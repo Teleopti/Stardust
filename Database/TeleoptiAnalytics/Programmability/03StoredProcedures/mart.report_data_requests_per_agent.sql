@@ -41,7 +41,7 @@ CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 AS
 BEGIN
 SET NOCOUNT ON;
-
+/*
 --create temp tables
 CREATE TABLE  #request_type (request_type_id int)
 CREATE TABLE  #rights_agents (right_id int)
@@ -148,5 +148,6 @@ order by
 	
 	
 SELECT * FROM #result	
+*/
 END
 GO
