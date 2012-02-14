@@ -10,6 +10,7 @@ GO
 -- Date			Author	Description
 ------------------------------------------------
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
+-- 2012-02-14	DavidJ	#	- refactor tables
 -- =============================================
 --Static dimension table
 --------------------------------------------------------
