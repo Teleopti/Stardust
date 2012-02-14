@@ -77,7 +77,7 @@ DROP TABLE [mart].[fact_request]
 CREATE TABLE [mart].[fact_request](	
 	[request_code] [uniqueidentifier] NOT NULL,
 	[person_id] [int] NOT NULL,
-	[request_date_id] [int] NOT NULL, --NEW
+	[request_start_date_id] [int] NOT NULL, --NEW
 	[application_datetime] [smalldatetime] NOT NULL,--NEW
 	[request_startdate] [smalldatetime] NOT NULL,--NEW		
 	[request_enddate] [smalldatetime] NOT NULL,	--NEW	
@@ -98,7 +98,7 @@ ALTER TABLE mart.fact_request ADD CONSTRAINT
 		request_code
 	  )
 
-ALTER TABLE [mart].[fact_request]  WITH CHECK ADD  CONSTRAINT [FK_fact_request_dim_date_startdate] FOREIGN KEY([request_date_id])
+ALTER TABLE [mart].[fact_request]  WITH CHECK ADD  CONSTRAINT [FK_fact_request_dim_date_startdate] FOREIGN KEY([request_start_date_id])
 REFERENCES [mart].[dim_date] ([date_id])
 ALTER TABLE [mart].[fact_request] CHECK CONSTRAINT [FK_fact_request_dim_date_startdate]
 GO
