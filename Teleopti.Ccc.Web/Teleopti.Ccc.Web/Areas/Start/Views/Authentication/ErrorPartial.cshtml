@@ -1,0 +1,14 @@
+﻿@using Teleopti.Ccc.Web.Models.Shared
+@model ErrorViewModel
+@{
+	Layout = null;
+}
+<div id="error_partial_target">
+	<div class="error app-error">
+		<h1 class="pdr10">
+			@Model.Message</h1>
+	</div>
+	<div class="floatleft clearboth mr10 ml10 mt5">
+		@Html.ActionLink(Teleopti.Ccc.UserTexts.Resources.Back, "SignOut", new { returnUrl = "~/" }, new { @class = "button" })
+	</div>
+</div>

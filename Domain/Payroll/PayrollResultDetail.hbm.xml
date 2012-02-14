@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   assembly="Teleopti.Ccc.Domain" 
+                   namespace="Teleopti.Ccc.Domain.Payroll"
+                   default-access="field.camelcase-underscore">
+  <class name="PayrollResultDetail">
+    <!--IUnique-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <!--IUnique-->
+    
+    <many-to-one name="Parent"
+                 class="PayrollResult"
+                 not-null ="true"
+                 foreign-key="FK_PayrollResultDetail_PayrollResult"/>
+
+    <property name="Message" length="1000" type="string" not-null ="true" />
+    <property name="ExceptionStackTrace" length="8000" type="string" not-null ="false" />
+    <property name="ExceptionMessage" length="2000" type="string" not-null ="false" />
+    <property name="InnerExceptionStackTrace" length="8000" type="string" not-null ="false" />
+    <property name="InnerExceptionMessage" length="2000" type="string" not-null ="false" />
+    <property name="Timestamp" type="Timestamp" not-null="true"/>
+    <property name="DetailLevel" not-null="true"/>
+  </class>
+         
+</hibernate-mapping>

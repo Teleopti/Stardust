@@ -1,0 +1,445 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="c74d259b-1972-4ae3-bba9-35e4b24dabc1" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Teleopti Analytics</ID>
+  <MeasureGroups>
+    <MeasureGroup>
+      <ID>Fact Queue</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="89a5e79c-b739-40dd-ad06-b6b50a68cd24">
+          <ID>Fact Queue</ID>
+          <Name>Fact Queue</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="a8b58e50-171b-4d46-ba77-05b119c007e8">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_queue</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Bridge Time Zone</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="bf3cb670-ffb5-4c94-87fa-33d90b539a89">
+          <ID>Bridge Time Zone</ID>
+          <Name>Bridge Time Zone</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="21cf4f96-6260-473a-825b-c5172275a777">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_bridge_time_zone</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Forecast Workload</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="b317c0d8-5984-4366-abbc-1d6e8e77d0a5">
+          <ID>Fact Forecast Workload</ID>
+          <Name>Fact Forecast Workload</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="0aca0ade-9d20-4de1-8cd1-8c723d84ffea">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_forecast_workload</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Agent</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="c69b9ddd-431c-47e9-994a-b4268d8dd764">
+          <ID>Fact Agent</ID>
+          <Name>Fact Agent</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="e11e290c-8091-4c09-be82-afa7ba9b9c3b">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_agent</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Agent Queue</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="fc4d6756-8cb0-4c05-b973-8c56b7a5e6cb">
+          <ID>Fact Agent Queue</ID>
+          <Name>Fact Agent Queue</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="80f5a134-fb63-47fb-9a53-77d656b0acd2">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_agent_queue</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Schedule</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="2382a99a-8799-4c62-8c82-7216a7810d41">
+          <ID>Fact Schedule</ID>
+          <Name>Fact Schedule</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="81b178d5-3e6a-4616-a8c9-fbc9259afcaa">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Kpi Targets Team</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="9587289c-6a60-4539-9386-254d3f83fecc">
+          <ID>Fact Kpi Targets Team</ID>
+          <Name>Fact Kpi Targets Team</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="34a03a14-f0c1-4e30-bf75-afafb2a5a6a4">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_kpi_targets_team</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Scorecard Kpi</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="22f68bc4-20c6-4336-8323-34afd97ab408">
+          <ID>Scorecard Kpi</ID>
+          <Name>Scorecard Kpi</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="b48bd31f-3e6c-4274-837a-3ff747984651">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_scorecard_kpi</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Bridge Acd Login Person</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="a811779c-bf94-4ce9-9878-3e627c5e867d">
+          <ID>Bridge Acd Login Person</ID>
+          <Name>Bridge Acd Login Person</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="c1208998-23ce-4d22-8184-c8780b8d9913">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_bridge_acd_login_person</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Bridge Queue Workload</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="3dbc534d-c9bc-4589-9e38-7c2219d413cc">
+          <ID>Bridge Queue Workload</ID>
+          <Name>Bridge Queue Workload</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="31e407d9-d64a-478e-a25f-056030ec286b">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_bridge_queue_workload</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Vfact Shift Start</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="f6912954-71ee-442a-99bd-e355aa69c95f">
+          <ID>Vfact Shift Start</ID>
+          <Name>Vfact Shift Start</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="9a635f57-ca6f-4f52-b1a2-e6939fa14ba0">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>vfact_shift_start</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>v Bridge Agent Skill</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="6edceba5-e121-4383-a8fb-53f0248d7d34">
+          <ID>v Bridge Agent Skill</ID>
+          <Name>v Bridge Agent Skill</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="e6de9f3c-0314-4489-aa2e-b24edb52dd77">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>v_bridge_agent_skill</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Vfact Agents Ready</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="1eda2081-07b8-40c8-9c76-54e9978be069">
+          <ID>Vfact Agents Ready</ID>
+          <Name>Vfact Agents Ready</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="b723ca9e-5994-4812-91d9-5bf5bc09d86d">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>vfact_agents_ready</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Vfact Schedule</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="a5a63dfa-4fdd-4692-b338-c68034723e02">
+          <ID>Vfact Schedule</ID>
+          <Name>Vfact Schedule</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="19180a1d-3b7f-4760-b142-ac922955019e">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>vfact_schedule</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Schedule Forecast Skill</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="697107e2-e9a5-4ae3-bb4e-d11c8a7aa6fc">
+          <ID>Fact Schedule Forecast Skill</ID>
+          <Name>Fact Schedule Forecast Skill</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="181bf044-2862-4787-907a-595d438aa7ad">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule_forecast_skill</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Schedule Deviation</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="782a5467-f1d5-4d41-bf4f-be9ece62fd19">
+          <ID>Fact Schedule Deviation</ID>
+          <Name>Fact Schedule Deviation</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="1d38973b-1e88-404b-88cf-cde1f976844e">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule_deviation</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Vfact Kpi Targets Team</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="12c8c541-fc2a-4f9b-9590-7fcd78f236ef">
+          <ID>Vfact Kpi Targets Team</ID>
+          <Name>Vfact Kpi Targets Team</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="49cf1951-3624-46e8-aa36-55e563b0c13a">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>vfact_kpi_targets_team</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>v Fact Schedule Day Count Absence</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="165abe6d-50ce-445b-97f2-f7b6ba94da0d">
+          <ID>v Fact Schedule Day Count Absence</ID>
+          <Name>v Fact Schedule Day Count Absence</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="65f5afef-013e-4fc6-85f2-6d937c2d533c">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>v_fact_schedule_day_count_absence</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>v Fact Schedule Day Count Day Off</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="4ef380f2-3afa-4c21-b32d-ee329f20ff36">
+          <ID>v Fact Schedule Day Count Day Off</ID>
+          <Name>v Fact Schedule Day Count Day Off</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="0c41258d-e705-41f4-b907-a49b0108757f">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>v_fact_schedule_day_count_day_off</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>v Fact Scheudule Day Count Shift Category</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="fdcaa3a9-8b5a-49eb-91ae-d962d4d2ae48">
+          <ID>v Fact Scheudule Day Count Shift Category</ID>
+          <Name>v Fact Scheudule Day Count Shift Category</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="73a834d6-5830-439a-9fed-d604bc559bdb">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>v_fact_scheudule_day_count_shift_category</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Schedule Preference</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="c0548431-6d2d-4063-bbd4-272a6f4dc646">
+          <ID>Fact Schedule Preference</ID>
+          <Name>Fact Schedule Preference</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="c49db8b7-11e7-4fe1-8eea-f248d2f129c7">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule_preference</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Bridge Group Page Person</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="2380f6a2-754a-4c9d-85a4-86145ab73b32">
+          <ID>Bridge Group Page Person</ID>
+          <Name>Bridge Group Page Person</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="3ca1bed6-a577-4fe8-ba17-8283b100649d">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>mart_bridge_group_page_person</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+  </MeasureGroups>
+</Cube>

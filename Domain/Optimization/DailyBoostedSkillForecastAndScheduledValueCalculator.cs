@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Optimization
+{
+    public class DailyBoostedSkillForecastAndScheduledValueCalculator : IDailySkillForecastAndScheduledValueCalculator
+    {
+        private readonly ISchedulingResultStateHolder _schedulingStateHolder;
+
+        public DailyBoostedSkillForecastAndScheduledValueCalculator(ISchedulingResultStateHolder schedulingStateHolder)
+        {
+            _schedulingStateHolder = schedulingStateHolder;
+        }
+
+        public ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        {
+            ForecastScheduleValuePair result = new ForecastScheduleValuePair();
+
+            IList<ForecastScheduleValuePair> intradayResults = CalculateIntradayForecastAndScheduleDataForSkill(skill, scheduleDay);
+
+            foreach (ForecastScheduleValuePair forecastScheduleValuePair in intradayResults)
+            {
+                result.ForecastValue += forecastScheduleValuePair.ForecastValue;
+                result.ScheduleValue += forecastScheduleValuePair.ScheduleValue;
+            }
+            return result;
+        }
+
+        public ReadOnlyCollection<ForecastScheduleValuePair> CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        {
+            IList<ForecastScheduleValuePair> result = new List<ForecastScheduleValuePair>();
+
+            DateTimePeriod dateTimePeriod = CreateDateTimePeriodFromScheduleDay(scheduleDay);
+
+            IList<ISkillStaffPeriod> skillStaffPeriods =
+                _schedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, dateTimePeriod);
+            if (skillStaffPeriods == null || skillStaffPeriods.Count == 0)
+                return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+
+            foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
+            {
+                ForecastScheduleValuePair forecastScheduleValuePair = CalculateSkillStaffPeriodForecastAndScheduledValue(skill, skillStaffPeriod);
+                result.Add(forecastScheduleValuePair);
+            }
+            return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public double CalculateSkillStaffPeriod(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
+        {
+            var ret = new ForecastScheduleValuePair();
+            if(!skill.IsVirtual)
+            {
+                ret = CalculateSkillStaffPeriodForecastAndScheduledValue(skill, skillStaffPeriod);
+            }
+            else
+            {
+                IList<ISkillStaffPeriod> skillStaffPeriods =
+                _schedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>(skill.AggregateSkills), skillStaffPeriod.Period);
+                foreach (var staffPeriod in skillStaffPeriods)
+                {
+                    var thisSkill = CalculateSkillStaffPeriodForecastAndScheduledValue(((ISkillDay)staffPeriod.Parent).Skill, staffPeriod);
+                    ret.ForecastValue += thisSkill.ForecastValue;
+                    ret.ScheduleValue += thisSkill.ScheduleValue;
+                }
+            }
+
+            return (ret.ScheduleValue/ret.ForecastValue) * 100;
+        }
+
+        private static DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
+        {
+            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+                scheduleDay.Date, scheduleDay.Date.AddDays(1),
+                TeleoptiPrincipal.Current.Regional.TimeZone);
+        }
+
+        private static ForecastScheduleValuePair CalculateSkillStaffPeriodForecastAndScheduledValue(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
+        {
+            double forecastValue = skillStaffPeriod.FStaffTime().TotalMinutes;
+            if (forecastValue == 0)
+                forecastValue = 0.001;
+            double scheduledValue = BoostedTweakedSkillStaffPeriodValue(skillStaffPeriod, skill, forecastValue);
+            return new ForecastScheduleValuePair() { ForecastValue = forecastValue, ScheduleValue = scheduledValue };
+        }
+
+        private static double BoostedTweakedSkillStaffPeriodValue(ISkillStaffPeriod skillStaffPeriod, ISkill skill, double forecastMinutes)
+        {
+            if (forecastMinutes == 0)
+                return 0;
+            double scheduledMinutes = skillStaffPeriod.CalculatedResource * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+            double minStaffBoosted = calculateMinimumStaffBoosted(skillStaffPeriod, scheduledMinutes);
+            double maxStaffBoosted = calculateMaximumStaffBoosted(skillStaffPeriod, scheduledMinutes);
+            double boostedAbsoluteDifference = scheduledMinutes - forecastMinutes + minStaffBoosted + maxStaffBoosted;
+            double tweakedAbsoluteDifference = calculateTweakedDifference(skill, boostedAbsoluteDifference);
+            return tweakedAbsoluteDifference;
+        }
+
+        private static double calculateMinimumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledMinutes)
+        {
+            if (skillStaffPeriod.Payload.SkillPersonData.MinimumPersons > 0)
+            {
+                double minimumMinutes = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+                if (scheduledMinutes < minimumMinutes)
+                    return 1000 * (scheduledMinutes - minimumMinutes);
+                return 0;
+            }
+            return 0;
+        }
+
+        private static double calculateMaximumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledMinutes)
+        {
+            if (skillStaffPeriod.Payload.SkillPersonData.MaximumPersons > 0)
+            {
+                double maximumMinutes = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+                if (scheduledMinutes > maximumMinutes)
+                    return 1000 * (scheduledMinutes - maximumMinutes);
+                return 0;
+            }
+            return 0;
+        }
+
+        private static double calculateTweakedDifference(ISkill skill, double absoluteDifferenceInMinutes)
+        {
+            double skillPriority = skill.PriorityValue;
+            double overStaffingFactor = skill.OverstaffingFactor.Value;
+            if (absoluteDifferenceInMinutes < 0)
+                overStaffingFactor = 1 - overStaffingFactor;
+            return skillPriority * overStaffingFactor * absoluteDifferenceInMinutes;
+        }
+    }
+}

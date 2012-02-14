@@ -1,0 +1,10 @@
+Description:
+Here you will find some useful examples for how to write MDX-queries in Teleopti PM.
+
+Example/howto:
+"how turn a messure [Scheduled Time m] into format [hh:mm:ss]"
+1) Drag the messure [Scheduled Time m] into a PM report
+2) Click the little arrow next to the messure => "Add Formula" => "Add MDX Expression ..."
+3) Paste the content of "Format-hhmmss (Scheduled Time m).mdx" into the dialog
+4) Give a name to your custom messure e.g: hh:mm:ss
+5) OK

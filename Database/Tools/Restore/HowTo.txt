@@ -1,0 +1,47 @@
+<Pre-Reqs>
+  - Disk space
+   |----------------------------|
+   | Customer		FootPrint	|
+   | ---------------------------|
+   | Demo.rar		1,5 Gb		|
+   | Eon_Wimpelcom	7 Gb		|
+   | Elkop.rar		8 Gb		|
+   |----------------------------|
+
+  - Local SQL Server instance (default instance!)
+  Hardcoded AS %COMPUTERNAME% , change if you like, to match any namned instance
+
+  - Use default location of script
+  You must run this script from it's original source folder:   $\RaptorScrum\Database\Tools\Restore\Restore to Local.bat
+  
+  - Vista
+  On Vista you must execute the batch-file via Right-Click: "Run as Administrator"
+</Pre-Reqs>
+
+<INPUT>
+  - FileSet?
+  You will be promted for which database to restore (e.g. Demo.rar or WMdata.rar).
+  The rar-fiels are compresses copies of the database files used in our test environements.
+
+  - TRUNK?
+  Next you'll be asked to apply the trunk or not.
+  Note, If you say "Y" = apply the trunk; the version control chain is brooken
+  and you have to manually keep track of new changes.
+  
+  - RarZilla
+  If you have done the restore process before, RarZilla (~un-zip) will ask you
+  if you like to overwrite existing files or not.
+  Sorry, didn't care to write the code fot this part...
+  To be sure you have fresh copies, choose "OverWrite All Files"
+  (If no .rar-file have been copied you could click "Overwrite No Files")
+
+</INPUT>
+
+<Post-Reqs>
+  - update SQL Logins
+  If you use sa on your local instance do nothing.
+  If you use other SQL logins, re-map them with sp_change_users_login
+
+  - Update Nhib and app.config
+  Displayed in notepad at the end of the restore process
+</Post-Reqs>

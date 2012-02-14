@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+  <joined-subclass name="ChildPersonGroup"
+					extends="PersonGroupBase">
+    <key column="PersonGroupBase" foreign-key="FK_ChildPersonGroup_PersonGroupBase1"/>
+    <many-to-one class="PersonGroupBase"
+                 name="Parent"
+                 not-null="true" foreign-key="FK_ChildPersonGroup_PersonGroupBase2"/>
+  </joined-subclass>
+
+</hibernate-mapping>

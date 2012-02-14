@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Forecasting"
+                   default-access="field.camelcase-underscore">
+  <joined-subclass name="WorkloadDay"
+					extends="WorkloadDayBase">
+    <key column="WorkloadDayBase" foreign-key="FK_WorkloadDay_WorkloadDayBase" />
+    
+    <many-to-one name="Parent"
+        class="SkillDay"
+        not-null="true" foreign-key="FK_WorkloadDay_SkillDay"/>
+
+    <component name="TemplateReference" class="Teleopti.Ccc.Domain.Forecasting.Template.WorkloadDayTemplateReference">
+      <property name="TemplateName"
+					not-null="false"
+					type="string"
+					length="50"/>
+      <property name="TemplateId"
+					not-null="true"
+					type="guid"/>
+      <property name="DayOfWeek"
+					not-null="false"/>
+      <property name="VersionNumber"
+            type="int"
+            not-null="true"
+            access="property"/>
+      <property name ="UpdatedDate"
+            type="UtcDateTime"
+            not-null="true"/>
+      <many-to-one name="Workload"
+                   class="Workload"
+                   not-null="false" 
+                   foreign-key="FK_WorkloadDay_Workload"/>    
+    </component>
+    
+    <property name="Annotation"
+              not-null="false"
+              type="string"
+              length="1000" />
+  </joined-subclass>
+</hibernate-mapping>

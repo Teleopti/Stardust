@@ -1,0 +1,25 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="546173c6-5ef4-434e-ab73-401c8eddea7a" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Teleopti Analytics</ID>
+  <MeasureGroups>
+    <MeasureGroup>
+      <ID>Fact Schedule Activities</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="48bd589e-98a5-4b86-bd97-825648bafc49">
+          <ID>Fact Schedule Activities</ID>
+          <Name>Fact Schedule Activities</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="bbc924a3-50ae-48b2-827f-9fb1682b93d0">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule_activities</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+  </MeasureGroups>
+</Cube>

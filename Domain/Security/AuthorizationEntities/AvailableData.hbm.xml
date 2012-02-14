@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Security.AuthorizationEntities"
+                   default-access="field.camelcase-underscore">
+  <class name="AvailableData">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_AvailableData_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_AvailableData_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+
+	<many-to-one name="ApplicationRole"
+		class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationRole"
+		column="ApplicationRole"
+		unique="true"
+		not-null="true"/>
+    
+    <bag name="AvailableTeams"
+         table="AvailableTeamsInApplicationRole">
+      <key column="AvailableData" 
+           foreign-key ="FK_AvailableTeamsInApplicationRole_AvailableData" />
+      <many-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team" 
+                    column="AvailableTeam"
+                    foreign-key="FK_AvailableTeamsInApplicationRole_Team" />
+    </bag>
+
+    <bag name="AvailableBusinessUnits"
+         table="AvailableUnitsInApplicationRole">
+      <key column="AvailableData" 
+           foreign-key="FK_AvailableUnitsInApplicationRole_AvailableData" />
+      <many-to-many class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+                    column="AvailableBusinessUnit"
+                    foreign-key="FK_AvailableUnitsInApplicationRole_BusinessUnit" />
+    </bag>
+
+    <bag name="AvailableSites"
+         table="AvailableSitesInApplicationRole">
+      <key column ="AvailableData" 
+           foreign-key="FK_AvailableSitesInApplicationRole_AvailableData" />
+      <many-to-many class="Teleopti.Ccc.Domain.Common.Site" 
+                    column="AvailableSite"
+                    foreign-key="FK_AvailableSitesInApplicationRole_Site" />
+    </bag>
+
+    <bag name="AvailablePersons"
+         table="AvailablePersonsInApplicationRole">
+      <key column="AvailableData"
+           foreign-key="FK_AvailablePersonsInApplicationRole_AvailableData" />
+      <many-to-many class="Teleopti.Ccc.Domain.Common.Person"
+                    column="AvailablePerson"
+                    foreign-key="FK_AvailablePersonsInApplicationRole_Person" />
+    </bag>
+
+
+    <!--
+    Rollback this when we've upgraded nh and http://nhjira.koah.net/browse/NH-1959 is fixed
+    
+    <idbag name="AvailablePersons"
+		table ="AvailablePersonsInApplicationRole"
+		cascade="none">
+		  <collection-id column="collection_id" type="guid">
+			  <generator class="guid.comb"/>
+		  </collection-id>
+			<key foreign-key="FK_AvailablePersonsInApplicationRole_AvailableData">
+				<column name="AvailableData" 
+					not-null="true" />
+		  </key>
+		<many-to-many class="Teleopti.Ccc.Domain.Common.Person" foreign-key="FK_AvailablePersonsInApplicationRole_Person">
+			<column name="AvailablePerson"
+					not-null="false" />
+		</many-to-many>
+	</idbag>
+
+	  <idbag name="AvailableTeams"
+		table ="AvailableTeamsInApplicationRole"
+		cascade="none">
+		  <collection-id column="collection_id" type="guid">
+			  <generator class="guid.comb"/>
+		  </collection-id>
+		  <key foreign-key="FK_AvailableTeamsInApplicationRole_AvailableData">
+			  <column name="AvailableData"
+					not-null="true" />
+		  </key>
+		  <many-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team" foreign-key="FK_AvailableTeamsInApplicationRole_Team">
+			  <column name="AvailableTeam"
+					not-null="false" />
+		  </many-to-many>
+	  </idbag>
+
+	  <idbag name="AvailableSites"
+		table ="AvailableSitesInApplicationRole"
+		cascade="none">
+		  <collection-id column="collection_id" type="guid">
+			  <generator class="guid.comb"/>
+		  </collection-id>
+		  <key foreign-key="FK_AvailableSitesInApplicationRole_AvailableData">
+			  <column name="AvailableData"
+					not-null="true" />
+		  </key>
+		  <many-to-many class="Teleopti.Ccc.Domain.Common.Site" foreign-key="FK_AvailableSitesInApplicationRole_Site">
+			  <column name="AvailableSite"
+					  not-null="false" />
+		  </many-to-many>
+	  </idbag>
+
+
+	  <idbag name="AvailableBusinessUnits"
+		table ="AvailableUnitsInApplicationRole"
+		cascade="none">
+		  <collection-id column="collection_id" type="guid">
+			  <generator class="guid.comb"/>
+		  </collection-id>
+		  <key foreign-key="FK_AvailableUnitsInApplicationRole_AvailableData">
+			  <column name="AvailableData"
+					not-null="true" />
+		  </key>
+  		  <many-to-many class="Teleopti.Ccc.Domain.Common.BusinessUnit" foreign-key="FK_AvailableUnitsInApplicationRole_BusinessUnit">
+			  <column name="AvailableBusinessUnit"
+					  not-null="false" />
+		  </many-to-many>
+	  </idbag>-->
+
+    <property name="AvailableDataRange"
+            not-null="true" />
+    
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="Teleopti.Ccc.Domain"
+									 namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
+									 default-access="field.camelcase-underscore">
+	<class name="AvailabilityRotation">
+		<!--IEntity-->
+		<id name="Id"
+						type="guid"
+						unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+						 unsaved-value ="null"/>
+		<many-to-one name="CreatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 update="false" foreign-key="FK_AvailabilityRotation_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 foreign-key="FK_AvailabilityRotation_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+							type="UtcDateTime"
+							not-null="true"
+							update="false" />
+		<property name="UpdatedOn"
+							type="UtcDateTime"
+							not-null="true"/>
+		<!--IEntity-->
+
+		<property name="Name"
+						not-null="true"
+						length="50"/>
+		<list name="AvailabilityDays"
+					cascade="all-delete-orphan"
+					inverse="true">
+			<key column="Parent" />
+			<index type="int" column="Day" />
+			<one-to-many class="AvailabilityDay"/>
+		</list>
+		<many-to-one name="BusinessUnit"
+					class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+					access="nosetter.camelcase-underscore"
+					not-null="true" foreign-key="FK_AvailabilityRotation_BusinessUnit"/>
+		
+		<property name="IsDeleted"
+					not-null="true"/>
+		<filter name="businessUnitFilter"
+				condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="deletedFlagFilter"
+			condition="IsDeleted = 0" />
+	</class>
+
+	<query name="LoadAvailabilityRotationsWithHierarchyData">
+		<![CDATA[
+			from AvailabilityRotation ar
+						left join fetch ar.AvailabilityDays ad
+						left join fetch ad.Restriction r
+					where exists
+						(
+							select 1 from PersonAvailability pa
+								where pa.Availability = ar.Id
+									and pa.Person in (:PersonCollection)
+									and ((not pa.StartDate <
+										(select max(pa2.StartDate) from PersonAvailability pa2
+											where pa2.Person = pa.Person
+												and pa2.StartDate <= :StartDate))
+                        or pa.StartDate  >= :StartDate
+                        )
+						)
+			]]>
+		<query-param name="PersonCollection" type="Person[]"/>
+		<query-param name="StartDate" type="DateTime"/>
+	</query>
+</hibernate-mapping>

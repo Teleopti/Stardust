@@ -1,0 +1,1 @@
+--only needed from MSBuild to be able to copy this folder

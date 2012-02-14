@@ -1,0 +1,34 @@
+﻿@using Teleopti.Ccc.Web.Areas.Start.Models.Authentication
+@model SignInWindowsViewModel
+
+<div id="windows_partial_target">
+    @using (Ajax.BeginForm("Windows", new AjaxOptions
+    {
+        UpdateTargetId = "windows_partial_target",
+        InsertionMode = InsertionMode.Replace,
+		OnComplete = "Teleopti.Start.Authentication.SignInPartialInit",
+		OnFailure = "Teleopti.Start.Common.AjaxFailed",
+    }))
+    { 
+
+        <div class="select-list floatleft mt10 mr10 ml10">
+            @Html.HiddenFor(m => m.SignIn.DataSourceName)
+            <ul id="WindowsDataSourceList">
+                @foreach (var item in Model.DataSources)
+                {
+                    <li data-mytime-value="@Html.AttributeEncode(item.Name)">@item.Name</li>
+                }
+            </ul>
+        </div>
+        <h1 class="floatleft mt10">
+            @Html.LabelFor(m => m.SignIn.DataSourceName)
+        </h1>
+        @Html.ValidationMessageFor(m => m.SignIn.DataSourceName)<br />
+        @Html.ValidationSummary(true)
+		<div class="mr10 ml10 floatright clearboth">
+			<input type="submit" value="@Html.AttributeEncode(Teleopti.Ccc.UserTexts.Resources.Ok)" class="button mt5 displayinline-block" id="WindowsOkButton" />
+				
+		</div>
+    }
+</div>
+@*  @Html.UlListBoxFor(m => m.SignIn.WindowsDataSource, new SelectList(Model.DataSource, "key", "value"), new { size = 8 });*@

@@ -1,0 +1,236 @@
+﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="3b1ea78f-79ad-4653-9a23-0216b06d86ae" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Dim Skill</ID>
+  <Name>Skill</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-4980" scrolltop="-2843" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="11642" y="20320" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="dim_skill" left="20" top="0" logicalid="2" controlid="1" masterid="0" hint1="0" hint2="0" width="4366" height="6111" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000800000e110000df170000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_dim_skill" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-4980</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-2843</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ARDiagramLayout</Name>
+      <Value>
+        <DiagramLayout ZoomPercent="100" ViewPortX="0" ViewPortY="0" xmlns="">
+          <Shapes NodeWidth="161">
+            <Shape Id="Dim Skill" Expanded="true">
+              <Attributes>
+                <Attribute Id="Dim Skill" />
+                <Attribute Id="Status" />
+                <Attribute Id="Time Zone Id" />
+              </Attributes>
+              <Position x="20" y="20" />
+            </Shape>
+            <Shape Id="Skill Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Skill Name" />
+              </Attributes>
+              <Position x="226" y="20" />
+            </Shape>
+            <Shape Id="Forecast Method Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Forecast Method Name" />
+              </Attributes>
+              <Position x="432" y="20" />
+            </Shape>
+          </Shapes>
+        </DiagramLayout>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Source xsi:type="DataSourceViewBinding" dwd:design-time-name="a744ea00-ca3d-493e-b57c-1d9ad38edeb7">
+    <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+  </Source>
+  <ErrorConfiguration dwd:design-time-name="e8d108a7-58af-496c-8b91-3b4d1123838d">
+    <KeyDuplicate>ReportAndContinue</KeyDuplicate>
+  </ErrorConfiguration>
+  <CurrentStorageMode>Molap</CurrentStorageMode>
+  <Attributes>
+    <Attribute dwd:design-time-name="6a04a835-1e8b-4432-81a0-ba2ea1252dc0">
+      <ID>Dim Skill</ID>
+      <Name>Skill Id</Name>
+      <Usage>Key</Usage>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="f7d53301-1749-455d-82c0-cca94d018204">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="c074b41d-869c-40ec-a623-a13926c2fffa">
+            <TableID>dbo_dim_skill</TableID>
+            <ColumnID>skill_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="bb169bf1-09fe-4564-886f-e3fd4f3350d6">
+          <AttributeID>Skill Name</AttributeID>
+          <RelationshipType>Rigid</RelationshipType>
+          <Name>Skill Name</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="19692375-5596-4af7-8d98-7e3fdbce53f1">
+          <AttributeID>Time Zone Id</AttributeID>
+          <RelationshipType>Rigid</RelationshipType>
+          <Name>Time Zone Id</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="d253dcfc-42b5-4b6b-9b4f-6c370949983f">
+          <AttributeID>Status</AttributeID>
+          <RelationshipType>Rigid</RelationshipType>
+          <Name>Status</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="0dc69315-ea30-43d9-917b-0353f546a9b8">
+      <ID>Skill Name</ID>
+      <Name>Skill Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="22fc316d-ee26-459e-b04e-ab544540543d">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="3827febb-19b1-44d5-a5c1-f55bf8137d2b">
+            <TableID>dbo_dim_skill</TableID>
+            <ColumnID>skill_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <NameColumn dwd:design-time-name="c447532d-bffb-4606-91d4-8725915029d6">
+        <DataType>WChar</DataType>
+        <DataSize>100</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="57ed4b7b-a21c-4c79-abc1-d3922025c4cd">
+          <TableID>dbo_dim_skill</TableID>
+          <ColumnID>skill_name</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="201858b2-e42c-4108-8b3e-79416506d8fe">
+          <AttributeID>Forecast Method Name</AttributeID>
+          <RelationshipType>Rigid</RelationshipType>
+          <Name>Forecast Method Name</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="82ef2a73-c5c2-479c-93df-24778668183f">
+      <ID>Time Zone Id</ID>
+      <Name>Time Zone Id</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="6d40b2ba-6dd0-490d-abd4-42352cef834d">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="a9e59278-98fb-4800-aaba-6c3f3da12089">
+            <TableID>dbo_dim_skill</TableID>
+            <ColumnID>time_zone_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="68aad13d-9a98-4cae-a83a-7f5e17b814be">
+      <ID>Forecast Method Name</ID>
+      <Name>Forecast Method Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="d1e8d7c2-ba83-426f-b23f-a58cb5e198b2">
+          <DataType>WChar</DataType>
+          <DataSize>100</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="564ee19b-319d-4b68-9953-ab244dd5e841">
+            <TableID>dbo_dim_skill</TableID>
+            <ColumnID>forecast_method_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="fdd1ff1f-6810-44a5-b9b9-ee122033a21d">
+      <ID>Status</ID>
+      <Name>Status</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="58666f4c-5a1a-4693-a23e-4295b4ce3e4d">
+          <DataType>WChar</DataType>
+          <DataSize>7</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="a45448ee-6d5b-4b1a-9c63-012df5cd7158">
+            <TableID>dbo_dim_skill</TableID>
+            <ColumnID>status</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+    </Attribute>
+  </Attributes>
+  <Hierarchies>
+    <Hierarchy dwd:design-time-name="a0d8665e-97a7-49c9-b2cc-fa2a142b3afb">
+      <ID>Hierarchy</ID>
+      <Name>Skill</Name>
+      <Levels>
+        <Level dwd:design-time-name="1b94994a-640d-4706-8550-5acf6700908b">
+          <ID>Forecast Method Name</ID>
+          <Name>Forecast Method</Name>
+          <SourceAttributeID>Forecast Method Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="a8aca2a0-3b4b-4f33-a253-c35c7c8462f0">
+          <ID>Skill Name</ID>
+          <Name>Skill</Name>
+          <SourceAttributeID>Skill Name</SourceAttributeID>
+          <HideMemberIf>ParentName</HideMemberIf>
+        </Level>
+      </Levels>
+    </Hierarchy>
+  </Hierarchies>
+</Dimension>

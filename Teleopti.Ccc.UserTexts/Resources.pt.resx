@@ -1,0 +1,4212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CampaignEmailsHandlingtime" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="MaskedEditTextBox" xml:space="preserve">
+    <value>Caixa de Texto com Mascara</value>
+  </data>
+  <data name="MaskedEditBox" xml:space="preserve">
+    <value>Caixa com Mascara</value>
+  </data>
+  <data name="AbandonedCalls" xml:space="preserve">
+    <value>Chamadas Abandonadas</value>
+  </data>
+  <data name="Absence" xml:space="preserve">
+    <value>Ausência</value>
+  </data>
+  <data name="Absences" xml:space="preserve">
+    <value>Ausências</value>
+  </data>
+  <data name="AbsencesColon" xml:space="preserve">
+    <value>Ausências:</value>
+  </data>
+  <data name="AbsolutePosition" xml:space="preserve">
+    <value>Posição Absoluta</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Ações</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>Atividades</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>Atividade</value>
+  </data>
+  <data name="ActivityColon" xml:space="preserve">
+    <value>Atividade:</value>
+  </data>
+  <data name="ActivityColor" xml:space="preserve">
+    <value>Cor da Atividade</value>
+  </data>
+  <data name="ActivityLength" xml:space="preserve">
+    <value>Duração da Atividade</value>
+  </data>
+  <data name="ActivityPosition" xml:space="preserve">
+    <value>Posição da Atividade</value>
+  </data>
+  <data name="ACW" xml:space="preserve">
+    <value>PAT</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="AddAbsence" xml:space="preserve">
+    <value>Adicionar Ausência</value>
+  </data>
+  <data name="AddActivity" xml:space="preserve">
+    <value>Adicionar Atividade</value>
+  </data>
+  <data name="AddArrows" xml:space="preserve">
+    <value>&amp;Adicionar&gt;&gt;</value>
+  </data>
+  <data name="AddDayOff" xml:space="preserve">
+    <value>Adicionar Folga</value>
+  </data>
+  <data name="AddNewScorecard" xml:space="preserve">
+    <value>Adicionar Scorecard</value>
+  </data>
+  <data name="AddOpenHours" xml:space="preserve">
+    <value>Adicionar Horas Válidas</value>
+  </data>
+  <data name="AddOutlierThreeDots" xml:space="preserve">
+    <value>Adicionar Evento Especial</value>
+  </data>
+  <data name="AddPersonalActivity" xml:space="preserve">
+    <value>Adicionar Atividade Pessoal</value>
+  </data>
+  <data name="AddQueuesThreeDots" xml:space="preserve">
+    <value>Adicionar filas...</value>
+  </data>
+  <data name="AddToQuickAccessToolBar" xml:space="preserve">
+    <value>&amp;Adicionar para Barra de Acesso Rápido </value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administração</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Avançado</value>
+  </data>
+  <data name="AfterCallWorkTime" xml:space="preserve">
+    <value>Pós Atendimento</value>
+  </data>
+  <data name="AgentInfo" xml:space="preserve">
+    <value>Dados do Agente</value>
+  </data>
+  <data name="AgentInformation" xml:space="preserve">
+    <value>Informações do Agente</value>
+  </data>
+  <data name="AgentInfoThreeDots" xml:space="preserve">
+    <value>Dados do agente...</value>
+  </data>
+  <data name="AgentPortal" xml:space="preserve">
+    <value>Meu Tempo</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Agentes</value>
+  </data>
+  <data name="AgentSettings" xml:space="preserve">
+    <value>Configurações do Agente</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="AllSelection" xml:space="preserve">
+    <value>&lt; Todos &gt;</value>
+  </data>
+  <data name="AmpersandNameColon" xml:space="preserve">
+    <value>&amp;Nome:</value>
+  </data>
+  <data name="AmpersandPeriodColon" xml:space="preserve">
+    <value>&amp;Período:</value>
+  </data>
+  <data name="AnsweredCalls" xml:space="preserve">
+    <value>Chamadas atendidas</value>
+  </data>
+  <data name="ApplicationLogInName" xml:space="preserve">
+    <value>Nome do usuário no Aplicativo</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Funções</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="AreYouSureYouWantToDelete" xml:space="preserve">
+    <value>Tem certeza que você quer Excluir?</value>
+  </data>
+  <data name="ArrowsRemove" xml:space="preserve">
+    <value>&lt;&lt;&amp;Excluir</value>
+  </data>
+  <data name="AuthenticationFailed" xml:space="preserve">
+    <value>Falha na Autenticação: Por Favor Tente Novamente.</value>
+  </data>
+  <data name="AutoPosition" xml:space="preserve">
+    <value>Auto Posicionamento</value>
+  </data>
+  <data name="AvailableScorecards" xml:space="preserve">
+    <value>Scorecards Disponíveis</value>
+  </data>
+  <data name="AverageACW" xml:space="preserve">
+    <value>PAT Médio</value>
+  </data>
+  <data name="AverageAfterCallWork" xml:space="preserve">
+    <value>Média de tempo de Pós Atendimento</value>
+  </data>
+  <data name="AverageCalls" xml:space="preserve">
+    <value>Média de Chamados</value>
+  </data>
+  <data name="AverageTalkTime" xml:space="preserve">
+    <value>Tempo médio de atendimento</value>
+  </data>
+  <data name="AverageTasks" xml:space="preserve">
+    <value>Média de Tarefas</value>
+  </data>
+  <data name="AverageWorkTime" xml:space="preserve">
+    <value>Tempo médio de trabalho</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Volta</value>
+  </data>
+  <data name="BackAmpersandArrow" xml:space="preserve">
+    <value>&lt;&amp;Volta</value>
+  </data>
+  <data name="Bar" xml:space="preserve">
+    <value>Barra</value>
+  </data>
+  <data name="BaseActivity" xml:space="preserve">
+    <value>Atividade Base</value>
+  </data>
+  <data name="BetweenColon" xml:space="preserve">
+    <value>Entre:</value>
+  </data>
+  <data name="BusinessRulesConflict" xml:space="preserve">
+    <value>Conflito de regras de negócio</value>
+  </data>
+  <data name="BusinessUnitHierarchy" xml:space="preserve">
+    <value>Hierarquia de unidades de negócio</value>
+  </data>
+  <data name="CalculatedCalls" xml:space="preserve">
+    <value>Chamados calculados</value>
+  </data>
+  <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
+    <value>Ocupação Calculada %</value>
+  </data>
+  <data name="Calls" xml:space="preserve">
+    <value>Chamados</value>
+  </data>
+  <data name="CampaignACWPercentSign" xml:space="preserve">
+    <value>PAT da Campanha %</value>
+  </data>
+  <data name="CampaignAfterWorkPercentSign" xml:space="preserve">
+    <value>Pós Atendimento da Campanha %</value>
+  </data>
+  <data name="CampaignCallsPercentSign" xml:space="preserve">
+    <value>Chamados da Campanha %</value>
+  </data>
+  <data name="CampaignTalkTimePercentSign" xml:space="preserve">
+    <value>Tempo falado da Campanha %</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="CanNotFindTheServiceEndPoint" xml:space="preserve">
+    <value>Não foi localizado o ponto de encerramento do serviço</value>
+  </data>
+  <data name="CapitalTo" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="ManageContracts" xml:space="preserve">
+    <value>Gerenciar Contratos</value>
+  </data>
+  <data name="ChangeYourCultureSettings" xml:space="preserve">
+    <value>Computador Default</value>
+  </data>
+  <data name="ManagePartTimePercentages" xml:space="preserve">
+    <value>Gerenciar Percentual de Tempo Parcial</value>
+  </data>
+  <data name="ChangeYourPassword" xml:space="preserve">
+    <value>Altere a sua senha</value>
+  </data>
+  <data name="Chart" xml:space="preserve">
+    <value>Gráfico</value>
+  </data>
+  <data name="ChartSettings" xml:space="preserve">
+    <value>Parâmetros dos Gráficos</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Marcar todos</value>
+  </data>
+  <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
+    <value>Pressione OK para sobrepor as regras. Pressione CANCEL para corrigir os erros primeiro.</value>
+  </data>
+  <data name="ChooseCommandsFromColon" xml:space="preserve">
+    <value>&amp;Escolher comandos para:</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="Clipboard" xml:space="preserve">
+    <value>Quadro de Colagem</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Fechado</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Cor</value>
+  </data>
+  <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
+    <value>Escolha definições de tempo parcial para edição</value>
+  </data>
+  <data name="CommunicationErrorEndPoint" xml:space="preserve">
+    <value>Comunicação de erro de ponto final</value>
+  </data>
+  <data name="CompareWith" xml:space="preserve">
+    <value>Compare com</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Confirmar nova senha</value>
+  </data>
+  <data name="Conflicts" xml:space="preserve">
+    <value>Conflitos</value>
+  </data>
+  <data name="ConnectedToColon" xml:space="preserve">
+    <value>Conectado em:</value>
+  </data>
+  <data name="Contract" xml:space="preserve">
+    <value>Contrato</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Agenda do Contrato</value>
+  </data>
+  <data name="ContractScheduledTime" xml:space="preserve">
+    <value>Tempo agendado em contrato</value>
+  </data>
+  <data name="Contractschedules" xml:space="preserve">
+    <value>Agendas do Contrato</value>
+  </data>
+  <data name="ContractTargetTime" xml:space="preserve">
+    <value>Tempo acordado em contrato</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="CopySpecial" xml:space="preserve">
+    <value>Copiar Especial</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Contar</value>
+  </data>
+  <data name="CreateForecast" xml:space="preserve">
+    <value>Criar Previsão</value>
+  </data>
+  <data name="CreateTemplate" xml:space="preserve">
+    <value>Criar Modelo</value>
+  </data>
+  <data name="CultureSettings" xml:space="preserve">
+    <value>Parâmetros culturais</value>
+  </data>
+  <data name="CultureText" xml:space="preserve">
+    <value>Cultura</value>
+  </data>
+  <data name="CustomizeQuickAccessToolbarDots" xml:space="preserve">
+    <value>&amp;Customizar Barra de Acesso Rápido</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>Cortar</value>
+  </data>
+  <data name="CutAbsence" xml:space="preserve">
+    <value>Cortar Ausência</value>
+  </data>
+  <data name="CutDayOff" xml:space="preserve">
+    <value>Cortar Folga</value>
+  </data>
+  <data name="CutPersonalShift" xml:space="preserve">
+    <value>Cortar Turno Pessoal</value>
+  </data>
+  <data name="CutShift" xml:space="preserve">
+    <value>Cortar Turno</value>
+  </data>
+  <data name="CutSpecial" xml:space="preserve">
+    <value>Cortar Especial</value>
+  </data>
+  <data name="CutSpecialThreeDots" xml:space="preserve">
+    <value>Cortar Especial...</value>
+  </data>
+  <data name="DailyView" xml:space="preserve">
+    <value>Visão diária</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Dados</value>
+  </data>
+  <data name="DataAvailable" xml:space="preserve">
+    <value>Dados Disponíveis</value>
+  </data>
+  <data name="DataSummary" xml:space="preserve">
+    <value>Resumo dos Dados</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="AvailabilityDate" xml:space="preserve">
+    <value>Data Disponível</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Dia</value>
+  </data>
+  <data name="DayOff" xml:space="preserve">
+    <value>Folga</value>
+  </data>
+  <data name="DayOffShortName" xml:space="preserve">
+    <value>Folga</value>
+  </data>
+  <data name="DayOfWeek" xml:space="preserve">
+    <value>Dia da Semana</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="DaysOff" xml:space="preserve">
+    <value>Folgas</value>
+  </data>
+  <data name="DayView" xml:space="preserve">
+    <value>Visão do dia</value>
+  </data>
+  <data name="DefaultColor" xml:space="preserve">
+    <value>Cor Inicial</value>
+  </data>
+  <data name="IntervalLength" xml:space="preserve">
+    <value>Duração do Intervalo</value>
+  </data>
+  <data name="ManageScorecards" xml:space="preserve">
+    <value>Gerenciar Scorecard</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="DeleteAbsence" xml:space="preserve">
+    <value>Excluir Ausência</value>
+  </data>
+  <data name="DeleteDayOff" xml:space="preserve">
+    <value>Excluir Folga</value>
+  </data>
+  <data name="DeletePersonalShift" xml:space="preserve">
+    <value>Excluir Turno Pessoal</value>
+  </data>
+  <data name="DeleteShift" xml:space="preserve">
+    <value>Apagar Turno</value>
+  </data>
+  <data name="DeleteSpecialThreeDots" xml:space="preserve">
+    <value>Excluir Especial</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="DescriptionTest" xml:space="preserve">
+    <value>Teste de Descrição</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detalhe</value>
+  </data>
+  <data name="DetailView" xml:space="preserve">
+    <value>Visão do Detalhe</value>
+  </data>
+  <data name="DeviationACWColon" xml:space="preserve">
+    <value>Desvio PAT:</value>
+  </data>
+  <data name="Deviations" xml:space="preserve">
+    <value>Desvios</value>
+  </data>
+  <data name="DeviationCallsColon" xml:space="preserve">
+    <value>Desvios em Chamados:</value>
+  </data>
+  <data name="DeviationTalkTimeColon" xml:space="preserve">
+    <value>Desvios em Tempo Falado:</value>
+  </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Domínio do Windows</value>
+  </data>
+  <data name="DoubleArrowAdd" xml:space="preserve">
+    <value>&gt;&gt;</value>
+  </data>
+  <data name="DoubleArrowRemove" xml:space="preserve">
+    <value>&lt;&lt;</value>
+  </data>
+  <data name="Down" xml:space="preserve">
+    <value>Para Baixo</value>
+  </data>
+  <data name="DoYouWantToSaveChangesYouMade" xml:space="preserve">
+    <value>Quer salvar as alterações que você fez?</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="EditForecast" xml:space="preserve">
+    <value>Abrir Previsão</value>
+  </data>
+  <data name="OpenForecastThreeDots" xml:space="preserve">
+    <value>Abrir Previsão...</value>
+  </data>
+  <data name="Editor" xml:space="preserve">
+    <value>Editor</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EmailResult" xml:space="preserve">
+    <value>Resultado do E-mail</value>
+  </data>
+  <data name="EmployeeNo" xml:space="preserve">
+    <value>Numero do Empregado</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Habilitado</value>
+  </data>
+  <data name="EndPeriod" xml:space="preserve">
+    <value>Fim do Periodo</value>
+  </data>
+  <data name="EndsNextDay" xml:space="preserve">
+    <value>Termina no próximo dia</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>Tempo de Término</value>
+  </data>
+  <data name="EnterNameHere" xml:space="preserve">
+    <value>Digite seu nome aqui</value>
+  </data>
+  <data name="ErrorOccuredWhenAccessingTheDataSource" xml:space="preserve">
+    <value>Ocorreu um erro quando acessado a base de dados</value>
+  </data>
+  <data name="EstimatedOccupancy" xml:space="preserve">
+    <value>Ocupação Estimada</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="ExitOrClose" xml:space="preserve">
+    <value>Sair/Fechar</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 Minutos</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="FinishAmpersand" xml:space="preserve">
+    <value>&amp;Finalizar</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Primeiro Nome</value>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 Minutos</value>
+  </data>
+  <data name="ForecastedACW" xml:space="preserve">
+    <value>PAT Previsto</value>
+  </data>
+  <data name="ForecastedAgents" xml:space="preserve">
+    <value>Agentes Previstos</value>
+  </data>
+  <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
+    <value>Pós Atendimento médio previsto</value>
+  </data>
+  <data name="ForecastedAverageTalkTime" xml:space="preserve">
+    <value>Tempo Médio de Atendimento Médio Previsto</value>
+  </data>
+  <data name="ForecastedCalls" xml:space="preserve">
+    <value>Chamadas Previstas</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Horas</value>
+  </data>
+  <data name="ForecastedTalkTime" xml:space="preserve">
+    <value>Tempo Falado Previsto</value>
+  </data>
+  <data name="Forecasts" xml:space="preserve">
+    <value>Previsões</value>
+  </data>
+  <data name="Workflow" xml:space="preserve">
+    <value>Fluxo de Trabalho</value>
+  </data>
+  <data name="Forward" xml:space="preserve">
+    <value>Segue</value>
+  </data>
+  <data name="ForwardAmpersandArrow" xml:space="preserve">
+    <value>&amp;Segue&gt;</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nome Completo</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>funções</value>
+  </data>
+  <data name="FunctionsAvailable" xml:space="preserve">
+    <value>Funções disponíveis</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Geral</value>
+  </data>
+  <data name="GridActions" xml:space="preserve">
+    <value>Ações da Grade</value>
+  </data>
+  <data name="GroupingAbsences" xml:space="preserve">
+    <value>Ausências dos Grupos</value>
+  </data>
+  <data name="Header" xml:space="preserve">
+    <value>Cabeçalho</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Esconder detalhes</value>
+  </data>
+  <data name="HistoricalDepth" xml:space="preserve">
+    <value>Largura do Histórico</value>
+  </data>
+  <data name="HistoricalPeriod" xml:space="preserve">
+    <value>Período do Histórico</value>
+  </data>
+  <data name="Holiday" xml:space="preserve">
+    <value>Feriado</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Casa</value>
+  </data>
+  <data name="IndexACW" xml:space="preserve">
+    <value>Índice de PAT</value>
+  </data>
+  <data name="IndexAfterCallWork" xml:space="preserve">
+    <value>Índice de Pós Atendimento</value>
+  </data>
+  <data name="IndexCalls" xml:space="preserve">
+    <value>Índice dos chamados</value>
+  </data>
+  <data name="IndexTalkTime" xml:space="preserve">
+    <value>Índice de Tempo Falado</value>
+  </data>
+  <data name="IndexTasks" xml:space="preserve">
+    <value>Índice das Tarefas</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Inserir</value>
+  </data>
+  <data name="InsertNewPerson" xml:space="preserve">
+    <value>Inserir Nova Pessoa</value>
+  </data>
+  <data name="InsertNewPersonFromClipboard" xml:space="preserve">
+    <value>Inserir Nova Pessoa do Quadro de Colagem</value>
+  </data>
+  <data name="AddOptionalColumn" xml:space="preserve">
+    <value>Adicionar Coluna Opcional</value>
+  </data>
+  <data name="DeleteOptionalColumn" xml:space="preserve">
+    <value>Excluir Coluna Opcional</value>
+  </data>
+  <data name="ChangeOptionalColumn" xml:space="preserve">
+    <value>Mudar Coluna Opcional</value>
+  </data>
+  <data name="Intraday" xml:space="preserve">
+    <value>Diário</value>
+  </data>
+  <data name="InvalidCredential" xml:space="preserve">
+    <value>Credenciais Inválidas. Por favor tente novamente.</value>
+  </data>
+  <data name="IsFullDayAbsence" xml:space="preserve">
+    <value>Ausência do dia inteiro</value>
+  </data>
+  <data name="IsIn" xml:space="preserve">
+    <value>Tem</value>
+  </data>
+  <data name="ItemsSelectedParameter" xml:space="preserve">
+    <value>{0} itens selecionados.</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Absenteísmo (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Aderência (%)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Chamadas atendidas por tempo agendado de telefone</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Pós Atendimento Médio (s)</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Tempo de Tratamento Médio (s)</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Tempo Falado Médio (s)</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Disponibilidade (%)</value>
+  </data>
+  <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
+    <value>KPI's no scorecard</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Linguagem</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Ultimo atualizado</value>
+  </data>
+  <data name="Layer" xml:space="preserve">
+    <value>Camada</value>
+  </data>
+  <data name="LeftAxis" xml:space="preserve">
+    <value>Eixo Esquerdo</value>
+  </data>
+  <data name="Legends" xml:space="preserve">
+    <value>Legendas</value>
+  </data>
+  <data name="LessDoubleArrow" xml:space="preserve">
+    <value>Menos &lt;&lt;</value>
+  </data>
+  <data name="LessThanColon" xml:space="preserve">
+    <value>&amp;Menos que:</value>
+  </data>
+  <data name="Limitations" xml:space="preserve">
+    <value>Limitações</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>Linha</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Trava</value>
+  </data>
+  <data name="LockAbsence" xml:space="preserve">
+    <value>Travar Ausência</value>
+  </data>
+  <data name="LockAbsences" xml:space="preserve">
+    <value>Travar Ausências</value>
+  </data>
+  <data name="LockAll" xml:space="preserve">
+    <value>Travar Tudo</value>
+  </data>
+  <data name="LockDayOff" xml:space="preserve">
+    <value>Travar Folga</value>
+  </data>
+  <data name="LockFreeDays" xml:space="preserve">
+    <value>Travar Folgas</value>
+  </data>
+  <data name="Locks" xml:space="preserve">
+    <value>Travas</value>
+  </data>
+  <data name="LockSelection" xml:space="preserve">
+    <value>Travar Seleção</value>
+  </data>
+  <data name="LogObject" xml:space="preserve">
+    <value>Objeto Auditado</value>
+  </data>
+  <data name="MainGrid" xml:space="preserve">
+    <value>Agendas</value>
+  </data>
+  <data name="MainScreen" xml:space="preserve">
+    <value>Tela principal</value>
+  </data>
+  <data name="ManageAbsence" xml:space="preserve">
+    <value>Gerenciar Ausência</value>
+  </data>
+  <data name="ManageDayDistributionsThreeDots" xml:space="preserve">
+    <value>Gerenciar Distribuições Diárias</value>
+  </data>
+  <data name="ManageDayTemplatesThreeDots" xml:space="preserve">
+    <value>Gerenciar Modelos Diários</value>
+  </data>
+  <data name="ManageTemplate" xml:space="preserve">
+    <value>Gerenciar Modelo</value>
+  </data>
+  <data name="MaximumAgents" xml:space="preserve">
+    <value>Agentes Máximos</value>
+  </data>
+  <data name="MaximumOccupancy" xml:space="preserve">
+    <value>Ocupação Máxima</value>
+  </data>
+  <data name="MaxTime" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Merge" xml:space="preserve">
+    <value>Juntar</value>
+  </data>
+  <data name="MinimizeTheRibbon" xml:space="preserve">
+    <value>Mi&amp;nimizar regua</value>
+  </data>
+  <data name="MinimumAgents" xml:space="preserve">
+    <value>Agentes Minimos</value>
+  </data>
+  <data name="MinimumOccupancy" xml:space="preserve">
+    <value>Ocupação Minima</value>
+  </data>
+  <data name="MinTime" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Mês </value>
+  </data>
+  <data name="MonthOfYear" xml:space="preserve">
+    <value>Mês do ano</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>Meses</value>
+  </data>
+  <data name="MonthView" xml:space="preserve">
+    <value>Visão Mensal</value>
+  </data>
+  <data name="MoreDoubleArrow" xml:space="preserve">
+    <value>Mais &gt;&gt;</value>
+  </data>
+  <data name="MoreThanColon" xml:space="preserve">
+    <value>&amp;Mais que:</value>
+  </data>
+  <data name="MoreToComeThreeDots" xml:space="preserve">
+    <value>Mais por vir...</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Mover</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Mover para baixo</value>
+  </data>
+  <data name="MoveLeft" xml:space="preserve">
+    <value>Mover para esquerda</value>
+  </data>
+  <data name="MoveRight" xml:space="preserve">
+    <value>Mover para direita</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Mover para cima</value>
+  </data>
+  <data name="MultipleValuesParanteses" xml:space="preserve">
+    <value>(múltiplos valores)</value>
+  </data>
+  <data name="MultisiteDayTemplate" xml:space="preserve">
+    <value>Modelo dia Multi-Site</value>
+  </data>
+  <data name="MultisiteDayTemplatesInvalidOneParameter" xml:space="preserve">
+    <value>Os modelos não podem ser gravados por causa de um erro de validação. Verifique se cada intervalo somam mais que 100%. Informação sobre o erro: {0}</value>
+  </data>
+  <data name="PrepareForecastThreeDots" xml:space="preserve">
+    <value>Preparar Carga de Trabalho...</value>
+  </data>
+  <data name="CreateWorkloadThreeDots" xml:space="preserve">
+    <value>Criar Carga de Trabalho...</value>
+  </data>
+  <data name="DeleteSkillThreeDots" xml:space="preserve">
+    <value>Excluir Grupo...</value>
+  </data>
+  <data name="EditSkillTemplatesThreeDots" xml:space="preserve">
+    <value>Editar Modelos de Grupo</value>
+  </data>
+  <data name="EditWorkloadTemplates" xml:space="preserve">
+    <value>Editar Modelos de Carga de Trabalho</value>
+  </data>
+  <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
+    <value>Agentes previstos com indisponibilidade</value>
+  </data>
+  <data name="LockShiftCategories" xml:space="preserve">
+    <value>Travar Categorias de Turnos</value>
+  </data>
+  <data name="LockShiftCategory" xml:space="preserve">
+    <value>Travar Categoria de Turno</value>
+  </data>
+  <data name="MultisiteSkillWizard" xml:space="preserve">
+    <value>Configurador de Turnos Multi-Site</value>
+  </data>
+  <data name="MultisiteTemplate" xml:space="preserve">
+    <value>Modelo Multi-Site</value>
+  </data>
+  <data name="MustSpecifyValidTime" xml:space="preserve">
+    <value>Você deve especificar um tempo válido</value>
+  </data>
+  <data name="MyCurrentCulture" xml:space="preserve">
+    <value>Minha cultura atual</value>
+  </data>
+  <data name="MyLanguage" xml:space="preserve">
+    <value>Minha linguagem</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Novo</value>
+  </data>
+  <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
+    <value>Novo Turno Multi-Site....</value>
+  </data>
+  <data name="NewOutlier" xml:space="preserve">
+    <value>Novo Evento Especial</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Nova Senha</value>
+  </data>
+  <data name="NewScorecard" xml:space="preserve">
+    <value>Novo Scorecard</value>
+  </data>
+  <data name="NewShift" xml:space="preserve">
+    <value>Novo Turno</value>
+  </data>
+  <data name="NewSkillThreeDots" xml:space="preserve">
+    <value>Novo Turno...</value>
+  </data>
+  <data name="NewThreeDots" xml:space="preserve">
+    <value>Novo...</value>
+  </data>
+  <data name="NewWorkload" xml:space="preserve">
+    <value>Nova Carga de Trabalho</value>
+  </data>
+  <data name="NewWorkloadThreeDots" xml:space="preserve">
+    <value>Nova Carga de Trabalho...</value>
+  </data>
+  <data name="NextAmpersandArrow" xml:space="preserve">
+    <value>&amp;Próximo &gt;</value>
+  </data>
+  <data name="NextDay" xml:space="preserve">
+    <value>Próximo Dia</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Nenhuma data disponível</value>
+  </data>
+  <data name="NoDateIsSelected" xml:space="preserve">
+    <value>Nenhuma data foi selecionada</value>
+  </data>
+  <data name="NoFunctionsAvailable" xml:space="preserve">
+    <value>Nenhuma função disponível</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="NoRulesetsavailable" xml:space="preserve">
+    <value>Nenhuma Definição de Regra Disponível</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="NotInHierarchy" xml:space="preserve">
+    <value>Usuários</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Numero</value>
+  </data>
+  <data name="OccupancyAdjustment" xml:space="preserve">
+    <value>Ajuste de Ocupação</value>
+  </data>
+  <data name="OccupancySettings" xml:space="preserve">
+    <value>Definições de Ocupação</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="OpenHours" xml:space="preserve">
+    <value>Horas Abertas</value>
+  </data>
+  <data name="OpenPersonAdminPage" xml:space="preserve">
+    <value>Pessoa</value>
+  </data>
+  <data name="OpenSchedulePage" xml:space="preserve">
+    <value>Agendas</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Opções</value>
+  </data>
+  <data name="OriginalACW" xml:space="preserve">
+    <value>PAT Original</value>
+  </data>
+  <data name="OriginalAfterCallWork" xml:space="preserve">
+    <value>Pós atendimento original</value>
+  </data>
+  <data name="OriginalCalls" xml:space="preserve">
+    <value>Chamadas realizadas originais</value>
+  </data>
+  <data name="OriginalTalkTime" xml:space="preserve">
+    <value>Tempo falado original</value>
+  </data>
+  <data name="OriginalTasks" xml:space="preserve">
+    <value>Tarefas originais</value>
+  </data>
+  <data name="Outlier" xml:space="preserve">
+    <value>Eventos especiais</value>
+  </data>
+  <data name="OverlappningShifts" xml:space="preserve">
+    <value>Turnos Sobrepostos</value>
+  </data>
+  <data name="OverView" xml:space="preserve">
+    <value>Visão Geral</value>
+  </data>
+  <data name="PageSetup" xml:space="preserve">
+    <value>Configuração da Página</value>
+  </data>
+  <data name="PartTimePercentage" xml:space="preserve">
+    <value>Percentual de Tempo Parcial</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Percentuais de Tempo Parcial</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Senhas são diferentes</value>
+  </data>
+  <data name="PasswordSettings" xml:space="preserve">
+    <value>Configurações de Senhas</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+  <data name="PasteAbsence" xml:space="preserve">
+    <value>Colar Ausência</value>
+  </data>
+  <data name="PasteAssignment" xml:space="preserve">
+    <value>Colar Turno</value>
+  </data>
+  <data name="PasteDayOff" xml:space="preserve">
+    <value>Colar Folga</value>
+  </data>
+  <data name="PasteNew" xml:space="preserve">
+    <value>Colar Novo</value>
+  </data>
+  <data name="PastePersonalShift" xml:space="preserve">
+    <value>Colar Turno Pessoal</value>
+  </data>
+  <data name="PasteSpecial" xml:space="preserve">
+    <value>Colar Especial</value>
+  </data>
+  <data name="PasteSpecialThreeDots" xml:space="preserve">
+    <value>Colar Especial...</value>
+  </data>
+  <data name="PeopleAdminScreen" xml:space="preserve">
+    <value>Pessoa</value>
+  </data>
+  <data name="PeoplePeriods" xml:space="preserve">
+    <value>Período da Pessoa</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>Porcentagem</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Período</value>
+  </data>
+  <data name="PeriodSelection" xml:space="preserve">
+    <value>Seleção de Período</value>
+  </data>
+  <data name="PeriodView" xml:space="preserve">
+    <value>Visão do Período</value>
+  </data>
+  <data name="Periodviewprototype" xml:space="preserve">
+    <value>Protótipo de Visão de Período</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Permissão</value>
+  </data>
+  <data name="PersonAdmin" xml:space="preserve">
+    <value>Pessoa</value>
+  </data>
+  <data name="PersonalizeYourAgentPortal" xml:space="preserve">
+    <value>Personalizar Meu Tempo</value>
+  </data>
+  <data name="PersonalShift" xml:space="preserve">
+    <value>Atividade Pessoal</value>
+  </data>
+  <data name="PersonalShifts" xml:space="preserve">
+    <value>Atividades Pessoais</value>
+  </data>
+  <data name="PersonSkill" xml:space="preserve">
+    <value>Grupos</value>
+  </data>
+  <data name="PlaceHolder" xml:space="preserve">
+    <value>[Espaço Disponível]</value>
+  </data>
+  <data name="PlaceHolderForSmartPart" xml:space="preserve">
+    <value>Espaço Disponível para Smart Part</value>
+  </data>
+  <data name="PlaceQuickAccessToolbarAboveTheRibbon" xml:space="preserve">
+    <value>&amp;Coloque a Barra de acesso rápida acima da Regua</value>
+  </data>
+  <data name="PlaceQuickAccessToolbarBelowTheRibbon" xml:space="preserve">
+    <value>&amp;Coloque a Barra de acesso rápida abaixo da Regua</value>
+  </data>
+  <data name="PlanDayOffs" xml:space="preserve">
+    <value>Planejar folgas</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Imprimir</value>
+  </data>
+  <data name="PrintPreview" xml:space="preserve">
+    <value>Previsão da Impressão</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>Prioridade</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Propriedades</value>
+  </data>
+  <data name="PropertiesThreeDots" xml:space="preserve">
+    <value>Propriedades...</value>
+  </data>
+  <data name="Quarter" xml:space="preserve">
+    <value>Trimestre</value>
+  </data>
+  <data name="QuestionCreateAnotherSubSkill" xml:space="preserve">
+    <value>Você que criar outro Sub Grupo?</value>
+  </data>
+  <data name="QuestionCreateAnotherWorkload" xml:space="preserve">
+    <value>Você quer criar outra Carga de Trabalho?</value>
+  </data>
+  <data name="QuestionCreateSubSkill" xml:space="preserve">
+    <value>O Grupo Multi-Site não contêm nenhum Sub-Grupo. Você gostaria de criar um?</value>
+  </data>
+  <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
+    <value>Você realmente quer excluir o Grupo {0}{1}{0}?</value>
+  </data>
+  <data name="QuestionSaveChanges" xml:space="preserve">
+    <value>Salvar Alterações?</value>
+  </data>
+  <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
+    <value>Seu Grupo não têm nenhuma Carga de Trabalho. Você quer criar uma Carga de Trabalho agora?</value>
+  </data>
+  <data name="QuestionWouldYouLikeToCreateWorkloadQuestionMark" xml:space="preserve">
+    <value>Você quer criar uma carga de trabalho?</value>
+  </data>
+  <data name="Queue" xml:space="preserve">
+    <value>Fila</value>
+  </data>
+  <data name="Queues" xml:space="preserve">
+    <value>Filas</value>
+  </data>
+  <data name="QuickAccess" xml:space="preserve">
+    <value>Acesso Rápido</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Disponível</value>
+  </data>
+  <data name="Redo" xml:space="preserve">
+    <value>Refazer</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="RemoveFromQuickAccessToolbar" xml:space="preserve">
+    <value>&amp;Remover da Barra de Acesso Rápido</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renomear</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Relatórios</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="ResetTrend" xml:space="preserve">
+    <value>Reiniciar Tendência</value>
+  </data>
+  <data name="ResolveBusinessRulesConflict" xml:space="preserve">
+    <value>Resolver conflitos de regras de negócio</value>
+  </data>
+  <data name="ResultView" xml:space="preserve">
+    <value>Visão de Resultados</value>
+  </data>
+  <data name="RightAxis" xml:space="preserve">
+    <value>Eixo Direito</value>
+  </data>
+  <data name="RightToLeft" xml:space="preserve">
+    <value>Direita para a esquerda</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Função</value>
+  </data>
+  <data name="RollingPeriod" xml:space="preserve">
+    <value>Período de Rolagem</value>
+  </data>
+  <data name="Rules" xml:space="preserve">
+    <value>Regras</value>
+  </data>
+  <data name="RuleSet" xml:space="preserve">
+    <value>Definição de Regra</value>
+  </data>
+  <data name="Rulesetavailable" xml:space="preserve">
+    <value>Uma definição de regra disponível</value>
+  </data>
+  <data name="Rulesetsavailables" xml:space="preserve">
+    <value>Definição de regra disponível</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Salvar como</value>
+  </data>
+  <data name="Scenario" xml:space="preserve">
+    <value>Cenário</value>
+  </data>
+  <data name="ScenarioColon" xml:space="preserve">
+    <value>Cenário:</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Agenda</value>
+  </data>
+  <data name="ScheduleDescripton" xml:space="preserve">
+    <value>Descrição da Agenda</value>
+  </data>
+  <data name="ScheduledHeads" xml:space="preserve">
+    <value>Cabeçalho Agendados</value>
+  </data>
+  <data name="ScheduledHours" xml:space="preserve">
+    <value>Horas Agendadas</value>
+  </data>
+  <data name="ScheduledStaff" xml:space="preserve">
+    <value>Agentes Agendados</value>
+  </data>
+  <data name="SchedulePeriods" xml:space="preserve">
+    <value>Períodos de Agendamento</value>
+  </data>
+  <data name="Schedules" xml:space="preserve">
+    <value>Agendas</value>
+  </data>
+  <data name="ScheduleSelected" xml:space="preserve">
+    <value>Agenda Selecionada</value>
+  </data>
+  <data name="ScheduleViews" xml:space="preserve">
+    <value>Visão da Agenda</value>
+  </data>
+  <data name="Scheduling" xml:space="preserve">
+    <value>Agendando</value>
+  </data>
+  <data name="SchedulingScreen" xml:space="preserve">
+    <value>Tela de Agendamento</value>
+  </data>
+  <data name="ScoreCard" xml:space="preserve">
+    <value>Scorecard</value>
+  </data>
+  <data name="Scorecards" xml:space="preserve">
+    <value>Scorecards</value>
+  </data>
+  <data name="Segment" xml:space="preserve">
+    <value>Seguimento</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>&lt;Selecione&gt;</value>
+  </data>
+  <data name="SelectedExceptions" xml:space="preserve">
+    <value>Exceções Selecionadas</value>
+  </data>
+  <data name="SelectHistoricalData" xml:space="preserve">
+    <value>Selecione Dados Históricos</value>
+  </data>
+  <data name="SelectSiteColon" xml:space="preserve">
+    <value>Selecione Site:</value>
+  </data>
+  <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
+    <value>Nível de Serviço (%)</value>
+  </data>
+  <data name="ServiceLevelPercentageMustBeBetween1And100" xml:space="preserve">
+    <value>O Percentual de Nível deve ser entre 1 e 100%</value>
+  </data>
+  <data name="ServiceLevelPercentSign" xml:space="preserve">
+    <value>Nível de Serviço %</value>
+  </data>
+  <data name="ServiceLevelSParenthesis" xml:space="preserve">
+    <value>Nível de Serviço (s)</value>
+  </data>
+  <data name="SetCulture" xml:space="preserve">
+    <value>Configurar Cultura</value>
+  </data>
+  <data name="SetKPITargets" xml:space="preserve">
+    <value>Configurar Alvos do KPI</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Configurar Senha</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="SetTrendManually" xml:space="preserve">
+    <value>Configurar Tendência Manualmente</value>
+  </data>
+  <data name="Shift" xml:space="preserve">
+    <value>Turno</value>
+  </data>
+  <data name="ShiftCategoryColon" xml:space="preserve">
+    <value>Categoria de Turno:</value>
+  </data>
+  <data name="ShiftCreator" xml:space="preserve">
+    <value>Turnos</value>
+  </data>
+  <data name="ShiftEditor" xml:space="preserve">
+    <value>Editor de Turno</value>
+  </data>
+  <data name="ShowAbsence" xml:space="preserve">
+    <value>Mostrar Ausência</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>Mostrar Detalhes</value>
+  </data>
+  <data name="ShowMainShift" xml:space="preserve">
+    <value>Mostrar Turno</value>
+  </data>
+  <data name="ShowNext" xml:space="preserve">
+    <value>Mostrar o Próximo</value>
+  </data>
+  <data name="ShowNextShift" xml:space="preserve">
+    <value>Mostrar Próximo Turno</value>
+  </data>
+  <data name="ShowPersonalShifts" xml:space="preserve">
+    <value>Mostrar Turno Pessoal</value>
+  </data>
+  <data name="ShowPrevious" xml:space="preserve">
+    <value>Mostrar Anterior</value>
+  </data>
+  <data name="ShowPreviousShift" xml:space="preserve">
+    <value>Mostrar Turno Anterior</value>
+  </data>
+  <data name="Shrinkage" xml:space="preserve">
+    <value>Indisponibilidade</value>
+  </data>
+  <data name="SixMinutes" xml:space="preserve">
+    <value>6 Minutos </value>
+  </data>
+  <data name="SixtyMinutes" xml:space="preserve">
+    <value>60 Minutos</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="SkillData" xml:space="preserve">
+    <value>Dados do Grupo</value>
+  </data>
+  <data name="SkillDataGrids" xml:space="preserve">
+    <value>Tabela de Dados do Grupo</value>
+  </data>
+  <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
+    <value>Informação de Erro: {0} Verifique se o numero máximo de agentes é 0 ou maior que o mínimo de agentes, ou se a distribuição entre sub-grupos adiciona para 100%</value>
+  </data>
+  <data name="SkillDayTemplate" xml:space="preserve">
+    <value>Modelo de Dia do Grupo</value>
+  </data>
+  <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
+    <value>Os modelos não podem ser salvos porque existe um erro de validação. Verifique se o Máximo de Agentes é 0 ou maior que o mínimo de agentes. Informação do Erro: {0}</value>
+  </data>
+  <data name="SkillDayTemplates" xml:space="preserve">
+    <value>Modelos de Dias do Grupo</value>
+  </data>
+  <data name="SkillNameIsInvalid" xml:space="preserve">
+    <value>O nome do Grupo é inválido, o nome não pode estar vazio ou ser maior do que 50 caracteres.</value>
+  </data>
+  <data name="SkillsTotal" xml:space="preserve">
+    <value>Grupos Total</value>
+  </data>
+  <data name="SkillTab" xml:space="preserve">
+    <value>Guia de Grupos</value>
+  </data>
+  <data name="SkillTemplate" xml:space="preserve">
+    <value>Modelo de Grupo</value>
+  </data>
+  <data name="ForecastMethod" xml:space="preserve">
+    <value>Método da Previsão</value>
+  </data>
+  <data name="SkillViews" xml:space="preserve">
+    <value>Visões de Grupo</value>
+  </data>
+  <data name="SkillWizard" xml:space="preserve">
+    <value>Configurador de Grupo</value>
+  </data>
+  <data name="SkillWizardInformation" xml:space="preserve">
+    <value>O Configirador ajuda você a criar um Grupo.</value>
+  </data>
+  <data name="SkillWizardWelcome" xml:space="preserve">
+    <value>Bem-vindo ao Configurador de Grupo</value>
+  </data>
+  <data name="Smoothing" xml:space="preserve">
+    <value>Atenuação</value>
+  </data>
+  <data name="SpecialEvents" xml:space="preserve">
+    <value>Eventos Especiais</value>
+  </data>
+  <data name="SpecialTemplates" xml:space="preserve">
+    <value>Modelos Especiais</value>
+  </data>
+  <data name="SpecificDatesSelection" xml:space="preserve">
+    <value>Seleção de datas específicas</value>
+  </data>
+  <data name="Split" xml:space="preserve">
+    <value>Dividir</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="StandardColors" xml:space="preserve">
+    <value>Cores Originais</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Data Início:</value>
+  </data>
+  <data name="StartMenu" xml:space="preserve">
+    <value>Menu Inicial</value>
+  </data>
+  <data name="StartPeriod" xml:space="preserve">
+    <value>Período Inicial</value>
+  </data>
+  <data name="StartSegment" xml:space="preserve">
+    <value>Seguimento Inicial</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Tempo Início</value>
+  </data>
+  <data name="SubSkill" xml:space="preserve">
+    <value>Sub-Grupo</value>
+  </data>
+  <data name="SubSkillDistributions" xml:space="preserve">
+    <value>Distrinbuições de Sub-Grupos</value>
+  </data>
+  <data name="SubSkillHasValueInTemplate" xml:space="preserve">
+    <value>O Sub-Grupo não pode ser excluído. Existem valores nos modelos de distribuição. Remova-os e tente novamente.</value>
+  </data>
+  <data name="SubSkills" xml:space="preserve">
+    <value>Sub-Grupos</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Resumo</value>
+  </data>
+  <data name="SummaryView" xml:space="preserve">
+    <value>Visão do Resumo</value>
+  </data>
+  <data name="SwitchDateSelectionView" xml:space="preserve">
+    <value>Trocar Visão da Data de Seleção</value>
+  </data>
+  <data name="SystemColor" xml:space="preserve">
+    <value>Cor do Sistema</value>
+  </data>
+  <data name="TalkTime" xml:space="preserve">
+    <value>Tempo Falado</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Alvo</value>
+  </data>
+  <data name="TargetColon" xml:space="preserve">
+    <value>&amp;Alvo:</value>
+  </data>
+  <data name="TargetPeriod" xml:space="preserve">
+    <value>Período Alvo</value>
+  </data>
+  <data name="TargetPeriodFrom" xml:space="preserve">
+    <value>Período Alvo de</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Membros do Time</value>
+  </data>
+  <data name="TeamView" xml:space="preserve">
+    <value>Visão do Time</value>
+  </data>
+  <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
+    <value>Teleopti CCC: Previsões</value>
+  </data>
+  <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
+    <value>Teleopti CCC: Portal Principal</value>
+  </data>
+  <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
+    <value>Teleopti CCC: Agendas</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Modelo</value>
+  </data>
+  <data name="TemplatesThreeDots" xml:space="preserve">
+    <value>Modelos...</value>
+  </data>
+  <data name="TenMinutes" xml:space="preserve">
+    <value>10 Minutos</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Teste</value>
+  </data>
+  <data name="ThemeColors" xml:space="preserve">
+    <value>Cores dos Temas</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 Minutos</value>
+  </data>
+  <data name="ThreeDots" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="CreateForecastFor" xml:space="preserve">
+    <value>Criar previsão para</value>
+  </data>
+  <data name="TimeZone" xml:space="preserve">
+    <value>Fuzo Horário</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Hoje</value>
+  </data>
+  <data name="ToggleDateSelection" xml:space="preserve">
+    <value>Seleção de Conversão de Data</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Ferramentas</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TotalACW" xml:space="preserve">
+    <value>Total PAT</value>
+  </data>
+  <data name="TotalAfterWorkTime" xml:space="preserve">
+    <value>Total de Pós-Atendimento</value>
+  </data>
+  <data name="TotalCalls" xml:space="preserve">
+    <value>Total de Chamadas</value>
+  </data>
+  <data name="TotalTalkTime" xml:space="preserve">
+    <value>Tempo falado total</value>
+  </data>
+  <data name="Trend" xml:space="preserve">
+    <value>Tendência</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="UICulture" xml:space="preserve">
+    <value>UI-Cultura</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Desfazer</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Unidade</value>
+  </data>
+  <data name="UnknownTimeFormat" xml:space="preserve">
+    <value>Formato de tempo desconhecido</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Destravar</value>
+  </data>
+  <data name="UnlockAll" xml:space="preserve">
+    <value>Destravar Todos</value>
+  </data>
+  <data name="UnlockSelection" xml:space="preserve">
+    <value>Destravar Seleção</value>
+  </data>
+  <data name="Up" xml:space="preserve">
+    <value>Cima</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="UpdatedBy" xml:space="preserve">
+    <value>Atualizado por</value>
+  </data>
+  <data name="UpdateGrid" xml:space="preserve">
+    <value>Tabela de Atualização</value>
+  </data>
+  <data name="UpdatesStatistics" xml:space="preserve">
+    <value>Atualizando Estatisticas</value>
+  </data>
+  <data name="UpdateStatistics" xml:space="preserve">
+    <value>Atualizar Estatisticas</value>
+  </data>
+  <data name="UseAverage" xml:space="preserve">
+    <value>Usar Média</value>
+  </data>
+  <data name="UseOccupancyAdjustment" xml:space="preserve">
+    <value>Usar Ajustes de Ocupação</value>
+  </data>
+  <data name="UserCredentialsFor" xml:space="preserve">
+    <value>Usar credenciais para</value>
+  </data>
+  <data name="UseTemplatesForLongtermForecasting" xml:space="preserve">
+    <value>Usar modelos para Previsões de Longo Prazo</value>
+  </data>
+  <data name="UseTrend" xml:space="preserve">
+    <value>Usar Tendência</value>
+  </data>
+  <data name="ValidatedACW" xml:space="preserve">
+    <value>PAT Validados</value>
+  </data>
+  <data name="ValidatedAfterCallWork" xml:space="preserve">
+    <value>Pós-Atendimento Validados</value>
+  </data>
+  <data name="ValidatedCalls" xml:space="preserve">
+    <value>Chamados Validados</value>
+  </data>
+  <data name="ValidatedTalkTime" xml:space="preserve">
+    <value>Tempo Falado Validado</value>
+  </data>
+  <data name="ValidatedTasks" xml:space="preserve">
+    <value>Tarefas Validados</value>
+  </data>
+  <data name="Validation" xml:space="preserve">
+    <value>Validação</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>Erro de Validação</value>
+  </data>
+  <data name="ValidationPeriod" xml:space="preserve">
+    <value>Período de Validação</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Visão</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>Visões</value>
+  </data>
+  <data name="Visual" xml:space="preserve">
+    <value>Visual</value>
+  </data>
+  <data name="VolumeForecast" xml:space="preserve">
+    <value>Previsão de Logo Prazo</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Semana</value>
+  </data>
+  <data name="WeekDay" xml:space="preserve">
+    <value>Dia de Semana</value>
+  </data>
+  <data name="WeeklyView" xml:space="preserve">
+    <value>Visão Semanal</value>
+  </data>
+  <data name="WeekOfMonth" xml:space="preserve">
+    <value>Semana do Mês</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>Semanas</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bem-vindo</value>
+  </data>
+  <data name="WinLoginNameDot" xml:space="preserve">
+    <value>Log On Windows</value>
+  </data>
+  <data name="Wizard" xml:space="preserve">
+    <value>Configurador</value>
+  </data>
+  <data name="WorkflowToolWelcome" xml:space="preserve">
+    <value>Use esta ferramenta de workflow para preparar sua Carga de Trabalho</value>
+  </data>
+  <data name="Workload" xml:space="preserve">
+    <value>Carga de Trabalho</value>
+  </data>
+  <data name="WorkloadCreatedDotParameter0" xml:space="preserve">
+    <value>Carga de Trabalho Criada {0}.</value>
+  </data>
+  <data name="WorkloadDayTemplate" xml:space="preserve">
+    <value>Modelo de Carga de Trabalho Diária</value>
+  </data>
+  <data name="WorkloadDayTemplates" xml:space="preserve">
+    <value>Modelos de Carga de Trabalho Diária</value>
+  </data>
+  <data name="WorkloadNameIsInvalid" xml:space="preserve">
+    <value>O nome da Carga de Trabalho é inválido. O nome não pode ser vazio ou maior que 50 caracteres.</value>
+  </data>
+  <data name="WorkloadTemplate" xml:space="preserve">
+    <value>Modelo de Carga de Trabalho</value>
+  </data>
+  <data name="WorkloadWizard" xml:space="preserve">
+    <value>Configurador de Carga de Trabalho</value>
+  </data>
+  <data name="WorkloadWizardInformation" xml:space="preserve">
+    <value>O Configurador ajuda a criar uma Carga de Trabalho</value>
+  </data>
+  <data name="WorkloadWizardWelcome" xml:space="preserve">
+    <value>Bem-vindo ao Configurador de Carga de Trabalho</value>
+  </data>
+  <data name="WorkShiftRule" xml:space="preserve">
+    <value>Regra de Turno de Trabalho</value>
+  </data>
+  <data name="Workshiftruleset" xml:space="preserve">
+    <value>Configuração de Regra de Turno de Trabalho</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="YearlyTrend" xml:space="preserve">
+    <value>Tendência Anual</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>Anos</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
+    <value>Você que salvar na Agenda?</value>
+  </data>
+  <data name="ZeroZeroColonZeroZero" xml:space="preserve">
+    <value>00:00</value>
+  </data>
+  <data name="DateFromGreaterThanDateTo" xml:space="preserve">
+    <value>Data final deve ocorrer depois da data inicial</value>
+  </data>
+  <data name="EmptyRequest" xml:space="preserve">
+    <value>Requisição vazia</value>
+  </data>
+  <data name="RequestsSummary" xml:space="preserve">
+    <value>Resumo das Requisições</value>
+  </data>
+  <data name="EmploymentTypeFixedStaff" xml:space="preserve">
+    <value>Equipe Fixa</value>
+  </data>
+  <data name="EmploymentTypeHourlyStaff" xml:space="preserve">
+    <value>Equipe por Hora</value>
+  </data>
+  <data name="GroupingActivity" xml:space="preserve">
+    <value>Agupando Atividade</value>
+  </data>
+  <data name="IsContractTime" xml:space="preserve">
+    <value>É tempo de contrato</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="NewApplicationRole" xml:space="preserve">
+    <value>Nova Aplicação de Função</value>
+  </data>
+  <data name="NewContract" xml:space="preserve">
+    <value>Novo Contrato</value>
+  </data>
+  <data name="NoPeopleAvailable" xml:space="preserve">
+    <value>Nenhuma pessoa disponível</value>
+  </data>
+  <data name="NoRolesAvailable" xml:space="preserve">
+    <value>Nenhuma função disponível</value>
+  </data>
+  <data name="OneFunctionAvailable" xml:space="preserve">
+    <value>Uma função disponível</value>
+  </data>
+  <data name="OnePersonAvailable" xml:space="preserve">
+    <value>Uma pessoa disponível</value>
+  </data>
+  <data name="OneRoleAvailable" xml:space="preserve">
+    <value>Uma função disponível</value>
+  </data>
+  <data name="PeopleAvailable" xml:space="preserve">
+    <value>Pessoa disponível</value>
+  </data>
+  <data name="RequestDate" xml:space="preserve">
+    <value>Data da requisição</value>
+  </data>
+  <data name="RequestStatus" xml:space="preserve">
+    <value>Estado da requisição</value>
+  </data>
+  <data name="RolesAvailable" xml:space="preserve">
+    <value>Funções disponíveis</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Nome curto</value>
+  </data>
+  <data name="UnableToConnectRemoteService" xml:space="preserve">
+    <value>Não foi possível de conectar ao serviço remoto</value>
+  </data>
+  <data name="UseAverageOnDeviatingDays" xml:space="preserve">
+    <value>Usar média nos dias atípicos</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Cesta de Turnos</value>
+  </data>
+  <data name="AbsenceRequest" xml:space="preserve">
+    <value>Requisição de Ausência</value>
+  </data>
+  <data name="AgentName" xml:space="preserve">
+    <value>Nome do Agente</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="NewAbsenceRequest" xml:space="preserve">
+    <value>Nova solicitação de ausência</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>Solicitações</value>
+  </data>
+  <data name="PrintSchedule" xml:space="preserve">
+    <value>Imprimir agenda</value>
+  </data>
+  <data name="ScoreCardPreview" xml:space="preserve">
+    <value>Previsão do Scorecard</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Mensagem de erro</value>
+  </data>
+  <data name="EnterNewGroupName" xml:space="preserve">
+    <value>Digite o novo nome do grupo</value>
+  </data>
+  <data name="NewGroupName" xml:space="preserve">
+    <value>Novo Nome do Grupo</value>
+  </data>
+  <data name="TerminalDate" xml:space="preserve">
+    <value>Dia de Saída</value>
+  </data>
+  <data name="AgentScheduleMessenger" xml:space="preserve">
+    <value>Mensageiro da Agenda do Agente</value>
+  </data>
+  <data name="WeekView" xml:space="preserve">
+    <value>Visão Semanal</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Mostrar Todos</value>
+  </data>
+  <data name="DeleteSpecial" xml:space="preserve">
+    <value>Excluir Especial</value>
+  </data>
+  <data name="PasteShift" xml:space="preserve">
+    <value>Colar Turno</value>
+  </data>
+  <data name="Shifts" xml:space="preserve">
+    <value>Turnos</value>
+  </data>
+  <data name="AddMainLayer" xml:space="preserve">
+    <value>Adicionar Camada Principal</value>
+  </data>
+  <data name="AddPersonalLayer" xml:space="preserve">
+    <value>Adicionar Camanda Pessoal</value>
+  </data>
+  <data name="GridRowsInChart" xml:space="preserve">
+    <value>Configurações do Gráfico</value>
+  </data>
+  <data name="FromColon" xml:space="preserve">
+    <value>De:</value>
+  </data>
+  <data name="ToColon" xml:space="preserve">
+    <value>Para:</value>
+  </data>
+  <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
+    <value>Tem certeza que quer apagar a Carga de Trabalho {0}{1}{0}?</value>
+  </data>
+  <data name="AuditTrail" xml:space="preserve">
+    <value>Log de Auditoria</value>
+  </data>
+  <data name="ManageScenarios" xml:space="preserve">
+    <value>Gerenciar Cenários</value>
+  </data>
+  <data name="DefaultScenario" xml:space="preserve">
+    <value>Cenário Padrão</value>
+  </data>
+  <data name="SelectScenario" xml:space="preserve">
+    <value>Selecione Cenário</value>
+  </data>
+  <data name="ShowOvertime" xml:space="preserve">
+    <value>Mostrar Tempo Excedido</value>
+  </data>
+  <data name="GridInChart" xml:space="preserve">
+    <value>Tabela no Gráfico</value>
+  </data>
+  <data name="BackToLegalState" xml:space="preserve">
+    <value>Volta ao Estado Legal</value>
+  </data>
+  <data name="EditCommonAgentNameDescription" xml:space="preserve">
+    <value>Editar descrição do formato do nome do agente comum</value>
+  </data>
+  <data name="Example" xml:space="preserve">
+    <value>Exemplo</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Formato</value>
+  </data>
+  <data name="AmpersandFirstName" xml:space="preserve">
+    <value>&amp;Primeiro Nome</value>
+  </data>
+  <data name="AmpersandEmployeeNumber" xml:space="preserve">
+    <value>&amp;Numero do Empregado</value>
+  </data>
+  <data name="AmpersandLastName" xml:space="preserve">
+    <value>&amp;Sobrenome</value>
+  </data>
+  <data name="ChartInitialized" xml:space="preserve">
+    <value>Gráfico Inicializado</value>
+  </data>
+  <data name="DataSourceInitialized" xml:space="preserve">
+    <value>Fonte de dados inicializado</value>
+  </data>
+  <data name="DataSourceLoading" xml:space="preserve">
+    <value>Carregando fonte de dados</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Feito</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Inicializando</value>
+  </data>
+  <data name="MultisiteSkill" xml:space="preserve">
+    <value>Grupo Multi-Site</value>
+  </data>
+  <data name="MultisiteSkillLoading" xml:space="preserve">
+    <value>Carregando Grupo Multi-Site</value>
+  </data>
+  <data name="SkillDaysLoaded" xml:space="preserve">
+    <value>Grupo Multi-Site Carregado</value>
+  </data>
+  <data name="SkillLoaded" xml:space="preserve">
+    <value>Grupo Carregado</value>
+  </data>
+  <data name="TemplatesLoaded" xml:space="preserve">
+    <value>Modelos carregados</value>
+  </data>
+  <data name="TemplateTargetMultisite" xml:space="preserve">
+    <value>Grupo Multi-Site</value>
+  </data>
+  <data name="TemplateTargetSkill" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="TemplateTargetWorkload" xml:space="preserve">
+    <value>Carga de Trabalho</value>
+  </data>
+  <data name="WorkingIntervalCustom" xml:space="preserve">
+    <value>Customizado</value>
+  </data>
+  <data name="WorkingIntervalDay" xml:space="preserve">
+    <value>Dia</value>
+  </data>
+  <data name="WorkingIntervalIntraday" xml:space="preserve">
+    <value>Intradiário</value>
+  </data>
+  <data name="WorkingIntervalMonth" xml:space="preserve">
+    <value>Mês</value>
+  </data>
+  <data name="WorkingIntervalSelection" xml:space="preserve">
+    <value>Seleção</value>
+  </data>
+  <data name="WorkingIntervalWeek" xml:space="preserve">
+    <value>Semana</value>
+  </data>
+  <data name="WorkloadDaysLoaded" xml:space="preserve">
+    <value>Dias de Carga de Trabalho Carregados</value>
+  </data>
+  <data name="ChartViews" xml:space="preserve">
+    <value>Visões dos Gráficos</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="SelectColor" xml:space="preserve">
+    <value>Selecione Cor</value>
+  </data>
+  <data name="Templates" xml:space="preserve">
+    <value>Modelos</value>
+  </data>
+  <data name="AddNewGroupPage" xml:space="preserve">
+    <value>Adicionar nova pagina do grupo</value>
+  </data>
+  <data name="ManageGroupings" xml:space="preserve">
+    <value>Gerenciar agrupamentos</value>
+  </data>
+  <data name="DoNotGroup" xml:space="preserve">
+    <value>Não agrupar</value>
+  </data>
+  <data name="EditGroupPage" xml:space="preserve">
+    <value>Editar pagina do grupo</value>
+  </data>
+  <data name="GroupByOptions" xml:space="preserve">
+    <value>Basear o novo agrupamento</value>
+  </data>
+  <data name="GroupByPersonNote" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="GroupByPersonPeriodContract" xml:space="preserve">
+    <value>Contrato</value>
+  </data>
+  <data name="GroupByPersonPeriodContractSchedule" xml:space="preserve">
+    <value>Agenda Contrato</value>
+  </data>
+  <data name="GroupByPersonPeriodPartTimePercentage" xml:space="preserve">
+    <value>Porcentagem de tempo parcial</value>
+  </data>
+  <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
+    <value>Cesta de Turnos</value>
+  </data>
+  <data name="GroupPage" xml:space="preserve">
+    <value>Página do Grupo</value>
+  </data>
+  <data name="GroupPageDetails" xml:space="preserve">
+    <value>Detalhes da Página do Grupo</value>
+  </data>
+  <data name="GroupPageName" xml:space="preserve">
+    <value>Nome da Página do Grupo</value>
+  </data>
+  <data name="GroupPageSettings" xml:space="preserve">
+    <value>Tela de configuração de grupo</value>
+  </data>
+  <data name="OptionalColumn" xml:space="preserve">
+    <value>Coluna opcional</value>
+  </data>
+  <data name="PreviewOrEditGroupPage" xml:space="preserve">
+    <value>Ver Agrupamento</value>
+  </data>
+  <data name="GroupPagePreviewScreen" xml:space="preserve">
+    <value>Tela de visão da página do grupo</value>
+  </data>
+  <data name="RootGroup" xml:space="preserve">
+    <value>Grupo raiz</value>
+  </data>
+  <data name="NewGroupPageName" xml:space="preserve">
+    <value>Nome do nova página do grupo</value>
+  </data>
+  <data name="RenameGroupPage" xml:space="preserve">
+    <value>Renomear página do grupo</value>
+  </data>
+  <data name="DuplicatePersonPeriodMessage" xml:space="preserve">
+    <value>Não são permitidas datas duplicadas nos períodos pessoais Para</value>
+  </data>
+  <data name="DuplicateSchedulePeriodMessage" xml:space="preserve">
+    <value>Não são permitidas datas duplicadas nos períodos das agendas Para</value>
+  </data>
+  <data name="ChooseScorecardToEdit" xml:space="preserve">
+    <value>Escolha Scorecard para Editar</value>
+  </data>
+  <data name="EnterSettingsForThisScorecard" xml:space="preserve">
+    <value>Digite os parâmetros para este Scorecard</value>
+  </data>
+  <data name="ScorecardColon" xml:space="preserve">
+    <value>Scorecard:</value>
+  </data>
+  <data name="ForecastedACWColon" xml:space="preserve">
+    <value>PAT Previsto:</value>
+  </data>
+  <data name="ForecastedCallsColon" xml:space="preserve">
+    <value>Chamadas Previstas:</value>
+  </data>
+  <data name="ForecastedTalkTimeColon" xml:space="preserve">
+    <value>Tempo Falado Previsto:</value>
+  </data>
+  <data name="SkillColon" xml:space="preserve">
+    <value>Grupo:</value>
+  </data>
+  <data name="ForecastMethodColon" xml:space="preserve">
+    <value>Método da Previsão:</value>
+  </data>
+  <data name="SubSkillDistributionsColon" xml:space="preserve">
+    <value>Distribuições de Sub-Grupos:</value>
+  </data>
+  <data name="RuleSets" xml:space="preserve">
+    <value>Definições de Regra</value>
+  </data>
+  <data name="ShiftBags" xml:space="preserve">
+    <value>Cestas de Turnos </value>
+  </data>
+  <data name="ShiftCategory" xml:space="preserve">
+    <value>Categoria de Turnos</value>
+  </data>
+  <data name="Forecasted" xml:space="preserve">
+    <value>Previsto</value>
+  </data>
+  <data name="BusinessRuleDayOffErrorMessage1" xml:space="preserve">
+    <value>A Folga em {0} conflita com a atividade antes e depois da Folga</value>
+  </data>
+  <data name="BusinessRuleDayOffErrorMessage2" xml:space="preserve">
+    <value>A Folga em {0} conflita com a atividade antes e a flexibilidade não permite mover para frente.</value>
+  </data>
+  <data name="BusinessRuleDayOffErrorMessage3" xml:space="preserve">
+    <value>A Folga em {0} conflita com a atividade antes e não pode ser movida adiante.</value>
+  </data>
+  <data name="BusinessRuleDayOffErrorMessage4" xml:space="preserve">
+    <value>A Folga em {0} conflita com a atividade depois e a flexibilidade não permite mover para trás</value>
+  </data>
+  <data name="BusinessRuleDayOffErrorMessage5" xml:space="preserve">
+    <value>A Folga em {0} conflita com a atividade depois e não pode ser movida para trás</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeErrorMessage" xml:space="preserve">
+    <value>A semana contêm muito tempo de trabalho ({0}). Máximo é {1}.</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
+    <value>Deve haver um descanso diário de pelo menos {0} horas entre dois turnos. Entre {1} e {2} há apenas {3} horas.</value>
+  </data>
+  <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
+    <value>Pessoa {0} não tem contrato definido para a data atual {1}.</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage1" xml:space="preserve">
+    <value>Já existe um turno no intervalo. O outro turno está no intervalo {0} - {1}, este turno está no intervalo {2} - {3}.</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage2" xml:space="preserve">
+    <value>Existem dios Turnos Sobrepostos</value>
+  </data>
+  <data name="ShiftCreatorValidationErrorMessage" xml:space="preserve">
+    <value>Tabela contêm dados inválidos</value>
+  </data>
+  <data name="OpenForecaster" xml:space="preserve">
+    <value>Módulo de Previsões </value>
+  </data>
+  <data name="PrepareSkillThreeDots" xml:space="preserve">
+    <value>Preparar Grupo...</value>
+  </data>
+  <data name="ModifyMainShift" xml:space="preserve">
+    <value>Modificar turno principal</value>
+  </data>
+  <data name="ModifyPersonalShift" xml:space="preserve">
+    <value>Modificar turno pessoal</value>
+  </data>
+  <data name="NewRule" xml:space="preserve">
+    <value>Nova Regra</value>
+  </data>
+  <data name="NewRuleSet" xml:space="preserve">
+    <value>Nova Definição de Regra</value>
+  </data>
+  <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
+    <value>Teleopti CCC: Turnos</value>
+  </data>
+  <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
+    <value>&lt; Nome da Definição de Regra &gt;</value>
+  </data>
+  <data name="CutRuleSet" xml:space="preserve">
+    <value>Cortar Definição de Regra</value>
+  </data>
+  <data name="CutRuleSetBag" xml:space="preserve">
+    <value>Cortar Cesta de Definições de Regra</value>
+  </data>
+  <data name="DeleteRuleSet" xml:space="preserve">
+    <value>Excluir Definição de Regra</value>
+  </data>
+  <data name="DeleteRuleSetBag" xml:space="preserve">
+    <value>Excluir Cesta de Definição de Regras</value>
+  </data>
+  <data name="NewRuleSetBag" xml:space="preserve">
+    <value>Nova Cesta de Turnos</value>
+  </data>
+  <data name="PasteRuleSet" xml:space="preserve">
+    <value>Colar Definição de Regra</value>
+  </data>
+  <data name="PasteRuleSetBag" xml:space="preserve">
+    <value>Colar Cesta de Definição de Regra</value>
+  </data>
+  <data name="SelectRuleSetBagMessage" xml:space="preserve">
+    <value>Selecione Mensagem da Cesta de Definição de Regra</value>
+  </data>
+  <data name="SelectRuleSetMessage" xml:space="preserve">
+    <value>Selecione Mensagem de Definição de Regra</value>
+  </data>
+  <data name="CreateForecastWorkflowTool" xml:space="preserve">
+    <value>Criar Ferramenta de Fluxo de Trabalho para Previsão</value>
+  </data>
+  <data name="CopyRuleSet" xml:space="preserve">
+    <value>Copiar Definição de Regra</value>
+  </data>
+  <data name="CopyRuleSetBag" xml:space="preserve">
+    <value>Copiar Cesta de Definição de Regra</value>
+  </data>
+  <data name="RequestTypeShiftTrade" xml:space="preserve">
+    <value>Troca de Turnos</value>
+  </data>
+  <data name="ForecastedDistributedDemand" xml:space="preserve">
+    <value>Demanda Distribuída Prevista</value>
+  </data>
+  <data name="ForecastedEmails" xml:space="preserve">
+    <value>E-mails Previstos</value>
+  </data>
+  <data name="ForecastedFacsimiles" xml:space="preserve">
+    <value>Faxes Previstos</value>
+  </data>
+  <data name="ForecastedHandlingTime" xml:space="preserve">
+    <value>Tempo de Atendimento Previsto</value>
+  </data>
+  <data name="ForecastedTasks" xml:space="preserve">
+    <value>Tarefas Previstas</value>
+  </data>
+  <data name="BudgetForecasting" xml:space="preserve">
+    <value>Previsões de Orçamento</value>
+  </data>
+  <data name="DetailedForecastSmartPart" xml:space="preserve">
+    <value>Previsões Detalhadas</value>
+  </data>
+  <data name="SkillValidationSmartPart" xml:space="preserve">
+    <value>Validação do Grupo</value>
+  </data>
+  <data name="ManageMultisiteDistributions" xml:space="preserve">
+    <value>Gerenciar Distribuição Multisite</value>
+  </data>
+  <data name="ListOfValues" xml:space="preserve">
+    <value>Lista de Definição de Regra</value>
+  </data>
+  <data name="SelectYourListOfValues" xml:space="preserve">
+    <value>Selecione sua lista de Definições de Regras</value>
+  </data>
+  <data name="DefaultRuleSetBagName" xml:space="preserve">
+    <value>&lt;Nome da Cesta de Regras&gt;</value>
+  </data>
+  <data name="AddRuleSet" xml:space="preserve">
+    <value>Adiocionar Definição de Regra</value>
+  </data>
+  <data name="ShiftTradeRequest" xml:space="preserve">
+    <value>Requisição de Troca de Turnos</value>
+  </data>
+  <data name="NewShiftTradeRequest" xml:space="preserve">
+    <value>Nova Requisição de Troca de Turnos</value>
+  </data>
+  <data name="EarlyStart" xml:space="preserve">
+    <value>Início Antecipado</value>
+  </data>
+  <data name="LateStart" xml:space="preserve">
+    <value>Início Atrasado</value>
+  </data>
+  <data name="LessThanSkillNameGreaterThan" xml:space="preserve">
+    <value>&lt; Nome do Grupo &gt;</value>
+  </data>
+  <data name="ApplyStandard" xml:space="preserve">
+    <value>Aplicar Padrão</value>
+  </data>
+  <data name="SkillTypeBackoffice" xml:space="preserve">
+    <value>Backoffice</value>
+  </data>
+  <data name="SkillTypeEmail" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="SkillTypeFax" xml:space="preserve">
+    <value>Fax</value>
+  </data>
+  <data name="SkillTypeInboundTelephony" xml:space="preserve">
+    <value>Telefonia Inbound</value>
+  </data>
+  <data name="SkillTypeProject" xml:space="preserve">
+    <value>Projeto</value>
+  </data>
+  <data name="SkillTypeTime" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="NewShiftCategory" xml:space="preserve">
+    <value>Nova Categoria de Turno</value>
+  </data>
+  <data name="AddNewShiftCategory" xml:space="preserve">
+    <value>Adicionar nova categoria de turno</value>
+  </data>
+  <data name="ChooseShiftCategoryToChange" xml:space="preserve">
+    <value>Escolher categoria de turno para mudar</value>
+  </data>
+  <data name="EnterSettingsForShiftCategory" xml:space="preserve">
+    <value>Ingressar parâmetros para categoria de turnos</value>
+  </data>
+  <data name="ManageShiftCategories" xml:space="preserve">
+    <value>Gerenciar Categoria de Turnos</value>
+  </data>
+  <data name="ViolationOfABusinessRule" xml:space="preserve">
+    <value>Violação de uma Regra de Negócio</value>
+  </data>
+  <data name="ModifyShiftCategoryPreferences" xml:space="preserve">
+    <value>Preferencias Originais</value>
+  </data>
+  <data name="AddShiftCategory" xml:space="preserve">
+    <value>Adicionar Categoria de Turno</value>
+  </data>
+  <data name="CreateShiftTradeRequest" xml:space="preserve">
+    <value>Requisição de troca de turnos</value>
+  </data>
+  <data name="OpenScorecard" xml:space="preserve">
+    <value>Scorecards</value>
+  </data>
+  <data name="SelectShiftCategory" xml:space="preserve">
+    <value>Selecione Categoria de Turno</value>
+  </data>
+  <data name="YouHaveToHaveAtLeastOneScoreCard" xml:space="preserve">
+    <value>Você precisa ter ao menos um Scorecard. Por favor adicione um clicando o botão +</value>
+  </data>
+  <data name="TradeWith" xml:space="preserve">
+    <value>Trocar com</value>
+  </data>
+  <data name="PrepareForecast" xml:space="preserve">
+    <value>Preparar Carga de Trabalho</value>
+  </data>
+  <data name="UseShiftCategory" xml:space="preserve">
+    <value>Usar Categoria de Turno</value>
+  </data>
+  <data name="SkillCreatedDotParameter0" xml:space="preserve">
+    <value>Grupo criado {0}.</value>
+  </data>
+  <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
+    <value>Dê um clique duplo aqui para abrir a visão principal.</value>
+  </data>
+  <data name="MaximumOccupancyParenthesisPercentSign" xml:space="preserve">
+    <value>Ocupação Máxima (%)</value>
+  </data>
+  <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
+    <value>Ocupação Mínima (%)</value>
+  </data>
+  <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
+    <value>Indisponibilidade (%)</value>
+  </data>
+  <data name="ForecasterWillBeClosedDot" xml:space="preserve">
+    <value>O Módulo de Previsões será fechado</value>
+  </data>
+  <data name="MoveMaxShifts" xml:space="preserve">
+    <value>Mover Turnos Máximos</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Carga de Trabalho Prevista versus Real</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Horas Previstas versus Agendadas</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Categoria de Turno e Ausência de Dia Inteiro por Agente</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Categoria de Turno por Dia</value>
+  </data>
+  <data name="MultiplicatorTypeOBTime" xml:space="preserve">
+    <value>Permissão de Turno</value>
+  </data>
+  <data name="CannotFindAValidPeriodAccordingToTheBusinessRules" xml:space="preserve">
+    <value>Não posso localizar um período de acordo com as regras de negócio</value>
+  </data>
+  <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
+    <value>Não foi localizado nenhum turno conforme o tempo de contrato</value>
+  </data>
+  <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
+    <value>Turnos dentro do periodo:</value>
+  </data>
+  <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
+    <value>Turnos com tempo de contrato no meio</value>
+  </data>
+  <data name="GetsShiftListToStartWith" xml:space="preserve">
+    <value>Lista de turno deve iniciar com</value>
+  </data>
+  <data name="NoRuleSetBagDefined" xml:space="preserve">
+    <value>Nenhuma cesta de definição de regra definida</value>
+  </data>
+  <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
+    <value>Nenhum Turno de Trabalho estava disponível</value>
+  </data>
+  <data name="RulesetIsNotValidThisDate" xml:space="preserve">
+    <value>Definição de Regra {0} não é válida para esta data</value>
+  </data>
+  <data name="WorkShiftsAfter" xml:space="preserve">
+    <value>Turnos de Trabalho depois</value>
+  </data>
+  <data name="WorkShiftsBefore" xml:space="preserve">
+    <value>Turnos de Trabalho antes</value>
+  </data>
+  <data name="CreateSkillSummery" xml:space="preserve">
+    <value>Criar Resumo do Grupo</value>
+  </data>
+  <data name="EditSkillSummery" xml:space="preserve">
+    <value>Editar Resumo do Grupo</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>Grupos</value>
+  </data>
+  <data name="SkillSummery" xml:space="preserve">
+    <value>Resumo do Grupo</value>
+  </data>
+  <data name="SummeryName" xml:space="preserve">
+    <value>Nome do Resumo</value>
+  </data>
+  <data name="NoNameWasEntered" xml:space="preserve">
+    <value>Nenhum nome foi digitado</value>
+  </data>
+  <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
+    <value>Filtrar com limitações do tempo de contrato(turnos com tempo de contrato entre {0} e {1})</value>
+  </data>
+  <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
+    <value>Filtrar com limitações de período pessoais (turnos dentro do período: {0} - {1})</value>
+  </data>
+  <data name="RequiresSkill" xml:space="preserve">
+    <value>Requer Grupo</value>
+  </data>
+  <data name="ZeroShiftCategoriesInDb" xml:space="preserve">
+    <value>Não foi localizada nenhuma categoria de turno no banco de dados</value>
+  </data>
+  <data name="HighestStdev" xml:space="preserve">
+    <value>stdev mais alto</value>
+  </data>
+  <data name="IntervalStdev" xml:space="preserve">
+    <value>intervalo stdev</value>
+  </data>
+  <data name="PersonSkills" xml:space="preserve">
+    <value>Grupos da Pessoa</value>
+  </data>
+  <data name="ForecastedAgentsIncoming" xml:space="preserve">
+    <value>Agentes entrantes previstos</value>
+  </data>
+  <data name="ForecastedHours" xml:space="preserve">
+    <value>Horas Previstas</value>
+  </data>
+  <data name="ForecastedHoursIncoming" xml:space="preserve">
+    <value>Horas entrantes previstas</value>
+  </data>
+  <data name="DeleteSkillSummery" xml:space="preserve">
+    <value>Excluir Resumo do Grupo</value>
+  </data>
+  <data name="AddToBags" xml:space="preserve">
+    <value>Adicionar na cesta de turnos</value>
+  </data>
+  <data name="SelectRuleSets" xml:space="preserve">
+    <value>Selecione Definições de Regras</value>
+  </data>
+  <data name="BusinessRulePersonAccountError1" xml:space="preserve">
+    <value>Conta pessoal para {0}, iniciando em {1} supera valor correto</value>
+  </data>
+  <data name="LoadingSkillDataTreeDots" xml:space="preserve">
+    <value>Carregando dados da previsão...</value>
+  </data>
+  <data name="Bags" xml:space="preserve">
+    <value>Cestas</value>
+  </data>
+  <data name="RecentWorkShiftRuleSets" xml:space="preserve">
+    <value>Parâmetros de Turnos de Trabalho Recentes</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>Scorecard do Agente</value>
+  </data>
+  <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
+    <value>Filtrar com limitações de tempo de trabalho (turnos com tempo de contrato entre {0} e {1})</value>
+  </data>
+  <data name="Excluded" xml:space="preserve">
+    <value>Excluídos</value>
+  </data>
+  <data name="Included" xml:space="preserve">
+    <value>Incluídos</value>
+  </data>
+  <data name="KeepShiftCategory" xml:space="preserve">
+    <value>Manter categoria de turno</value>
+  </data>
+  <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>Tempo Disponível versus Tempo Agendado (incluindo tempo antes e depois do início do turno)</value>
+  </data>
+  <data name="ShiftTradeStatusDtoNotValid" xml:space="preserve">
+    <value>Não válido</value>
+  </data>
+  <data name="ShiftTradeStatusDtoOkByMe" xml:space="preserve">
+    <value>Esperando o outro participante</value>
+  </data>
+  <data name="ShiftTradeStatusDtoOkByBothParts" xml:space="preserve">
+    <value>Esperando pela aprovação</value>
+  </data>
+  <data name="ShiftTradeStatusDtoReferred" xml:space="preserve">
+    <value>Referido</value>
+  </data>
+  <data name="InitializingSkillTabsThreeDots" xml:space="preserve">
+    <value>Inicializando Guia de Grupo...</value>
+  </data>
+  <data name="ReloadingSkillGridThreeDots" xml:space="preserve">
+    <value>Recarregando Tabela de Grupos...</value>
+  </data>
+  <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
+    <value>A troca de turno foi aceita pela outra pessoa.</value>
+  </data>
+  <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>A requisição de troca de turno foi aprovada.</value>
+  </data>
+  <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
+    <value>A requisição de troca de turno foi rejeitada.</value>
+  </data>
+  <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
+    <value>A requisição de troca deve ser aceita novamente devido a modificação de agenda.</value>
+  </data>
+  <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
+    <value>Nova requisição de troca de turno, aprove ou negue na sua lista de requisições.</value>
+  </data>
+  <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
+    <value>A soma de distribuições entre sub-grupos deve ser 100%</value>
+  </data>
+  <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
+    <value>Deve existir pelo menos uma dara na sua requisição de troca de turno.</value>
+  </data>
+  <data name="ShiftsPerDay" xml:space="preserve">
+    <value>Turnos por dia</value>
+  </data>
+  <data name="ShiftsPerDayHeader" xml:space="preserve">
+    <value>Turnos por dia</value>
+  </data>
+  <data name="NoShiftsAvailableForThisPreference" xml:space="preserve">
+    <value>Nenhum turno disponível para esta preferência</value>
+  </data>
+  <data name="ShiftCategoryLimitations" xml:space="preserve">
+    <value>Limitações de categoria de turno</value>
+  </data>
+  <data name="UseShiftCategoryRestrictions" xml:space="preserve">
+    <value>Usar Limitações de Categoria de Turno</value>
+  </data>
+  <data name="InputError" xml:space="preserve">
+    <value>Erro de entrada</value>
+  </data>
+  <data name="TheNameIsTooLong" xml:space="preserve">
+    <value>O nome é muito longo</value>
+  </data>
+  <data name="RequestDenyReasonOtherPart" xml:space="preserve">
+    <value>Sua requisição de troca de turno foi rejeitada por quem você solicitou</value>
+  </data>
+  <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
+    <value>Seu pedido de ausência foi negado automaticamente, pois o numero mínimo de recursos ficará abaixo do necessário.</value>
+  </data>
+  <data name="NoExistingShiftSelected" xml:space="preserve">
+    <value>Nenhu turno existente foi selecionado</value>
+  </data>
+  <data name="BlockNotValidConflictingCategories" xml:space="preserve">
+    <value>Categorias de Turnos Pré-Agendados conflitantes, não é um bloco válido.</value>
+  </data>
+  <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
+    <value>Você precisa ter ao menos uma Atividade e Categoria de Grupo antes de criar uma Regra.</value>
+  </data>
+  <data name="NoRuleSetSelected" xml:space="preserve">
+    <value>Nenhuma Definição de Regra Selecionada</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneRuleSet" xml:space="preserve">
+    <value>Você precisa selecionar ao menos uma Definição de Regra!</value>
+  </data>
+  <data name="ForecastingPerformance" xml:space="preserve">
+    <value>Performance da Previsão</value>
+  </data>
+  <data name="ConsecutiveDaysOffRule" xml:space="preserve">
+    <value>Filtrar por limitações de folgas consecutivas</value>
+  </data>
+  <data name="ConsecutiveWorkdaysRule" xml:space="preserve">
+    <value>Filtrar por limitações de dias de trabalho consecutivos</value>
+  </data>
+  <data name="DaysOffPerWeekRule" xml:space="preserve">
+    <value>Filtrar por limitações de folgas por semana</value>
+  </data>
+  <data name="FreeWeekendDayRule" xml:space="preserve">
+    <value>Filtrar por limitações de dias de finais de semana livres</value>
+  </data>
+  <data name="FreeWeekendRule" xml:space="preserve">
+    <value>Filtrar por limitações de finais de semana livres</value>
+  </data>
+  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Sua solicitação de ausência foi negada automaticamente, devido a uma regra definida pelo administrador.</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenErrorMessage" xml:space="preserve">
+    <value>Nenhum Grupo com horas abertas conectados a atividade: {0} encontrada na: {1} - {2}</value>
+  </data>
+  <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque as datas selecionadas não estão abertas para requisições.</value>
+  </data>
+  <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque seus Grupos não coincidem com os da outra pessoa.</value>
+  </data>
+  <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
+    <value>Troca de turno negada o seus parâmetros de Fluxo de Trabalho não coincidem com os da outra pessoa.</value>
+  </data>
+  <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque a tolerância de tempo de contrato foi superada.</value>
+  </data>
+  <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque não existem paramêtros de fluxo de trabalho definidos.</value>
+  </data>
+  <data name="ShiftTradeRequests" xml:space="preserve">
+    <value>Requisições de Troca de Turno</value>
+  </data>
+  <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
+    <value>Categorias de Turnos Disponíveis por Preferências </value>
+  </data>
+  <data name="OpenForShiftTradeRequests" xml:space="preserve">
+    <value>Requisições de troca de turno abertas</value>
+  </data>
+  <data name="MatchingSkills" xml:space="preserve">
+    <value>Checando Grupos</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationErrorMessage" xml:space="preserve">
+    <value>A semana tem Categorias de Turnos demais {0}.</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationErrorMessage2" xml:space="preserve">
+    <value>O Período  tem Categorias de Turnos demais {0}.</value>
+  </data>
+  <data name="NotAllowedShiftCategories" xml:space="preserve">
+    <value>Categoria de Turno não permitida</value>
+  </data>
+  <data name="SelectScorecardForTeams" xml:space="preserve">
+    <value>Selecione scorecard para usar com Times</value>
+  </data>
+  <data name="SetScorecard" xml:space="preserve">
+    <value>Preparar scorecard</value>
+  </data>
+  <data name="SetScorecards" xml:space="preserve">
+    <value>Preparar scorecards</value>
+  </data>
+  <data name="PasteShiftFromShifts" xml:space="preserve">
+    <value>Colar Turno dos Turnos</value>
+  </data>
+  <data name="ChangePasswordValidationError" xml:space="preserve">
+    <value>A senha não pôde ser alterada. Por favor verifique se a senha atual está correta e se a confirmação da nova senha é válida. Se este erro persistir verifique se a senha segue as regras de tamanho e caracteres.</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestErrorMessage" xml:space="preserve">
+    <value>A semana não tem descanso semanal estipulado ({0}).</value>
+  </data>
+  <data name="OptimizingShiftLengths" xml:space="preserve">
+    <value>Otimizando tamanho dos turnos</value>
+  </data>
+  <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
+    <value>A requisição de troca de turno não pode ser aceita devido a um erro. Mensagem de Erro: {0}</value>
+  </data>
+  <data name="AddedSkillsColon" xml:space="preserve">
+    <value>Grupos Adiocionados:</value>
+  </data>
+  <data name="ForecastedStaff" xml:space="preserve">
+    <value>Equipe Prevista</value>
+  </data>
+  <data name="NetStaffFCAdj" xml:space="preserve">
+    <value>Equipe prevista ajustada</value>
+  </data>
+  <data name="LoadForecastedHours" xml:space="preserve">
+    <value>Horas Previstas Carregadas</value>
+  </data>
+  <data name="ErrorMessageNotConsistentShiftCategories" xml:space="preserve">
+    <value>Não é possível agendar o Time poque ainda existem diferentes categorias de turnos</value>
+  </data>
+  <data name="PersonalSkillView" xml:space="preserve">
+    <value>Grupos Pessoais</value>
+  </data>
+  <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
+    <value>As Atividades selecionadas não podem ser excluídas porque os seguintes Grupos estão utilizando:</value>
+  </data>
+  <data name="EqualOfEachShiftCategory" xml:space="preserve">
+    <value>Igual a cada categoria de turno</value>
+  </data>
+  <data name="PointsPerShiftCategory" xml:space="preserve">
+    <value>Pontos por categoria de turnos</value>
+  </data>
+  <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
+    <value>Um turno com Atividades Principais não pode ser usado em agendas!</value>
+  </data>
+  <data name="NoSkillMatchingPropertiesForCurrentSkillFound" xml:space="preserve">
+    <value>Nenhum Grupo com propriedades equivalentes ao atual foi localizado.</value>
+  </data>
+  <data name="TargetSkillColon" xml:space="preserve">
+    <value>Grupo Alvo:</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Nenhum turno disponível para esta disponibilidade de estudante.</value>
+  </data>
+  <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
+    <value>O tamanho máximo de um apontamento é {0} horas. O tamanho do apontamento atual é de {1} horas.</value>
+  </data>
+  <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
+    <value>Troca de turno não pode ser feita devido a ausência em um turno.</value>
+  </data>
+  <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque uma atividade pessoal termina depois do turno.</value>
+  </data>
+  <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque uma reunião termina depois do turno.</value>
+  </data>
+  <data name="ConflictingShiftCategories" xml:space="preserve">
+    <value>A categoria de turno nos conflitos por Restrição com as categorias de turnos nas opções.</value>
+  </data>
+  <data name="AllFulFilledShifts" xml:space="preserve">
+    <value>Todos Turnos Preenchidos</value>
+  </data>
+  <data name="AllShifts" xml:space="preserve">
+    <value>Todos os Turnos</value>
+  </data>
+  <data name="HoursPerDay" xml:space="preserve">
+    <value>Horas por dia</value>
+  </data>
+  <data name="Override" xml:space="preserve">
+    <value>Sobrepor</value>
+  </data>
+  <data name="PeriodHours" xml:space="preserve">
+    <value>Horas do Período</value>
+  </data>
+  <data name="PersonPeriodError" xml:space="preserve">
+    <value>Erro do Período da Pessoa</value>
+  </data>
+  <data name="SchedulePeriodError" xml:space="preserve">
+    <value>Erro do Período Agendado</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Sexta-Feira</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Segunda-Feira</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Quinta-Feira</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Terça-Feira</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Quarta-Feira</value>
+  </data>
+  <data name="IncludeExclude" xml:space="preserve">
+    <value>Incluir Excluir</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Pessoa</value>
+  </data>
+  <data name="StartWeek" xml:space="preserve">
+    <value>Semana Inicial</value>
+  </data>
+  <data name="AverageWorkTimePerDayColon" xml:space="preserve">
+    <value>Tempo Médio de Trabalho por Dia:</value>
+  </data>
+  <data name="MaximumTimePerWeekColon" xml:space="preserve">
+    <value>Tempo Máximo por Semana:</value>
+  </data>
+  <data name="EmploymentTypeColon" xml:space="preserve">
+    <value>Tipo de Emprego:</value>
+  </data>
+  <data name="NameColon" xml:space="preserve">
+    <value>Nome:</value>
+  </data>
+  <data name="NightlyRestTimeColon" xml:space="preserve">
+    <value>Tempo de descanso noturno:</value>
+  </data>
+  <data name="Colon" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="ContractColon" xml:space="preserve">
+    <value>Contrato:</value>
+  </data>
+  <data name="ChooseContractToChange" xml:space="preserve">
+    <value>Escolha o contrato para editar</value>
+  </data>
+  <data name="EnterContractDetails" xml:space="preserve">
+    <value>Digite os detalhes do contrato</value>
+  </data>
+  <data name="WeeklyRestTimeColon" xml:space="preserve">
+    <value>Tempo de descanso semanal:</value>
+  </data>
+  <data name="ManageContractSchedules" xml:space="preserve">
+    <value>Gerenciar Agendas dos Contratos</value>
+  </data>
+  <data name="ChooseContractScheduleToChange" xml:space="preserve">
+    <value>Escolha a agenda do contrato para editar</value>
+  </data>
+  <data name="ScheduleColon" xml:space="preserve">
+    <value>Agenda:</value>
+  </data>
+  <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
+    <value>Selecione os dias de trabalho para esta agenda contratada</value>
+  </data>
+  <data name="NewPercentage" xml:space="preserve">
+    <value>Nova Porcentagem</value>
+  </data>
+  <data name="PercentageColon" xml:space="preserve">
+    <value>Porcentagem:</value>
+  </data>
+  <data name="PartTimePercentageColon" xml:space="preserve">
+    <value>Porcentagem Tempo Parcial:</value>
+  </data>
+  <data name="EnterPartTimePercentageValue" xml:space="preserve">
+    <value>Digite valor da porcentagem de tempo parcial</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Contratos</value>
+  </data>
+  <data name="ChooseScenarioToChange" xml:space="preserve">
+    <value>Escolha cenário para editar</value>
+  </data>
+  <data name="NewScenario" xml:space="preserve">
+    <value>Novo Cenário</value>
+  </data>
+  <data name="AuditTrailColon" xml:space="preserve">
+    <value>Log de Auditoria:</value>
+  </data>
+  <data name="DefaultScenarioColon" xml:space="preserve">
+    <value>Cenário Padrão:</value>
+  </data>
+  <data name="EnterSettingsForScenario" xml:space="preserve">
+    <value>Digite parâmetros para cenário</value>
+  </data>
+  <data name="CancelLoading" xml:space="preserve">
+    <value>Cancelar carregamento</value>
+  </data>
+  <data name="AddNewContract" xml:space="preserve">
+    <value>Adicionar Contrato</value>
+  </data>
+  <data name="AddNewWeekToSchedule" xml:space="preserve">
+    <value>Adicione nova semana para a agenda do contrato</value>
+  </data>
+  <data name="AddPartTimePercentage" xml:space="preserve">
+    <value>Adicione definição de porcentagem de tempo parcial</value>
+  </data>
+  <data name="AddGroupingAbsence" xml:space="preserve">
+    <value>Adicionar Ausência do Grupo</value>
+  </data>
+  <data name="AddGroupingActivity" xml:space="preserve">
+    <value>Adicionar Atividade do Grupo</value>
+  </data>
+  <data name="AddNewScenario" xml:space="preserve">
+    <value>Adicionar Cenário</value>
+  </data>
+  <data name="EnterTargetValuesForEachTeam" xml:space="preserve">
+    <value>Digite valores alvo para cada time</value>
+  </data>
+  <data name="FilterKPIs" xml:space="preserve">
+    <value>Filtrar KPIs</value>
+  </data>
+  <data name="PeriodColon" xml:space="preserve">
+    <value>Período:</value>
+  </data>
+  <data name="SelectKPIToHandleColon" xml:space="preserve">
+    <value>Selecione KPI para ajustar:</value>
+  </data>
+  <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
+    <value>Digite valores apropriados para ausências</value>
+  </data>
+  <data name="EnterPropertyValuesForActivities" xml:space="preserve">
+    <value>Digite valores apropriados para at⁭ividades</value>
+  </data>
+  <data name="EnterPropertyValuesForGroupingAbsences" xml:space="preserve">
+    <value>Digite valores apropriados para ausências do grupo</value>
+  </data>
+  <data name="EnterPropertyValuesForGroupingActivities" xml:space="preserve">
+    <value>Digite valores apropriados para atividades do grupo</value>
+  </data>
+  <data name="ManageActivities" xml:space="preserve">
+    <value>Gerenciar Atividades</value>
+  </data>
+  <data name="CommonAgentDescription" xml:space="preserve">
+    <value>Descrição de agente comum</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Hierarquia de Negócios</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissões</value>
+  </data>
+  <data name="Rotation" xml:space="preserve">
+    <value>Rotações</value>
+  </data>
+  <data name="Restrictions" xml:space="preserve">
+    <value>Restrições</value>
+  </data>
+  <data name="NewRotation" xml:space="preserve">
+    <value>Nova Rotação</value>
+  </data>
+  <data name="ServiceLevelSeconds" xml:space="preserve">
+    <value>Segundos do Nível de Serviço</value>
+  </data>
+  <data name="ColorColon" xml:space="preserve">
+    <value>Cor:</value>
+  </data>
+  <data name="IntervalLengthColon" xml:space="preserve">
+    <value>Duração do Intervalo:</value>
+  </data>
+  <data name="DescriptionColon" xml:space="preserve">
+    <value>Descrição:</value>
+  </data>
+  <data name="MaximumOccupancyColon" xml:space="preserve">
+    <value>Ocupação Máxima:</value>
+  </data>
+  <data name="MinimumOccupancyColon" xml:space="preserve">
+    <value>Ocupação Minima:</value>
+  </data>
+  <data name="ServiceLevelPercentSignColon" xml:space="preserve">
+    <value>Nível de Serviço %:</value>
+  </data>
+  <data name="ServiceLevelSecondsColon" xml:space="preserve">
+    <value>Segundos do Nível de Serviço:</value>
+  </data>
+  <data name="ServiceLevelSParenthesisColon" xml:space="preserve">
+    <value>Nível de Serviço (s):</value>
+  </data>
+  <data name="ShrinkageColon" xml:space="preserve">
+    <value>Indisponibilidade:</value>
+  </data>
+  <data name="TimeZoneColon" xml:space="preserve">
+    <value>Fuzo Horário:</value>
+  </data>
+  <data name="OpenHoursColon" xml:space="preserve">
+    <value>Horas Abertas:</value>
+  </data>
+  <data name="FindAmpersandReplace" xml:space="preserve">
+    <value>Localizar &amp; Substituir</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Ordenar</value>
+  </data>
+  <data name="Groupings" xml:space="preserve">
+    <value>Agrupamentos</value>
+  </data>
+  <data name="Editing" xml:space="preserve">
+    <value>Editando</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Acessabilidade</value>
+  </data>
+  <data name="Early" xml:space="preserve">
+    <value>Cedo</value>
+  </data>
+  <data name="Late" xml:space="preserve">
+    <value>Tarde</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Tamanho</value>
+  </data>
+  <data name="Limit" xml:space="preserve">
+    <value>Limite</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="AbsoluteDifference" xml:space="preserve">
+    <value>Diferença Absoluta</value>
+  </data>
+  <data name="DateNavigation" xml:space="preserve">
+    <value>Navegação</value>
+  </data>
+  <data name="RelativeDifference" xml:space="preserve">
+    <value>Diferença Relativa</value>
+  </data>
+  <data name="StandardDeviation" xml:space="preserve">
+    <value>Desvio Padrão</value>
+  </data>
+  <data name="ChangeInterval" xml:space="preserve">
+    <value>Mudar Intervalo</value>
+  </data>
+  <data name="OverMidnight" xml:space="preserve">
+    <value>Após Meia-Noite</value>
+  </data>
+  <data name="ReadyThreeDots" xml:space="preserve">
+    <value>Disponível...</value>
+  </data>
+  <data name="EnterNameOnNewGroup" xml:space="preserve">
+    <value>Digite o nome do novo agrupamento</value>
+  </data>
+  <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
+    <value>Indicação da pessoa não é válida. {0}</value>
+  </data>
+  <data name="ChangeYourRotations" xml:space="preserve">
+    <value>Mudar suas rotações</value>
+  </data>
+  <data name="EarlyEndTime" xml:space="preserve">
+    <value>Final do horário adiantado</value>
+  </data>
+  <data name="EarlyStartTime" xml:space="preserve">
+    <value>Inicio do horário adiantado</value>
+  </data>
+  <data name="LateEndTime" xml:space="preserve">
+    <value>Final do horário atrasado</value>
+  </data>
+  <data name="LateStartTime" xml:space="preserve">
+    <value>Inicio do horário atrasado</value>
+  </data>
+  <data name="MaxWorkTime" xml:space="preserve">
+    <value>Tempo de trabalho máximo</value>
+  </data>
+  <data name="MinWorkTime" xml:space="preserve">
+    <value>Tempo de trabalho minimo</value>
+  </data>
+  <data name="Rotations" xml:space="preserve">
+    <value>Rotações</value>
+  </data>
+  <data name="SelectRotation" xml:space="preserve">
+    <value>Selecione Rotação</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Esconder</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duração</value>
+  </data>
+  <data name="InvalidRequest" xml:space="preserve">
+    <value>Requisição Inválida</value>
+  </data>
+  <data name="MeetingLocationRequired" xml:space="preserve">
+    <value>Preencha a sua localização!</value>
+  </data>
+  <data name="MeetingParticipantsRequired" xml:space="preserve">
+    <value>Selecione seus participantes!</value>
+  </data>
+  <data name="MeetingSubjectRequired" xml:space="preserve">
+    <value>Preencha o seu Assunto!</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Assunto</value>
+  </data>
+  <data name="HHcolonMM" xml:space="preserve">
+    <value>hh:mm</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Localização</value>
+  </data>
+  <data name="Meetings" xml:space="preserve">
+    <value>Reuniões</value>
+  </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="MeetingOrganizer" xml:space="preserve">
+    <value>Reuniões</value>
+  </data>
+  <data name="RestoreAgentPortal" xml:space="preserve">
+    <value>Restaurar o Portal do Agente</value>
+  </data>
+  <data name="RestoreASM" xml:space="preserve">
+    <value>Restaurar o Mensageiro da Agenda do Agente</value>
+  </data>
+  <data name="DuplicatePersonRotationMessage" xml:space="preserve">
+    <value>Não é permitido datas duplicadas nas Rotações de Pessoas</value>
+  </data>
+  <data name="NewOptionalColumn" xml:space="preserve">
+    <value>Nova coluna opcional</value>
+  </data>
+  <data name="AddNewOptionalColumn" xml:space="preserve">
+    <value>Adicione nova coluna opcional</value>
+  </data>
+  <data name="NoValueInNameField" xml:space="preserve">
+    <value>Não há valor no campo Nome</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Erro ao Salvar</value>
+  </data>
+  <data name="Actual" xml:space="preserve">
+    <value>Real</value>
+  </data>
+  <data name="AgentsWithShrinkage" xml:space="preserve">
+    <value>Agentes com indisponibilidade</value>
+  </data>
+  <data name="ExternalLogOn" xml:space="preserve">
+    <value>Login Externo</value>
+  </data>
+  <data name="AgentPortalOptions" xml:space="preserve">
+    <value>Opções do Portal do Agente</value>
+  </data>
+  <data name="ExitAgentPortal" xml:space="preserve">
+    <value>Sair do Portal do Agente</value>
+  </data>
+  <data name="ChooseOptionalColumnToChange" xml:space="preserve">
+    <value>Escolha a coluna opcional</value>
+  </data>
+  <data name="OptionalColumns" xml:space="preserve">
+    <value>Colunas opcionais</value>
+  </data>
+  <data name="ManageOptionalColumns" xml:space="preserve">
+    <value>Gerenciar Colunas Opcionais</value>
+  </data>
+  <data name="HandledWithinColon" xml:space="preserve">
+    <value>Tratado em:</value>
+  </data>
+  <data name="AddressBook" xml:space="preserve">
+    <value>Endereço</value>
+  </data>
+  <data name="EndTimeColon" xml:space="preserve">
+    <value>Horário Final:</value>
+  </data>
+  <data name="LocationColon" xml:space="preserve">
+    <value>Localização:</value>
+  </data>
+  <data name="Meeting" xml:space="preserve">
+    <value>Reunião</value>
+  </data>
+  <data name="StartTimeColon" xml:space="preserve">
+    <value>Horário Inicial:</value>
+  </data>
+  <data name="SubjectColon" xml:space="preserve">
+    <value>Assunto:</value>
+  </data>
+  <data name="ToThreeDots" xml:space="preserve">
+    <value>Para...</value>
+  </data>
+  <data name="CombinedGrid" xml:space="preserve">
+    <value>Atividades</value>
+  </data>
+  <data name="CombinedGridAutoPosition" xml:space="preserve">
+    <value>Auto Posicionamento</value>
+  </data>
+  <data name="ExitTELEOPTICCC" xml:space="preserve">
+    <value>Sair Teleopti CCC</value>
+  </data>
+  <data name="Find" xml:space="preserve">
+    <value>Localizar</value>
+  </data>
+  <data name="Periods" xml:space="preserve">
+    <value>Períodos</value>
+  </data>
+  <data name="Emails" xml:space="preserve">
+    <value>E-mails</value>
+  </data>
+  <data name="HandledWithin" xml:space="preserve">
+    <value>Tratado em</value>
+  </data>
+  <data name="HandlingTime" xml:space="preserve">
+    <value>Tempo de Atendimento</value>
+  </data>
+  <data name="TotalEmails" xml:space="preserve">
+    <value>Total e-mails</value>
+  </data>
+  <data name="TotalHandledWithin" xml:space="preserve">
+    <value>Total tratado em</value>
+  </data>
+  <data name="TotalHandlingTime" xml:space="preserve">
+    <value>Tempo total de atendimento</value>
+  </data>
+  <data name="AbandonedEmails" xml:space="preserve">
+    <value>E-mails abandonados</value>
+  </data>
+  <data name="AbandonedFacsimiles" xml:space="preserve">
+    <value>Faxes abandonados</value>
+  </data>
+  <data name="AbandonedTasks" xml:space="preserve">
+    <value>Tarefas abandonados</value>
+  </data>
+  <data name="AnsweredEmails" xml:space="preserve">
+    <value>E-mails respondidos</value>
+  </data>
+  <data name="AnsweredFacsimiles" xml:space="preserve">
+    <value>Faxes respondidos</value>
+  </data>
+  <data name="AnsweredTasks" xml:space="preserve">
+    <value>Tarefas Respondidas</value>
+  </data>
+  <data name="CalculatedEmails" xml:space="preserve">
+    <value>E-mails calculados</value>
+  </data>
+  <data name="CalculatedFacsimiles" xml:space="preserve">
+    <value>Faxes calculados</value>
+  </data>
+  <data name="CalculatedTasks" xml:space="preserve">
+    <value>Tarefas calculadas</value>
+  </data>
+  <data name="NewRequest" xml:space="preserve">
+    <value>Nova Solicitação</value>
+  </data>
+  <data name="DefineOrganization" xml:space="preserve">
+    <value>Definir Organização</value>
+  </data>
+  <data name="OrganizationHierarchy" xml:space="preserve">
+    <value>Hierarquia da Organização</value>
+  </data>
+  <data name="ShowRequests" xml:space="preserve">
+    <value>Mostrar Solicitações</value>
+  </data>
+  <data name="LoadingThreeDots" xml:space="preserve">
+    <value>Carregando...</value>
+  </data>
+  <data name="ContractScheduleLower" xml:space="preserve">
+    <value>Agenda do Contrato</value>
+  </data>
+  <data name="OpenReports" xml:space="preserve">
+    <value>Relatórios</value>
+  </data>
+  <data name="OpenTeleoptiCCC" xml:space="preserve">
+    <value>Teleopti CCC</value>
+  </data>
+  <data name="PartTimePercentageLower" xml:space="preserve">
+    <value>Porcentagem Tempo Parcial</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Opcional</value>
+  </data>
+  <data name="WeekAbbreviationDot" xml:space="preserve">
+    <value>s.</value>
+  </data>
+  <data name="ApplicationLogon" xml:space="preserve">
+    <value>Login Aplicação</value>
+  </data>
+  <data name="InitializingTreeDots" xml:space="preserve">
+    <value>Inicializando...</value>
+  </data>
+  <data name="LoadingDataTreeDots" xml:space="preserve">
+    <value>Carregando dados...</value>
+  </data>
+  <data name="LoggingOnTreeDots" xml:space="preserve">
+    <value>Ingressando...</value>
+  </data>
+  <data name="LoginNameColon" xml:space="preserve">
+    <value>Login:</value>
+  </data>
+  <data name="PasswordColon" xml:space="preserve">
+    <value>Senha:</value>
+  </data>
+  <data name="PleaseChooseABusinessUnit" xml:space="preserve">
+    <value>Por favor selecione uma unidade de negócio</value>
+  </data>
+  <data name="PleaseChooseADatasource" xml:space="preserve">
+    <value>Por favor selecione uma fonte de dados</value>
+  </data>
+  <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
+    <value>Por favor digite suas credenciais de login</value>
+  </data>
+  <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
+    <value>Procurando fontes de dados...</value>
+  </data>
+  <data name="VerifyingPermissionsTreeDots" xml:space="preserve">
+    <value>Verificando permissões...</value>
+  </data>
+  <data name="WindowsLogon" xml:space="preserve">
+    <value>Windows Login</value>
+  </data>
+  <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
+    <value>Teleopti CCC: Pessoas</value>
+  </data>
+  <data name="DecreaseDecimals" xml:space="preserve">
+    <value>Diminuir decimais</value>
+  </data>
+  <data name="IncreaseDecimals" xml:space="preserve">
+    <value>Aumentar decimais</value>
+  </data>
+  <data name="EditMeeting" xml:space="preserve">
+    <value>Editar Reunião</value>
+  </data>
+  <data name="MeetingPicker" xml:space="preserve">
+    <value>Selecionar Reunião</value>
+  </data>
+  <data name="RemoveParticipant" xml:space="preserve">
+    <value>Remover Participantes Selecionados</value>
+  </data>
+  <data name="AutomaticScheduling" xml:space="preserve">
+    <value>Agendamento Automático</value>
+  </data>
+  <data name="ModifyAbsence" xml:space="preserve">
+    <value>Modificar Ausência</value>
+  </data>
+  <data name="ModifyAssignment" xml:space="preserve">
+    <value>Modificar atribuição</value>
+  </data>
+  <data name="ModifyDayOff" xml:space="preserve">
+    <value>Modificar Folga</value>
+  </data>
+  <data name="ModifyPersonNameAndPassword" xml:space="preserve">
+    <value>Modificar nome e senha</value>
+  </data>
+  <data name="ModifyPersonTimeActivity" xml:space="preserve">
+    <value>Modificar tempo excedido</value>
+  </data>
+  <data name="OpenPermissionPage" xml:space="preserve">
+    <value>Permissões</value>
+  </data>
+  <data name="OpenRaptorApplication" xml:space="preserve">
+    <value>Abrir Teleopti CCC</value>
+  </data>
+  <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
+    <value>Teleopti CCC: Permissões</value>
+  </data>
+  <data name="PeopleInsertScreen" xml:space="preserve">
+    <value>Página para Inserir Pessoas</value>
+  </data>
+  <data name="SelectPeopleToAddToRole" xml:space="preserve">
+    <value>Selecione Pessoa para Adicionar para a Função</value>
+  </data>
+  <data name="CutActivity" xml:space="preserve">
+    <value>Cortar Atividade</value>
+  </data>
+  <data name="CutDateEx" xml:space="preserve">
+    <value>Cortar Data Exceção</value>
+  </data>
+  <data name="CutLimitation" xml:space="preserve">
+    <value>Cortar Limitação</value>
+  </data>
+  <data name="DeleteActivity" xml:space="preserve">
+    <value>Excluir Atividade</value>
+  </data>
+  <data name="DeleteDateEx" xml:space="preserve">
+    <value>Axcluir Data Exceção</value>
+  </data>
+  <data name="DeleteLimitation" xml:space="preserve">
+    <value>Excluir Limitação</value>
+  </data>
+  <data name="NewActivity" xml:space="preserve">
+    <value>Nova Atividade</value>
+  </data>
+  <data name="NewDateExclusion" xml:space="preserve">
+    <value>Nova Disponibilidade de Data</value>
+  </data>
+  <data name="NewLimitation" xml:space="preserve">
+    <value>Nova Limitação</value>
+  </data>
+  <data name="PasteActivity" xml:space="preserve">
+    <value>Colar Atividade</value>
+  </data>
+  <data name="PasteDateEx" xml:space="preserve">
+    <value>Colar Data Exceção</value>
+  </data>
+  <data name="PasteLimitation" xml:space="preserve">
+    <value>Colar Limitação</value>
+  </data>
+  <data name="Accrued" xml:space="preserve">
+    <value>Acumulado</value>
+  </data>
+  <data name="BalanceIn" xml:space="preserve">
+    <value>Balanciado Em</value>
+  </data>
+  <data name="BalanceOut" xml:space="preserve">
+    <value>Balanciado Fora</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>Excluir Função</value>
+  </data>
+  <data name="DescriptionDayTracker" xml:space="preserve">
+    <value>Feriado</value>
+  </data>
+  <data name="Extra" xml:space="preserve">
+    <value>Extra</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Nova Função</value>
+  </data>
+  <data name="PersonAccountDay" xml:space="preserve">
+    <value>Dia</value>
+  </data>
+  <data name="PersonAccountTime" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="RenameRole" xml:space="preserve">
+    <value>Renomear Função</value>
+  </data>
+  <data name="Used" xml:space="preserve">
+    <value>Usado</value>
+  </data>
+  <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
+    <value>Ocupação Máxima %:</value>
+  </data>
+  <data name="MinimumOccupancyPercentSignColon" xml:space="preserve">
+    <value>Ocupação Mínima %:</value>
+  </data>
+  <data name="ShrinkagePercentSignColon" xml:space="preserve">
+    <value>Indisponibilidade %:</value>
+  </data>
+  <data name="OpenScheduler" xml:space="preserve">
+    <value>Agendas Abertas</value>
+  </data>
+  <data name="PersonAccounts" xml:space="preserve">
+    <value>Contas Pessoais</value>
+  </data>
+  <data name="AddPersonToRole" xml:space="preserve">
+    <value>Adicionar Pessoa para a Função</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Adicionar Função</value>
+  </data>
+  <data name="DeletePersonFromRole" xml:space="preserve">
+    <value>Excluir Pessoa da Função</value>
+  </data>
+  <data name="NewPerson" xml:space="preserve">
+    <value>Nova Pessoa</value>
+  </data>
+  <data name="NewPersonAccount" xml:space="preserve">
+    <value>Nova Conta Pessoal</value>
+  </data>
+  <data name="NewPersonPeriod" xml:space="preserve">
+    <value>Novo Período Pessoal</value>
+  </data>
+  <data name="NewPersonRotation" xml:space="preserve">
+    <value>Nova Rotação Pessoal</value>
+  </data>
+  <data name="NewSchedulePeriod" xml:space="preserve">
+    <value>Novo Período de Agendamento</value>
+  </data>
+  <data name="ResetTemplates" xml:space="preserve">
+    <value>Reiniciar Modelos</value>
+  </data>
+  <data name="Overstaffing" xml:space="preserve">
+    <value>Sobre Agendamento</value>
+  </data>
+  <data name="SeriousUnderstaffing" xml:space="preserve">
+    <value>Sub Agendamento Critico</value>
+  </data>
+  <data name="Understaffing" xml:space="preserve">
+    <value>Sub Agendamento</value>
+  </data>
+  <data name="BallonTipScheduleChange" xml:space="preserve">
+    <value>Sua Agenda foi mudada. Clique aqui para ver a agenda atualizada.</value>
+  </data>
+  <data name="Agent" xml:space="preserve">
+    <value>Agente</value>
+  </data>
+  <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
+    <value>Teleopti CCC: Intradiário</value>
+  </data>
+  <data name="OpenAgentPortal" xml:space="preserve">
+    <value>Portal do Agente</value>
+  </data>
+  <data name="OpenASM" xml:space="preserve">
+    <value>Mensageiro da Agenda do Agente</value>
+  </data>
+  <data name="AutomaticUpdate" xml:space="preserve">
+    <value>Atualização Automática</value>
+  </data>
+  <data name="OpenPeople" xml:space="preserve">
+    <value>Abrir Pessoa</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>Balanço</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Criado</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Negado</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="RequestType" xml:space="preserve">
+    <value>Tipo de Solicitação</value>
+  </data>
+  <data name="RequestTypeAbsence" xml:space="preserve">
+    <value>Ausência</value>
+  </data>
+  <data name="Seniority" xml:space="preserve">
+    <value>Senioridade</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="ActualAgents" xml:space="preserve">
+    <value>Agentes Reais</value>
+  </data>
+  <data name="ActualHandlingTime" xml:space="preserve">
+    <value>Tempo de Atendimento Real</value>
+  </data>
+  <data name="ActualTalkTime" xml:space="preserve">
+    <value>Tempo Falado Real</value>
+  </data>
+  <data name="AverageSpeedOfAnswer" xml:space="preserve">
+    <value>Tempo Médio de Resposta </value>
+  </data>
+  <data name="CurrentDistributedDemand" xml:space="preserve">
+    <value>Demanda distribuída atual</value>
+  </data>
+  <data name="OfferedCalls" xml:space="preserve">
+    <value>Chamadas realizadas</value>
+  </data>
+  <data name="OfferedEmails" xml:space="preserve">
+    <value>E-mails realizados</value>
+  </data>
+  <data name="OfferedFacsimiles" xml:space="preserve">
+    <value>Faxes realizados</value>
+  </data>
+  <data name="OfferedTasks" xml:space="preserve">
+    <value>Tarefas realizadas</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Fim</value>
+  </data>
+  <data name="Request" xml:space="preserve">
+    <value>Solicitação</value>
+  </data>
+  <data name="RequestScreen" xml:space="preserve">
+    <value>Tela de Solicitação</value>
+  </data>
+  <data name="SaveClose" xml:space="preserve">
+    <value>Salvar &amp;&amp; Fechar</value>
+  </data>
+  <data name="AddAnotherLevel" xml:space="preserve">
+    <value>Adicionar outro nível</value>
+  </data>
+  <data name="AndThenOn" xml:space="preserve">
+    <value>e neste</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Aprovar</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Coluna</value>
+  </data>
+  <data name="Deny" xml:space="preserve">
+    <value>Negar</value>
+  </data>
+  <data name="HandleRequests" xml:space="preserve">
+    <value>Solicitação de Tratamento</value>
+  </data>
+  <data name="SortOn" xml:space="preserve">
+    <value>Ordenar </value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>Ordenado por</value>
+  </data>
+  <data name="SortRequests" xml:space="preserve">
+    <value>Solicitação de Ordenação</value>
+  </data>
+  <data name="AtoZ" xml:space="preserve">
+    <value>A - Z</value>
+  </data>
+  <data name="ZtoA" xml:space="preserve">
+    <value>Z - A</value>
+  </data>
+  <data name="CreateMeeting" xml:space="preserve">
+    <value>Criar </value>
+  </data>
+  <data name="HandledWithinHMMColon" xml:space="preserve">
+    <value>Tratado em (hh:mm):</value>
+  </data>
+  <data name="IntervalLengthHMMColon" xml:space="preserve">
+    <value>Duração Intervalo (hh:mm)</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Carregando</value>
+  </data>
+  <data name="TemplatesSmartpart" xml:space="preserve">
+    <value>Modelos</value>
+  </data>
+  <data name="ChangedBy" xml:space="preserve">
+    <value>Modificado Por</value>
+  </data>
+  <data name="FilterOn" xml:space="preserve">
+    <value>Filtrado por</value>
+  </data>
+  <data name="SortAtoZ" xml:space="preserve">
+    <value>Ordenado A - Z</value>
+  </data>
+  <data name="BlankDescription" xml:space="preserve">
+    <value>Descrição em Branco</value>
+  </data>
+  <data name="SortZtoA" xml:space="preserve">
+    <value>Ordenado Z - A</value>
+  </data>
+  <data name="NextDate" xml:space="preserve">
+    <value>Próxima Data</value>
+  </data>
+  <data name="SelectedDate" xml:space="preserve">
+    <value>Data selecionada</value>
+  </data>
+  <data name="NewContractSchedule" xml:space="preserve">
+    <value>Nova Agenda do Contrato</value>
+  </data>
+  <data name="RequestTypeText" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="RelativeEnd" xml:space="preserve">
+    <value>Final Relativo</value>
+  </data>
+  <data name="RelativeStart" xml:space="preserve">
+    <value>Inicio Relativo</value>
+  </data>
+  <data name="RealTimeAdherence" xml:space="preserve">
+    <value>Aderencia em Tempo Real</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>&lt;Vazio&gt;</value>
+  </data>
+  <data name="EnterReply" xml:space="preserve">
+    <value>Digite Resposta</value>
+  </data>
+  <data name="Reply" xml:space="preserve">
+    <value>Responder</value>
+  </data>
+  <data name="SiteTeam" xml:space="preserve">
+    <value>Site/Time</value>
+  </data>
+  <data name="ReplyAndApprove" xml:space="preserve">
+    <value>Responder e Aprovar</value>
+  </data>
+  <data name="ReplyAndDeny" xml:space="preserve">
+    <value>Responder e Negar</value>
+  </data>
+  <data name="PersonRequestEmptySubjectError" xml:space="preserve">
+    <value>Assunto não pode estar vazio</value>
+  </data>
+  <data name="RequestDateColon" xml:space="preserve">
+    <value>Data da Solicitação:</value>
+  </data>
+  <data name="RequestStatusColon" xml:space="preserve">
+    <value>Status da Solicitação</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Site</value>
+  </data>
+  <data name="Respond" xml:space="preserve">
+    <value>Responder</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Adicionar novo</value>
+  </data>
+  <data name="MoveTime" xml:space="preserve">
+    <value>Mover Tempo</value>
+  </data>
+  <data name="OptimizeDayOffs" xml:space="preserve">
+    <value>Otimizar Folgas</value>
+  </data>
+  <data name="LessThanWorkloadNameGreaterThan" xml:space="preserve">
+    <value>&lt; Nome da Carga de Trabalho &gt;</value>
+  </data>
+  <data name="CopyOf" xml:space="preserve">
+    <value>Copia de</value>
+  </data>
+  <data name="NoOptionalColumnIsSelected" xml:space="preserve">
+    <value>Nenhuma coluna opcional foi selecionada!</value>
+  </data>
+  <data name="OptionalColumnName" xml:space="preserve">
+    <value>Nome da coluna opcional</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Informação</value>
+  </data>
+  <data name="QueueDetails" xml:space="preserve">
+    <value>Detalhe da Fila</value>
+  </data>
+  <data name="AfterContactWork" xml:space="preserve">
+    <value>Pós Atendimento</value>
+  </data>
+  <data name="AnsweredContracts" xml:space="preserve">
+    <value>Contratos Respondidos</value>
+  </data>
+  <data name="Availability" xml:space="preserve">
+    <value>Disponibilidade</value>
+  </data>
+  <data name="AvailableTime" xml:space="preserve">
+    <value>Tempo Disponível</value>
+  </data>
+  <data name="IdleTime" xml:space="preserve">
+    <value>Tempo Indisponível</value>
+  </data>
+  <data name="LoggedInTime" xml:space="preserve">
+    <value>Tempo Logado</value>
+  </data>
+  <data name="ScheduleWorkCtiTime" xml:space="preserve">
+    <value>Tempo Disponível Agendado</value>
+  </data>
+  <data name="Availabilities" xml:space="preserve">
+    <value>Disponibilidades</value>
+  </data>
+  <data name="ChangeYourAvailabilities" xml:space="preserve">
+    <value>Mude suas disponibilidades</value>
+  </data>
+  <data name="SelectAvailability" xml:space="preserve">
+    <value>Selecione disponibilidade:</value>
+  </data>
+  <data name="AddAbsenceThreeDots" xml:space="preserve">
+    <value>Adicionar Ausência...</value>
+  </data>
+  <data name="AddActivityThreeDots" xml:space="preserve">
+    <value>Adicionar Atividade...</value>
+  </data>
+  <data name="AddOverTimeThreeDots" xml:space="preserve">
+    <value>Adicionar Horas Extras</value>
+  </data>
+  <data name="AddPersonalActivityThreeDots" xml:space="preserve">
+    <value>Adicionar Atividade Pessoal</value>
+  </data>
+  <data name="GroupIsNotEmpty" xml:space="preserve">
+    <value>Grupo não está vazio</value>
+  </data>
+  <data name="TheGroupHasToBeEmptyBeforeDeleted" xml:space="preserve">
+    <value>O Grupo precisa estar vazio para ser apagado</value>
+  </data>
+  <data name="AuthenticationError" xml:space="preserve">
+    <value>Erro de Autenticação.</value>
+  </data>
+  <data name="ExternalSystemError" xml:space="preserve">
+    <value>Erro em Sistema Externo</value>
+  </data>
+  <data name="PleaseTryAgainLater" xml:space="preserve">
+    <value>Por favor tente novamente depois</value>
+  </data>
+  <data name="ReloadingDone" xml:space="preserve">
+    <value>Recarregado</value>
+  </data>
+  <data name="SomeoneElseHaveChanged" xml:space="preserve">
+    <value>Outra pessoa mudou</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Disponível</value>
+  </data>
+  <data name="NewAvailability" xml:space="preserve">
+    <value>Nova Disponibilidade</value>
+  </data>
+  <data name="AnUnHandledExceptionOccured" xml:space="preserve">
+    <value>Uma exceção não tratada aconteceu, e a aplicação está terminando.</value>
+  </data>
+  <data name="AgentSelectDialog" xml:space="preserve">
+    <value>Seleção de Agente</value>
+  </data>
+  <data name="Go" xml:space="preserve">
+    <value>Ir</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Procurar</value>
+  </data>
+  <data name="Togt" xml:space="preserve">
+    <value>Para - &gt;</value>
+  </data>
+  <data name="OpenMyReport" xml:space="preserve">
+    <value>Meu Relatório</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Apagar Confirmação</value>
+  </data>
+  <data name="AddNewSite" xml:space="preserve">
+    <value>Adicionar novo site</value>
+  </data>
+  <data name="AddNewTeam" xml:space="preserve">
+    <value>Adicionar novo time</value>
+  </data>
+  <data name="MessageTooLong" xml:space="preserve">
+    <value>Mensagem muito longa</value>
+  </data>
+  <data name="UserSettingsName" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="UserSettingsValue" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="UserSettingsValueType" xml:space="preserve">
+    <value>Tipo de Valor</value>
+  </data>
+  <data name="SystemSettings" xml:space="preserve">
+    <value>Propriedades do Sistema</value>
+  </data>
+  <data name="DeleteAvailability" xml:space="preserve">
+    <value>Excluir disponibilidade</value>
+  </data>
+  <data name="SelectAvailabilityColon" xml:space="preserve">
+    <value>Selecione disponibilidade:</value>
+  </data>
+  <data name="WeeksColon" xml:space="preserve">
+    <value>Semanas</value>
+  </data>
+  <data name="PersonRotations" xml:space="preserve">
+    <value>Rotações de Pessoas</value>
+  </data>
+  <data name="ScheduledDaysOff" xml:space="preserve">
+    <value>Folgas</value>
+  </data>
+  <data name="TargetDaysOff" xml:space="preserve">
+    <value>Folgas</value>
+  </data>
+  <data name="MidnightBreakOffsetColon" xml:space="preserve">
+    <value>Intervalo Meia-Noite</value>
+  </data>
+  <data name="ColumnOnly" xml:space="preserve">
+    <value>Apenas Coluna</value>
+  </data>
+  <data name="HideOptions" xml:space="preserve">
+    <value>Opções &lt;&lt;</value>
+  </data>
+  <data name="ShowOptions" xml:space="preserve">
+    <value>Opções &gt;&gt;</value>
+  </data>
+  <data name="DeleteScenario" xml:space="preserve">
+    <value>Excluir Cenários</value>
+  </data>
+  <data name="CreateAbsenceRequest" xml:space="preserve">
+    <value>Solicitações de Ausência</value>
+  </data>
+  <data name="CreateTextRequest" xml:space="preserve">
+    <value>Requisições de Mudança</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Excluída</value>
+  </data>
+  <data name="Longterm" xml:space="preserve">
+    <value>Longo Prazo</value>
+  </data>
+  <data name="Old" xml:space="preserve">
+    <value>Velho</value>
+  </data>
+  <data name="ReOptimize" xml:space="preserve">
+    <value>Otimizar</value>
+  </data>
+  <data name="ManageRTA" xml:space="preserve">
+    <value>Gerenciar Aderência em Tempo Real</value>
+  </data>
+  <data name="DeleteRotation" xml:space="preserve">
+    <value>Excluir Rotação</value>
+  </data>
+  <data name="DefaultAccessibilityExcluded" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="DefaultAccessibilityIncluded" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="ScheduleHourlyEmployees" xml:space="preserve">
+    <value>Empregados agendados por hora</value>
+  </data>
+  <data name="OperatorLimiterEquals" xml:space="preserve">
+    <value>Igual</value>
+  </data>
+  <data name="OperatorLimiterGreaterThen" xml:space="preserve">
+    <value>Maior que</value>
+  </data>
+  <data name="OperatorLimiterGreaterThenEquals" xml:space="preserve">
+    <value>Maior ou igual que</value>
+  </data>
+  <data name="OperatorLimiterLessThen" xml:space="preserve">
+    <value>Menor que</value>
+  </data>
+  <data name="OperatorLimiterLessThenEquals" xml:space="preserve">
+    <value>Menor ou igual que</value>
+  </data>
+  <data name="ExampleColon" xml:space="preserve">
+    <value>Exemplo:</value>
+  </data>
+  <data name="FormatColon" xml:space="preserve">
+    <value>Formato:</value>
+  </data>
+  <data name="OptionalColumnColon" xml:space="preserve">
+    <value>Coluna Opcional:</value>
+  </data>
+  <data name="NewDayOff" xml:space="preserve">
+    <value>Nova Folga</value>
+  </data>
+  <data name="AbsenceRequestEmptyAbsenceTypeError" xml:space="preserve">
+    <value>Ausência não selecionada</value>
+  </data>
+  <data name="SuggestedTimesColon" xml:space="preserve">
+    <value>Horários Sugeridos:</value>
+  </data>
+  <data name="AddNewContractSchedule" xml:space="preserve">
+    <value>Adicionar nova Agenda de Contrato</value>
+  </data>
+  <data name="ChooseDaysOffToChange" xml:space="preserve">
+    <value>Selecione Folga para Mudar</value>
+  </data>
+  <data name="DaysOffColon" xml:space="preserve">
+    <value>Folgas:</value>
+  </data>
+  <data name="EnterSettingsForDaysOff" xml:space="preserve">
+    <value>Digite paramêtros para Folgas</value>
+  </data>
+  <data name="FlexibilityColon" xml:space="preserve">
+    <value>Flexibilidade:</value>
+  </data>
+  <data name="ManageDayOff" xml:space="preserve">
+    <value>Gerenciar Folgas</value>
+  </data>
+  <data name="TargetLengthColon" xml:space="preserve">
+    <value>Tamanho Alvo:</value>
+  </data>
+  <data name="HolidayDays" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="HolidayTime" xml:space="preserve">
+    <value>Horário</value>
+  </data>
+  <data name="Preference" xml:space="preserve">
+    <value>Preferencias</value>
+  </data>
+  <data name="ScheduleOnlyAvailabilityDays" xml:space="preserve">
+    <value>Agendar apenas dias disponíveis</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceDays" xml:space="preserve">
+    <value>Agendar apenas dias preferenciais</value>
+  </data>
+  <data name="UseAvailability" xml:space="preserve">
+    <value>Usar disponibilidade</value>
+  </data>
+  <data name="UseMaxStaffing" xml:space="preserve">
+    <value>Usar Equipe Máxima</value>
+  </data>
+  <data name="UseMinStaffing" xml:space="preserve">
+    <value>Usar Equipe Minima</value>
+  </data>
+  <data name="UsePreferences" xml:space="preserve">
+    <value>Usar Preferências</value>
+  </data>
+  <data name="NewPartTimePercentage" xml:space="preserve">
+    <value>Nova porcentagem tempo parcial</value>
+  </data>
+  <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
+    <value>Visão Geral: Detalhes do Usuário</value>
+  </data>
+  <data name="Attendees" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="FilterPeopleColon" xml:space="preserve">
+    <value>Filtrar pessoas:</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Obrigatório</value>
+  </data>
+  <data name="SelectAttendees" xml:space="preserve">
+    <value>Selecione Participantes</value>
+  </data>
+  <data name="ZeroOneFoundDot" xml:space="preserve">
+    <value>{0} {1} localizado.</value>
+  </data>
+  <data name="ActivityNext" xml:space="preserve">
+    <value>Próxima atividade</value>
+  </data>
+  <data name="ActivityNextStart" xml:space="preserve">
+    <value>Inicio proxima atividade</value>
+  </data>
+  <data name="AgentState" xml:space="preserve">
+    <value>Estado do Agente</value>
+  </data>
+  <data name="AgentTeam" xml:space="preserve">
+    <value>Time do Agente</value>
+  </data>
+  <data name="Alarm" xml:space="preserve">
+    <value>Alarme</value>
+  </data>
+  <data name="AlarmName" xml:space="preserve">
+    <value>Nome do Alarme</value>
+  </data>
+  <data name="AlarmTime" xml:space="preserve">
+    <value>Tempo atual do Alarme</value>
+  </data>
+  <data name="AlarmTotalTime" xml:space="preserve">
+    <value>Tempo total do Alarme</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Atual</value>
+  </data>
+  <data name="CurrentActivity" xml:space="preserve">
+    <value>Atividade Atual</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="NextStart" xml:space="preserve">
+    <value>Próximo inicio</value>
+  </data>
+  <data name="ScheduledTime" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="TargetTime" xml:space="preserve">
+    <value>Tempo</value>
+  </data>
+  <data name="TotalTime" xml:space="preserve">
+    <value>Tempo Total</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="People" xml:space="preserve">
+    <value>pessoa</value>
+  </data>
+  <data name="AllDayEvent" xml:space="preserve">
+    <value>Todo dia</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Data criação</value>
+  </data>
+  <data name="SelectRotationColon" xml:space="preserve">
+    <value>Selecione rotação</value>
+  </data>
+  <data name="EmployeeNumber" xml:space="preserve">
+    <value>Numero do Empregado</value>
+  </data>
+  <data name="HandledWithinHMM" xml:space="preserve">
+    <value>Tratado em (hh:mm)</value>
+  </data>
+  <data name="NameAlreadyExists" xml:space="preserve">
+    <value>O nome já existe</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="OpenLicenseFile" xml:space="preserve">
+    <value>Escolha arquivo de licença</value>
+  </data>
+  <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
+    <value>Dia de Trabalho</value>
+  </data>
+  <data name="UndoAll" xml:space="preserve">
+    <value>Desfazer Tudo</value>
+  </data>
+  <data name="TimeTypeDays" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="TimeTypeDaysSingular" xml:space="preserve">
+    <value>Dia</value>
+  </data>
+  <data name="TimeTypeHours" xml:space="preserve">
+    <value>Horas</value>
+  </data>
+  <data name="TimeTypeHoursSingular" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="TimeTypeMinutes" xml:space="preserve">
+    <value>minutos</value>
+  </data>
+  <data name="TimeTypeMinutesSingular" xml:space="preserve">
+    <value>minuto</value>
+  </data>
+  <data name="TimeTypeWeeks" xml:space="preserve">
+    <value>semanas</value>
+  </data>
+  <data name="TimeTypeWeeksSingular" xml:space="preserve">
+    <value>semana</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Disponibilidade Estudante</value>
+  </data>
+  <data name="DayOfWeekFriday" xml:space="preserve">
+    <value>Sexta-Feira</value>
+  </data>
+  <data name="DayOfWeekMonday" xml:space="preserve">
+    <value>Segunda-Feira</value>
+  </data>
+  <data name="DayOfWeekSaturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="DayOfWeekSunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="DayOfWeekThursday" xml:space="preserve">
+    <value>Quinta-Feira</value>
+  </data>
+  <data name="DayOfWeekTuesday" xml:space="preserve">
+    <value>Terça-Feira</value>
+  </data>
+  <data name="DayOfWeekWednesday" xml:space="preserve">
+    <value>Quarta-Feira</value>
+  </data>
+  <data name="WeekNumberFirst" xml:space="preserve">
+    <value>primeiro</value>
+  </data>
+  <data name="WeekNumberFourth" xml:space="preserve">
+    <value>quarto</value>
+  </data>
+  <data name="WeekNumberLast" xml:space="preserve">
+    <value>último</value>
+  </data>
+  <data name="WeekNumberSecond" xml:space="preserve">
+    <value>segundo</value>
+  </data>
+  <data name="WeekNumberThird" xml:space="preserve">
+    <value>terceiro</value>
+  </data>
+  <data name="ApointmentTime" xml:space="preserve">
+    <value>Tempo de Apontamento</value>
+  </data>
+  <data name="AppointmentRecurrence" xml:space="preserve">
+    <value>Recorrência do Apontamento</value>
+  </data>
+  <data name="DurationColon" xml:space="preserve">
+    <value>Duração:</value>
+  </data>
+  <data name="EndByColon" xml:space="preserve">
+    <value>Terminando em:</value>
+  </data>
+  <data name="EndColon" xml:space="preserve">
+    <value>Fim:</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Mensal</value>
+  </data>
+  <data name="OfEvery" xml:space="preserve">
+    <value>em cada</value>
+  </data>
+  <data name="RangeOfRecurrence" xml:space="preserve">
+    <value>Período da Recorrência</value>
+  </data>
+  <data name="RemoveRecurrence" xml:space="preserve">
+    <value>Remover recorrência</value>
+  </data>
+  <data name="StartColon" xml:space="preserve">
+    <value>Inicio:</value>
+  </data>
+  <data name="The" xml:space="preserve">
+    <value>o</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Semanal</value>
+  </data>
+  <data name="WeeksOnColon" xml:space="preserve">
+    <value>Semana(s) em:</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
+    <value>Realmente deseja excluir a coluna opcional '{0}'?</value>
+  </data>
+  <data name="SelectOptionalColumn" xml:space="preserve">
+    <value>&lt; Selecione a coluna opcional &gt;</value>
+  </data>
+  <data name="CloseApplication" xml:space="preserve">
+    <value>Fechar aplicação</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Copiar para o Quadro de Colagem</value>
+  </data>
+  <data name="SendEmail" xml:space="preserve">
+    <value>Enviar E-mail</value>
+  </data>
+  <data name="RequestStatusApproved" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="RequestStatusDenied" xml:space="preserve">
+    <value>Negado</value>
+  </data>
+  <data name="RequestStatusDtoApproved" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="RequestStatusDtoDenied" xml:space="preserve">
+    <value>Negado</value>
+  </data>
+  <data name="RequestStatusDtoPending" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="RequestStatusPending" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="Me" xml:space="preserve">
+    <value>Mim</value>
+  </data>
+  <data name="MaxColon" xml:space="preserve">
+    <value>Max:</value>
+  </data>
+  <data name="MinColon" xml:space="preserve">
+    <value>Min:</value>
+  </data>
+  <data name="WeeklyWorkTime" xml:space="preserve">
+    <value>Tempo de Trabalho Semanal</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Validado</value>
+  </data>
+  <data name="DateSelection" xml:space="preserve">
+    <value>Seleção de Data</value>
+  </data>
+  <data name="RemoveDays" xml:space="preserve">
+    <value>Remover Dias</value>
+  </data>
+  <data name="FilterDays" xml:space="preserve">
+    <value>Filtrar dias</value>
+  </data>
+  <data name="NextPeriod" xml:space="preserve">
+    <value>Próximo Periodo</value>
+  </data>
+  <data name="PreviousPeriod" xml:space="preserve">
+    <value>Período Anterior</value>
+  </data>
+</root>

@@ -1,0 +1,48 @@
+﻿using Autofac;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.IocCommon.Configuration;
+
+namespace Teleopti.Ccc.IocCommonTest.Configuration
+{
+    [TestFixture]
+    public class ScheduleScreenRefresherModuleTest
+    {
+        private ContainerBuilder _containerBuilder;
+        private ScheduleScreenRefresherModule _module;
+        private IContainer _container;
+
+        [SetUp]
+        public void Setup()
+        {
+            _module = new ScheduleScreenRefresherModule();
+            _containerBuilder = new ContainerBuilder();
+            _containerBuilder.RegisterModule(new UnitOfWorkModule());
+            _containerBuilder.RegisterModule(new RepositoryModule());
+            _containerBuilder.RegisterModule(_module);
+            _container = _containerBuilder.Build();
+        }
+
+        [Test]
+        public void ShouldResolveScheduleScreenRefresherAsFarAsPossible()
+        {
+            var mocks = new MockRepository();
+
+            var instance = _container.Resolve<IScheduleScreenRefresher>(
+                TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
+                TypedParameter.From(_container.Resolve<IScheduleDataRefresher>(
+                    TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>())
+                    )),
+                TypedParameter.From(_container.Resolve<IMeetingRefresher>(
+                    TypedParameter.From(mocks.Stub<IUpdateMeetingsFromMessages>())
+                    )),
+                TypedParameter.From(_container.Resolve<IPersonRequestRefresher>(
+                    TypedParameter.From(mocks.Stub<IUpdatePersonRequestsFromMessages>())
+                    ))
+                );
+
+            Assert.That(instance, Is.InstanceOf<ScheduleScreenRefresher>());
+        }
+    }
+}

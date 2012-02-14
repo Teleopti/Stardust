@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Teleopti.Ccc.WpfControls.MeetingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:cvt="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
+    xmlns:c="clr-namespace:Teleopti.Ccc.WpfControls.Commands"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:WpfControls="clr-namespace:Teleopti.Ccc.WpfControls">
+   
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources\CommonBrushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <cvt:ColorConverter x:Key="ColorConverter"/>
+        
+        <DataTemplate x:Key="DescriptiveTemplate">
+            <WpfControls:LayerDescriptiveView DataContext="{Binding}" Background="{DynamicResource RaptorStandardMeetingGradientBrush}"/>
+        </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                BorderBrush="SteelBlue" 
+                BorderThickness="0.5" 
+                Opacity="1"
+                CornerRadius="2"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+                MouseDown="Border_MouseDown">
+        <Border.CommandBindings>
+            <CommandBinding Command="c:RoutedCommands.EditMeeting"
+                            Executed="EditMeeting_Executed"
+                            CanExecute="EditMeeting_CanExecute"/>
+        </Border.CommandBindings>
+        <Border.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="c:RoutedCommands.EditMeeting"/>
+            </ContextMenu>
+        </Border.ContextMenu>
+       
+        
+    </Border>
+    <UserControl.ToolTip>
+        <ToolTip Opacity="0.8">
+            <ContentControl Content="{Binding}" 
+                            ContentTemplate="{StaticResource DescriptiveTemplate}" />
+        </ToolTip>
+    </UserControl.ToolTip>
+</UserControl>

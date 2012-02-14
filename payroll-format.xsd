@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="urn:payroll-format-1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:payroll-format-1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="Item">
+    <xs:complexType>
+      <xs:attribute name="Element" use="required" type="xs:string" />
+      <xs:attribute name="Type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="string" />
+            <xs:enumeration value="time" />
+            <xs:enumeration value="date" />
+            <xs:enumeration value="decimal" />
+            <xs:enumeration value="double" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="Format" type="xs:string" />
+      <xs:attribute name="Fill" type="xs:string" />
+      <xs:attribute name="Quote" type="xs:boolean" default="false" />
+      <xs:attribute name="Length">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="16383" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="Align">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Left" />
+            <xs:enumeration value="Right" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Items">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Item" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="Element" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Document">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Items" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="Header" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="Footer" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute name="DocumentElement" type="xs:string" use="required" />
+      <xs:attribute name="Type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Csv"/>
+            <xs:enumeration value="FixedWidth" />
+            <xs:enumeration value="Xml" />
+            <xs:enumeration value="Excel" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="Separator" type="xs:string" />
+      <xs:attribute name="Line-separator" type="xs:string" />
+      <xs:attribute name="Encoding" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Header">
+    <xs:complexType>
+      <xs:attribute name="Enabled" type="xs:boolean" default="false" />
+      <xs:attribute name="Element" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Footer">
+    <xs:complexType>
+      <xs:attribute name="Enabled" type="xs:boolean" default="false" />
+      <xs:attribute name="Element" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Format">
+    <xs:complexType>
+      <xs:choice minOccurs="1" maxOccurs="1">
+        <xs:element ref="Document" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

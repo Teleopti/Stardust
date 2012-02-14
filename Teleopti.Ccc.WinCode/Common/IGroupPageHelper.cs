@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.WinCode.Common
+{
+    public interface IGroupPageHelper : IDisposable, IGroupPageDataProvider
+    {
+        /// <summary>
+        /// Gets or sets the current group page.
+        /// </summary>
+        /// <value>The current group page.</value>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2008-07-04
+        /// </remarks>
+        IGroupPage CurrentGroupPage { get; set; }
+
+        /// <summary>
+        /// Loads all persons.
+        /// </summary>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2008-06-26
+        /// </remarks>
+        void LoadAll();
+
+        void ReloadCurrentGroupPageFromDatabase(IUnitOfWork uow);
+
+    	/// <summary>
+    	/// Removes the group page.
+    	/// </summary>
+    	/// <param name="groupPage">The group page.</param>
+    	/// <remarks>
+    	/// Created by: Muhamad Risath
+    	/// Created date: 2008-07-10
+    	/// </remarks>
+    	IEnumerable<IRootChangeInfo> RemoveGroupPage(IGroupPage groupPage);
+
+        void UpdateCurrent();
+
+    	/// <summary>
+    	/// Adds the or update group page.
+    	/// </summary>
+    	/// <param name="groupPage">The group page.</param>
+    	IEnumerable<IRootChangeInfo> AddOrUpdateGroupPage(IGroupPage groupPage);
+
+        void SetSelectedPeriod(DateOnlyPeriod dateOnlyPeriod);
+
+        IGroupingsCreator CreateGroupingsCreator();
+        void RemoveGroupPageById(Guid id);
+        void SetCurrentGroupPageById(Guid groupPageId);
+        void RenameGroupPage(Guid groupPageId, string newName);
+    }
+}

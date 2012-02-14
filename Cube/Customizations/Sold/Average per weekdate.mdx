@@ -1,0 +1,20 @@
+with
+
+member [Measures].[Daily AVG] as
+	AVG
+	(
+		existing [Date].[Date].[Date]
+		,[Measures].[Offered Calls]
+	)
+	
+select
+{[Date].[Weekday].children}
+*
+{	
+	[Measures].[Offered Calls],
+	[Measures].[Daily AVG]
+} on columns,
+[Date].[Year Month].members on rows
+from [Teleopti Analytics]
+where [Date].[Year].[2003]
+cell properties value, formatted_value

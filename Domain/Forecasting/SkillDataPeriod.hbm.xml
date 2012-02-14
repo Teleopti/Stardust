@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Forecasting"
+                   default-access="field.camelcase-underscore">
+	<class name="SkillDataPeriod">
+		<!--IEntity-->
+		<id name="Id"
+					type="guid"
+					unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+    <many-to-one class="SkillDay"
+                 name="Parent"
+                 not-null="true" foreign-key="FK_SkillDataPeriod_SkillDay"/>
+		<!--IEntity-->
+		
+    <!-- 
+    Puh - a lot of nested components/value types below...
+    Poor Micke - cursed late at night.
+    -->
+    <component name="ServiceAgreement" class="Teleopti.Interfaces.Domain.ServiceAgreement, Teleopti.Interfaces">
+      <component name="ServiceLevel" class="Teleopti.Interfaces.Domain.ServiceLevel, Teleopti.Interfaces">
+        <component name="Percent" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+          <property name="Value"
+							  not-null="true"
+							  type="Double" />
+        </component>
+        <property name="Seconds"
+							  type="Double"
+							  not-null="true"/>
+      </component>
+
+      <component name="MaxOccupancy" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <property name="Value"
+                not-null="true"
+                type="Double"
+                column="MaxOccupancy"/>
+      </component>
+      <component name="MinOccupancy" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <property name="Value"
+              not-null="true"
+              type="Double"
+              column="MinOccupancy"/>
+      </component>
+    </component>
+
+		<component name="SkillPersonData" class="Teleopti.Interfaces.Domain.SkillPersonData, Teleopti.Interfaces">
+				<property name="MaximumPersons"
+						  column ="PersonBoundary_Maximum"
+						  not-null="true"
+						  type="int" />
+				<property name="MinimumPersons"
+						  column ="PersonBoundary_Minimum"
+						  not-null="true"
+						  type="int" />
+		</component>
+    <component name="Shrinkage" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <property name="Value"
+              not-null="true"
+              type="Double"
+              column="Shrinkage"/>
+    </component>
+
+    <component name="Efficiency" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <property name="Value"
+              not-null="true"
+              type="Double"
+              column="Efficiency"/>
+    </component>
+
+    <property name="ManualAgents" type="double" not-null="false" />
+		
+    <component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+      <component name="period" access="field">
+        <property name="Minimum"
+				  column="StartDateTime"
+					  not-null="true"
+					  type="UtcDateTime" />
+        <property name="Maximum"
+				column="EndDateTime"
+				  not-null="true"
+					  type="UtcDateTime"  />
+      </component>
+    </component>
+	</class>
+
+</hibernate-mapping>

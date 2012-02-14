@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Teleopti.Ccc.WpfControls.Controls.Editor.Views.ShiftCategoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
+    xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
+                <ResourceDictionary Source="..\..\..\Resources\Icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <DataTemplate x:Key="ShiftCategoryTemplate">
+                <Views:ShiftCategoryShortView DataContext="{Binding}"/>
+            </DataTemplate>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border BorderBrush="#FF8B8787" BorderThickness="0.3" CornerRadius="3" Padding="3" Margin="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="25"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{x:Static UserTexts:Resources.ShiftCategoryColon}" 
+                       Margin="3,0,0,0" 
+                       VerticalAlignment="Center"
+                       Grid.Column="0"/>
+            
+            <ContentPresenter Content="{Binding Path=Category}" 
+                              ContentTemplate="{StaticResource ShiftCategoryTemplate}"
+                              Grid.Column="1"
+                              VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding Path=Categories}"
+                      SelectedValue="{Binding Path=Category}"
+                      IsEnabled="{Binding Path=Enabled}"
+                      Background="{StaticResource RaptorStandardGradientBrush}"
+                      MaxHeight="22"
+                      Margin="3,0,0,0"
+					  Grid.Row="1"
+                      IsSynchronizedWithCurrentItem="True" 
+                      Height="20" 
+                      Width="20" 
+                      Grid.Column="2"
+                      ItemTemplate="{StaticResource ShiftCategoryTemplate}"/>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="CreateAzure" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
+	</PropertyGroup>
+
+	<Target Name="GetBuildParameters">
+		<ReadLinesFromFile File="$(SharedMSIWorkingFolder)\CCNetProject.html" >
+			<Output TaskParameter="Lines"
+					PropertyName="CallingCCNetProject" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(SharedMSIWorkingFolder)\CCCVersion.html" >
+			<Output TaskParameter="Lines"
+					PropertyName="CCCVersion" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(SharedMSIWorkingFolder)\DeployShare.html" >
+			<Output TaskParameter="Lines"
+					PropertyName="DeployShare" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(SharedMSIWorkingFolder)\MSIShare.html" >
+			<Output TaskParameter="Lines"
+					PropertyName="MSIShare" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(SharedMSIWorkingFolder)\CCNetWorkingDirectory.html" >
+			<Output TaskParameter="Lines"
+			  PropertyName="CallingCCNetWorkingDirectory" />
+		</ReadLinesFromFile>
+
+		<PropertyGroup>
+			<CCCVersion>$(CCCVersion)</CCCVersion>
+			<DeployShare>$(DeployShare)</DeployShare>
+			<CallingCCNetProject>$(CallingCCNetProject)</CallingCCNetProject>
+			<MSIShare>$(MSIShare)</MSIShare>
+			<CallingCCNetWorkingDirectory>$(CallingCCNetWorkingDirectory)</CallingCCNetWorkingDirectory>
+		</PropertyGroup>
+
+		<Message Text="CallingCCNetProject is: $(CallingCCNetProject)" Importance="high" />
+		<Message Text="CCCVersion is: $(CCCVersion)" Importance="high" />
+		<Message Text="DeployShare is: $(DeployShare)" Importance="high" />
+		<Message Text="MSIShare is: $(MSIShare)" Importance="high" />
+		<Message Text="CallingCCNetWorkingDirectory is: $(CallingCCNetWorkingDirectory)" Importance="high" />
+
+	</Target>
+
+	<Target Name="CreateAzure" DependsOnTargets="GetBuildParameters">
+		<Message Text="Building Azure packages ..." Importance="high" />
+		<Message Text="&quot;$(CallingCCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Exec Command="&quot;$(CallingCCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="Building Azure packages . Done!" Importance="high" />
+	</Target>
+
+</Project>

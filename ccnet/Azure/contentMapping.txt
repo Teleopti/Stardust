@@ -1,0 +1,10 @@
+Analytics,Analytics,Analytics
+Client\ClickOnce,Client,Client
+ETL,TeleoptiCCC\Services\ETL,ETL
+MessageBroker,TeleoptiCCC\Services\MessageBroker,MessageBroker
+MyTime\ClickOnce,MyTime,MyTime
+AgentPortalWeb,Web,Web
+RTA,RTA,RTA
+RTATools,TeleoptiCCC\Tools\RTATools,RTATools
+SDK,SDK,SDK
+ClickOnceSignTools,TeleoptiCCC\Tools\ClickOnceSign,DummyFolder

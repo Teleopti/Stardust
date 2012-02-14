@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <CustomerName>This freemium license is stolen!</CustomerName>
+  <ExpirationDate>2021-02-02T12:00:00</ExpirationDate>
+  <ExpirationGracePeriod>PT20H</ExpirationGracePeriod>
+  <MaxActiveAgents>1</MaxActiveAgents>
+  <MaxActiveAgentsGrace>20</MaxActiveAgentsGrace>
+  <TeleoptiCCCFreemium>
+    <Forecasts>true</Forecasts>
+  </TeleoptiCCCFreemium>
+</License>

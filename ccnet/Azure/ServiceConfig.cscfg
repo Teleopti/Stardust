@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="TeleoptiCCC" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="2" osVersion="*">
+  <Role name="TeleoptiCCC">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="teleopti" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEAvdrHwdCUeUScLnxqVNnwswDQYJKoZIhvcNAQEBBQAEggEAAwte6dmQ5pbXuG88gvpbjlWOz3MR7biTecSrojwkG19hoSKOduN+wQuJW6en5H8yFrQg7trD3GNziGuLdi4gEdECAYsRudq8N1LBDxAbsfB8fsRETk58NiIj3KfSWnO3hU+N/l5Y9AIOKeVAjnrKkpyJ1WBdPrE7xsfRFUPWy9hk+AchfU5ejPl2MypuH51/BmY1S8DSU9ZPBns5uyT32jykY48HdOq+TIga50Y/oHXBh3/zLcx7ncDE7/TsxQeQ0a1bpBI8IOfjKT/c6uS/u48zS+t/rugcFEkvU6GV0eP57S6ej6X+I7ETxDj6O+oRd411R1okOIRxFcyV83Z05jAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECAFJMac+4aRvgBBBVK5O6e3oOkVRALGBcDEm" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2011-12-31T23:59:59.0000000+01:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="D5517A7DDBF4FAAA4A428596E4D3B1C9" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

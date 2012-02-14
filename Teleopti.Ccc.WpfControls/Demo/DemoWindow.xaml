@@ -1,0 +1,8 @@
+﻿<Window x:Class="Teleopti.Ccc.WpfControls.Demo.DemoWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="DemoWindow" Height="300" Width="300">
+    <Grid>
+        <Label Content="WPF Window Started from WinForm" />
+    </Grid>
+</Window>

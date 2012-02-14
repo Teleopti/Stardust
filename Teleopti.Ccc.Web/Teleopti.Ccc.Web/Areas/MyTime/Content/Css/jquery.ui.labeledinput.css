@@ -1,0 +1,9 @@
+﻿
+.ui-labeled-input-label
+{
+	position: absolute;
+	top: 2px;
+	left: 15px;
+	cursor: text;
+	color: #ccd0d3;
+}

@@ -1,0 +1,228 @@
+using System;
+using System.Windows.Forms;
+using Teleopti.Ccc.WinCode.Meetings.Interfaces;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCode.Meetings
+{
+    public class MeetingRecurrencePresenter
+    {
+        private readonly IMeetingRecurrenceView _view;
+        private readonly IMeetingViewModel _meetingViewModel;
+        private RecurrentMeetingOptionViewModel _originalRecurrenceOption;
+        private DateOnly _startDate;
+        private DateOnly _recurrenceEndDate;
+        private TimeSpan _startTime;
+        private TimeSpan _endTime;
+        private RecurrentMeetingOptionViewModel _currentRecurrenceOption;
+        private TimeSpan _meetingDuration;
+
+        public MeetingRecurrencePresenter(IMeetingRecurrenceView view, IMeetingViewModel meetingViewModel)
+        {
+            _view = view;
+            _meetingViewModel = meetingViewModel;
+        }
+
+        public void Initialize()
+        {
+            _startDate = _meetingViewModel.StartDate;
+            _recurrenceEndDate = _meetingViewModel.RecurringEndDate;
+            _startTime = _meetingViewModel.StartTime;
+            _endTime = _meetingViewModel.EndTime;
+            _meetingDuration = _meetingViewModel.MeetingDuration;
+            _originalRecurrenceOption = _meetingViewModel.RecurringOption;
+
+            RecurrentMeetingType recurrentMeetingType =
+                _originalRecurrenceOption.RecurrentMeetingType;
+
+            _view.SetStartTime(_startTime);
+            _view.SetEndTime(_endTime);
+            _view.SetMeetingDuration(_meetingDuration);
+            _view.SetStartDate(_startDate);
+            _view.SetRecurringEndDate(_recurrenceEndDate);
+            _view.SetRecurringOption(recurrentMeetingType);
+            _view.SetRecurringExists(_recurrenceEndDate>_startDate);
+        }
+
+        public void SaveRecurrenceForMeeting()
+        {
+            if (ValidateControls())
+            {
+                _meetingViewModel.StartDate = _startDate;
+                _meetingViewModel.StartTime = _startTime;
+                _meetingViewModel.EndTime = _endTime;
+                _meetingViewModel.RecurringEndDate = _recurrenceEndDate;
+                _meetingViewModel.RecurringOption = _currentRecurrenceOption;
+                _view.AcceptAndClose();
+            }
+            else
+            {
+                _view.ShowErrorMessage(
+                    UserTexts.Resources.TheRecurrencePatternIsNotValid,
+                    UserTexts.Resources.ErrorMessage);
+            }
+        }
+
+        private bool ValidateControls()
+        {
+            if (!_currentRecurrenceOption.IsValid() ||
+                _recurrenceEndDate < _startDate) 
+                return false;
+
+            return true;
+        }
+
+        public void RemoveRecurrence()
+        {
+            _meetingViewModel.RemoveRecurrence();
+            _view.Close();
+        }
+
+        public void SetRecurringEndDate(DateOnly endDate)
+        {
+            _recurrenceEndDate = endDate;
+        }
+
+        public void ChangeRecurringType(RecurrentMeetingType recurrentMeetingType)
+        {
+            _currentRecurrenceOption =
+                (_currentRecurrenceOption ?? _originalRecurrenceOption).ChangeRecurringMeetingOption(recurrentMeetingType);
+            _view.RefreshRecurrenceOption(_currentRecurrenceOption);
+        }
+
+        public void SetStartDate(DateOnly startDate)
+        {
+            _startDate = startDate;
+            if (_recurrenceEndDate<_startDate)
+            {
+                SetRecurringEndDate(_startDate);
+                _view.SetRecurringEndDate(_recurrenceEndDate);
+            }
+        }
+
+        public void SetStartTime(TimeSpan startTime)
+        {
+            _startTime = startTime;
+            _view.SetStartTime(startTime);
+            CalculateAndSetDuration();
+        }
+
+        public void SetEndTime(TimeSpan endTime)
+        {
+            _endTime = endTime;
+            _view.SetEndTime(endTime);
+            CalculateAndSetDuration();
+        }
+
+        private void CalculateAndSetDuration()
+        {
+            TimeSpan realEndTime = _endTime;
+            if (_startTime>realEndTime)
+            {
+                realEndTime = realEndTime.Add(TimeSpan.FromDays(1));
+            }
+            _meetingDuration = realEndTime.Subtract(_startTime);
+            _view.SetMeetingDuration(_meetingDuration);
+        }
+
+        public void SetMeetingDuration(TimeSpan duration)
+        {
+            if (duration >= TimeSpan.FromDays(1)) duration = TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(-1));
+
+            _endTime = _startTime.Add(duration);
+            if (_endTime > TimeSpan.FromDays(1)) _endTime = _endTime.Subtract(TimeSpan.FromDays(1));
+            _view.SetEndTime(_endTime);
+        }
+
+		public TimeSpan GetStartTime
+		{
+			get { return _meetingViewModel.StartTime; }
+		}
+
+		public TimeSpan GetEndTime
+		{
+			get { return _meetingViewModel.EndTime; }
+		}
+
+		public TimeSpan GetDurationTime
+		{
+			get { return _meetingViewModel.MeetingDuration; }
+		}
+
+		public void OnOutlookTimePickerStartLeave(string inputText)
+		{
+			TimeSpan? timeSpan;
+
+			if (TimeHelper.TryParse(inputText, out timeSpan))
+			{
+				if (timeSpan.HasValue)
+					SetStartTime(timeSpan.Value);
+				_view.NotifyMeetingTimeChanged();
+
+			}
+			else
+				_view.SetStartTime(GetStartTime);
+		}
+
+		public void OnOutlookTimePickerEndLeave(string inputText)
+		{
+			TimeSpan? timeSpan;
+
+			if (TimeHelper.TryParse(inputText, out timeSpan))
+			{
+				if (timeSpan.HasValue)
+					SetEndTime(timeSpan.Value);
+			}
+			else
+				SetMeetingDuration(GetDurationTime); 
+		}
+
+		public void OnOutlookTimePickerStartKeyDown(Keys keys, string inputText)
+		{
+			if (keys == Keys.Enter)
+				OnOutlookTimePickerStartLeave(inputText);
+		}
+
+		public void OnOutlookTimePickerEndKeyDown(Keys keys, string inputText)
+		{
+			if (keys == Keys.Enter)
+				OnOutlookTimePickerEndLeave(inputText);
+		}
+
+		public void OnOutlookTimePickerStartSelectedIndexChanged(string inputText)
+		{
+			OnOutlookTimePickerStartLeave(inputText);
+		}
+
+		public void OnOutlookTimePickerEndSelectedIndexChanged(string inputText)
+		{
+			OnOutlookTimePickerEndLeave(inputText);
+		}
+
+		public void OnTimeDurationPickerViewLengthLeave(string inputText)
+		{
+			TimeSpan? timeSpan;
+
+			if (TimeHelper.TryParse(inputText, out timeSpan))
+			{
+				if (timeSpan.HasValue)
+				{
+					SetMeetingDuration(timeSpan.Value);
+				}
+			}
+			else
+				_view.SetMeetingDuration(GetDurationTime);
+		}
+
+		public void OnTimeDurationPickerViewLengthKeyDown(Keys keys, string inputText)
+		{
+			if (keys == Keys.Enter)
+				OnTimeDurationPickerViewLengthLeave(inputText);
+		}
+
+		public void OnTimeDurationPickerViewLengthSelectedIndexChanged(string inputText)
+		{
+			OnTimeDurationPickerViewLengthLeave(inputText);
+		}
+    }
+}

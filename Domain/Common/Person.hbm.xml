@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+  <typedef class="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HashedString, Teleopti.Ccc.Infrastructure" name="Encrypted"/>
+  <import class="Teleopti.Ccc.Domain.Common.Pair`1[System.Guid]" rename="PersonSkillPair"/>
+  <class name="Person"
+		   batch-size="10">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+				access="nosetter.camelcase-underscore"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+				 unsaved-value ="null"/>
+		<many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_Person_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_Person_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+		<!--IEntity-->
+		<property name="Email"
+				  type="string"
+				  length="50"
+				  not-null="true"/>
+		<property name="Note"
+				  type="string"
+				  length="1024"
+				  not-null="true"/>
+
+		<property name="EmploymentNumber"
+				  type="string"
+				  length="50"
+				  not-null="true"/>
+
+		<property name="TerminalDate"
+				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+				not-null="false"/>
+
+		<component name="Name" class="Teleopti.Interfaces.Domain.Name, Teleopti.Interfaces">
+			<property name="FirstName"
+					  type="string"
+					  not-null="true"
+					  length="25"
+					  access="nosetter.camelcase-underscore"/>
+			<property name="LastName"
+					  type="string"
+					  length="25"
+					  not-null="true"
+					  access="nosetter.camelcase-underscore"/>
+		</component>
+
+		<property name="BuiltIn"
+		  not-null="true"
+		  type="boolean" />
+
+		<property name="PartOfUnique"
+					not-null="false"
+					type="guid"
+					access="property"
+					unique-key="Unique_LogOn"/>
+
+		<component name="PermissionInformation"
+				 class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.PermissionInformation">
+			<parent name="BelongsTo"/>
+
+			<property name="defaultTimeZone"
+                access="field"
+						type="string"
+				length="50"
+				not-null="true"/>
+
+			<property name="culture"
+                access="field"
+					  type="int"
+			  not-null="false"/>
+
+			<property name="uiCulture"
+                access="field"
+					  type="int"
+			  not-null="false"/>
+
+			<component name="WindowsAuthenticationInfo"
+					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.WindowsAuthenticationInfo">
+				<property name="WindowsLogOnName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_LogOn"/>
+				<property name="DomainName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_LogOn"/>
+			</component>
+
+			<component name="ApplicationAuthenticationInfo"
+					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
+				<property name="ApplicationLogOnName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_LogOn"/>
+				<property name="Password"
+				not-null="false"
+				length="50"
+				type="Encrypted" />
+			</component>
+
+			<bag name="personInApplicationRole"
+            access="field"
+				    cascade="none">
+				<key foreign-key="FK_PersonInApplicationRole_Person">
+					<column name="Person"
+							not-null="true"
+							unique-key="ApplicationUserRoleUnique" />
+				</key>
+				<many-to-many class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationRole"
+							  foreign-key="FK_PersonInApplicationRole_ApplicationRole">
+					<column name="ApplicationRole"
+							unique-key="ApplicationUserRoleUnique"
+							not-null="true"/>
+				</many-to-many>
+			</bag>
+		</component>
+
+		<map name="PersonPeriodCollection"
+			 cascade="all-delete-orphan"
+			 collection-type="sorted-list"
+			 sort="natural"
+			 inverse="true">
+			<key column="Parent" />
+			<index column ="StartDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
+			<one-to-many class="Teleopti.Ccc.Domain.AgentInfo.PersonPeriod"/>
+		</map>
+
+		<map name="PersonSchedulePeriodCollection"
+			 cascade="all-delete-orphan"
+       collection-type="sorted-list"
+			 sort="natural"
+			 inverse="true">
+			<key column ="Parent" />
+      <index column ="DateFrom" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
+			<one-to-many class="Teleopti.Ccc.Domain.Scheduling.Assignment.SchedulePeriod"/>
+		</map>
+
+    <one-to-one name="PersonWriteProtection"
+					 class="PersonWriteProtectionInfo"
+           cascade="all-delete-orphan"/>
+    
+    <many-to-one name="WorkflowControlSet"
+					 class="Teleopti.Ccc.Domain.WorkflowControl.WorkflowControlSet"
+					 not-null="false"
+           foreign-key="FK_Person_WorkflowControlSet"/>
+
+    <property name="FirstDayOfWeek"
+       not-null="true"/>
+    
+    <property name="IsDeleted"
+		  type="boolean"
+		  not-null="true"/>
+		<filter name="deletedFlagFilter"
+		  condition="IsDeleted = 0" />
+	</class>
+
+	<query name="CheckIfWindowsUserExists">
+		<![CDATA[
+		select 1 from Person p 
+						where p.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = :userName and
+							p.PermissionInformation.WindowsAuthenticationInfo.DomainName = :domainName and
+							(p.TerminalDate is null or p.TerminalDate >= :dateNow)
+		]]>
+	</query>
+	
+	<query name="ActiveAgents">
+		<![CDATA[    
+    select count(p) from Person p
+      where (p.TerminalDate is null or p.TerminalDate>=:currentDate)
+        and exists(from PersonPeriod pp where pp.Parent=p.Id and pp.StartDate<:currentDate)
+                        and exists(from PersonAssignment pa
+                                    inner join pa.Scenario s
+                                where pa.Person = p
+                                    and s.DefaultScenario = 1)
+    ]]>
+	</query>
+	<query name="AgentSkillMatrix">
+		<![CDATA[
+    select new PersonSkillPair(per.Id, ps.Skill.Id)
+                        from Person as per
+                        inner join per.PersonPeriodCollection as pp
+                        inner join pp.Team t
+                        inner join t.Site s
+                        inner join pp.PersonSkillCollection as ps
+                    where exists(
+                                from SkillDay sd
+                                    inner join sd.Skill sdSkill
+                                 where sdSkill=ps.Skill
+                                    and sdSkill.IsDeleted=0
+                                    and sd.Scenario = :scenario
+                                    and sd.CurrentDate between :StartDateTime and :EndDateTime)
+                        and (per.TerminalDate is null or per.TerminalDate >= :StartDateTime)
+                        and s.BusinessUnit = :bu
+                        and pp.StartDate < :EndDateTime
+                        and pp.StartDate >=
+                            coalesce(
+                                (select max(pp2.StartDate) from PersonPeriod pp2
+                                    where pp.Parent=pp2.Parent
+                                        and pp2.StartDate <:StartDateTime),
+                                :StartDateTime)
+    ]]>
+	</query>
+  <query name="AgentSiteMatrix">
+    <![CDATA[
+    select per.Id
+                        from Person as per
+                        inner join per.PersonPeriodCollection as pp
+                        inner join pp.Team t
+                        inner join t.Site s
+                        where (per.TerminalDate is null or per.TerminalDate >= :StartDateTime)
+                        and s.MaxSeats is not null
+                        and s.BusinessUnit = :bu
+                        and pp.StartDate < :EndDateTime
+                        and pp.StartDate >=
+                            coalesce(
+                                (select max(pp2.StartDate) from PersonPeriod pp2
+                                    where pp.Parent=pp2.Parent
+                                        and pp2.StartDate <:StartDateTime),
+                                :StartDateTime)
+    ]]>
+  </query>
+  <database-object>
+    <create>SELECT 1</create>
+    <drop>
+      ALTER TABLE [dbo].[Person] DROP CONSTRAINT [FK_Person_WorkflowControlSet]
+    </drop>
+  </database-object>
+</hibernate-mapping>

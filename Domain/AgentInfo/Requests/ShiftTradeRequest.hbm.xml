@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo.Requests"
+                   default-access="field.camelcase-underscore">
+
+  <joined-subclass name="ShiftTradeRequest"
+         extends="Request">
+    <key column="Request" foreign-key="FK_ShiftTradeRequest_Request"/>
+
+    <property name="shiftTradeStatus"
+         not-null="true"
+              access="field"
+         type="int"/>
+
+    <bag name="ShiftTradeSwapDetails" table="ShiftTradeSwapDetail" cascade="all-delete-orphan"
+            inverse="true">
+      <key column="Parent" foreign-key="FK_ShiftTradeSwapDetail_ShiftTradeRequest"/>
+      <one-to-many  class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftTradeSwapDetail"/>
+    </bag>
+  </joined-subclass>
+</hibernate-mapping>

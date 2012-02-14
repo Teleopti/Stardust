@@ -1,0 +1,79 @@
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
+@using Teleopti.Interfaces.Domain
+@model RequestsViewModel
+@{
+	Layout = null;
+}
+<div id="Requests-body-inner" class="request-body-inner relative">
+	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all">
+		<input type="hidden" id="Request-detail-entityid"/>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+			<input id="Request-detail-subject-input" type="text"/>
+		</div>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
+			<textarea id="Request-detail-message-input" />
+		</div>
+		<div class="edit-module-element floatleft">
+			<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+		</div>
+		<div class="edit-module-element floatleft">
+			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+			<select id="Request-detail-fromTime-input" class="time-input combobox">
+				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+				{
+					<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+				}
+			</select>
+		</div>
+		<div class="edit-module-element clearleftfloat floatleft">
+			<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+		</div>
+		<div class="edit-module-element floatleft">
+			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+			<select id="Request-detail-toTime-input" class="time-input combobox">
+				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+				{
+					<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+				}
+			</select>
+		</div>
+		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.NewRequest)"/>
+		<div id="Request-detail-error" class="error clearleftfloat"></div>
+	</div>
+	<div class="request-list">
+		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
+			@Resources.NoRequestsFound
+		</div>
+		<ol id="Requests-list">
+			<li class="ui-corner-all request-item template relative">
+				<button class="request-delete-button icon" style="display: none;" disabled="disabled" title="@Resources.Delete" />
+				<div class="request-subject">
+					<h3 class="request-data-subject">
+					</h3>
+				</div>
+				<div class="request-details">
+					<span class="request-caption">@Resources.Type: </span>
+					<span class="request-data-type"></span>
+					<span class="request-caption">@Resources.Date: </span>
+					<span class="request-data-date"></span>
+					<span class="request-caption">@Resources.UpdatedOn: </span>
+					<span class="request-data-updatedon"></span>
+					<span class="request-caption">@Resources.Status: </span>
+					<span class="request-data-status"></span>
+				</div>
+				<div class="request-text request-data-text">
+				</div>
+				<div class="request-connector">
+				</div>
+			</li>
+		</ol>
+		<div class="loading-gradient" style="display: none">
+			<div class="loading"></div>
+		</div>
+		<div class="arrow-down"></div>
+		<div class="clearboth"></div>
+	</div>
+</div>

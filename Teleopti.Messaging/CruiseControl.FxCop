@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="Raptor - FxCop">
+  <ProjectOptions>
+    <SharedProject>True</SharedProject>
+    <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
+    <SaveMessages>
+      <Project Status="Active, Excluded" NewOnly="False" />
+      <Report Status="Active" NewOnly="False" />
+    </SaveMessages>
+    <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+    <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+    <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+    <SourceLookup>True</SourceLookup>
+    <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+    <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+    <Spelling Locale="en-us" />
+    <VersionAware>False</VersionAware>
+    <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+    <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+    <SearchGlobalAssemblyCache>True</SearchGlobalAssemblyCache>
+    <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  </ProjectOptions>
+  <Targets>
+   
+    <!--Peter stuff-->
+
+    <Target Name="$(ProjectDir)/Teleopti.Messaging/TeleOpti.Messaging.Bin/teleopti.messaging.interfaces.dll" Analyze="True" AnalyzeAllChildren="True" />
+    <Target Name="$(ProjectDir)/Teleopti.Messaging/TeleOpti.Messaging.Bin/teleopti.messaging.dll" Analyze="True" AnalyzeAllChildren="True" />
+    <Target Name="$(ProjectDir)/Teleopti.Messaging/TeleOpti.Messaging.Bin/teleopti.messaging.management.exe" Analyze="True" AnalyzeAllChildren="True" />
+    <Target Name="$(ProjectDir)/Teleopti.Messaging/TeleOpti.Messaging.Bin/teleopti.messaging.svc.exe" Analyze="True" AnalyzeAllChildren="True" />
+
+    <!-- end peter stuff -->
+
+
+
+    <!--<Target Name="$(ProjectDir)/AgentPortal/Teleopti.Ccc.AgentPortal/bin/Debug/Teleopti.Ccc.AgentPortal.exe" Analyze="True" AnalyzeAllChildren="True" />-->
+  </Targets>
+  <Rules>
+    <RuleFiles>
+      <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\MaintainabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\ReliabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+      <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+    </RuleFiles>
+    <Groups />
+    <Settings />
+  </Rules>
+  <FxCopReport Version="1.36" />
+</FxCopProject>

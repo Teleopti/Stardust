@@ -1,0 +1,336 @@
+﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="f917aaab-0562-4e6a-8925-f0c8f01c163c" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Group Page Person</ID>
+  <Name>Group Page Person</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="12" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-13" scrolltop="-4996" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="90" x="16140" y="20532" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="dim_group_page" left="10199" top="0" logicalid="6" controlid="1" masterid="0" hint1="0" hint2="0" width="5424" height="5000" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000800003015000088130000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="mart_dim_group_page" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="v_group_page_person" left="20" top="79" logicalid="7" controlid="2" masterid="0" hint1="0" hint2="0" width="7779" height="4842" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="00080000631e0000ea120000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="v_group_page_person" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="dim_person" left="377" top="7321" logicalid="8" controlid="3" masterid="0" hint1="0" hint2="0" width="7064" height="5000" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="00080000981b000088130000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_dim_person" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="7499" top="2101" logicalid="9" controlid="4" masterid="0" hint1="0" hint2="0" width="3000" height="799" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[v_group_page_person-dim_group_page]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="2" sourceattachpoint="26" destattachpoint="35" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="10199" y="2500" />
+              <point x="7799" y="2500" />
+            </connector>
+          </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="3510" top="4621" logicalid="10" controlid="5" masterid="0" hint1="0" hint2="0" width="799" height="3200" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[v_group_page_person-dim_person]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="3" destid="2" sourceattachpoint="12" destattachpoint="13" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="3909" y="7321" />
+              <point x="3909" y="4921" />
+            </connector>
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-13</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-4996</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>90</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ARDiagramLayout</Name>
+      <Value>
+        <DiagramLayout ZoomPercent="100" ViewPortX="0" ViewPortY="0" xmlns="">
+          <Shapes NodeWidth="271">
+            <Shape Id="Group Page Id" Expanded="true">
+              <Attributes>
+                <Attribute Id="Group Page Id" />
+                <Attribute Id="Group Page Name Person" />
+              </Attributes>
+              <Position x="20" y="20" />
+            </Shape>
+            <Shape Id="Person Name Employment Number Valid From Date" Expanded="false">
+              <Attributes>
+                <Attribute Id="Person Name Employment Number Valid From Date" />
+              </Attributes>
+              <Position x="363" y="20" />
+            </Shape>
+            <Shape Id="Business Unit Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Business Unit Name" />
+              </Attributes>
+              <Position x="363" y="68" />
+            </Shape>
+            <Shape Id="Group Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Group Name" />
+              </Attributes>
+              <Position x="363" y="116" />
+            </Shape>
+            <Shape Id="Group Page Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Group Page Name" />
+              </Attributes>
+              <Position x="363" y="164" />
+            </Shape>
+          </Shapes>
+        </DiagramLayout>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Source xsi:type="DataSourceViewBinding" dwd:design-time-name="f77aef81-6353-4303-84f2-e2adbf29fcc4">
+    <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+  </Source>
+  <UnknownMember>Visible</UnknownMember>
+  <ErrorConfiguration dwd:design-time-name="ceee3c78-ca8a-408e-87be-c4eddcf2444e">
+    <KeyNotFound>ReportAndStop</KeyNotFound>
+    <KeyDuplicate>ReportAndStop</KeyDuplicate>
+    <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+  </ErrorConfiguration>
+  <CurrentStorageMode>Molap</CurrentStorageMode>
+  <Attributes>
+    <Attribute dwd:design-time-name="04f40c87-a8d3-4f8d-9bf2-076f3d495522">
+      <ID>Group Page Id</ID>
+      <Name>Group Page Id</Name>
+      <Usage>Key</Usage>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="3e3238fc-ef7c-4239-990b-637ae49948b9">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="1a8eadfb-916e-4292-a2bf-4b17389277de">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>group_page_id</ColumnID>
+          </Source>
+        </KeyColumn>
+        <KeyColumn dwd:design-time-name="5e61a1b6-368f-4ffb-b8d1-a598e6b25d1c">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="76f3c5f6-8e4e-4a20-801c-be8e18278524">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>person_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <NameColumn dwd:design-time-name="a9f334dd-7acd-4ddd-b13d-fb51b247838a">
+        <DataType>WChar</DataType>
+        <DataSize>1024</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="8f540c34-b66e-4370-a892-9812c9bbd089">
+          <TableID>v_group_page_person</TableID>
+          <ColumnID>group_page_name_person</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="bec6d7d6-4be7-4a9f-9da5-45a38da06be2">
+          <AttributeID>Group Page Name</AttributeID>
+          <Name>Group Page Name</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="538acc06-9fae-44ee-be64-db15358f81de">
+          <AttributeID>Group Name</AttributeID>
+          <Name>Group Name</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="89c9eeae-cb4b-434d-a4df-ca168a507968">
+          <AttributeID>Business Unit Name</AttributeID>
+          <Name>Business Unit Name</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="14d89c9b-de48-452d-8bf0-56247c026f83">
+          <AttributeID>Person Name Employment Number Valid From Date</AttributeID>
+          <Name>Person Name Employment Number Valid From Date</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="d14cd8fc-e92f-40fe-b6ce-3d894ad3a396">
+          <AttributeID>Group Page Name Person</AttributeID>
+          <Name>Group Page Name Person</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="5f6ae1f4-49f8-4288-9a92-0fbb637998ae">
+      <ID>Group Page Name</ID>
+      <Name>Group Page Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="1428f3fc-5f6f-43a3-8c69-d4978a1c1a78">
+          <DataType>WChar</DataType>
+          <DataSize>100</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="3a5f855c-0bcb-4261-a41d-89332eeafa67">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>group_page_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="865c699f-c459-413b-91a2-6ad8e5fdd666">
+      <ID>Group Name</ID>
+      <Name>Group Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="006377f4-f35b-42d6-a5d1-74a1235334de">
+          <DataType>WChar</DataType>
+          <DataSize>1024</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="1bb99420-3170-40b5-bb0e-5735e3733365">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>group_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="4e002835-5b91-4a4d-9b7b-67308dbe1042">
+      <ID>Business Unit Name</ID>
+      <Name>Business Unit Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="08e9953e-9cdc-4a16-b370-1d2e1782fa45">
+          <DataType>WChar</DataType>
+          <DataSize>50</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="aac1e6d7-7410-4b50-b27a-47bb546f7487">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>business_unit_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="d8cabbf4-9798-4032-8d63-438cbdd97040">
+      <ID>Person Name Employment Number Valid From Date</ID>
+      <Name>Person Name Employment Number Valid From Date</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="ccfdcffe-0a5d-47cd-8bff-115670b76ff3">
+          <DataType>WChar</DataType>
+          <DataSize>264</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="f6acc009-922b-4885-a751-bb1043cb8dba">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>person_name_employment_number_valid_from_date</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="43e26d3d-2f6c-4fff-8e05-f17f002f5997">
+      <ID>Group Page Name Person</ID>
+      <Name>Group Page Name Person</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="7f6b4ba2-53ee-4c10-b70b-b9ac6b2646fc">
+          <DataType>WChar</DataType>
+          <DataSize>1024</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="a89ef33b-16e8-4546-8c86-2f589e0c4f93">
+            <TableID>v_group_page_person</TableID>
+            <ColumnID>group_page_name_person</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+  </Attributes>
+  <Hierarchies>
+    <Hierarchy dwd:design-time-name="c0c2499a-62ac-4bb1-b1fb-c28dee2be3b0">
+      <ID>Hierarchy 1</ID>
+      <Name>Group Page Person</Name>
+      <Levels>
+        <Level dwd:design-time-name="2fa81cd4-4965-4792-93cc-768ffa97299e">
+          <ID>Business Unit Name</ID>
+          <Name>Business Unit</Name>
+          <SourceAttributeID>Business Unit Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="7fd1925f-095f-4c7d-a4d2-bb197d5415fe">
+          <ID>Group Page Name</ID>
+          <Name>Group Page</Name>
+          <SourceAttributeID>Group Page Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="66ebb459-0b71-4746-83dc-a599d8784303">
+          <ID>Group Name</ID>
+          <Name>Group</Name>
+          <SourceAttributeID>Group Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="88155b17-087f-4271-903e-8debc648bdd0">
+          <ID>Person Name Employment Number Valid From Date</ID>
+          <Name>Person Period</Name>
+          <SourceAttributeID>Person Name Employment Number Valid From Date</SourceAttributeID>
+        </Level>
+      </Levels>
+    </Hierarchy>
+  </Hierarchies>
+</Dimension>

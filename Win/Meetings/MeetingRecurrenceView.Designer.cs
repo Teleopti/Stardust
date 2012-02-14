@@ -1,0 +1,664 @@
+﻿using System;
+using System.ComponentModel;
+
+namespace Teleopti.Ccc.Win.Meetings
+{
+    partial class MeetingRecurrenceView
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeetingRecurrenceView));
+			this.ribbonControlForm = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.statusStripExAddressBook = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
+			this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.groupBoxAppointmentTime = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.outlookTimePickerEnd = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.labelStart = new System.Windows.Forms.Label();
+			this.labelEnd = new System.Windows.Forms.Label();
+			this.labelDuration = new System.Windows.Forms.Label();
+			this.outlookTimePickerStart = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
+			this.timeDurationPickerViewLength = new Teleopti.Ccc.Win.Common.Controls.TimeDurationPickerView(this.components);
+			this.groupBoxRecurrencePattern = new System.Windows.Forms.GroupBox();
+			this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.radioButtonAdvMonthlyRecurring = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
+			this.radioButtonAdvDailyRecurring = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
+			this.radioButtonAdvWeeklyRecurring = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
+			this.groupBoxRangeOfRecurrence = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelRangeStart = new System.Windows.Forms.Label();
+			this.dateTimePickerAdvStart = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
+			this.labelEndBy = new System.Windows.Forms.Label();
+			this.dateTimePickerAdvEnd = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.buttonAdvRemove = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvOK = new Syncfusion.Windows.Forms.ButtonAdv();
+			((System.ComponentModel.ISupportInitialize)(this.ribbonControlForm)).BeginInit();
+			this.statusStripExAddressBook.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.groupBoxAppointmentTime.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerEnd)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerStart)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.timeDurationPickerViewLength)).BeginInit();
+			this.groupBoxRecurrencePattern.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
+			this.splitContainerAdv1.Panel1.SuspendLayout();
+			this.splitContainerAdv1.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvMonthlyRecurring)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvDailyRecurring)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvWeeklyRecurring)).BeginInit();
+			this.groupBoxRangeOfRecurrence.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).BeginInit();
+			this.tableLayoutPanel5.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// ribbonControlForm
+			// 
+			this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlForm.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlForm.MenuButtonVisible = false;
+			this.ribbonControlForm.Name = "ribbonControlForm";
+			// 
+			// ribbonControlForm.OfficeMenu
+			// 
+			this.ribbonControlForm.OfficeMenu.Name = "OfficeMenu";
+			this.ribbonControlForm.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlForm.QuickPanelVisible = false;
+			this.ribbonControlForm.Size = new System.Drawing.Size(498, 33);
+			this.ribbonControlForm.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
+			this.ribbonControlForm.TabIndex = 3;
+			this.ribbonControlForm.Text = "yyribbonControlAdv1";
+			// 
+			// statusStripExAddressBook
+			// 
+			this.statusStripExAddressBook.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelMessage});
+            this.statusStripExAddressBook.Location = new System.Drawing.Point(6, 416);
+            this.statusStripExAddressBook.Name = "statusStripExAddressBook";
+            this.statusStripExAddressBook.Size = new System.Drawing.Size(488, 22);
+            this.statusStripExAddressBook.TabIndex = 7;
+            // 
+            // toolStripStatusLabelMessage
+            // 
+            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
+            this.SetShortcut(this.toolStripStatusLabelMessage, System.Windows.Forms.Keys.None);
+            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(49, 15);
+            this.toolStripStatusLabelMessage.Text = "xxReady";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxAppointmentTime, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxRecurrencePattern, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxRangeOfRecurrence, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 3);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 34);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.98429F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.48691F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.43794F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.90632F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(488, 382);
+            this.tableLayoutPanel1.TabIndex = 8;
+            // 
+            // groupBoxAppointmentTime
+            // 
+            this.groupBoxAppointmentTime.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxAppointmentTime.Controls.Add(this.tableLayoutPanel2);
+            this.groupBoxAppointmentTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxAppointmentTime.Location = new System.Drawing.Point(3, 3);
+            this.groupBoxAppointmentTime.Name = "groupBoxAppointmentTime";
+            this.groupBoxAppointmentTime.Size = new System.Drawing.Size(482, 120);
+            this.groupBoxAppointmentTime.TabIndex = 0;
+            this.groupBoxAppointmentTime.TabStop = false;
+            this.groupBoxAppointmentTime.Text = "xxApointmentTime";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.outlookTimePickerEnd, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.labelStart, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.labelEnd, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.labelDuration, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.outlookTimePickerStart, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.timeDurationPickerViewLength, 1, 2);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(476, 100);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // outlookTimePickerEnd
+            // 
+            this.outlookTimePickerEnd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.outlookTimePickerEnd.BindableTimeValue = System.TimeSpan.Parse("02:00:00");
+            this.outlookTimePickerEnd.Location = new System.Drawing.Point(123, 33);
+            this.outlookTimePickerEnd.MaxDropDownItems = 16;
+            this.outlookTimePickerEnd.Name = "outlookTimePickerEnd";
+            this.outlookTimePickerEnd.Size = new System.Drawing.Size(175, 19);
+            this.outlookTimePickerEnd.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.outlookTimePickerEnd.TabIndex = 2;
+            this.outlookTimePickerEnd.Text = "02:00";
+           
+            // 
+            // labelStart
+            // 
+            this.labelStart.AutoSize = true;
+            this.labelStart.Location = new System.Drawing.Point(3, 8);
+            this.labelStart.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+            this.labelStart.Name = "labelStart";
+            this.labelStart.Size = new System.Drawing.Size(70, 13);
+            this.labelStart.TabIndex = 0;
+            this.labelStart.Text = "xxStartColon";
+            this.labelStart.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelEnd
+            // 
+            this.labelEnd.AutoSize = true;
+            this.labelEnd.Location = new System.Drawing.Point(3, 38);
+            this.labelEnd.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+            this.labelEnd.Name = "labelEnd";
+            this.labelEnd.Size = new System.Drawing.Size(64, 13);
+            this.labelEnd.TabIndex = 1;
+            this.labelEnd.Text = "xxEndColon";
+            this.labelEnd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelDuration
+            // 
+            this.labelDuration.AutoSize = true;
+            this.labelDuration.Location = new System.Drawing.Point(3, 68);
+            this.labelDuration.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+            this.labelDuration.Name = "labelDuration";
+            this.labelDuration.Size = new System.Drawing.Size(87, 13);
+            this.labelDuration.TabIndex = 2;
+            this.labelDuration.Text = "xxDurationColon";
+            this.labelDuration.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // outlookTimePickerStart
+            // 
+            this.outlookTimePickerStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.outlookTimePickerStart.BindableTimeValue = System.TimeSpan.Parse("01:00:00");
+            this.outlookTimePickerStart.Location = new System.Drawing.Point(123, 3);
+            this.outlookTimePickerStart.MaxDropDownItems = 16;
+            this.outlookTimePickerStart.Name = "outlookTimePickerStart";
+            this.outlookTimePickerStart.Size = new System.Drawing.Size(175, 19);
+            this.outlookTimePickerStart.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.outlookTimePickerStart.TabIndex = 1;
+            this.outlookTimePickerStart.Text = "01:00";
+          
+            // 
+            // timeDurationPickerViewLength
+            // 
+            this.timeDurationPickerViewLength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.timeDurationPickerViewLength.Interval = System.TimeSpan.Parse("00:30:00");
+            this.timeDurationPickerViewLength.Location = new System.Drawing.Point(123, 63);
+            this.timeDurationPickerViewLength.Name = "timeDurationPickerViewLength";
+            this.timeDurationPickerViewLength.Size = new System.Drawing.Size(175, 19);
+            this.timeDurationPickerViewLength.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.timeDurationPickerViewLength.TabIndex = 3;
+            this.timeDurationPickerViewLength.Text = "timeDurationPickerView1";
+            // 
+            // groupBoxRecurrencePattern
+            // 
+            this.groupBoxRecurrencePattern.BackColor = System.Drawing.Color.Transparent;
+            this.groupBoxRecurrencePattern.Controls.Add(this.splitContainerAdv1);
+            this.groupBoxRecurrencePattern.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxRecurrencePattern.Location = new System.Drawing.Point(3, 129);
+            this.groupBoxRecurrencePattern.Name = "groupBoxRecurrencePattern";
+            this.groupBoxRecurrencePattern.Size = new System.Drawing.Size(482, 99);
+            this.groupBoxRecurrencePattern.TabIndex = 0;
+            this.groupBoxRecurrencePattern.TabStop = false;
+            this.groupBoxRecurrencePattern.Text = "xxRecurrencePattern";
+            // 
+            // splitContainerAdv1
+            // 
+            this.splitContainerAdv1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainerAdv1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Transparent);
+            this.splitContainerAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv1.IsSplitterFixed = true;
+            this.splitContainerAdv1.Location = new System.Drawing.Point(3, 17);
+            this.splitContainerAdv1.Name = "splitContainerAdv1";
+            // 
+            // splitContainerAdv1.Panel1
+            // 
+            this.splitContainerAdv1.Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainerAdv1.Panel1.Controls.Add(this.tableLayoutPanel3);
+            // 
+            // splitContainerAdv1.Panel2
+            // 
+            this.splitContainerAdv1.Panel2.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainerAdv1.Size = new System.Drawing.Size(476, 79);
+            this.splitContainerAdv1.SplitterDistance = 120;
+            this.splitContainerAdv1.SplitterWidth = 1;
+            this.splitContainerAdv1.TabIndex = 0;
+            this.splitContainerAdv1.Text = "yysplitContainerAdv1";
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.Controls.Add(this.radioButtonAdvMonthlyRecurring, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.radioButtonAdvDailyRecurring, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.radioButtonAdvWeeklyRecurring, 0, 1);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(120, 79);
+            this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // radioButtonAdvMonthlyRecurring
+            // 
+            this.radioButtonAdvMonthlyRecurring.CheckedInt = 2;
+            this.radioButtonAdvMonthlyRecurring.Location = new System.Drawing.Point(3, 55);
+            this.radioButtonAdvMonthlyRecurring.Name = "radioButtonAdvMonthlyRecurring";
+            this.radioButtonAdvMonthlyRecurring.Size = new System.Drawing.Size(114, 19);
+            this.radioButtonAdvMonthlyRecurring.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Office2007;
+            this.radioButtonAdvMonthlyRecurring.TabIndex = 1;
+            this.radioButtonAdvMonthlyRecurring.Text = "xxMonthly";
+            this.radioButtonAdvMonthlyRecurring.ThemesEnabled = false;
+            this.radioButtonAdvMonthlyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+            // 
+            // radioButtonAdvDailyRecurring
+            // 
+            this.radioButtonAdvDailyRecurring.CheckedInt = 0;
+            this.radioButtonAdvDailyRecurring.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonAdvDailyRecurring.Name = "radioButtonAdvDailyRecurring";
+            this.radioButtonAdvDailyRecurring.Size = new System.Drawing.Size(114, 19);
+            this.radioButtonAdvDailyRecurring.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Office2007;
+            this.radioButtonAdvDailyRecurring.TabIndex = 3;
+            this.radioButtonAdvDailyRecurring.Text = "xxDaily";
+            this.radioButtonAdvDailyRecurring.ThemesEnabled = false;
+            this.radioButtonAdvDailyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+            // 
+            // radioButtonAdvWeeklyRecurring
+            // 
+            this.radioButtonAdvWeeklyRecurring.Location = new System.Drawing.Point(3, 29);
+            this.radioButtonAdvWeeklyRecurring.Name = "radioButtonAdvWeeklyRecurring";
+            this.radioButtonAdvWeeklyRecurring.Size = new System.Drawing.Size(114, 19);
+            this.radioButtonAdvWeeklyRecurring.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Office2007;
+            this.radioButtonAdvWeeklyRecurring.TabIndex = 2;
+            this.radioButtonAdvWeeklyRecurring.Text = "xxWeekly";
+            this.radioButtonAdvWeeklyRecurring.ThemesEnabled = false;
+            this.radioButtonAdvWeeklyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+            // 
+            // groupBoxRangeOfRecurrence
+            // 
+            this.groupBoxRangeOfRecurrence.Controls.Add(this.tableLayoutPanel4);
+            this.groupBoxRangeOfRecurrence.Location = new System.Drawing.Point(3, 234);
+            this.groupBoxRangeOfRecurrence.Name = "groupBoxRangeOfRecurrence";
+            this.groupBoxRangeOfRecurrence.Size = new System.Drawing.Size(482, 68);
+            this.groupBoxRangeOfRecurrence.TabIndex = 0;
+            this.groupBoxRangeOfRecurrence.TabStop = false;
+            this.groupBoxRangeOfRecurrence.Text = "xxRangeOfRecurrence";
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 4;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Controls.Add(this.labelRangeStart, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.dateTimePickerAdvStart, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.labelEndBy, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.dateTimePickerAdvEnd, 3, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(476, 48);
+            this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // labelRangeStart
+            // 
+            this.labelRangeStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelRangeStart.AutoSize = true;
+            this.labelRangeStart.Location = new System.Drawing.Point(3, 0);
+            this.labelRangeStart.Name = "labelRangeStart";
+            this.labelRangeStart.Size = new System.Drawing.Size(64, 48);
+            this.labelRangeStart.TabIndex = 1;
+            this.labelRangeStart.Text = "xxStartColon";
+            this.labelRangeStart.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dateTimePickerAdvStart
+            // 
+            this.dateTimePickerAdvStart.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.dateTimePickerAdvStart.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+            this.dateTimePickerAdvStart.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
+            this.dateTimePickerAdvStart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvStart.Calendar.AllowMultipleSelection = false;
+            this.dateTimePickerAdvStart.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+            this.dateTimePickerAdvStart.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+            this.dateTimePickerAdvStart.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dateTimePickerAdvStart.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerAdvStart.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvStart.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
+            this.dateTimePickerAdvStart.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerAdvStart.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
+            this.dateTimePickerAdvStart.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvStart.Calendar.Location = new System.Drawing.Point(0, 0);
+            this.dateTimePickerAdvStart.Calendar.Name = "monthCalendar";
+            this.dateTimePickerAdvStart.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
+            this.dateTimePickerAdvStart.Calendar.SelectedDates = new System.DateTime[0];
+            this.dateTimePickerAdvStart.Calendar.Size = new System.Drawing.Size(206, 174);
+            this.dateTimePickerAdvStart.Calendar.SizeToFit = true;
+            this.dateTimePickerAdvStart.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.dateTimePickerAdvStart.Calendar.TabIndex = 0;
+            this.dateTimePickerAdvStart.Calendar.WeekFont = new System.Drawing.Font("Verdana", 8F);
+            this.dateTimePickerAdvStart.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.PeachPuff, System.Drawing.Color.AntiqueWhite);
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvStart.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.dateTimePickerAdvStart.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+            this.dateTimePickerAdvStart.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
+            this.dateTimePickerAdvStart.Calendar.NoneButton.Text = "xxNone";
+            this.dateTimePickerAdvStart.Calendar.NoneButton.UseVisualStyle = true;
+            this.dateTimePickerAdvStart.Calendar.NoneButton.Visible = false;
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvStart.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.dateTimePickerAdvStart.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
+            this.dateTimePickerAdvStart.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+            this.dateTimePickerAdvStart.Calendar.TodayButton.Text = "xxToday";
+            this.dateTimePickerAdvStart.Calendar.TodayButton.UseVisualStyle = true;
+            this.dateTimePickerAdvStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerAdvStart.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
+            this.dateTimePickerAdvStart.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvStart.Culture = new System.Globalization.CultureInfo("sv-SE");
+            this.dateTimePickerAdvStart.DropDownImage = null;
+            this.dateTimePickerAdvStart.EnableNullDate = false;
+            this.dateTimePickerAdvStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePickerAdvStart.Location = new System.Drawing.Point(74, 14);
+            this.dateTimePickerAdvStart.MinValue = new System.DateTime(((long)(0)));
+            this.dateTimePickerAdvStart.Name = "dateTimePickerAdvStart";
+            this.dateTimePickerAdvStart.NoneButtonVisible = false;
+            this.dateTimePickerAdvStart.ShowCheckBox = false;
+            this.dateTimePickerAdvStart.Size = new System.Drawing.Size(94, 20);
+            this.dateTimePickerAdvStart.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.dateTimePickerAdvStart.TabIndex = 10;
+            this.dateTimePickerAdvStart.ThemesEnabled = true;
+            this.dateTimePickerAdvStart.UseCurrentCulture = true;
+            this.dateTimePickerAdvStart.Value = new System.DateTime(2008, 12, 5, 6, 42, 38, 484);
+            this.dateTimePickerAdvStart.ValueChanged += new System.EventHandler(this.DateTimePickerAdvStartValueChanged);
+            // 
+            // labelEndBy
+            // 
+            this.labelEndBy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelEndBy.AutoSize = true;
+            this.labelEndBy.Location = new System.Drawing.Point(240, 0);
+            this.labelEndBy.Name = "labelEndBy";
+            this.labelEndBy.Size = new System.Drawing.Size(64, 48);
+            this.labelEndBy.TabIndex = 3;
+            this.labelEndBy.Text = "xxEndByColon";
+            this.labelEndBy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dateTimePickerAdvEnd
+            // 
+            this.dateTimePickerAdvEnd.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.dateTimePickerAdvEnd.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+            this.dateTimePickerAdvEnd.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
+            this.dateTimePickerAdvEnd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvEnd.Calendar.AllowMultipleSelection = false;
+            this.dateTimePickerAdvEnd.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+            this.dateTimePickerAdvEnd.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+            this.dateTimePickerAdvEnd.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dateTimePickerAdvEnd.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerAdvEnd.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvEnd.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
+            this.dateTimePickerAdvEnd.Calendar.HeaderEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
+            this.dateTimePickerAdvEnd.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dateTimePickerAdvEnd.Calendar.HeaderHeight = 20;
+            this.dateTimePickerAdvEnd.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
+            this.dateTimePickerAdvEnd.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvEnd.Calendar.HeadGradient = true;
+            this.dateTimePickerAdvEnd.Calendar.Location = new System.Drawing.Point(0, 0);
+            this.dateTimePickerAdvEnd.Calendar.Name = "monthCalendar";
+            this.dateTimePickerAdvEnd.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
+            this.dateTimePickerAdvEnd.Calendar.SelectedDates = new System.DateTime[0];
+            this.dateTimePickerAdvEnd.Calendar.Size = new System.Drawing.Size(206, 174);
+            this.dateTimePickerAdvEnd.Calendar.SizeToFit = true;
+            this.dateTimePickerAdvEnd.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.dateTimePickerAdvEnd.Calendar.TabIndex = 0;
+            this.dateTimePickerAdvEnd.Calendar.WeekFont = new System.Drawing.Font("Verdana", 8F);
+            this.dateTimePickerAdvEnd.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.PeachPuff, System.Drawing.Color.AntiqueWhite);
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.Text = "xxNone";
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.UseVisualStyle = true;
+            this.dateTimePickerAdvEnd.Calendar.NoneButton.Visible = false;
+            // 
+            // 
+            // 
+            this.dateTimePickerAdvEnd.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.dateTimePickerAdvEnd.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
+            this.dateTimePickerAdvEnd.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+            this.dateTimePickerAdvEnd.Calendar.TodayButton.Text = "xxToday";
+            this.dateTimePickerAdvEnd.Calendar.TodayButton.UseVisualStyle = true;
+            this.dateTimePickerAdvEnd.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerAdvEnd.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
+            this.dateTimePickerAdvEnd.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+            this.dateTimePickerAdvEnd.Culture = new System.Globalization.CultureInfo("sv-SE");
+            this.dateTimePickerAdvEnd.DropDownImage = null;
+            this.dateTimePickerAdvEnd.EnableNullDate = false;
+            this.dateTimePickerAdvEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePickerAdvEnd.Location = new System.Drawing.Point(311, 14);
+            this.dateTimePickerAdvEnd.MinValue = new System.DateTime(((long)(0)));
+            this.dateTimePickerAdvEnd.Name = "dateTimePickerAdvEnd";
+            this.dateTimePickerAdvEnd.NoneButtonVisible = false;
+            this.dateTimePickerAdvEnd.ShowCheckBox = false;
+            this.dateTimePickerAdvEnd.Size = new System.Drawing.Size(88, 20);
+            this.dateTimePickerAdvEnd.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.dateTimePickerAdvEnd.TabIndex = 11;
+            this.dateTimePickerAdvEnd.ThemesEnabled = true;
+            this.dateTimePickerAdvEnd.UseCurrentCulture = true;
+            this.dateTimePickerAdvEnd.Value = new System.DateTime(2008, 12, 5, 6, 42, 0, 0);
+            this.dateTimePickerAdvEnd.ValueChanged += new System.EventHandler(this.DateTimePickerAdvEndValueChanged);
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel5.ColumnCount = 3;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel5.Controls.Add(this.buttonAdvRemove, 2, 0);
+            this.tableLayoutPanel5.Controls.Add(this.buttonAdvCancel, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.buttonAdvOK, 0, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(53, 324);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(381, 39);
+            this.tableLayoutPanel5.TabIndex = 3;
+            // 
+            // buttonAdvRemove
+            // 
+            this.buttonAdvRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAdvRemove.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvRemove.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonAdvRemove.Enabled = false;
+            this.buttonAdvRemove.Location = new System.Drawing.Point(257, 8);
+            this.buttonAdvRemove.Name = "buttonAdvRemove";
+            this.buttonAdvRemove.Size = new System.Drawing.Size(121, 23);
+            this.buttonAdvRemove.TabIndex = 14;
+            this.buttonAdvRemove.Text = "xxRemoveRecurrence";
+            this.buttonAdvRemove.UseVisualStyle = true;
+            this.buttonAdvRemove.Click += new System.EventHandler(this.ButtonAdvRemoveClick);
+            // 
+            // buttonAdvCancel
+            // 
+            this.buttonAdvCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonAdvCancel.Location = new System.Drawing.Point(42, 8);
+            this.buttonAdvCancel.Name = "buttonAdvCancel";
+            this.buttonAdvCancel.Size = new System.Drawing.Size(82, 23);
+            this.buttonAdvCancel.TabIndex = 13;
+            this.buttonAdvCancel.Text = "xxCancel";
+            this.buttonAdvCancel.UseVisualStyle = true;
+            // 
+            // buttonAdvOK
+            // 
+            this.buttonAdvOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.buttonAdvOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvOK.Location = new System.Drawing.Point(149, 8);
+            this.buttonAdvOK.Name = "buttonAdvOK";
+            this.buttonAdvOK.Size = new System.Drawing.Size(82, 23);
+            this.buttonAdvOK.TabIndex = 12;
+            this.buttonAdvOK.Text = "xxOk";
+            this.buttonAdvOK.UseVisualStyle = true;
+            this.buttonAdvOK.Click += new System.EventHandler(this.ButtonAdvOkClick);
+            // 
+            // MeetingRecurrenceView
+            // 
+            this.AcceptButton = this.AcceptButton;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.Borders = new System.Windows.Forms.Padding(6, 1, 6, 2);
+            this.CancelButton = this.buttonAdvCancel;
+            this.ClientSize = new System.Drawing.Size(500, 440);
+            this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Blue;
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.statusStripExAddressBook);
+            this.Controls.Add(this.ribbonControlForm);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(500, 440);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 440);
+            this.Name = "MeetingRecurrenceView";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "xxAppointmentRecurrence";
+            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlForm)).EndInit();
+            this.statusStripExAddressBook.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.groupBoxAppointmentTime.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timeDurationPickerViewLength)).EndInit();
+            this.groupBoxRecurrencePattern.ResumeLayout(false);
+            this.splitContainerAdv1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).EndInit();
+            this.splitContainerAdv1.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvMonthlyRecurring)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvDailyRecurring)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvWeeklyRecurring)).EndInit();
+            this.groupBoxRangeOfRecurrence.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart.Calendar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd.Calendar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).EndInit();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+        
+        #endregion
+
+        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlForm;
+        private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripExAddressBook;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.GroupBox groupBoxAppointmentTime;
+        private System.Windows.Forms.GroupBox groupBoxRecurrencePattern;
+        private System.Windows.Forms.GroupBox groupBoxRangeOfRecurrence;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label labelStart;
+        private System.Windows.Forms.Label labelEnd;
+        private System.Windows.Forms.Label labelDuration;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.Label labelRangeStart;
+        private System.Windows.Forms.Label labelEndBy;
+        private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvStart;
+        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerStart;
+        private Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker outlookTimePickerEnd;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvRemove;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOK;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
+        private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvEnd;
+        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvDailyRecurring;
+        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvMonthlyRecurring;
+        private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvWeeklyRecurring;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private Teleopti.Ccc.Win.Common.Controls.TimeDurationPickerView timeDurationPickerViewLength;
+    }
+}
+

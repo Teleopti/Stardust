@@ -1,0 +1,145 @@
+﻿
+.body-teamschedule {
+	
+}
+.body-teamschedule-inner {
+	
+}
+
+.teamschedule ul 
+{
+	margin: 0; 
+	padding: 0;
+	list-style: none;
+}
+.teamschedule 
+{
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: #f8f8f8;
+	font-family: Verdana;
+	width: 100%;
+	padding-top: 20px;
+	padding-bottom: 15px;
+}
+
+.teamschedule-timeline 
+{
+	left: 0px;
+	top: 5px;
+	bottom: 0px;
+}
+.teamschedule-timeline-spacer {
+	width: 125px;
+}
+.teamschedule-timeline-times 
+{
+	height: 100%;
+}
+.teamschedule-timeline-time {
+	height: 100%;
+	font-size: 8px;
+	border-left: 1px solid rgba(0, 0, 0, 0.15);
+}
+.teamschedule-timeline-label 
+{
+	padding: 1px;
+	padding-left: 4px;
+	padding-right: 5px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: white;
+	left: -10px;
+	position: relative;
+}
+
+.teamschedule-timeline-time.minute .teamschedule-timeline-label
+{
+	display: none;
+}
+
+.teamschedule-agents {
+	width: 100%;
+	position: relative;
+	z-index: 10;
+}
+.teamschedule-agent 
+{
+	vertical-align: bottom;
+	padding-top: 8px;
+	height: 19px;
+	width: 100%;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+	vertical-align: bottom;
+}
+.teamschedule-agent-name 
+{
+	top: 3px;
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 119px;
+	height: 19px;
+	padding-top: 5px;
+	padding-left: 5px;
+	background-color: #f8f8f8;
+}
+.teamschedule-agent-name-hover
+{
+	padding-right: 10px;
+	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
+	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	width: auto;
+	z-index: 10;
+}
+
+.teamschedule-agent-schedule 
+{
+	position: absolute;
+	left: 125px;
+}
+
+.layer 
+{
+	vertical-align: bottom;
+	height: 19px;
+	border-radius: 2px;
+}
+
+.dayoff 
+{
+	margin-left: 5px;
+	width: 824px;
+	vertical-align: bottom;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	text-align: center;
+	height: 18px;
+	border-radius: 2px;
+	
+	background-color: beige;
+	 -webkit-background-size: 6px 6px;
+	background-image: -webkit-linear-gradient(-45deg, 
+			rgba(0, 0, 0, .1) 0%, 
+			rgba(0, 0, 0, .1) 10%, 
+			transparent 10%, 
+			transparent 50%, 
+			rgba(0, 0, 0, .1) 50%, 
+			rgba(0, 0, 0, .1) 60%, 
+			transparent 60%, 
+			transparent 100%)
+}
+
+#TeamScheduleDateRangeSelector.date-range-selector .datepicker{
+	 width: 110px;
+}
+
+.teamschedule-agent-schedule .tooltip {
+	position: absolute;
+}
+
+.teamschedule-agent-schedule .tooltip-container {
+	top: -55px;
+	height: 57px;
+}
+
+.teamschedule-agent-schedule .tooltip-bottom {
+	height: 30px;	
+}

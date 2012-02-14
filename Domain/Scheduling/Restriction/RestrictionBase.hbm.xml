@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   assembly="Teleopti.Ccc.Domain" 
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
+                   default-access="field.camelcase-underscore">
+  <class name="RestrictionBase">
+    <!--IUnique-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <!--IUnique-->
+
+    <component name="StartTimeLimitation" class="Teleopti.Interfaces.Domain.StartTimeLimitation, Teleopti.Interfaces">
+        <property name="StartTime"
+            column="StartTimeMinimum"
+					  not-null="false"/>
+        <property name="EndTime"
+					  not-null="false"
+            column="StartTimeMaximum"/>
+    </component>
+
+    <component name="EndTimeLimitation" class="Teleopti.Interfaces.Domain.EndTimeLimitation, Teleopti.Interfaces">
+        <property name="StartTime"
+					  not-null="false"
+            column="EndTimeMinimum"/>
+        <property name="EndTime"
+					  not-null="false"
+            column="EndTimeMaximum" />
+    </component>
+
+    <component name="WorkTimeLimitation" class="Teleopti.Interfaces.Domain.WorkTimeLimitation, Teleopti.Interfaces">
+        <property name="StartTime"
+					  not-null="false"
+                  column="WorkTimeMinimum"/>
+        <property name="EndTime"
+					  not-null="false"
+                  column="WorkTimeMaximum" />
+    </component>
+    
+  </class>
+         
+</hibernate-mapping>

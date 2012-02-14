@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.SystemSetting"
+                   default-access="field.camelcase-underscore">
+  <class name="PersonalSettingData">
+    <cache usage="read-write" />
+    <id name="Id"
+         type="guid"
+         unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <property name="Key"
+              column="[Key]"
+              not-null="true" 
+              unique-key="PersonalSettingUniqueKey"
+              />
+    <property name="serializedValue" type="BinaryBlob" access="field">
+      <column name="SerializedValue"
+              sql-type="varbinary(max)"
+              not-null="true"/>
+    </property>
+    <many-to-one name="OwnerPerson"
+                  not-null="true"
+                  unique-key="PersonalSettingUniqueKey"
+                  class="Teleopti.Ccc.Domain.Common.Person"
+                  foreign-key="FK_PersonalSettingData_Person"/>
+  </class>
+</hibernate-mapping>

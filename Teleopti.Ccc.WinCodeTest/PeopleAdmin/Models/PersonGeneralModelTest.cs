@@ -1,0 +1,565 @@
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.PeopleAdmin;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
+{
+    [TestFixture, SetUICulture("en-US")]
+    public class PersonGeneralModelTest
+    {
+        private PersonGeneralModel _target;
+        private IPerson _base;
+        private IPersonPeriod _personPeriod;
+        private MockRepository _mocks;
+        private IPrincipalAuthorization _principalAuthorization;
+
+        /// <summary>
+        /// Tests the init.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [SetUp]
+        public void TestInit()
+        {
+            _base = PersonFactory.CreatePerson();
+            ITeam team = TeamFactory.CreateSimpleTeam();
+            _personPeriod = PersonPeriodFactory.CreatePersonPeriod
+                (new DateOnly(DateTime.Now),
+                 PersonContractFactory.CreatePersonContract("testContract",
+                                                            "TestSchedule",
+                                                            "TestPartTimePercentage"),
+                 team);
+            _base.AddPersonPeriod(_personPeriod);
+            _mocks = new MockRepository();
+            _principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+            _target = new PersonGeneralModel(_base, new UserDetail(_base),_principalAuthorization);
+        }
+
+        [Test]
+        public void VerifyPassingPersonInConstructor()
+        {
+            _base.Name = new Name("FirstName","LastName");
+            Assert.AreEqual(_target.FirstName, "FirstName");
+        }
+
+        /// <summary>
+        /// Verifies the first name of the set.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetFirstName()
+        {
+            const string setValue = "FirstName";
+            _target.FirstName = setValue;
+
+            // Test get method
+            string getValue = _target.FirstName;
+
+            // Perform Assert Tests
+            Assert.AreSame(setValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the last name of the set.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetLastName()
+        {
+            const string setValue = "LastName";
+            _target.LastName = setValue;
+
+            // Test get method
+            string getValue = _target.LastName;
+
+            // Perform Assert Tests
+            Assert.AreSame(setValue, getValue);
+        }
+
+        [Test]
+        public void VerifySetFullName()
+        {
+            const string setValue = "LastName";
+            _target.LastName = setValue;
+
+            // Test get method
+            string getValue = _target.FullName;
+
+            // Perform Assert Tests
+            Assert.AreEqual(_base.Name.ToString(), getValue);
+        }
+
+        /// <summary>
+        /// Verifies the set email.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetEmail()
+        {
+            const string setValue = "Mail";
+            _target.Email = setValue;
+
+            // Test get method
+            string getValue = _target.Email;
+
+            // Perform Assert Tests
+            //TODO: Write Assert Tests for Email()
+            Assert.AreSame(setValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the set employee number.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetEmployeeNumber()
+        {
+            const string setValue = "EmployeeNumber";
+            _target.EmployeeNumber = setValue;
+
+            //Test get method
+            var getValue = _target.EmployeeNumber;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the set note.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetNote()
+        {
+            const string setValue = "TestNoteTestNote";
+            _target.Note = setValue;
+
+            //Test get method
+            var getValue = _target.Note;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the set language.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetLanguage()
+        {
+            int setValue = 1034;
+            _target.Language = setValue;
+
+            //Test get method
+            int getValue = _target.Language;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+            Assert.AreEqual(setValue, _target.LanguageLCID);
+            //-------------------------------------------
+           setValue = 0;
+            _target.Language = setValue;
+            getValue = _target.ContainedEntity.PermissionInformation.Culture().LCID; //Hmm dunno
+
+            //Perform Test
+            Assert.AreEqual(getValue, _target.Language);
+        }
+
+        /// <summary>
+        /// Verifies the set culture.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetCulture()
+        {
+            int setValue = 1034;
+            _target.Culture = setValue;
+
+            //Test get method
+            int getValue = _target.Culture;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+            Assert.AreEqual(setValue, _target.CultureLCID);
+
+            //-------------------------------------------
+            setValue = 0;
+            _target.Culture = setValue;
+            getValue = 1033;
+
+            //Perform Test
+            Assert.AreEqual(getValue, _target.Culture);
+        }
+
+        /// <summary>
+        /// Verifies the set time zone.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetTimeZone()
+        {
+            const string setValue = "W. Europe Standard Time";
+            _target.TimeZone = setValue;
+
+            //Test get method
+            var getValue = _target.TimeZone;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+        }
+
+        [Test]
+        public void VerifySetWorkflowControlSet()
+        {
+            Assert.IsNull(_base.WorkflowControlSet);
+            Assert.AreEqual(PersonGeneralModel.NullWorkflowControlSet,_target.WorkflowControlSet);
+            var newWorkflowControlSet = new WorkflowControlSet("My");
+            _target.WorkflowControlSet = newWorkflowControlSet;
+            
+            //Perform Test
+            Assert.AreEqual(newWorkflowControlSet, _target.WorkflowControlSet);
+            Assert.AreEqual(newWorkflowControlSet, _base.WorkflowControlSet);
+
+            _target.WorkflowControlSet = PersonGeneralModel.NullWorkflowControlSet;
+            Assert.IsNull(_base.WorkflowControlSet);
+            Assert.AreEqual(PersonGeneralModel.NullWorkflowControlSet, _target.WorkflowControlSet);
+        }
+
+        /// <summary>
+        /// Verifies the name of the windows log on.
+        /// </summary>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2/20/2008
+        /// </remarks>
+        [Test]
+        public void VerifyWindowsLogOnName()
+        {
+            const string setValue = "WinUser123";
+            Expect.Call(
+               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+            _mocks.ReplayAll();
+            _target.WindowsLogOnName = setValue;
+
+            //Test get method
+            var getValue = _target.WindowsLogOnName;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the name of the domain.
+        /// </summary>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2/20/2008
+        /// </remarks>
+        [Test]
+        public void VerifyDomainName()
+        {
+            const string setValue = "toptinet";
+            Expect.Call(
+               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+            _mocks.ReplayAll();
+            _target.DomainName = setValue;
+
+            //Test get method
+            var getValue = _target.DomainName;
+
+            //Perform Test
+            Assert.AreEqual(setValue, getValue);
+        }
+
+        [Test]
+        public void ShouldCheckPasswordOnChangeOfApplicationLogOnName()
+        {
+            const string setValue = "AppUser123";
+
+            _base = _mocks.StrictMock<IPerson>();
+            var userDetail = _mocks.StrictMock<IUserDetail>();
+            var permission = _mocks.StrictMock<IPermissionInformation>();
+            var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
+            using (_mocks.Record())
+            {
+                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(3);
+                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(3);
+                Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
+                Expect.Call(authInfo.Password).Return("");
+                Expect.Call(authInfo.ApplicationLogOnName).Return("AppUser123");
+                Expect.Call(
+               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                Expect.Call(_base.ChangePassword("", null, userDetail)).Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+
+                //Test get method
+                var getValue = _target.ApplicationLogOnName;
+
+                //Perform Test
+                Assert.AreEqual(setValue, getValue);
+            }
+        }
+
+        [Test]
+        public void ShouldSayValidPasswordWhenApplicationLogOnNameIsEmpty()
+        {
+            const string setValue = "";
+            _base = _mocks.StrictMock<IPerson>();
+            var userDetail = _mocks.StrictMock<IUserDetail>();
+            var permission = _mocks.StrictMock<IPermissionInformation>();
+            var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
+            using (_mocks.Record())
+            {
+                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(1);
+                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(1);
+                Expect.Call(
+               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
+            }
+            using (_mocks.Playback())
+            {
+                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+
+                Assert.That(_target.IsValid,Is.True);
+            }
+        }
+
+        /// <summary>
+        /// Verifies the password.
+        /// </summary>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2/20/2008
+        /// </remarks>
+        [Test]
+        public void VerifyPassword()
+        {
+            const string setValue = "passwordX07";
+            _base = _mocks.StrictMock<IPerson>();
+            var userDetail = _mocks.StrictMock<IUserDetail>();
+            var permission = _mocks.StrictMock<IPermissionInformation>();
+            var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
+            using (_mocks.Record())
+            {
+                Expect.Call(_base.PermissionInformation).Return(permission);
+                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo);
+                Expect.Call(authInfo.ApplicationLogOnName).Return("userX07");
+                Expect.Call(
+               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                   new DateOnly(DateTime.Today), _base)).Return(true);
+                Expect.Call(_base.ChangePassword(setValue, null, userDetail)).Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                _target = new PersonGeneralModel(_base, userDetail,_principalAuthorization) {Password = setValue};
+            }
+        }
+
+        /// <summary>
+        /// Verifies the set is agent.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetIsAgent()
+        {
+            bool expectedValue = (_base.Period(new DateOnly(DateTime.Now)) != null);
+
+            // Test get method
+            bool getValue = _target.IsAgent;
+
+            // Perform Assert Tests     
+            Assert.AreEqual(expectedValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the set is user.
+        /// </summary>
+        /// <remarks>
+        /// Created by: sumeda herath
+        /// Created date: 2008-02-05
+        /// </remarks>
+        [Test]
+        public void VerifySetIsUser()
+        {
+            var info = _base.PermissionInformation;
+            var expectedValue = (info != null);
+
+            // Test get method
+            var getValue = _target.IsUser;
+
+            // Perform Assert Tests      
+            Assert.AreEqual(expectedValue, getValue);
+        }
+
+        /// <summary>
+        /// Verifies the terminal date.
+        /// </summary>
+        /// <remarks>
+        /// Created by: Madhuranga Pinnagoda
+        /// Created date: 2008-07-02
+        /// </remarks>
+        [Test]
+        public void VerifyTerminalDate()
+        {
+            var dateOnly = new DateOnly(DateTime.Now);
+            _target.TerminalDate = dateOnly;
+            Assert.AreEqual(_target.TerminalDate, dateOnly);
+
+            _target.TerminalDate = null;
+            Assert.AreEqual(_target.TerminalDate, null);
+        }
+
+        [Test]
+        public void VerifyLanguageInfo()
+        {
+            var culture = new Culture(0, "No Language");
+            _target.LanguageInfo = culture;
+
+            Assert.AreEqual(culture.Id, _target.LanguageInfo.Id);
+        }
+
+        [Test]
+        public void VerifyCultureInfo()
+        {
+            var culture = new Culture(0, "No Language");
+            _target.CultureInfo = culture;
+
+            Assert.AreEqual(culture.Id, _target.CultureInfo.Id);
+        }
+
+        [Test]
+        public void VerifyRoles()
+        {
+            IList<IApplicationRole> roles = new List<IApplicationRole> {new ApplicationRole{DescriptionText = "Test"}};
+
+            _target.SetAvailableRoles(roles);
+            Assert.AreEqual(string.Empty,_target.Roles);
+
+            _target.Roles = "Test";
+            Assert.AreEqual("Test",_target.Roles);
+        }
+        
+        [Test]
+        public void VerifyCanBold()
+        {
+            Assert.IsFalse(_target.CanBold);
+            _target.CanBold = true;
+            Assert.IsTrue(_target.CanBold);
+        }
+
+        [Test]
+        public void ShouldNotGray()
+        {
+            Assert.IsFalse(_target.CanGray);
+        }
+
+        [Test]
+        public void ShouldHaveAnEmptyPasswordFromBeginning()
+        {
+            Assert.That(_target.Password,Is.Empty);
+        }
+
+        [Test]
+        public void ShouldSayValidWhenSettingPasswordIfLogOnNameIsEmpty()
+        {
+            _target.ApplicationLogOnName = "";
+            _target.Password = "x";
+            Assert.That(_target.IsValid, Is.True);
+            Assert.That(_target.Password, Is.Empty);
+        }
+
+        [Test]
+        public void ShouldShowEmptyWorkflowControlSetIfItWasDeleted()
+        {
+            var newWorkflowControlSet = new WorkflowControlSet("WCS ToBeDeleted");
+            _target.WorkflowControlSet = newWorkflowControlSet;
+            newWorkflowControlSet.SetDeleted();
+            
+            Assert.AreEqual(PersonGeneralModel.NullWorkflowControlSet, _target.WorkflowControlSet);
+        }
+
+        [Test]
+        public void ShouldCheckIfUserHasPermissionToChangeLogOnAndPassword()
+        {
+            Expect.Call(
+                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                    new DateOnly(DateTime.Today), _base)).Return(true);
+            
+            _mocks.ReplayAll();
+            _target.ApplicationLogOnName = "";
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldNotChangeIfUserHasNoPermissionToChangeLogOnAndPassword()
+        {
+            const string oldLogOnInfo = "oldLogOnInfo";
+            _base.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = oldLogOnInfo;
+            _base.PermissionInformation.ApplicationAuthenticationInfo.Password = oldLogOnInfo;
+            _base.PermissionInformation.WindowsAuthenticationInfo.DomainName = oldLogOnInfo;
+            _base.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = oldLogOnInfo;
+            Expect.Call(
+                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+                                                    new DateOnly(DateTime.Today), _base)).Return(false);
+
+            _mocks.ReplayAll();
+            _target.ApplicationLogOnName = "";
+            _target.WindowsLogOnName = "";
+            _target.Password = "";
+            _target.DomainName = "";
+            
+            Assert.That(_target.ApplicationLogOnName, Is.EqualTo(oldLogOnInfo));
+            Assert.That(_target.WindowsLogOnName, Is.EqualTo(oldLogOnInfo));
+            Assert.That(_target.Password, Is.EqualTo(oldLogOnInfo));
+            Assert.That(_target.DomainName, Is.EqualTo(oldLogOnInfo));
+            _mocks.VerifyAll();
+
+        }
+    }
+}

@@ -1,0 +1,843 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>Aktivite</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>Devamsızlık</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>Haftaiçi</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>Hafta</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>Çarşamba</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>Salı</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>Perşembe</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>Pazar</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>Vardiya Başlangıç Zamanı</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>GELİŞME</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>Ücretli Zaman (ss:dd)</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>Vardiya Kategorisi</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>Interval ve Takım Başına Vardiyalanan Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>Çağrı Karşılama Zamanı / Ücretli Zaman (%)</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>Vardiyalanan Zaman/Aktivite</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>Tercih/Gün</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Cumartesi</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>Çağrı Karşılamaya Uygun Zaman - Vardiyalanan Zaman (vardiya başlangıcı öncesi ve sonrası zaman dahil)</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>Müşteri Temsilcisi Skorkartı</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>Terich Kategorisi</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>Tercih/Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>Takım Metrikleri</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>Talep Edilen Tercihler</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>Çağrı Karşılamaya Hazır Zaman - Vardiyalanan Çağrı Karşılamaya Hazır Zaman</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>Çağrı Karşılamaya Hazır Zaman - Sözleşmesel Vardiyalama Zamanı</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>Tanımsız</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>Ay</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>Pazartesi</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>Soyad</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>Yarım Saat</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>Cuma</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>Genişletilmiş Tercihler</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>Tatil</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>Takım/Tarih</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Servis Seviyesi Eşiği İçinde Karşılanmış Çağrılar/Gerçekleşen Çağrılar</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>Ücretli Zaman (ss:dd)</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>Yanıtlanan Çağrılar / Çağrı Karşılamaya Hazır Zaman</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Servis Seviyesi Eşiği İçinde Karşılanan ve Kaçan Çağrılar / Gerçekleşen Çağrılar </value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>Tam Gün</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>Servis Seviyesi Eşiği İçinde Karşılanan Çağrılar / Karşılanan Çağrılar</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>Tüm</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>Uyum</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>Sözleşmesel Devamsızlık Süresi (ss:dd)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>Reddedilen Tercihler</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>Sözleşme Zamanı (ss:dd)</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>Günün Bölümü</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>Kabul Edilen Tercihler (%)</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>Çalışma Zamanı (ss:dd)</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>Kabul Edilen Tercihler</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>Kullanıcı İçin Doğrulama Gerçekleşemedi</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Bilimeyen Hata</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>Teknik Bilgi</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>İstemci uygulamasını kapatıp tekrar Windows doğrulama ile uygulamaya giriş yapın veya bir sistem yöneticisi web doğrulamasını Formlara çevirebilir. </value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>Devamsızlık Zamanı / Müşteri Temsilcisi</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>Web uygulamasında Windows doğrulama kullanıldığı zaman istemci uygulamasında Uygulama doğrulama geçerli olmamaktadır.</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>Çalışma Zamanı (ss:dd)</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>Lütfen uygulama girişini kullanın.</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>Yetkilerin ETL servisi ile senkron olduğunu kontrol edin.</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>Olası çözüm</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>Nisan</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>Toplam:</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>Müşteri Temsilcisi İstatistikleri</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>Kuyruk İstatistikleri</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>Müşteri Kuyruk İstatistikleri</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>Yetki Reddedildi</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>Vardiyalanmış Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>Kullanıcı Adı Gerekmektedir</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>Kullanıcı Adı:</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>Kuyruktaki En Uzun Gecikme, Yanıtlanan</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>Kuyruktaki En Uzun Gecikme, Yanıtlanan (sn)</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>Kuyruktaki En Uzun Gecikme, Kaçan</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>Kuyruktaki En Uzun Gecikme, Kaçan (sn)</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>Rapor Göster</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>Rapor Göster</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>Ağustos</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>Ekim</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>Trend</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>Pazartesi</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>Genel Toplam</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>Pazar</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>Çarşamba</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>Hafta</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>Sapma (dk)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>Sapma / Interval (dk)</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>Standart Sapma</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>Tarih / İnterval</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>Tarih:</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>Devam</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>Salı</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>Cuma</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>Perşembe</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>Bir Önceki</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>Tahmin Edilen Saat (ss:dd)</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>Tahmin Edilen Saat (Daralma) (ss:dd)</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Tahmin Edilen - Vardiyalanan Saat</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>Vardiyalanan Saat (ss:dd)</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>Cumartesi</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>Senaryo:</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>Tatil:</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>Güncel ACW</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>Tahmin Edilen ACW</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Tahmin Edilen - Güncel İşyükü</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>İşyükü:</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>Devanmsızlık:</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>İnterval</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>İnterval:</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>Periyod:</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>Daralma Dahil Bağıl Fark (%)</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>Takım:</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>Çağrılar</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>Direk Dışarama Çağrıları</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>Kaçan Kısa Çağrılar</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>Tahmin Edilen Çağrılar</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>Hesaplanan Çağrılar</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>Direk Gelen Çağrılar</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>Zaman Dilimi:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>Yetenek:</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>Lokasyon:</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>Aktivite:</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>Hedef</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>Vardiyalanan Fazla Zaman (ss:dd)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>Tahmin Edilen Zaman (ss:dd)</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>Daralma Dahil Tahmin Edilen Zaman (ss:dd)</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>Vardiyalanan Zaman (ss:dd)</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>Vardiyalanan Zaman / Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>Vardiyalanan Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>Vardiyalanan Müşteri Temsilcisi - Hazır Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>Müşteri Temsilcisi:</value>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Müşteri Temsilcisi - Vardiyaya Uyum</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>Müşteri Temsilcisi / Tarih</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>Bitiş Tarihi:</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>Haftaiçi Günü / Yetenek</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>Tarih Aralığı:</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>Seçimler</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>Taşan Dış Çağrılar</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>Taşan İç Çağrılar</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>Gelecek sefer beni hatırla</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>Giriş Yap</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>Giriş Yap</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>ACD Giriş</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>Yardım</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>Geçersiz bir değer girdiniz:</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>Genişlet</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>Saniyeler</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>Uyum Hesaplama:</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>Servis Seciyesi Hesaplaması:</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>Aralık</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>Çağrı Sonrası Çalışma (ACW)</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>Eylül</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>Karşılama Süresi</value>
+  </data>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>Çökme</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>Sayısı</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>Çağrı Kaçma ve Çağrı Karşılama Süresi</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>Müşteri Temsilcisi Kategorisi:</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Vardiya Kategorisi / Gün</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Vardiya Kategorisi ve Tüm Gün Devamsızlık / Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>Vardiya Kategorisi</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>Son İnterval:</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>İlk İnterval:</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>Şubat</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>Önceki Periyod</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>Sınıflandır:</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>Bağıl Fark (%)</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>Güncel Takım</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>Güncel</value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>Kuyruk</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>Kuyruk:</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>Şifre gerekmektedir.</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>Şifre:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>Yeni Şifre</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>Girişiniz başarısız oldu lütfen yeniden deneyin.</value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>Herhangi bir veri girmediniz:</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>Kpi</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>Mart</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>Mayıs</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Ortalama Çağrı Sonrası Çalışma (sn)</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>Ortalama Çağrı Karşılama Hızı (sn)</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>Ortalama Konuşma Süresi (OKS)</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Ortalama Konuşma Süresi (sn)</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>Güncel OKS</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>Tahmin Edilen OKS</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Ortalama Çağrı Yönetim Süresi (sn)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>Ortalama Çağrı Kaçma Süresi (sn)</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>Servis Seviyesi</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>Servis Seviyesi (%)</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>Servis Seviyesi Üstünde Karşılanan</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>Servis Seviyesi İçinde Karşılanan</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>Servis Seviyesi İçinde Kaçan</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Servis Seviyesi ve Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>Karşılama Oranı (%)</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Devamsızlık (%)</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>Kaçan Çağrı Oranı</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>Kaçan Çağrı Oranı (%)</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>Kısa Çağrılar Hariç Kaçan Çağrı Oranı (%)</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>Karşılanan Çağrılar</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>Karşılanan Çağrılar / Vardiyalanmış Hazır Zaman</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Karşılanan Çağrılar / Vardiyalanan Çağrı Karşılama Süresi</value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>Kaçan Çağrılar</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>Aktarılan Çağrılar</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>Gerçekleşen Çağrılar</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>Gerçekleşen Çağrılar / Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>Gerçekleşen Çağrılar / Vardiyalanan Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>Gerçekleşen Çağrılar / Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>İlk Tarih</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>Müşteri Temsilcisi Metrikleri</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Hazır Olma (%)</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>Hazır Olma (%)</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>Doluluk Oranı (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Uyum (%)</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>Uyum (%)</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Uyum / İnterval (%)</value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>Paralelllik (%)</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>Yüzde</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>Periyod Tipi:</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>Müşteri Temsilcisi Kategori Tipi:</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>Kasım</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>Yönetim Süresi</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>Hazır Olunan Süre</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Hazır Olunan Süre / Vardiyalanan Hazır Olunan Süre (%)</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>Vardiyalanan Hazır Olunan Zaman</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>Konuşma Süresi</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>Direk Dışarama Çağrısı Konuşma Süresi</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>Direk Gelen Çağrı Konuşma Süresi</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>Müsait Zaman</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>Vardiyalanan Devamsızlık Zamanı (ss:dd)</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>Yönetim Zamanı</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>Logged In Olunan Zaman</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>Hazır Olunmayan Zaman</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>Çağrı Kaçış Süresi</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>Çağrı Kaçış Süresi (sn)</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>Vardiyalanan Zaman</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>Ocak</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>Temmuz</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>Haziran</value>
+  </data>
+</root>

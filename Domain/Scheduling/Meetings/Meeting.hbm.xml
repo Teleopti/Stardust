@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Meetings"
+                   default-access="field.camelcase-underscore">
+
+  <class name="Meeting">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_Meeting_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_Meeting_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+
+	  <many-to-one name="Organizer"
+              class="Teleopti.Ccc.Domain.Common.Person" 
+              not-null="true" foreign-key="FK_Meeting_Person3"/>
+	  <many-to-one name="Scenario"
+              class="Teleopti.Ccc.Domain.Common.Scenario"
+              not-null="true" foreign-key="FK_Meeting_Scenario"/>
+
+	  <property name="Subject"
+				type="string"
+				length="100"
+				not-null="true"/>
+
+	  <property name="Description"
+				type="string"
+				length="2000"
+				not-null="true"/>
+
+	  <property name="Location"
+				type="string"
+				length="100"
+				not-null="true"/>
+
+    <property name="TimeZone"
+				type="string"
+				length="100"
+				not-null="true"/>
+
+    <many-to-one name="Activity"
+       class="Teleopti.Ccc.Domain.Scheduling.Activity"
+       not-null="true" foreign-key="FK_Meeting_Activity"/>
+
+    <bag name="meetingRecurrenceOptions"
+            access="field"
+            cascade="all-delete-orphan"
+            inverse="true">
+      <key column ="Parent" />
+      <one-to-many class="Teleopti.Ccc.Domain.Scheduling.Meetings.RecurrentMeetingOption" />
+    </bag>
+    
+    <property name="StartDate"
+       not-null="true"
+       type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+    <property name="EndDate"
+       not-null="true"
+       type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+	  <set name="MeetingPersons"
+            cascade="all-delete-orphan"
+            inverse="true">
+		  <key column ="Parent" />
+		  <one-to-many class="MeetingPerson"/>
+	  </set>
+
+    <property name="StartTime" type="TimeSpan" not-null="true"/>
+  	<property name="EndTime" type="TimeSpan" not-null="true"/>
+  	<property name="OriginalMeetingId" />
+    
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_Meeting_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+  </class>
+</hibernate-mapping>

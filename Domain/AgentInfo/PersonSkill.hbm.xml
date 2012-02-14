@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo"
+                   default-access="field.camelcase-underscore">
+
+
+  <class name="PersonSkill">
+    <id name="Id"
+        type="guid"
+        unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <many-to-one class="PersonPeriod"
+              name ="Parent" 
+              not-null="true" foreign-key="FK_PersonSkill_PersonPeriod"/>
+    <many-to-one name="Skill"
+                 class="Teleopti.Ccc.Domain.Forecasting.Skill"
+                 not-null="true" foreign-key="FK_PersonSkill_Skill"/>
+
+    <component name="SkillPercentage" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <property name="Value"
+            not-null="true"
+            type="Double" />
+    </component>
+    <property name="Active" not-null="true"/>
+  </class>  
+</hibernate-mapping>

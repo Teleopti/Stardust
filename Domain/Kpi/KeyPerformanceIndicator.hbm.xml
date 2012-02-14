@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Kpi"
+                   default-access="field.camelcase-underscore">
+
+  <class name="KeyPerformanceIndicator" mutable="false">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_KeyPerformanceIndicator_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_KeyPerformanceIndicator_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+    <property name="Name"
+              not-null="true"
+              type="string"
+              length="50"/>
+    <property name="ResourceKey"
+              not-null="true"
+              type="string"
+              length="50"/>
+    <property name="TargetValueType"
+              not-null="true"
+              type="int"/>
+    <property name="DefaultTargetValue"
+				  type="double"
+				  not-null="true" />
+    <property name="DefaultMinValue"
+				  type="double"
+				  not-null="true" />
+    <property name="DefaultMaxValue"
+				  type="double"
+				  not-null="true" />
+    <property name="DefaultBetweenColor"
+          type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
+				  not-null="true" />
+    <property name="DefaultLowerThanMinColor" 
+          type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
+				  not-null="true" />
+    <property name="DefaultHigherThanMaxColor"
+          type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
+				  not-null="true" />
+    <bag name="KpiTargetCollection"
+             inverse ="true">
+      <key column="KeyPerformanceIndicator" foreign-key="FK_KeyPerformanceIndicatorCollection_KeyPerformanceIndicator"/>
+      <one-to-many class="Teleopti.Ccc.Domain.Kpi.KpiTarget"/>
+    </bag>         
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,130 @@
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
+@using Teleopti.Interfaces.Domain
+@model WeekScheduleViewModel
+@{
+	Layout = null;
+}
+<div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+	<style>
+		@foreach (var style in Model.Styles)
+		{
+			@string.Format(".weekview-day li.{0} div{{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
+		}
+
+		
+	</style>
+	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
+		@foreach (var day in Model.Days)
+		{
+			<ul class="weekview-day" data-mytime-date="@day.FixedDate" data-mytime-state="@Html.Schedule().FormatState(day.State)">
+				<li>
+					<div>@day.Header.Title</div>
+				</li>
+				<li class="second">
+					<div>
+						<span class="floatleft ml5">@day.Header.DayDescription</span>
+						<span class="floatright mr5">@day.Header.DayNumber</span>
+					</div>
+				</li>
+				<li class="@Html.AttributeEncode(day.Summary.StyleClassName) third">
+					<div>
+						<span class="fullwidth displayblock">@day.Summary.Title</span>
+						<strong class="fullwidth displayblock">@day.Summary.TimeSpan</strong>
+						@day.Summary.Summary
+					</div>
+				</li>
+				<li>
+					<div class="relative">
+						<div class="text-request absolute" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
+							<div class="floatright extrasmall">@day.TextRequestCount</div>
+							<div class="icon text-request floatright" />
+						</div>
+						@if (day.HasNote)
+						{
+							<div class="icon comment-day absolute">
+							</div>
+							<div class="comment-day">
+								@day.Note.Message
+							</div>
+						}
+					</div>
+				</li>
+				@foreach (var period in day.Periods)
+				{
+					<li class="@string.Format("{0}", period.StyleClassName)">
+						<div>
+							<strong class="fullwidth displayblock">@period.TimeSpan</strong>
+							<div class="truncate">@period.Title</div>
+							@if (period.Meeting != null)
+							{
+								<div class="icon meeting tooltip floatright" data-mytime-subject="@Html.AttributeEncode(period.Meeting.Title)" data-mytime-location="@Html.AttributeEncode(period.Meeting.Location)"></div>
+							}
+						</div>
+					</li>
+				}
+				<li>
+				</li>
+			</ul>
+		}
+	</div>
+</div>
+
+<div id="Schedule-addTextRequest-section" class="edit-section col-1 floatleft mt10 displaynone">
+	<div class="edit-section-content col-1 clearfix">
+		<div class="edit-module floatleft">
+			<div class="edit-module-inner">
+				<div class="edit-module-element">
+					<label class="displayblock" for="Schedule-addTextRequest-subject-input">@Resources.Subject</label>
+					<input id="Schedule-addTextRequest-subject-input" type="text"/>
+				</div>
+				<div class="edit-module-element">
+					<label class="displayblock" for="Schedule-addTextRequest-message-input">@Resources.Message</label>
+					<textarea id="Schedule-addTextRequest-message-input" />
+				</div>
+			</div>
+		</div>
+		<div class="edit-module floatleft">
+			<div class="edit-module-inner">
+				<div>
+					<div class="edit-module-element floatleft">
+						<label class="displayblock" for="Schedule-addTextRequest-fromDate-input">@Resources.From</label>
+						<input id="Schedule-addTextRequest-fromDate-input" class="date-input" type="text" value="@Model.Days.First().Date" />
+					</div>
+					<div class="edit-module-element floatleft">
+						<label class="displayblock" for="Schedule-addTextRequest-fromTime-input-input">@Resources.Time</label>
+						<select id="Schedule-addTextRequest-fromTime-input" class="time-input combobox">
+							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+							{
+								<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+							}
+						</select>
+					</div>
+					<div class="edit-module-element clearleftfloat floatleft">
+						<label class="displayblock" for="Schedule-addTextRequest-toDate-input">@Resources.To</label>
+						<input id="Schedule-addTextRequest-toDate-input" class="date-input" type="text" value="@Model.Days.First().Date" />
+					</div>
+					<div class="edit-module-element floatleft">
+						<label class="displayblock" for="Schedule-addTextRequest-toTime-input-input">@Resources.Time</label>
+						<select id="Schedule-addTextRequest-toTime-input" class="time-input combobox">
+							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+							{
+								<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+							}
+						</select>
+					</div>
+					<div class="clearboth"></div>
+				</div>
+			</div>
+		</div>
+		<div class="edit-button-bar mr5 ml5 clearleftfloat">
+			<div id="Schedule-addTextRequest-error" class="error floatleft">
+			</div>
+			<div class="floatright">
+				<input id="Schedule-addTextRequest-ok-button" type="button" class="button mb5" value="@Html.AttributeEncode(Resources.Save)"/>
+				<input id="Schedule-addTextRequest-cancel-button" type="button" class="button cancel mb5" value="@Html.AttributeEncode(Resources.Cancel)" />
+			</div>
+		</div>
+	</div>
+</div>

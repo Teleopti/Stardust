@@ -1,0 +1,158 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace Teleopti.Interfaces.Domain
+{
+    /// <summary>
+    /// Request from a person
+    /// </summary>
+    /// <remarks>
+    /// Created by: robink
+    /// Created date: 2008-10-10
+    /// </remarks>
+    public interface IPersonRequest : ICloneableEntity<IPersonRequest>, 
+                                        IAggregateRoot,
+                                        IOriginator<IPersonRequest>,
+                                        IChangeInfo,
+                                        INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Gets the date.
+        /// </summary>
+        /// <value>The date.</value>
+        DateTime RequestedDate { get; }
+
+        /// <summary>
+        /// Gets the person.
+        /// </summary>
+        /// <value>The person.</value>
+        IPerson Person { get; }
+
+        /// <summary>
+        /// Tries the set message and returns the result.
+        /// </summary>
+        /// <returns></returns>
+        bool TrySetMessage(string message);
+
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        /// <value>The message.</value>
+        string Message { get;}
+
+        /// <summary>
+        /// Gets or sets the request.
+        /// </summary>
+        /// <value>The current request.</value>
+        IRequest Request { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subject of the message.
+        /// </summary>
+        /// <value>The subject.</value>
+        string Subject { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is editable.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is editable; otherwise, <c>false</c>.
+        /// </value>
+        bool IsEditable { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="IPersonRequest"/> is changed and should be saved.
+        /// </summary>
+        /// <value><c>true</c> if changed; otherwise, <c>false</c>.</value>
+        bool Changed { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is new.
+        /// </summary>
+        /// <value><c>true</c> if this instance is new; otherwise, <c>false</c>.</value>
+        bool IsNew { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is pending.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is pending; otherwise, <c>false</c>.
+        /// </value>
+        bool IsPending { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is denied.
+        /// </summary>
+        /// <value><c>true</c> if this instance is denied; otherwise, <c>false</c>.</value>
+        bool IsDenied { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is approved.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is approved; otherwise, <c>false</c>.
+        /// </value>
+        bool IsApproved { get; }
+
+        /// <summary>
+        /// Gets the status text.
+        /// </summary>
+        /// <value>The status text.</value>
+        string StatusText { get; }
+
+        /// <summary>
+        /// Approves this instance.
+        /// </summary>
+        /// <param name="approvalService">The approval service.</param>
+        /// <param name="authorization"></param>
+        IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization);
+
+        /// <summary>
+        /// Denies this instance.
+        /// </summary>
+        /// <param name="denyPerson">The deny person.</param>
+        /// <param name="denyReasonTextResourceKey">The deny reason text resource key.</param>
+        /// <param name="authorization"></param>
+        void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization);
+
+        /// <summary>
+        /// Answers the specified message.
+        /// </summary>
+        /// <param name="answerMessage">The answer message.</param>
+        bool Reply(string answerMessage);
+
+        /// <summary>
+        /// Checks the length of the reply.
+        /// </summary>
+        /// <param name="answerMessage">The answer message.</param>
+        /// <returns></returns>
+        bool CheckReplyTextLength(string answerMessage);
+
+        /// <summary>
+        /// Sets the status to pending IF it was pending originally.
+        /// </summary>
+        void Pending();
+
+        /// <summary>
+        /// Forces the status to pending.
+        /// </summary>
+        void ForcePending();
+
+        /// <summary>
+        /// Tells this PersonRequest that it has been persisted.
+        /// </summary>
+        void Persisted();
+
+        /// <summary>
+        /// Gets the deny reason.
+        /// </summary>
+        /// <value>The deny reason.</value>
+        string DenyReason { get; }
+
+        ///<summary>
+        /// Set the status to new to be able to perform validation after edits.
+        ///</summary>
+        void SetNew();
+    }
+}

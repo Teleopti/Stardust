@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo"
+                   default-access="field.camelcase-underscore">
+
+  <class name="PersonRotation">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_PersonRotation_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_PersonRotation_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+
+    <many-to-one name="Person"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true" foreign-key="FK_PersonRotation_Person3"/>
+    
+    <property name="StartDate"
+					not-null="true"
+					type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+    <property name="StartDay"
+      not-null="true"
+      type="int"/>
+
+    <many-to-one name="Rotation"
+                 class="Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation"
+                 not-null="true" foreign-key="FK_PersonRotation_Rotation"/>
+
+    <property name="IsDeleted"
+      type="boolean"
+      not-null="true"/>
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_PersonRotation_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+            condition=":businessUnitParameter = BusinessUnit" />
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+  </class>
+</hibernate-mapping>

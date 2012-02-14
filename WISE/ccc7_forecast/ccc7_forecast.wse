@@ -1,0 +1,611 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Title=Teleopti CCC Forecasts
+  Flags=01000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000101100000000010110000001010
+  Log Pathname=%MAINDIR%\INSTALL.LOG
+  Message Font=MS Sans Serif
+  Font Size=8
+  Extra Flags=00000000000000000000010100000000
+  Pages Modified=01001000011000100000000000000000
+  Extra Pages=00000000000000000000000000110000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  EXE Filename=%_OUTPUTFILEPATH_%
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Step View=&Properties
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\Windows\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\Windows
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Variable Name5=_OUTPUTFILEPATH_
+  Variable Description5=The filepath of the file to be created by compiling this script.
+  Variable Default5=K:\Src\Wise\ccc7_forecast\ccc7_forecast.exe
+  Variable Name6=_STUBFILEPATH_
+  Variable Description6=Full path to the stub file
+  Variable Default6=K:\Src\Wise\ccc7_forecast\ccc7_forecast.stub
+  Variable Name7=_STUBFILENAME_
+  Variable Description7=Filename to use when extracting the stub file.
+  Variable Default7=ccc7_forecast.exe
+  Variable Name8=_PACKAGECODE_
+  Variable Description8=The package code for the application to be installed.
+  Variable Default8={742975B9-F562-4820-B006-BAB15774C62E}
+  Variable Name9=_SVSWRAPPER_
+  Variable Default9=0
+  Variable Flags9=00001000
+  Variable Name10=_SVSDRIVERINST_
+  Variable Description10=Install SVS driver or not
+  Variable Default10=0
+  Variable Flags10=00001000
+  Variable Name11=_SVSEXCLUDES_
+  Variable Flags11=00001000
+  Variable Name12=_SVSDRIVERINC_
+  Variable Default12=0
+  Variable Flags12=00001000
+  Variable Name13=_PREREQAPPTITLE_
+  Variable Default13=Teleopti CCC Forecasts
+  Variable Flags13=00001000
+  Requested Execution Level=requireAdministrator
+end
+item: Set Variable
+  Variable=EMPTY
+end
+item: Set Variable
+  Variable=PREREQFILEPATH
+end
+item: Set Variable
+  Variable=ERRORMSG
+end
+item: Set Variable
+  Variable=RETVAL
+end
+item: Set Variable
+  Variable=COUNT
+end
+item: Set Variable
+  Variable=ISURL
+  Value=0
+end
+item: Set Variable
+  Variable=DONTCHECKMSICONDITIONS
+  Value=0
+end
+item: Set Variable
+  Variable=PROCEXITCODE
+end
+item: Set Variable
+  Variable=BACKUPDIR
+end
+item: Set Variable
+  Variable=APPTITLE
+  Value=%_PREREQAPPTITLE_%
+end
+item: Call DLL Function
+  Pathname=%SYS32%\kernel32.dll
+  Function Name=GetModuleFileNameA
+  Argument List=310
+  Argument List=40MODULEFILENAME
+  Argument List=31255
+  Return Variable=3
+  Flags=00100000
+end
+item: Call DLL Function
+  Pathname=%SYS32%\kernel32.dll
+  Function Name=SetCurrentDirectoryA
+  Argument List=40INST
+  Return Variable=2
+  Flags=00100000
+end
+item: Remark
+  Text=Clear out command line params when debugging
+end
+item: If/While Statement
+  Variable=CMDLINE
+  Value=/M2=WiseInst4194304
+end
+item: Set Variable
+  Variable=CMDLINE
+end
+item: End Block
+end
+item: Remark
+end
+item: Remark
+  Text=Get/create ini file for storing our progress
+end
+item: If/While Statement
+  Variable=CMDLINE
+end
+item: Get Temporary Filename
+  Variable=WORKINGDIR
+end
+item: Delete File
+  Pathname=%WORKINGDIR%
+end
+item: Set Variable
+  Variable=WORKINGDIR
+  Value=%TEMP%\%WORKINGDIR%
+end
+item: Delete File
+  Pathname=%WORKINGDIR%
+  Flags=00001100
+end
+item: Create Directory
+  Pathname=%WORKINGDIR%
+end
+item: Set Variable
+  Variable=INIFILEPATH
+  Value=%WORKINGDIR%\settings.ini
+end
+item: Delete File
+  Pathname=%INIFILEPATH%
+end
+item: Set Variable
+  Variable=COUNT
+  Value=1
+end
+item: Parse String
+  Source=%_OUTPUTFILEPATH_%
+  Pattern=\
+  Variable1=BEFORE
+  Variable2=AFTER
+  Flags=00000101
+end
+item: Parse String
+  Source=%AFTER%
+  Pattern=.
+  Variable1=BEFORE
+  Variable2=AFTER
+  Flags=00000100
+end
+item: Set Variable
+  Variable=EXEINIFILEPATH
+  Value=%INST%\%BEFORE%.ini
+end
+item: Edit INI File
+  Pathname=%INIFILEPATH%
+  Settings=[Settings]
+  Settings=Count=%COUNT%
+  Settings=WorkingDir=%WORKINGDIR%
+  Settings=ExeINIFilePath=%EXEINIFILEPATH%
+  Settings=ModuleFileName=%MODULEFILENAME%
+  Settings=
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=INIFILEPATH
+  Value=%CMDLINE%
+end
+item: End Block
+end
+item: Read INI Value
+  Variable=COUNT
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=Count
+end
+item: Read INI Value
+  Variable=STUBFILEPATH
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=StubFilePath
+end
+item: Read INI Value
+  Variable=WORKINGDIR
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=WorkingDir
+end
+item: Read INI Value
+  Variable=EXEINIFILEPATH
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=ExeINIFilePath
+end
+item: Edit Registry
+  Total Keys=1
+  Key=Software\Microsoft\Windows\CurrentVersion\Run
+  New Value=%MODULEFILENAME% %INIFILEPATH%
+  New Value=
+  Value Name=%_PACKAGECODE_%
+  Root=2
+end
+item: Remark
+end
+item: Remark
+  Text=Execute the runtime stub
+end
+item: If/While Statement
+  Variable=STUBFILEPATH
+end
+item: Set Variable
+  Variable=STUBFILEPATH
+  Value=%WORKINGDIR%\%_STUBFILENAME_%
+end
+item: Install File
+  Source=%_STUBFILEPATH_%
+  Destination=%STUBFILEPATH%
+  Flags=0000000010100010
+end
+item: Edit INI File
+  Pathname=%INIFILEPATH%
+  Settings=[Settings]
+  Settings=StubFilePath=%STUBFILEPATH%
+  Settings=
+end
+item: Execute Program
+  Pathname=%STUBFILEPATH%
+  Command Line= /awm "%INIFILEPATH%"
+  Flags=00000010
+end
+item: End Block
+end
+item: Remark
+end
+item: Remark
+  Text=Check msi launch conditions
+end
+item: Read INI Value
+  Variable=MSIFILEPATH
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=MsiFilePath
+end
+item: If/While Statement
+  Variable=MSIFILEPATH
+end
+item: Remark
+  Text=Cleanup
+end
+item: If/While Statement
+  Variable=WORKINGDIR
+  Value=%TEMP%
+  Flags=00000010
+end
+item: Delete File
+  Pathname=%WORKINGDIR%\*.*
+  Flags=00001100
+end
+item: End Block
+end
+item: Edit Registry
+  Total Keys=1
+  Key=Software\Microsoft\Windows\CurrentVersion\Run
+  Value Name=%_PACKAGECODE_%
+  Root=194
+end
+item: Exit Installation
+end
+item: End Block
+end
+item: Set Variable
+  Variable=PREREQFILEPATH
+  Value=%WORKINGDIR%\wiseprereq.dll
+end
+item: Install File
+  Source=C:\Program Files\Altiris\Wise\Windows Installer Editor\stub\wiseprereq.dll
+  Destination=%PREREQFILEPATH%
+  Flags=0000000010100010
+end
+item: Set Variable
+  Variable=PREREQEXEFILEPATH
+  Value=%WORKINGDIR%\wiseprereq.exe
+end
+item: Install File
+  Source=C:\Program Files\Altiris\Wise\Windows Installer Editor\stub\wiseprereq.exe
+  Destination=%PREREQEXEFILEPATH%
+  Flags=0000000010100010
+end
+item: If/While Statement
+  Variable=DONTCHECKMSICONDITIONS
+  Value=1
+  Flags=00000001
+end
+item: Call DLL Function
+  Pathname=%PREREQFILEPATH%
+  Function Name=IsUrl
+  Argument List=40MSIFILEPATH
+  Return Variable=2ISURL
+  Flags=00100000
+end
+item: If/While Statement
+  Variable=ISURL
+  Value=1
+  Flags=00000001
+end
+item: Execute Program
+  Pathname=%PREREQEXEFILEPATH%
+  Command Line="%MSIFILEPATH%" InstallUISequence
+  Flags=00000010
+end
+item: Set Variable
+  Variable=RETVAL
+  Value=%PROCEXITCODE%
+end
+item: If/While Statement
+  Variable=RETVAL
+  Value=0
+end
+item: If/While Statement
+  Variable=ERRORMSG
+end
+item: Set Variable
+  Variable=ERRORMSG
+  Value=Msi launch conditions failed. Installation aborted.
+end
+item: End Block
+end
+item: Display Message
+  Title=Error
+  Text=%ERRORMSG%
+  Flags=00100000
+end
+item: Remark
+  Text=Cleanup
+end
+item: If/While Statement
+  Variable=WORKINGDIR
+  Value=%TEMP%
+  Flags=00000010
+end
+item: Delete File
+  Pathname=%WORKINGDIR%\*.*
+  Flags=00001100
+end
+item: End Block
+end
+item: Edit Registry
+  Total Keys=1
+  Key=Software\Microsoft\Windows\CurrentVersion\Run
+  Value Name=%_PACKAGECODE_%
+  Root=194
+end
+item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: End Block
+end
+item: End Block
+end
+item: Remark
+end
+item: If/While Statement
+  Variable=COUNT
+  Value=1
+end
+item: Set Variable
+  Variable=COUNT
+  Value=2
+end
+item: Edit INI File
+  Pathname=%INIFILEPATH%
+  Settings=[Settings]
+  Settings=Count=%COUNT%
+  Settings=
+end
+item: Set Variable
+  Variable=FILEPATH1
+  Value=%WORKINGDIR%\FILEPATH1\Detect35SP1.exe
+end
+item: Install File
+  Source=Detect35SP1.exe
+  Destination=%FILEPATH1%
+  Flags=0000000010100010
+end
+item: Set Variable
+  Variable=CMDLINE1
+end
+item: Execute Program
+  Pathname=%FILEPATH1%
+  Command Line=%CMDLINE1%
+  Flags=00000010
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=COUNT
+  Value=2
+end
+item: Set Variable
+  Variable=COUNT
+  Value=3
+end
+item: Edit INI File
+  Pathname=%INIFILEPATH%
+  Settings=[Settings]
+  Settings=Count=%COUNT%
+  Settings=
+end
+item: Set Variable
+  Variable=FILEPATH2
+  Value=%WORKINGDIR%\FILEPATH2\SQLEXPR.EXE
+end
+item: Install File
+  Source=SQLEXPR.EXE
+  Destination=%FILEPATH2%
+  Flags=0000000010100010
+end
+item: Set Variable
+  Variable=CMDLINE2
+  Value=/qb ADDLOCAL=SQL_Engine INSTANCENAME=TELEOPTIFORECAST DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=38745jj#!Q_g COLLATION=SQL_Latin1_General_Cp1_CI_AS
+end
+item: Execute Program
+  Pathname=%FILEPATH2%
+  Command Line=%CMDLINE2%
+  Flags=00000010
+end
+item: End Block
+end
+item: Remark
+end
+item: Compiler Variable If
+  Variable=_SVSDRIVERINST_
+  Value=1
+end
+item: Include Script
+  Pathname=%_WISE_%\INCLUDE\SVSDriver.wse
+end
+item: If/While Statement
+  Variable=SVSDRIVERRET
+  Value=0
+  Flags=00000001
+end
+item: Set Variable
+  Variable=SVSCANCEL
+  Value=1
+end
+item: Display Message
+  Title=%APPTITLE%
+  Text=You do not have an active Internet connection, which is required to install this application as a virtualized application. Click 'Yes' to continue with the installation and to install it normally (non-virtualized). Click 'No' to exit the installation. You can then establish an Internet connection before attempting to install the application. 
+  Flags=00101101
+end
+item: Set Variable
+  Variable=SVSCANCEL
+  Value=0
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=SVSCANCEL
+  Value=1
+end
+item: Edit Registry
+  Total Keys=1
+  Key=Software\Microsoft\Windows\CurrentVersion\Run
+  Value Name=%_PACKAGECODE_%
+  Root=194
+end
+item: Exit Installation
+end
+item: End Block
+end
+item: End Block
+end
+item: Compiler Variable End
+end
+item: Remark
+end
+item: Remark
+  Text=Get command line for msiexec.exe
+end
+item: Set Variable
+  Variable=X
+  Value=1
+end
+item: Set Variable
+  Variable=VALUE
+end
+item: If/While Statement
+  Variable=VALUE
+  Flags=00110001
+end
+item: Read INI Value
+  Variable=VALUE
+  Pathname=%INIFILEPATH%
+  Section=Settings
+  Item=MsiCommandLine%X%
+end
+item: Set Variable
+  Variable=MSICMDLINE
+  Value=%VALUE%
+  Flags=00000001
+end
+item: Set Variable
+  Variable=X
+  Value=%X%
+  Flags=00000100
+end
+item: End Block
+end
+item: Remark
+end
+item: Remark
+  Text=Cleanup
+end
+item: If/While Statement
+  Variable=WORKINGDIR
+  Value=%TEMP%
+  Flags=00000010
+end
+item: Delete File
+  Pathname=%WORKINGDIR%\*.*
+  Flags=00001100
+end
+item: End Block
+end
+item: Edit Registry
+  Total Keys=1
+  Key=Software\Microsoft\Windows\CurrentVersion\Run
+  Value Name=%_PACKAGECODE_%
+  Root=194
+end
+item: Remark
+end
+item: Remark
+  Text=Now execute the install
+end
+item: Compiler Variable If
+  Variable=_SVSWRAPPER_
+  Value=1
+end
+item: Set Variable
+  Variable=EXES
+  Value=%SYS32%\msiexec.exe%CRLF%
+end
+item: Set Variable
+  Variable=ARGS
+  Value=%MSICMDLINE% ARPSYSTEMCOMPONENT=1%CRLF%
+end
+item: Set Variable
+  Variable=REMOVE_ARPSYSTEMCOMPONENT
+  Value=1
+end
+item: Set Variable
+  Variable=FAIL_IF_LAYER_EXISTS_MSG
+  Value=This application is already installed.
+end
+item: Set Variable
+  Variable=MSIPATH
+  Value=%MSIFILEPATH%
+end
+item: Set Variable
+  Variable=EXCLUDES
+  Value=%_SVSEXCLUDES_%
+end
+remarked item: Include Script
+  Pathname=.\SvsWrapper.wse
+end
+item: Compiler Variable Else
+end
+item: Execute Program
+  Pathname=msiexec.exe
+  Command Line= %MSICMDLINE%
+end
+item: Compiler Variable End
+end

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+	<class name="PersonAccount"
+		   abstract="true">
+		<!--IEntity-->
+		<id name="Id" 
+				type="guid"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+    <discriminator column="Discriminator"
+        not-null="true"
+        type="System.String"/>
+
+
+    <many-to-one class="Teleopti.Ccc.Domain.Common.Person"
+				 name="Parent"
+				 not-null="true" foreign-key="FK_PersonAccount_Person"/>
+		<!--IEntity-->
+
+		<property name ="StartDate"
+		type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+		not-null="false"/>
+
+		<component name="TrackingDescription" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces"> 
+			<property name="Name"
+					  not-null="false"
+					  type="string"
+					  length="50"/>
+			<property name="ShortName"
+					  not-null="false"
+					  type="string"
+					  length="25"/>
+		</component>
+
+		<many-to-one class="Teleopti.Ccc.Domain.Scheduling.Absence"
+				 name="TrackingAbsence"
+				 not-null="false" 
+				 foreign-key="FK_PersonAccount_TrackingAbsence"/>
+
+    <property name="Accrued"
+              access="property"
+			        not-null="true">
+    </property>
+
+    <property name="Extra"
+              access="property"
+  			      not-null="true">
+    </property>
+
+    <property name="BalanceIn"
+              access="property"
+    				  not-null="true">
+    </property>
+
+    <property name="LatestCalculatedBalance"
+              access="property"
+				      not-null="true">
+    </property>		
+	</class>	
+</hibernate-mapping>

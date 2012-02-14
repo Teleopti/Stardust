@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Format xmlns="urn:payroll-format-1.0">
+  <Document DocumentElement="DocumentElement" Separator="," Type="Csv">
+    <Items Element="PayrollExport">
+      <Item Element="Person" Type="string" />
+      <Item Element="Date" Type="date" Format="yyyy-MM-dd" />
+      <Item Element="PayrollCode" Type="string" />
+      <Item Element="Time" Type="time" Format="hhmm" />
+    </Items>
+  </Document>
+</Format>

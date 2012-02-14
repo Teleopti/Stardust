@@ -1,0 +1,46 @@
+
+AnonymousUserName
+  IUSR
+HttpErrors
+  401,*,FILE,C:\inetpub\custerr\en-US\401.htm
+  403,*,FILE,C:\inetpub\custerr\en-US\403.htm
+  404,*,FILE,C:\inetpub\custerr\en-US\404.htm
+  405,*,FILE,C:\inetpub\custerr\en-US\405.htm
+  406,*,FILE,C:\inetpub\custerr\en-US\406.htm
+  412,*,FILE,C:\inetpub\custerr\en-US\412.htm
+  500,*,FILE,C:\inetpub\custerr\en-US\500.htm
+  501,*,FILE,C:\inetpub\custerr\en-US\501.htm
+  502,*,FILE,C:\inetpub\custerr\en-US\502.htm
+AccessSSLFlags
+  0
+
+AccessFlags
+  513
+ScriptMaps
+  .svc,C:\Windows\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll,1
+RedirectHeaders
+ServerState
+  4
+Win32Error
+  0
+ServerCommand
+  1
+KeyType
+  IIsWebServer
+ServerComment
+  Default Web Site
+ServerBindings
+  :80:
+
+
+
+*Windows authentication
+
+NTAuthenticationProviders
+  Negotiate,NTLM
+
+
+*ASP.NET
+
+HttpCustomHeaders
+  X-Powered-By: ASP.NET (finns ej ingen ASP.NET)

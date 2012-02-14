@@ -1,0 +1,44 @@
+﻿@using Teleopti.Ccc.Web.Areas.Start.Models.Authentication
+@model SignInViewModel
+
+@section head {
+    <script src="@Url.Content("~/Content/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+    	jQuery(function () {
+    		Teleopti.Start.Authentication.Init();
+    	});
+    </script>
+}
+<section id="page-signin">
+    <img src="@Url.Content("~/Areas/Start/Content/Images/login_logo.png")" id="logo" alt="Teleopti MyTime" />
+    <article id="body-signin" class="col-1 signin pdt5">  
+        <section id="tabs-signin" class="sign-in-form">
+            <ul>
+                @if (Model.HasWindowsSignIn)
+                {
+                <li><a href="#tab-windows" id="WindowsTabLink">@Html.Label(Teleopti.Ccc.UserTexts.Resources.WindowsLogon)</a></li>
+                }
+                @if (Model.HasApplicationSignIn)
+                {
+                <li><a href="#tab-application" id="ApplicationTabLink">@Html.Label(Teleopti.Ccc.UserTexts.Resources.ApplicationLogon)</a></li>
+                }
+            </ul>
+			
+            @if (Model.HasWindowsSignIn)
+            {
+            <section id="tab-windows">
+                @Html.Partial("SignInWindowsPartial", Model.WindowsSignIn)
+            </section>
+            }
+            @if (Model.HasApplicationSignIn)
+            {
+            <section id="tab-application" class="ui-tabs-hide">
+                @Html.Partial("SignInApplicationPartial", Model.ApplicationSignIn)
+            </section>
+            }
+        </section>
+    </article>
+</section>
+

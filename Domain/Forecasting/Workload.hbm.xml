@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Forecasting"
+                   default-access="field.camelcase-underscore">
+	<class name="Workload">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+		<version name="Version"
+		 unsaved-value ="null"/>
+		<many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_Workload_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_Workload_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+		
+		<!--IEntity-->
+
+		<property name="Name"
+				  type="string"
+          length="50"
+				  not-null="true"/>
+		
+		<property name="Description"
+				  type="string"
+          length="1024"
+				  not-null="true"/>
+
+	 <map name="TemplateWeekCollection"
+	            cascade="all-delete-orphan"
+              inverse="true">
+				<key column="Parent" />
+         <index type="int">
+           <column name="WeekdayIndex" not-null="true"/>
+         </index>
+				<one-to-many class="Teleopti.Ccc.Domain.Forecasting.WorkloadDayTemplate"/>
+		</map>
+    
+		<many-to-one name="Skill"
+                 class="Skill"
+                 not-null ="true" foreign-key="FK_Workload_Skill"/>
+
+		<bag name="QueueSourceCollection"
+         cascade="none">
+			<key foreign-key="FK_QueueSourceCollection_QueueSource">
+				<column name="Workload"
+						not-null="true"
+						unique-key="WorkloadQueueUnique"/>
+			</key>
+			<many-to-many class="Teleopti.Ccc.Domain.Forecasting.QueueSource" foreign-key="FK_QueueSourceCollection_Workload">
+				<column name="QueueSource"
+						unique-key="WorkloadQueueUnique"
+						not-null="true"/>
+			</many-to-many>
+		</bag>
+
+    <component name="QueueAdjustments" class="Teleopti.Interfaces.Domain.QueueAdjustment, Teleopti.Interfaces">
+      <component name="OfferedTasks" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="OfferedTasks"/>
+      </component>
+      <component name="OverflowIn" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="OverflowIn"/>
+      </component>
+      <component name="OverflowOut" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="OverflowOut"/>
+      </component>
+      <component name="Abandoned" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="Abandoned"/>
+      </component>
+      <component name="AbandonedShort" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="AbandonedShort"/>
+      </component>
+      <component name="AbandonedWithinServiceLevel" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="AbandonedWithinServiceLevel"/>
+      </component>
+      <component name="AbandonedAfterServiceLevel" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces" access="property">
+        <property name="Value"
+            not-null="true"
+            type="double"
+            column="AbandonedAfterServiceLevel"/>
+      </component>
+    </component>
+    
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_Workload_BusinessUnit"/>
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+		
+	</class>
+</hibernate-mapping>
+

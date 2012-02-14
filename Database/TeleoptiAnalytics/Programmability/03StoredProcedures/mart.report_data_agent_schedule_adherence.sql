@@ -1,0 +1,614 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
+GO
+
+
+--[mart].[report_data_agent_schedule_adherence] @date_from='Jan  4 2013 12:00AM',@group_page_code='C2BAEB17-9E91-40FA-AA5A-1DD963BF834D',@group_page_group_set='2',@group_page_agent_code='C2BAEB15-9E91-40FA-AA5A-1DD963BF834D',@site_id='1',@team_set='1',@adherence_id='1',@sort_by='1',@time_zone_id='1',@person_code='C2BAEB18-9E91-40FA-AA5A-1DD963BF834D',@agent_person_code='C2BAEB12-9E91-40FA-AA5A-1DD963BF834D',@report_id='13',@language_id='1',@business_unit_code='C2BAEB14-9E91-40FA-AA5A-1DD963BF834D',@from_matrix='1'
+
+-- =============================================
+-- Author:		KJ
+-- Create date: 2008-07-01
+-- Update date: 
+--				2009-01-12 Bug fix adherence tot and deviation_tot KJ
+--				2008-11-06 Bug fix on # table for fact schedule
+--				2009-02-11 Added new mart schema KJ
+--				2009-03-02 Excluded timezone UTC from time_zone check KJ
+--				2009-07-07 Bug fix for multiple activities per interval KJ
+--				2009-08-20 Adding another person -> agent. Now used from SDK and MyTime also ZT
+--				2009-09-16 Removed a few IFs for @from_matrix DJ
+--				2010-10-29 Refactor of mart.fact_schedule_deviation causing changes on used columns
+--				2010-11-01 Fix #12301 Sorting issues
+--				2010-11-16 #12394 Show all statistics (outside scheduled time)
+--				2010-11-17 Divsion by zero in build
+--				2011-01-24 Use agent_code instead of agent_id ME
+--				2011-02-24 Added SDK comment 
+--				2011-08-08 Added sort by shiftstart and shiftend Ola
+--				2011-09-27 #16079 - Azure select into
+--				2011-11-15 #16939 - Sorting issue
+--				2011-12-05 #17180 - Multi-bu and @adherence_id = 2
+--				2012-01-09 Change the handling of multi-bu and @adherence_id = 2
+--				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
+-- Description:	Used by report Agent  - Schedule Adherence
+-- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
+-- =============================================
+
+
+CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence] 
+@date_from datetime,
+@group_page_code uniqueidentifier,
+@group_page_group_set nvarchar(max),
+@group_page_agent_code uniqueidentifier,
+@site_id int,  --currently obsolete
+@team_set nvarchar(max),
+@adherence_id int,--1,2 eller 3 från adherence_calculation tabellen
+@sort_by int, ---sort by 1=FirstName,2=LastName,3=Shift_start,4=Adherence
+@time_zone_id int,
+@person_code uniqueidentifier,
+@agent_person_code uniqueidentifier,
+@report_id int,
+@language_id int,
+@business_unit_code uniqueidentifier,
+@from_matrix bit = 1 --Not from SDK
+AS
+SET NOCOUNT ON 
+
+--todo: make this input on the SP
+DECLARE @date_to datetime
+SET @date_to = @date_from
+
+------------
+--Create all needed temp tables. Just for performance
+------------
+CREATE TABLE #fact_schedule_deviation (
+	date_id INT,
+	person_id INT,
+	interval_id INT,
+	deviation_schedule_ready_s INT,
+	deviation_schedule_s INT,
+	deviation_contract_s INT,
+	ready_time_s INT,
+	is_logged_in INT,
+	contract_time_s INT
+	)
+
+CREATE TABLE #minmax(
+	[minint] [int] NULL,
+	[maxint] [int] NULL,
+	[person_id] [int] NULL
+)
+
+CREATE TABLE #team_adh_tot(
+	[date_id] [int] NULL,
+	[adherence_calc_s] [decimal](38, 3) NULL,
+	[deviation_s] [decimal](38, 3) NULL
+)
+
+CREATE TABLE #team_adh(
+	[date_id] [int] NULL,
+	[interval_id] [int] NULL,
+	[adherence_calc_s] [decimal](38, 3) NULL,
+	[deviation_s] [decimal](38, 3) NULL
+)
+
+CREATE TABLE #person_adh(
+	[date_id] [int] NULL,
+	[person_id] [int] NULL,
+	[adherence_calc_s] [decimal](38, 3) NULL,
+	[deviation_s] [decimal](38, 3) NULL
+)
+
+CREATE TABLE #result (
+	date_id int,
+	date datetime,
+	interval_id int,
+	interval_name nvarchar(20),
+	intervals_per_day int,
+	site_id int,
+	site_name nvarchar(100),
+	team_id int,
+	team_name nvarchar(100),
+	person_code uniqueidentifier,
+	person_id int,
+	person_first_name nvarchar(30),
+	person_last_name nvarchar(30),
+	person_name	nvarchar(200),
+	adherence decimal(18,3),
+	adherence_tot decimal(18,3),
+	deviation_s decimal(18,3),
+	deviation_tot_s decimal(18,3),
+	ready_time_s decimal(18,3),
+	is_logged_in bit not null,
+	activity_id int,
+	absence_id int,
+	display_color int,
+	activity_absence_name nvarchar(100),
+	adherence_calc_s decimal(18,3),
+	team_adherence decimal(18,3),
+	team_adherence_tot decimal(18,3),
+	team_deviation_s decimal(18,3),
+	team_deviation_tot_s decimal(18,3),
+	adherence_type_selected nvarchar(100),
+	hide_time_zone bit,
+	count_activity_per_interval int,
+	mininterval int,  
+	maxinterval int
+	)
+
+CREATE TABLE #fact_schedule (
+	schedule_date_id INT,
+	person_id INT,
+	interval_id INT,
+	scenario_id INT,
+	activity_id int,
+	absence_id int,
+	scheduled_time_s INT,
+	scheduled_ready_time_s INT,
+	count_activity_per_interval int
+	)
+
+CREATE TABLE #rights_agents (right_id int)
+
+CREATE TABLE #rights_teams (right_id int)
+
+CREATE TABLE #person_intervals(
+	site_id int,
+	site_name nvarchar(100),
+	team_id int,
+	team_name nvarchar(100),
+	person_code uniqueidentifier,
+	person_id int,
+	first_name nvarchar(30),
+	last_name nvarchar(30),
+	person_name nvarchar(200),
+	interval_id int,
+	interval_name nvarchar(30)
+	)
+
+CREATE TABLE #agent_ids(person_id int)
+
+CREATE TABLE #bridge_time_zone
+	(
+	local_date_id int,
+	local_interval_id int,
+	date_id int,
+	interval_id int
+	)
+
+------------
+--Declares
+------------
+DECLARE @intervals_per_day INT
+DECLARE @intervals_length_s INT
+DECLARE @hide_time_zone bit
+DECLARE @selected_adherence_type nvarchar(100)
+DECLARE @date TABLE (date_from_id INT, date_to_id INT)
+DECLARE @scenario_id int
+
+------------
+--Init
+------------
+SELECT @selected_adherence_type= adherence_name FROM mart.adherence_calculation WHERE adherence_id=@adherence_id
+SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
+
+-- Get default scenario for given business unit
+SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1 AND business_unit_code = @business_unit_code
+
+--handle empty Analytics
+IF @intervals_per_day = 0 SET @intervals_per_day=96
+
+--how many seconds per interval
+SELECT @intervals_length_s = 1440*60/@intervals_per_day
+
+--Get needed dates and intervals from bridge time zone into temp table
+INSERT INTO #bridge_time_zone
+SELECT 
+	local_date_id		= d.date_id,
+	local_interval_id	= i.interval_id,
+	date_id				= b.date_id,
+	interval_id			= b.interval_id
+FROM mart.bridge_time_zone b
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+	AND d.date_date BETWEEN @date_from AND @date_to
+INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+WHERE b.time_zone_id = @time_zone_id
+
+--Get the min/max UTC date_id
+INSERT INTO @date (date_from_id,date_to_id)
+	SELECT MIN(b.date_id),MAX(b.date_id)
+	FROM mart.bridge_time_zone b
+	INNER JOIN mart.dim_date d 
+		ON b.local_date_id = d.date_id
+	WHERE	d.date_date	between @date_from AND @date_to
+	AND		b.time_zone_id	= @time_zone_id
+
+
+--Multiple Time zones?
+IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
+	SET @hide_time_zone = 1
+ELSE
+	SET @hide_time_zone = 0
+
+/* speed?
+SELECT *
+INTO #fact_schedule_all_columns
+FROM mart.fact_schedule fs
+INNER JOIN @date d
+ON fs.schedule_date_id = d.date_id
+*/
+
+-----------
+--Start
+-----------
+
+--Get agent data permissions
+IF (@from_matrix = 1)
+BEGIN --Standard Report Permisssions
+
+	/* Get the agents to report on */
+
+	INSERT INTO #rights_agents
+	SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code)
+	
+	INSERT INTO #rights_teams
+	SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
+END
+ELSE  --MyTime and SDK, don't use permissions, just go for the current agent looking on her/him self
+BEGIN	
+	INSERT #rights_agents  --Insert the current agent
+	SELECT * FROM mart.PersonCodeToId(@agent_person_code, @date_from, @date_to, @site_id, @team_set)
+	
+	INSERT #rights_teams --Insert the current team
+	SELECT * FROM mart.SplitStringInt(@team_set)
+END
+
+--Table to hold agents to view
+CREATE TABLE #person_id (person_id int)
+
+--Join the ResultSets above as:
+--a) teams allowed = #rights_teams.
+--b) agent allowed = #rights_agents
+--c) valid for this period
+INSERT INTO #person_id
+SELECT dp.person_id
+FROM mart.dim_person dp
+INNER JOIN #rights_teams t
+	ON dp.team_id = t.right_id
+INNER JOIN #rights_agents a
+	ON a.right_id = dp.person_id
+	
+--Create UTC table from: mart.fact_schedule_deviation
+INSERT INTO #fact_schedule_deviation
+SELECT 
+	fsd.date_id,
+	fsd.person_id,
+	fsd.interval_id,
+	deviation_schedule_ready_s,
+	deviation_schedule_s,
+	deviation_contract_s,
+	ready_time_s,
+	is_logged_in,
+	contract_time_s
+FROM mart.fact_schedule_deviation fsd
+INNER JOIN #person_id a
+	ON fsd.person_id = a.person_id
+INNER JOIN #bridge_time_zone b
+	ON	fsd.interval_id= b.interval_id
+	AND fsd.date_id= b.date_id
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+	AND d.date_date BETWEEN @date_from AND @date_to
+INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+
+--Get all fact_schedule-data for the day in question.
+--Note: local date e.g. incl. time zone
+INSERT #fact_schedule(schedule_date_id,person_id,interval_id,scenario_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
+SELECT
+	fs.schedule_date_id,
+	fs.person_id,
+	fs.interval_id,
+	fs.scenario_id,
+	SUM(fs.scheduled_time_m)*60,
+	SUM(fs.scheduled_ready_time_m)*60,
+	COUNT(fs.interval_id)		
+FROM mart.fact_schedule fs
+INNER JOIN #person_id a
+	ON fs.person_id = a.person_id
+INNER JOIN #bridge_time_zone b
+	ON	fs.interval_id= b.interval_id
+	AND fs.schedule_date_id= b.date_id
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+	AND d.date_date BETWEEN @date_from AND @date_to
+INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+AND fs.scenario_id=@scenario_id
+GROUP BY fs.schedule_date_id,fs.person_id,fs.interval_id,fs.scenario_id
+
+--Update with activity.
+--a) In case there are multiple activities per interval, we use activities where in_ready_time = 1
+UPDATE #fact_schedule
+SET activity_id= fs.activity_id
+FROM mart.fact_schedule fs
+	INNER JOIN #fact_schedule SchTemp
+	ON SchTemp.schedule_date_id=fs.schedule_date_id
+	AND SchTemp.person_id=fs.person_id
+	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.scenario_id=fs.scenario_id
+	
+	INNER JOIN mart.dim_activity a
+	ON a.activity_id=fs.activity_id
+WHERE a.in_ready_time=1
+
+-- b) in case there is no ready time; just take any one
+UPDATE #fact_schedule
+SET activity_id= fs.activity_id
+FROM mart.fact_schedule fs
+	INNER JOIN #fact_schedule SchTemp
+	ON SchTemp.schedule_date_id=fs.schedule_date_id
+	AND SchTemp.person_id=fs.person_id
+	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.scenario_id=fs.scenario_id
+	
+	INNER JOIN mart.dim_activity a
+	ON a.activity_id=fs.activity_id
+WHERE SchTemp.activity_id IS NULL
+
+--Update with absence code
+UPDATE #fact_schedule
+SET absence_id= fs.absence_id
+FROM mart.fact_schedule fs
+INNER JOIN #fact_schedule SchTemp
+	ON SchTemp.schedule_date_id=fs.schedule_date_id
+	AND SchTemp.person_id=fs.person_id
+	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.scenario_id=fs.scenario_id
+WHERE SchTemp.absence_id IS NULL
+
+--Get all intervals for the collection of person and teams
+INSERT #person_intervals
+	SELECT site_id,site_name,team_id,team_name,person_code,p.person_id,first_name,last_name,person_name,interval_id,interval_name
+	FROM mart.dim_person p
+	INNER JOIN mart.dim_interval i
+		ON 1=1
+	INNER JOIN #person_id a
+		ON p.person_id = a.person_id
+	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
+	
+
+--Start creating the result set
+--a) insert agent statistics matching scheduled time
+INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
+adherence_type_selected,hide_time_zone,count_activity_per_interval)
+	SELECT	d.date_id,
+			d.date_date,
+			i.interval_id,
+			i.interval_name,
+			@intervals_per_day,
+			p.site_id,
+			p.site_name,
+			p.team_id,
+			p.team_name,
+			p.person_code,
+			p.person_id,
+			p.first_name,
+			p.last_name,
+			p.person_name,
+			CASE @adherence_id 
+				WHEN 1 THEN  isnull(fsd.deviation_schedule_ready_s,0)
+				WHEN 2 THEN  isnull(fsd.deviation_schedule_s,0)
+				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
+			END AS 'deviation_s',
+			isnull(fsd.ready_time_s,0) 'ready_time_s',
+			fsd.is_logged_in,
+			isnull(fs.activity_id,-1), --isnull = not defined
+			isnull(fs.absence_id,-1), --isnull = not defined
+			CASE @adherence_id 
+				WHEN 1 THEN isnull(fs.scheduled_ready_time_s,0)
+				WHEN 2 THEN isnull(fs.scheduled_time_s,0)
+				WHEN 3 THEN isnull(fsd.contract_time_s,0)
+			END AS 'adherence_calc_s',
+			@selected_adherence_type,
+			@hide_time_zone,
+			isnull(count_activity_per_interval,2) --fake a mixed shift = white color
+			
+	FROM mart.dim_person p
+	INNER JOIN #fact_schedule_deviation fsd
+		ON fsd.person_id=p.person_id
+	LEFT JOIN #fact_schedule fs
+		ON fsd.person_id=fs.person_id
+		AND fsd.date_id=fs.schedule_date_id
+		AND fsd.interval_id=fs.interval_id
+	INNER JOIN mart.bridge_time_zone b
+		ON	fsd.interval_id= b.interval_id
+		AND fsd.date_id= b.date_id
+	INNER JOIN mart.dim_date d 
+		ON b.local_date_id = d.date_id
+	INNER JOIN mart.dim_interval i
+		ON b.local_interval_id = i.interval_id
+	WHERE d.date_date = @date_from
+	AND fs.scenario_id=@scenario_id
+	AND b.time_zone_id=@time_zone_id
+ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,d.date_id,d.date_date,i.interval_id
+
+IF @adherence_id = 2
+BEGIN
+--b) insert agent statistics outside schdeuled time
+INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,adherence_type_selected,hide_time_zone,count_activity_per_interval)
+	SELECT	d.date_id,
+			d.date_date,
+			i.interval_id,
+			i.interval_name,
+			@intervals_per_day,
+			p.site_id,
+			p.site_name,
+			p.team_id,
+			p.team_name,
+			p.person_code,
+			p.person_id,
+			p.first_name,
+			p.last_name,
+			p.person_name,
+			isnull(fsd.deviation_schedule_s,0) 'deviation_s', --@adherence_id =2
+			isnull(fsd.ready_time_s,0) 'ready_time_s',
+			fsd.is_logged_in,
+			-1,
+			-1,
+			@intervals_length_s AS 'adherence_calc_s', --Compare to full Interval since there's no Scheduled Time here
+			@selected_adherence_type,
+			@hide_time_zone,
+			2
+FROM mart.dim_person p
+	INNER JOIN #fact_schedule_deviation fsd
+		ON fsd.person_id=p.person_id
+	INNER JOIN mart.bridge_time_zone b
+		ON	fsd.interval_id= b.interval_id
+		AND fsd.date_id= b.date_id
+	INNER JOIN mart.dim_date d 
+		ON b.local_date_id = d.date_id
+	INNER JOIN mart.dim_interval i
+		ON b.local_interval_id = i.interval_id
+	WHERE NOT EXISTS
+		(SELECT 1 FROM #fact_schedule fs
+			WHERE fsd.person_id=fs.person_id
+			AND fsd.date_id=fs.schedule_date_id
+			AND fsd.interval_id=fs.interval_id)
+	AND d.date_date = @date_from
+	AND b.time_zone_id=@time_zone_id
+END
+
+----------
+--calculation of Agent adherence, team adherence
+----------
+--per person and interval
+UPDATE #result
+SET adherence=
+CASE
+		WHEN adherence_calc_s = 0 THEN 1
+		ELSE (adherence_calc_s - deviation_s)/ adherence_calc_s
+	END
+FROM #result
+
+--per person total
+INSERT INTO #person_adh
+SELECT date_id,person_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+FROM #result
+GROUP by date_id,person_id
+
+UPDATE #result
+SET adherence_tot=
+	CASE
+		WHEN a.adherence_calc_s = 0 THEN 1
+		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
+	END,
+deviation_tot_s=a.deviation_s
+FROM #person_adh a
+INNER JOIN #result r ON r.date_id=a.date_id AND r.person_id=a.person_id
+
+--per interval
+INSERT INTO #team_adh
+SELECT date_id,interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+FROM #result
+GROUP by date_id,interval_id
+
+UPDATE #result
+SET team_adherence=
+	CASE
+		WHEN a.adherence_calc_s = 0 THEN 1
+		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
+	END
+,team_deviation_s=a.deviation_s
+FROM #team_adh a
+INNER JOIN #result r ON r.date_id=a.date_id AND r.interval_id=a.interval_id
+--WHERE a.adherence_calc_m>0
+
+/*De som inte avviker och inte har någon ready time får 100 i adherence*/
+/*
+UPDATE #result
+SET team_adherence=1,team_deviation_m=0
+FROM #result
+WHERE team_adherence is null and team_deviation_m is null
+*/
+
+--total(for all selected)
+INSERT INTO #team_adh_tot
+SELECT date_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+FROM #result
+GROUP by date_id
+
+UPDATE #result
+SET team_adherence_tot=
+	CASE
+		WHEN a.adherence_calc_s = 0 THEN 1
+		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
+	END
+,team_deviation_tot_s=a.deviation_s
+FROM #team_adh_tot a
+INNER JOIN #result r ON r.date_id=a.date_id
+--WHERE a.adherence_calc_m>0
+
+
+/*Set display color and name on activity or absence*/
+UPDATE #result
+SET display_color=a.display_color,activity_absence_name=absence_name
+FROM mart.dim_absence a 
+INNER JOIN #result r
+	ON r.absence_id=a.absence_id AND r.activity_id = -1
+
+UPDATE #result
+SET display_color=a.display_color,activity_absence_name=activity_name
+FROM mart.dim_activity a 
+INNER JOIN #result r
+	ON r.activity_id=a.activity_id and r.absence_id = -1
+
+--If more the one activity per interval, then we display the "not defined" color
+UPDATE #result
+SET display_color=a.display_color,activity_absence_name=activity_name
+FROM #result  r
+INNER JOIN mart.dim_activity a on a.activity_id =-1
+WHERE r.count_activity_per_interval >1
+
+INSERT INTO #minmax
+SELECT min(interval_id) minint ,max(interval_id) maxint, person_id
+FROM #result GROUP BY person_id 
+ 
+update #result set mininterval = minint, maxinterval = maxint
+from  #minmax
+inner join #result on #minmax.person_id = #result.person_id
+
+/*Sortering 1=FÃ¶rnamn,2=Efternamn,3=Shift_start,4=Adherence,5=ShiftEnd*/
+--NOTE: If you change the column order/name you need to consider SDK DTO as well!
+--		see: 
+IF @sort_by=1
+	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot, deviation_s/60.0 as 'deviation_m' ,adherence_calc_s,deviation_tot_s/60.0 as 'deviation_tot_m' ,round(ready_time_s/60.0 ,0)'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence, team_adherence_tot ,team_deviation_s/60.0 as 'team_deviation_m' ,
+				team_deviation_tot_s/60.0 as 'team_deviation_tot_m' ,adherence_type_selected, hide_time_zone
+				FROM #result ORDER BY person_first_name,person_last_name,person_id,interval_id
+IF @sort_by=2
+	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 'deviation_m' ,deviation_tot_s/60.0 as 'deviation_tot_m' ,round(ready_time_s/60.0,0 )'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
+				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone 
+				FROM #result ORDER BY person_last_name,person_first_name,person_id,interval_id
+IF @sort_by=3
+SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
+				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
+				FROM #result ORDER BY mininterval, person_first_name,person_last_name,person_id,interval_id
+IF @sort_by=4
+	SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
+				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
+				FROM #result ORDER BY adherence_tot,person_first_name,person_last_name,person_id,interval_id
+IF @sort_by=5
+SELECT date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
+				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
+				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
+				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone
+				FROM #result ORDER BY maxinterval, person_first_name,person_last_name,person_id,interval_id

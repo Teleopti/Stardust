@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
+                   default-access="field.camelcase-underscore">
+	<class name="SchedulePeriod">
+		<id name="Id"
+			type="guid"
+			unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+    <property name="DateFrom"
+               type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+		  not-null="true"/>
+
+		<property name="PeriodType"
+				  not-null="true" />
+
+		<property name="Number"
+				  not-null="true"/>
+		
+		<property name="AverageWorkTimePerDay"
+				  not-null="false"
+				  type="TimeSpan"/>
+
+    <property name="BalanceIn"
+      not-null="true"
+      type="TimeSpan"/>
+
+    <property name="Extra"
+      not-null="true"
+      type="TimeSpan"/>
+
+    <component name="Seasonality"
+               class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <property name="Value" type="double" column="Seasonality"/>
+    </component>
+
+    <property name="BalanceOut"
+      not-null="true"
+      type="TimeSpan"/>
+    
+    <property name="DaysOff"
+				  not-null="false"/>
+    
+    <property name="MustHavePreference"
+              not-null="true"
+              type="int"/>
+		<many-to-one class="Teleopti.Ccc.Domain.Common.Person"
+				  name ="Parent"
+				  not-null="true" foreign-key="FK_SchedulePeriod_Person"/>
+
+    <bag name="shiftCategoryLimitation" 
+         table="SchedulePeriodShiftCategoryLimitation"
+         access="field">
+      <key foreign-key="FK_Limitation_SchedulePeriod">
+        <column name="SchedulePeriod"
+                unique-key="IX_SchedulePeriod_CategoryLimitation" />
+      </key>
+      <composite-element class="ShiftCategoryLimitation">
+        <property name="Weekly" 
+                  access="property"
+                  not-null="true"/>
+        <property name="MaxNumberOf" 
+                  access="property"
+                  not-null="true"/>
+        <many-to-one name="ShiftCategory" 
+                     not-null="true"
+                     foreign-key="FK_Limitation_ShiftCategory"
+                     unique-key="IX_SchedulePeriod_CategoryLimitation" 
+                     class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"/>
+      </composite-element>
+    </bag>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,82 @@
+﻿using System;
+using System.Reflection;
+using NHibernate;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.ApplicationConfig.Creators
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// Created by: peterwe
+    /// Created date: 2008-10-29
+    /// </remarks>
+    public class ApplicationRoleCreator
+    {
+        private readonly IPerson _person;
+        private readonly IBusinessUnit _businessUnit;
+        private readonly ISessionFactory _sessionFactory;
+
+        public ApplicationRoleCreator(IPerson person, IBusinessUnit businessUnit, ISessionFactory sessionFactory)
+        {
+            _person = person;
+            _businessUnit = businessUnit;
+            _sessionFactory = sessionFactory;
+        }
+
+        /// <summary>
+        /// Creates the specified application role name.
+        /// </summary>
+        /// <param name="applicationRoleName">Name of the application role.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="builtIn">if set to <c>true</c> [built in].</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Created by: peterwe
+        /// Created date: 2008-10-29
+        /// </remarks>
+        public IApplicationRole Create(string applicationRoleName, string description, bool builtIn)
+        {
+            IApplicationRole applicationRole = new ApplicationRole { Name = applicationRoleName, BuiltIn = builtIn, DescriptionText = description };
+
+
+            DateTime nu = DateTime.Now;
+            typeof(AggregateRoot)
+                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(applicationRole, _person);
+            typeof(AggregateRoot)
+                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(applicationRole, nu);
+            typeof(AggregateRoot)
+                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(applicationRole, _person);
+            typeof(AggregateRoot)
+                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(applicationRole, nu);
+            typeof(ApplicationRole)
+                .GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(applicationRole, _businessUnit);
+
+            return applicationRole;
+        }
+
+        /// <summary>
+        /// Saves the specified application role.
+        /// </summary>
+        /// <param name="applicationRole">The application role.</param>
+        /// <remarks>
+        /// Created by: peterwe
+        /// Created date: 2008-10-29
+        /// </remarks>
+        public void Save(IApplicationRole applicationRole)
+        {
+            ISession session = _sessionFactory.OpenSession();
+            session.Save(applicationRole);
+            session.Flush();
+            session.Close();
+        }
+    }
+}

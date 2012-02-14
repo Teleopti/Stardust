@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
+{
+	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification, IShiftTradeAbsenceSpecification
+	{
+		
+		public override string DenyReason
+		{
+			get { return "ShiftTradeAbsenceDenyReason"; }
+		}
+
+		public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		{
+			if(obj == null)
+				throw new ArgumentNullException("obj");
+
+			foreach (var shiftTradeSwapDetail in obj)
+			{
+				var visualLayerCollectionFrom = shiftTradeSwapDetail.SchedulePartFrom.ProjectionService().CreateProjection();
+				
+				if(visualLayerCollectionFrom.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
+					return false;
+
+				var visualLayerCollectionTo = shiftTradeSwapDetail.SchedulePartTo.ProjectionService().CreateProjection();
+
+				if(visualLayerCollectionTo.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
+					return false;
+			}
+
+			return true;
+		}
+	}
+}

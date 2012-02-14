@@ -1,0 +1,70 @@
+using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling
+{
+    /// <summary>
+    /// Tests an absence layer
+    /// </summary>
+    [TestFixture]
+    public class AbsenceLayerTest
+    {
+        private IAbsenceLayer target;
+
+        /// <summary>
+        /// Runs before each test
+        /// </summary>
+        [SetUp]
+        public void Setup()
+        {
+            DateTimePeriod period = new DateTimePeriod(2007, 8, 20, 2007, 08, 30);
+            target = new AbsenceLayer(AbsenceFactory.CreateAbsence("Sommarlov"), period);
+        }
+
+        /// <summary>
+        /// Verifies that constructor is working
+        /// </summary>
+        [Test]
+        public void CanCreateNewInstance()
+        {
+            Assert.IsNotNull(target);
+        }
+
+        /// <summary>
+        /// Can create an instance
+        /// </summary>
+        [Test]
+        public void ProtectedConstructorWorks()
+        {
+            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ShouldNotAcceptPeriodWithSeconds()
+        {
+            target = new AbsenceLayer(target.Payload, target.Period.MovePeriod(TimeSpan.FromSeconds(4)));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ShouldNotAllowToMoveLayersBySeconds()
+        {
+            target.MoveLayer(TimeSpan.FromSeconds(4));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ShouldNotAllowToChangeStartTimeOfLayersBySeconds()
+        {
+            target.ChangeLayerPeriodStart(TimeSpan.FromSeconds(-4));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ShouldNotAllowToChangeEndTimeOfLayersBySeconds()
+        {
+            target.ChangeLayerPeriodEnd(TimeSpan.FromSeconds(4));
+        }
+    }
+}

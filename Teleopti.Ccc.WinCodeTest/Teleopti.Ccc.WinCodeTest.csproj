@@ -1,0 +1,919 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0D4BFD2E-D020-44F7-AF6A-AC88E1EABD11}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Ccc.WinCodeTest</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.WinCodeTest</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
+    <OutputPath>bin\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
+    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\AutoFac\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache">
+      <HintPath>..\mbcache\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Microsoft.Practices.Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoMocks.3.6\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpTestsEx">
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Chart.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Chart.Base.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Core, Version=8.203.0.18, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SyncFusion\Syncfusion.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Grid.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Grid.Windows.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SyncFusion\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Shared.Base.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Tools.Windows.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />
+    <Compile Include="Budgeting\BudgetDayGapFillerTest.cs" />
+    <Compile Include="Budgeting\BudgetDayProviderTest.cs" />
+    <Compile Include="Budgeting\BudgetDaysUpdaterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupDataServiceTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupDayDetailModelTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupDayPresenterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupMainTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupMonthFilterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupMonthModelTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupMonthPresenterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupNavigatorModelsTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupPropertiesPageTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupWeekFilterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupWeekModelTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupWeekPresenterTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupWizardPageTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupNavigatorTest.cs" />
+    <Compile Include="Budgeting\BudgetNavigatorDataServiceTest.cs" />
+    <Compile Include="Budgeting\BudgetSettingsProviderTest.cs" />
+    <Compile Include="Budgeting\BudgetGroupTabViewPresenterTest.cs" />
+    <Compile Include="Budgeting\AddShrinkagePresenterTest.cs" />
+    <Compile Include="Budgeting\EditShrinkagePresenterTest.cs" />
+    <Compile Include="Budgeting\LoadForecastedHoursCommandTest.cs" />
+    <Compile Include="Budgeting\LoadStaffEmployedCommandTest.cs" />
+    <Compile Include="Budgeting\SaveBudgetDaysTest.cs" />
+    <Compile Include="Budgeting\ClosedBudgetDayResolverTest.cs" />
+    <Compile Include="Budgeting\VisibleBudgetDaysTest.cs" />
+    <Compile Include="Common\Chart\ChartSeriesSettingTest.cs" />
+    <Compile Include="Common\Chart\ChartSettingsTest.cs" />
+    <Compile Include="Common\Clipboard\ClipboardSpecialPresenterTest.cs" />
+    <Compile Include="Common\Clipboard\ClipHandlerTest.cs" />
+    <Compile Include="Common\Clipboard\ClipTest.cs" />
+    <Compile Include="Common\AbsenceLayerViewModelTest.cs" />
+    <Compile Include="Common\Collections\CommonRootCollectionTest.cs" />
+    <Compile Include="Common\Collections\FilterExtensionsTest.cs" />
+    <Compile Include="Common\Collections\ShowOnlyCollectionTest.cs" />
+    <Compile Include="Common\Commands\ApplicationCommandModelTest.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBindingTest.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorTest.cs" />
+    <Compile Include="Common\Commands\TesterForCommandModels.cs" />
+    <Compile Include="Common\Commands\CommandHelperTest.cs" />
+    <Compile Include="Common\Commands\CommandModelTest.cs" />
+    <Compile Include="Common\Commands\CommonRoutedCommandsTest.cs" />
+    <Compile Include="Common\Commands\CreateCommandBindingTest.cs" />
+    <Compile Include="Common\Commands\RepositoryCommandModelTest.cs" />
+    <Compile Include="Common\Commands\RoutedEventBehaviorFactoryTest.cs" />
+    <Compile Include="Common\Commands\BehaviorTest.cs" />
+    <Compile Include="Common\Commands\SimpleCommandModelTest.cs" />
+    <Compile Include="Common\Commands\SimpleRepositoryCommandTest.cs" />
+    <Compile Include="Common\Commands\TextBoxBehaviorTest.cs" />
+    <Compile Include="Common\Commands\TwoStepCommandModelTest.cs" />
+    <Compile Include="Common\CreateLayerViewModelServiceTest.cs" />
+    <Compile Include="Common\CustomPanelsTest\Grouping\BaseGroupingPanelTest.cs" />
+    <Compile Include="Common\CustomPanelsTest\TesterForPanels.cs" />
+    <Compile Include="Common\DefaultScenarioLoaderTest.cs" />
+    <Compile Include="Common\Filter\FilterListViewItemsTest.cs" />
+    <Compile Include="Common\Filter\SpecificationFilterViewModelTest.cs" />
+    <Compile Include="Common\GroupPageHelperTest.cs" />
+    <Compile Include="Common\GuiHelpers\ColorHelperTest.cs" />
+    <Compile Include="Common\GuiHelpers\HelpProviderTest.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeFinderTest.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeTimeZoneInfoTest.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeTranslatorTest.cs" />
+    <Compile Include="Common\Interop\HostViewModelTest.cs" />
+    <Compile Include="Common\Interop\MultiHostViewModelTest.cs" />
+    <Compile Include="Common\LayerViewModelCollectionTest.cs" />
+    <Compile Include="Common\LayerGroupViewModelTest.cs" />
+    <Compile Include="Common\LayerViewModelSelectorTest.cs" />
+    <Compile Include="Common\Messaging\Filter\MessageDialogueFilterTest.cs" />
+    <Compile Include="Common\Messaging\Filter\PushMessageFilterTest.cs" />
+    <Compile Include="Common\Filter\SpecificationFilterTest.cs" />
+    <Compile Include="Common\Messaging\FollowUpDialogueForTest.cs" />
+    <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModelTest.cs" />
+    <Compile Include="Common\Messaging\PushMessageViewModelTest.cs" />
+    <Compile Include="Common\Messaging\FollowUpPushMessageViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\Messaging\FollowUpServiceViewModelTest.cs" />
+    <Compile Include="Common\Messaging\ReplyOptionViewModelTest.cs" />
+    <Compile Include="Common\Messaging\SendPushMessageViewModelTest.cs" />
+    <Compile Include="Common\Models\DataModelTest.cs" />
+    <Compile Include="Common\Models\DataModelForTest.cs" />
+    <Compile Include="Common\Models\DataModelWithDataErrorInfoTest.cs" />
+    <Compile Include="Common\ModifySelectionPresenterTest.cs" />
+    <Compile Include="Common\MoveableLayerViewModelTest.cs" />
+    <Compile Include="Common\OpenPeriodModeTest.cs" />
+    <Compile Include="Common\OpenPeriodSpecificationTest.cs" />
+    <Compile Include="Common\OptionalColumnProviderTest.cs" />
+    <Compile Include="Common\PeopleLoaderForTeamLeaderModeTest.cs" />
+    <Compile Include="Common\PeopleLoaderTest.cs" />
+    <Compile Include="Common\PersonPicker\PersonPickerViewModelTest.cs" />
+    <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
+    <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
+    <Compile Include="Common\RestoreFocusWhenCompletedTest.cs" />
+    <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
+    <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
+    <Compile Include="Common\ScheduleDataLoaderTest.cs" />
+    <Compile Include="Common\ScheduleFilter\CccTreeNodeTest.cs" />
+    <Compile Include="Common\ScheduleFilter\ScheduleFilterTest.cs" />
+    <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
+    <Compile Include="Common\ScheduleFilter\TeamPersonKeyTest.cs" />
+    <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
+    <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
+    <Compile Include="Common\SchedulingResultLoaderTest.cs" />
+    <Compile Include="Common\OvertimeLayerViewModelTest.cs" />
+    <Compile Include="Common\PersonalShiftLayerViewModelTest.cs" />
+    <Compile Include="Common\MainShiftLayerViewModelTest.cs" />
+    <Compile Include="Common\DateTimePeriodPanelTest.cs" />
+    <Compile Include="Common\LayerViewModelTest.cs" />
+    <Compile Include="Common\MeetingLayerViewModelTest.cs" />
+    <Compile Include="Common\SearchPersonPresenterTest.cs" />
+    <Compile Include="Common\Time\DateTimeViewModelTest.cs" />
+    <Compile Include="Common\Time\LayerViewModelGroupMoveTest.cs" />
+    <Compile Include="Common\Time\TimeDurationPickerPresenterTest.cs" />
+    <Compile Include="Common\Time\IntervalCollectionTest.cs" />
+    <Compile Include="Common\Time\IntervalViewModelTest.cs" />
+    <Compile Include="Common\Time\Timeline\TimelineControlViewModelTest.cs" />
+    <Compile Include="Common\Time\Timeline\TimelineViewModelTest.cs" />
+    <Compile Include="Common\Time\Timeline\TickMarkViewModelTest.cs" />
+    <Compile Include="Common\Time\TimeSpanDataBoundItemTest.cs" />
+    <Compile Include="Common\Time\TimeZoomViewModelTest.cs" />
+    <Compile Include="Common\TransparentControlMeetingHelperTest.cs" />
+    <Compile Include="Common\TransparentMeetingControlModelTest.cs" />
+    <Compile Include="Common\TransparentMeetingControlPresenterTest.cs" />
+    <Compile Include="Common\WhenAddingNewScheduleToShiftEditor.cs" />
+    <Compile Include="Configuration\ChangePasswordPresenterTest.cs" />
+    <Compile Include="Configuration\MasterActivityPresenterTest.cs" />
+    <Compile Include="Configuration\MasterActivityModelTest.cs" />
+    <Compile Include="Configuration\SitePresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\SiteProviderTest.cs" />
+    <Compile Include="Configuration\ScorecardProviderTest.cs" />
+    <Compile Include="Configuration\SetScorecardPresenterTest.cs" />
+    <Compile Include="Configuration\TeamProviderTest.cs" />
+    <Compile Include="Configuration\TeamScorecardModelTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetModelMockedDomainTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetModelTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetPresenterTest.cs" />
+    <Compile Include="Configuration\WorkflowControlSetPresenterUnitTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeBaseConverterTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeParserTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeToLocalConverterTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverterTest.cs" />
+    <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverterTest.cs" />
+    <Compile Include="Converters\ExtendDateTimePeriodConverterTest.cs" />
+    <Compile Include="Converters\Layers\IsMoveAllLayersConverterTest.cs" />
+    <Compile Include="Events\EventAggregatorModuleTest.cs" />
+    <Compile Include="Events\EventAggregatorTest.cs" />
+    <Compile Include="ExceptionHandler\ExceptionHandlerTest.cs" />
+    <Compile Include="ExceptionHandler\SimpleExceptionHandlerPresenterTest.cs" />
+    <Compile Include="FileImport\DimQueueTableTest.cs" />
+    <Compile Include="FileImport\FileImportExceptionTest.cs" />
+    <Compile Include="FileImport\FileImportDateTimeParserTest.cs" />
+    <Compile Include="FileImport\ImportFileDoTest.cs" />
+    <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
+    <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
+    <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
+    <Compile Include="Grouping\CommandProviderTest.cs" />
+    <Compile Include="Grouping\Commands\AddGroupPageCommandTest.cs" />
+    <Compile Include="Grouping\Commands\DeleteGroupPageCommandTest.cs" />
+    <Compile Include="Grouping\Commands\ModifyGroupPageCommandTest.cs" />
+    <Compile Include="Grouping\Commands\RenameGroupPageCommandTest.cs" />
+    <Compile Include="Grouping\FindPersonPeriodHandlerTest.cs" />
+    <Compile Include="Grouping\Commands\LoadBuiltInTabsCommandTest.cs" />
+    <Compile Include="Grouping\Commands\LoadOrganizationCommandTest.cs" />
+    <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommandTest.cs" />
+    <Compile Include="Grouping\Commands\OpenModuleCommandTest.cs" />
+    <Compile Include="Grouping\PeopleNavigatoPresenterTest.cs" />
+    <Compile Include="Grouping\PersonSelectorPresenterTest.cs" />
+    <Compile Include="Helpers\CollectionListener.cs" />
+    <Compile Include="Helpers\CollectionViewComparer.cs" />
+    <Compile Include="Helpers\PropertyChangedListener.cs" />
+    <Compile Include="Intraday\AgentStateViewAdapterTest.cs" />
+    <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
+    <Compile Include="Intraday\DayLayerModelTest.cs" />
+    <Compile Include="Intraday\DispatcherWrapperTest.cs" />
+    <Compile Include="Intraday\IntradayMessageBrokerRetryTest.cs" />
+    <Compile Include="Intraday\OnEventForecastMessageCommandTest.cs" />
+    <Compile Include="Intraday\OnEventStatisticMessageCommandTest.cs" />
+    <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
+    <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
+    <Compile Include="Meetings\AddressBookPresenterTest.cs" />
+    <Compile Include="Meetings\AddressBookViewModelTest.cs" />
+    <Compile Include="Meetings\Commands\CanModifyMeetingTest.cs" />
+    <Compile Include="Meetings\Commands\AddMeetingFromPanelCommandTest.cs" />
+    <Compile Include="Meetings\Commands\ExportMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommandTest.cs" />
+    <Compile Include="Meetings\Commands\OpenMeetingOverviewCommandTest.cs" />
+    <Compile Include="Meetings\Commands\ShowExportMeetingCommandTest.cs" />
+    <Compile Include="Meetings\MeetingMousePositionDeciderTest.cs" />
+    <Compile Include="Meetings\MeetingMoverTest.cs" />
+    <Compile Include="Meetings\MeetingParticipantPermittedCheckerTest.cs" />
+    <Compile Include="Meetings\Overview\AppointmentFromMeetingCreatorTest.cs" />
+    <Compile Include="Meetings\Commands\AddMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\CopyMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\CutMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\EditMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\DeleteMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Commands\PasteMeetingCommandTest.cs" />
+    <Compile Include="Meetings\Overview\ExportableScenarioProviderTest.cs" />
+    <Compile Include="Meetings\Overview\ExportMeetingPresenterTest.cs" />
+    <Compile Include="Meetings\Overview\ExportMeetingsProviderTest.cs" />
+    <Compile Include="Meetings\Overview\InfoWindowTextFormatterTest.cs" />
+    <Compile Include="Meetings\Overview\MeetingChangerAndPersisterTest.cs" />
+    <Compile Include="Meetings\Overview\MeetingClipboardHandlerTest.cs" />
+    <Compile Include="Meetings\MeetingImpactCalculatorTest.cs" />
+    <Compile Include="Meetings\MeetingImpactPresenterTest.cs" />
+    <Compile Include="Meetings\ContactPersonViewModelTest.cs" />
+    <Compile Include="Meetings\MeetingImpactSkillGridHandlerTest.cs" />
+    <Compile Include="Meetings\MeetingImpactTransparentWindowHandlerTest.cs" />
+    <Compile Include="Meetings\Overview\MeetingOverviewPresenterTest.cs" />
+    <Compile Include="Meetings\MeetingStateHolderLoaderHelperTest.cs" />
+    <Compile Include="Meetings\Overview\MeetingTimeZoneHelperTest.cs" />
+    <Compile Include="Meetings\Overview\OverlappingAppointmentsHelperTest.cs" />
+    <Compile Include="Meetings\RecurrentMonthlyByWeekMeetingViewModelTest.cs" />
+    <Compile Include="Meetings\MeetingScheduleRangeToLoadCalculatorTest.cs" />
+    <Compile Include="Meetings\MeetingRecurrencePresenterTest.cs" />
+    <Compile Include="Meetings\RecurrentMeetingOptionViewModelFactoryTest.cs" />
+    <Compile Include="Meetings\RecurrentMonthlyByDayMeetingViewModelTest.cs" />
+    <Compile Include="Meetings\RecurrentWeeklyMeetingViewModelTest.cs" />
+    <Compile Include="Meetings\MeetingComposerPresenterTest.cs" />
+    <Compile Include="Meetings\MeetingGeneralPresenterTest.cs" />
+    <Compile Include="Converters\ColumnWidthConverterTest.cs" />
+    <Compile Include="Converters\ConverterComparerTest.cs" />
+    <Compile Include="Converters\AvailableConverterTest.cs" />
+    <Compile Include="Converters\TimeSpanRoundingConverterTest.cs" />
+    <Compile Include="Converters\PersonNameConverterTest.cs" />
+    <Compile Include="Converters\IsNullConverterTest.cs" />
+    <Compile Include="Converters\ScrollPositionConverterTest.cs" />
+    <Compile Include="Converters\LayerPeriodConverterTest.cs" />
+    <Compile Include="Converters\ElapsedTimeConverterTest.cs" />
+    <Compile Include="Meetings\MeetingSchedulesPresenterTest.cs" />
+    <Compile Include="Meetings\MeetingViewModelTest.cs" />
+    <Compile Include="Intraday\StaffingEffectViewAdapterTest.cs" />
+    <Compile Include="Meetings\RecurrentDailyMeetingViewModelTest.cs" />
+    <Compile Include="Payroll\DefinitionSetPresenterTest.cs" />
+    <Compile Include="Payroll\DefinitionSetViewModelTest.cs" />
+    <Compile Include="Payroll\ExplorerPresenterTest.cs" />
+    <Compile Include="Payroll\ExplorerViewModelTest.cs" />
+    <Compile Include="Payroll\MultiplicatorDefinitionPresenterTest.cs" />
+    <Compile Include="Payroll\MultiplicatorDefinitionViewModelTest.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportPropertiesPagesTest.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportWizardPagesTest.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PersonsSelectionPresenterTest.cs" />
+    <Compile Include="Payroll\PayrollExportSmartPart\PayrollExportSmartPartViewModelTest.cs" />
+    <Compile Include="Payroll\PayrollExportSmartPart\PayrollResultViewModelTest.cs" />
+    <Compile Include="Payroll\PayrollHelperTest.cs" />
+    <Compile Include="Payroll\VisualizePresenterTest.cs" />
+    <Compile Include="Payroll\VisualPayloadInfoTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodExtraComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceOutComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceInComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodBudgetGroupComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\WorkflowControlSetComparerTest.cs" />
+    <Compile Include="PeopleAdmin\DayOfWeekDisplayTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonFinderDisplayRowTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonFinderModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteriaTest.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderFindCommandTest.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderNextCommandTest.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderPresenterTest.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderPreviousCommandTest.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderSettingsTest.cs" />
+    <Compile Include="PeopleAdmin\PersonSkillStringParserTest.cs" />
+    <Compile Include="PeopleAdmin\SameUserCredentialOnOtherCheckerTest.cs" />
+    <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
+    <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombinationTest.cs" />
+    <Compile Include="Presentation\ReportDetailTest.cs" />
+    <Compile Include="Presentation\ReportSettingsHostPresenterTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleAuditingModelTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleAuditingPresenterTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleAuditingTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityModelTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityPresenterTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimeModelTest.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenterTest.cs" />
+    <Compile Include="Presentation\ReportUserSelectorAuditingModelTest.cs" />
+    <Compile Include="Presentation\ReportUserSelectorAuditingPresenterTest.cs" />
+    <Compile Include="Presentation\ShiftCategoryLimitationViewPresenterTest.cs" />
+    <Compile Include="Scheduler\AddAbsenceViewModelTest.cs" />
+    <Compile Include="Scheduler\AddActivityViewModelTest.cs" />
+    <Compile Include="Scheduler\AddDayOffViewModelTest.cs" />
+    <Compile Include="Scheduler\AddLayerViewModelTest.cs" />
+    <Compile Include="Scheduler\AddOvertimeViewModelTest.cs" />
+    <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
+    <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
+    <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
+    <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />
+    <Compile Include="Scheduler\AuditHistory\AuditHistoryScheduleDayCreatorTest.cs" />
+    <Compile Include="Scheduler\AuditHistory\NextPageCommandTest.cs" />
+    <Compile Include="Scheduler\AuditHistory\PreviousPageCommandTest.cs" />
+    <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
+    <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
+    <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
+    <Compile Include="Scheduler\DayPresenterNewTest.cs" />
+    <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
+    <Compile Include="Scheduler\Editor\ShiftEditorRoutedCommandsTest.cs" />
+    <Compile Include="Scheduler\ExportToScenarioResultTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityAvailableCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityFulfilledCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityUnavailableCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesAbsenceCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesDayOffCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledAbsenceCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesMustHaveCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesMustHaveFulfilledCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesShiftCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRestrictionsCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllTagsCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockTagCommandTest.cs" />
+    <Compile Include="Scheduler\GridLockRemoverForDeleteTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsDayOffCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsFulfilledCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsFulfilledDayOffCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsFulfilledShiftCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsShiftCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityAvailableCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityFulfilledCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\GridlockAllStudentAvailabilityUnavailableCommandTest.cs" />
+    <Compile Include="Scheduler\GroupScheduleGroupPageDataProviderTest.cs" />
+    <Compile Include="Scheduler\MatrixUserLockLockerTest.cs" />
+    <Compile Include="Scheduler\IntradayOptimizer2CreatorTest.cs" />
+    <Compile Include="Scheduler\MoveTimeOptimizerCreatorTest.cs" />
+    <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
+    <Compile Include="Scheduler\OptimizerActivitiesPreferencesPresenterTest.cs" />
+    <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
+    <Compile Include="Scheduler\PersistConflictTest.cs" />
+    <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
+    <Compile Include="Scheduler\PinnedSkillHelperTests.cs" />
+    <Compile Include="Scheduler\Reporting\PdfFontManagerTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduledTimeVersusTargetTimeReportDataTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportDialogGraphicalModelTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportDialogGraphicalPresenterTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportDrawHeaderTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportGraphicalDrawDayOffTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportGraphicalDrawNameDateTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportGraphicalDrawScheduleTest.cs" />
+    <Compile Include="Scheduler\Reporting\ScheduleReportGraphicalDrawTimeLineTest.cs" />
+    <Compile Include="Scheduler\Reporting\ShiftPerDayTest.cs" />
+    <Compile Include="Scheduler\Reporting\ShiftsPerDayGraphicalToPdfManagerTest.cs" />
+    <Compile Include="Scheduler\Reporting\StringWidthHandlerTest.cs" />
+    <Compile Include="Scheduler\Requests\HandlePersonRequestSelectionChangedTest.cs" />
+    <Compile Include="Scheduler\Requests\HandlePersonRequestViewModelTest.cs" />
+    <Compile Include="Scheduler\Requests\PersonRequestAuthorizationTest.cs" />
+    <Compile Include="Scheduler\Requests\PersonRequestViewModelFilterTest.cs" />
+    <Compile Include="Scheduler\Requests\PersonRequestViewModelIsEditableSpecificationTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestAllowanceModelTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestAllowancePresenterTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestDetailsPresenterTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestDetailsShiftTradePresenterTest.cs" />
+    <Compile Include="Scheduler\RestrictionPresenterTest.cs" />
+    <Compile Include="Scheduler\Editor\ExpandedLayersViewModelTest.cs" />
+    <Compile Include="Scheduler\Editor\EditLayerViewModelTest.cs" />
+    <Compile Include="Scheduler\Editor\ShiftEditorEventArgsTest.cs" />
+    <Compile Include="Scheduler\Editor\ShiftEditorSettingsTest.cs" />
+    <Compile Include="Scheduler\Editor\ShiftEditorViewModelTest.cs" />
+    <Compile Include="Scheduler\Panels\IntervalSelectorTest.cs" />
+    <Compile Include="Scheduler\RestrictionCellValueTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\PainterHelperTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\PreferenceNightRestCheckerTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\RestrictionSummaryModelTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\RestrictionSummaryPresenterTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionModelTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionPresenterTest.cs" />
+    <Compile Include="Scheduler\RestrictionSummary\WeekHeaderCellDataTest.cs" />
+    <Compile Include="Scheduler\Restriction\Commands\AddPreferenceRestrictionCommandModelTest.cs" />
+    <Compile Include="Scheduler\Restriction\Commands\AddStudentAvailabilityCommandModelTest.cs" />
+    <Compile Include="Scheduler\Restriction\LimitationViewModelTest.cs" />
+    <Compile Include="Scheduler\Restriction\WorkTimeLimitationAdapterTest.cs" />
+    <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
+    <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
+    <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
+    <Compile Include="Scheduler\SetTagCommandTest.cs" />
+    <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
+    <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
+    <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
+    <Compile Include="Settings\AbsenceViewTest.cs" />
+    <Compile Include="Settings\PageHelperTest.cs" />
+    <Compile Include="Shifts\AbsolutePositionViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\AccessibilityDatePresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\AccessibilityDateViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ActivityPresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ActivityTimeLimiterPresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ActivityTimeLimiterViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\AutoPositionViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\DayOfWeekPresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\DaysOfWeekViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ExplorerPresenterTest.cs" />
+    <Compile Include="Shifts\ExplorerViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\GeneralPresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\GeneralTemplateViewModelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\GridClassTypeTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\NavigationPresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ShiftsDataHelperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\VisualizePresenterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\VisualPayloadInfoTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tracking\DefaultTrackerTest.cs" />
+    <Compile Include="Settings\TrackerViewTest.cs" />
+    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTestClass.cs">
+    </Compile>
+    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTest.cs" />
+    <Compile Include="Common\ControlExtenders\TreeViewCheckBoxExtenderTest.cs" />
+    <Compile Include="Common\CustomEventArgsTest.cs" />
+    <Compile Include="Common\DateTimePeriodControllerTest.cs" />
+    <Compile Include="Common\Clipboard\PasteBehaviorTest.cs" />
+    <Compile Include="Common\FilterAdvancedSettingTest.cs" />
+    <Compile Include="Common\FilterBoxAdvancedFilterTest.cs" />
+    <Compile Include="Common\FilterOperandTest.cs" />
+    <Compile Include="Common\GuiHelpers\ApplicationTextHelperTest.cs" />
+    <Compile Include="Common\Rows\GridRowTest.cs" />
+    <Compile Include="Common\Rows\IntervalHeaderGridRowTest.cs" />
+    <Compile Include="Common\Rows\CellInfoTest.cs" />
+    <Compile Include="Common\Rows\RowManagerTest.cs" />
+    <Compile Include="Common\Rows\SkillStaffPeriodGridRowSchedulerTest.cs" />
+    <Compile Include="Configuration\AlarmControlPresenterTest.cs" />
+    <Compile Include="Configuration\ManageAlarmSituationPresenterTest.cs" />
+    <Compile Include="Converters\TimeSpanConverterTest.cs" />
+    <Compile Include="FakeData\PeopleAdminGridDataFactory.cs" />
+    <Compile Include="FakeData\PeopleAdminTestBase.cs" />
+    <Compile Include="FakeData\SchedulePeriodComparerTestHelper.cs" />
+    <Compile Include="FakeData\PeopleAdminUtilityTestHelper.cs" />
+    <Compile Include="Common\Chart\ChartSettingsManagerTest.cs" />
+    <Compile Include="Forecasting\TextManagerTest.cs" />
+    <Compile Include="Intraday\DayLayerViewModelTest.cs" />
+    <Compile Include="Intraday\IntradayPresenterTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\OptionalColumnComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminCultureComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountDateComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountDescriptionComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountIntegerTimeSpanColumnComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountTypeComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAvailabilityCurrentRotationComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAvailabilityFromDateComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodContractComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodContractScheduleComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodExternalLogOnNameComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodPartTimePercentageComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodPersonSkillComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodRuleSetBagComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodTeamComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationCurrentRotationComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationFromDateComparerTest.cs.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationStartWeekComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodAverageWorkTimePerDayComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodDaysOffComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodNumberComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodStartDateComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodUnitComparerTest.cs" />
+    <Compile Include="PeopleAdmin\CultureTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminApplicationRoleComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminLanguageComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminTerminalDateComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminTimeZoneInfoComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodDateComparerTest.cs" />
+    <Compile Include="PeopleAdmin\Models\ExternalLogOnModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAccountChildModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAccountModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAvailabilityModelChildTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAvailabilityModelParentTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonPeriodChildModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonPeriodModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonRotationModelChildTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonRotationModelParentTest.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonSkillModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\RolesModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\SchedulePeriodChildModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\SchedulePeriodModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\ShiftCategoryModelTest.cs" />
+    <Compile Include="PeopleAdmin\Models\SiteTeamModelTest.cs" />
+    <Compile Include="Presentation\TimeSpanSelectorViewModelTest.cs" />
+    <Compile Include="Scheduler\DateTimeTimeSpanDictionaryTest.cs" />
+    <Compile Include="Scheduler\PeriodPresenterTest.cs" />
+    <Compile Include="Scheduler\DetailPresenterTest.cs" />
+    <Compile Include="Scheduler\OverviewPresenterTest.cs" />
+    <Compile Include="Scheduler\Restriction\RestrictionEditorViewModelTest.cs" />
+    <Compile Include="Scheduler\Restriction\RestrictionViewModelTest.cs" />
+    <Compile Include="Scheduler\WeekPresenterTest.cs" />
+    <Compile Include="Scheduler\DateTimePeriodViewModelTest.cs" />
+    <Compile Include="Scheduler\DayPresenterTest.cs" />
+    <Compile Include="Scheduler\GridlockManagerTest.cs" />
+    <Compile Include="Scheduler\GridlockTest.cs" />
+    <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
+    <Compile Include="Presentation\PersonListBoxPresenterTest.cs" />
+    <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
+    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfoTest.cs" />
+    <Compile Include="Common\Collections\TreeNodeDisplayInfoTest.cs" />
+    <Compile Include="Common\ControlBinders\TreeViewAdvBinderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
+    <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
+    <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
+    <Compile Include="Common\LanguageResourceHelperTest.cs" />
+    <Compile Include="Presentation\BusinessUnitListBoxPresenterTest.cs" />
+    <Compile Include="Presentation\TeamListBoxPresenterTest.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AfterSavedEventArgsTest.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgsTest.cs" />
+    <Compile Include="Common\PropertyReflectorTest.cs" />
+    <Compile Include="Common\SchedulerStateHolderTest.cs" />
+    <Compile Include="Common\Collections\TreeItemEntityHelperTest.cs" />
+    <Compile Include="Common\Collections\TreeItemEventArgsTest.cs" />
+    <Compile Include="Common\Collections\TreeItemTest.cs" />
+    <Compile Include="Common\CommonStateHolderTest.cs" />
+    <Compile Include="Common\PasteOptionsTest.cs" />
+    <Compile Include="Common\ControlBinders\TreeViewBinderTest.cs" />
+    <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
+    <Compile Include="Forecasting\OpenHourHelperTest.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillPropertiesPagesTest.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillWizardPagesTest.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPagesTest.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPagesTest.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonGeneralModelTest.cs" />
+    <Compile Include="Common\ClipHandlerTest.cs" />
+    <Compile Include="Common\ClipTest.cs" />
+    <Compile Include="Scheduler\AgentAssignmentLayerTest.cs" />
+    <Compile Include="Scheduler\FilteredCollectionTest.cs" />
+    <Compile Include="Scheduler\Panels\LengthToTimeCalculatorTest.cs" />
+    <Compile Include="Scheduler\SchedulePresenterBaseTest.cs" />
+    <Compile Include="Scheduler\PersonRequestViewModelTest.cs" />
+    <Compile Include="Scheduler\RequestPresenterTest.cs" />
+    <Compile Include="Scheduler\ScheduleHelperTest.cs" />
+    <Compile Include="Settings\AvailabilityRestrictionViewTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\ContractScheduleWeekAdapterTest.cs" />
+    <Compile Include="Settings\RotationRestrictionViewTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\ScheduleRestrictionBaseViewTest.cs" />
+    <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
+    <Compile Include="Scheduler\DetailViewHelperTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShiftCreator\AbsolutePositionViewTest.cs" />
+    <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />
+    <Compile Include="ShiftCreator\AccessibilityDateViewTest.cs" />
+    <Compile Include="ShiftCreator\GeneralTemplateViewTest.cs" />
+    <Compile Include="ShiftCreator\DaysOfWeekViewTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
+      <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
+      <Name>Teleopti.Ccc.DayOffPlanning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
+      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
+      <Name>Teleopti.Ccc.Obfuscated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
+      <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
+      <Name>Teleopti.Ccc.Sdk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.WinCode\Teleopti.Ccc.WinCode.csproj">
+      <Project>{3B495E4B-1803-413C-9480-40C8EFCCBA45}</Project>
+      <Name>Teleopti.Ccc.WinCode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
+      <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
+      <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Teleopti.Ccc.snk">
+      <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="Migrated rules for Teleopti.Ccc.WinCodeTest.ruleset" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Security\ValidFile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Configuration\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

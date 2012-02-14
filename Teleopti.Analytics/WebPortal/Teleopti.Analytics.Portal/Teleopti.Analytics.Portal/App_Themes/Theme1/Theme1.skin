@@ -1,0 +1,26 @@
+﻿<%--
+Default skin template. The following skins are provided as examples only.
+
+1. Named control skin. The SkinId should be uniquely defined because
+   duplicate SkinId's per control type are not allowed in the same theme.
+
+<asp:GridView runat="server" SkinId="gridviewSkin" BackColor="White" >
+   <AlternatingRowStyle BackColor="Blue" />
+</asp:GridView>
+
+2. Default skin. The SkinId is not defined. Only one default 
+   control skin per control type is allowed in the same theme.
+
+<asp:Image runat="server" ImageUrl="~/images/image1.jpg" />
+--%>
+<asp:Login SkinID="Login" runat="server" BorderColor="Beige" BorderWidth="2" BorderStyle="inset" BackColor="#f2f7fa" CssClass="Login"/>
+<asp:Image SkinID="OpenCalSmall" runat="server" ImageUrl="images/Calendar_scheduleHS.png" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="RightSmall" runat="server" ImageUrl="images/right_light.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="RightAllSmall" runat="server" ImageUrl="images/right_all_light.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="LeftSmall" runat="server" ImageUrl="images/left_light.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="LeftAllSmall" runat="server" ImageUrl="images/left_all_light.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:ImageButton SkinID="Show" runat="server" ImageUrl="images/icon_show.gif" />
+<asp:Image SkinID="TranspCircle" runat="server" ImageUrl="images/transparent_circle.png" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="Arrow_DownWard" runat="server" ImageUrl="images/Arrow_DownWard.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="Arrow_UpWard" runat="server" ImageUrl="images/Arrow_UpWard.gif" ImageAlign="AbsMiddle"></asp:Image>
+<asp:Image SkinID="Arrow_Straight" runat="server" ImageUrl="images/Arrow_Straight.gif" ImageAlign="AbsMiddle"></asp:Image>

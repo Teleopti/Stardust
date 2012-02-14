@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9465B16-1563-4F16-BCD6-353551B0AA20}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Analytics.Etl.Transformer</RootNamespace>
+    <AssemblyName>Teleopti.Analytics.Etl.Transformer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Teleopti.Analytics.Etl.Transformer.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
+    <OutputPath>bin\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Teleopti.Analytics.Etl.Transformer.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbsenceTransformer.cs" />
+    <Compile Include="ActivityTransformer.cs" />
+    <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="Job\Steps\FactRequestJobStep.cs" />
+    <Compile Include="Job\Jobs\RequestJobCollection.cs" />
+    <Compile Include="RequestTransformer.cs" />
+    <Compile Include="Job\Steps\StageRequestJobStep.cs" />
+    <Compile Include="Job\Steps\DimOvertimeJobStep.cs" />
+    <Compile Include="Job\Steps\ScheduleDayRestrictor.cs" />
+    <Compile Include="Job\Steps\StageOvertimeJobStep.cs" />
+    <Compile Include="Job\Steps\StageSkillJobStep.cs" />
+    <Compile Include="OvertimeTransformer.cs" />
+    <Compile Include="PmPermissionExtractor.cs" />
+    <Compile Include="SkillTransformer.cs" />
+    <Compile Include="DayOffTransformer.cs" />
+    <Compile Include="GroupPagePersonTransformer.cs" />
+    <Compile Include="Job\Jobs\CleanupJobCollection.cs" />
+    <Compile Include="Job\Jobs\NightlyJobCollection.cs" />
+    <Compile Include="Job\Steps\BridgeGroupPagePersonJobStep.cs" />
+    <Compile Include="Job\Steps\DimGroupPageJobStep.cs" />
+    <Compile Include="Job\Steps\StageGroupPagePersonJobStep.cs" />
+    <Compile Include="Job\Steps\MaintenanceJobStep.cs" />
+    <Compile Include="Job\Steps\StageDayOffJobStep.cs" />
+    <Compile Include="Job\Steps\DimScenarioDeleteJobStep.cs" />
+    <Compile Include="Job\Steps\DimPersonTrimJobStep.cs" />
+    <Compile Include="Job\Steps\DimPersonDeleteJobStep.cs" />
+    <Compile Include="Job\Steps\FactSchedulePreferenceJobStep.cs" />
+    <Compile Include="PermissionReportTransformer.cs" />
+    <Compile Include="ScheduleForecastSkillEqualComparer.cs" />
+    <Compile Include="ScheduleForecastSkillKey.cs" />
+    <Compile Include="Job\Jobs\QueueAndAgentLogOnJobCollection.cs" />
+    <Compile Include="Job\Jobs\PerformanceManagerJobCollection.cs" />
+    <Compile Include="Job\Steps\RaptorAgentLogOnSynchronizationStep.cs" />
+    <Compile Include="Job\Steps\PerformanceManagerJobStep.cs" />
+    <Compile Include="Job\Steps\PmPermissionJobStep.cs" />
+    <Compile Include="Job\Steps\RaptorQueueSynchronizationStep.cs" />
+    <Compile Include="Job\Steps\StageSchedulePreferenceJobStep.cs" />
+    <Compile Include="PmPermissionTransformer.cs" />
+    <Compile Include="CommonStateHolder.cs" />
+    <Compile Include="BusinessUnitTransformer.cs" />
+    <Compile Include="Job\Jobs\WorkloadQueuesJobCollection.cs" />
+    <Compile Include="Job\MultipleDate\JobMultipleDateItem.cs" />
+    <Compile Include="Job\MultipleDate\JobMultipleDate.cs" />
+    <Compile Include="Job\Steps\BridgeQueueWorkloadJobStep.cs" />
+    <Compile Include="Job\Steps\BridgeSkillSetSkillJobStep.cs" />
+    <Compile Include="Job\Steps\BridgeAcdLogOnPersonJobStep.cs" />
+    <Compile Include="Job\Steps\AspNetUsersJobStep.cs" />
+    <Compile Include="Job\Steps\StageUserJobStep.cs" />
+    <Compile Include="Job\Steps\StageScheduleDayOffCountJobStep.cs" />
+    <Compile Include="Job\Steps\DimDayOffJobStep.cs" />
+    <Compile Include="Job\Steps\FactScheduleDayCountJobStep.cs" />
+    <Compile Include="Job\Steps\StageBusinessUnitJobStep.cs" />
+    <Compile Include="Job\Steps\FactScheduleDeviationJobStep.cs" />
+    <Compile Include="Job\Steps\FactScheduleForecastSkillJobStep.cs" />
+    <Compile Include="Job\Steps\StageScheduleForecastSkillJobStep.cs" />
+    <Compile Include="Job\Steps\DimSkillSetJobStep.cs" />
+    <Compile Include="AgentSkillTransform.cs" />
+    <Compile Include="IntervalBase.cs" />
+    <Compile Include="Job\Jobs\AgentStatisticsJobCollection.cs" />
+    <Compile Include="Job\Jobs\AgentSkillCollection.cs" />
+    <Compile Include="Job\Jobs\IntradayJobCollection.cs" />
+    <Compile Include="Job\Jobs\ForecastJobCollection.cs" />
+    <Compile Include="Job\Jobs\JobCollection.cs" />
+    <Compile Include="Job\Jobs\KpiJobCollection.cs" />
+    <Compile Include="Job\Jobs\PermissionJobCollection.cs" />
+    <Compile Include="Job\Jobs\QueueStatisticsJobCollection.cs" />
+    <Compile Include="Job\Steps\StageAgentSkillJobStep.cs" />
+    <Compile Include="Job\Steps\PermissionReportJobStep.cs" />
+    <Compile Include="Job\Steps\StagePermissionJobStep.cs" />
+    <Compile Include="Job\Steps\FactKpiTargetTeamJobStep.cs" />
+    <Compile Include="Job\Steps\ScorecardKpiJobStep.cs" />
+    <Compile Include="Job\Steps\DimScorecardJobStep.cs" />
+    <Compile Include="Job\Steps\DimKpiJobStep.cs" />
+    <Compile Include="Job\Steps\StageKpiTargetTeamJobStep.cs" />
+    <Compile Include="Job\Steps\StageKpiJobStep.cs" />
+    <Compile Include="Job\Steps\StageScorecardKpiJobStep.cs" />
+    <Compile Include="Job\Steps\StageScorecardJobStep.cs" />
+    <Compile Include="Job\Steps\FactAgentQueueJobStep.cs" />
+    <Compile Include="Job\Steps\FactAgentJobStep.cs" />
+    <Compile Include="Job\Steps\DimAcdLogOnJobStep.cs" />
+    <Compile Include="Job\Steps\DimShiftCategoryJobStep.cs" />
+    <Compile Include="Job\Steps\DimAbsenceJobStep.cs" />
+    <Compile Include="Job\Steps\DimActivityJobStep.cs" />
+    <Compile Include="Job\Steps\DimBusinessUnitJobStep.cs" />
+    <Compile Include="Job\Steps\DimPersonJobStep.cs" />
+    <Compile Include="Job\Steps\DimScenarioJobStep.cs" />
+    <Compile Include="Job\Steps\DimShiftLengthJobStep.cs" />
+    <Compile Include="Job\Steps\DimSiteJobStep.cs" />
+    <Compile Include="Job\Steps\DimTeamJobStep.cs" />
+    <Compile Include="Job\Steps\FactForecastWorkloadJobStep.cs" />
+    <Compile Include="Job\Steps\FactScheduleContractJobStep.cs" />
+    <Compile Include="Job\Steps\FactScheduleJobStep.cs" />
+    <Compile Include="Job\Steps\StageAbsenceJobStep.cs" />
+    <Compile Include="Job\Steps\StageActivityJobStep.cs" />
+    <Compile Include="Job\Steps\StageForecastWorkloadJobStep.cs" />
+    <Compile Include="Job\Steps\DimWorkloadJobStep.cs" />
+    <Compile Include="Job\Steps\DimSkillJobStep.cs" />
+    <Compile Include="Job\Steps\StagePersonJobStep.cs" />
+    <Compile Include="Job\Steps\StageScenarioJobStep.cs" />
+    <Compile Include="Job\Steps\StageScheduleJobStep.cs" />
+    <Compile Include="Job\Steps\StageShiftCategoryJobStep.cs" />
+    <Compile Include="Job\Steps\StageWorkloadJobStep.cs" />
+    <Compile Include="Job\Steps\BridgeTimeZoneJobStep.cs" />
+    <Compile Include="Job\Steps\DimDateJobStep.cs" />
+    <Compile Include="Job\Steps\DimIntervalJobStep.cs" />
+    <Compile Include="Job\Steps\DimTimeZoneJobStep.cs" />
+    <Compile Include="Job\Steps\StageDateJobStep.cs" />
+    <Compile Include="Job\JobHelper.cs" />
+    <Compile Include="Job\Jobs\InitialJobCollection.cs" />
+    <Compile Include="Job\Steps\StageTimeZoneBridgeJobStep.cs" />
+    <Compile Include="Job\Steps\StageTimeZoneJobStep.cs" />
+    <Compile Include="Job\Steps\FactQueueJobStep.cs" />
+    <Compile Include="Job\Steps\DimQueueJobStep.cs" />
+    <Compile Include="KpiTargetTeamTransformer.cs" />
+    <Compile Include="Job\JobStepBase.cs" />
+    <Compile Include="Job\Steps\JobBase.cs" />
+    <Compile Include="Job\JobsParameters.cs" />
+    <Compile Include="Job\JobResult.cs" />
+    <Compile Include="Job\JobStepResult.cs" />
+    <Compile Include="Job\Jobs\ScheduleJobCollection.cs" />
+    <Compile Include="ScheduleForecastSkill.cs" />
+    <Compile Include="ScheduleForecastSkillResourceCalculation.cs" />
+    <Compile Include="SchedulePreferenceTransformer.cs" />
+    <Compile Include="ScheduleThreading\TimeInfo.cs" />
+    <Compile Include="ScheduleThreading\TimeInfoObject.cs" />
+    <Compile Include="UserTransformer.cs" />
+    <Compile Include="ScheduleDayOffCountTransformer.cs" />
+    <Compile Include="ScheduleThreading\DayAbsenceDataRowFactory.cs" />
+    <Compile Include="ScheduleThreading\IScheduleDataRowCollectionFactory.cs" />
+    <Compile Include="ScheduleThreading\IScheduleTransformer.cs" />
+    <Compile Include="ScheduleThreading\ScheduleDataRowCollectionFactory.cs" />
+    <Compile Include="ScheduleThreading\ProjectionsForAllAgentSchedulesFactory.cs" />
+    <Compile Include="ScheduleThreading\ContractDataRowFactory.cs" />
+    <Compile Include="ScheduleThreading\ScheduleDataRowFactory.cs" />
+    <Compile Include="ScheduleThreading\ScheduleTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ScheduleThreading\ThreadObj.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ScheduleThreading\ThreadObjects.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ScheduleThreading\WorkThread.cs" />
+    <Compile Include="ScorecardKpiTransformer.cs" />
+    <Compile Include="KpiTransformer.cs" />
+    <Compile Include="ScheduleProjection.cs" />
+    <Compile Include="DayDate.cs" />
+    <Compile Include="DateTransformer.cs" />
+    <Compile Include="ScheduleForecastSkillTransformer.cs" />
+    <Compile Include="ForecastWorkloadTransformer.cs" />
+    <Compile Include="GeneralFunctions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Interval.cs" />
+    <Compile Include="IntervalFactory.cs" />
+    <Compile Include="IntervalTransformer.cs" />
+    <Compile Include="PersonTransformer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RaptorTransformerHelper.cs" />
+    <Compile Include="ScenarioTransformer.cs" />
+    <Compile Include="ScorecardTransformer.cs" />
+    <Compile Include="ShiftCategoryTransformer.cs" />
+    <Compile Include="TimeZoneBridge.cs" />
+    <Compile Include="TimeZoneFactory.cs" />
+    <Compile Include="TimeZoneTransformer.cs" />
+    <Compile Include="WorkloadTransformer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
+      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
+      <Name>Teleopti.Ccc.Obfuscated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
+      <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
+      <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
+      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
+      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.PerformanceManagerProxy\Teleopti.Analytics.Etl.PerformanceManagerProxy.csproj">
+      <Project>{AE2DE329-7681-40C4-BE16-7382280E2BC6}</Project>
+      <Name>Teleopti.Analytics.Etl.PerformanceManagerProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
+      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
+      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Teleopti.Ccc.snk">
+      <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

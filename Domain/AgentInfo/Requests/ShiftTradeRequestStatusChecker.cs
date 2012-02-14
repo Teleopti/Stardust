@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.AgentInfo.Requests
+{
+    public interface IBatchShiftTradeRequestStatusChecker : IShiftTradeRequestStatusChecker
+    {
+        bool IsInBatchMode { get; }
+        void StartBatch(IEnumerable<IPersonRequest> personRequests);
+        void EndBatch();
+    }
+
+    public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
+    {
+        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IPersonRequestCheckAuthorization _authorization;
+        private IList<IPerson> _persons;
+        private DateTimePeriod? _period;
+        private IScheduleDictionary _scheduleDictionary;
+        private bool _isInBatchMode;
+
+        public ShiftTradeRequestStatusChecker(IScenarioProvider scenarioProvider, IScheduleRepository scheduleRepository, IPersonRequestCheckAuthorization authorization)
+        {
+            _scenarioProvider = scenarioProvider;
+            _scheduleRepository = scheduleRepository;
+            _authorization = authorization;
+        }
+
+        public bool IsInBatchMode
+        {
+            get { return _isInBatchMode; }
+        }
+
+        public void StartBatch(IEnumerable<IPersonRequest> personRequests)
+        {
+            IList<IShiftTradeRequest> shiftTradeRequests = ExtractPeriodAndPersons(personRequests);
+            if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
+
+            LoadScheduleDictionary();
+            _isInBatchMode = true;
+        }
+
+        private void LoadScheduleDictionary()
+        {
+            _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons),new ScheduleDictionaryLoadOptions(false, false),
+                                                           _period.GetValueOrDefault(new DateTimePeriod()).ChangeEndTime
+                                                               (TimeSpan.FromHours(25)), _scenarioProvider.DefaultScenario());
+
+            //_scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons) { LoadNotes = false, LoadRestrictions = false },
+            //                                               _period.GetValueOrDefault(new DateTimePeriod()).ChangeEndTime
+            //                                                   (TimeSpan.FromHours(25)), _scenarioProvider.DefaultScenario());
+        }
+
+        public void EndBatch()
+        {
+            _period = null;
+            _persons.Clear();
+            _scheduleDictionary = null;
+            _isInBatchMode = false;
+        }
+
+        private IList<IShiftTradeRequest> ExtractPeriodAndPersons(IEnumerable<IPersonRequest> personRequests)
+        {
+            ShiftTradeRequestPersonExtractor shiftTradeRequestPersonExtractor = new ShiftTradeRequestPersonExtractor();
+            IList<IShiftTradeRequest> shiftTradeRequests = new List<IShiftTradeRequest>();
+            foreach (IPersonRequest personRequest in personRequests)
+            {
+                if (!personRequest.IsPending) continue;
+                IShiftTradeRequest shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
+                if (shiftTradeRequest == null) continue;
+
+                shiftTradeRequestPersonExtractor.ExtractPersons(shiftTradeRequest);
+                shiftTradeRequests.Add(shiftTradeRequest);
+
+                if (_period.HasValue)
+                {
+                    _period = _period.Value.MaximumPeriod(personRequest.Request.Period);
+                }
+                else
+                {
+                    _period = personRequest.Request.Period;
+                }
+            }
+            _persons = shiftTradeRequestPersonExtractor.Persons;
+            return shiftTradeRequests;
+        }
+
+        public void Check(IShiftTradeRequest shiftTradeRequest)
+        {
+            if (shiftTradeRequest == null) return;
+            if (!_isInBatchMode)
+            {
+                IList<IShiftTradeRequest> shiftTradeRequests =
+                    ExtractPeriodAndPersons(new List<IPersonRequest> {(IPersonRequest) shiftTradeRequest.Parent});
+                if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
+                LoadScheduleDictionary();
+            }
+            VerifyShiftTradeIsUnchanged(_scheduleDictionary, shiftTradeRequest, _authorization);
+        }
+
+        internal static bool VerifyShiftTradeIsUnchanged(IScheduleDictionary scheduleDictionary, IShiftTradeRequest shiftTradeRequest, IPersonRequestCheckAuthorization authorization)
+        {
+            bool scheduleUnchanged = true;
+            foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+            {
+                IScheduleRange rangeFrom = scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
+                IScheduleRange rangeTo = scheduleDictionary[shiftTradeSwapDetail.PersonTo];
+
+                IScheduleDay partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
+                IScheduleDay partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
+                long checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
+                long checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
+
+                shiftTradeSwapDetail.SchedulePartFrom = partFrom;
+                shiftTradeSwapDetail.SchedulePartTo = partTo;
+
+                if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom ||
+                    shiftTradeSwapDetail.ChecksumTo != checksumTo)
+                {
+                    shiftTradeRequest.Refer(authorization);
+                    scheduleUnchanged = false;
+                }
+            }
+            return scheduleUnchanged;
+        }
+    }
+}

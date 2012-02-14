@@ -1,0 +1,150 @@
+﻿using System.Collections.Generic;
+using Syncfusion.Styles;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common.Controls.Columns;
+using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Win.PeopleAdmin.Views
+{
+	class PersonSkillGridView : GridViewBase
+	{
+		private readonly List<IColumn<PersonSkillModel>> _gridColumns = new List<IColumn<PersonSkillModel>>();
+
+		private ColumnBase<PersonSkillModel> _checkBoxColumn;
+		private ColumnBase<PersonSkillModel> _roleColumn;
+		
+		public PersonSkillGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder) : base(view, filteredPeopleHolder) { }
+
+		internal override ViewType Type
+		{
+			get { return ViewType.SkillsView; }
+		}
+
+
+		internal override void CreateHeaders()
+		{
+			_gridColumns.Add(new RowHeaderColumn<PersonSkillModel>());
+
+            _checkBoxColumn = new CheckColumn<PersonSkillModel>("TriState", "1", "0", "2", typeof(int), Resources.IsIn);
+            _checkBoxColumn.CellChanged += checkBoxColumnCellChanged;
+            _gridColumns.Add(_checkBoxColumn);
+
+			var activeCheckBoxColumn = new CheckColumn<PersonSkillModel>("ActiveTriState", "1", "0", "2", typeof(int), Resources.Active);
+			activeCheckBoxColumn.CellChanged += activeCheckBoxColumnCellChanged;
+			_gridColumns.Add(activeCheckBoxColumn);
+
+			_roleColumn = new ReadOnlyTextColumn<PersonSkillModel>("DescriptionText", Resources.PersonSkill);
+			_gridColumns.Add(_roleColumn);
+
+			var profColumn = new ProficiencyColumn<PersonSkillModel>("ProficiencyValues", "Proficiency", Resources.ProficiencyPercent);
+			
+			_gridColumns.Add(profColumn);
+			profColumn.CellChanged += profColumnCellChanged;
+		}
+
+		void profColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonSkillModel> e)
+		{
+			if (FilteredPeopleHolder.SelectedPeoplePeriodGridCollection == null)
+			{
+				return;
+			}
+
+			if (e.DataItem.TriState == 1)
+				WorksheetStateHolder.SetPersonSkillForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, new Percent(e.DataItem.Proficiency / 100d)); 
+			
+		}
+
+		internal override void PrepareView()
+		{
+			ColCount = _gridColumns.Count;
+			RowCount = FilteredPeopleHolder.PersonSkillViewAdapterCollection.Count;
+
+			Grid.ColCount = ColCount - 1;
+			Grid.RowCount = RowCount;
+
+			Grid.Cols.HeaderCount = 0;
+			Grid.Rows.HeaderCount = 0;
+
+			//Grid.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+			Grid.ColWidths[1] = 40;
+			Grid.ColWidths[2] = 60;
+			Grid.ColWidths[3] = _gridColumns[3].PreferredWidth + 30;
+			Grid.ColWidths[4] = _gridColumns[4].PreferredWidth;
+			Grid.Name = "PersonalSkillView";
+			HideRowHeaderColumn();
+		}
+
+		public override void Invalidate()
+		{
+			Grid.Invalidate();
+		}
+
+		private void activeCheckBoxColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonSkillModel> e)
+		{
+			if (FilteredPeopleHolder.SelectedPeoplePeriodGridCollection == null)
+			{
+				e.DataItem.ActiveTriState = 0; return;
+			}
+
+			if (e.DataItem.ActiveTriState == 2) e.DataItem.ActiveTriState = 1;
+
+            if(e.DataItem.ActiveTriState == 1)
+            {
+                WorksheetStateHolder.SetPersonSkillForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, new Percent(e.DataItem.Proficiency / 100d));
+                WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill,true);
+                e.DataItem.TriState = e.DataItem.ActiveTriState;
+            }
+            else
+            {
+                WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, false);    
+            }
+			
+            
+            //WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, e.DataItem.ActiveTriState == 1);
+		}
+
+		private void checkBoxColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonSkillModel> e)
+		{
+			if (FilteredPeopleHolder.SelectedPeoplePeriodGridCollection == null)
+			{
+				e.DataItem.TriState = 0; return;
+			}
+
+			if (e.DataItem.TriState == 2) e.DataItem.TriState = 1;
+
+            if (e.DataItem.TriState == 1)
+            {
+                WorksheetStateHolder.SetPersonSkillForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill,new Percent(e.DataItem.Proficiency / 100d));
+                WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, true);
+                e.DataItem.ActiveTriState = e.DataItem.TriState;
+
+            }
+            else
+            {
+                WorksheetStateHolder.RemovePersonSkillForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill);
+                WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, false);
+                e.DataItem.ActiveTriState = e.DataItem.TriState;
+            }
+		}
+
+		internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
+		{
+			if (ValidCell(e.ColIndex, e.RowIndex))
+			{
+				_gridColumns[e.ColIndex].GetCellInfo(e, FilteredPeopleHolder.PersonSkillViewAdapterCollection);
+			}
+			base.QueryCellInfo(e);
+		}
+
+		internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		{
+			if (ValidCell(e.ColIndex, e.RowIndex))
+			{
+				_gridColumns[e.ColIndex].SaveCellInfo(e, FilteredPeopleHolder.PersonSkillViewAdapterCollection);
+			}
+		}
+	}
+}

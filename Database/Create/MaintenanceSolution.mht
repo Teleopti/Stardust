@@ -1,0 +1,1964 @@
+From: "Saved by Windows Internet Explorer 8"
+Subject: SQL Server 2005 and 2008 - Backup, Integrity Check and Index Optimization - Documentation
+Date: Tue, 13 Oct 2009 14:54:49 +0200
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01CA4C15.1CD8E0C0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.1.7100.0
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0000_01CA4C15.1CD8E0C0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://ola.hallengren.com/Documentation.html
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>SQL Server 2005 and 2008 - Backup, Integrity Check =
+and Index Optimization - Documentation</TITLE><LINK=20
+rel=3DStyleSheet type=3Dtext/css =
+href=3D"http://ola.hallengren.com/styles/style.css">
+<META content=3D"text/html; charset=3Dutf-8" http-equiv=3DContent-Type>
+<META name=3DDescription content=3D"">
+<META name=3DKeywords content=3D"">
+<META name=3DGENERATOR content=3D"MSHTML 8.00.7100.4129"></HEAD>
+<BODY>
+<DIV id=3Dcontent>
+<TABLE class=3Dcolumns border=3D0 cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%">
+  <TBODY>
+  <TR><!-- START HEADER -->
+    <TD class=3Dheader colSpan=3D3 align=3Dmiddle>
+      <TABLE class=3DblogHeader border=3D0 cellSpacing=3D0 =
+cellPadding=3D0=20
+        width=3D"100%"><TBODY>
+        <TR>
+          <TD class=3DblogHeaderLeft>
+            <DIV class=3Dcomponent>
+            <DIV class=3DcomponentBlogname><A=20
+            =
+href=3D"http://ola.hallengren.com/">ola.hallengren.com</A></DIV></DIV></T=
+D>
+          <TD class=3DblogHeaderRight>
+            <DIV class=3DcomponentText><SPAN =
+class=3DcomponentHomeLink><A=20
+            =
+href=3D"http://ola.hallengren.com/Newsmail.html">Newsmail</A></SPAN></DIV=
+>
+            <DIV class=3DcomponentText><SPAN =
+class=3DcomponentHomeLink><A=20
+            =
+href=3D"http://ola.hallengren.com/">Home</A></SPAN></DIV></TD></TR></TBOD=
+Y></TABLE></TD><!-- END HEADER --></TR>
+  <TR><!-- START LEFT COL -->
+    <TD class=3Dleft>
+      <DIV id=3Dleftcol>
+      <DIV class=3Dcomponent>
+      <DIV class=3DcomponentHead>This Month</DIV>
+      <DIV class=3DcomponentContent>
+      <TABLE class=3DcomponentCalendar cellSpacing=3D1 cellPadding=3D1>
+        <TBODY>
+        <TR>
+          <TH colSpan=3D7>September 2009</TH></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDayname>Sun</TD>
+          <TD class=3DcomponentCalendarDayname>Mon</TD>
+          <TD class=3DcomponentCalendarDayname>Tue</TD>
+          <TD class=3DcomponentCalendarDayname>Wed</TD>
+          <TD class=3DcomponentCalendarDayname>Thu</TD>
+          <TD class=3DcomponentCalendarDayname>Fri</TD>
+          <TD class=3DcomponentCalendarDayname>Sat</TD></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle></TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle></TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>1 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>2 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>3 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>4 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle><A=20
+            style=3D"FONT-WEIGHT: bold" =
+href=3D"http://ola.hallengren.com/">5</A>=20
+</TD><!-- days --></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>6 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>7 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>8 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>9 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>10 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>11 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>12 </TD><!-- =
+days --></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>13 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>14 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>15 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>16 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>17 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>18 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>19 </TD><!-- =
+days --></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>20 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>21 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>22 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>23 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>24 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>25 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>26 </TD><!-- =
+days --></TR>
+        <TR>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>27 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>28 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>29 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle>30 </TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle></TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle></TD>
+          <TD class=3DcomponentCalendarDay align=3Dmiddle></TD><!-- days =
+--></TR><!-- calendar.weeks --></TBODY></TABLE></DIV><!-- =
+componentContent --></DIV><!-- component -->
+      <DIV class=3Dcomponent>
+      <DIV class=3DcomponentHead>Month Archive</DIV>
+      <DIV class=3DcomponentContent>
+      <DIV class=3DcomponentArchive><A style=3D"FONT-WEIGHT: bold"=20
+      href=3D"http://ola.hallengren.com/">September =
+2009</A><BR></DIV><!-- componetArchive --></DIV><!-- componentContent =
+--></DIV><!-- component --><!-- calendar.months -->
+      <DIV class=3Dcomponent>
+      <DIV class=3DcomponentHead>Year Archive</DIV>
+      <DIV class=3DcomponentContent>
+      <DIV class=3DcomponentArchive><A=20
+      href=3D"http://ola.hallengren.com/">2009</A><BR></DIV><!-- =
+compontArchive --></DIV><!-- componentContent --></DIV><!-- component =
+--><!-- calendar.years -->
+      <DIV class=3Dcomponent>
+      <DIV class=3DcomponentHead>Recent Articles</DIV>
+      <DIV class=3DcomponentContent>
+      <DIV class=3DcomponentRecentArticles>
+      <DIV class=3DcomponentRecentArticlesItem><A=20
+      href=3D"http://ola.hallengren.com/">SQL Server 2005 and 2008 - =
+Backup,=20
+      Integrity Check and Index Optimization</A> </DIV></DIV><!-- =
+componetRecentArticles --></DIV><!-- componentContent --></DIV><!-- =
+component --><!-- blog.recent_articles -->
+      <DIV class=3Dcomponent>
+      <DIV class=3DcomponentHead>Links</DIV>
+      <DIV class=3DcomponentContent>
+      <DIV class=3DcomponentBlogroll>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      href=3D"http://ola.hallengren.com/About.html">About</A></DIV>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      href=3D"http://ola.hallengren.com/About.html">Contact</A></DIV>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      =
+href=3D"http://ola.hallengren.com/Documentation.html">Documentation</A></=
+DIV>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Downlo=
+ad=20
+      Script</A></DIV>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      href=3D"http://ola.hallengren.com/Newsmail.html">Get Information =
+about=20
+      Updates</A></DIV>
+      <DIV class=3DcomponentBlogrollItem><A=20
+      href=3D"http://ola.hallengren.com/Versions.html">Version=20
+      History</A></DIV></DIV><!-- componentBlogroll --></DIV><!-- =
+componentContent --></DIV><!-- component --></DIV><!-- leftcol =
+--></TD><!-- END LEFT COL --><!-- START CENTER COL -->
+    <TD class=3Dcenter>
+      <DIV id=3Dcentercol>
+      <DIV class=3DdayArticles>
+      <DIV class=3DcategoryBreadcrumb><A =
+href=3D"http://ola.hallengren.com/">Main=20
+      Page</A></DIV>
+      <DIV class=3Darticle>
+      <DIV class=3DarticleTitle><A><IMG border=3D0 alt=3D""=20
+      src=3D"http://ola.hallengren.com/images/page.gif" width=3D13=20
+      height=3D13></A>&nbsp; SQL Server 2005 and 2008 - Backup, =
+Integrity Check=20
+      and Index Optimization - Documentation</DIV>
+      <DIV class=3DarticleBody><A name=3DDatabaseBackup></A>
+      <DIV class=3DcommentTitle><BR>Database Backup</DIV><BR>Procedure =
+name: <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseBackup.sql">DatabaseBac=
+kup</A><BR><BR>Purpose:=20
+      Create backup directories, backup databases, verify backups and =
+delete old=20
+      backups.<BR><BR>Parameters: See table below.<BR><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Name</TD>
+          <TD vAlign=3Dtop width=3D"34%">Description</TD>
+          <TD vAlign=3Dtop width=3D"33%">Supported Values</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Databases</TD>
+          <TD vAlign=3Dtop width=3D"34%">Selection of databases.</TD>
+          <TD vAlign=3Dtop width=3D"33%">E.g. SYSTEM_DATABASES<BR>E.g.=20
+            USER_DATABASES<BR>E.g. ALL_DATABASES<BR>E.g. =
+Database1<BR>E.g.=20
+            Database1, Database2<BR>E.g. %Database%<BR>E.g. %Database%,=20
+            -Database1<BR></TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Directory</TD>
+          <TD vAlign=3Dtop width=3D"34%">Backup root directory.</TD>
+          <TD vAlign=3Dtop width=3D"33%">NULL (DEFAULT)<BR>E.g. =
+C:\Backup</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">BackupType</TD>
+          <TD vAlign=3Dtop width=3D"34%">Type of backup.</TD>
+          <TD vAlign=3Dtop width=3D"33%">FULL<BR>DIFF<BR>LOG</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Verify</TD>
+          <TD vAlign=3Dtop width=3D"34%">Verify the backup.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">CleanupTime</TD>
+          <TD vAlign=3Dtop width=3D"34%">Time in hours after which the =
+backup=20
+            files are deleted. If not specified no backup files are =
+deleted.</TD>
+          <TD vAlign=3Dtop width=3D"33%">NULL (DEFAULT)<BR>E.g. =
+24</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Compress</TD>
+          <TD vAlign=3Dtop width=3D"34%">Compress the backup.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y *<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">CopyOnly</TD>
+          <TD vAlign=3Dtop width=3D"34%">Perform a copy-only =
+backup.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">ChangeBackupType</TD>
+          <TD vAlign=3Dtop width=3D"34%">Change backup type if a =
+differential or=20
+            transaction log backup cannot be performed.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">BackupSoftware</TD>
+          <TD vAlign=3Dtop width=3D"34%">Third party backup software. If =
+not=20
+            specified a sql server native backup is performed.</TD>
+          <TD vAlign=3Dtop width=3D"33%">NULL =
+(DEFAULT)<BR>LITESPEED</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">CheckSum</TD>
+          <TD vAlign=3Dtop width=3D"34%">Enable backup checksums.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Execute</TD>
+          <TD vAlign=3Dtop width=3D"34%">Execution of commands. Default =
+the=20
+            commands are executed normally. If set to 'N' the commands =
+are only=20
+            printed.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y =
+(DEFAULT)<BR>N</TD></TR></TBODY></TABLE><BR>*=20
+      Backup compression is only supported in SQL Server 2008 Enterprise =
+and=20
+      Developer Edition.<BR><A name=3DDatabaseIntegrityCheck></A>
+      <DIV class=3DcommentTitle><BR>Integrity Check</DIV><BR>Procedure =
+name: <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseIntegrityCheck.sql">Dat=
+abaseIntegrityCheck</A><BR><BR>Purpose:=20
+      Check the integrity of databases.<BR><BR>Parameters: See table=20
+      below.<BR><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Name</TD>
+          <TD vAlign=3Dtop width=3D"34%">Description</TD>
+          <TD vAlign=3Dtop width=3D"33%">Supported Values</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Databases</TD>
+          <TD vAlign=3Dtop width=3D"34%">Selection of databases.</TD>
+          <TD vAlign=3Dtop width=3D"33%">E.g. SYSTEM_DATABASES<BR>E.g.=20
+            USER_DATABASES<BR>E.g. ALL_DATABASES<BR>E.g. =
+Database1<BR>E.g.=20
+            Database1, Database2<BR>E.g. %Database%<BR>E.g. %Database%,=20
+            -Database1<BR></TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">PhysicalOnly</TD>
+          <TD vAlign=3Dtop width=3D"34%">Limit the checks to the =
+physical=20
+            structures of the database.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">NoIndex</TD>
+          <TD vAlign=3Dtop width=3D"34%">Nonclustered indexes are not =
+checked.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">ExtendedLogicalChecks</TD>
+          <TD vAlign=3Dtop width=3D"34%">Perform extended logical =
+checks.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y *<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Execute</TD>
+          <TD vAlign=3Dtop width=3D"34%">Execution of commands. Default =
+the=20
+            commands are executed normally. If set to 'N' the commands =
+are only=20
+            printed.</TD>
+          <TD vAlign=3Dtop width=3D"33%">Y =
+(DEFAULT)<BR>N</TD></TR></TBODY></TABLE><BR>*=20
+      Extended logical checks is only supported in SQL Server =
+2008.<BR><A=20
+      name=3DIndexOptimize></A>
+      <DIV class=3DcommentTitle><BR>Index =
+Optimization</DIV><BR>Procedure name: <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/IndexOptimize.sql">IndexOptimiz=
+e</A><BR><BR>Purpose:=20
+      Rebuild and reorganize indexes and update =
+statistics.<BR><BR>Parameters:=20
+      See table below.<BR><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Name</TD>
+          <TD vAlign=3Dtop width=3D"24%">Description</TD>
+          <TD vAlign=3Dtop width=3D"43%">Supported Values</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Databases</TD>
+          <TD vAlign=3Dtop width=3D"24%">Selection of databases.</TD>
+          <TD vAlign=3Dtop width=3D"43%">E.g. SYSTEM_DATABASES<BR>E.g.=20
+            USER_DATABASES<BR>E.g. ALL_DATABASES<BR>E.g. =
+Database1<BR>E.g.=20
+            Database1, Database2<BR>E.g. %Database%<BR>E.g. %Database%,=20
+            -Database1<BR></TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationHigh_LOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a =
+high=20
+            fragmented index that does contain a LOB.</TD>
+          <TD vAlign=3Dtop=20
+            =
+width=3D"43%">INDEX_REBUILD_OFFLINE&nbsp;(DEFAULT)<BR>INDEX_REORGANIZE<BR=
+>STATISTICS_UPDATE<BR>INDEX_REORGANIZE_STATISTICS_UPDATE<BR>NOTHING</TD><=
+/TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationHigh_NonLOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a =
+high=20
+            fragmented index that does not contain a LOB.</TD>
+          <TD vAlign=3Dtop width=3D"43%">INDEX_REBUILD_ONLINE=20
+            =
+*<BR>INDEX_REBUILD_OFFLINE&nbsp;(DEFAULT)<BR>INDEX_REORGANIZE<BR>STATISTI=
+CS_UPDATE<BR>INDEX_REORGANIZE_STATISTICS_UPDATE<BR>NOTHING</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationMedium_LOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a =
+medium=20
+            fragmented index that does contain a LOB.</TD>
+          <TD vAlign=3Dtop=20
+            =
+width=3D"43%">INDEX_REBUILD_OFFLINE<BR>INDEX_REORGANIZE&nbsp;=20
+            =
+(DEFAULT)<BR>STATISTICS_UPDATE<BR>INDEX_REORGANIZE_STATISTICS_UPDATE<BR>N=
+OTHING</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationMedium_NonLOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a =
+medium=20
+            fragmented index that does not contain a LOB.</TD>
+          <TD vAlign=3Dtop width=3D"43%">INDEX_REBUILD_ONLINE=20
+            *<BR>INDEX_REBUILD_OFFLINE<BR>INDEX_REORGANIZE=20
+            =
+(DEFAULT)<BR>STATISTICS_UPDATE<BR>INDEX_REORGANIZE_STATISTICS_UPDATE<BR>N=
+OTHING</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationLow_LOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a low =
+
+            fragmented index that does contain a LOB.</TD>
+          <TD vAlign=3Dtop=20
+            =
+width=3D"43%">INDEX_REBUILD_OFFLINE<BR>INDEX_REORGANIZE<BR>STATISTICS_UPD=
+ATE<BR>INDEX_REORGANIZE_STATISTICS_UPDATE<BR>NOTHING=20
+            (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationLow_NonLOB</TD>
+          <TD vAlign=3Dtop width=3D"24%">Action to be performed on a low =
+
+            fragmented index that does not contain a LOB.</TD>
+          <TD vAlign=3Dtop width=3D"43%">INDEX_REBUILD_ONLINE=20
+            =
+*<BR>INDEX_REBUILD_OFFLINE<BR>INDEX_REORGANIZE<BR>STATISTICS_UPDATE<BR>IN=
+DEX_REORGANIZE_STATISTICS_UPDATE<BR>NOTHING=20
+            (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationLevel1</TD>
+          <TD vAlign=3Dtop width=3D"24%">The lower limit in percent for =
+medium=20
+            fragmentation.</TD>
+          <TD vAlign=3Dtop width=3D"43%">E.g. 5 (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FragmentationLevel2</TD>
+          <TD vAlign=3Dtop width=3D"24%">The lower limit in percent for =
+high=20
+            fragmentation.</TD>
+          <TD vAlign=3Dtop width=3D"43%">E.g. 30 (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">PageCountLevel</TD>
+          <TD vAlign=3Dtop width=3D"24%">Indexes under this size in =
+pages are=20
+            considered to be low fragmented regardless of actual =
+fragmentation=20
+            level.</TD>
+          <TD vAlign=3Dtop width=3D"43%">E.g. 1000 (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">SortInTempdb</TD>
+          <TD vAlign=3Dtop width=3D"24%">Use tempdb for sort operations =
+when=20
+            rebuilding indexes.</TD>
+          <TD vAlign=3Dtop width=3D"43%">Y<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">MaxDOP</TD>
+          <TD vAlign=3Dtop width=3D"24%">The number of CPUs that are =
+used when=20
+            rebuilding indexes. If not specified the global max degree =
+of=20
+            parallelism is used.</TD>
+          <TD vAlign=3Dtop width=3D"43%">NULL (DEFAULT)<BR>0 - =
+64</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">FillFactor</TD>
+          <TD vAlign=3Dtop width=3D"24%">Percentage that indicates how =
+full the=20
+            pages should be made when rebuilding indexes. If not =
+specified the=20
+            fillfactor in sys.indexes is used.</TD>
+          <TD vAlign=3Dtop width=3D"43%">NULL (DEFAULT)<BR>1 - =
+100</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">LOBCompaction</TD>
+          <TD vAlign=3Dtop width=3D"24%">Compact pages that contain LOB =
+columns=20
+            when reorganizing indexes.</TD>
+          <TD vAlign=3Dtop width=3D"43%">Y (DEFAULT)<BR>N</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">StatisticsSample</TD>
+          <TD vAlign=3Dtop width=3D"24%">Percentage that indicates how =
+much of a=20
+            table that is gathered when updating statistics. 100 is =
+equivalent=20
+            to a full scan. If not specified SQL Server automatically =
+computes=20
+            the required sample.</TD>
+          <TD vAlign=3Dtop width=3D"43%">NULL (DEFAULT)<BR>1 - =
+100</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">PartitionLevel</TD>
+          <TD vAlign=3Dtop width=3D"24%">Optimize partitioned indexes on =
+the=20
+            partition level.</TD>
+          <TD vAlign=3Dtop width=3D"43%">Y *<BR>N (DEFAULT)</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">TimeLimit</TD>
+          <TD vAlign=3Dtop width=3D"24%">Time in seconds after which no =
+commands=20
+            are executed.</TD>
+          <TD vAlign=3Dtop width=3D"43%">NULL (DEFAULT)<BR>E.g. =
+3600</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"33%">Execute</TD>
+          <TD vAlign=3Dtop width=3D"24%">Execution of commands. Default =
+the=20
+            commands are executed normally. If set to 'N' the commands =
+are only=20
+            printed.</TD>
+          <TD vAlign=3Dtop width=3D"43%">Y=20
+      (DEFAULT)<BR>N</TD></TR></TBODY></TABLE><BR>IndexOptimize places =
+indexes=20
+      into one of six groups based on their level of fragmentation =
+(High, Medium=20
+      or Low) and whether there are LOB columns (LOB or =
+NonLOB).<BR><BR>It uses=20
+      avg_fragmentation_in_ percent in sys.dm_db_index_physical_ stats =
+to check=20
+      the percentage of fragmentation in each index. Using the threshold =
+limits=20
+      you set in the @FragmentationLevel1 (lower threshold) and=20
+      @FragmentationLevel2 (upper threshold) parameters, it places each =
+index in=20
+      the appropriate group. Indexes with fragmentation levels higher =
+than the=20
+      upper threshold go into one of the high fragmentation groups. =
+Indexes with=20
+      fragmentation levels between the two thresholds go into one of the =
+medium=20
+      fragmentation groups. Indexes with fragmentation levels under the =
+lower=20
+      threshold go into one of the low fragmentation groups.<BR><BR>For =
+each=20
+      group, you can select one of the following actions:<BR><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Action </TD>
+          <TD vAlign=3Dtop width=3D"50%">Description </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">INDEX_REBUILD_ONLINE * </TD>
+          <TD vAlign=3Dtop width=3D"50%">Rebuild indexes online. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">INDEX_REBUILD_OFFLINE </TD>
+          <TD vAlign=3Dtop width=3D"50%">Rebuild indexes offline. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">INDEX_REORGANIZE </TD>
+          <TD vAlign=3Dtop width=3D"50%">Reorganize indexes. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop =
+width=3D"50%">INDEX_REORGANIZE_STATISTICS_UPDATE </TD>
+          <TD vAlign=3Dtop width=3D"50%">Reorganize indexes and update =
+statistics.=20
+          </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">STATISTICS_UPDATE </TD>
+          <TD vAlign=3Dtop width=3D"50%">Update statistics. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">NOTHING </TD>
+          <TD vAlign=3Dtop width=3D"50%">Do nothing. =
+</TD></TR></TBODY></TABLE><BR>*=20
+      Online rebuild is only supported in Enterprise and Developer=20
+      Edition.<BR><BR>* Table partitioning is only supported in =
+Enterprise and=20
+      Developer Edition.<BR><A name=3DSelectingDatabases></A>
+      <DIV class=3DcommentTitle><BR>Selecting =
+Databases</DIV><BR>DatabaseBackup,=20
+      DatabaseIntegrityCheck and IndexOptimize all have a parameter =
+called=20
+      @Databases that are used for selecting which databases to work =
+with. It=20
+      can be used like this.<BR><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Usage </TD>
+          <TD vAlign=3Dtop width=3D"50%">Description </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D =
+'SYSTEM_DATABASES' </TD>
+          <TD vAlign=3Dtop width=3D"50%">All system databases (master, =
+msdb and=20
+            model). </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'USER_DATABASES' =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">All user databases. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'ALL_DATABASES' =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">All databases. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'Database1' =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">The database Database1. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'Database1, =
+Database2' </TD>
+          <TD vAlign=3Dtop width=3D"50%">The databases Database1 and =
+Database2.=20
+        </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'USER_DATABASES, =
+-Database1'=20
+          </TD>
+          <TD vAlign=3Dtop width=3D"50%">All user databases, except =
+Database1.=20
+        </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D '%Database%' =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">All databases that have =
+Database in the=20
+            name. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D '%Database%, =
+-Database1' </TD>
+          <TD vAlign=3Dtop width=3D"50%">All databases that have =
+Database in the=20
+            name, except Database1. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">@Databases =3D 'ALL_DATABASES, =
+-%Database%'=20
+          </TD>
+          <TD vAlign=3Dtop width=3D"50%">All databases that do not have =
+Database=20
+            in the name. </TD></TR></TBODY></TABLE><BR>The keywords =
+SYSTEM_DATABASES,=20
+      USER_DATABASES and ALL_DATABASES are supported. The (-) character =
+is used=20
+      to exclude databases and the (%) character is used for wildcard =
+selection.=20
+      All of these things can be combined using the (,) character.<BR><A =
+
+      name=3DSetup></A>
+      <DIV class=3DcommentTitle><BR>Setup</DIV><BR>To use the solution =
+for backup=20
+      you need the objects <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseBackup.sql">DatabaseBac=
+kup</A>,=20
+      <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/CommandExecute.sql">CommandExec=
+ute</A>=20
+      and <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseSelect.sql">DatabaseSel=
+ect</A>,<BR>to=20
+      use it for integrity check you need <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseIntegrityCheck.sql">Dat=
+abaseIntegrityCheck</A>,=20
+      <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/CommandExecute.sql">CommandExec=
+ute</A>=20
+      and <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseSelect.sql">DatabaseSel=
+ect</A><BR>and=20
+      to use it for index optimization you need <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/IndexOptimize.sql">IndexOptimiz=
+e</A>,=20
+      <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/CommandExecute.sql">CommandExec=
+ute</A>=20
+      and <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/DatabaseSelect.sql">DatabaseSel=
+ect</A>.<BR><BR>Execute=20
+      the stored procedures from SQL Server Agent Jobs, through sqlcmd =
+and the=20
+      -b option. <BR><BR>E.g. sqlcmd -E -S $(ESCAPE_SQUOTE(SRVR)) -d =
+master -Q=20
+      "EXECUTE [dbo].[DatabaseIntegrityCheck] @Databases =3D =
+'SYSTEM_DATABASES'"=20
+      -b <BR><BR>Use SQL Server Agent Job Output files with <A=20
+      href=3D"http://msdn.microsoft.com/en-us/library/ms175575.aspx"=20
+      target=3Dblanc>tokens</A> for the logging. <BR><BR>E.g. C:\Program =
+
+      Files\Microsoft SQL=20
+      =
+Server\MSSQL.1\MSSQL\LOG\DatabaseBackup<BR>_$(ESCAPE_SQUOTE(JOBID))_$(ESC=
+APE_SQUOTE(STEPID))_$(ESCAPE_SQUOTE(STRTDT))_$(ESCAPE_SQUOTE(STRTTM)).txt=
+=20
+      <BR><BR>The solution is supported on SQL Server 2005 and SQL =
+Server 2008.=20
+      <BR><A name=3DLicense></A>
+      <DIV class=3DcommentTitle><BR>License</DIV><BR>The maintenance =
+solution is=20
+      free.<BR><BR>You can use it both commercially and =
+non-commercially. You=20
+      are allowed to modify the solution. <BR><A =
+name=3DGettingStarted></A>
+      <DIV class=3DcommentTitle><BR>Getting Started</DIV><BR>Here's an =
+easy way to=20
+      get started with the solution.<BR><BR>1. Download <A=20
+      =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>.<BR><BR>2.=20
+      Change this line in the script to your backup directory.<BR>SET=20
+      @BackupDirectory =3D N'C:\Backup' -- &lt;=3D=3D Change this to =
+your backup=20
+      directory.<BR><BR>3. Execute MaintenanceSolution.sql.<BR><BR>4. Go =
+into=20
+      [SQL Server Agent] / [Jobs] and start the jobs that have been =
+created.=20
+      Verify that they're completing successfully.<BR>Verify that the =
+backup=20
+      files are created. Check the output files in the error log=20
+      directory.<BR><BR>5. Schedule the jobs.<BR><A =
+name=3DErrorScenarios></A>
+      <DIV class=3DcommentTitle><BR>Error Scenarios</DIV><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Description </TD>
+          <TD vAlign=3Dtop width=3D"50%">Behavior </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">A backup command fails. </TD>
+          <TD vAlign=3Dtop width=3D"50%">The procedure skips the verify =
+backup and=20
+            delete backup steps for that database. The procedure then =
+continues=20
+            to the next database. In the end the job reports failure. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">A verify backup command fails. =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">The procedure skips the delete =
+backup=20
+            step for that database. The procedure continues to the next=20
+            database. In the end the job reports failure. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">An integrity check command =
+fails. </TD>
+          <TD vAlign=3Dtop width=3D"50%">The procedure logs the error =
+and=20
+            continues to the next database. In the end the job reports =
+failure.=20
+          </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">An index rebuild or index =
+reorganize=20
+            command fails. </TD>
+          <TD vAlign=3Dtop width=3D"50%">The procedure logs the error =
+and=20
+            continues to the next index. In the end the job reports =
+failure.=20
+        </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">A table is locked and the index =
+rebuild=20
+            or index reorganize is waiting. </TD>
+          <TD vAlign=3Dtop width=3D"50%">When the index rebuild or index =
+
+            reorganize has been waiting on locks for one hour it logs an =
+error=20
+            and the procedure continues to the next index. In the end =
+the job=20
+            reports failure. </TD></TR></TBODY></TABLE><A =
+name=3DFaq></A>
+      <DIV class=3DcommentTitle><BR>Frequently Asked Questions</DIV><BR>
+      <TABLE border=3D1 cellSpacing=3D0 cellPadding=3D2 width=3D"80%">
+        <TBODY>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Question </TD>
+          <TD vAlign=3Dtop width=3D"50%">Answer </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting this error message =
+when I try=20
+            to create the objects.<BR><BR>"Msg 102, Level 15, State 1, =
+Procedure=20
+            IndexOptimize, Line 456"<BR>"Incorrect syntax near '('." =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">This error is because of that =
+the=20
+            database that you are creating the objects in, is not in=20
+            compatibility level 90 or 100. Change the compatibility =
+level to 90=20
+            or 100 and try again.<BR><BR>EXECUTE dbo.sp_dbcmptlevel=20
+            @dbname=3DN'DatabaseName', @new_cmptlevel=3D90 </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Does all databases have to be =
+in=20
+            compatibility level 90 or 100? </TD>
+          <TD vAlign=3Dtop width=3D"50%">It is only the database that =
+you are=20
+            creating the objects in, that has to be in compatibility =
+level 90 or=20
+            100. All other databases can be in any compatibility level. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting these informational =
+messages=20
+            when I create the stored procedure DatabaseBackup,=20
+            DatabaseIntegrityCheck or IndexOptimize.<BR><BR>"Cannot add =
+rows to=20
+            sys.sql_dependencies for the stored procedure because it =
+depends on=20
+            the missing table 'dbo.CommandExecute'. The stored procedure =
+will=20
+            still be created; however, it cannot be successfully =
+executed until=20
+            the table exists."<BR><BR>"The module 'DatabaseBackup' =
+depends on=20
+            the missing object 'dbo.CommandExecute'. The module will =
+still be=20
+            created; however, it cannot run successfully until the =
+object=20
+            exists." </TD>
+          <TD vAlign=3Dtop width=3D"50%">DatabaseBackup, =
+DatabaseIntegrityCheck=20
+            and IndexOptimize are using the stored procedure <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/CommandExecute.sql">CommandExec=
+ute</A>=20
+            and the function <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/DatabaseSelect.sql">DatabaseSel=
+ect</A>.=20
+            Download these objects and create them in the same=20
+            database.<BR><BR>You could also use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>.=20
+            This script contains all the objects that you need. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting these error =
+messages, when I=20
+            execute the stored procedure DatabaseBackup, =
+DatabaseIntegrityCheck=20
+            or IndexOptimize.<BR><BR>"Msg 208, Level 16, State 1, =
+Procedure=20
+            DatabaseBackup, Line 111"<BR>"Invalid object name=20
+            'dbo.DatabaseSelect'."<BR><BR>"Msg 2812, Level 16, State 62, =
+
+            Procedure DatabaseBackup, Line 397"<BR>"Could not find =
+stored=20
+            procedure 'dbo.CommandExecute'." </TD>
+          <TD vAlign=3Dtop width=3D"50%">DatabaseBackup, =
+DatabaseIntegrityCheck=20
+            and IndexOptimize are using the stored procedure <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/CommandExecute.sql">CommandExec=
+ute</A>=20
+            and the function <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/DatabaseSelect.sql">DatabaseSel=
+ect</A>.=20
+            Download these objects and create them in the same=20
+            database.<BR><BR>You could also use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>.=20
+            This script contains all the objects that you need. =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Does the stored procedures have =
+to be=20
+            executed in a CmdExec job step with sqlcmd? Can I not use a =
+T-SQL=20
+            job step? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The stored procedures have to =
+be executed=20
+            in a CmdExec job step with sqlcmd and the -b option. =
+Otherwise the=20
+            error handling and logging will not work as =
+designed.<BR><BR>You=20
+            could use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>=20
+            to create the jobs. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">My job stops after the first =
+error. What=20
+            could the reason be for that? </TD>
+          <TD vAlign=3Dtop width=3D"50%">This is the behaviour if you're =
+using=20
+            T-SQL job steps. Then the job stops at the first =
+error.<BR><BR>I=20
+            recommend that you use CmdExec job steps with sqlcmd and the =
+-b=20
+            option. Then the job will continue after an error. In the =
+end the=20
+            job will report failure.<BR><BR>You could use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>=20
+            to create the jobs. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">The output files have a =
+[SQLSTATE 01000]=20
+            or [SQLSTATE 42000] in the end of each line. Why does it =
+look like=20
+            this? </TD>
+          <TD vAlign=3Dtop width=3D"50%">This is the behaviour if you're =
+using=20
+            T-SQL job steps.<BR><BR>I recommend that you use CmdExec job =
+steps=20
+            with sqlcmd and the -b option. Then this will go =
+away.<BR><BR>You=20
+            could use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>=20
+            to create the jobs. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Can IndexOptimize be used to =
+update=20
+            statistics? </TD>
+          <TD vAlign=3Dtop width=3D"50%">Yes, IndexOptimize can be used =
+to update=20
+            statistics.<BR><BR>If you use these parameters it will =
+reorganize=20
+            indexes and update the statistics, instead of only =
+reorganize the=20
+            indexes.<BR><BR>@FragmentationMedium_LOB =3D=20
+            'INDEX_REORGANIZE_STATISTICS_UPDATE', =
+@FragmentationMedium_NonLOB =3D=20
+            'INDEX_REORGANIZE_STATISTICS_UPDATE' <BR><BR>For high =
+fragmentation=20
+            the indexes are rebuilt. Then the statistics are =
+automatically=20
+            updated. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting this error message =
+when I'm=20
+            executing IndexOptimize. Why do I get this =
+error?<BR><BR>"Msg 50000,=20
+            Level 16, State 1, Procedure CommandExecute, Line =
+103"<BR>"Msg 1222,=20
+            Lock request time out period exceeded." </TD>
+          <TD vAlign=3Dtop width=3D"50%">This is because of that one of =
+your=20
+            indexes is locked by another connection. IndexOptimize can =
+therefore=20
+            not rebuild or reorganize the index. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Can the solution be used with =
+SQL Server=20
+            Express? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The solution is supported on =
+SQL Server=20
+            Express. SQL Server Express has no SQL Server Agent. =
+Therefore the=20
+            execution of the stored procedures has to be scheduled using =
+<A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/SQLExpress.cmd">cmd -=20
+            files</A> and Windows Scheduled Tasks instead. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm using an old version of the =
+solution.=20
+            How do I upgrade to the latest version? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The easiest way to upgrade to =
+the latest=20
+            version is to use the script <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/MaintenanceSolution.sql">Mainte=
+nanceSolution.sql</A>.=20
+            <BR><BR>This script will drop and recreate all the objects =
+in the=20
+            solution. <BR><BR>It will not drop or change any jobs. All =
+your=20
+            existing jobs will continue to work unchanged as all the =
+objects are=20
+            backward compatible. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">What should the fragmentation =
+levels be=20
+            for reorganization and rebuild of indexes? </TD>
+          <TD vAlign=3Dtop width=3D"50%">Microsoft has some =
+recommendations in <A=20
+            =
+href=3D"http://technet.microsoft.com/en-us/library/ms189858.aspx"=20
+            target=3Dblanc>Books Online</A>.<BR><BR>The default values =
+in=20
+            IndexOptimize are based on this. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Some of my indexes are still =
+fragmented=20
+            after I have just executed IndexOptimize. How could that be? =
+</TD>
+          <TD vAlign=3Dtop width=3D"50%">Very small indexes sometimes =
+shows a high=20
+            fragmentation even if they've just been rebuilt or=20
+            reorganized.<BR><BR>In addition fragmentation on very small =
+tables=20
+            has no impact on performance. <A=20
+            =
+href=3D"http://technet.microsoft.com/sv-se/library/cc966523(en-us).aspx" =
+
+            target=3Dblanc>Microsoft</A> has a whitepaper about=20
+            this.<BR><BR>"Generally, you should not be concerned with=20
+            fragmentation levels of indexes with less than 1,000 pages. =
+In the=20
+            tests, indexes containing more than 10,000 pages realized=20
+            performance gains, with the biggest gains on indexes with=20
+            significantly more pages (greater than 50,000 pages)." =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">DatabaseBackup is not deleting =
+old backup=20
+            files. What could the problem be? </TD>
+          <TD vAlign=3Dtop width=3D"50%">It could be because of one of =
+the=20
+            following things.<BR><BR>1. Windows security. Check that the =
+SQL=20
+            Server service account has full control of the backup =
+directory. If=20
+            it's a network share, also check that the SQL Server service =
+account=20
+            has full control of the network share.<BR><BR>2. File system =
+
+            locking. It could for example be a backup or anti-virus =
+software=20
+            that is locking the file.<BR><BR>3. DatabaseBackup has been =
+designed=20
+            not to delete transaction log backups that are newer than =
+the latest=20
+            full or differential backup. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting this error message =
+when I'm=20
+            backing up a database with DatabaseBackup. Doesn't =
+DatabaseBackup=20
+            check if a backup can be done?<BR><BR>"Msg 3035, Level 16, =
+State 10,=20
+            Line 3"<BR>"Cannot perform a differential backup for =
+database=20
+            "Database", because a current database backup does not =
+exist.=20
+            Perform a full database backup by reissuing BACKUP DATABASE, =
+
+            omitting the WITH DIFFERENTIAL option." </TD>
+          <TD vAlign=3Dtop width=3D"50%">DatabaseBackup is checking=20
+            sys.master_files.differential_base_lsn to see if a =
+differential=20
+            backup can be done. If it cannot be done it is doing one of =
+two=20
+            things. Default the database is skipped. A full backup can =
+also be=20
+            performed. This is if @ChangeBackupType =3D =
+'Y'.<BR><BR>Unfortunately=20
+            this does not work if a database from a SQL Server 2000 =
+server is=20
+            restored or attached. Then you get this error message =
+</TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm executing =
+MaintenanceSolution.sql.=20
+            The stored procedures and the function are created, but not =
+the=20
+            jobs. How could that be? </TD>
+          <TD vAlign=3Dtop width=3D"50%">This could be because of that =
+you are=20
+            using SQL Server Express. SQL Server Express does not have =
+SQL=20
+            Server Agent. Therefore the jobs are not created. You can =
+use <A=20
+            =
+href=3D"http://ola.hallengren.com/scripts/SQLExpress.cmd">cmd -=20
+            files</A> and Windows Scheduled Tasks instead. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm getting the following error =
+message=20
+            when I'm executing the jobs.<BR><BR>"Unable to start =
+execution of=20
+            step 1 (reason: The job step contains tokens. For SQL Server =
+2005=20
+            Service Pack 1 or later, you must use the appropriate =
+ESCAPE_xxx=20
+            macro to update job steps containing tokens before the job =
+can=20
+            run.)" </TD>
+          <TD vAlign=3Dtop width=3D"50%">The syntax for SQL Server Agent =
+<A=20
+            =
+href=3D"http://msdn.microsoft.com/en-us/library/ms175575.aspx"=20
+            target=3Dblanc>tokens</A> has changed between SQL Server =
+2005 RTM and=20
+            SQL Server 2005 SP1.<BR><BR>If you are upgrading from SQL =
+Server=20
+            2005 RTM to a later service pack or version you need to =
+update the=20
+            jobs. <A href=3D"http://support.microsoft.com/kb/915845"=20
+            target=3Dblanc>Microsoft</A> has a script that can help you =
+with this.=20
+          </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I have read something about =
+Service Pack=20
+            requirements on SQL Server 2005. What Service Pack is =
+required? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The most recent version of the =
+solution=20
+            is supported on all versions and editions of SQL Server 2005 =
+and SQL=20
+            Server 2008. No Service Pack is required. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Is the solution supported on =
+SQL Server=20
+            2000? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The solution is only supported =
+and only=20
+            works on SQL Server 2005 and SQL Server 2008.<BR><BR>I'm =
+using a lot=20
+            of things that were introduced in SQL Server 2005; catalog =
+views,=20
+            dynamic management views, TRY CATCH, ALTER INDEX and some =
+more.=20
+        </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Isn't it easier just to use the =
+SQL=20
+            Server Maintenance Plans? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The SQL Server <A=20
+            =
+href=3D"http://ola.hallengren.com/MaintenancePlans.html">Maintenance=20
+            Plans</A> are good in some situations, but it's not always =
+what you=20
+            need.<BR><BR>This solution is very reliable, easily =
+deployable, has=20
+            extensive logging and has the features that often are needed =
+in an=20
+            enterprise environment. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">Is the solution free? </TD>
+          <TD vAlign=3Dtop width=3D"50%">The solution is free and will =
+stay=20
+            free.<BR><BR>You can use it in your database administration, =
+in your=20
+            hosting environment, in your consultancy work or distribute =
+it with=20
+            your software. There are no limitations. </TD></TR>
+        <TR>
+          <TD vAlign=3Dtop width=3D"50%">I'm a so called accidental DBA. =
+How do I=20
+            get started with your solution? </TD>
+          <TD vAlign=3Dtop width=3D"50%">It's easy to get started with =
+my=20
+            solution. I have made a <A=20
+            =
+href=3D"http://ola.hallengren.com/Documentation.html#GettingStarted">Gett=
+ing=20
+            Started Guide</A> that I recommend you to start with.=20
+      </TD></TR></TBODY></TABLE></DIV><!-- articleBody --></DIV><!-- =
+article --><!-- articles --></DIV><!-- dayArticles --><!-- days =
+--></DIV><!-- centercol --></TD><!-- END CENTER COL --></TR><!-- =
+has_footer --></TBODY></TABLE></DIV><!-- content --></BODY></HTML>
+
+------=_NextPart_000_0000_01CA4C15.1CD8E0C0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://ola.hallengren.com/images/page.gif
+
+R0lGODlhDQANAJEDAP///5mZmczMzP///yH5BAEAAAMALAAAAAANAA0AAAIpXI4xywH/DlsOgiBU
+e0LcrhnWlVCcZ2nVGJlAB7ciK1dwV9O5ria+UgAAOw==
+
+------=_NextPart_000_0000_01CA4C15.1CD8E0C0
+Content-Type: text/css;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://ola.hallengren.com/styles/style.css
+
+BODY {
+	HEIGHT: 100%
+}
+HTML {
+	HEIGHT: 100%
+}
+FORM {
+	PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: =
+0px; PADDING-TOP: 0px
+}
+TEXTAREA {
+	BORDER-BOTTOM: #999 1px solid; BORDER-LEFT: #999 1px solid; =
+BACKGROUND-COLOR: #fff; FONT: 11px Verdana,Helvetica,Arial,sans-serif; =
+COLOR: #333333; BORDER-TOP: #999 1px solid; BORDER-RIGHT: #999 1px solid
+}
+INPUT {
+	BORDER-BOTTOM: #999 1px solid; BORDER-LEFT: #336699 1px solid; =
+PADDING-BOTTOM: 1px; BACKGROUND-COLOR: #fff; PADDING-LEFT: 1px; =
+PADDING-RIGHT: 1px; FONT: 11px Verdana,Helvetica,Arial,sans-serif; =
+COLOR: #333; BORDER-TOP: #336699 1px solid; BORDER-RIGHT: #999 1px =
+solid; PADDING-TOP: 1px
+}
+SELECT {
+	BORDER-BOTTOM: #333 1px solid; BORDER-LEFT: #333 1px solid; FONT: 11px =
+Verdana,Helvetica,Arial,sans-serif; BORDER-TOP: #333 1px solid; =
+BORDER-RIGHT: #333 1px solid
+}
+INPUT.checkbox {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BACKGROUND-COLOR: =
+transparent; BORDER-TOP: medium none; BORDER-RIGHT: medium none
+}
+INPUT.radio {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BACKGROUND-COLOR: =
+transparent; BORDER-TOP: medium none; BORDER-RIGHT: medium none
+}
+IMG {
+	BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BORDER-TOP: =
+medium none; BORDER-RIGHT: medium none
+}
+BODY {
+	BACKGROUND-COLOR: #fff; MARGIN: 0px; FONT: 11px =
+Verdana,Helvetica,Arial,sans-serif; COLOR: #333
+}
+TABLE {
+	BACKGROUND-COLOR: transparent; FONT: 11px =
+Verdana,Helvetica,Arial,sans-serif; COLOR: #333
+}
+A {
+	BACKGROUND-COLOR: transparent; COLOR: #666; TEXT-DECORATION: underline
+}
+A:link {
+	BACKGROUND-COLOR: transparent; COLOR: #3366cc; CURSOR: pointer; =
+TEXT-DECORATION: underline
+}
+A:visited {
+	BACKGROUND-COLOR: transparent; COLOR: #3366cc; CURSOR: pointer; =
+TEXT-DECORATION: underline
+}
+A:active {
+	BACKGROUND-COLOR: transparent; COLOR: #3366cc; CURSOR: pointer; =
+TEXT-DECORATION: underline
+}
+A:focus {
+	OUTLINE-STYLE: dotted; OUTLINE-COLOR: invert; OUTLINE-WIDTH: thin
+}
+A:hover {
+	BACKGROUND-COLOR: transparent; COLOR: #ff0000; CURSOR: pointer; =
+TEXT-DECORATION: underline
+}
+A.plain {
+	TEXT-DECORATION: none
+}
+TEXTAREA {
+	FONT: 11px Verdana,Helvetica,Arial,sans-serif
+}
+INPUT {
+	FONT: 11px Verdana,Helvetica,Arial,sans-serif; CURSOR: pointer
+}
+SELECT {
+	FONT: 11px Verdana,Helvetica,Arial,sans-serif
+}
+INPUT.buttonWhite {
+	BORDER-BOTTOM: #999 2px solid; BORDER-LEFT: #ccc 2px solid; =
+PADDING-BOTTOM: 0px; BACKGROUND-COLOR: #dedede; PADDING-LEFT: 3px; =
+PADDING-RIGHT: 3px; COLOR: #333; FONT-SIZE: 11px; BORDER-TOP: #ccc 2px =
+solid; FONT-WEIGHT: bold; BORDER-RIGHT: #999 2px solid; PADDING-TOP: 0px
+}
+INPUT.button {
+	BORDER-BOTTOM: #333 1px solid; BORDER-LEFT: #999 1px solid; =
+PADDING-BOTTOM: 0px; BACKGROUND-COLOR: #dedede; PADDING-LEFT: 3px; =
+PADDING-RIGHT: 3px; COLOR: #333; FONT-SIZE: 11px; BORDER-TOP: #999 1px =
+solid; FONT-WEIGHT: bold; BORDER-RIGHT: #333 1px solid; PADDING-TOP: 0px
+}
+TABLE.columns {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; WIDTH: 100%; PADDING-RIGHT: =
+0px; HEIGHT: 100%; PADDING-TOP: 0px
+}
+TABLE.columns TD.left {
+	PADDING-BOTTOM: 15px; PADDING-LEFT: 12px; WIDTH: 20%; PADDING-RIGHT: =
+15px; BORDER-COLLAPSE: collapse; HEIGHT: 100%; VERTICAL-ALIGN: top; =
+PADDING-TOP: 20px
+}
+TABLE.columns TD.center {
+	BORDER-BOTTOM: #ccc 0px solid; MIN-WIDTH: 340px; BORDER-LEFT: #ccc 1px =
+solid; PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; =
+BORDER-COLLAPSE: collapse; HEIGHT: 100%; VERTICAL-ALIGN: top; =
+BORDER-TOP: #ccc 0px solid; BORDER-RIGHT: #ccc 0px solid; PADDING-TOP: =
+20px
+}
+TABLE.columns TD.header {
+	BORDER-BOTTOM: #336699 5px solid; BORDER-LEFT: #336699 0px solid; =
+PADDING-BOTTOM: 8px; BACKGROUND-COLOR: #0f4275; PADDING-LEFT: 15px; =
+PADDING-RIGHT: 15px; BORDER-TOP: #336699 0px solid; BORDER-RIGHT: =
+#336699 0px solid; PADDING-TOP: 20px
+}
+TABLE.columns TD.right {
+	PADDING-BOTTOM: 15px; BACKGROUND-COLOR: #000; PADDING-LEFT: 15px; =
+WIDTH: 20%; PADDING-RIGHT: 12px; BORDER-COLLAPSE: collapse; HEIGHT: =
+100%; VERTICAL-ALIGN: top; PADDING-TOP: 20px
+}
+TABLE.columns TD.footer {
+	BORDER-BOTTOM: #336699 0px solid; TEXT-ALIGN: center; BORDER-LEFT: =
+#336699 0px solid; PADDING-BOTTOM: 6px; BACKGROUND-COLOR: #0f4275; =
+PADDING-LEFT: 10px; PADDING-RIGHT: 10px; FONT: 11px =
+verdana,arial,geneva,sans-serif; COLOR: #fff; BORDER-TOP: #336699 1px =
+solid; BORDER-RIGHT: #336699 0px solid; PADDING-TOP: 4px
+}
+TABLE.blogHeader {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; COLOR: =
+#fff; PADDING-TOP: 0px
+}
+TABLE.blogHeader A:link {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogHeader A:active {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogHeader A:visited {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogHeader A:hover {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.blogHeader TD.blogHeaderLeft {
+	TEXT-ALIGN: left; MARGIN: 0px; VERTICAL-ALIGN: bottom
+}
+TABLE.blogHeader TD.blogHeaderCenter {
+	TEXT-ALIGN: center; VERTICAL-ALIGN: bottom
+}
+TABLE.blogHeader TD.blogHeaderRight {
+	TEXT-ALIGN: right; VERTICAL-ALIGN: bottom
+}
+TABLE.blogFooter {
+	COLOR: #fff
+}
+TABLE.blogFooter A:link {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogFooter A:active {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogFooter A:visited {
+	COLOR: #99ccff; FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+TABLE.blogFooter A:hover {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.blogFooter TD.blogFooterLeft {
+	TEXT-ALIGN: left
+}
+TABLE.blogFooter TD.blogFooterCenter {
+	TEXT-ALIGN: center; FONT-SIZE: 11px
+}
+TABLE.blogFooter TD.blogFooterRight {
+	TEXT-ALIGN: right
+}
+#content {
+	POSITION: relative
+}
+.articleAll {
+	MARGIN: 18px
+}
+.photoAll {
+	MARGIN: 18px
+}
+.dayArticles {
+	BORDER-BOTTOM: #ccc 1px dotted; PADDING-BOTTOM: 0px; BACKGROUND-COLOR: =
+#fff; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; MARGIN-BOTTOM: 25px; FLOAT: =
+none; CLEAR: both; PADDING-TOP: 0px
+}
+.article {
+	POSITION: relative; PADDING-BOTTOM: 0px; MARGIN: 18px 0px 32px; =
+PADDING-LEFT: 18px; PADDING-RIGHT: 25px; PADDING-TOP: 0px
+}
+.article P {
+	MARGIN: 0px 0px 1em
+}
+.articleTitle {
+	BACKGROUND-COLOR: transparent; FONT: bold 16px =
+Georgia,verdana,arial,geneva,sans-serif; LETTER-SPACING: -1px; COLOR: =
+#6699cc; CLEAR: both
+}
+.articleAuthor {
+	BACKGROUND-COLOR: transparent; MARGIN: 3px 0px 13px; FONT: 9px =
+verdana,arial,geneva,sans-serif; COLOR: #999; CLEAR: both
+}
+.articleBody {
+	FONT: 11px/150% Verdana,Helvetica,Arial,sans-serif; CLEAR: both
+}
+DIV.articleBody FONT {
+	LINE-HEIGHT: 150%
+}
+DIV.articleBody TABLE TD {
+	FONT: 11px/150% Verdana,Helvetica,Arial,sans-serif
+}
+DIV.articleBody TABLE TH {
+	FONT: 11px/150% Verdana,Helvetica,Arial,sans-serif
+}
+.articleMore {
+	FONT: 10px verdana,arial,geneva,sans-serif
+}
+.articleStats {
+	MARGIN-TOP: 10px; FONT: 9px verdana,arial,geneva,sans-serif; =
+WHITE-SPACE: nowrap; COLOR: #999; CLEAR: both
+}
+.postDate {
+	PADDING-BOTTOM: 0px; BACKGROUND-COLOR: transparent; MARGIN: 0px 0px =
+18px; PADDING-LEFT: 18px; PADDING-RIGHT: 18px; FONT: bold 12px =
+Georgia,verdana,arial,geneva,sans-serif; WHITE-SPACE: nowrap; COLOR: =
+#ff9900; PADDING-TOP: 0px
+}
+.photoPostDate {
+	PADDING-BOTTOM: 2px; BACKGROUND-COLOR: transparent; MARGIN: 6px 0px =
+0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT: bold 12px =
+Georgia,verdana,arial,geneva,sans-serif; WHITE-SPACE: nowrap; COLOR: =
+#ff9900; BORDER-TOP: #ccc 1px dotted; PADDING-TOP: 4px
+}
+#leftcol {
+=09
+}
+#leftcol .component {
+	BACKGROUND-COLOR: transparent; BORDER-COLLAPSE: collapse; =
+MARGIN-BOTTOM: 30px; CLEAR: both
+}
+#leftcol .componentHead {
+	BORDER-BOTTOM: #99ccff 1px dotted; PADDING-BOTTOM: 2px; PADDING-LEFT: =
+0px; PADDING-RIGHT: 0px; BORDER-COLLAPSE: collapse; FONT: bold 12px =
+Georgia,verdana,arial,geneva,sans-serif; WHITE-SPACE: nowrap; COLOR: =
+#336699; PADDING-TOP: 2px
+}
+#leftcol .componentHead A {
+	TEXT-DECORATION: none
+}
+#leftcol .componentContent {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 10px; PADDING-RIGHT: 0px; =
+PADDING-TOP: 10px
+}
+#leftcol A {
+=09
+}
+#leftcol A:link {
+=09
+}
+#leftcol A:active {
+=09
+}
+#leftcol A:visited {
+=09
+}
+#leftcol A:hover {
+=09
+}
+#centercol {
+=09
+}
+#centercol A {
+=09
+}
+#centercol A:link {
+=09
+}
+#centercol A:active {
+=09
+}
+#centercol A:visited {
+=09
+}
+#rightcol {
+	TEXT-ALIGN: left; COLOR: #ccc
+}
+#rightcol .component {
+	TEXT-ALIGN: left; BACKGROUND-COLOR: transparent; BORDER-COLLAPSE: =
+collapse; MARGIN-BOTTOM: 30px; COLOR: #ccc; CLEAR: both
+}
+#rightcol .componentHead {
+	TEXT-ALIGN: left; PADDING-BOTTOM: 2px; PADDING-LEFT: 0px; =
+PADDING-RIGHT: 0px; BORDER-COLLAPSE: collapse; FONT: bold 12px =
+Georgia,verdana,arial,geneva,sans-serif; WHITE-SPACE: nowrap; COLOR: =
+#6699cc; PADDING-TOP: 2px
+}
+#rightcol .componentHead A {
+	TEXT-DECORATION: none
+}
+#rightcol .componentContent {
+	PADDING-BOTTOM: 4px; PADDING-LEFT: 12px; PADDING-RIGHT: 0px; =
+PADDING-TOP: 4px
+}
+#rightcol A {
+=09
+}
+#rightcol A:link {
+	COLOR: #99ccff
+}
+#rightcol A:active {
+	COLOR: #99ccff
+}
+#rightcol A:visited {
+	COLOR: #99ccff
+}
+#rightcol A:hover {
+	COLOR: #ff0000
+}
+.componentRSSFeed {
+=09
+}
+.componentRSSFeed UL {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: =
+0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px
+}
+.componentRSSFeed UL LI {
+	MARGIN: 0px 0px 6px
+}
+.componentBlogroll {
+	LINE-HEIGHT: 16px; FONT-SIZE: 11px
+}
+.componentBlogrollItem {
+	MARGIN-BOTTOM: 6px
+}
+.componentTopics {
+	LINE-HEIGHT: 18px
+}
+.componentTopicItem {
+	MARGIN-BOTTOM: 6px
+}
+.componentArchive {
+	LINE-HEIGHT: 20px; WHITE-SPACE: nowrap
+}
+.componentCalendar {
+	TEXT-ALIGN: center; BACKGROUND-COLOR: transparent; FONT: 9px =
+verdana,arial,geneva,sans-serif
+}
+TABLE.componentCalendar {
+	FONT-SIZE: 9px
+}
+TABLE.componentCalendar TD.componentCalendarDayname {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 1px; PADDING-RIGHT: 1px; =
+PADDING-TOP: 0px
+}
+TABLE.componentCalendar TD.componentCalendarDay {
+=09
+}
+.componentLogin {
+	TEXT-ALIGN: right
+}
+.componentWelcome {
+=09
+}
+.componentBlogname {
+	BACKGROUND-COLOR: transparent; FONT: 27px/30px =
+verdana,arial,helvetica,sans-serif; LETTER-SPACING: -1px; COLOR: #fff
+}
+DIV.componentBlogname A:link {
+	FONT-STYLE: normal; COLOR: #fff; CURSOR: pointer; FONT-WEIGHT: normal; =
+TEXT-DECORATION: none
+}
+DIV.componentBlogname A:visited {
+	FONT-STYLE: normal; COLOR: #fff; CURSOR: pointer; FONT-WEIGHT: normal; =
+TEXT-DECORATION: none
+}
+DIV.componentBlogname A:active {
+	FONT-STYLE: normal; COLOR: #fff; CURSOR: pointer; FONT-WEIGHT: normal; =
+TEXT-DECORATION: none
+}
+DIV.componentBlogname A:hover {
+	FONT-STYLE: normal; COLOR: #fff; CURSOR: pointer; FONT-WEIGHT: normal; =
+TEXT-DECORATION: none
+}
+.componentPostArticleLink {
+	BACKGROUND-COLOR: transparent; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif
+}
+.componentEditArticleLink {
+	BACKGROUND-COLOR: transparent; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif
+}
+.componentRssLink {
+	BACKGROUND-COLOR: transparent; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif
+}
+.componentHomeLink {
+	BACKGROUND-COLOR: transparent; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif
+}
+.componentEmailNotifyLink {
+	BACKGROUND-COLOR: transparent; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif
+}
+TABLE.blogHeader TD.blogHeaderLeft DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+TABLE.blogHeader TD.blogHeaderCenter DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+TABLE.blogHeader TD.blogHeaderRight DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+TABLE.blogFooter TD.blogFooterLeft DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+TABLE.blogFooter TD.blogFooterCenter DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+TABLE.blogFooter TD.blogFooterRight DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; PADDING-RIGHT: 5px; DISPLAY: =
+inline; WHITE-SPACE: nowrap; PADDING-TOP: 0px
+}
+#leftcol DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; =
+MARGIN-BOTTOM: 4px; PADDING-TOP: 0px
+}
+#rightcol DIV.componentText {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; =
+MARGIN-BOTTOM: 4px; PADDING-TOP: 0px
+}
+.componentRecentVisitors {
+=09
+}
+.componentRecentVisitorsItem {
+	MARGIN-BOTTOM: 8px
+}
+.componentRecentTrackbacks {
+=09
+}
+.componentRecentTrackbacksItem {
+	MARGIN-BOTTOM: 8px
+}
+.componentRecentEntries {
+=09
+}
+.componentRecentEntriesItem {
+	MARGIN-BOTTOM: 8px
+}
+.componentRecentComments {
+=09
+}
+.componentRecentCommentsItem {
+	MARGIN-BOTTOM: 8px
+}
+.componentRecentArticles {
+=09
+}
+.componentRecentArticlesItem {
+	MARGIN-BOTTOM: 8px
+}
+.componentRecentPhotos {
+=09
+}
+.componentRecentPhotosItem {
+	MARGIN-BOTTOM: 12px
+}
+.componentRecentPhotosItem IMG {
+	BORDER-BOTTOM: #000 1px solid; BORDER-LEFT: #000 1px solid; BORDER-TOP: =
+#000 1px solid; BORDER-RIGHT: #000 1px solid
+}
+.commentForm {
+	PADDING-BOTTOM: 8px; BACKGROUND-COLOR: #eee; MARGIN: 0px; PADDING-LEFT: =
+8px; PADDING-RIGHT: 8px; CLEAR: both; PADDING-TOP: 8px
+}
+.commentFormInline {
+	PADDING-BOTTOM: 8px; BACKGROUND-COLOR: #eee; MARGIN: 8px 0px; =
+PADDING-LEFT: 8px; PADDING-RIGHT: 8px; CLEAR: both; PADDING-TOP: 8px
+}
+.commentsHead {
+	TEXT-TRANSFORM: uppercase; BACKGROUND-COLOR: transparent; =
+MARGIN-BOTTOM: 12px; COLOR: #ff9900; FONT-SIZE: 11px; BORDER-TOP: #ccc =
+2px solid; FONT-WEIGHT: bold; PADDING-TOP: 2px
+}
+.comments {
+	MARGIN: 12px 0px 18px; CLEAR: both
+}
+.commentTitle {
+	PADDING-BOTTOM: 2px; BACKGROUND-COLOR: transparent; FONT: bold 11px =
+Georgia,verdana,arial,geneva,sans-serif; COLOR: #6699cc
+}
+.commentAuthor {
+	BACKGROUND-COLOR: transparent; FONT: 9px =
+verdana,arial,geneva,sans-serif; MARGIN-BOTTOM: 8px; COLOR: #999; =
+BORDER-TOP: #ccc 1px solid; PADDING-TOP: 2px
+}
+.commentReply {
+	MARGIN-TOP: 5px; MARGIN-BOTTOM: 10px; FONT-SIZE: 10px; FONT-WEIGHT: =
+bold
+}
+.commentBody {
+	LINE-HEIGHT: 135%
+}
+.comment {
+	PADDING-BOTTOM: 5px; MARGIN: 12px 0px
+}
+.commentReplyRef {
+	PADDING-BOTTOM: 5px; MARGIN: 0px 0px 12px
+}
+.commentIndent0 {
+=09
+}
+.commentIndent1 {
+	MARGIN-LEFT: 25px
+}
+.commentIndent2 {
+	MARGIN-LEFT: 50px
+}
+.commentIndent3 {
+	MARGIN-LEFT: 75px
+}
+.commentIndent4 {
+	MARGIN-LEFT: 100px
+}
+.commentIndent5 {
+	MARGIN-LEFT: 125px
+}
+.commentIndent6 {
+	MARGIN-LEFT: 150px
+}
+.commentIndent7 {
+	MARGIN-LEFT: 175px
+}
+.commentIndent8 {
+	MARGIN-LEFT: 200px
+}
+.trackbacks {
+	MARGIN: 12px 0px; CLEAR: both
+}
+.trackbacksHead {
+	TEXT-TRANSFORM: uppercase; BACKGROUND-COLOR: transparent; =
+MARGIN-BOTTOM: 12px; COLOR: #ff9900; FONT-SIZE: 11px; BORDER-TOP: #ccc =
+2px solid; FONT-WEIGHT: bold; PADDING-TOP: 2px
+}
+.trackback {
+	BORDER-BOTTOM: #666 1px dotted; PADDING-BOTTOM: 12px; MARGIN: 12px 0px
+}
+TABLE.thumbnails {
+	CLEAR: both
+}
+TABLE.thumbnails TD {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 12px; =
+PADDING-TOP: 0px
+}
+TABLE.thumbnails TD.row {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 12px; =
+PADDING-TOP: 0px
+}
+TABLE.thumbnails TD.emptyRow {
+=09
+}
+TABLE.thumbnailsByDay {
+=09
+}
+TABLE.thumbnailsByDay TD {
+	TEXT-ALIGN: left; PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; =
+PADDING-RIGHT: 12px; VERTICAL-ALIGN: top; PADDING-TOP: 0px
+}
+.thumbnailCaption {
+	LINE-HEIGHT: 13px; MARGIN: 0px 0px 16px
+}
+.thumbnail {
+	MARGIN-BOTTOM: 2px
+}
+.thumbnail IMG {
+	BORDER-BOTTOM: #ccc 1px solid; BORDER-LEFT: #ccc 1px solid; =
+PADDING-BOTTOM: 3px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; BORDER-TOP: =
+#ccc 1px solid; BORDER-RIGHT: #ccc 1px solid; PADDING-TOP: 3px
+}
+IMG.photo {
+	BORDER-BOTTOM: #666 2px solid; BORDER-LEFT: #666 2px solid; MARGIN: 0px =
+0px 10px; BORDER-TOP: #666 2px solid; BORDER-RIGHT: #666 2px solid
+}
+.sectionHead1 {
+	BACKGROUND-COLOR: transparent; MARGIN-BOTTOM: 16px; FONT-SIZE: 13px; =
+FONT-WEIGHT: bold
+}
+.categoryPostList {
+	MARGIN: 18px 0px; FONT: 11px Verdana,Helvetica,Arial,sans-serif; CLEAR: =
+both
+}
+TABLE.categoryPostListTable {
+	FONT: 11px Verdana,Helvetica,Arial,sans-serif
+}
+.categoryBreadcrumb {
+	TEXT-ALIGN: left; MARGIN: 0px 18px 18px; WHITE-SPACE: nowrap
+}
+.categoryBreadcrumb A:link {
+=09
+}
+.categoryBreadcrumb A:active {
+=09
+}
+.categoryBreadcrumb A:visited {
+=09
+}
+.categoryBreadcrumb A:hover {
+=09
+}
+.articleBreadcrumb {
+	BORDER-BOTTOM: #666 1px dotted; PADDING-BOTTOM: 6px; MARGIN: 15px 18px; =
+PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT: 10px =
+Verdana,Helvetica,Arial,sans-serif; WHITE-SPACE: nowrap; BORDER-TOP: =
+#666 1px dotted; PADDING-TOP: 6px
+}
+.photoBreadcrumb {
+	BORDER-BOTTOM: #666 1px dotted; PADDING-BOTTOM: 6px; MARGIN: 0px 4px =
+12px 8px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; FONT: 10px =
+Verdana,Helvetica,Arial,sans-serif; WHITE-SPACE: nowrap; BORDER-TOP: =
+#666 1px dotted; PADDING-TOP: 6px
+}
+DIV.articleBreadcrumb TABLE {
+	FONT: 10px Verdana,Helvetica,Arial,sans-serif
+}
+DIV.photoBreadcrumb TABLE {
+	FONT: 10px Verdana,Helvetica,Arial,sans-serif
+}
+DIV.articleBreadcrumb SPAN.emph {
+	BACKGROUND-COLOR: transparent; COLOR: #ff9900; FONT-WEIGHT: bold
+}
+DIV.photoBreadcrumb SPAN.emph {
+	BACKGROUND-COLOR: transparent; COLOR: #ff9900; FONT-WEIGHT: bold
+}
+.pager {
+	TEXT-ALIGN: right; MARGIN: 12px 0px; WHITE-SPACE: nowrap
+}
+.articlePrintLink {
+	MARGIN-TOP: 12px; FONT: 11px Verdana,Helvetica,Arial,sans-serif; CLEAR: =
+both
+}
+.emph {
+	FONT-WEIGHT: bold
+}
+.noncompliant {
+	DISPLAY: none
+}
+.message {
+	MARGIN-BOTTOM: 16px
+}
+DIV.dayPhotos {
+=09
+}
+DIV.thumbcontainer {
+	BACKGROUND-COLOR: #fff
+}
+DIV.thumb {
+	MARGIN: 0px 12px 20px 0px; WIDTH: 150px; FLOAT: left
+}
+DIV.spacer {
+	CLEAR: both
+}
+DIV.thumb IMG {
+	BORDER-BOTTOM: #666 1px solid; BORDER-LEFT: #666 1px solid; MARGIN: 0px =
+0px 4px; BORDER-TOP: #666 1px solid; BORDER-RIGHT: #666 1px solid
+}
+DIV.thumbcaption {
+	TEXT-ALIGN: left; LINE-HEIGHT: 13px
+}
+DIV.articleAll DIV.article {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; =
+PADDING-TOP: 0px
+}
+DIV.photoAll DIV.article {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; =
+PADDING-TOP: 0px
+}
+DIV.articleAll DIV.articleBreadcrumb {
+	MARGIN: 0px 0px 25px
+}
+DIV.photoAll DIV.articleBreadcrumb {
+	MARGIN: 0px 0px 25px
+}
+#rightcol TABLE TD {
+	COLOR: #ccc
+}
+#rightcol TABLE.componentCalendar TD.componentCalendarDayname {
+	COLOR: #ccc
+}
+#rightcol TABLE.componentCalendar {
+	COLOR: #ccc
+}
+.editButtons {
+	MARGIN: 16px 0px 0px
+}
+IMG.editButtonOn {
+	WIDTH: 23px; HEIGHT: 22px; CURSOR: pointer
+}
+IMG.editButtonOff {
+	WIDTH: 23px; HEIGHT: 22px; CURSOR: pointer
+}
+IMG.editButtonDown {
+	WIDTH: 23px; HEIGHT: 22px; CURSOR: pointer
+}
+IMG.editButtonUp {
+	WIDTH: 23px; HEIGHT: 22px; CURSOR: pointer
+}
+.editButtonOn {
+	BORDER-BOTTOM: #000 1px solid; BORDER-LEFT: #000 1px solid; BACKGROUND: =
+#eee; BORDER-TOP: #000 1px solid; BORDER-RIGHT: #000 1px solid
+}
+.editButtonOff {
+	BORDER-BOTTOM: #dedede 1px solid; BORDER-LEFT: #dedede 1px solid; =
+BACKGROUND: #fff; BORDER-TOP: #dedede 1px solid; BORDER-RIGHT: #dedede =
+1px solid
+}
+.editButtonDown {
+	BACKGROUND: #ccc
+}
+.editButtonUp {
+	BACKGROUND: #fff
+}
+.reviewBox {
+	MARGIN-BOTTOM: 25px
+}
+TABLE.reviewDetails {
+	BORDER-BOTTOM: #336699 1px solid; BORDER-LEFT: #336699 1px solid; =
+BORDER-TOP: #336699 1px solid; BORDER-RIGHT: #336699 1px solid
+}
+TABLE.reviewDetails TD.reviewTitle {
+	BACKGROUND-COLOR: #336699; FONT: bold 13px =
+verdana,arial,helvetica,sans-serif; COLOR: #fff
+}
+TABLE.reviewDetails TD.reviewDetailLabel {
+	TEXT-ALIGN: right; BACKGROUND-COLOR: #6699cc; FONT: bold 10px =
+verdana,arial,helvetica,sans-serif; WHITE-SPACE: nowrap; COLOR: #fff
+}
+TABLE.reviewDetails TD.reviewDetailValue {
+	FONT: 10px verdana,arial,helvetica,sans-serif
+}
+.updatedAlbumBox {
+	BORDER-BOTTOM: #0f4275 1px solid; TEXT-ALIGN: left; BORDER-LEFT: =
+#0f4275 1px solid; PADDING-BOTTOM: 0px; BACKGROUND-COLOR: #fff; MARGIN: =
+0px 25px 25px 18px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; COLOR: #000; =
+BORDER-TOP: #0f4275 1px solid; BORDER-RIGHT: #0f4275 1px solid; =
+PADDING-TOP: 0px
+}
+TABLE.updatedAlbumHead {
+	PADDING-BOTTOM: 3px; BACKGROUND-COLOR: #6699cc; MARGIN: 0px; =
+PADDING-LEFT: 8px; PADDING-RIGHT: 8px; COLOR: #fff; PADDING-TOP: 3px
+}
+TABLE.updatedAlbumHead TD.albumName {
+	FONT-WEIGHT: bold
+}
+TABLE.updatedAlbumHead TD.albumName A {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.updatedAlbumHead TD.albumName A:link {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.updatedAlbumHead TD.albumName A:active {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.updatedAlbumHead TD.albumName A:visited {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+TABLE.updatedAlbumHead TD.albumName A:hover {
+	COLOR: #fff; TEXT-DECORATION: underline
+}
+TABLE.updatedAlbumHead TD.updateTime {
+	FONT: 9px verdana,arial,sans-serif
+}
+.miniThumbCount {
+=09
+}
+.miniThumbCount A {
+	TEXT-DECORATION: none
+}
+.miniThumbSizedImg {
+	BORDER-BOTTOM: #000 1px solid; BORDER-LEFT: #000 1px solid; BORDER-TOP: =
+#000 1px solid; BORDER-RIGHT: #000 1px solid
+}
+.miniThumbHorizContainer {
+	CLEAR: both
+}
+.miniThumbHoriz {
+	PADDING-BOTTOM: 0px; MARGIN: 0px 6px 0px 0px; PADDING-LEFT: 0px; =
+PADDING-RIGHT: 0px; FLOAT: left; PADDING-TOP: 0px
+}
+.miniThumbVertContainer {
+	MARGIN: 0px
+}
+.miniThumbVert {
+	PADDING-BOTTOM: 0px; MARGIN: 0px 0px 6px; PADDING-LEFT: 0px; =
+PADDING-RIGHT: 0px; PADDING-TOP: 0px
+}
+.miniThumbDefaultImg {
+	BORDER-BOTTOM: #000 1px solid; BORDER-LEFT: #000 1px solid; =
+PADDING-BOTTOM: 2px; BACKGROUND-COLOR: #fff; PADDING-LEFT: 2px; =
+PADDING-RIGHT: 2px; BORDER-TOP: #000 1px solid; BORDER-RIGHT: #000 1px =
+solid; PADDING-TOP: 2px
+}
+.miniThumbSelectedImg {
+	BORDER-BOTTOM: #ff0000 3px solid; BORDER-LEFT: #ff0000 3px solid; =
+PADDING-BOTTOM: 0px; BACKGROUND-COLOR: #fff; PADDING-LEFT: 0px; =
+PADDING-RIGHT: 0px; BORDER-TOP: #ff0000 3px solid; BORDER-RIGHT: #ff0000 =
+3px solid; PADDING-TOP: 0px
+}
+.miniThumbSizedCaption {
+	TEXT-ALIGN: left; MARGIN: 5px 0px 8px
+}
+.miniThumbLinks {
+	MARGIN-BOTTOM: 12px
+}
+
+------=_NextPart_000_0000_01CA4C15.1CD8E0C0--

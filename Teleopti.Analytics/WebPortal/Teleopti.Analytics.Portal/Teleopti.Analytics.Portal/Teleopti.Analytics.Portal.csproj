@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{390BE690-1711-43B1-B877-87D035EE683B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Analytics.Portal</RootNamespace>
+    <AssemblyName>Teleopti.Analytics.Portal</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ApplicationIcon>images\ccc_Menu.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\RaptorRoger2\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DeployIisAppPath>Default Web Site/Analytics</DeployIisAppPath>
+    <PackageAsSingleFile>true</PackageAsSingleFile>
+    <PublishDatabases>false</PublishDatabases>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\..\..\..\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Theme1\images\loading.gif" />
+    <Content Include="PerformanceManager\test_login.aspx" />
+    <Content Include="ReportViewer.aspx" />
+    <Content Include="Selection.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorMessage.aspx.cs">
+      <DependentUpon>ErrorMessage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ErrorMessage.aspx.designer.cs">
+      <DependentUpon>ErrorMessage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PerformanceManager\CloseReport.aspx.cs">
+      <DependentUpon>CloseReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\CloseReport.aspx.designer.cs">
+      <DependentUpon>CloseReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\CustomTree.cs" />
+    <Compile Include="PerformanceManager\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\Helper\AuthorizationHelper.cs" />
+    <Compile Include="PerformanceManager\Helper\DatabaseAccess.cs" />
+    <Compile Include="PerformanceManager\Helper\DatabaseHelperFunctions.cs" />
+    <Compile Include="PerformanceManager\Helper\IDatabaseAccess.cs" />
+    <Compile Include="PerformanceManager\KeepAlive.aspx.cs">
+      <DependentUpon>KeepAlive.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\KeepAlive.aspx.designer.cs">
+      <DependentUpon>KeepAlive.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\ReportInstanceHandler.cs" />
+    <Compile Include="PerformanceManager\Settings.cs" />
+    <Compile Include="PerformanceManager\ShowReport.aspx.cs">
+      <DependentUpon>ShowReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\ShowReport.aspx.designer.cs">
+      <DependentUpon>ShowReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\View\ActionBarView.ascx.cs">
+      <DependentUpon>ActionBarView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\View\ActionBarView.ascx.designer.cs">
+      <DependentUpon>ActionBarView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\View\AddReportView.ascx.designer.cs">
+      <DependentUpon>AddReportView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\View\AnalyzerReportView.ascx.designer.cs">
+      <DependentUpon>AnalyzerReportView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\View\NewView.ascx.cs">
+      <DependentUpon>NewView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\View\NewView.ascx.designer.cs">
+      <DependentUpon>NewView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\View\ReportTreeView.ascx.designer.cs">
+      <DependentUpon>ReportTreeView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\Site1.Master.cs">
+      <DependentUpon>Site1.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\Site1.Master.designer.cs">
+      <DependentUpon>Site1.Master</DependentUpon>
+    </Compile>
+    <Compile Include="PerformanceManager\test.aspx.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\ViewModel\AnalyzerReportViewModel.cs" />
+    <Compile Include="PerformanceManager\ViewModel\ReportTreeViewModel.cs" />
+    <Compile Include="PerformanceManager\View\AddReportView.ascx.cs">
+      <DependentUpon>AddReportView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\View\AnalyzerReportView.ascx.cs">
+      <DependentUpon>AnalyzerReportView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerformanceManager\View\ReportTreeView.ascx.cs">
+      <DependentUpon>ReportTreeView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Ccc\ColorExtensions.cs" />
+    <Compile Include="Reports\Ccc\DataCellModel.cs" />
+    <Compile Include="Reports\Ccc\GroupingExtensions.cs" />
+    <Compile Include="Reports\Ccc\IntervalToolTip.cs" />
+    <Compile Include="Reports\Ccc\PersonModel.cs" />
+    <Compile Include="Reports\Ccc\report_agent_schedule_adherence.aspx.cs">
+      <DependentUpon>report_agent_schedule_adherence.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Ccc\report_agent_schedule_adherence.aspx.designer.cs">
+      <DependentUpon>report_agent_schedule_adherence.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\AppKeyReader.cs" />
+    <Compile Include="CultureCompare.cs" />
+    <Compile Include="Utils\CccReports.cs" />
+    <Compile Include="Utils\HelpLinkBuilder.cs" />
+    <Compile Include="Utils\ImpersonatedUser.cs" />
+    <Compile Include="Utils\Login.cs" />
+    <Compile Include="Utils\TextLoader.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Utils\UserInfo.cs" />
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MatrixBasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Utils\CommonReports.cs" />
+    <Compile Include="Reports\Ccc\AgentScorecard.aspx.cs">
+      <DependentUpon>AgentScorecard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Ccc\AgentScorecard.aspx.designer.cs">
+      <DependentUpon>AgentScorecard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportViewer.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>ReportViewer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportViewer.aspx.designer.cs">
+      <DependentUpon>ReportViewer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selection.aspx.cs">
+      <DependentUpon>Selection.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Selection.aspx.designer.cs">
+      <DependentUpon>Selection.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReportTexts\ReportTexts.csproj">
+      <Project>{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}</Project>
+      <Name>ReportTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Parameter\Teleopti.Analytics.Parameters.csproj">
+      <Project>{8A8C2FC6-AD5A-4234-B887-21DE7E8D75CD}</Project>
+      <Name>Teleopti.Analytics.Parameters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Portal.AnalyzerProxy\Teleopti.Analytics.Portal.AnalyzerProxy.csproj">
+      <Project>{0B9B4EE2-0F67-401C-B6DC-8183EDEDA2E8}</Project>
+      <Name>Teleopti.Analytics.Portal.AnalyzerProxy</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Theme1\calendar.css" />
+    <Content Include="App_Themes\Theme1\images\Arrow_DownWard.gif" />
+    <Content Include="App_Themes\Theme1\images\Arrow_Straight.gif" />
+    <Content Include="App_Themes\Theme1\images\Arrow_UpWard.gif" />
+    <Content Include="App_Themes\Theme1\images\Calendar_scheduleHS.png" />
+    <Content Include="App_Themes\Theme1\images\gridheaditem_bg.gif" />
+    <Content Include="App_Themes\Theme1\images\icon_show.gif" />
+    <Content Include="App_Themes\Theme1\images\left_all_light.gif" />
+    <Content Include="App_Themes\Theme1\images\left_light.gif" />
+    <Content Include="App_Themes\Theme1\images\right_all_light.gif" />
+    <Content Include="App_Themes\Theme1\images\right_light.gif" />
+    <Content Include="App_Themes\Theme1\images\transparent_circle.png" />
+    <Content Include="App_Themes\Theme1\images\transparent_circle32.png" />
+    <Content Include="App_Themes\Theme1\Styles.css" />
+    <Content Include="App_Themes\Theme1\Scorecard.css" />
+    <Content Include="App_Themes\Theme1\Theme1.skin" />
+    <Content Include="Default.aspx" />
+    <Content Include="images\collapse.jpg" />
+    <Content Include="images\expand.jpg" />
+    <Content Include="images\next.gif" />
+    <Content Include="images\next2.gif" />
+    <Content Include="images\prev.gif" />
+    <Content Include="images\prev2.gif" />
+    <Content Include="images\Question_16x16.png" />
+    <Content Include="Login.aspx" />
+    <Content Include="Reports\Ccc\AgentScorecard.aspx" />
+    <Content Include="Reports\Ccc\report_agent_schedule_adherence.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\ccc_Menu.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PerformanceManager\Default.aspx" />
+    <Content Include="PerformanceManager\images\delete.png" />
+    <Content Include="PerformanceManager\images\edge.png" />
+    <Content Include="PerformanceManager\images\headerborder.png" />
+    <Content Include="PerformanceManager\images\icon_delete_small.gif" />
+    <Content Include="PerformanceManager\ShowReport.aspx" />
+    <Content Include="PerformanceManager\test.aspx" />
+    <Content Include="PerformanceManager\images\top_menu_logo.png" />
+    <Content Include="PerformanceManager\View\AddReportView.ascx" />
+    <Content Include="PerformanceManager\View\AnalyzerReportView.ascx" />
+    <Content Include="PerformanceManager\View\ReportTreeView.ascx" />
+    <Content Include="Reports\Ccc\report_agent_queue_stat_raw.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_agent_schedule_result.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\Ccc\report_agent_stat_raw.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_forecast_vs_actual_workload.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_forecast_vs_scheduled_hours.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_queue_stat_abnd.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_queue_stat_raw.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Ccc\report_service_level_agents_ready.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Theme1\images\next.gif" />
+    <Content Include="App_Themes\Theme1\images\previous.gif" />
+    <Content Include="Global.asax" />
+    <Content Include="ErrorMessage.aspx" />
+    <Content Include="PerformanceManager\CloseReport.aspx" />
+    <Content Include="PerformanceManager\Dummy.htm" />
+    <Content Include="PerformanceManager\images\1x1.png" />
+    <Content Include="PerformanceManager\images\edge_small.png" />
+    <Content Include="PerformanceManager\images\graph_small.gif" />
+    <Content Include="PerformanceManager\images\icon_deleteSmall.gif" />
+    <Content Include="PerformanceManager\images\Question_16x16.png" />
+    <Content Include="PerformanceManager\KeepAlive.aspx" />
+    <Content Include="PerformanceManager\Scripts\AnalyzerDelegation.js" />
+    <Content Include="PerformanceManager\Scripts\NewPopup.js" />
+    <Content Include="PerformanceManager\Site1.Master" />
+    <Content Include="PerformanceManager\Styles\PMStyles.css" />
+    <Content Include="PerformanceManager\View\ActionBarView.ascx" />
+    <Content Include="PerformanceManager\View\NewView.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\Ccc\report_agent_queue_metrics.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Reports\Ccc\report_activity_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_absence.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_IMPROVE.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_agents_per_interval_and_team.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_overtime_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_schedule_preferences_per_agent.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_activity.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_schedule_preferences_per_day.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Ccc\report_requests_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_shift_category_and_day_absences_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_shift_category_and_day_absences_per_day.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_shift_category_per_day.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_team_metrics.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+</Project>

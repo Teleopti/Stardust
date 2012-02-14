@@ -1,0 +1,6 @@
+<SmartAssembly.Settings>
+    <Options>
+        <Database Path="D:\SQLData\MSSQL10.SMARTASSEMBLY\MSSQL\DATA\" Server=".\smartassembly" />
+        <Maps LocalPath="C:\Program Files (x86)\{smartassembly}\Maps\" NetworkPath="\\DummyServer\NotUsedButNeeded" />
+    </Options>
+</SmartAssembly.Settings>

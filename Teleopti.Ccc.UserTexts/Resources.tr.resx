@@ -1,0 +1,5469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MaskedEditTextBox" xml:space="preserve">
+    <value>Gizli Biçimle Metin Kutusu</value>
+  </data>
+  <data name="MaskedEditBox" xml:space="preserve">
+    <value>Gizli Biçimle Kutusu</value>
+  </data>
+  <data name="AbandonedCalls" xml:space="preserve">
+    <value>Kaçan Çağrılar</value>
+  </data>
+  <data name="Absence" xml:space="preserve">
+    <value>Devamsızlık</value>
+  </data>
+  <data name="Absences" xml:space="preserve">
+    <value>Devamsızlıklar</value>
+  </data>
+  <data name="AbsencesColon" xml:space="preserve">
+    <value>Devamsızlıklar:</value>
+  </data>
+  <data name="AbsolutePosition" xml:space="preserve">
+    <value>Mutlak Konum</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Aksiyon</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Aksiyonlar</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>Aktiviteler</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>Aktivite</value>
+  </data>
+  <data name="ActivityColon" xml:space="preserve">
+    <value>Aktivite:</value>
+  </data>
+  <data name="ActivityColor" xml:space="preserve">
+    <value>Aktivite rengi</value>
+  </data>
+  <data name="ActivityLength" xml:space="preserve">
+    <value>Aktivite uzunluğu</value>
+  </data>
+  <data name="ActivityPosition" xml:space="preserve">
+    <value>Aktivite konumu</value>
+  </data>
+  <data name="ACW" xml:space="preserve">
+    <value>ACW</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="AddAbsence" xml:space="preserve">
+    <value>Devamsızlık Ekle</value>
+  </data>
+  <data name="AddActivity" xml:space="preserve">
+    <value>Aktivite Ekle</value>
+  </data>
+  <data name="AddArrows" xml:space="preserve">
+    <value>&amp;Ekle&gt;&gt;</value>
+  </data>
+  <data name="AddDayOff" xml:space="preserve">
+    <value>Tatil Ekle</value>
+  </data>
+  <data name="AddNewScorecard" xml:space="preserve">
+    <value>Skorkart ekle</value>
+  </data>
+  <data name="AddOpenHours" xml:space="preserve">
+    <value>Açık saat ekle</value>
+  </data>
+  <data name="AddOutlierThreeDots" xml:space="preserve">
+    <value>Özel Durum Ekle...</value>
+  </data>
+  <data name="AddPersonalActivity" xml:space="preserve">
+    <value>Personel Aktivitesi Ekle</value>
+  </data>
+  <data name="AddQueuesThreeDots" xml:space="preserve">
+    <value>Kuyruk ekle...</value>
+  </data>
+  <data name="AddToQuickAccessToolBar" xml:space="preserve">
+    <value>&amp;Hızlı Erişim Araç Çubuğuna ekle</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Yönetim</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Gelişmiş</value>
+  </data>
+  <data name="AfterCallWorkTime" xml:space="preserve">
+    <value>Çağrı sonrası çalışma süresi</value>
+  </data>
+  <data name="AgentInfo" xml:space="preserve">
+    <value>Müşteri Temsilcisi Bilgisi</value>
+  </data>
+  <data name="AgentInformation" xml:space="preserve">
+    <value>Müşteri Temsilcisi bilgisi</value>
+  </data>
+  <data name="AgentInfoThreeDots" xml:space="preserve">
+    <value>Müşteri Temsilcisi bilgisi</value>
+  </data>
+  <data name="AgentPortal" xml:space="preserve">
+    <value>Zaman Planım</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Müşteri Temsilcileri</value>
+  </data>
+  <data name="AgentSettings" xml:space="preserve">
+    <value>Müşteri Temsilcisi Ayarları</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tüm</value>
+  </data>
+  <data name="AllSelection" xml:space="preserve">
+    <value>&lt;Tüm&gt;</value>
+  </data>
+  <data name="AmpersandNameColon" xml:space="preserve">
+    <value>&amp;Ad:</value>
+  </data>
+  <data name="AmpersandPeriodColon" xml:space="preserve">
+    <value>&amp;Periyod:</value>
+  </data>
+  <data name="AnsweredCalls" xml:space="preserve">
+    <value>Karşılanan çağrılar</value>
+  </data>
+  <data name="ApplicationLogInName" xml:space="preserve">
+    <value>Uygulama giriş ismi</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Uygula</value>
+  </data>
+  <data name="AreYouSureYouWantToDelete" xml:space="preserve">
+    <value>Silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="ArrowsRemove" xml:space="preserve">
+    <value>&lt;&lt;&amp;Sil</value>
+  </data>
+  <data name="AuthenticationFailed" xml:space="preserve">
+    <value>Doğrulama yapılamadı. Lütfen tekrar deneyin</value>
+  </data>
+  <data name="AutoPosition" xml:space="preserve">
+    <value>Oto Pozisyon</value>
+  </data>
+  <data name="AvailableScorecards" xml:space="preserve">
+    <value>Geçerli Skor Kartları</value>
+  </data>
+  <data name="AverageACW" xml:space="preserve">
+    <value>Ortalama ACW</value>
+  </data>
+  <data name="AverageAfterCallWork" xml:space="preserve">
+    <value>Ortalama çağrı sonrası çalışma</value>
+  </data>
+  <data name="AverageCalls" xml:space="preserve">
+    <value>Ortalama çağrılar</value>
+  </data>
+  <data name="AverageTalkTime" xml:space="preserve">
+    <value>Ortalama konuşma süresi</value>
+  </data>
+  <data name="AverageTasks" xml:space="preserve">
+    <value>Ortalama görev</value>
+  </data>
+  <data name="AverageWorkTime" xml:space="preserve">
+    <value>Ortalama çalışma süresi</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+  <data name="BackAmpersandArrow" xml:space="preserve">
+    <value>&lt;&amp;Geri</value>
+  </data>
+  <data name="Bar" xml:space="preserve">
+    <value>Çubuk</value>
+  </data>
+  <data name="BaseActivity" xml:space="preserve">
+    <value>Temel Aktivite</value>
+  </data>
+  <data name="BetweenColon" xml:space="preserve">
+    <value>Arasında:</value>
+  </data>
+  <data name="BusinessRulesConflict" xml:space="preserve">
+    <value>İş kuralı çelişkisi</value>
+  </data>
+  <data name="BusinessUnitHierarchy" xml:space="preserve">
+    <value>İş birimi hiyerarşisi</value>
+  </data>
+  <data name="CalculatedCalls" xml:space="preserve">
+    <value>Hesaplanan çağrılar</value>
+  </data>
+  <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
+    <value>Hesaplanan doluluk oranı %</value>
+  </data>
+  <data name="Calls" xml:space="preserve">
+    <value>Çağrılar</value>
+  </data>
+  <data name="CampaignACWPercentSign" xml:space="preserve">
+    <value>Kampanya ACW %</value>
+  </data>
+  <data name="CampaignAfterWorkPercentSign" xml:space="preserve">
+    <value>Kampanya sonrası çalışma %</value>
+  </data>
+  <data name="CampaignCallsPercentSign" xml:space="preserve">
+    <value>Kampanya çağrıları %</value>
+  </data>
+  <data name="CampaignTalkTimePercentSign" xml:space="preserve">
+    <value>Kampanya konuşma süresi %</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="CanNotFindTheServiceEndPoint" xml:space="preserve">
+    <value>Servis bitiş noktası bulunamamıştır</value>
+  </data>
+  <data name="CapitalTo" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="ManageContracts" xml:space="preserve">
+    <value>Kontrat yönet</value>
+  </data>
+  <data name="ChangeYourCultureSettings" xml:space="preserve">
+    <value>Bilgisayar Hazır Ayarı</value>
+  </data>
+  <data name="ManagePartTimePercentages" xml:space="preserve">
+    <value>Yarı-zamanlı yüzdlerini yönet</value>
+  </data>
+  <data name="ChangeYourPassword" xml:space="preserve">
+    <value>Şifrenizi değiştirin</value>
+  </data>
+  <data name="Chart" xml:space="preserve">
+    <value>Grafik</value>
+  </data>
+  <data name="ChartSettings" xml:space="preserve">
+    <value>Grafik ayarları</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Tamamını kontrol et</value>
+  </data>
+  <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
+    <value>Kuralları geçersiz kılmak için TAMAM'a basın. Önce hataları düzeltmek için İPTAL'e basın.</value>
+  </data>
+  <data name="ChooseCommandsFromColon" xml:space="preserve">
+    <value>&amp;Yorumları seç:</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+  <data name="ClipAbsence" xml:space="preserve">
+    <value>Devamsızlık Ekle</value>
+  </data>
+  <data name="Clipboard" xml:space="preserve">
+    <value>Pano</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
+    <value>Biçimlemek için yarı zamanlı yğzdesi seçin</value>
+  </data>
+  <data name="CommunicationErrorEndPoint" xml:space="preserve">
+    <value>İletişim bitiş noktası hatası</value>
+  </data>
+  <data name="CompareWith" xml:space="preserve">
+    <value>Karşılaştır</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Yani şifreyi onayla</value>
+  </data>
+  <data name="Conflicts" xml:space="preserve">
+    <value>Çelişkiler</value>
+  </data>
+  <data name="ConnectedToColon" xml:space="preserve">
+    <value>Bağlantılı:</value>
+  </data>
+  <data name="Contract" xml:space="preserve">
+    <value>Sözleşme</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Sözleşme Takvimi</value>
+  </data>
+  <data name="ContractScheduledTime" xml:space="preserve">
+    <value>Sözleşme takvim zamanı</value>
+  </data>
+  <data name="Contractschedules" xml:space="preserve">
+    <value>Sözleşme takvimleri</value>
+  </data>
+  <data name="ContractTargetTime" xml:space="preserve">
+    <value>Sözleşme hedef zamanı</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="CopySpecial" xml:space="preserve">
+    <value>Özel Kopyala</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Say</value>
+  </data>
+  <data name="CreateForecast" xml:space="preserve">
+    <value>Tahmin oluştur</value>
+  </data>
+  <data name="PrepareForecastThreeDots" xml:space="preserve">
+    <value>İşyükü hazırla</value>
+  </data>
+  <data name="CreateWorkloadThreeDots" xml:space="preserve">
+    <value>İşyükü oluştur</value>
+  </data>
+  <data name="CultureSettings" xml:space="preserve">
+    <value>Kültürel ayarlar</value>
+  </data>
+  <data name="CultureText" xml:space="preserve">
+    <value>Kültür</value>
+  </data>
+  <data name="CustomizeQuickAccessToolbarDots" xml:space="preserve">
+    <value>&amp;Hızlı Erişim Araç Çubuğunu Özelleştir</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>Kes</value>
+  </data>
+  <data name="CutAbsence" xml:space="preserve">
+    <value>Devamsızlğı taşı</value>
+  </data>
+  <data name="CutDayOff" xml:space="preserve">
+    <value>Tatili taşı</value>
+  </data>
+  <data name="CutPersonalShift" xml:space="preserve">
+    <value>Kişisel Vardiyayı taşı</value>
+  </data>
+  <data name="CutShift" xml:space="preserve">
+    <value>Vardiyayı taşı</value>
+  </data>
+  <data name="CutSpecial" xml:space="preserve">
+    <value>Özeli taşı</value>
+  </data>
+  <data name="CutSpecialThreeDots" xml:space="preserve">
+    <value>Özeli taşı...</value>
+  </data>
+  <data name="DailyView" xml:space="preserve">
+    <value>Günlük görünüm</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Veri</value>
+  </data>
+  <data name="DataAvailable" xml:space="preserve">
+    <value>Uygun veri</value>
+  </data>
+  <data name="DataSummary" xml:space="preserve">
+    <value>Veri özeti</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="AvailabilityDate" xml:space="preserve">
+    <value>Uygunluk tarihi</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="DayOff" xml:space="preserve">
+    <value>Tatil</value>
+  </data>
+  <data name="DayOffShortName" xml:space="preserve">
+    <value>TA</value>
+  </data>
+  <data name="DayOfWeek" xml:space="preserve">
+    <value>Haftanın günü</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Günler</value>
+  </data>
+  <data name="DaysOff" xml:space="preserve">
+    <value>Tatil</value>
+  </data>
+  <data name="DayView" xml:space="preserve">
+    <value>Günlük görünüm</value>
+  </data>
+  <data name="DefaultColor" xml:space="preserve">
+    <value>Hazır renk</value>
+  </data>
+  <data name="IntervalLength" xml:space="preserve">
+    <value>İnterval uzunluğu</value>
+  </data>
+  <data name="ManageScorecards" xml:space="preserve">
+    <value>Skorkartları yönet</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="DeleteAbsence" xml:space="preserve">
+    <value>Devamsızlığı sil</value>
+  </data>
+  <data name="DeleteDayOff" xml:space="preserve">
+    <value>Tatili sil</value>
+  </data>
+  <data name="DeletePersonalShift" xml:space="preserve">
+    <value>Kişisel vardiyayı sil</value>
+  </data>
+  <data name="DeleteShift" xml:space="preserve">
+    <value>Vardiyayı sil</value>
+  </data>
+  <data name="DeleteSkillThreeDots" xml:space="preserve">
+    <value>Yeteneği sil</value>
+  </data>
+  <data name="DeleteSpecialThreeDots" xml:space="preserve">
+    <value>Özeli sil</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Anlatım</value>
+  </data>
+  <data name="DescriptionTest" xml:space="preserve">
+    <value>Anlatım testi</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detay</value>
+  </data>
+  <data name="DetailView" xml:space="preserve">
+    <value>Detay görüntü</value>
+  </data>
+  <data name="DeviationACWColon" xml:space="preserve">
+    <value>ACW sapma:</value>
+  </data>
+  <data name="Deviations" xml:space="preserve">
+    <value>Sapmalar</value>
+  </data>
+  <data name="DeviationCallsColon" xml:space="preserve">
+    <value>Çağrı sapmaları:</value>
+  </data>
+  <data name="DeviationTalkTimeColon" xml:space="preserve">
+    <value>Konuşma süresi sapması:</value>
+  </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Windows alanı</value>
+  </data>
+  <data name="DoubleArrowAdd" xml:space="preserve">
+    <value>&gt;&gt;</value>
+  </data>
+  <data name="DoubleArrowRemove" xml:space="preserve">
+    <value>&lt;&lt;</value>
+  </data>
+  <data name="Down" xml:space="preserve">
+    <value>Aşağı</value>
+  </data>
+  <data name="DoYouWantToSaveChangesYouMade" xml:space="preserve">
+    <value>Değişiklikleri kayıt etmek istiyormusunuz?</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Biçimle</value>
+  </data>
+  <data name="EditForecast" xml:space="preserve">
+    <value>Tahmin aç</value>
+  </data>
+  <data name="OpenForecastThreeDots" xml:space="preserve">
+    <value>Tahmin aç...</value>
+  </data>
+  <data name="Editor" xml:space="preserve">
+    <value>Biçimlendirici</value>
+  </data>
+  <data name="EditSkillTemplatesThreeDots" xml:space="preserve">
+    <value>Yetenek şablonlarını biçimle</value>
+  </data>
+  <data name="EditWorkloadTemplates" xml:space="preserve">
+    <value>İşyükü şablonlarını biçimle</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="EmailResult" xml:space="preserve">
+    <value>E-posta sonuçları</value>
+  </data>
+  <data name="EmployeeNo" xml:space="preserve">
+    <value>Personel Numarası</value>
+  </data>
+  <data name="EmployeeNoDot" xml:space="preserve">
+    <value>Personel #</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Etkinleştirildi</value>
+  </data>
+  <data name="EndPeriod" xml:space="preserve">
+    <value>Bitiş periyodu</value>
+  </data>
+  <data name="EndsNextDay" xml:space="preserve">
+    <value>Ertesi gün biten</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>Bitiş zamanı</value>
+  </data>
+  <data name="EnterNameHere" xml:space="preserve">
+    <value>Buraya isim girin</value>
+  </data>
+  <data name="ErrorOccuredWhenAccessingTheDataSource" xml:space="preserve">
+    <value>Veri kaynağına erişim hatası oluştu</value>
+  </data>
+  <data name="EstimatedOccupancy" xml:space="preserve">
+    <value>Tahmin edilen doluluk oranı</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Çık</value>
+  </data>
+  <data name="ExitOrClose" xml:space="preserve">
+    <value>Çık/Kapat</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 dakika</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtreler</value>
+  </data>
+  <data name="FinishAmpersand" xml:space="preserve">
+    <value>&amp;Bitir</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 dakika</value>
+  </data>
+  <data name="ForecastedACW" xml:space="preserve">
+    <value>Tahmin edilen ACW</value>
+  </data>
+  <data name="ForecastedAgents" xml:space="preserve">
+    <value>Tahmin edilen müşteri temsilcisi</value>
+  </data>
+  <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
+    <value>Tahmin edilen müşteri temsilcisi (Daralma etkisi ile)</value>
+  </data>
+  <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
+    <value>Tahmin edilen ortalama çağrı sonrası çalışma</value>
+  </data>
+  <data name="ForecastedAverageTalkTime" xml:space="preserve">
+    <value>Tahmin edilen ortalama konuşma süresi</value>
+  </data>
+  <data name="ForecastedCalls" xml:space="preserve">
+    <value>Tahmin edilen çağrılar</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="ForecastedTalkTime" xml:space="preserve">
+    <value>Tahmin edilen konuşma süresi</value>
+  </data>
+  <data name="Forecasts" xml:space="preserve">
+    <value>Tahminler</value>
+  </data>
+  <data name="Workflow" xml:space="preserve">
+    <value>İş akışı</value>
+  </data>
+  <data name="Forward" xml:space="preserve">
+    <value>İleri</value>
+  </data>
+  <data name="ForwardAmpersandArrow" xml:space="preserve">
+    <value>&amp;İleri&gt;</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>başlangıç</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Tam isim</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>İşlev</value>
+  </data>
+  <data name="FunctionsAvailable" xml:space="preserve">
+    <value>Uygun işlevler</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="GridActions" xml:space="preserve">
+    <value>Çapraz Aksiyonlar</value>
+  </data>
+  <data name="GroupingAbsences" xml:space="preserve">
+    <value>Devamsızlıkları Gruplama</value>
+  </data>
+  <data name="Header" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Detayları gizle</value>
+  </data>
+  <data name="HistoricalDepth" xml:space="preserve">
+    <value>Tarihsel derinlik</value>
+  </data>
+  <data name="HistoricalPeriod" xml:space="preserve">
+    <value>Tarihsel periyod</value>
+  </data>
+  <data name="Holiday" xml:space="preserve">
+    <value>İzin</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Ev</value>
+  </data>
+  <data name="IndexACW" xml:space="preserve">
+    <value>Indeks ACW</value>
+  </data>
+  <data name="IndexAfterCallWork" xml:space="preserve">
+    <value>Çağrı sonrası çalışma indeksi</value>
+  </data>
+  <data name="IndexCalls" xml:space="preserve">
+    <value>Çağrı indeksi</value>
+  </data>
+  <data name="IndexTalkTime" xml:space="preserve">
+    <value>Konuşma süresi indeksi</value>
+  </data>
+  <data name="IndexTasks" xml:space="preserve">
+    <value>Görev indeksi</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="InsertNewPerson" xml:space="preserve">
+    <value>Yeni kişi ekle</value>
+  </data>
+  <data name="InsertNewPersonFromClipboard" xml:space="preserve">
+    <value>Panodan yeni kişi ekle</value>
+  </data>
+  <data name="AddOptionalColumn" xml:space="preserve">
+    <value>Opsiyonel Kolon Ekle</value>
+  </data>
+  <data name="DeleteOptionalColumn" xml:space="preserve">
+    <value>Opsiyonel Kolonu Sil</value>
+  </data>
+  <data name="ChangeOptionalColumn" xml:space="preserve">
+    <value>Opsiyonel Kolono Değiştir</value>
+  </data>
+  <data name="Intraday" xml:space="preserve">
+    <value>Güniçi</value>
+  </data>
+  <data name="InvalidCredential" xml:space="preserve">
+    <value>Geçersiz giriş. Lütfen tekrar deneyin.</value>
+  </data>
+  <data name="IsFullDayAbsence" xml:space="preserve">
+    <value>Tüm gün devamsızlık</value>
+  </data>
+  <data name="IsIn" xml:space="preserve">
+    <value>Has</value>
+  </data>
+  <data name="ItemsSelectedParameter" xml:space="preserve">
+    <value>[0] madde seçildi</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Devamsızlık (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Uyum (%)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Karşılanan Çağrı/Vardiyalanan telefpn zamanı</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Ortalama çağrı sonrası çalışma (sn)</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Ortalama çağrı tamamlama zamanı (sn)</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Ortalama konuşma süresi (sn)</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Hazır olma (%)</value>
+  </data>
+  <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
+    <value>Skorkart içindeki KPI'lar</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lisan</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Soyad</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Son güncelleme</value>
+  </data>
+  <data name="Layer" xml:space="preserve">
+    <value>Seviye</value>
+  </data>
+  <data name="LeftAxis" xml:space="preserve">
+    <value>Sol eksen</value>
+  </data>
+  <data name="Legends" xml:space="preserve">
+    <value>Göstergeler</value>
+  </data>
+  <data name="LessDoubleArrow" xml:space="preserve">
+    <value>Az&lt;&lt;</value>
+  </data>
+  <data name="LessThanColon" xml:space="preserve">
+    <value>&amp;Daha az</value>
+  </data>
+  <data name="Limitations" xml:space="preserve">
+    <value>Sınırlama</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>Çizgi</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Kilit</value>
+  </data>
+  <data name="LockAbsence" xml:space="preserve">
+    <value>Devamsızlığı Kilitle</value>
+  </data>
+  <data name="LockAbsences" xml:space="preserve">
+    <value>Devamsızlıkları Kilitle</value>
+  </data>
+  <data name="LockAll" xml:space="preserve">
+    <value>Tümünü Kilitle</value>
+  </data>
+  <data name="LockDayOff" xml:space="preserve">
+    <value>Tatili Kilitle</value>
+  </data>
+  <data name="LockFreeDays" xml:space="preserve">
+    <value>Tatili Kilitle</value>
+  </data>
+  <data name="Locks" xml:space="preserve">
+    <value>Kilitler</value>
+  </data>
+  <data name="LockSelection" xml:space="preserve">
+    <value>Seçili Alanı Kilitle</value>
+  </data>
+  <data name="LockShiftCategories" xml:space="preserve">
+    <value>Vardiya Kategorilerini Kilitle</value>
+  </data>
+  <data name="LockShiftCategory" xml:space="preserve">
+    <value>Vardiya Kategorisini Kilitle</value>
+  </data>
+  <data name="LogObject" xml:space="preserve">
+    <value>Nesne logla</value>
+  </data>
+  <data name="MainGrid" xml:space="preserve">
+    <value>Vardiya Planları</value>
+  </data>
+  <data name="MainScreen" xml:space="preserve">
+    <value>Ana ekran</value>
+  </data>
+  <data name="ManageAbsence" xml:space="preserve">
+    <value>Devamsızlıkları yönet</value>
+  </data>
+  <data name="ManageDayDistributionsThreeDots" xml:space="preserve">
+    <value>Günlük dağılımları yönet</value>
+  </data>
+  <data name="ManageDayTemplatesThreeDots" xml:space="preserve">
+    <value>Gün şablonlarını yönet</value>
+  </data>
+  <data name="ManageTemplate" xml:space="preserve">
+    <value>Şablonları yönet</value>
+  </data>
+  <data name="MaximumAgents" xml:space="preserve">
+    <value>Maksimum Müşteri Temsilcisi</value>
+  </data>
+  <data name="MaximumOccupancy" xml:space="preserve">
+    <value>Maksimum Doluluk Oranı</value>
+  </data>
+  <data name="MaxTime" xml:space="preserve">
+    <value>Maks</value>
+  </data>
+  <data name="Merge" xml:space="preserve">
+    <value>Birleştir</value>
+  </data>
+  <data name="MinimizeTheRibbon" xml:space="preserve">
+    <value>İşareti küçült</value>
+  </data>
+  <data name="MinimumAgents" xml:space="preserve">
+    <value>Minimum Müşteri Temsilcisi</value>
+  </data>
+  <data name="MinimumOccupancy" xml:space="preserve">
+    <value>Minimum Doluluk Oranı</value>
+  </data>
+  <data name="MinTime" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Ay</value>
+  </data>
+  <data name="MonthOfYear" xml:space="preserve">
+    <value>Yılın Ayları</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>Aylar</value>
+  </data>
+  <data name="MonthView" xml:space="preserve">
+    <value>Aylık Görünüm</value>
+  </data>
+  <data name="MoreDoubleArrow" xml:space="preserve">
+    <value>Daha fazla &gt;&gt;</value>
+  </data>
+  <data name="MoreThanColon" xml:space="preserve">
+    <value>&amp;Daha fazla</value>
+  </data>
+  <data name="MoreToComeThreeDots" xml:space="preserve">
+    <value>İlave gelecek olan...</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Taşı</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Aşağı taşı</value>
+  </data>
+  <data name="MoveLeft" xml:space="preserve">
+    <value>Sola taşı</value>
+  </data>
+  <data name="MoveRight" xml:space="preserve">
+    <value>Sağa taşı</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Yukarı taşı</value>
+  </data>
+  <data name="MultipleValuesParanteses" xml:space="preserve">
+    <value>(birden fazla değer)</value>
+  </data>
+  <data name="MultisiteDayTemplate" xml:space="preserve">
+    <value>Çoklu Lokasyon gün şablonları</value>
+  </data>
+  <data name="MultisiteDayTemplatesInvalidOneParameter" xml:space="preserve">
+    <value>Doğrulama hatasından ötürü şablonlar kayıt edilemedi. İntarvallerin toplamının %100'e tamamlandığını kontrol ediniz. Hata bilgisi {0}</value>
+  </data>
+  <data name="MultisiteSkillWizard" xml:space="preserve">
+    <value>Çoklu Lokasyon Yetenek Sihirbazı</value>
+  </data>
+  <data name="MultisiteTemplate" xml:space="preserve">
+    <value>Çoklu Lokasyon Şablonu</value>
+  </data>
+  <data name="MustSpecifyValidTime" xml:space="preserve">
+    <value>Geçerli bir zaman tanımlayın</value>
+  </data>
+  <data name="MyCurrentCulture" xml:space="preserve">
+    <value>Mevcut Kültürüm</value>
+  </data>
+  <data name="MyLanguage" xml:space="preserve">
+    <value>Lisanım</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Yeni</value>
+  </data>
+  <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
+    <value>Yeni Çoklu Lokasyon Yeteneği...</value>
+  </data>
+  <data name="NewOutlier" xml:space="preserve">
+    <value>Yeni Özel Durum</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Yeni Şifre</value>
+  </data>
+  <data name="NewScorecard" xml:space="preserve">
+    <value>Yeni skorkart</value>
+  </data>
+  <data name="NewShift" xml:space="preserve">
+    <value>Yeni vardiya</value>
+  </data>
+  <data name="NewSkillThreeDots" xml:space="preserve">
+    <value>Yeni yetenek...</value>
+  </data>
+  <data name="NewThreeDots" xml:space="preserve">
+    <value>Yeni...</value>
+  </data>
+  <data name="NewWorkload" xml:space="preserve">
+    <value>Yeni İşyükü</value>
+  </data>
+  <data name="NewWorkloadThreeDots" xml:space="preserve">
+    <value>Yeni İşyükü...</value>
+  </data>
+  <data name="NextAmpersandArrow" xml:space="preserve">
+    <value>&amp;Sonraki &gt;</value>
+  </data>
+  <data name="NextDay" xml:space="preserve">
+    <value>Ertesi gün</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Uygun veri yok</value>
+  </data>
+  <data name="NoDateIsSelected" xml:space="preserve">
+    <value>Tarih seçilmedi</value>
+  </data>
+  <data name="NoFunctionsAvailable" xml:space="preserve">
+    <value>Uygun işlev yok</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Hiçbiri</value>
+  </data>
+  <data name="NoRulesetsavailable" xml:space="preserve">
+    <value>Uygun kural seti yok</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Not</value>
+  </data>
+  <data name="NotInHierarchy" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="OccupancyAdjustment" xml:space="preserve">
+    <value>Doluluk oranı ayarı</value>
+  </data>
+  <data name="OccupancySettings" xml:space="preserve">
+    <value>Doluluk oranı ayarları</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>TAMAM</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="OpenHours" xml:space="preserve">
+    <value>Açık saatler</value>
+  </data>
+  <data name="OpenPersonAdminPage" xml:space="preserve">
+    <value>İnsanlar</value>
+  </data>
+  <data name="OpenSchedulePage" xml:space="preserve">
+    <value>Vardiya Planları</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Opsiyonlar</value>
+  </data>
+  <data name="OriginalACW" xml:space="preserve">
+    <value>Orjinal ACW</value>
+  </data>
+  <data name="OriginalAfterCallWork" xml:space="preserve">
+    <value>Orijinal çağrı sonrası çalışma</value>
+  </data>
+  <data name="OriginalCalls" xml:space="preserve">
+    <value>Orijinal gerçekleşen çağrılar</value>
+  </data>
+  <data name="OriginalTalkTime" xml:space="preserve">
+    <value>Orijinal konuşma süresi</value>
+  </data>
+  <data name="OriginalTasks" xml:space="preserve">
+    <value>Orijinal görevler</value>
+  </data>
+  <data name="Outlier" xml:space="preserve">
+    <value>Özel Durum</value>
+  </data>
+  <data name="OverlappningShifts" xml:space="preserve">
+    <value>Çakışan vardiyalar</value>
+  </data>
+  <data name="OverView" xml:space="preserve">
+    <value>Genel Görünüm</value>
+  </data>
+  <data name="PageSetup" xml:space="preserve">
+    <value>Sayfa düzeni</value>
+  </data>
+  <data name="PartTimePercentage" xml:space="preserve">
+    <value>Yarım zamanlı yüzdesi</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Yarım zamanlı yüzdeleri</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Tutmayan Şifreler</value>
+  </data>
+  <data name="PasswordSettings" xml:space="preserve">
+    <value>Şifre ayarları</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Yapıştır</value>
+  </data>
+  <data name="PasteAbsence" xml:space="preserve">
+    <value>Devamsızlığı yapıştır</value>
+  </data>
+  <data name="PasteAssignment" xml:space="preserve">
+    <value>Vardiyayı yapıştır</value>
+  </data>
+  <data name="PasteDayOff" xml:space="preserve">
+    <value>Tatili yapıştıır</value>
+  </data>
+  <data name="PasteNew" xml:space="preserve">
+    <value>Yeni yapıştır</value>
+  </data>
+  <data name="PastePersonalShift" xml:space="preserve">
+    <value>Kişisel vardiya yapıştır</value>
+  </data>
+  <data name="PasteSpecial" xml:space="preserve">
+    <value>Özel şekilde yapıştır</value>
+  </data>
+  <data name="PasteSpecialThreeDots" xml:space="preserve">
+    <value>Özel şekilde yapıştır...</value>
+  </data>
+  <data name="PeopleAdminScreen" xml:space="preserve">
+    <value>İnsanlar</value>
+  </data>
+  <data name="PeoplePeriods" xml:space="preserve">
+    <value>Kişi Periyodları</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>Yüzde</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Periyod</value>
+  </data>
+  <data name="PeriodSelection" xml:space="preserve">
+    <value>Periyod Seçimi</value>
+  </data>
+  <data name="PeriodView" xml:space="preserve">
+    <value>Periyod görünümü</value>
+  </data>
+  <data name="Periodviewprototype" xml:space="preserve">
+    <value>Periyod Görünüm PROTOTİP</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Yetkilendirme</value>
+  </data>
+  <data name="PersonAdmin" xml:space="preserve">
+    <value>İnsanlar</value>
+  </data>
+  <data name="PersonalizeYourAgentPortal" xml:space="preserve">
+    <value>MyTime Kişiselleştirme</value>
+  </data>
+  <data name="PersonalShift" xml:space="preserve">
+    <value>Kişisel vardiya</value>
+  </data>
+  <data name="PersonalShifts" xml:space="preserve">
+    <value>Kişisel vardiyalar</value>
+  </data>
+  <data name="PersonSkill" xml:space="preserve">
+    <value>Yetenekler</value>
+  </data>
+  <data name="PlaceHolder" xml:space="preserve">
+    <value>[Yer tutucu]</value>
+  </data>
+  <data name="PlaceHolderForSmartPart" xml:space="preserve">
+    <value>[Akıllı bölüm için yer tutucu]</value>
+  </data>
+  <data name="PlaceQuickAccessToolbarAboveTheRibbon" xml:space="preserve">
+    <value>&amp;Hızlı Eriçim Araççubuğunu işaretin üzerine yerleştir</value>
+  </data>
+  <data name="PlaceQuickAccessToolbarBelowTheRibbon" xml:space="preserve">
+    <value>&amp;Hızlı Eriçim Araççubuğunu işaretin altına yerleştir</value>
+  </data>
+  <data name="PlanDayOffs" xml:space="preserve">
+    <value>Tatileri Planla</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Yazdır</value>
+  </data>
+  <data name="PrintPreview" xml:space="preserve">
+    <value>Görüntüyü yazdır</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Özellikler</value>
+  </data>
+  <data name="PropertiesThreeDots" xml:space="preserve">
+    <value>Özellikler...</value>
+  </data>
+  <data name="Quarter" xml:space="preserve">
+    <value>Çeyrek</value>
+  </data>
+  <data name="QuestionCreateAnotherSubSkill" xml:space="preserve">
+    <value>Başka bir alt yetenek oluşturmak istiyormusunuz?</value>
+  </data>
+  <data name="QuestionCreateAnotherWorkload" xml:space="preserve">
+    <value>Başka bir işyükü oluşturmak istiyormusunuz?</value>
+  </data>
+  <data name="QuestionCreateSubSkill" xml:space="preserve">
+    <value>Çoklu-lokasyon yeteneği herhangi bir alt yetenek içermiyor. Oluşturmak istiyor musunuz?</value>
+  </data>
+  <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
+    <value>Yeteneği silmek istediğinizden emin misiniz?{0}{1}{0}?</value>
+  </data>
+  <data name="QuestionSaveChanges" xml:space="preserve">
+    <value>Değişiklikler kaydedilsin mi?</value>
+  </data>
+  <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
+    <value>Yeteneğiniz herhangi bir işyükü içermiyor, şimddi bir işyükü oluşturmak ister misiniz?</value>
+  </data>
+  <data name="QuestionWouldYouLikeToCreateWorkloadQuestionMark" xml:space="preserve">
+    <value>İşyükü oluşturmak ister misiniz?</value>
+  </data>
+  <data name="Queue" xml:space="preserve">
+    <value>Kuyruk</value>
+  </data>
+  <data name="Queues" xml:space="preserve">
+    <value>Kuyruklar</value>
+  </data>
+  <data name="QuickAccess" xml:space="preserve">
+    <value>Hızlı Erişim</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Hazır</value>
+  </data>
+  <data name="Redo" xml:space="preserve">
+    <value>Yeniden Yap</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="RemoveFromQuickAccessToolbar" xml:space="preserve">
+    <value>&amp;Hızlı Erişim Çubuğundan kaldır</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Yeniden adlandır</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Raporlar</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Yeniden kur</value>
+  </data>
+  <data name="ResetTrend" xml:space="preserve">
+    <value>Trendi yeniden kur</value>
+  </data>
+  <data name="ResolveBusinessRulesConflict" xml:space="preserve">
+    <value>İş kuralları çelişkilerini düzelt</value>
+  </data>
+  <data name="ResultView" xml:space="preserve">
+    <value>Sonucu görüntüsü</value>
+  </data>
+  <data name="RightAxis" xml:space="preserve">
+    <value>Sağ eksen</value>
+  </data>
+  <data name="RightToLeft" xml:space="preserve">
+    <value>Sağdan sola</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="RollingPeriod" xml:space="preserve">
+    <value>Devir periyodu</value>
+  </data>
+  <data name="Rules" xml:space="preserve">
+    <value>Kurallar</value>
+  </data>
+  <data name="RuleSet" xml:space="preserve">
+    <value>Kural seti</value>
+  </data>
+  <data name="Rulesetavailable" xml:space="preserve">
+    <value>1 adet uygun kural seti</value>
+  </data>
+  <data name="Rulesetsavailables" xml:space="preserve">
+    <value>Uygun kural setleri</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Başka isimle kaydet</value>
+  </data>
+  <data name="Scenario" xml:space="preserve">
+    <value>Senaryo</value>
+  </data>
+  <data name="ScenarioColon" xml:space="preserve">
+    <value>Senaryo:</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Vardiya Planı</value>
+  </data>
+  <data name="ScheduleDescripton" xml:space="preserve">
+    <value>Vardiya Planı tanımı</value>
+  </data>
+  <data name="ScheduledHeads" xml:space="preserve">
+    <value>Vardiyalanan kişiler</value>
+  </data>
+  <data name="ScheduledHours" xml:space="preserve">
+    <value>Vardiyalanan saatler</value>
+  </data>
+  <data name="ScheduledStaff" xml:space="preserve">
+    <value>Vardiyalanan müşteri temsilcileri</value>
+  </data>
+  <data name="SchedulePeriods" xml:space="preserve">
+    <value>Vardiya Planı periyodu</value>
+  </data>
+  <data name="Schedules" xml:space="preserve">
+    <value>Vardiya Planları</value>
+  </data>
+  <data name="ScheduleSelected" xml:space="preserve">
+    <value>Seçili Vardiya Planları</value>
+  </data>
+  <data name="ScheduleViews" xml:space="preserve">
+    <value>Vardiya Planı görünümü</value>
+  </data>
+  <data name="Scheduling" xml:space="preserve">
+    <value>Vardiya Planlama</value>
+  </data>
+  <data name="SchedulingScreen" xml:space="preserve">
+    <value>Vardiya Planı ekranı</value>
+  </data>
+  <data name="ScoreCard" xml:space="preserve">
+    <value>Skorkart</value>
+  </data>
+  <data name="Scorecards" xml:space="preserve">
+    <value>Skorkartları</value>
+  </data>
+  <data name="Segment" xml:space="preserve">
+    <value>parça</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>&lt;seç&gt;</value>
+  </data>
+  <data name="SelectedExceptions" xml:space="preserve">
+    <value>Seçili istisnalar</value>
+  </data>
+  <data name="SelectHistoricalData" xml:space="preserve">
+    <value>Tarihi veri seç</value>
+  </data>
+  <data name="SelectSiteColon" xml:space="preserve">
+    <value>Lokasyon seç:</value>
+  </data>
+  <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
+    <value>Servis Seviyesi (%)</value>
+  </data>
+  <data name="ServiceLevelPercentageMustBeBetween1And100" xml:space="preserve">
+    <value>Girdiğiniz servis seviyesi 1 ile 100 % arasında olmalıdır.</value>
+  </data>
+  <data name="ServiceLevelPercentSign" xml:space="preserve">
+    <value>Servis Seiyesi %</value>
+  </data>
+  <data name="ServiceLevelSParenthesis" xml:space="preserve">
+    <value>Servis Seviyesi (s)</value>
+  </data>
+  <data name="SetCulture" xml:space="preserve">
+    <value>Kültürü ayarla</value>
+  </data>
+  <data name="SetKPITargets" xml:space="preserve">
+    <value>KPI hedeflerini ayarla</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Şifre Ayarla</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="SetTrendManually" xml:space="preserve">
+    <value>Trendi elle ayarla</value>
+  </data>
+  <data name="Shift" xml:space="preserve">
+    <value>Vardiya</value>
+  </data>
+  <data name="ShiftCategoryColon" xml:space="preserve">
+    <value>Vardiya kategorisi</value>
+  </data>
+  <data name="ShiftCreator" xml:space="preserve">
+    <value>Vardiyalar</value>
+  </data>
+  <data name="ShiftEditor" xml:space="preserve">
+    <value>Vardiya biçimlendiricisi</value>
+  </data>
+  <data name="ShowAbsence" xml:space="preserve">
+    <value>Devamsızlıkları göster</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>Detayları göster</value>
+  </data>
+  <data name="ShowMainShift" xml:space="preserve">
+    <value>Vardiyaları göster</value>
+  </data>
+  <data name="ShowNext" xml:space="preserve">
+    <value>Bir sonrakini göster</value>
+  </data>
+  <data name="ShowNextShift" xml:space="preserve">
+    <value>Bir sonraki vardiyayı göster</value>
+  </data>
+  <data name="ShowPersonalShifts" xml:space="preserve">
+    <value>Kişisel vardiyaları göster</value>
+  </data>
+  <data name="ShowPrevious" xml:space="preserve">
+    <value>Bir öncekini göster</value>
+  </data>
+  <data name="ShowPreviousShift" xml:space="preserve">
+    <value>Bir önceki vardiyayı göster</value>
+  </data>
+  <data name="Shrinkage" xml:space="preserve">
+    <value>Daralma</value>
+  </data>
+  <data name="SixMinutes" xml:space="preserve">
+    <value>6 dakika</value>
+  </data>
+  <data name="SixtyMinutes" xml:space="preserve">
+    <value>60 dakika</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Yetenek</value>
+  </data>
+  <data name="SkillData" xml:space="preserve">
+    <value>Yetenek verisi</value>
+  </data>
+  <data name="SkillDataGrids" xml:space="preserve">
+    <value>Yetenek veri gridleri</value>
+  </data>
+  <data name="SkillDayTemplate" xml:space="preserve">
+    <value>Yetenek gün şablonu</value>
+  </data>
+  <data name="SkillDayTemplates" xml:space="preserve">
+    <value>Yetenek gün şablonları</value>
+  </data>
+  <data name="SkillsTotal" xml:space="preserve">
+    <value>Yeteneklerin toplamı</value>
+  </data>
+  <data name="SkillTab" xml:space="preserve">
+    <value>Yetenek sekmesi</value>
+  </data>
+  <data name="SkillTemplate" xml:space="preserve">
+    <value>Yetenek şablonu</value>
+  </data>
+  <data name="ForecastMethod" xml:space="preserve">
+    <value>Tahmin metodu</value>
+  </data>
+  <data name="SkillViews" xml:space="preserve">
+    <value>Yetenek Görünümleri</value>
+  </data>
+  <data name="SkillWizard" xml:space="preserve">
+    <value>Yetenek sihirbazı</value>
+  </data>
+  <data name="SkillWizardInformation" xml:space="preserve">
+    <value>Sihirbaz size yetenek oluşturmanıza yardım edebilir.</value>
+  </data>
+  <data name="SkillWizardWelcome" xml:space="preserve">
+    <value>Yetenek sihirbazına hoş geldiniz.</value>
+  </data>
+  <data name="Smoothing" xml:space="preserve">
+    <value>Yumuşatma</value>
+  </data>
+  <data name="SpecialEvents" xml:space="preserve">
+    <value>Özel durumlar</value>
+  </data>
+  <data name="SpecialTemplates" xml:space="preserve">
+    <value>Özel şablonlar</value>
+  </data>
+  <data name="SpecificDatesSelection" xml:space="preserve">
+    <value>Özel tarih seçimi</value>
+  </data>
+  <data name="Split" xml:space="preserve">
+    <value>Böl</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>Standart</value>
+  </data>
+  <data name="StandardColors" xml:space="preserve">
+    <value>Standart renkler</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Başlangıç tarihi:</value>
+  </data>
+  <data name="StartMenu" xml:space="preserve">
+    <value>Başlangıç menüsü</value>
+  </data>
+  <data name="StartPeriod" xml:space="preserve">
+    <value>Başlangıç periyodu</value>
+  </data>
+  <data name="StartSegment" xml:space="preserve">
+    <value>Başlangıç bölümü</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Başlangıç zamanı</value>
+  </data>
+  <data name="SubSkill" xml:space="preserve">
+    <value>Alt yetenek</value>
+  </data>
+  <data name="SubSkillDistributions" xml:space="preserve">
+    <value>Alt yetenek dağılımları</value>
+  </data>
+  <data name="SubSkills" xml:space="preserve">
+    <value>Alt yetenekler</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Özet</value>
+  </data>
+  <data name="SummaryView" xml:space="preserve">
+    <value>Özet görünüm</value>
+  </data>
+  <data name="SwitchDateSelectionView" xml:space="preserve">
+    <value>Tarih seçim görünümünü değiştir</value>
+  </data>
+  <data name="SystemColor" xml:space="preserve">
+    <value>Sistem rengi</value>
+  </data>
+  <data name="TalkTime" xml:space="preserve">
+    <value>Konuşma süresi</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Hedef</value>
+  </data>
+  <data name="TargetColon" xml:space="preserve">
+    <value>&amp;Target:</value>
+  </data>
+  <data name="TargetPeriod" xml:space="preserve">
+    <value>Hedef periyod</value>
+  </data>
+  <data name="TargetPeriodFrom" xml:space="preserve">
+    <value>Hedef period başlangıcı</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Takım</value>
+  </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Takım üyeleri</value>
+  </data>
+  <data name="TeamView" xml:space="preserve">
+    <value>Takım görünümü</value>
+  </data>
+  <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
+    <value>TELEOPTI CCC : Tahminleri</value>
+  </data>
+  <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
+    <value>TELEOPTI CCC: Ana portal</value>
+  </data>
+  <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
+    <value>TELEOPTI CCC : Vardiya Planları</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Şablon</value>
+  </data>
+  <data name="TemplatesThreeDots" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="TenMinutes" xml:space="preserve">
+    <value>10 dakika</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="ThemeColors" xml:space="preserve">
+    <value>Tema renkleri</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 dakika</value>
+  </data>
+  <data name="ThreeDots" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="CreateForecastFor" xml:space="preserve">
+    <value>Tahmin yarat</value>
+  </data>
+  <data name="TimeZone" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Bitiş zamanı</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Bugün</value>
+  </data>
+  <data name="ToggleDateSelection" xml:space="preserve">
+    <value>Tarih seçimini değiştir</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Araçlar</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="TotalACW" xml:space="preserve">
+    <value>Toplam ACW</value>
+  </data>
+  <data name="TotalAfterWorkTime" xml:space="preserve">
+    <value>Toplam çağrı sonrası çalışma zamanı</value>
+  </data>
+  <data name="TotalCalls" xml:space="preserve">
+    <value>Toplam çağrılar</value>
+  </data>
+  <data name="TotalTalkTime" xml:space="preserve">
+    <value>Toplam konuşma süresi</value>
+  </data>
+  <data name="Trend" xml:space="preserve">
+    <value>Trend</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="UICulture" xml:space="preserve">
+    <value>UI-Kültür</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>Yapma</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Birim</value>
+  </data>
+  <data name="UnknownTimeFormat" xml:space="preserve">
+    <value>Bilinmayen zaman biçimi</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Kilidi aç</value>
+  </data>
+  <data name="UnlockAll" xml:space="preserve">
+    <value>Tümünün kilidini aç</value>
+  </data>
+  <data name="UnlockSelection" xml:space="preserve">
+    <value>Seçili alanın kilidini aç</value>
+  </data>
+  <data name="Up" xml:space="preserve">
+    <value>Yukarı</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="UpdatedBy" xml:space="preserve">
+    <value>Tarafından güncellendi</value>
+  </data>
+  <data name="UpdateGrid" xml:space="preserve">
+    <value>Gridi güncelle</value>
+  </data>
+  <data name="UpdatesStatistics" xml:space="preserve">
+    <value>İstatistikleri güncelliyor</value>
+  </data>
+  <data name="UpdateStatistics" xml:space="preserve">
+    <value>İstatistikleri güncelle</value>
+  </data>
+  <data name="UseAverage" xml:space="preserve">
+    <value>Ortalamayı kullan</value>
+  </data>
+  <data name="UseOccupancyAdjustment" xml:space="preserve">
+    <value>Doluluk oranı ayarlarını kullan</value>
+  </data>
+  <data name="UserCredentialsFor" xml:space="preserve">
+    <value>Kullanıcı kimlik bilgileri</value>
+  </data>
+  <data name="UseTemplatesForLongtermForecasting" xml:space="preserve">
+    <value>Uzun dönem tahminleme için şablonları kullan</value>
+  </data>
+  <data name="UseTrend" xml:space="preserve">
+    <value>Trendi kullan</value>
+  </data>
+  <data name="ValidatedACW" xml:space="preserve">
+    <value>Doğrulanmış ACW</value>
+  </data>
+  <data name="ValidatedAfterCallWork" xml:space="preserve">
+    <value>Doğrulanmış çağrı sonrası çalışma</value>
+  </data>
+  <data name="ValidatedCalls" xml:space="preserve">
+    <value>Doğrulanmış çağrılar</value>
+  </data>
+  <data name="ValidatedTalkTime" xml:space="preserve">
+    <value>Doğrulanmış konuşma süresi</value>
+  </data>
+  <data name="ValidatedTasks" xml:space="preserve">
+    <value>Doğrulanmış görevler</value>
+  </data>
+  <data name="Validation" xml:space="preserve">
+    <value>Doğrulama</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>Doğrulama hatası</value>
+  </data>
+  <data name="ValidationPeriod" xml:space="preserve">
+    <value>Doğrulama periyodu</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Görünüm</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>Görünümler</value>
+  </data>
+  <data name="Visual" xml:space="preserve">
+    <value>Görsel</value>
+  </data>
+  <data name="VolumeForecast" xml:space="preserve">
+    <value>Uzun dönem tahminleme</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Hafta</value>
+  </data>
+  <data name="WeekDay" xml:space="preserve">
+    <value>Haftaiçi</value>
+  </data>
+  <data name="WeeklyView" xml:space="preserve">
+    <value>Haftalık görünüm</value>
+  </data>
+  <data name="WeekOfMonth" xml:space="preserve">
+    <value>Ayın haftaları</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>Haftalar</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Hoşgeldiniz</value>
+  </data>
+  <data name="WinLoginNameDot" xml:space="preserve">
+    <value>Windows giriş</value>
+  </data>
+  <data name="Wizard" xml:space="preserve">
+    <value>Sihirbaz</value>
+  </data>
+  <data name="WorkflowToolWelcome" xml:space="preserve">
+    <value>İşyükünüzü hazırlamak için bu işakışı aracını kullanın.</value>
+  </data>
+  <data name="Workload" xml:space="preserve">
+    <value>İşyükü</value>
+  </data>
+  <data name="WorkloadCreatedDotParameter0" xml:space="preserve">
+    <value>Oluşturulmuş işyükü {0}.</value>
+  </data>
+  <data name="WorkloadDayTemplate" xml:space="preserve">
+    <value>İşyükü gün şablonu</value>
+  </data>
+  <data name="WorkloadDayTemplates" xml:space="preserve">
+    <value>İşyükü gün şablonları</value>
+  </data>
+  <data name="WorkloadNameIsInvalid" xml:space="preserve">
+    <value>Girilen işyükü ismi geçerli değil, isim yeri boş olmamalı veya 50 karakterden uzun olmamalı</value>
+  </data>
+  <data name="WorkloadTemplate" xml:space="preserve">
+    <value>İşyükü şablonu</value>
+  </data>
+  <data name="WorkloadWizard" xml:space="preserve">
+    <value>İşyükü sihirbazı</value>
+  </data>
+  <data name="WorkloadWizardInformation" xml:space="preserve">
+    <value>Sihirbaz size işyükü oluşturmakta yardımcı olacaktır.</value>
+  </data>
+  <data name="WorkloadWizardWelcome" xml:space="preserve">
+    <value>İşyükü sihirbazına hoşgeldiniz</value>
+  </data>
+  <data name="WorkShiftRule" xml:space="preserve">
+    <value>İş vardiyası kuralı</value>
+  </data>
+  <data name="Workshiftruleset" xml:space="preserve">
+    <value>İş vardiyası kural seti</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Yıl</value>
+  </data>
+  <data name="YearlyTrend" xml:space="preserve">
+    <value>Yıllık trend</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>Yıllar</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
+    <value>Vardiya planında yapılan değişiklikleri kayedetmek istiyor musunuz?</value>
+  </data>
+  <data name="ZeroZeroColonZeroZero" xml:space="preserve">
+    <value>00:00</value>
+  </data>
+  <data name="DateFromGreaterThanDateTo" xml:space="preserve">
+    <value>Bitiş tarihi başlangıç tarihinden sonra olmalıdır</value>
+  </data>
+  <data name="EmptyRequest" xml:space="preserve">
+    <value>Boş istek</value>
+  </data>
+  <data name="RequestsSummary" xml:space="preserve">
+    <value>İstekler Özeti</value>
+  </data>
+  <data name="EmploymentTypeFixedStaff" xml:space="preserve">
+    <value>Sabit personel</value>
+  </data>
+  <data name="EmploymentTypeHourlyStaff" xml:space="preserve">
+    <value>Saatlik personel</value>
+  </data>
+  <data name="GroupingActivity" xml:space="preserve">
+    <value>Gruplama aktivitesi</value>
+  </data>
+  <data name="IsContractTime" xml:space="preserve">
+    <value>Sözleşme Zamanı</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="NewApplicationRole" xml:space="preserve">
+    <value>Yeni Uygulama Rolü</value>
+  </data>
+  <data name="NewContract" xml:space="preserve">
+    <value>Yeni Sözleşme</value>
+  </data>
+  <data name="NoPeopleAvailable" xml:space="preserve">
+    <value>Uygun kişi bulunmamaktadır</value>
+  </data>
+  <data name="NoRolesAvailable" xml:space="preserve">
+    <value>Uygun rol bulunmamaktadır</value>
+  </data>
+  <data name="OneFunctionAvailable" xml:space="preserve">
+    <value>Tek uygun işlev</value>
+  </data>
+  <data name="OnePersonAvailable" xml:space="preserve">
+    <value>Tek uygun kişi</value>
+  </data>
+  <data name="OneRoleAvailable" xml:space="preserve">
+    <value>Tek uygun rol</value>
+  </data>
+  <data name="PeopleAvailable" xml:space="preserve">
+    <value>Uygun kişiler</value>
+  </data>
+  <data name="RequestDate" xml:space="preserve">
+    <value>İstek tarihi</value>
+  </data>
+  <data name="RequestStatus" xml:space="preserve">
+    <value>İstek statüsü</value>
+  </data>
+  <data name="RolesAvailable" xml:space="preserve">
+    <value>Uygun roller</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Kısa isim</value>
+  </data>
+  <data name="UnableToConnectRemoteService" xml:space="preserve">
+    <value>Uzaktan hizmete bağlanmaya uygun değil</value>
+  </data>
+  <data name="UseAverageOnDeviatingDays" xml:space="preserve">
+    <value>Değişken günler için ortalama değeri kullan</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Vardiya kutusu</value>
+  </data>
+  <data name="AbsenceRequest" xml:space="preserve">
+    <value>Devamsızlık isteği</value>
+  </data>
+  <data name="AgentName" xml:space="preserve">
+    <value>Müşteri Temsilcisi Adı</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>Başlangıç </value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="NewAbsenceRequest" xml:space="preserve">
+    <value>Yeni devamsızlık isteği</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>İstekler</value>
+  </data>
+  <data name="PrintSchedule" xml:space="preserve">
+    <value>Vardiya Planını Yazdır</value>
+  </data>
+  <data name="ScoreCardPreview" xml:space="preserve">
+    <value>Skorkart Görünümü</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Hata Mesajı</value>
+  </data>
+  <data name="EnterNewGroupName" xml:space="preserve">
+    <value>Yeni grup ismi gir</value>
+  </data>
+  <data name="NewGroupName" xml:space="preserve">
+    <value>Yeni Grup İsmi</value>
+  </data>
+  <data name="TerminalDate" xml:space="preserve">
+    <value>Ayrılış Tarihi</value>
+  </data>
+  <data name="AgentScheduleMessenger" xml:space="preserve">
+    <value>Müşteri Temsilcisi vardiya Planı Mesajlaşma Sistemi</value>
+  </data>
+  <data name="ASM" xml:space="preserve">
+    <value>ASM</value>
+  </data>
+  <data name="WeekView" xml:space="preserve">
+    <value>Haftalık Görünüm</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Tümünü Göster</value>
+  </data>
+  <data name="RiLe" xml:space="preserve">
+    <value>Ri Le</value>
+  </data>
+  <data name="DeleteSpecial" xml:space="preserve">
+    <value>Özelleri Sil</value>
+  </data>
+  <data name="PasteShift" xml:space="preserve">
+    <value>Vardiyayı Yapıştır</value>
+  </data>
+  <data name="Shifts" xml:space="preserve">
+    <value>Vardiyalar</value>
+  </data>
+  <data name="AddMainLayer" xml:space="preserve">
+    <value>Ana Katman Ekle</value>
+  </data>
+  <data name="AddPersonalLayer" xml:space="preserve">
+    <value>Kişisel Katman Ekle</value>
+  </data>
+  <data name="GridRowsInChart" xml:space="preserve">
+    <value>Grafik Ayarları</value>
+  </data>
+  <data name="FromColon" xml:space="preserve">
+    <value>Başlangıç:</value>
+  </data>
+  <data name="ToColon" xml:space="preserve">
+    <value>Bitiş:</value>
+  </data>
+  <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
+    <value>İşyükünü silmek istediğinize emin misiniz{0}{1}{0}?</value>
+  </data>
+  <data name="AuditTrail" xml:space="preserve">
+    <value>İzleri Denetle</value>
+  </data>
+  <data name="ManageScenarios" xml:space="preserve">
+    <value>Senaryoları yönet</value>
+  </data>
+  <data name="DefaultScenario" xml:space="preserve">
+    <value>Hazır senaryo</value>
+  </data>
+  <data name="SelectScenario" xml:space="preserve">
+    <value>Senaryo seç</value>
+  </data>
+  <data name="ShowOvertime" xml:space="preserve">
+    <value>Fazla zamanı göster</value>
+  </data>
+  <data name="GridInChart" xml:space="preserve">
+    <value>Grafiklerdeki Çizgiler</value>
+  </data>
+  <data name="BackToLegalState" xml:space="preserve">
+    <value>En Baştaki Duruma Dön</value>
+  </data>
+  <data name="EditCommonAgentNameDescription" xml:space="preserve">
+    <value>Genel müşteri temsilcisi adı tanımlamasıformatını biçimle</value>
+  </data>
+  <data name="Example" xml:space="preserve">
+    <value>Örnek</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Biçim</value>
+  </data>
+  <data name="AmpersandFirstName" xml:space="preserve">
+    <value>&amp;ad</value>
+  </data>
+  <data name="AmpersandEmployeeNumber" xml:space="preserve">
+    <value>&amp;Personel No</value>
+  </data>
+  <data name="AmpersandLastName" xml:space="preserve">
+    <value>&amp;Soyad</value>
+  </data>
+  <data name="ChartInitialized" xml:space="preserve">
+    <value>Başlatılan grafik</value>
+  </data>
+  <data name="DataSourceInitialized" xml:space="preserve">
+    <value>Veri kaynağı başlatıldı</value>
+  </data>
+  <data name="DataSourceLoading" xml:space="preserve">
+    <value>Veri kaynağı yükleniyor</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Tamamlandı</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Başlatılıyor</value>
+  </data>
+  <data name="MultisiteSkill" xml:space="preserve">
+    <value>Çoklu Lokasyon Yetenek</value>
+  </data>
+  <data name="MultisiteSkillLoading" xml:space="preserve">
+    <value>Öoklu lokayson yetenek yükleniyor</value>
+  </data>
+  <data name="SkillDaysLoaded" xml:space="preserve">
+    <value>Yetenek günleri yükleniyor</value>
+  </data>
+  <data name="SkillLoaded" xml:space="preserve">
+    <value>Yetenek yüklendi</value>
+  </data>
+  <data name="TemplatesLoaded" xml:space="preserve">
+    <value>Şablonlar yüklendi</value>
+  </data>
+  <data name="TemplateTargetMultisite" xml:space="preserve">
+    <value>Çoklu lokasyon yeteneği</value>
+  </data>
+  <data name="TemplateTargetSkill" xml:space="preserve">
+    <value>Yetenek</value>
+  </data>
+  <data name="TemplateTargetWorkload" xml:space="preserve">
+    <value>İşyükü</value>
+  </data>
+  <data name="WorkingIntervalCustom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="WorkingIntervalDay" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="WorkingIntervalIntraday" xml:space="preserve">
+    <value>Güniçi</value>
+  </data>
+  <data name="WorkingIntervalMonth" xml:space="preserve">
+    <value>Ay</value>
+  </data>
+  <data name="WorkingIntervalSelection" xml:space="preserve">
+    <value>Seçim</value>
+  </data>
+  <data name="WorkingIntervalWeek" xml:space="preserve">
+    <value>Hafta</value>
+  </data>
+  <data name="WorkloadDaysLoaded" xml:space="preserve">
+    <value>İşyükü günleri yüklendi</value>
+  </data>
+  <data name="ChartViews" xml:space="preserve">
+    <value>Grafik görünümleri</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Dışa aktar</value>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Çıktı</value>
+  </data>
+  <data name="SelectColor" xml:space="preserve">
+    <value>Renk seç</value>
+  </data>
+  <data name="CanNotLoadSmartPartModule" xml:space="preserve">
+    <value>Akıllı Bölüm Modülü yüklenemedi</value>
+  </data>
+  <data name="SmartPartModuleNotFound" xml:space="preserve">
+    <value>Akıllı Bölüm Modülü bulunamadı</value>
+  </data>
+  <data name="Templates" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="AddNewGroupPage" xml:space="preserve">
+    <value>Yeni grup sayfası ekle</value>
+  </data>
+  <data name="ManageGroupings" xml:space="preserve">
+    <value>Gruplamaları yönet</value>
+  </data>
+  <data name="DoNotGroup" xml:space="preserve">
+    <value>Gruplama Yapma</value>
+  </data>
+  <data name="EditGroupPage" xml:space="preserve">
+    <value>Grup Saufasını Biçimle</value>
+  </data>
+  <data name="GroupByOptions" xml:space="preserve">
+    <value>Gruplama kriteri</value>
+  </data>
+  <data name="GroupByPersonNote" xml:space="preserve">
+    <value>Not</value>
+  </data>
+  <data name="GroupByPersonPeriodContract" xml:space="preserve">
+    <value>Sözleşme</value>
+  </data>
+  <data name="GroupByPersonPeriodContractSchedule" xml:space="preserve">
+    <value>Sözleşme takvimi</value>
+  </data>
+  <data name="GroupByPersonPeriodPartTimePercentage" xml:space="preserve">
+    <value>Yarı zaman oranı</value>
+  </data>
+  <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
+    <value>Vardiya kutusu</value>
+  </data>
+  <data name="GroupPage" xml:space="preserve">
+    <value>Grup sayfası</value>
+  </data>
+  <data name="GroupPageDetails" xml:space="preserve">
+    <value>Grup sayfa detayları</value>
+  </data>
+  <data name="GroupPageName" xml:space="preserve">
+    <value>Grup sayfa ismi</value>
+  </data>
+  <data name="GroupPageSettings" xml:space="preserve">
+    <value>Grup Sayfa Ayar Ekranı</value>
+  </data>
+  <data name="OptionalColumn" xml:space="preserve">
+    <value>Opsiyonel kolon</value>
+  </data>
+  <data name="PreviewOrEditGroupPage" xml:space="preserve">
+    <value>Gruplama öngörünümü</value>
+  </data>
+  <data name="GroupPagePreviewScreen" xml:space="preserve">
+    <value>Grup Sayfası Öngörünüm Ekranı</value>
+  </data>
+  <data name="RootGroup" xml:space="preserve">
+    <value>Temel Grup</value>
+  </data>
+  <data name="NewGroupPageName" xml:space="preserve">
+    <value>Yeni Grup Sayfası İsmi</value>
+  </data>
+  <data name="RenameGroupPage" xml:space="preserve">
+    <value>Grup sayfasını yeniden isimle</value>
+  </data>
+  <data name="HoursPerDay" xml:space="preserve">
+    <value>Saat/gün</value>
+  </data>
+  <data name="Override" xml:space="preserve">
+    <value>Üzerine yaz</value>
+  </data>
+  <data name="PeriodHours" xml:space="preserve">
+    <value>Periyod saatleri</value>
+  </data>
+  <data name="PersonPeriodError" xml:space="preserve">
+    <value>Kişi Periyodu Hatası</value>
+  </data>
+  <data name="SchedulePeriodError" xml:space="preserve">
+    <value>Vardiya Planı Periyod Hatası</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Cuma</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Pazartesi</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Cumartesi</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Pazar</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Perşembe</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Salı</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Çarşamba</value>
+  </data>
+  <data name="IncludeExclude" xml:space="preserve">
+    <value>Dahil Hariç</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Kişi</value>
+  </data>
+  <data name="StartWeek" xml:space="preserve">
+    <value>Başlangıç Haftası</value>
+  </data>
+  <data name="AverageWorkTimePerDayColon" xml:space="preserve">
+    <value>Ortalama Çalışma Süresi / Gün</value>
+  </data>
+  <data name="MaximumTimePerWeekColon" xml:space="preserve">
+    <value>Maksimum Zaman / Gün</value>
+  </data>
+  <data name="EmploymentTypeColon" xml:space="preserve">
+    <value>Çalışma tipi:</value>
+  </data>
+  <data name="NameColon" xml:space="preserve">
+    <value>Ad:</value>
+  </data>
+  <data name="NightlyRestTimeColon" xml:space="preserve">
+    <value>Gecelik Dinlenme Süresi:</value>
+  </data>
+  <data name="Colon" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="ContractColon" xml:space="preserve">
+    <value>Sözleşme:</value>
+  </data>
+  <data name="ChooseContractToChange" xml:space="preserve">
+    <value>Biçimlemek için sözleşme seçin</value>
+  </data>
+  <data name="EnterContractDetails" xml:space="preserve">
+    <value>Sözleşme detaylarını girin</value>
+  </data>
+  <data name="WeeklyRestTimeColon" xml:space="preserve">
+    <value>Haftalık Dinlenme Süresi:</value>
+  </data>
+  <data name="ManageContractSchedules" xml:space="preserve">
+    <value>Sözleşme takvimlerini yönet</value>
+  </data>
+  <data name="ChooseContractScheduleToChange" xml:space="preserve">
+    <value>Biçimlemek için sözleşme takvimi seçin</value>
+  </data>
+  <data name="ScheduleColon" xml:space="preserve">
+    <value>Vardiya Planı:</value>
+  </data>
+  <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
+    <value>Bu sözleşme takvimi için çalışma günlerini seçin</value>
+  </data>
+  <data name="NewPercentage" xml:space="preserve">
+    <value>Yeni Oran</value>
+  </data>
+  <data name="PercentageColon" xml:space="preserve">
+    <value>Oran:</value>
+  </data>
+  <data name="PartTimePercentageColon" xml:space="preserve">
+    <value>Yarı-zaman oranı:</value>
+  </data>
+  <data name="EnterPartTimePercentageValue" xml:space="preserve">
+    <value>Yarı-zaman oran değeri seçin</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Sözleşmeler</value>
+  </data>
+  <data name="ChooseScenarioToChange" xml:space="preserve">
+    <value>Biçimlemek için senaryo seç</value>
+  </data>
+  <data name="NewScenario" xml:space="preserve">
+    <value>Yeni Senaryo</value>
+  </data>
+  <data name="AuditTrailColon" xml:space="preserve">
+    <value>İzleri Denetle:</value>
+  </data>
+  <data name="DefaultScenarioColon" xml:space="preserve">
+    <value>Hazır Senaryo:</value>
+  </data>
+  <data name="EnterSettingsForScenario" xml:space="preserve">
+    <value>Senaryo için ayarları girin</value>
+  </data>
+  <data name="CancelLoading" xml:space="preserve">
+    <value>Yüklemeyi iptal et</value>
+  </data>
+  <data name="AddNewContract" xml:space="preserve">
+    <value>Sözleşme ekle</value>
+  </data>
+  <data name="AddNewWeekToSchedule" xml:space="preserve">
+    <value>Sözleşme takvimine yeni hafta ekle</value>
+  </data>
+  <data name="AddPartTimePercentage" xml:space="preserve">
+    <value>Yarı-zaman oran tanımı ekle</value>
+  </data>
+  <data name="AddGroupingAbsence" xml:space="preserve">
+    <value>Gruplama devamsızlığı ekle</value>
+  </data>
+  <data name="AddGroupingActivity" xml:space="preserve">
+    <value>Gruplama aktivitesi ekle</value>
+  </data>
+  <data name="AddNewScenario" xml:space="preserve">
+    <value>Senaryo ekle</value>
+  </data>
+  <data name="ChooseScorecardToEdit" xml:space="preserve">
+    <value>Biçimlemek için skorkart seç</value>
+  </data>
+  <data name="EnterSettingsForThisScorecard" xml:space="preserve">
+    <value>Bu skorkart için ayarları gir</value>
+  </data>
+  <data name="EnterTargetValuesForEachTeam" xml:space="preserve">
+    <value>Her bir takım için hedef değer gir</value>
+  </data>
+  <data name="FilterKPIs" xml:space="preserve">
+    <value>KPI'ları filtrele</value>
+  </data>
+  <data name="PeriodColon" xml:space="preserve">
+    <value>Periyod:</value>
+  </data>
+  <data name="ScorecardColon" xml:space="preserve">
+    <value>Skorkart:</value>
+  </data>
+  <data name="SelectKPIToHandleColon" xml:space="preserve">
+    <value>Yönetmek için KPI seç:</value>
+  </data>
+  <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
+    <value>Devamsızlıklar için özellik değeri gir</value>
+  </data>
+  <data name="EnterPropertyValuesForActivities" xml:space="preserve">
+    <value>Aktiviteler için özellik değeri gir</value>
+  </data>
+  <data name="EnterPropertyValuesForGroupingAbsences" xml:space="preserve">
+    <value>Gruplama devamsızlıkları için özellik değeri gir</value>
+  </data>
+  <data name="EnterPropertyValuesForGroupingActivities" xml:space="preserve">
+    <value>Gruplama aktiviteleri için özellik değerleri gir</value>
+  </data>
+  <data name="ManageActivities" xml:space="preserve">
+    <value>Aktiviteleri yönet</value>
+  </data>
+  <data name="CommonAgentDescription" xml:space="preserve">
+    <value>Genel müşteri temsilcisi tanımı</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>İş hiyerarşisi</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Yetkiler</value>
+  </data>
+  <data name="Rotation" xml:space="preserve">
+    <value>Rotasyon</value>
+  </data>
+  <data name="ForecastedACWColon" xml:space="preserve">
+    <value>Tahmini ACW:</value>
+  </data>
+  <data name="ForecastedCallsColon" xml:space="preserve">
+    <value>Tahmini çağrılar</value>
+  </data>
+  <data name="ForecastedTalkTimeColon" xml:space="preserve">
+    <value>Tahmini konuşma süresi:</value>
+  </data>
+  <data name="Restrictions" xml:space="preserve">
+    <value>Sınırlamalar</value>
+  </data>
+  <data name="NewRotation" xml:space="preserve">
+    <value>Yeni Rotasyon</value>
+  </data>
+  <data name="ServiceLevelSeconds" xml:space="preserve">
+    <value>Servis seviyesi saniye</value>
+  </data>
+  <data name="ColorColon" xml:space="preserve">
+    <value>Renk:</value>
+  </data>
+  <data name="IntervalLengthColon" xml:space="preserve">
+    <value>İterval uzunluğu:</value>
+  </data>
+  <data name="DescriptionColon" xml:space="preserve">
+    <value>Tanım:</value>
+  </data>
+  <data name="MaximumOccupancyColon" xml:space="preserve">
+    <value>Maksimum doluluk oranı:</value>
+  </data>
+  <data name="MinimumOccupancyColon" xml:space="preserve">
+    <value>Minimum doluluk oranı:</value>
+  </data>
+  <data name="ServiceLevelPercentSignColon" xml:space="preserve">
+    <value>Servis seviyesi %:</value>
+  </data>
+  <data name="ServiceLevelSecondsColon" xml:space="preserve">
+    <value>Servis seviyesi saniye:</value>
+  </data>
+  <data name="ServiceLevelSParenthesisColon" xml:space="preserve">
+    <value>Servis seviyesi (sn):</value>
+  </data>
+  <data name="ShrinkageColon" xml:space="preserve">
+    <value>Daralma:</value>
+  </data>
+  <data name="SkillColon" xml:space="preserve">
+    <value>Yetenek:</value>
+  </data>
+  <data name="ForecastMethodColon" xml:space="preserve">
+    <value>Tahmin metodu:</value>
+  </data>
+  <data name="TimeZoneColon" xml:space="preserve">
+    <value>Zaman dilimi:</value>
+  </data>
+  <data name="OpenHoursColon" xml:space="preserve">
+    <value>Açık saatler:</value>
+  </data>
+  <data name="SubSkillDistributionsColon" xml:space="preserve">
+    <value>alt yetenek dağılımları:</value>
+  </data>
+  <data name="FindAmpersandReplace" xml:space="preserve">
+    <value>Bul &amp; değiştir</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sınıfla</value>
+  </data>
+  <data name="Groupings" xml:space="preserve">
+    <value>Gruplamalar</value>
+  </data>
+  <data name="Editing" xml:space="preserve">
+    <value>Biçimleme</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Erişilebilirlik</value>
+  </data>
+  <data name="Early" xml:space="preserve">
+    <value>Erken</value>
+  </data>
+  <data name="Late" xml:space="preserve">
+    <value>Geç</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Uzunluk</value>
+  </data>
+  <data name="Limit" xml:space="preserve">
+    <value>Sınır</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Maks</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="RuleSets" xml:space="preserve">
+    <value>Kural setleri</value>
+  </data>
+  <data name="ShiftBags" xml:space="preserve">
+    <value>Vardiya kutuları</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Zaman</value>
+  </data>
+  <data name="AbsoluteDifference" xml:space="preserve">
+    <value>Mutlak fark</value>
+  </data>
+  <data name="DateNavigation" xml:space="preserve">
+    <value>Navigasyon</value>
+  </data>
+  <data name="RelativeDifference" xml:space="preserve">
+    <value>Bağıl fark</value>
+  </data>
+  <data name="StandardDeviation" xml:space="preserve">
+    <value>Standart sapma</value>
+  </data>
+  <data name="ChangeInterval" xml:space="preserve">
+    <value>Değişim intervali</value>
+  </data>
+  <data name="OverMidnight" xml:space="preserve">
+    <value>Gece yarısı sonrası</value>
+  </data>
+  <data name="ReadyThreeDots" xml:space="preserve">
+    <value>Hazır...</value>
+  </data>
+  <data name="EnterNameOnNewGroup" xml:space="preserve">
+    <value>Yeni gruplama için isim gir</value>
+  </data>
+  <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
+    <value>Kişi atanması geçerli değil. {0}</value>
+  </data>
+  <data name="ChangeYourRotations" xml:space="preserve">
+    <value>Rotasyonlarını değiştir</value>
+  </data>
+  <data name="EarlyEndTime" xml:space="preserve">
+    <value>Erken bitiş saati</value>
+  </data>
+  <data name="EarlyStartTime" xml:space="preserve">
+    <value>Erken başlangıç saati</value>
+  </data>
+  <data name="LateEndTime" xml:space="preserve">
+    <value>Geç bitiş saati</value>
+  </data>
+  <data name="LateStartTime" xml:space="preserve">
+    <value>Geç başlangıç saati</value>
+  </data>
+  <data name="MaxWorkTime" xml:space="preserve">
+    <value>Maks çalışma süresi</value>
+  </data>
+  <data name="MinWorkTime" xml:space="preserve">
+    <value>Min çalışma süresi</value>
+  </data>
+  <data name="Rotations" xml:space="preserve">
+    <value>Rotasyonlar</value>
+  </data>
+  <data name="SelectRotation" xml:space="preserve">
+    <value>Rotasyon seç</value>
+  </data>
+  <data name="ShiftCategory" xml:space="preserve">
+    <value>Vardiya kategorisi</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Sakla</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Göster</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Aralık</value>
+  </data>
+  <data name="InvalidRequest" xml:space="preserve">
+    <value>Geçersiz İstek</value>
+  </data>
+  <data name="MeetingLocationRequired" xml:space="preserve">
+    <value>Lokasyonunu gir!</value>
+  </data>
+  <data name="MeetingParticipantsRequired" xml:space="preserve">
+    <value>Katılımcılarını seç!</value>
+  </data>
+  <data name="MeetingSubjectRequired" xml:space="preserve">
+    <value>Konunu gir!</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="HHcolonMM" xml:space="preserve">
+    <value>ss:dd</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Lokasyon</value>
+  </data>
+  <data name="Meetings" xml:space="preserve">
+    <value>Toplantılar</value>
+  </data>
+  <data name="Participants" xml:space="preserve">
+    <value>Katılımcılar</value>
+  </data>
+  <data name="MeetingOrganizer" xml:space="preserve">
+    <value>Toplantı Organizatörü</value>
+  </data>
+  <data name="RestoreAgentPortal" xml:space="preserve">
+    <value>Müşteri Temsilcisi Portalını Onar</value>
+  </data>
+  <data name="RestoreASM" xml:space="preserve">
+    <value>Müşteri Temsilcisi Vardiya Planı Mesajlaşma Sistemini Onar</value>
+  </data>
+  <data name="NewOptionalColumn" xml:space="preserve">
+    <value>Yeni opsiyonel Kolon</value>
+  </data>
+  <data name="AddNewOptionalColumn" xml:space="preserve">
+    <value>Yeni Opiyonel Kolon Ekle</value>
+  </data>
+  <data name="NoValueInNameField" xml:space="preserve">
+    <value>İsim Bölümünde Değer Yol</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Hatayı Kaydet</value>
+  </data>
+  <data name="Actual" xml:space="preserve">
+    <value>Güncel</value>
+  </data>
+  <data name="Forecasted" xml:space="preserve">
+    <value>Tahmin edilen</value>
+  </data>
+  <data name="AgentsWithShrinkage" xml:space="preserve">
+    <value>Daralma Sonrası Müşteri Temsilcileri Sayısı</value>
+  </data>
+  <data name="ExternalLogOn" xml:space="preserve">
+    <value>Harici Giriş</value>
+  </data>
+  <data name="AgentPortalOptions" xml:space="preserve">
+    <value>Müşteri Temsilcisi Portali Opsiyonları</value>
+  </data>
+  <data name="ExitAgentPortal" xml:space="preserve">
+    <value>Müşteri Temsilcisi Portalinden Çık</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage2" xml:space="preserve">
+    <value>İki adet çakışan vardiya var</value>
+  </data>
+  <data name="ChooseOptionalColumnToChange" xml:space="preserve">
+    <value>Değiştirmek için Opsiyonel Kolon Seç</value>
+  </data>
+  <data name="OptionalColumns" xml:space="preserve">
+    <value>Opsiyonel Kolonlar</value>
+  </data>
+  <data name="ManageOptionalColumns" xml:space="preserve">
+    <value>Opsiyonel Kolonları Yönet</value>
+  </data>
+  <data name="AddressBook" xml:space="preserve">
+    <value>Adres Defteri</value>
+  </data>
+  <data name="EndTimeColon" xml:space="preserve">
+    <value>Bitiş Saati:</value>
+  </data>
+  <data name="LocationColon" xml:space="preserve">
+    <value>Lokayon:</value>
+  </data>
+  <data name="Meeting" xml:space="preserve">
+    <value>Toplantı</value>
+  </data>
+  <data name="StartTimeColon" xml:space="preserve">
+    <value>Başlangıç Saati:</value>
+  </data>
+  <data name="SubjectColon" xml:space="preserve">
+    <value>Konu:</value>
+  </data>
+  <data name="ToThreeDots" xml:space="preserve">
+    <value>Bitiş:</value>
+  </data>
+  <data name="CombinedGrid" xml:space="preserve">
+    <value>Aktiviteler</value>
+  </data>
+  <data name="CombinedGridAutoPosition" xml:space="preserve">
+    <value>Oto Pozisyon</value>
+  </data>
+  <data name="ExitTELEOPTICCC" xml:space="preserve">
+    <value>TELEOPTI CCC'den Çık</value>
+  </data>
+  <data name="Find" xml:space="preserve">
+    <value>Bul</value>
+  </data>
+  <data name="Periods" xml:space="preserve">
+    <value>Periyodlar</value>
+  </data>
+  <data name="AEW" xml:space="preserve">
+    <value>AEW</value>
+  </data>
+  <data name="AgentsInc" xml:space="preserve">
+    <value>Dahil Olan Müşteri Temsilcileri</value>
+  </data>
+  <data name="AgentsIncWithShrinkage" xml:space="preserve">
+    <value>Daralma etkisi dahil olan müşteri temsilcileri</value>
+  </data>
+  <data name="Emails" xml:space="preserve">
+    <value>E-postalar</value>
+  </data>
+  <data name="HandlingTime" xml:space="preserve">
+    <value>Yönetim zamanı</value>
+  </data>
+  <data name="HoursInc" xml:space="preserve">
+    <value>Dahil olan zaman</value>
+  </data>
+  <data name="HoursIncShrinkage" xml:space="preserve">
+    <value>Daralma etkisi dahil olan zaman</value>
+  </data>
+  <data name="TotalAEW" xml:space="preserve">
+    <value>Toplam AEW</value>
+  </data>
+  <data name="TotalEmails" xml:space="preserve">
+    <value>Toplam e-postalar</value>
+  </data>
+  <data name="TotalHandledWithin" xml:space="preserve">
+    <value>Toplam yönetilen</value>
+  </data>
+  <data name="TotalHandlingTime" xml:space="preserve">
+    <value>Toplam yönetim zamanı</value>
+  </data>
+  <data name="AbandonedEmails" xml:space="preserve">
+    <value>Kaçan e-postalar</value>
+  </data>
+  <data name="AbandonedFacsimiles" xml:space="preserve">
+    <value>Kaçan fakslar</value>
+  </data>
+  <data name="AbandonedTasks" xml:space="preserve">
+    <value>Kaçan görevler</value>
+  </data>
+  <data name="AFW" xml:space="preserve">
+    <value>AFW</value>
+  </data>
+  <data name="AnsweredEmails" xml:space="preserve">
+    <value>Karşılanan e-postalar</value>
+  </data>
+  <data name="AnsweredFacsimiles" xml:space="preserve">
+    <value>Karşılanan fakslar</value>
+  </data>
+  <data name="AnsweredTasks" xml:space="preserve">
+    <value>Karşılanan görevler</value>
+  </data>
+  <data name="ATW" xml:space="preserve">
+    <value>ATW</value>
+  </data>
+  <data name="CalculatedEmails" xml:space="preserve">
+    <value>Hesaplanan e-postalar</value>
+  </data>
+  <data name="CalculatedFacsimiles" xml:space="preserve">
+    <value>Hesaplanan fakslar</value>
+  </data>
+  <data name="CalculatedTasks" xml:space="preserve">
+    <value>Hesaplanan</value>
+  </data>
+  <data name="CampaignAEWPercent" xml:space="preserve">
+    <value>Kampanya AEW %</value>
+  </data>
+  <data name="CampaignAFWPercent" xml:space="preserve">
+    <value>Kampanya AFW %</value>
+  </data>
+  <data name="CampaignATWPercent" xml:space="preserve">
+    <value>Kampanya ATW %</value>
+  </data>
+  <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
+    <value>Kampanya e-postaları yönetim süresi %</value>
+  </data>
+  <data name="CampaignEmailsPercent" xml:space="preserve">
+    <value>Kampanya e-postaları %</value>
+  </data>
+  <data name="CampaignFacsimilesHandlingtime" xml:space="preserve">
+    <value>Kampanya faklası yünetim süresi %</value>
+  </data>
+  <data name="CampaignFacsimilesPercent" xml:space="preserve">
+    <value>Kampanya faksları %</value>
+  </data>
+  <data name="CampaignTaskPercent" xml:space="preserve">
+    <value>Kampanya görevleri %</value>
+  </data>
+  <data name="CampaignTasksHandlingtime" xml:space="preserve">
+    <value>Kamoanya görevleri yönetim süresi</value>
+  </data>
+  <data name="Facsimiles" xml:space="preserve">
+    <value>Fakslar</value>
+  </data>
+  <data name="IndexAEW" xml:space="preserve">
+    <value>İndeks ACW</value>
+  </data>
+  <data name="IndexAFW" xml:space="preserve">
+    <value>İndeks AFW</value>
+  </data>
+  <data name="IndexATW" xml:space="preserve">
+    <value>İndeks ATW</value>
+  </data>
+  <data name="IndexEmails" xml:space="preserve">
+    <value>İndeks e-postalar</value>
+  </data>
+  <data name="IndexFacsimiles" xml:space="preserve">
+    <value>İndeks fakslar</value>
+  </data>
+  <data name="IndexHandlingTime" xml:space="preserve">
+    <value>İndeks yönetim süresi</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Görevler</value>
+  </data>
+  <data name="TotalAFW" xml:space="preserve">
+    <value>Toplam AFW</value>
+  </data>
+  <data name="TotalATW" xml:space="preserve">
+    <value>Toplam ATW</value>
+  </data>
+  <data name="TotalFacsimiles" xml:space="preserve">
+    <value>Toplam faks</value>
+  </data>
+  <data name="TotalTasks" xml:space="preserve">
+    <value>Toplam görev</value>
+  </data>
+  <data name="AvegareFacsimiles" xml:space="preserve">
+    <value>Ortalama faks</value>
+  </data>
+  <data name="AverageEmails" xml:space="preserve">
+    <value>Ortalama e-posta</value>
+  </data>
+  <data name="AverageHandlingTime" xml:space="preserve">
+    <value>Ortalama yönetim süresi</value>
+  </data>
+  <data name="OriginalAEW" xml:space="preserve">
+    <value>Orijinal AEW</value>
+  </data>
+  <data name="OriginalAFW" xml:space="preserve">
+    <value>Orijinal AFW</value>
+  </data>
+  <data name="OriginalATW" xml:space="preserve">
+    <value>Orijinal ATW</value>
+  </data>
+  <data name="OriginalHandlingTime" xml:space="preserve">
+    <value>Orijinal yönetim süresi</value>
+  </data>
+  <data name="OriginalOfferedEmails" xml:space="preserve">
+    <value>Orijinal gerçekleşen e-posta</value>
+  </data>
+  <data name="OriginalOfferedFacsimiles" xml:space="preserve">
+    <value>Orijinal gerçekleşen faks</value>
+  </data>
+  <data name="OriginalOfferedTasks" xml:space="preserve">
+    <value>Orijinal gerçekleşen görev</value>
+  </data>
+  <data name="ValidatedEmails" xml:space="preserve">
+    <value>Doğrulanan e-postalar</value>
+  </data>
+  <data name="ValidatedFacsimiles" xml:space="preserve">
+    <value>Doğrulanan fakslar</value>
+  </data>
+  <data name="ValidatedHandlingTime" xml:space="preserve">
+    <value>Doğrulanan yönetim süresi</value>
+  </data>
+  <data name="ShiftCreatorValidationErrorMessage" xml:space="preserve">
+    <value>Grid geçersiz veri içermektedir</value>
+  </data>
+  <data name="AverageAEW" xml:space="preserve">
+    <value>Ortalama AEW</value>
+  </data>
+  <data name="AverageAFW" xml:space="preserve">
+    <value>Ortalama AFW</value>
+  </data>
+  <data name="AverageATW" xml:space="preserve">
+    <value>Ortalama ATW</value>
+  </data>
+  <data name="AverageFacsimiles" xml:space="preserve">
+    <value>Ortalama faks</value>
+  </data>
+  <data name="ValidatedAEW" xml:space="preserve">
+    <value>Doğrulanan AEW</value>
+  </data>
+  <data name="ValidatedAFW" xml:space="preserve">
+    <value>Doğrulanan AFW</value>
+  </data>
+  <data name="ValidatedATW" xml:space="preserve">
+    <value>Doğrulanan ATW</value>
+  </data>
+  <data name="ValidatedAverageHandlingTime" xml:space="preserve">
+    <value>Doğrulanan ortalama yönetim süresi</value>
+  </data>
+  <data name="NewRequest" xml:space="preserve">
+    <value>Yeni istek</value>
+  </data>
+  <data name="DefineOrganization" xml:space="preserve">
+    <value>Organizasyon Tanımla</value>
+  </data>
+  <data name="OrganizationHierarchy" xml:space="preserve">
+    <value>Organizasyon Hiyerarşisi</value>
+  </data>
+  <data name="ShowRequests" xml:space="preserve">
+    <value>İstekleri Göster</value>
+  </data>
+  <data name="LoadingThreeDots" xml:space="preserve">
+    <value>Yükleniyor...</value>
+  </data>
+  <data name="RotationsCouldNotBeLoaded" xml:space="preserve">
+    <value>Rotasyonlar yüklenemedi. Veritabanında rotasyon bulunmayabilir.</value>
+  </data>
+  <data name="ContractScheduleLower" xml:space="preserve">
+    <value>Sözleşme takvimi</value>
+  </data>
+  <data name="OpenForecaster" xml:space="preserve">
+    <value>Tahmin edici</value>
+  </data>
+  <data name="OpenReports" xml:space="preserve">
+    <value>Raporlar</value>
+  </data>
+  <data name="OpenTeleoptiCCC" xml:space="preserve">
+    <value>TELEOPTI CCC</value>
+  </data>
+  <data name="PartTimePercentageLower" xml:space="preserve">
+    <value>Yarı-zamanlı oranı</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Opsiyonel</value>
+  </data>
+  <data name="WeekAbbreviationDot" xml:space="preserve">
+    <value>w.</value>
+  </data>
+  <data name="PrepareSkillThreeDots" xml:space="preserve">
+    <value>Yetenek Hazırla...</value>
+  </data>
+  <data name="ApplicationLogon" xml:space="preserve">
+    <value>Uygulama Giriş</value>
+  </data>
+  <data name="InitializingTreeDots" xml:space="preserve">
+    <value>Başlatılıyor...</value>
+  </data>
+  <data name="LoadingDataTreeDots" xml:space="preserve">
+    <value>Veri yükleniyor...</value>
+  </data>
+  <data name="LoggingOnTreeDots" xml:space="preserve">
+    <value>Giriş yapılıyor...</value>
+  </data>
+  <data name="LoginNameColon" xml:space="preserve">
+    <value>Kullanıcı adı:</value>
+  </data>
+  <data name="PasswordColon" xml:space="preserve">
+    <value>Şifre:</value>
+  </data>
+  <data name="PleaseChooseABusinessUnit" xml:space="preserve">
+    <value>Lütfen iş birimi seçin</value>
+  </data>
+  <data name="PleaseChooseADatasource" xml:space="preserve">
+    <value>Lütfen veri kaynağı seçin</value>
+  </data>
+  <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
+    <value>Lütfen giriş doğrulama bilgilerinizi girin</value>
+  </data>
+  <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
+    <value>Veri kaynağı aranıyor...</value>
+  </data>
+  <data name="VerifyingPermissionsTreeDots" xml:space="preserve">
+    <value>Yetkiler sorgulanıyor...</value>
+  </data>
+  <data name="WindowsLogon" xml:space="preserve">
+    <value>Windows giriş</value>
+  </data>
+  <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
+    <value>TELEOPTI CCC: Kişiler</value>
+  </data>
+  <data name="DecreaseDecimals" xml:space="preserve">
+    <value>Ondalık basamak azalt</value>
+  </data>
+  <data name="IncreaseDecimals" xml:space="preserve">
+    <value>Ondalık basamak arttır</value>
+  </data>
+  <data name="EditMeeting" xml:space="preserve">
+    <value>Toplantı Biçimle</value>
+  </data>
+  <data name="MeetingPicker" xml:space="preserve">
+    <value>Toplantı seç</value>
+  </data>
+  <data name="RemoveParticipant" xml:space="preserve">
+    <value>Seçili Katılımcıları Kaldır</value>
+  </data>
+  <data name="AutomaticScheduling" xml:space="preserve">
+    <value>Otomatik Vardiya Planı</value>
+  </data>
+  <data name="ModifyAbsence" xml:space="preserve">
+    <value>Devamsızlıkları modifiye et</value>
+  </data>
+  <data name="ModifyAssignment" xml:space="preserve">
+    <value>Atamaları modifiye et</value>
+  </data>
+  <data name="ModifyDayOff" xml:space="preserve">
+    <value>Tatilleri modifiye et</value>
+  </data>
+  <data name="ModifyMainShift" xml:space="preserve">
+    <value>Ana vardiyayı modifiye et</value>
+  </data>
+  <data name="ModifyPersonalShift" xml:space="preserve">
+    <value>Kişi vardiyalarını modifiye et</value>
+  </data>
+  <data name="ModifyPersonNameAndPassword" xml:space="preserve">
+    <value>İsim ve şifreyi modifiye et</value>
+  </data>
+  <data name="ModifyPersonTimeActivity" xml:space="preserve">
+    <value>Fazla zamanı modifiye et</value>
+  </data>
+  <data name="OpenPermissionPage" xml:space="preserve">
+    <value>Yetkiler</value>
+  </data>
+  <data name="OpenRaptorApplication" xml:space="preserve">
+    <value>TELEOPTI CCC'yi aç</value>
+  </data>
+  <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
+    <value>TELEOPTI CCC: Yetkiler</value>
+  </data>
+  <data name="SelectPeopleToAddToRole" xml:space="preserve">
+    <value>Rol eklemek için kişileri seç</value>
+  </data>
+  <data name="NewRule" xml:space="preserve">
+    <value>Yeni Kural</value>
+  </data>
+  <data name="NewRuleSet" xml:space="preserve">
+    <value>Yeni Kural Seti</value>
+  </data>
+  <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
+    <value>TELEOPTI CCC: Vardiyalar</value>
+  </data>
+  <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
+    <value>&lt;Kural seti ismi&gt;</value>
+  </data>
+  <data name="CutActivity" xml:space="preserve">
+    <value>Aktiviteyi Taşı</value>
+  </data>
+  <data name="CutDateEx" xml:space="preserve">
+    <value>Tarih İstisnasını Taşı</value>
+  </data>
+  <data name="CutLimitation" xml:space="preserve">
+    <value>Sınırlandırmayı Taşı</value>
+  </data>
+  <data name="CutRuleSet" xml:space="preserve">
+    <value>Kural Setini Taşı</value>
+  </data>
+  <data name="CutRuleSetBag" xml:space="preserve">
+    <value>Kural Seti Kutusunu Taşı</value>
+  </data>
+  <data name="DeleteActivity" xml:space="preserve">
+    <value>Aktiviteyi Sil</value>
+  </data>
+  <data name="DeleteDateEx" xml:space="preserve">
+    <value>Hariç Tutulmuş Tarihi Sil </value>
+  </data>
+  <data name="DeleteLimitation" xml:space="preserve">
+    <value>Sınırlandırmayı Sil</value>
+  </data>
+  <data name="DeleteRuleSet" xml:space="preserve">
+    <value>Kural Setini Sil</value>
+  </data>
+  <data name="DeleteRuleSetBag" xml:space="preserve">
+    <value>Kural Seti Kutusunu Sil</value>
+  </data>
+  <data name="NewActivity" xml:space="preserve">
+    <value>Yeni Aktivite</value>
+  </data>
+  <data name="NewDateExclusion" xml:space="preserve">
+    <value>Yeni Uygun Tarih</value>
+  </data>
+  <data name="NewLimitation" xml:space="preserve">
+    <value>Yeni Sınırlandırma</value>
+  </data>
+  <data name="NewRuleSetBag" xml:space="preserve">
+    <value>Yeni Vardiya Kutusu</value>
+  </data>
+  <data name="PasteActivity" xml:space="preserve">
+    <value>Aktiviteyi Yapıştır</value>
+  </data>
+  <data name="PasteDateEx" xml:space="preserve">
+    <value>Tarih İstisnasını Yapıştır</value>
+  </data>
+  <data name="PasteLimitation" xml:space="preserve">
+    <value>Sınırlandırmayı Yapıştır</value>
+  </data>
+  <data name="PasteRuleSet" xml:space="preserve">
+    <value>Kural Setini Yapıştır</value>
+  </data>
+  <data name="PasteRuleSetBag" xml:space="preserve">
+    <value>Kural Seti Kutusunu Yapıştır</value>
+  </data>
+  <data name="SelectRuleSetBagMessage" xml:space="preserve">
+    <value>Kural Seti Kutusu Mesajı Seç</value>
+  </data>
+  <data name="SelectRuleSetMessage" xml:space="preserve">
+    <value>Kural Seti Mesajı Seç</value>
+  </data>
+  <data name="CreateForecastWorkflowTool" xml:space="preserve">
+    <value>Tahmin iş akışı araçı oluştur</value>
+  </data>
+  <data name="CopyRuleSet" xml:space="preserve">
+    <value>Kural setini kopyala</value>
+  </data>
+  <data name="CopyRuleSetBag" xml:space="preserve">
+    <value>Kural Seti Kutusunu Kopyala</value>
+  </data>
+  <data name="Accrued" xml:space="preserve">
+    <value>Gerçekleşen</value>
+  </data>
+  <data name="BalanceIn" xml:space="preserve">
+    <value>Bakiye içi</value>
+  </data>
+  <data name="BalanceOut" xml:space="preserve">
+    <value>Bakiye dışı</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>Rolü sil</value>
+  </data>
+  <data name="DescriptionDayTracker" xml:space="preserve">
+    <value>İzin</value>
+  </data>
+  <data name="Extra" xml:space="preserve">
+    <value>Ekstra</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Yeni Rol</value>
+  </data>
+  <data name="PersonAccountDay" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="PersonAccountTime" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="RenameRole" xml:space="preserve">
+    <value>Rolü Yeniden İsimlendir</value>
+  </data>
+  <data name="Used" xml:space="preserve">
+    <value>Kullanılmış</value>
+  </data>
+  <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
+    <value>Maksimum Doluluk Oranı %:</value>
+  </data>
+  <data name="MinimumOccupancyPercentSignColon" xml:space="preserve">
+    <value>Minimum Doluluk Oranı %:</value>
+  </data>
+  <data name="ShrinkagePercentSignColon" xml:space="preserve">
+    <value>Daralma %:</value>
+  </data>
+  <data name="OpenScheduler" xml:space="preserve">
+    <value>Vardiya planı aç</value>
+  </data>
+  <data name="PersonAccounts" xml:space="preserve">
+    <value>Kişisel Hesaplar</value>
+  </data>
+  <data name="AddPersonToRole" xml:space="preserve">
+    <value>Role kişi ekle</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Rol ekle</value>
+  </data>
+  <data name="DeletePersonFromRole" xml:space="preserve">
+    <value>Rolden kişi sil</value>
+  </data>
+  <data name="NewPerson" xml:space="preserve">
+    <value>Yeni Kişi</value>
+  </data>
+  <data name="NewPersonAccount" xml:space="preserve">
+    <value>Yeni Kişi Hesabı</value>
+  </data>
+  <data name="NewPersonPeriod" xml:space="preserve">
+    <value>Yeni Kişi Periyodu</value>
+  </data>
+  <data name="NewPersonRotation" xml:space="preserve">
+    <value>Yeni Kişi Rotasyonu</value>
+  </data>
+  <data name="NewSchedulePeriod" xml:space="preserve">
+    <value>Yeni Vardiya Planı Periyodu</value>
+  </data>
+  <data name="ResetTemplates" xml:space="preserve">
+    <value>Şablonları yeniden kur</value>
+  </data>
+  <data name="Overstaffing" xml:space="preserve">
+    <value>Fazla kapasite</value>
+  </data>
+  <data name="SeriousUnderstaffing" xml:space="preserve">
+    <value>Kritik düşük kapasite seviyesi</value>
+  </data>
+  <data name="Thresholds" xml:space="preserve">
+    <value>Eşik</value>
+  </data>
+  <data name="Understaffing" xml:space="preserve">
+    <value>Düşük Kapasite</value>
+  </data>
+  <data name="BallonTipScheduleChange" xml:space="preserve">
+    <value>Vardiya Planınız değişti. Güncellenmiş halini görmek için buraya tıklayınız.</value>
+  </data>
+  <data name="Agent" xml:space="preserve">
+    <value>Müşteri Temsilcisi</value>
+  </data>
+  <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
+    <value>TELEOPTI CCC: Gün içi</value>
+  </data>
+  <data name="OpenAgentPortal" xml:space="preserve">
+    <value>Müşteri Temsilcisi Portali</value>
+  </data>
+  <data name="OpenASM" xml:space="preserve">
+    <value>Müşteri temsilcisi Vardiya Planı Mesajlaşma Sistemi</value>
+  </data>
+  <data name="AutomaticUpdate" xml:space="preserve">
+    <value>Otomatik Güncelleme</value>
+  </data>
+  <data name="OpenPeople" xml:space="preserve">
+    <value>Kişileri Aç</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Kabul Edildi</value>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>Bakiye</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Oluşturuldu</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="RequestType" xml:space="preserve">
+    <value>İstek tipi</value>
+  </data>
+  <data name="RequestTypeAbsence" xml:space="preserve">
+    <value>Devamsızlık</value>
+  </data>
+  <data name="Seniority" xml:space="preserve">
+    <value>Kıdem</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statü</value>
+  </data>
+  <data name="RequestTypeShiftTrade" xml:space="preserve">
+    <value>Vardiya Değişimi</value>
+  </data>
+  <data name="ActualAgents" xml:space="preserve">
+    <value>Güncel Müşteri Temsilcileri</value>
+  </data>
+  <data name="ActualHandlingTime" xml:space="preserve">
+    <value>Güncel Yönetim Süresi</value>
+  </data>
+  <data name="ActualTalkTime" xml:space="preserve">
+    <value>Güncel konuşma süresi</value>
+  </data>
+  <data name="AverageSpeedOfAnswer" xml:space="preserve">
+    <value>Ortalama çağrı karşılama süresi</value>
+  </data>
+  <data name="CurrentDistributedDemand" xml:space="preserve">
+    <value>Mevcut dağıtılmış talepler</value>
+  </data>
+  <data name="ForecastedDistributedDemand" xml:space="preserve">
+    <value>Tahmini dağıtılmış talepler</value>
+  </data>
+  <data name="ForecastedEmails" xml:space="preserve">
+    <value>Tahmini e-postalar</value>
+  </data>
+  <data name="ForecastedFacsimiles" xml:space="preserve">
+    <value>Tahmini fakslar</value>
+  </data>
+  <data name="ForecastedHandlingTime" xml:space="preserve">
+    <value>Tahmini yönetim süresi</value>
+  </data>
+  <data name="ForecastedTasks" xml:space="preserve">
+    <value>Tahmini görevler</value>
+  </data>
+  <data name="OfferedCalls" xml:space="preserve">
+    <value>Gerçekleşen çağrılar</value>
+  </data>
+  <data name="OfferedEmails" xml:space="preserve">
+    <value>Gerçekleşen e-postalar</value>
+  </data>
+  <data name="OfferedFacsimiles" xml:space="preserve">
+    <value>Gerçekleşen fakslar</value>
+  </data>
+  <data name="OfferedTasks" xml:space="preserve">
+    <value>Gerçekleşen görevler</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Son</value>
+  </data>
+  <data name="Request" xml:space="preserve">
+    <value>İstek</value>
+  </data>
+  <data name="RequestScreen" xml:space="preserve">
+    <value>İstek ekranı</value>
+  </data>
+  <data name="SaveClose" xml:space="preserve">
+    <value>Kaydet&amp;&amp;Kapat</value>
+  </data>
+  <data name="AddAnotherLevel" xml:space="preserve">
+    <value>Yeni bir katman ekle</value>
+  </data>
+  <data name="AndThenOn" xml:space="preserve">
+    <value>Ve daha sonra</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Kabul et</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Kolon</value>
+  </data>
+  <data name="Deny" xml:space="preserve">
+    <value>Reddet</value>
+  </data>
+  <data name="HandleRequests" xml:space="preserve">
+    <value>İstekleri yönet</value>
+  </data>
+  <data name="SortOn" xml:space="preserve">
+    <value>Sınıflandır</value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>Sınıflandırma sırası</value>
+  </data>
+  <data name="SortRequests" xml:space="preserve">
+    <value>İstekleri Sınıflandır</value>
+  </data>
+  <data name="AtoZ" xml:space="preserve">
+    <value>A'dan Z'ye</value>
+  </data>
+  <data name="ZtoA" xml:space="preserve">
+    <value>Z'den A'ya</value>
+  </data>
+  <data name="CreateMeeting" xml:space="preserve">
+    <value>Toplantı oluştur</value>
+  </data>
+  <data name="HandledWithinHMMColon" xml:space="preserve">
+    <value>Yönetim Süresi (h:dd):</value>
+  </data>
+  <data name="IntervalLengthHMMColon" xml:space="preserve">
+    <value>İnterval uzunluğu (s:dd):</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Yükleniyor</value>
+  </data>
+  <data name="BudgetForecasting" xml:space="preserve">
+    <value>Bütçe Tahminleme</value>
+  </data>
+  <data name="DetailedForecastSmartPart" xml:space="preserve">
+    <value>Detal Tahminleme</value>
+  </data>
+  <data name="SkillValidationSmartPart" xml:space="preserve">
+    <value>Yetenek Doğrulama</value>
+  </data>
+  <data name="TemplatesSmartpart" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="ChangedBy" xml:space="preserve">
+    <value>Değiştirildi</value>
+  </data>
+  <data name="NoChartDataRowsEnabled" xml:space="preserve">
+    <value>Grafik kolonları aktif değil</value>
+  </data>
+  <data name="EnterPublishingDates" xml:space="preserve">
+    <value>Her bir takım için Yayınlanma Tarihi Gir</value>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Takımları Filtrele</value>
+  </data>
+  <data name="SchedulePublishingDates" xml:space="preserve">
+    <value>Yayınlanma Tarihlerini Vardiyala</value>
+  </data>
+  <data name="SetSchedulePublishingDates" xml:space="preserve">
+    <value>Vardiya Planı Yayın Tarihlerini Ayarla</value>
+  </data>
+  <data name="ManageMultisiteDistributions" xml:space="preserve">
+    <value>Çoklu Lokasyon dağılımlarını yönet</value>
+  </data>
+  <data name="ListOfValues" xml:space="preserve">
+    <value>Kural seti listesi</value>
+  </data>
+  <data name="SelectYourListOfValues" xml:space="preserve">
+    <value>Kural seti listesi seç</value>
+  </data>
+  <data name="Overtime" xml:space="preserve">
+    <value>Fazla zaman</value>
+  </data>
+  <data name="AverageWorkTimeCannotBeMoreThan24Hours" xml:space="preserve">
+    <value>Ortalama çalışma süresi 24 saatten fazla olamaz.</value>
+  </data>
+  <data name="FilterOn" xml:space="preserve">
+    <value>Filtrele</value>
+  </data>
+  <data name="EnteredTimeIsInvalid" xml:space="preserve">
+    <value>Girilen zaman geçersiz ya da sıfır.</value>
+  </data>
+  <data name="TimeError" xml:space="preserve">
+    <value>Zaman hatası</value>
+  </data>
+  <data name="UseForRequests" xml:space="preserve">
+    <value>İstekler için kullan</value>
+  </data>
+  <data name="DefaultRuleSetBagName" xml:space="preserve">
+    <value>&lt;Kural seti kutusu ismi&gt;</value>
+  </data>
+  <data name="InsufficientPermission" xml:space="preserve">
+    <value>Bu işlemi gerçekleştirme yetkiniz yok. Lütfen Sistem Yöneticisi ile temasa geçin.</value>
+  </data>
+  <data name="SortAtoZ" xml:space="preserve">
+    <value>A'dan Z'ye doğru sınıflandır</value>
+  </data>
+  <data name="BlankDescription" xml:space="preserve">
+    <value>Boş Tanım</value>
+  </data>
+  <data name="SortZtoA" xml:space="preserve">
+    <value>Z'den A'ya doğru sınıflandır</value>
+  </data>
+  <data name="NextDate" xml:space="preserve">
+    <value>Gelecek tarih</value>
+  </data>
+  <data name="SelectedDate" xml:space="preserve">
+    <value>Seçili tarih</value>
+  </data>
+  <data name="NewContractSchedule" xml:space="preserve">
+    <value>Yeni kontrat takvimi</value>
+  </data>
+  <data name="RequestTypeText" xml:space="preserve">
+    <value>Metin</value>
+  </data>
+  <data name="AddRuleSet" xml:space="preserve">
+    <value>Kural seti ekle</value>
+  </data>
+  <data name="RelativeEnd" xml:space="preserve">
+    <value>Bağıl bitiş zamanı</value>
+  </data>
+  <data name="RelativeStart" xml:space="preserve">
+    <value>Bağıl başlangıç zamanı</value>
+  </data>
+  <data name="DefaultStateGroup" xml:space="preserve">
+    <value>Hazır grup durumu</value>
+  </data>
+  <data name="DeleteStateGroup" xml:space="preserve">
+    <value>Grup durumunu sil</value>
+  </data>
+  <data name="GroupStates" xml:space="preserve">
+    <value>Grup durumları</value>
+  </data>
+  <data name="ManageStateGroupsAndStates" xml:space="preserve">
+    <value>Grup durumlarını ve durumları yönet</value>
+  </data>
+  <data name="NewStateGroup" xml:space="preserve">
+    <value>Yeni grup durumu</value>
+  </data>
+  <data name="RealTimeAdherence" xml:space="preserve">
+    <value>Gerçek Zamanlı Uyum</value>
+  </data>
+  <data name="SetAsDefaultStateGroup" xml:space="preserve">
+    <value>Hazır grup durumu olarak ayarla</value>
+  </data>
+  <data name="StateGroupAvailableDescription" xml:space="preserve">
+    <value>(Çağrı almaya uygun Müşteri Temsilcileri)</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>&lt;boş&gt;</value>
+  </data>
+  <data name="EnterReply" xml:space="preserve">
+    <value>Yanıt gir</value>
+  </data>
+  <data name="Reply" xml:space="preserve">
+    <value>Yanıtla</value>
+  </data>
+  <data name="SiteTeam" xml:space="preserve">
+    <value>Lokasyon/Takım</value>
+  </data>
+  <data name="ReplyAndApprove" xml:space="preserve">
+    <value>Yanıtla ve kabul et</value>
+  </data>
+  <data name="ReplyAndDeny" xml:space="preserve">
+    <value>Yanıtla ve reddet</value>
+  </data>
+  <data name="PersonRequestEmptySubjectError" xml:space="preserve">
+    <value>Konu bölümü boş bırakılmamalıdır</value>
+  </data>
+  <data name="RequestDateColon" xml:space="preserve">
+    <value>İstek tarihi:</value>
+  </data>
+  <data name="RequestStatusColon" xml:space="preserve">
+    <value>İstek Statüsü:</value>
+  </data>
+  <data name="Site" xml:space="preserve">
+    <value>Lokasyon</value>
+  </data>
+  <data name="AddOvertime" xml:space="preserve">
+    <value>Fazla zaman ekle</value>
+  </data>
+  <data name="AddPersonTimeActivity" xml:space="preserve">
+    <value>Zaman Aktivitesi ekle</value>
+  </data>
+  <data name="ShiftTradeRequest" xml:space="preserve">
+    <value>Vardiya takası İsteği</value>
+  </data>
+  <data name="Respond" xml:space="preserve">
+    <value>Yanıt</value>
+  </data>
+  <data name="NewShiftTradeRequest" xml:space="preserve">
+    <value>Yeni Vardiya Takası İsteği</value>
+  </data>
+  <data name="EarlyStart" xml:space="preserve">
+    <value>Erken Başlangıç</value>
+  </data>
+  <data name="LateStart" xml:space="preserve">
+    <value>Geç Başlangıç</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Yeni Ekle</value>
+  </data>
+  <data name="MoveTime" xml:space="preserve">
+    <value>Zamanı Taşı</value>
+  </data>
+  <data name="OptimizeDayOffs" xml:space="preserve">
+    <value>Tatilleri Optimize Et</value>
+  </data>
+  <data name="Swap" xml:space="preserve">
+    <value>Takas</value>
+  </data>
+  <data name="LessThanSkillNameGreaterThan" xml:space="preserve">
+    <value>&lt;Yetenek İsmi&gt;</value>
+  </data>
+  <data name="LessThanWorkloadNameGreaterThan" xml:space="preserve">
+    <value>&lt;İşyükü ismi&gt;</value>
+  </data>
+  <data name="LayoutViews" xml:space="preserve">
+    <value>Yerleşim</value>
+  </data>
+  <data name="NameYourTypeColon" xml:space="preserve">
+    <value>İsimlendir {0}:</value>
+  </data>
+  <data name="NameType" xml:space="preserve">
+    <value>İsimlendir {0}:</value>
+  </data>
+  <data name="CopyOf" xml:space="preserve">
+    <value>Kopyası</value>
+  </data>
+  <data name="DayOffReoptimizerOptions" xml:space="preserve">
+    <value>Tatil Re-optimizasyon opsiyonları</value>
+  </data>
+  <data name="KeepWeekEndsTogether" xml:space="preserve">
+    <value>Hafta Sonları Bir Arada Tut</value>
+  </data>
+  <data name="MoveMaxDays" xml:space="preserve">
+    <value>Maksimum Günleri Taşı</value>
+  </data>
+  <data name="SchedulingSessionOptions" xml:space="preserve">
+    <value>Vardiya Planlama Oturumu Opsiyonları</value>
+  </data>
+  <data name="UseConsecutiveDaysOff" xml:space="preserve">
+    <value>Ardarda Tatil Seçeneğini Kullan</value>
+  </data>
+  <data name="UseDaysOffPerWeek" xml:space="preserve">
+    <value>Tatil/hafta seçeneğini kullan</value>
+  </data>
+  <data name="UseRotations" xml:space="preserve">
+    <value>Rotasyonları kullan</value>
+  </data>
+  <data name="ActivityGrid" xml:space="preserve">
+    <value>Aktivite Grid</value>
+  </data>
+  <data name="ScheduleOnlyRotationDays" xml:space="preserve">
+    <value>Sadece Rotasyon Günlerinin Vardiayalandır</value>
+  </data>
+  <data name="UseConsecutiveWorkDays" xml:space="preserve">
+    <value>Ardarda İşgünü Seçeneğini Kullan</value>
+  </data>
+  <data name="ManageWorkload" xml:space="preserve">
+    <value>İşyükünü Yönet</value>
+  </data>
+  <data name="AmpersandFindNext" xml:space="preserve">
+    <value>&amp;Bir sonrakini bul</value>
+  </data>
+  <data name="AmpersandReplace" xml:space="preserve">
+    <value>&amp;Değiştir</value>
+  </data>
+  <data name="FAmpersandindAll" xml:space="preserve">
+    <value>&amp;Tümünü bul</value>
+  </data>
+  <data name="FiAmpersandndWhatColon" xml:space="preserve">
+    <value>&amp;Hangisini Bul</value>
+  </data>
+  <data name="FinAmpersandd" xml:space="preserve">
+    <value>&amp;Bul</value>
+  </data>
+  <data name="FindAndReplace" xml:space="preserve">
+    <value>Bul ve değiştir</value>
+  </data>
+  <data name="MatchCase" xml:space="preserve">
+    <value>Durumları eşleştir</value>
+  </data>
+  <data name="MatchWholeCell" xml:space="preserve">
+    <value>Tüm hücreyi eşleştir</value>
+  </data>
+  <data name="OpAmpersandtionsGreaterThanGreaterThan" xml:space="preserve">
+    <value>Opsiyonlar&gt;&gt;</value>
+  </data>
+  <data name="RAmpesandeplaceWithColon" xml:space="preserve">
+    <value>Bununlar Değiştir</value>
+  </data>
+  <data name="ReAmpersandplace" xml:space="preserve">
+    <value>Değiştir</value>
+  </data>
+  <data name="ReplaceAmpersandAll" xml:space="preserve">
+    <value>Tümünü&amp;Değiştir</value>
+  </data>
+  <data name="SearchAll" xml:space="preserve">
+    <value>Tümünü ara</value>
+  </data>
+  <data name="SearchUp" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="WitAmpersandhinColon" xml:space="preserve">
+    <value>İçinde</value>
+  </data>
+  <data name="YesToAll" xml:space="preserve">
+    <value>Tümünü kabul et</value>
+  </data>
+  <data name="ApplyStandard" xml:space="preserve">
+    <value>Standardı uygula</value>
+  </data>
+  <data name="NewTextRequest" xml:space="preserve">
+    <value>Yeni istek metni</value>
+  </data>
+  <data name="TextRequest" xml:space="preserve">
+    <value>İstek metni</value>
+  </data>
+  <data name="ChangeYourOrganizationTree" xml:space="preserve">
+    <value>Organizasyon yapısını değiştir</value>
+  </data>
+  <data name="OrganizationTree" xml:space="preserve">
+    <value>Organizasyon yapısı</value>
+  </data>
+  <data name="SkillTypeBackoffice" xml:space="preserve">
+    <value>Arka Ofis</value>
+  </data>
+  <data name="SkillTypeEmail" xml:space="preserve">
+    <value>e-posta</value>
+  </data>
+  <data name="SkillTypeFax" xml:space="preserve">
+    <value>Faks</value>
+  </data>
+  <data name="SkillTypeInboundTelephony" xml:space="preserve">
+    <value>Gelen Telefon</value>
+  </data>
+  <data name="SkillTypeProject" xml:space="preserve">
+    <value>Proje</value>
+  </data>
+  <data name="SkillTypeTime" xml:space="preserve">
+    <value>Zaman</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGrouping" xml:space="preserve">
+    <value>'{0}' gruplamasını silmek istiyor musunuz?</value>
+  </data>
+  <data name="CannotDeleteSiteColon" xml:space="preserve">
+    <value>Lokasyon silinemedi:</value>
+  </data>
+  <data name="CannotDeleteTeamColon" xml:space="preserve">
+    <value>Takım silinemedi:</value>
+  </data>
+  <data name="ConfirmGroupingDeletion" xml:space="preserve">
+    <value>Gruplamayı Silmeyi Onayla</value>
+  </data>
+  <data name="ContractScheduleName" xml:space="preserve">
+    <value>Sözleşme takvimi ismi</value>
+  </data>
+  <data name="DeleteSelectedRowsQuestionmark" xml:space="preserve">
+    <value>Seçili satırları sil?</value>
+  </data>
+  <data name="EnterANameForTheGrouping" xml:space="preserve">
+    <value>Gruplama için yeni isim gir!</value>
+  </data>
+  <data name="NoOptionalColumnIsSelected" xml:space="preserve">
+    <value>Opsiyonel Kolon seçilmedi!</value>
+  </data>
+  <data name="OptionalColumnName" xml:space="preserve">
+    <value>Opsiyonel kolon ismi</value>
+  </data>
+  <data name="PartTimePercentageName" xml:space="preserve">
+    <value>Yarı-zamanlı oran ismi</value>
+  </data>
+  <data name="PleaseSelectAnEmploymentType" xml:space="preserve">
+    <value>Lütfen bir çalışan tipi seçin. </value>
+  </data>
+  <data name="SelectAGroupByOption" xml:space="preserve">
+    <value>Opsiyonel Grup Seç!</value>
+  </data>
+  <data name="SelectEmploymentType" xml:space="preserve">
+    <value>Çalışan Tipi Seç</value>
+  </data>
+  <data name="ThereAreAgentsAssignedToTheTeam" xml:space="preserve">
+    <value>Bu takıma atanmış müşteri temsilcileri var</value>
+  </data>
+  <data name="ThereAreTeamsAssignedUnderneath" xml:space="preserve">
+    <value>Altına atanmış takımlar var</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Uyarı</value>
+  </data>
+  <data name="YouCannotHaveABlankDescription" xml:space="preserve">
+    <value>Boş tanım yapılamaz</value>
+  </data>
+  <data name="NewShiftCategory" xml:space="preserve">
+    <value>Yeni vardiya kategorisi</value>
+  </data>
+  <data name="AddNewShiftCategory" xml:space="preserve">
+    <value>Yeni vardiya kategorisi ekle</value>
+  </data>
+  <data name="ChooseShiftCategoryToChange" xml:space="preserve">
+    <value>Değiştirmek için vardiya kategorisi seç</value>
+  </data>
+  <data name="EnterSettingsForShiftCategory" xml:space="preserve">
+    <value>Vardiya kategorisi için ayarları gir</value>
+  </data>
+  <data name="ManageShiftCategories" xml:space="preserve">
+    <value>Vardiya Kategorilerini Yönet</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Bilgi</value>
+  </data>
+  <data name="QueueDetails" xml:space="preserve">
+    <value>Kuyruk detayları</value>
+  </data>
+  <data name="AfterContactWork" xml:space="preserve">
+    <value>Kontakt sonrası çalışma</value>
+  </data>
+  <data name="AnsweredContracts" xml:space="preserve">
+    <value>Karşılanmış Kontaktlar</value>
+  </data>
+  <data name="Availability" xml:space="preserve">
+    <value>Uygunluk</value>
+  </data>
+  <data name="AvailableTime" xml:space="preserve">
+    <value>Uygun zaman</value>
+  </data>
+  <data name="IdleTime" xml:space="preserve">
+    <value>Boş zaman</value>
+  </data>
+  <data name="LoggedInTime" xml:space="preserve">
+    <value>Zamanında yapılmış giriş</value>
+  </data>
+  <data name="ScheduleWorkCtiTime" xml:space="preserve">
+    <value>CTI süresini vardiyala</value>
+  </data>
+  <data name="Availabilities" xml:space="preserve">
+    <value>Uygunluklar</value>
+  </data>
+  <data name="ChangeYourAvailabilities" xml:space="preserve">
+    <value>Uygunluklarını değiştir</value>
+  </data>
+  <data name="SelectAvailability" xml:space="preserve">
+    <value>Uygunluk seç:</value>
+  </data>
+  <data name="AddAbsenceThreeDots" xml:space="preserve">
+    <value>Devamsızlık Ekle...</value>
+  </data>
+  <data name="AddActivityThreeDots" xml:space="preserve">
+    <value>Aktivite Ekle...</value>
+  </data>
+  <data name="AddOverTimeThreeDots" xml:space="preserve">
+    <value>Fazla Zaman Ekle...</value>
+  </data>
+  <data name="AddPersonalActivityThreeDots" xml:space="preserve">
+    <value>Kişisel Aktivite Ekle...</value>
+  </data>
+  <data name="GroupIsNotEmpty" xml:space="preserve">
+    <value>Grup boş değil</value>
+  </data>
+  <data name="TheGroupHasToBeEmptyBeforeDeleted" xml:space="preserve">
+    <value>Grup silinmeden önce boşaltılmalıdır</value>
+  </data>
+  <data name="ViolationOfABusinessRule" xml:space="preserve">
+    <value>İş Kuralı ihlali</value>
+  </data>
+  <data name="AuthenticationError" xml:space="preserve">
+    <value>Doğrulama hatası</value>
+  </data>
+  <data name="ExternalSystemError" xml:space="preserve">
+    <value>Harici sistem hatası</value>
+  </data>
+  <data name="LogOn" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="LogOnFailedInvalidUserNameOrPassword" xml:space="preserve">
+    <value>Giriş başarısız! Geçersiz kullanıcı ismi veya şifre</value>
+  </data>
+  <data name="NoAllowedBusinessUnitFoundInCurrentDatabase" xml:space="preserve">
+    <value>Veritabanında uygun iş birimi bulunamadı</value>
+  </data>
+  <data name="NoAvailableDataSourcesHasBeenFound" xml:space="preserve">
+    <value>Uygun veri kaynağı bulunamadı</value>
+  </data>
+  <data name="PleaseTryAgainLater" xml:space="preserve">
+    <value>Lütfen tekrar deneyin</value>
+  </data>
+  <data name="ReloadingDone" xml:space="preserve">
+    <value>Yeniden yükleme tamamlandı</value>
+  </data>
+  <data name="SomeoneElseHaveChanged" xml:space="preserve">
+    <value>Başkası tarafından değiştirilmiş</value>
+  </data>
+  <data name="YouAreNotAuthorizedToRunTheApplication" xml:space="preserve">
+    <value>Bu uygulamayı çalıştırmaya yetkili değilsiniz! Uygulama kapatılacaktır.</value>
+  </data>
+  <data name="YourChangesWillBeDiscardedReloading" xml:space="preserve">
+    <value>Değişiklikleriniz çıkartıldı. Yeniden yükleniyor</value>
+  </data>
+  <data name="ModifyShiftCategoryPreferences" xml:space="preserve">
+    <value>Standart Tercihler</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Uygun</value>
+  </data>
+  <data name="NewAvailability" xml:space="preserve">
+    <value>Yeni Uygunluk</value>
+  </data>
+  <data name="AnUnHandledExceptionOccured" xml:space="preserve">
+    <value>Bilinmeyen bir istisna oluştu. Uygulama sonlandırılıyor.</value>
+  </data>
+  <data name="AgentSelectDialog" xml:space="preserve">
+    <value>Müşteri Temsilcisi Seç</value>
+  </data>
+  <data name="Go" xml:space="preserve">
+    <value>Git</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="Togt" xml:space="preserve">
+    <value>Bitiş - &gt;</value>
+  </data>
+  <data name="OpenMyReport" xml:space="preserve">
+    <value>Raporlarım</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Onayı Sil</value>
+  </data>
+  <data name="AddNewSite" xml:space="preserve">
+    <value>Yeni lokasyon ekle</value>
+  </data>
+  <data name="AddNewTeam" xml:space="preserve">
+    <value>Yeni takım ekle</value>
+  </data>
+  <data name="AdminStatus" xml:space="preserve">
+    <value>Yönetici durumu</value>
+  </data>
+  <data name="NodeTextCantBeNull" xml:space="preserve">
+    <value>Nod metni boş olamaz..!</value>
+  </data>
+  <data name="NodeTextCantBeNulls" xml:space="preserve">
+    <value>Lokasyon/Takım ismi boş olamaz..!</value>
+  </data>
+  <data name="MessageTooLong" xml:space="preserve">
+    <value>Çok uzun mesaj</value>
+  </data>
+  <data name="OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage" xml:space="preserve">
+    <value>Bir yada daha mesaj çok uzun. Lütfen daha kısa bir mesaj deneyin</value>
+  </data>
+  <data name="AddShiftCategory" xml:space="preserve">
+    <value>Vardiya kategorisi ekle</value>
+  </data>
+  <data name="NewShiftCategoryShortName" xml:space="preserve">
+    <value>XX</value>
+  </data>
+  <data name="TextTooLong" xml:space="preserve">
+    <value>İsim çok uzun</value>
+  </data>
+  <data name="WarningMessageTitle" xml:space="preserve">
+    <value>Uyarı mesajı</value>
+  </data>
+  <data name="DuplicatePersonAvailabilityMessage" xml:space="preserve">
+    <value>Kişi Uygunluğu için tekrarlanmış tarih girilemez</value>
+  </data>
+  <data name="PersonAvailability" xml:space="preserve">
+    <value>Kişi Uygunluğu</value>
+  </data>
+  <data name="PersonAvailabilityError" xml:space="preserve">
+    <value>Kişi Uygunluğu Hatası</value>
+  </data>
+  <data name="PersonRotationError" xml:space="preserve">
+    <value>Kişi Rotasyon Hatası</value>
+  </data>
+  <data name="NewPersonAvailability" xml:space="preserve">
+    <value>Yeni Kişi Uygunluğu</value>
+  </data>
+  <data name="AvailabilitiesCouldNotBeLoaded" xml:space="preserve">
+    <value>Uygunluklar yüklenemiyor. Veritabanında uygunluk olmayabilir.</value>
+  </data>
+  <data name="Adherence" xml:space="preserve">
+    <value>Uyum</value>
+  </data>
+  <data name="InvalidAgentName" xml:space="preserve">
+    <value>Geçersi İsim</value>
+  </data>
+  <data name="MyReport" xml:space="preserve">
+    <value>Raporlarım</value>
+  </data>
+  <data name="InvalidRecepient" xml:space="preserve">
+    <value>Geçersiz alıcı, var olan bir müşteri temsilcisi seç. </value>
+  </data>
+  <data name="KeyWord" xml:space="preserve">
+    <value>Kısa İsim</value>
+  </data>
+  <data name="Searchcl" xml:space="preserve">
+    <value>Ara:</value>
+  </data>
+  <data name="EmploymentTypeFixedStaffNormalWorkTime" xml:space="preserve">
+    <value>Sabit personel normal iş saati</value>
+  </data>
+  <data name="NightlyRestTimeCannotBeMoreThan24Hours" xml:space="preserve">
+    <value>Gecelik dinlenme süresi 24 saat'den fazla olamaz</value>
+  </data>
+  <data name="UserSettingsName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="UserSettingsValue" xml:space="preserve">
+    <value>Değer</value>
+  </data>
+  <data name="UserSettingsValueType" xml:space="preserve">
+    <value>Değer Tipi</value>
+  </data>
+  <data name="SystemSettings" xml:space="preserve">
+    <value>Sistem Ayarları</value>
+  </data>
+  <data name="DeleteAvailability" xml:space="preserve">
+    <value>Uygunluk sil</value>
+  </data>
+  <data name="SelectAvailabilityColon" xml:space="preserve">
+    <value>Uygunluk seç:</value>
+  </data>
+  <data name="WeeksColon" xml:space="preserve">
+    <value>Haftalar:</value>
+  </data>
+  <data name="PersonRotations" xml:space="preserve">
+    <value>Kişi Rotasyonları</value>
+  </data>
+  <data name="ScheduledDaysOff" xml:space="preserve">
+    <value>Tatiller</value>
+  </data>
+  <data name="TargetDaysOff" xml:space="preserve">
+    <value>Tatiller</value>
+  </data>
+  <data name="MidnightBreakOffsetColon" xml:space="preserve">
+    <value>Geceyarısı molası:</value>
+  </data>
+  <data name="NotValidOpenHoursForMidnightBreak" xml:space="preserve">
+    <value>Mevcut geceyarısı molası için geçerli çaşılma saati bulunmamaktadır.\Mevcut geceyarısı molası Yetenekde bulunmaktadır</value>
+  </data>
+  <data name="InvalidMultisiteDistribution" xml:space="preserve">
+    <value>Geçersiz çoklu lokasyon dağıtımı</value>
+  </data>
+  <data name="ExternalLogOnView" xml:space="preserve">
+    <value>HariciGirişGörünümü</value>
+  </data>
+  <data name="GeneralView" xml:space="preserve">
+    <value>GenelGörünüm</value>
+  </data>
+  <data name="PeoplePeriodView" xml:space="preserve">
+    <value>Kişi Periyodları Görünümü</value>
+  </data>
+  <data name="PersonalAccountView" xml:space="preserve">
+    <value>KişiselHesapGörünümü</value>
+  </data>
+  <data name="PersonalSkillView" xml:space="preserve">
+    <value>KişiselYetenekGörünümü</value>
+  </data>
+  <data name="PersonAvailabilityView" xml:space="preserve">
+    <value>KişiUygunlukGörünümü</value>
+  </data>
+  <data name="PersonRotationView" xml:space="preserve">
+    <value>KişiRotasyonGörünümü</value>
+  </data>
+  <data name="RolesView" xml:space="preserve">
+    <value>RolGörünümü</value>
+  </data>
+  <data name="SchedulePeriodView" xml:space="preserve">
+    <value>VardiyaPeriyodGörünümü</value>
+  </data>
+  <data name="ColumnOnly" xml:space="preserve">
+    <value>Sadece Kolon</value>
+  </data>
+  <data name="HideOptions" xml:space="preserve">
+    <value>Opsiyonlar&lt;&lt;</value>
+  </data>
+  <data name="ShowOptions" xml:space="preserve">
+    <value>Opsiyonlar&gt;&gt;</value>
+  </data>
+  <data name="WholeTable" xml:space="preserve">
+    <value>Tüm Tablo</value>
+  </data>
+  <data name="DeleteScenario" xml:space="preserve">
+    <value>Senaryoyu Sil</value>
+  </data>
+  <data name="CreateAbsenceRequest" xml:space="preserve">
+    <value>Devamsızlık İstekleri</value>
+  </data>
+  <data name="CreateShiftTradeRequest" xml:space="preserve">
+    <value>Vardiya değişim isteği</value>
+  </data>
+  <data name="CreateTextRequest" xml:space="preserve">
+    <value>Değişiklik İsteği</value>
+  </data>
+  <data name="OpenScorecard" xml:space="preserve">
+    <value>Skorkartları</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Silindi</value>
+  </data>
+  <data name="Longterm" xml:space="preserve">
+    <value>Uzundönem</value>
+  </data>
+  <data name="Old" xml:space="preserve">
+    <value>Eski</value>
+  </data>
+  <data name="ReOptimize" xml:space="preserve">
+    <value>Re-optimize et</value>
+  </data>
+  <data name="ManageRTA" xml:space="preserve">
+    <value>Gerçek Zamanlı Uyumluluğu Yönet</value>
+  </data>
+  <data name="SelectShiftCategory" xml:space="preserve">
+    <value>Vardiya Kategorisi Seç</value>
+  </data>
+  <data name="DeleteRotation" xml:space="preserve">
+    <value>Rotasyonu Sil</value>
+  </data>
+  <data name="DefaultAccessibilityExcluded" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="DefaultAccessibilityIncluded" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="ScheduleHourlyEmployees" xml:space="preserve">
+    <value>Saatli Çalışanları Vardiyala</value>
+  </data>
+  <data name="OperatorLimiterEquals" xml:space="preserve">
+    <value>Eşittir</value>
+  </data>
+  <data name="OperatorLimiterGreaterThen" xml:space="preserve">
+    <value>Büyüktür</value>
+  </data>
+  <data name="OperatorLimiterGreaterThenEquals" xml:space="preserve">
+    <value>Büyüktür veya eşittir</value>
+  </data>
+  <data name="OperatorLimiterLessThen" xml:space="preserve">
+    <value>Küçüktür</value>
+  </data>
+  <data name="OperatorLimiterLessThenEquals" xml:space="preserve">
+    <value>Küçüktür veya eşittir</value>
+  </data>
+  <data name="ExampleColon" xml:space="preserve">
+    <value>Örnek:</value>
+  </data>
+  <data name="FormatColon" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="OptionalColumnColon" xml:space="preserve">
+    <value>Opsiyonel Kolon:</value>
+  </data>
+  <data name="NewDayOff" xml:space="preserve">
+    <value>Yeni Tatil</value>
+  </data>
+  <data name="AbsenceRequestEmptyAbsenceTypeError" xml:space="preserve">
+    <value>Devamsızlık seçilmedi</value>
+  </data>
+  <data name="SuggestedTimesColon" xml:space="preserve">
+    <value>Önerilen zamanlar:</value>
+  </data>
+  <data name="AddNewContractSchedule" xml:space="preserve">
+    <value>Yeni sözleşme takvimi ekle</value>
+  </data>
+  <data name="YouHaveToHaveAtLeastOneScoreCard" xml:space="preserve">
+    <value>En az bşr adet skorkartınız olmalı. Lütfen + butonu ile ekleyiniz</value>
+  </data>
+  <data name="AnchorColon" xml:space="preserve">
+    <value>Ankor:</value>
+  </data>
+  <data name="ChooseDaysOffToChange" xml:space="preserve">
+    <value>Değiştirmek için tatil seçin</value>
+  </data>
+  <data name="DaysOffColon" xml:space="preserve">
+    <value>Tatil:</value>
+  </data>
+  <data name="EnterSettingsForDaysOff" xml:space="preserve">
+    <value>Tatil ayarlarını gir</value>
+  </data>
+  <data name="FlexibilityColon" xml:space="preserve">
+    <value>Esneklik:</value>
+  </data>
+  <data name="ManageDayOff" xml:space="preserve">
+    <value>Tatili Yönet</value>
+  </data>
+  <data name="TargetLengthColon" xml:space="preserve">
+    <value>Hedef Uzunluk:</value>
+  </data>
+  <data name="TradeWith" xml:space="preserve">
+    <value>Takas yap</value>
+  </data>
+  <data name="PrepareForecast" xml:space="preserve">
+    <value>İşyükü Hazırla</value>
+  </data>
+  <data name="CompTime" xml:space="preserve">
+    <value>Telafi Süresi</value>
+  </data>
+  <data name="HolidayDays" xml:space="preserve">
+    <value>Tatil Günleri</value>
+  </data>
+  <data name="HolidayTime" xml:space="preserve">
+    <value>Tatil Zamanı</value>
+  </data>
+  <data name="EarlyWarning" xml:space="preserve">
+    <value>Erken uyarı</value>
+  </data>
+  <data name="MinMaxStaffing" xml:space="preserve">
+    <value>Min Maks Personel</value>
+  </data>
+  <data name="Preference" xml:space="preserve">
+    <value>Tercih</value>
+  </data>
+  <data name="ScheduleOnlyAvailabilityDays" xml:space="preserve">
+    <value>Sadece Uygun Günleri Vardiyala</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceDays" xml:space="preserve">
+    <value>Sadece Tercih Yapılan Günleri Vardiyala</value>
+  </data>
+  <data name="UseAvailability" xml:space="preserve">
+    <value>Uygunluğu Kullan</value>
+  </data>
+  <data name="UseMaxStaffing" xml:space="preserve">
+    <value>Maks personel sayısını kullan</value>
+  </data>
+  <data name="UseMinStaffing" xml:space="preserve">
+    <value>Min Personel sayısını kullan</value>
+  </data>
+  <data name="UsePreferences" xml:space="preserve">
+    <value>Tercihleri kullan</value>
+  </data>
+  <data name="UseShiftCategory" xml:space="preserve">
+    <value>Vardiya Kategorisini Kullan</value>
+  </data>
+  <data name="NewPartTimePercentage" xml:space="preserve">
+    <value>Yeni yarı-zamanlı yüzdesi</value>
+  </data>
+  <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
+    <value>Genel Görünüm : kullanıcı detayları</value>
+  </data>
+  <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
+    <value>Duplike kullanıcı doğrulama bilgisi bulundu..!</value>
+  </data>
+  <data name="Attendees" xml:space="preserve">
+    <value>Katılımcılar</value>
+  </data>
+  <data name="FilterPeopleColon" xml:space="preserve">
+    <value>Kişileri filtrele:</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>İhtiyaç duyulan</value>
+  </data>
+  <data name="SelectAttendees" xml:space="preserve">
+    <value>Katılımcıları seç</value>
+  </data>
+  <data name="ZeroOneFoundDot" xml:space="preserve">
+    <value>{0}{1} bulundu.</value>
+  </data>
+  <data name="ActivityNext" xml:space="preserve">
+    <value>Sonraki aktivite</value>
+  </data>
+  <data name="ActivityNextStart" xml:space="preserve">
+    <value>Sonraki aktivite başlangıcı</value>
+  </data>
+  <data name="AgentState" xml:space="preserve">
+    <value>Müşteri temsilcisi durumu</value>
+  </data>
+  <data name="AgentTeam" xml:space="preserve">
+    <value>Müşteri temsilcisi takımı</value>
+  </data>
+  <data name="Alarm" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="AlarmName" xml:space="preserve">
+    <value>Alarm ismi</value>
+  </data>
+  <data name="AlarmTime" xml:space="preserve">
+    <value>Mevcut alarm ismi</value>
+  </data>
+  <data name="AlarmTotalTime" xml:space="preserve">
+    <value>Toplam alarm ismi</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Mevcut</value>
+  </data>
+  <data name="CurrentActivity" xml:space="preserve">
+    <value>Mevcut aktivite</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Sonraki</value>
+  </data>
+  <data name="NextStart" xml:space="preserve">
+    <value>Sonraki başlangıç</value>
+  </data>
+  <data name="ScheduledTime" xml:space="preserve">
+    <value>Zaman</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="TargetTime" xml:space="preserve">
+    <value>Zaman</value>
+  </data>
+  <data name="TotalTime" xml:space="preserve">
+    <value>Toplam Zaman</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Tercihler</value>
+  </data>
+  <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
+    <value>Kişi periyod görünümünü yüklemek için lütfen, sözleşme, sözleşme takvimi, yarı zamanlı oranı, takım bilgilerini ayarlar sayfasından seçin</value>
+  </data>
+  <data name="People" xml:space="preserve">
+    <value>Kişiler</value>
+  </data>
+  <data name="SwapCannotBePerformed" xml:space="preserve">
+    <value>Takas gerçekleştirilemedi</value>
+  </data>
+  <data name="ConfirmPeopleRemove" xml:space="preserve">
+    <value>Kişi Silmeyi Onayla</value>
+  </data>
+  <data name="ConfirmRoleDelete" xml:space="preserve">
+    <value>Rol Silmeyi Onayla</value>
+  </data>
+  <data name="ErrorMessagePreferenceDatesNotSelected" xml:space="preserve">
+    <value>Tercih girmek için tarih(ler) seç</value>
+  </data>
+  <data name="ErrorMessagePreferredDatesNotValid" xml:space="preserve">
+    <value>Geçersiz tercih tarihi(leri). Bu tarih(ler) için avrdiya planı tanımlanmış durumda.</value>
+  </data>
+  <data name="AllDayEvent" xml:space="preserve">
+    <value>Tüm gün</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Oluşturulmuş tarih</value>
+  </data>
+  <data name="YourChangesWillBeDiscarded" xml:space="preserve">
+    <value>Değişiklikleriniz diskart edilecek</value>
+  </data>
+  <data name="SelectRotationColon" xml:space="preserve">
+    <value>Rotasyon Seç:</value>
+  </data>
+  <data name="EmployeeNumber" xml:space="preserve">
+    <value>PersonelNumarası</value>
+  </data>
+  <data name="CreateAlarmTypes" xml:space="preserve">
+    <value>Alarm tipi oluştur</value>
+  </data>
+  <data name="AlarmList" xml:space="preserve">
+    <value>Mevcut alarm tipleri</value>
+  </data>
+  <data name="GiveAlarmAName" xml:space="preserve">
+    <value>Alarmtipine bir tanım adı verin</value>
+  </data>
+  <data name="NewAlarm" xml:space="preserve">
+    <value>Yeni alarm oluştur</value>
+  </data>
+  <data name="SetTresholdTime" xml:space="preserve">
+    <value>Alarm için eşik belirle (sn cinsinden)</value>
+  </data>
+  <data name="SkillCreatedDotParameter0" xml:space="preserve">
+    <value>Yetenek oluşturuldu {0}.</value>
+  </data>
+  <data name="ViewUnpublishedSchedules" xml:space="preserve">
+    <value>Yayınlanmamış vardiyaları görüntüle</value>
+  </data>
+  <data name="GlobalFunctions" xml:space="preserve">
+    <value>Global İşlevler</value>
+  </data>
+  <data name="EnterSettingsForEachWeek" xml:space="preserve">
+    <value>Her bir hafta için ayar giriniz</value>
+  </data>
+  <data name="AlwaysOverrideTheseErrors" xml:space="preserve">
+    <value>Bu hataları dikkate alma</value>
+  </data>
+  <data name="ChangeToOverMidnight" xml:space="preserve">
+    <value>Geceyarısı aşımına çevir</value>
+  </data>
+  <data name="InvalidPercentageValue" xml:space="preserve">
+    <value>Geçersiz oran değeri</value>
+  </data>
+  <data name="PercentageError" xml:space="preserve">
+    <value>Oran 1 ile 100 arası olmalıdır</value>
+  </data>
+  <data name="YouCannotHaveABlankName" xml:space="preserve">
+    <value>İsim kısmını boş bırakmayınız</value>
+  </data>
+  <data name="ManageAlarmSituations" xml:space="preserve">
+    <value>Alarm durumlarını yönet</value>
+  </data>
+  <data name="CannotChangeSystemAlarmType" xml:space="preserve">
+    <value>Sistem alarmını değiştiremezsiniz</value>
+  </data>
+  <data name="CannotDeleteSystemAlarmType" xml:space="preserve">
+    <value>Sistem alarımını silemezsiniz</value>
+  </data>
+  <data name="SelectSuitableColor" xml:space="preserve">
+    <value>Uygun renk seç</value>
+  </data>
+  <data name="CancelingLoadAndCloseProgram" xml:space="preserve">
+    <value>Yükleme iptal ediliyor ve uygulama kapatılıyor</value>
+  </data>
+  <data name="IsPaidTime" xml:space="preserve">
+    <value>Ücretli zaman</value>
+  </data>
+  <data name="IsWorkTime" xml:space="preserve">
+    <value>Çalışma zamanı</value>
+  </data>
+  <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
+    <value>Hata! {0} - {1} arası geçerli bir aralık değil.</value>
+  </data>
+  <data name="ToggleLogOutState" xml:space="preserve">
+    <value>log out durumunu değiştir</value>
+  </data>
+  <data name="UseForLogOut" xml:space="preserve">
+    <value>log out için kullan</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteAvailability" xml:space="preserve">
+    <value>'{0}' uygunluğu silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
+    <value>'{0}' rotasyonu silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
+    <value>'{0}' senaryoyu silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Silme işlemini onayla</value>
+  </data>
+  <data name="AuthorizationFailure" xml:space="preserve">
+    <value>Yetki hatası</value>
+  </data>
+  <data name="CannotDeleteDefaultScenario" xml:space="preserve">
+    <value>'{0}' senaryosu silinemiyor.</value>
+  </data>
+  <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
+    <value>Ana görünümü açmak için buraya tıklayın.</value>
+  </data>
+  <data name="NoScheduledActivity" xml:space="preserve">
+    <value>Vardiyalanmış aktivite bulunmamaktadır</value>
+  </data>
+  <data name="HandledWithinHMM" xml:space="preserve">
+    <value>Yönetim süresi (s:dd)</value>
+  </data>
+  <data name="MaximumOccupancyParenthesisPercentSign" xml:space="preserve">
+    <value>Maksimum doluluk oranı (%)</value>
+  </data>
+  <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
+    <value>Minimum doluluk oranı (%)</value>
+  </data>
+  <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
+    <value>Daralma (%)</value>
+  </data>
+  <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
+    <value>Daha önce RTA durum grupları konfigüre edilmelidir</value>
+  </data>
+  <data name="ApplyLicense" xml:space="preserve">
+    <value>Lisansı yükle</value>
+  </data>
+  <data name="CannotReadLicenseFile" xml:space="preserve">
+    <value>Lisans dosyası "{0}" ulaşılamaz durumda. Hata detayları {1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Lisansı veritabanında saklamak ile ilgili problem var. Hata detayları {0}</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>İz bilgisi içeren geçerli dosya ismi gir. </value>
+  </data>
+  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Lisansınızın süresi dolmuştur, lğtfen yenisini yükleyiniz. </value>
+  </data>
+  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Lisansınız geçersiz, muhtemelen yasadışı olarak değiştirilmiş. Lütfen yenisini yükleyin.</value>
+  </data>
+  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+    <value>Yüklemeye çalıştığınız Lisans "{0}" eskidir ve süresi dolmuş bulunmaktadır.</value>
+  </data>
+  <data name="NewLicenseCorrupted" xml:space="preserve">
+    <value>Lisans dosyası "{0}" geçersizdir. Kopya lisans olabilir.</value>
+  </data>
+  <data name="NewLicenseNotValidFile" xml:space="preserve">
+    <value>Lisans dosyası "{0}" geçersiz bir (xml) formatdadır. Hata detayları: {1}</value>
+  </data>
+  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+    <value>Lisans yüklenmemiş durumda, lütfen yükleyiniz.</value>
+  </data>
+  <data name="NoSuchFile" xml:space="preserve">
+    <value>Böyle bir dosya yok</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Başarı</value>
+  </data>
+  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+    <value>Lisans yüklemesi başarısız</value>
+  </data>
+  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Lisansınız "{0}" kadar geçerlidir. Lütfen yenilemeyi unutmayın.</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>&amp;Tara</value>
+  </data>
+  <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
+    <value>Kişi hesapları yüklenmedi. En az bir adet devamsızlık opsiyonlar içinde tanımlanmalıdır.</value>
+  </data>
+  <data name="NameAlreadyExists" xml:space="preserve">
+    <value>Bu isim mevcutta vardır</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="OpenLicenseFile" xml:space="preserve">
+    <value>Lisans dosyası seç</value>
+  </data>
+  <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
+    <value>Haftalık dinlenme süresi 168 saati geçemez</value>
+  </data>
+  <data name="LastUpdateColonParameter0" xml:space="preserve">
+    <value>Son güncelleme: {0}</value>
+  </data>
+  <data name="LicensedToColon" xml:space="preserve">
+    <value>Lisanslama adına yapıldı:</value>
+  </data>
+  <data name="MainPortal" xml:space="preserve">
+    <value>Ana Portal</value>
+  </data>
+  <data name="PaidTime" xml:space="preserve">
+    <value>Ücretli Zaman</value>
+  </data>
+  <data name="WorkTime" xml:space="preserve">
+    <value>Çalışma Zamanı</value>
+  </data>
+  <data name="ForecasterWillBeClosedDot" xml:space="preserve">
+    <value>Tahmin Edici kapatılacaktır.</value>
+  </data>
+  <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
+    <value>Bir başkası sizden önce aynı veriyi değiştirmiş.</value>
+  </data>
+  <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
+    <value>Çalışma Günü</value>
+  </data>
+  <data name="UndoAll" xml:space="preserve">
+    <value>Tamamını geri çek</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen lisanslarınızı güncelleyin.</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen devam edebilmek için lisanslarınızı güncelleyin.</value>
+  </data>
+  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen tüm müşteri temsilcilerinizi kapsayacak sayıda lisana tedarik ediniz. </value>
+  </data>
+  <data name="TimeTypeDays" xml:space="preserve">
+    <value>Günler</value>
+  </data>
+  <data name="TimeTypeDaysSingular" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="TimeTypeHours" xml:space="preserve">
+    <value>Saatler</value>
+  </data>
+  <data name="TimeTypeHoursSingular" xml:space="preserve">
+    <value>saat</value>
+  </data>
+  <data name="TimeTypeMinutes" xml:space="preserve">
+    <value>dakikalar</value>
+  </data>
+  <data name="TimeTypeMinutesSingular" xml:space="preserve">
+    <value>dakika</value>
+  </data>
+  <data name="TimeTypeWeeks" xml:space="preserve">
+    <value>haftalar</value>
+  </data>
+  <data name="TimeTypeWeeksSingular" xml:space="preserve">
+    <value>hafta</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Öğrenci Uygunluğu</value>
+  </data>
+  <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
+    <value>Farklı kombinasyonlar için değer gir</value>
+  </data>
+  <data name="JusticeValues" xml:space="preserve">
+    <value>Adalet değerleri</value>
+  </data>
+  <data name="ManageJusticeValues" xml:space="preserve">
+    <value>Adalet değerlerini yönet</value>
+  </data>
+  <data name="Budgets" xml:space="preserve">
+    <value>Bütçe</value>
+  </data>
+  <data name="PlanningGroups" xml:space="preserve">
+    <value>Planlama Grupları</value>
+  </data>
+  <data name="ErrorMessagePreferenceDateLimit" xml:space="preserve">
+    <value>Tercihlerinizi {0} dan önce giremezsiniz</value>
+  </data>
+  <data name="Budgeting" xml:space="preserve">
+    <value>Bütçeleme</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Öğrenci Uygunluğu</value>
+  </data>
+  <data name="NewPlanningGroup" xml:space="preserve">
+    <value>Yeni Planlama Grubu</value>
+  </data>
+  <data name="NewPlanningGroupThreeDots" xml:space="preserve">
+    <value>Yeni Planlama Grubu...</value>
+  </data>
+  <data name="PlanningGroupNameIsInvalid" xml:space="preserve">
+    <value>Planlama Grubu ismi geçersiz</value>
+  </data>
+  <data name="LessThanPlanningGroupNameGreaterThan" xml:space="preserve">
+    <value>Grup ismi planlama</value>
+  </data>
+  <data name="AddDayOffThreeDots" xml:space="preserve">
+    <value>Tatil ekle...</value>
+  </data>
+  <data name="DayOffColon" xml:space="preserve">
+    <value>Tatil:</value>
+  </data>
+  <data name="QuestionDeleteThePlanningGroupTwoParameters" xml:space="preserve">
+    <value>{0}{1}{0} Planlama gruplarını silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="PinnedUpWindow" xml:space="preserve">
+    <value>İzleme penceresi</value>
+  </data>
+  <data name="Pin" xml:space="preserve">
+    <value>İzleme</value>
+  </data>
+  <data name="Unpin" xml:space="preserve">
+    <value>Artık izleme</value>
+  </data>
+  <data name="StategroupOverview" xml:space="preserve">
+    <value>Durum Grubu Görünümü</value>
+  </data>
+  <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
+    <value>{0} yarı zamanlı oranını silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="StaffingEffect" xml:space="preserve">
+    <value>Başlangıç etkisi</value>
+  </data>
+  <data name="OpenBudgetThreeDots" xml:space="preserve">
+    <value>Bütçe aç...</value>
+  </data>
+  <data name="NegativeEffectColon" xml:space="preserve">
+    <value>Negatif etki:</value>
+  </data>
+  <data name="PositiveEffectColon" xml:space="preserve">
+    <value>Pozitif etki:</value>
+  </data>
+  <data name="TotalColon" xml:space="preserve">
+    <value>Toplam:</value>
+  </data>
+  <data name="TotalOutOfAdherenceColon" xml:space="preserve">
+    <value>Uyumsuz</value>
+  </data>
+  <data name="SaveAsScenario" xml:space="preserve">
+    <value>Senaryoyu kaydet</value>
+  </data>
+  <data name="MeetingCanNotCreate" xml:space="preserve">
+    <value>Toplantı oluşturulamıyor.</value>
+  </data>
+  <data name="MeetingCanNotLoadWithoutScenarios" xml:space="preserve">
+    <value>Toplantı yüklenemiyor.</value>
+  </data>
+  <data name="label7" xml:space="preserve">
+    <value>Etiket7</value>
+  </data>
+  <data name="UserDefinedOptions" xml:space="preserve">
+    <value>Kullanıcı Tanımlı Opsiyonlar</value>
+  </data>
+  <data name="DayOffPlannerOptions" xml:space="preserve">
+    <value>Tatil Planlama Opsiyonları</value>
+  </data>
+  <data name="PerformanceOptions" xml:space="preserve">
+    <value>Performans Opsiyonları</value>
+  </data>
+  <data name="ResourceReReoptimizerOptions" xml:space="preserve">
+    <value>Kaynak Optimizasyon Opsiyonları</value>
+  </data>
+  <data name="StartWithDayOffOptimization" xml:space="preserve">
+    <value>Tatil optimizasyonu ile başla</value>
+  </data>
+  <data name="RMS" xml:space="preserve">
+    <value>RMS</value>
+  </data>
+  <data name="MoveMaxDayOffs" xml:space="preserve">
+    <value>Maksimum Tatili Taşı</value>
+  </data>
+  <data name="MoveMaxShifts" xml:space="preserve">
+    <value>Maksimum vardiyayı taşı</value>
+  </data>
+  <data name="MaxDuration" xml:space="preserve">
+    <value>Maksimum zaman aralığı</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>Dakika</value>
+  </data>
+  <data name="NowColon" xml:space="preserve">
+    <value>Şimdi:</value>
+  </data>
+  <data name="MaxIteration" xml:space="preserve">
+    <value>Maksimum İterasyon</value>
+  </data>
+  <data name="CalculatingResourcesInTheBackground" xml:space="preserve">
+    <value>Araka planda kaynaklar hesaplanıyor</value>
+  </data>
+  <data name="DeletingSchedules" xml:space="preserve">
+    <value>{0} vardiya planı siliniyor</value>
+  </data>
+  <data name="ValidatingPersons" xml:space="preserve">
+    <value>{0} vardiya kişi doğrulanıyor</value>
+  </data>
+  <data name="BelongsToPlanningGroup" xml:space="preserve">
+    <value>Ait olunan planlama grubu</value>
+  </data>
+  <data name="DayOfWeekFriday" xml:space="preserve">
+    <value>Cuma</value>
+  </data>
+  <data name="DayOfWeekMonday" xml:space="preserve">
+    <value>Pazartesi</value>
+  </data>
+  <data name="DayOfWeekSaturday" xml:space="preserve">
+    <value>Cumartesi</value>
+  </data>
+  <data name="DayOfWeekSunday" xml:space="preserve">
+    <value>Pazar</value>
+  </data>
+  <data name="DayOfWeekThursday" xml:space="preserve">
+    <value>Perşembe</value>
+  </data>
+  <data name="DayOfWeekTuesday" xml:space="preserve">
+    <value>Salı</value>
+  </data>
+  <data name="DayOfWeekWednesday" xml:space="preserve">
+    <value>Çarşamba</value>
+  </data>
+  <data name="WeekNumberFirst" xml:space="preserve">
+    <value>İlk</value>
+  </data>
+  <data name="WeekNumberFourth" xml:space="preserve">
+    <value>dördüncü</value>
+  </data>
+  <data name="WeekNumberLast" xml:space="preserve">
+    <value>sonuncu</value>
+  </data>
+  <data name="WeekNumberSecond" xml:space="preserve">
+    <value>saniye</value>
+  </data>
+  <data name="WeekNumberThird" xml:space="preserve">
+    <value>üçüncü</value>
+  </data>
+  <data name="ApointmentTime" xml:space="preserve">
+    <value>Randevu zamanı</value>
+  </data>
+  <data name="AppointmentRecurrence" xml:space="preserve">
+    <value>Tekrar eden randevu</value>
+  </data>
+  <data name="DurationColon" xml:space="preserve">
+    <value>Aralık:</value>
+  </data>
+  <data name="EndByColon" xml:space="preserve">
+    <value>Sonu:</value>
+  </data>
+  <data name="EndColon" xml:space="preserve">
+    <value>Son:</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Aylık</value>
+  </data>
+  <data name="OfEvery" xml:space="preserve">
+    <value>hepsi</value>
+  </data>
+  <data name="RangeOfRecurrence" xml:space="preserve">
+    <value>Tekrarlanma oranı</value>
+  </data>
+  <data name="RecurEvery" xml:space="preserve">
+    <value>Tekrarla</value>
+  </data>
+  <data name="RecurrencePattern" xml:space="preserve">
+    <value>Tekrarlanma modeli</value>
+  </data>
+  <data name="RecurrentMeeting" xml:space="preserve">
+    <value>Tekrarlanan Toplantı</value>
+  </data>
+  <data name="RemoveRecurrence" xml:space="preserve">
+    <value>Tekrarı kaldır</value>
+  </data>
+  <data name="StartColon" xml:space="preserve">
+    <value>Başlat:</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Haftalık</value>
+  </data>
+  <data name="WeeksOnColon" xml:space="preserve">
+    <value>Hafta(lar)</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
+    <value>'{0}' sözleşmeyi silmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="NewStudentAvailability" xml:space="preserve">
+    <value>Yeni Öğrensi Uygunluğu</value>
+  </data>
+  <data name="AbsoluteStart" xml:space="preserve">
+    <value>Mutlak Başlangıç</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>Çağrı kaçışı ve çağrı karşılama hızı</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>Müşteri Temsilcisi Kuyruk İstatistikleri</value>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Müşteri Temsilcisi - Vardiya Planı Uyumu</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>Müşteri Temsilcisi Metrikleri</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>Müşteri Temsilcisi İstatistikleri</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Tahmin edilen - Güncel İşyükü</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Tahmin edilen - Vardiyalanan Saatler</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>Tercih/Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>Tercih/Gün</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>Kuyruk İstatistikleri</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>Vardiyalanan Müşteri temsilcisi/İnterval ve Takım</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>Vardiyalanan Zaman / Aktivite</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>Vardiyalanan Zaman / Müşteri temsilcisi</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Servis Seviyesi ve Hazır Müşteri Temsilcileri</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Vardiya kategorisi ve tam gün devamsızlık / Müşteri Temsilcisi</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Vardiya Kategorisi / Gün</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>Takım Metrikleri</value>
+  </data>
+  <data name="ShortNameColon" xml:space="preserve">
+    <value>Kısa isim:</value>
+  </data>
+  <data name="MultiplicatorTypeOBTime" xml:space="preserve">
+    <value>Uygunsuz</value>
+  </data>
+  <data name="NewMultiplicator" xml:space="preserve">
+    <value>Yeni Çarpan</value>
+  </data>
+  <data name="MultiplicatorTypeOvertime" xml:space="preserve">
+    <value>Fazla Zaman</value>
+  </data>
+  <data name="RecurrenceColon" xml:space="preserve">
+    <value>Tekrar:</value>
+  </data>
+  <data name="And" xml:space="preserve">
+    <value>ve</value>
+  </data>
+  <data name="CannotFindAValidPeriodAccordingToTheBusinessRules" xml:space="preserve">
+    <value>İş kurallarına uygun periyod bulunamadı</value>
+  </data>
+  <data name="FilterOnContractTimeLimitations" xml:space="preserve">
+    <value>Sözleşme zamanı limitasyonlarını filtrele</value>
+  </data>
+  <data name="FilterOnMaxStartTimeOnRestriction" xml:space="preserve">
+    <value>Maks başlangıç saatini filtrele</value>
+  </data>
+  <data name="FilterOnMinEndTimeOnRestriction" xml:space="preserve">
+    <value>Min bitiş saatini filtrele</value>
+  </data>
+  <data name="FilterOnPersonalPeriodLimitations" xml:space="preserve">
+    <value>Kişisel period sınırlamalarını filtrele</value>
+  </data>
+  <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
+    <value>Sözleşme zamanına uygun vardiya bulunamadı</value>
+  </data>
+  <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
+    <value>Periyod içi vardiyalar</value>
+  </data>
+  <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
+    <value>Sözleşme zamanı içindeki vardaiyalar</value>
+  </data>
+  <data name="TheDayIsNotAvailableForScheduling" xml:space="preserve">
+    <value>VArdiyalama için uygun olmayan gün</value>
+  </data>
+  <data name="ThisDayIsADayOffInAPreference" xml:space="preserve">
+    <value>Tatil tercihi yapılmış gün</value>
+  </data>
+  <data name="ThisDayIsADayOffInARotation" xml:space="preserve">
+    <value>Rotasyonda tatil olan gün</value>
+  </data>
+  <data name="NoPersonPeriodIsDefinedForTheDate" xml:space="preserve">
+    <value>Bu tarih için tanımlanmış kişi periyodu yok</value>
+  </data>
+  <data name="NoPreferenceFor" xml:space="preserve">
+    <value>{0} için tercih yok</value>
+  </data>
+  <data name="NoRotationDefinedFor" xml:space="preserve">
+    <value>{0} için tanımlı rotasyon yok</value>
+  </data>
+  <data name="NoRuleSetBagDefined" xml:space="preserve">
+    <value>Tanımlı kuralseti kutusu yok</value>
+  </data>
+  <data name="NoSchedulePeriodIsDefinedForTheDate" xml:space="preserve">
+    <value>Bu tarih için tanımlı vardiya periyodu yok </value>
+  </data>
+  <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
+    <value>Uygun çalışma vardiyası yok</value>
+  </data>
+  <data name="PersonName" xml:space="preserve">
+    <value>Kişi İsmi</value>
+  </data>
+  <data name="RulesetIsNotValidThisDate" xml:space="preserve">
+    <value>Kuralset {0} geçerli değil</value>
+  </data>
+  <data name="ScheduleDate" xml:space="preserve">
+    <value>Vardiya Planı Tarihi</value>
+  </data>
+  <data name="TheEmploymentTypeIsNotFixedStaff" xml:space="preserve">
+    <value>Çalışan tipi sabit personel değil</value>
+  </data>
+  <data name="TheEmploymentTypeIsNotHourlyStaff" xml:space="preserve">
+    <value>Çalışan tipi saatlik personel değil</value>
+  </data>
+  <data name="ThereIsAlreadyADayOff" xml:space="preserve">
+    <value>Halihazırda bir tatil var</value>
+  </data>
+  <data name="ThereIsAlreadyAnAssignment" xml:space="preserve">
+    <value>Halihazırda bir atama var</value>
+  </data>
+  <data name="OnlyShowResultFromLastBatch" xml:space="preserve">
+    <value>Yalnız son kümenin sonuçlarını göster</value>
+  </data>
+  <data name="OnlyShowUnsuccessfulAttempts" xml:space="preserve">
+    <value>Sadece başarısız girişimleri göster</value>
+  </data>
+  <data name="WorkShiftsAfter" xml:space="preserve">
+    <value>Sonraki çalışma vardiyası</value>
+  </data>
+  <data name="WorkShiftsBefore" xml:space="preserve">
+    <value>Önceki çalışma vardiyası</value>
+  </data>
+  <data name="TheRecurrencePatternIsNotValid" xml:space="preserve">
+    <value>Tekrar modeli geçerli değil</value>
+  </data>
+  <data name="ExportCode" xml:space="preserve">
+    <value>Dışa Aktarım Kodu</value>
+  </data>
+  <data name="ManageMultiplicator" xml:space="preserve">
+    <value>Çarpanı yönet</value>
+  </data>
+  <data name="MultiplicatorDeleteConfirmation" xml:space="preserve">
+    <value>Seçili çarpanları sil ?</value>
+  </data>
+  <data name="MultiplicatorType" xml:space="preserve">
+    <value>Çarpan tipi</value>
+  </data>
+  <data name="MultiplicatorValue" xml:space="preserve">
+    <value>Çarpan değeri</value>
+  </data>
+  <data name="AddMultiplicator" xml:space="preserve">
+    <value>Çarpan ekle</value>
+  </data>
+  <data name="DeleteMultiplicator" xml:space="preserve">
+    <value>Çarpanı sil</value>
+  </data>
+  <data name="AddPerson" xml:space="preserve">
+    <value>Kişi ekle</value>
+  </data>
+  <data name="FilterPersonAccounts" xml:space="preserve">
+    <value>Kişi hesaplarını filtrele</value>
+  </data>
+  <data name="SchedulingDays" xml:space="preserve">
+    <value>Vardiyalama {0} günleri</value>
+  </data>
+  <data name="CancellingThreeDots" xml:space="preserve">
+    <value>İptal ediliyor...</value>
+  </data>
+  <data name="NewReport" xml:space="preserve">
+    <value>Yeni Rapor</value>
+  </data>
+  <data name="PerformanceManager" xml:space="preserve">
+    <value>Performans Yöneticisi</value>
+  </data>
+  <data name="For" xml:space="preserve">
+    <value>için</value>
+  </data>
+  <data name="ModifyGroupPage" xml:space="preserve">
+    <value>Grup sayfasını düzenle</value>
+  </data>
+  <data name="ModifyPeopleWithinGroupPage" xml:space="preserve">
+    <value>Grup sayfasındaki kişileri düzenle</value>
+  </data>
+  <data name="Impact" xml:space="preserve">
+    <value>Etki</value>
+  </data>
+  <data name="DeleteGroupPage" xml:space="preserve">
+    <value>Grup sayfasını</value>
+  </data>
+  <data name="LookUp" xml:space="preserve">
+    <value>Gözat</value>
+  </data>
+  <data name="RefreshScreenEveryColon" xml:space="preserve">
+    <value>Ekran güncelleme aralığı</value>
+  </data>
+  <data name="ScheduleOrSchedules" xml:space="preserve">
+    <value>Vardiya Plan(ları)</value>
+  </data>
+  <data name="CreateSkillSummery" xml:space="preserve">
+    <value>Yetenek özeti oluştur</value>
+  </data>
+  <data name="EditSkillSummery" xml:space="preserve">
+    <value>Yetenek özetini biçimle</value>
+  </data>
+  <data name="Skills" xml:space="preserve">
+    <value>Yetenekler</value>
+  </data>
+  <data name="SkillSummery" xml:space="preserve">
+    <value>Yetenek özeti</value>
+  </data>
+  <data name="SummeryName" xml:space="preserve">
+    <value>Yetenek ismi</value>
+  </data>
+  <data name="AddPreferenceRestriction" xml:space="preserve">
+    <value>Tercih kısıtı ekle</value>
+  </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>Öğrenci uygunluğu ekle</value>
+  </data>
+  <data name="Multiplicator" xml:space="preserve">
+    <value>Çarpan</value>
+  </data>
+  <data name="NoNameWasEntered" xml:space="preserve">
+    <value>İsim girilmedi</value>
+  </data>
+  <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
+    <value>Sözleşme zamanı sınırlamalarını {0} ve {1} arası filtrele</value>
+  </data>
+  <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
+    <value>Kişisel periyod sınırlamalarını {0} ve {1} arası filtrele</value>
+  </data>
+  <data name="DefaultDefinitionSetName" xml:space="preserve">
+    <value>Tanım seti</value>
+  </data>
+  <data name="DefinitionSetNameBlank" xml:space="preserve">
+    <value>Tanım seti boş bırakılamaz</value>
+  </data>
+  <data name="AdvancedOptions" xml:space="preserve">
+    <value>Gelişmiş opsiyonlar</value>
+  </data>
+  <data name="SchedulingOptions" xml:space="preserve">
+    <value>Vardiya Planı Opsiyonları</value>
+  </data>
+  <data name="NoRestrictionDefinedFor" xml:space="preserve">
+    <value>{0} için kısıt tanımlanmadı</value>
+  </data>
+  <data name="AverageWorkTimePerDay" xml:space="preserve">
+    <value>Ortalama çalışma süresi / gün</value>
+  </data>
+  <data name="AverageWorkTimePerSlot" xml:space="preserve">
+    <value>Ortalama çalışma süresi / slot</value>
+  </data>
+  <data name="ContractTime" xml:space="preserve">
+    <value>Sözleşme zamanı</value>
+  </data>
+  <data name="FairnessValue" xml:space="preserve">
+    <value>Adalet değeri</value>
+  </data>
+  <data name="FreeSlots" xml:space="preserve">
+    <value>Boş slotlar</value>
+  </data>
+  <data name="SchedulePeriod" xml:space="preserve">
+    <value>Vardiya Planı periyodu</value>
+  </data>
+  <data name="RequiresSkill" xml:space="preserve">
+    <value>Yetenek ihtiyacı</value>
+  </data>
+  <data name="DeleteContract" xml:space="preserve">
+    <value>Sözleşmeyi sil</value>
+  </data>
+  <data name="DefinitionName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="DefinitionType" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="DeletePartTimePercentage" xml:space="preserve">
+    <value>Yarı zamanlı oranını sil</value>
+  </data>
+  <data name="ViewReports" xml:space="preserve">
+    <value>Raporları görüntüle</value>
+  </data>
+  <data name="HighestStdev" xml:space="preserve">
+    <value>Maks standart sapma</value>
+  </data>
+  <data name="IntervalStdev" xml:space="preserve">
+    <value>İnterval standart sapma</value>
+  </data>
+  <data name="AddMeeting" xml:space="preserve">
+    <value>Toplantı ekle</value>
+  </data>
+  <data name="EmploymentType" xml:space="preserve">
+    <value>Çalışan tipi</value>
+  </data>
+  <data name="EndTimeLimitation" xml:space="preserve">
+    <value>Bitiş zamanı sınırlaması</value>
+  </data>
+  <data name="EndTimeLimitations" xml:space="preserve">
+    <value>Bitiş zamanı sınırlaması</value>
+  </data>
+  <data name="PersonPeriod" xml:space="preserve">
+    <value>Kişi periyodu</value>
+  </data>
+  <data name="PersonSkills" xml:space="preserve">
+    <value>Kişi yetenekleri</value>
+  </data>
+  <data name="StartTimeLimitation" xml:space="preserve">
+    <value>Başlangıç zamanı sınırlaması</value>
+  </data>
+  <data name="StartTimeLimitations" xml:space="preserve">
+    <value>Başlangıç zamanı sınırlaması</value>
+  </data>
+  <data name="NewDefinitionSet" xml:space="preserve">
+    <value>Yeni tanım seti</value>
+  </data>
+  <data name="PayrollSettings" xml:space="preserve">
+    <value>Bordro ayarları</value>
+  </data>
+  <data name="DefinitionSets" xml:space="preserve">
+    <value>Tanım setleri</value>
+  </data>
+  <data name="ManageDefinitionSets" xml:space="preserve">
+    <value>Tanım setlerini yönet</value>
+  </data>
+  <data name="DefinitionSetNameColon" xml:space="preserve">
+    <value>Tanım seti ismi</value>
+  </data>
+  <data name="ModifyMeetings" xml:space="preserve">
+    <value>Toplantıları düzenle</value>
+  </data>
+  <data name="Projection" xml:space="preserve">
+    <value>Projeksiyon</value>
+  </data>
+  <data name="ConnectedDefinitionSets" xml:space="preserve">
+    <value>Bağlantılı tanım setleri:</value>
+  </data>
+  <data name="ShowLessPanels" xml:space="preserve">
+    <value>Daha az panel göster</value>
+  </data>
+  <data name="ShowMorePanels" xml:space="preserve">
+    <value>Daha çok panel göster</value>
+  </data>
+  <data name="OvertimeColon" xml:space="preserve">
+    <value>Fazla Zaman:</value>
+  </data>
+  <data name="AbsoluteDifferenceIncoming" xml:space="preserve">
+    <value>Mutlak fark</value>
+  </data>
+  <data name="ForecastedAgentsIncoming" xml:space="preserve">
+    <value>Tahmini müşteri tamsilcileri</value>
+  </data>
+  <data name="ForecastedHours" xml:space="preserve">
+    <value>Tahmini Saat</value>
+  </data>
+  <data name="ForecastedHoursIncoming" xml:space="preserve">
+    <value>Tahmini Saat</value>
+  </data>
+  <data name="RelativeDifferenceIncoming" xml:space="preserve">
+    <value>Bağıl fark</value>
+  </data>
+  <data name="ScheduledAgentsIncoming" xml:space="preserve">
+    <value>Vardiyalanan müşteri temsilcisi</value>
+  </data>
+  <data name="ScheduledHoursIncoming" xml:space="preserve">
+    <value>Vardiyalanan müşteri temsilcisi</value>
+  </data>
+  <data name="InReadyTime" xml:space="preserve">
+    <value>Hazır</value>
+  </data>
+  <data name="DeleteSkillSummery" xml:space="preserve">
+    <value>Yetenek özetini sil</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Oluşturan</value>
+  </data>
+  <data name="CreatedOn" xml:space="preserve">
+    <value>Oluşturulduğu yer</value>
+  </data>
+  <data name="UpdatedOn" xml:space="preserve">
+    <value>Güncel</value>
+  </data>
+  <data name="AddToBags" xml:space="preserve">
+    <value>Vardiya kutusuna ekle</value>
+  </data>
+  <data name="SelectBags" xml:space="preserve">
+    <value>Kutuları seç</value>
+  </data>
+  <data name="SelectRuleSets" xml:space="preserve">
+    <value>Kural seti seç</value>
+  </data>
+  <data name="WorkTimeLimitation" xml:space="preserve">
+    <value>Çalışma zamanı sınırlaması</value>
+  </data>
+  <data name="NoScenario" xml:space="preserve">
+    <value>Senaryo yok</value>
+  </data>
+  <data name="ScenarioMustBeCreated" xml:space="preserve">
+    <value>Senaryo oluştur</value>
+  </data>
+  <data name="EarliestEndTime" xml:space="preserve">
+    <value>En erken bitiş zamanı</value>
+  </data>
+  <data name="EarliestStartTime" xml:space="preserve">
+    <value>En erken başlangıç zamanı</value>
+  </data>
+  <data name="LatestEndTime" xml:space="preserve">
+    <value>En geç bitiş zamanı</value>
+  </data>
+  <data name="LatestStartTime" xml:space="preserve">
+    <value>En geç başlangıç zamanı</value>
+  </data>
+  <data name="CreatePayrollExport" xml:space="preserve">
+    <value>Bordro Eksport Oluştur</value>
+  </data>
+  <data name="PayrollExportWizard" xml:space="preserve">
+    <value>Bordro Eksport Sihirbazı</value>
+  </data>
+  <data name="UseShrinkage" xml:space="preserve">
+    <value>Daralmayı kullan</value>
+  </data>
+  <data name="FileTypeSelection" xml:space="preserve">
+    <value>Dosya tipi seç</value>
+  </data>
+  <data name="ESL" xml:space="preserve">
+    <value>ESL</value>
+  </data>
+  <data name="TeamSettings" xml:space="preserve">
+    <value>Takım ayarları</value>
+  </data>
+  <data name="PayrollCode" xml:space="preserve">
+    <value>Bordro sistem kodu</value>
+  </data>
+  <data name="Payrolls" xml:space="preserve">
+    <value>Bordro verisini aktar</value>
+  </data>
+  <data name="LoadingPeopleTreeDots" xml:space="preserve">
+    <value>Kişiler yükleniyor...</value>
+  </data>
+  <data name="LoadingSchedulesTreeDots" xml:space="preserve">
+    <value>Vardiya Planları Yükleniyor..</value>
+  </data>
+  <data name="LoadingSkillDataTreeDots" xml:space="preserve">
+    <value>Tahmin verisi yükleniyor...</value>
+  </data>
+  <data name="PayrollIntegration" xml:space="preserve">
+    <value>Bordro Entegrasyonu</value>
+  </data>
+  <data name="PersonSelection" xml:space="preserve">
+    <value>Kişi Seçimi</value>
+  </data>
+  <data name="ChangeInfoColon" xml:space="preserve">
+    <value>Bilgi Değiştir:</value>
+  </data>
+  <data name="CreatedByColon" xml:space="preserve">
+    <value>Oluşturan:</value>
+  </data>
+  <data name="UpdatedByColon" xml:space="preserve">
+    <value>Güncelleyen:</value>
+  </data>
+  <data name="Bags" xml:space="preserve">
+    <value>Kutular</value>
+  </data>
+  <data name="RecentWorkShiftRuleSets" xml:space="preserve">
+    <value>Mevcut çalışma vardiyası kural setleri</value>
+  </data>
+  <data name="ViewPointTimeZone" xml:space="preserve">
+    <value>Zaman Dilimi</value>
+  </data>
+  <data name="NotRemovable" xml:space="preserve">
+    <value>Değiştirilemez</value>
+  </data>
+  <data name="ThisRoleCannotBeDeleted" xml:space="preserve">
+    <value>Silinenemez rol</value>
+  </data>
+  <data name="PayrollExport" xml:space="preserve">
+    <value>Bordro Eksport</value>
+  </data>
+  <data name="PayrollExportGeneralInformation" xml:space="preserve">
+    <value>Bordro Eksport Genel Bilgi</value>
+  </data>
+  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
+    <value>Haftalık çalışma saati 168 saatden az olamaz</value>
+  </data>
+  <data name="RunExport" xml:space="preserve">
+    <value>Seçili raporu çalıştır</value>
+  </data>
+  <data name="ProductNameColon" xml:space="preserve">
+    <value>Ürün ismi:</value>
+  </data>
+  <data name="ProductVersionColon" xml:space="preserve">
+    <value>Ürün sürümü:</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Konfigürasyon</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Öngörünüm</value>
+  </data>
+  <data name="Encoding" xml:space="preserve">
+    <value>Kodlama</value>
+  </data>
+  <data name="Alarms" xml:space="preserve">
+    <value>Alarmlar</value>
+  </data>
+  <data name="AlarmTypes" xml:space="preserve">
+    <value>Alarm tipleri</value>
+  </data>
+  <data name="ManageAlarms" xml:space="preserve">
+    <value>Alarmları yönet</value>
+  </data>
+  <data name="ManageAlarmTypes" xml:space="preserve">
+    <value>Alarm tiplerini yönet</value>
+  </data>
+  <data name="StateGroups" xml:space="preserve">
+    <value>Gruplerı belirt</value>
+  </data>
+  <data name="StateGroupsAndStates" xml:space="preserve">
+    <value>Gruplerı belirt</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>Müşteri Temsilcisi Skorkartı</value>
+  </data>
+  <data name="Excluded" xml:space="preserve">
+    <value>Hariç</value>
+  </data>
+  <data name="Included" xml:space="preserve">
+    <value>Dahil</value>
+  </data>
+  <data name="UndoRedoDeleteSchedules" xml:space="preserve">
+    <value>Silinmiş Vardiya Planı</value>
+  </data>
+  <data name="UndoRedoPaste" xml:space="preserve">
+    <value>Yapıştır</value>
+  </data>
+  <data name="UndoRedoReOptimize" xml:space="preserve">
+    <value>Reoptimize et</value>
+  </data>
+  <data name="UndoRedoScheduling" xml:space="preserve">
+    <value>Vardiya Planı Yapılıyor</value>
+  </data>
+  <data name="ExportToPDF" xml:space="preserve">
+    <value>PDF'e aktar</value>
+  </data>
+  <data name="ReportLevelDetailLunch" xml:space="preserve">
+    <value>Yemek Molası</value>
+  </data>
+  <data name="ReportLevelDetailNone" xml:space="preserve">
+    <value>Hiçbiri</value>
+  </data>
+  <data name="ReportLevelDetailShortBreak" xml:space="preserve">
+    <value>Kısa Mola</value>
+  </data>
+  <data name="AllActivities" xml:space="preserve">
+    <value>Tüm Aktiviteler</value>
+  </data>
+  <data name="Breaks" xml:space="preserve">
+    <value>Molalar</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Göster</value>
+  </data>
+  <data name="Individual" xml:space="preserve">
+    <value>Birey</value>
+  </data>
+  <data name="NoActivities" xml:space="preserve">
+    <value>Aktivite yok</value>
+  </data>
+  <data name="CannotAnswer" xml:space="preserve">
+    <value>Yanıtlanamıyor</value>
+  </data>
+  <data name="Receiver" xml:space="preserve">
+    <value>Alıcı</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="TextAnswer" xml:space="preserve">
+    <value>Yanıt Metini</value>
+  </data>
+  <data name="YesNoAnswer" xml:space="preserve">
+    <value>Evet/Hayır</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Yükle</value>
+  </data>
+  <data name="Answered" xml:space="preserve">
+    <value>Yanıtlanmış</value>
+  </data>
+  <data name="Conversation" xml:space="preserve">
+    <value>Konuşma</value>
+  </data>
+  <data name="FollowUp" xml:space="preserve">
+    <value>Takip</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>Mesajlar</value>
+  </data>
+  <data name="NotAnswered" xml:space="preserve">
+    <value>Yanıtlanmamış</value>
+  </data>
+  <data name="Receivers" xml:space="preserve">
+    <value>Alıcılar</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="YesNo" xml:space="preserve">
+    <value>Evet/Hayır</value>
+  </data>
+  <data name="NotReplied" xml:space="preserve">
+    <value>Yanıtlanmamış</value>
+  </data>
+  <data name="Replied" xml:space="preserve">
+    <value>Yanıtlanmış</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Kabul et</value>
+  </data>
+  <data name="MessageColon" xml:space="preserve">
+    <value>Mesaj:</value>
+  </data>
+  <data name="RequestedByColon" xml:space="preserve">
+    <value>İstek sahibi:</value>
+  </data>
+  <data name="RequestForm" xml:space="preserve">
+    <value>İstek</value>
+  </data>
+  <data name="RequestResponseAction" xml:space="preserve">
+    <value>Yanıt aksiyonu</value>
+  </data>
+  <data name="SelectedDateColon" xml:space="preserve">
+    <value>Seçili Veri:</value>
+  </data>
+  <data name="StatusColon" xml:space="preserve">
+    <value>Statü:</value>
+  </data>
+  <data name="TradeWithColon" xml:space="preserve">
+    <value>Takas:</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Koru</value>
+  </data>
+  <data name="KeepNone" xml:space="preserve">
+    <value>Hiçbirini Koruma</value>
+  </data>
+  <data name="KeepShiftCategory" xml:space="preserve">
+    <value>Vardiya Kategorisini Koru</value>
+  </data>
+  <data name="KeepStartAndEndTime" xml:space="preserve">
+    <value>Başlangıç ve bitiş zamanını koru</value>
+  </data>
+  <data name="BuildInStandardAgentRole" xml:space="preserve">
+    <value>Müşteri temsilcisi</value>
+  </data>
+  <data name="BuiltInAdministratorRole" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="BuiltInBusinessUnitAdministratorRole" xml:space="preserve">
+    <value>Birim Yöneticisi</value>
+  </data>
+  <data name="BuiltInSiteManagerRole" xml:space="preserve">
+    <value>Lokasyon Yöneticisi</value>
+  </data>
+  <data name="BuiltInTeamLeaderRole" xml:space="preserve">
+    <value>Takım Lideri</value>
+  </data>
+  <data name="NewGroup" xml:space="preserve">
+    <value>Yeni Grup</value>
+  </data>
+  <data name="ViewSchedules" xml:space="preserve">
+    <value>Vardiya Planlarını Görüntüle</value>
+  </data>
+  <data name="ReportLevel" xml:space="preserve">
+    <value>Rapor seviyesi</value>
+  </data>
+  <data name="DefaultSegment" xml:space="preserve">
+    <value>Hazır Parça Aralığı</value>
+  </data>
+  <data name="AnsweredContacts" xml:space="preserve">
+    <value>Yanıtlanmış Kontaktlar</value>
+  </data>
+  <data name="NotScheduled" xml:space="preserve">
+    <value>Vardiyalanmamış</value>
+  </data>
+  <data name="AdherenceReportCalculation" xml:space="preserve">
+    <value>Uyum Hesabı</value>
+  </data>
+  <data name="AddDays" xml:space="preserve">
+    <value>Gün Ekle</value>
+  </data>
+  <data name="DateFromColon" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="DateToColon" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="DeleteDateParenthesisS" xml:space="preserve">
+    <value>Tarih sil</value>
+  </data>
+  <data name="SelectDates" xml:space="preserve">
+    <value>Tarih seç</value>
+  </data>
+  <data name="SelectedDateParenthesisS" xml:space="preserve">
+    <value>Seçili tarihler</value>
+  </data>
+  <data name="ShiftTradeStatusDtoNotValid" xml:space="preserve">
+    <value>Geçersiz</value>
+  </data>
+  <data name="SendEmail" xml:space="preserve">
+    <value>E-posta gönder</value>
+  </data>
+  <data name="Daily" xml:space="preserve">
+    <value>Günlük</value>
+  </data>
+  <data name="DayParenthesisS" xml:space="preserve">
+    <value>gün(ler)</value>
+  </data>
+  <data name="Every" xml:space="preserve">
+    <value>Her</value>
+  </data>
+  <data name="MonthsParenthesisS" xml:space="preserve">
+    <value>ay(lar)</value>
+  </data>
+  <data name="DataColon" xml:space="preserve">
+    <value>Veri:</value>
+  </data>
+  <data name="FilterAgents" xml:space="preserve">
+    <value>Müşteri temsilcilerini filtrele</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Bilgi</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Uyarılar</value>
+  </data>
+  <data name="OriginalOfferedCalls" xml:space="preserve">
+    <value>Orijinal gerçekleşen çağrılar</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>detaylar</value>
+  </data>
+  <data name="DeleteMeeting" xml:space="preserve">
+    <value>Toplantıyı sil</value>
+  </data>
+  <data name="RequestStatusApproved" xml:space="preserve">
+    <value>Kabul Edildi</value>
+  </data>
+  <data name="RequestStatusDenied" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="RequestStatusDtoApproved" xml:space="preserve">
+    <value>Kabul Edildi</value>
+  </data>
+  <data name="RequestStatusDtoDenied" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="RequestStatusDtoPending" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="RequestStatusPending" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
+    <value>Alt yeteneklerin dağılım toplamı %100 olmalı</value>
+  </data>
+  <data name="Me" xml:space="preserve">
+    <value>Ben</value>
+  </data>
+  <data name="MaxColon" xml:space="preserve">
+    <value>Maks:</value>
+  </data>
+  <data name="MinColon" xml:space="preserve">
+    <value>Min:</value>
+  </data>
+  <data name="WeeklyWorkTime" xml:space="preserve">
+    <value>Haftalık çalışma süresi</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Doğrula</value>
+  </data>
+  <data name="DateSelection" xml:space="preserve">
+    <value>Tarih seçimi</value>
+  </data>
+  <data name="RemoveDays" xml:space="preserve">
+    <value>Günleri kaldır</value>
+  </data>
+  <data name="FilterDays" xml:space="preserve">
+    <value>Günleri filtrele</value>
+  </data>
+  <data name="NextPeriod" xml:space="preserve">
+    <value>Sonraki periyod</value>
+  </data>
+  <data name="PreviousPeriod" xml:space="preserve">
+    <value>Önceki periyod</value>
+  </data>
+  <data name="TargetToleranceMinus" xml:space="preserve">
+    <value>Hedef tolerans -</value>
+  </data>
+  <data name="TargetTolerancePlus" xml:space="preserve">
+    <value>Hedef tolerans +</value>
+  </data>
+  <data name="OtherUser" xml:space="preserve">
+    <value>Başka kullanıcı</value>
+  </data>
+  <data name="Conflict" xml:space="preserve">
+    <value>Çelişki</value>
+  </data>
+  <data name="NotSaved" xml:space="preserve">
+    <value>Kaydedilmedi</value>
+  </data>
+  <data name="OverWrite" xml:space="preserve">
+    <value>Üzerine yaz</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Bilinmiyor</value>
+  </data>
+  <data name="PeriodInLegalState" xml:space="preserve">
+    <value>Legal Periyod</value>
+  </data>
+  <data name="WeekInLegalState" xml:space="preserve">
+    <value>Legal Hafta</value>
+  </data>
+  <data name="BusinessOrientation" xml:space="preserve">
+    <value>İş Odaklılık</value>
+  </data>
+  <data name="Fairness" xml:space="preserve">
+    <value>Adalet</value>
+  </data>
+  <data name="FairnessOrientation" xml:space="preserve">
+    <value>Adalet Odaklılık</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Açık dosya</value>
+  </data>
+  <data name="LayerInformationColon" xml:space="preserve">
+    <value>Katman Bilgisi</value>
+  </data>
+  <data name="Business" xml:space="preserve">
+    <value>İş</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>GELİŞTİR</value>
+  </data>
+  <data name="AgentPerformance" xml:space="preserve">
+    <value>Aracı performansı</value>
+  </data>
+  <data name="EmployeeInformation" xml:space="preserve">
+    <value>Çalışan bilgisi</value>
+  </data>
+  <data name="Improve" xml:space="preserve">
+    <value>GELİŞTİR</value>
+  </data>
+  <data name="ScheduleAnalysis" xml:space="preserve">
+    <value>İş Takvimi analizi</value>
+  </data>
+  <data name="ServiceLevelAnalysis" xml:space="preserve">
+    <value>Servis seviyesi analizi</value>
+  </data>
+</root>

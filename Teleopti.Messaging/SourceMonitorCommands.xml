@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+        <sourcemonitor_commands>
+        <write_log>false</write_log>
+        <command>
+        <project_file>TempProject.smp</project_file>
+        <project_language>CSharp</project_language>
+        <source_directory>C:\Program Files\CruiseControl.NET\server\RaptorMessaging</source_directory>
+        <include_subdirectories>true</include_subdirectories>
+        <export>
+        <export_file>C:\Program Files\CruiseControl.NET\server\Raptor\SourceMonitorDetailedOutput.xml</export_file>
+        <export_type>2</export_type>
+        </export>
+        </command>
+        </sourcemonitor_commands>

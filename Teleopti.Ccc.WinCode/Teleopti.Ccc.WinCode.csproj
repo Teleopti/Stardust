@@ -1,0 +1,1366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3B495E4B-1803-413C-9480-40C8EFCCBA45}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Ccc.WinCode</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.WinCode</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
+    <OutputPath>bin\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
+    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\AutoFac\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache">
+      <HintPath>..\mbcache\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Microsoft.Practices.Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite.Presentation, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Microsoft.Practices.CompositeUI.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Syncfusion.Chart.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Chart.Base.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Grid.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Grid.Windows.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Pdf.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SyncFusion\Syncfusion.Pdf.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Shared.Base.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Windows, Version=7.403.0.20, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\SyncFusion\Syncfusion.Tools.Windows.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
+    <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />
+    <Compile Include="Budgeting\BudgetNavigatorDataService.cs" />
+    <Compile Include="Budgeting\BudgetDaysUpdater.cs" />
+    <Compile Include="Budgeting\BudgetPermissionService.cs" />
+    <Compile Include="Budgeting\BudgetSettings.cs" />
+    <Compile Include="Budgeting\BudgetSettingsProvider.cs" />
+    <Compile Include="Budgeting\ClosedBudgetDayResolver.cs" />
+    <Compile Include="Budgeting\IBudgetGroupMainViewFactory.cs" />
+    <Compile Include="Budgeting\ICancelEventModel.cs" />
+    <Compile Include="Budgeting\ILockable.cs" />
+    <Compile Include="Budgeting\Models\AddShrinkageModel.cs" />
+    <Compile Include="Budgeting\Models\BaseModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupDayDetailModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupDayModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupDistributedDetailModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupMonthDetailModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupMonthModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupWeekDetailModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupWeekModel.cs" />
+    <Compile Include="Budgeting\Models\EditShrinkageModel.cs" />
+    <Compile Include="Budgeting\Models\IBudgetGroupDayDetailModel.cs" />
+    <Compile Include="Budgeting\Models\IBudgetGroupMonthDetailModel.cs" />
+    <Compile Include="Budgeting\Presenters\AddShrinkagePresenter.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetDayGapFiller.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetDayProvider.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupDataService.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupDayPresenter.cs" />
+    <Compile Include="Budgeting\BudgetGroupPropertiesPage.cs" />
+    <Compile Include="Budgeting\BudgetGroupWizardPage.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupMonthPresenter.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupTabPresenter.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupWeekPresenter.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetingSkillStaffPeriodProvider.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetPeopleProvider.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetSkillStaffPeriodContainer.cs" />
+    <Compile Include="Budgeting\Presenters\CustomEfficiencyShrinkageUpdatedEventArgs.cs" />
+    <Compile Include="Budgeting\Presenters\CustomShrinkageUpdatedEventArgs.cs" />
+    <Compile Include="Budgeting\Presenters\EditShrinkagePresenter.cs" />
+    <Compile Include="Budgeting\Presenters\ForecastedHoursExtractor.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetDayGapFiller.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetDayProvider.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetDaySource.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetPeopleProvider.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetSkillStaffPeriodContainer.cs" />
+    <Compile Include="Budgeting\Presenters\IBudgetSkillStaffPeriodProvider.cs" />
+    <Compile Include="Budgeting\Presenters\ISelectedBudgetDays.cs" />
+    <Compile Include="Budgeting\Presenters\IVisibleBudgetDays.cs" />
+    <Compile Include="Budgeting\Presenters\LoadForecastedHoursCommand.cs" />
+    <Compile Include="Budgeting\Presenters\LoadStaffEmployedCommand.cs" />
+    <Compile Include="Budgeting\Presenters\VisibleBudgetDays.cs" />
+    <Compile Include="Budgeting\Views\IAddShrinkageForm.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupDayView.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupMainModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupRootModel.cs" />
+    <Compile Include="Budgeting\Models\BudgetGroupNavigatorModel.cs" />
+    <Compile Include="Budgeting\Models\IBudgetModel.cs" />
+    <Compile Include="Budgeting\Models\SkillModel.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupMainPresenter.cs" />
+    <Compile Include="Budgeting\Presenters\BudgetGroupNavigatorPresenter.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupMainView.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupMonthView.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupNavigatorView.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupTabView.cs" />
+    <Compile Include="Budgeting\Views\IBudgetGroupWeekView.cs" />
+    <Compile Include="Budgeting\Views\IEditShrinkageForm.cs" />
+    <Compile Include="Budgeting\ViewType.cs" />
+    <Compile Include="Common\AbsenceLayerViewModel.cs" />
+    <Compile Include="Common\Clipboard\ClipboardSpecialPresenter.cs" />
+    <Compile Include="Common\Clipboard\IClipboardSpecialView.cs" />
+    <Compile Include="Common\Collections\CommonRootCollection.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\ActionExecutionStrategy.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\BehaviorBinding.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandBehavior.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBinding.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorCollection.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\EventHandlerGenerator.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
+    <Compile Include="Common\Commands\CommonRoutedCommands.cs" />
+    <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
+    <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
+    <Compile Include="Common\Configuration\ChangePasswordModel.cs" />
+    <Compile Include="Common\Configuration\ChangePasswordPresenter.cs" />
+    <Compile Include="Common\Configuration\IChangePasswordView.cs" />
+    <Compile Include="Common\Configuration\ISiteProvider.cs" />
+    <Compile Include="Common\Configuration\ISiteView.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\ActivityModel.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\IActivityModel.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\IMasterActivityModel.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\IMasterActivityView.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\IMasterActivityViewModel.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\MasterActivityModel.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\MasterActivityPresenter.cs" />
+    <Compile Include="Common\Configuration\MasterActivity\MasterActivityViewModel.cs" />
+    <Compile Include="Common\Configuration\SitePresenter.cs" />
+    <Compile Include="Common\Configuration\SiteProvider.cs" />
+    <Compile Include="Common\Configuration\IScorecardProvider.cs" />
+    <Compile Include="Common\Configuration\ISetScorecardView.cs" />
+    <Compile Include="Common\Configuration\ITeamProvider.cs" />
+    <Compile Include="Common\Configuration\ITeamScorecardModel.cs" />
+    <Compile Include="Common\Configuration\IWorkflowControlSetView.cs" />
+    <Compile Include="Common\Configuration\ScorecardProvider.cs" />
+    <Compile Include="Common\Configuration\SetScorecardPresenter.cs" />
+    <Compile Include="Common\Configuration\TeamProvider.cs" />
+    <Compile Include="Common\Configuration\TeamScorecardModel.cs" />
+    <Compile Include="Common\Configuration\WorkflowControlSetModel.cs" />
+    <Compile Include="Common\Configuration\WorkflowControlSetPresenter.cs" />
+    <Compile Include="Common\CreateLayerViewModelService.cs" />
+    <Compile Include="Common\CustomPanels\Grouping\BaseGroupingPanel.cs" />
+    <Compile Include="Common\DefaultScenarioLoader.cs" />
+    <Compile Include="Common\ExceptionHandling\ExceptionHandlerModel.cs" />
+    <Compile Include="Common\ExceptionHandling\ExceptionHandlerPresenter.cs" />
+    <Compile Include="Common\ExceptionHandling\IExceptionHandlerView.cs" />
+    <Compile Include="Common\ExceptionHandling\ISimpleExceptionHandlerView.cs" />
+    <Compile Include="Common\ExceptionHandling\SimpleExceptionHandlerModel.cs" />
+    <Compile Include="Common\ExceptionHandling\SimpleExceptionHandlerPresenter.cs" />
+    <Compile Include="Common\Filter\FilterListViewItems.cs" />
+    <Compile Include="Common\GroupPageHelper.cs" />
+    <Compile Include="Common\IClipboardOperationsForText.cs" />
+    <Compile Include="Common\ICommonStateHolder.cs" />
+    <Compile Include="Common\ICreateLayerViewModelService.cs" />
+    <Compile Include="Common\IDefaultScenarioLoader.cs" />
+    <Compile Include="Common\IDialogResult.cs" />
+    <Compile Include="Common\IFocusTarget.cs" />
+    <Compile Include="Common\IGroupPageHelper.cs" />
+    <Compile Include="Common\ILayerViewModelObserver.cs" />
+    <Compile Include="Common\ILayerViewModelSelector.cs" />
+    <Compile Include="Common\IModifySelectionView.cs" />
+    <Compile Include="Common\INavigationPanel.cs" />
+    <Compile Include="Common\IOpenPeriodMode.cs" />
+    <Compile Include="Common\IPortalSettings.cs" />
+    <Compile Include="Common\IScheduleContractTimeCalculator.cs" />
+    <Compile Include="Common\IScheduleTargetTimeCalculator.cs" />
+    <Compile Include="Common\ITransparentControlHelper.cs" />
+    <Compile Include="Common\ITransparentMeetingControlView.cs" />
+    <Compile Include="Common\LayerGroupViewModel.cs" />
+    <Compile Include="Common\LayerViewModelSelector.cs" />
+    <Compile Include="Common\Models\DataModelWithInvalidState.cs" />
+    <Compile Include="Common\ModifySelectionPresenter.cs" />
+    <Compile Include="Common\MoveableLayerViewModel.cs" />
+    <Compile Include="Common\OpenPeriodBudgetsMode.cs" />
+    <Compile Include="Common\OpenPeriodForecasterMode.cs" />
+    <Compile Include="Common\OpenPeriodIntradayMode.cs" />
+    <Compile Include="Common\OpenPeriodSchedulerMode.cs" />
+    <Compile Include="Common\OpenPeriodSpecification.cs" />
+    <Compile Include="Common\OptionalColumnProvider.cs" />
+    <Compile Include="Common\PeopleLoaderForTeamLeaderMode.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRoot.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesNoRoot.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
+    <Compile Include="Forecasting\ExportPages\ChildSkillMappingModel.cs" />
+    <Compile Include="Forecasting\ExportPages\DestinationSkillModel.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProvider.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPages.cs" />
+    <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettings.cs" />
+    <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettingsProvider.cs" />
+    <Compile Include="Forecasting\ExportPages\MultisiteSkillModel.cs" />
+    <Compile Include="Forecasting\ExportPages\MultisiteSkillSelectionModel.cs" />
+    <Compile Include="Forecasting\IJobHistoryProvider.cs" />
+    <Compile Include="Forecasting\IJobHistoryView.cs" />
+    <Compile Include="Forecasting\JobHistoryPresenter.cs" />
+    <Compile Include="Forecasting\JobHistoryProvider.cs" />
+    <Compile Include="Forecasting\JobResultModel.cs" />
+    <Compile Include="Grouping\Commands\AddGroupPageCommand.cs" />
+    <Compile Include="Grouping\Commands\CommandProvider.cs" />
+    <Compile Include="Grouping\Commands\RenameGroupPageCommand.cs" />
+    <Compile Include="Grouping\Commands\ModifyGroupPageCommand.cs" />
+    <Compile Include="Grouping\Commands\DeleteGroupPageCommand.cs" />
+    <Compile Include="Grouping\Events\AddGroupPageClicked.cs" />
+    <Compile Include="Grouping\Events\FindPeopleClicked.cs" />
+    <Compile Include="Grouping\Events\OpenModuleClicked.cs" />
+    <Compile Include="Grouping\Events\RefreshGroupPageClicked.cs" />
+    <Compile Include="Grouping\Events\RenameGroupPageClicked.cs" />
+    <Compile Include="Grouping\Events\ModifyGroupPageClicked.cs" />
+    <Compile Include="Grouping\Events\GroupPageDeleted.cs" />
+    <Compile Include="Grouping\Events\GroupPageAdded.cs" />
+    <Compile Include="Grouping\Events\DeleteGroupPageClicked.cs" />
+    <Compile Include="Grouping\Events\GroupPageRenamed.cs" />
+    <Compile Include="Grouping\Events\SelectedNodesChanged.cs" />
+    <Compile Include="Grouping\FindPersonPeriodHandler.cs" />
+    <Compile Include="Grouping\IFindPersonsModel.cs" />
+    <Compile Include="Grouping\IFindPersonsView.cs" />
+    <Compile Include="Grouping\IPeopleNavigator.cs" />
+    <Compile Include="Grouping\IPersonSelectorView.cs" />
+    <Compile Include="Grouping\Commands\LoadBuiltInTabsCommand.cs" />
+    <Compile Include="Grouping\Commands\LoadOrganizationCommand.cs" />
+    <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommand.cs" />
+    <Compile Include="Grouping\PersonSelectorPresenter.cs" />
+    <Compile Include="Intraday\DayLayerModel.cs" />
+    <Compile Include="Intraday\DispatcherWrapper.cs" />
+    <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
+    <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
+    <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
+    <Compile Include="Meetings\Commands\OpenMeetingsOverviewCommand.cs" />
+    <Compile Include="Meetings\Events\AddMeetingFromPanelClicked.cs" />
+    <Compile Include="Meetings\Events\FetchForCurrentUserChanged.cs" />
+    <Compile Include="Meetings\Events\OpenMeetingsOverviewClicked.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingOverviewViewFactory.cs" />
+    <Compile Include="Meetings\MeetingMousePositionDecider.cs" />
+    <Compile Include="Meetings\MeetingMover.cs" />
+    <Compile Include="Meetings\Overview\OverlappingAppointmentsHelper.cs" />
+    <Compile Include="PeopleAdmin\Commands\SendInstantMessageCommand.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
+    <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
+    <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
+    <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteria.cs" />
+    <Compile Include="PeopleAdmin\Commands\OpenModuleCommand.cs" />
+    <Compile Include="PeopleAdmin\PeopleNavigatorPresenter.cs" />
+    <Compile Include="PeopleAdmin\Commands\PersonFinderFindCommand.cs" />
+    <Compile Include="PeopleAdmin\Commands\PersonFinderNextCommand.cs" />
+    <Compile Include="PeopleAdmin\PeopleSaved.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderPresenter.cs" />
+    <Compile Include="PeopleAdmin\Commands\PersonFinderPreviousCommand.cs" />
+    <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
+    <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
+    <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
+    <Compile Include="Presentation\IReportSettingsScheduleAuditingView.cs" />
+    <Compile Include="Presentation\IReportUserSelectorAuditingView.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleAuditingModel.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleAuditingPresenter.cs" />
+    <Compile Include="Presentation\ReportUserSelectorAuditingModel.cs" />
+    <Compile Include="Presentation\ReportUserSelectorAuditingPresenter.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduleAuditing.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduleTimeVersusTargetTimeModel.cs" />
+    <Compile Include="Common\ScheduleContractTimeCalculator.cs" />
+    <Compile Include="Common\ScheduleDataLoader.cs" />
+    <Compile Include="Common\SchedulePeriodCloseCalculator.cs" />
+    <Compile Include="Common\ScheduleTargetTimeCalculator.cs" />
+    <Compile Include="Grouping\Events\GroupPageNodeCheckedChange.cs" />
+    <Compile Include="Intraday\IntradayMainModel.cs" />
+    <Compile Include="Intraday\OnEventForecastDataMessageCommand.cs" />
+    <Compile Include="Intraday\OnEventScheduleMessageCommand.cs" />
+    <Compile Include="Intraday\OnEventStatisticMessageCommand.cs" />
+    <Compile Include="Meetings\Commands\CanModifyMeeting.cs" />
+    <Compile Include="Meetings\Commands\ExportMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\ShowExportMeetingCommand.cs" />
+    <Compile Include="Meetings\Events\ExportMeetingClicked.cs" />
+    <Compile Include="Meetings\Events\MeetingExportDatesChanged.cs" />
+    <Compile Include="Meetings\Events\MeetingExportFinished.cs" />
+    <Compile Include="Meetings\Events\PersonSelectionFormHideEvent.cs" />
+    <Compile Include="Meetings\Events\ShowExportMeetingClicked.cs" />
+    <Compile Include="Meetings\Interfaces\IExportMeetingView.cs" />
+    <Compile Include="Meetings\MeetingParticipantPermittedChecker.cs" />
+    <Compile Include="Forecasting\CopyToSkillCommand.cs" />
+    <Compile Include="Forecasting\CopyToSkillModel.cs" />
+    <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
+    <Compile Include="Forecasting\ICopyToSkillCommand.cs" />
+    <Compile Include="Forecasting\ICopyToSkillView.cs" />
+    <Compile Include="Forecasting\IsPossibleTargetSkillForCopy.cs" />
+    <Compile Include="Meetings\Overview\AppointmentFromMeetingCreator.cs" />
+    <Compile Include="Meetings\Commands\AddMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\CopyMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\CutMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\EditMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\DeleteMeetingCommand.cs" />
+    <Compile Include="Meetings\Commands\PasteMeetingCommand.cs" />
+    <Compile Include="Meetings\Events\AddAppointmentClicked.cs" />
+    <Compile Include="Meetings\Events\ClipboardStatusEventModel.cs" />
+    <Compile Include="Meetings\Events\AppointmentSelectionChanged.cs" />
+    <Compile Include="Meetings\Events\CopyAppointmentClicked.cs" />
+    <Compile Include="Meetings\Events\CutAppointmentClicked.cs" />
+    <Compile Include="Meetings\Events\DeleteAppointmentClicked.cs" />
+    <Compile Include="Meetings\Events\EditAppointmentClicked.cs" />
+    <Compile Include="Meetings\Events\MeetingModificationOccurred.cs" />
+    <Compile Include="Meetings\Events\PasteAppointmentClicked.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingOverviewView.cs" />
+    <Compile Include="Meetings\Overview\ExportMeetingPresenter.cs" />
+    <Compile Include="Meetings\Overview\ExportMeetingsProvider.cs" />
+    <Compile Include="Meetings\Overview\InfoWindowTextFormatter.cs" />
+    <Compile Include="Meetings\Overview\MeetingChangerAndPersister.cs" />
+    <Compile Include="Meetings\Overview\MeetingClipboardHandler.cs" />
+    <Compile Include="Meetings\MeetingGeneralPresenter.cs" />
+    <Compile Include="Meetings\MeetingImpactCalculator.cs" />
+    <Compile Include="Meetings\MeetingImpactSkillGridHandler.cs" />
+    <Compile Include="Meetings\MeetingImpactTransparentWindowHandler.cs" />
+    <Compile Include="Meetings\Overview\MeetingOverviewPresenter.cs" />
+    <Compile Include="Meetings\MeetingStateHolderLoaderHelper.cs" />
+    <Compile Include="Meetings\Overview\MeetingOverviewViewmodel.cs" />
+    <Compile Include="Meetings\Overview\MeetingTimeZoneHelper.cs" />
+    <Compile Include="Meetings\Overview\ExportableScenarioProvider.cs" />
+    <Compile Include="PeopleAdmin\RoleDisplay.cs" />
+    <Compile Include="PeopleAdmin\RoleCollectionParser.cs" />
+    <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
+    <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
+    <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
+    <Compile Include="Scheduling\AuditHistory\AuditHistoryScheduleDayCreator.cs" />
+    <Compile Include="Scheduling\AuditHistory\IAuditHistoryView.cs" />
+    <Compile Include="Scheduling\AuditHistory\NextPageCommand.cs" />
+    <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
+    <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
+    <Compile Include="Scheduling\DayPresenterNew.cs" />
+    <Compile Include="Scheduling\DayPresenterScaleCalculator.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllAvailabilityAvailableCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllAvailabilityFulfilledCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllAvailabilityUnavailableCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesAbsenceCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesDayOffCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledAbsenceCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesMustHaveCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesMustHaveFulfilledCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllPreferencesShiftCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRestrictionsCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllTagsCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockTagCommand.cs" />
+    <Compile Include="Scheduling\GridLockRemoverForDelete.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsDayOffCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsFulfilledCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsFulfilledDayOffCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsFulfilledShiftCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsShiftCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityAvailableCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityFulfilledCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\GridlockAllStudentAvailabilityUnavailableCommand.cs" />
+    <Compile Include="Scheduling\IGridSchedulesExtractor.cs" />
+    <Compile Include="Scheduling\IntradayOptimizerCreator.cs" />
+    <Compile Include="Scheduling\IRequestDetailsView.cs" />
+    <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
+    <Compile Include="Scheduling\MatrixUserLockLocker.cs" />
+    <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
+    <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
+    <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
+    <Compile Include="Common\ScheduleFilter\CccTreeNode.cs" />
+    <Compile Include="Common\ScheduleFilter\IScheduleFilterView.cs" />
+    <Compile Include="Common\ScheduleFilter\ScheduleFilterModel.cs" />
+    <Compile Include="Common\ScheduleFilter\ScheduleFilterPresenter.cs" />
+    <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
+    <Compile Include="Common\SearchPersonPresenter.cs" />
+    <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />
+    <Compile Include="Common\Time\ITimeDurationPickerView.cs" />
+    <Compile Include="Common\Time\TimeSpanDataBoundItem.cs" />
+    <Compile Include="Common\TransparentControlMeetingHelper.cs" />
+    <Compile Include="Common\TransparentMeetingControlModel.cs" />
+    <Compile Include="Common\TransparentMeetingControlPresenter.cs" />
+    <Compile Include="Converters\DateTimeConverter\ExtendDateTimePeriodConverter.cs" />
+    <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverter.cs" />
+    <Compile Include="Events\EventAggregatorModule.cs" />
+    <Compile Include="Events\IEventAggregatorLocator.cs" />
+    <Compile Include="Common\Chart\ChartSeriesSetting.cs" />
+    <Compile Include="Common\Chart\ChartSettings.cs" />
+    <Compile Include="Common\Clipboard\Clip.cs" />
+    <Compile Include="Common\Clipboard\ClipHandler.cs" />
+    <Compile Include="Common\Clipboard\ExtenderPasteBehavior.cs" />
+    <Compile Include="Common\Clipboard\IPasteBehavior.cs" />
+    <Compile Include="Common\Clipboard\MergePasteBehavior.cs" />
+    <Compile Include="Common\Clipboard\NormalPasteBehavior.cs" />
+    <Compile Include="Common\Collections\FilteredCollection.cs" />
+    <Compile Include="Common\Collections\ITreeNodeAdvDisplayInfo.cs" />
+    <Compile Include="Common\Collections\FilterExtensions.cs" />
+    <Compile Include="Common\Collections\ITreeNodeDisplayInfo.cs" />
+    <Compile Include="Common\Collections\ShowOnlyCollection.cs" />
+    <Compile Include="Common\Collections\TreeNodeAdvDisplayInfo.cs" />
+    <Compile Include="Common\Collections\TreeNodeDisplayInfo.cs" />
+    <Compile Include="Common\Commands\ApplicationCommandModel.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\ExpanderBehavior.cs" />
+    <Compile Include="Common\Commands\CommandBehaviors\UIElementBehavior.cs" />
+    <Compile Include="Common\Commands\CommandModelFactory.cs" />
+    <Compile Include="Common\Commands\ITwoStepCommandModel.cs" />
+    <Compile Include="Common\Commands\SimpleApplicationCommandModel.cs" />
+    <Compile Include="Common\Commands\SimpleCommandModel.cs" />
+    <Compile Include="Common\Commands\RepositoryCommandModel.cs" />
+    <Compile Include="Common\Commands\EventBehaviorFactory.cs" />
+    <Compile Include="Common\Commands\SelectorBehavior.cs" />
+    <Compile Include="Common\Commands\SimpleRepositoryCommandModel.cs" />
+    <Compile Include="Common\Commands\TextBoxBehavior.cs" />
+    <Compile Include="Common\Commands\TwoStepCommandModel.cs" />
+    <Compile Include="Common\Filter\SpecificationFilter.cs" />
+    <Compile Include="Common\Filter\SpecificationFilterViewModel.cs" />
+    <Compile Include="Common\GuiHelpers\ColorHelper.cs" />
+    <Compile Include="Common\Commands\CommandModel.cs" />
+    <Compile Include="Common\Commands\CreateCommandBinding.cs" />
+    <Compile Include="Common\Configuration\AlarmControlPresenter.cs" />
+    <Compile Include="Common\Configuration\IAlarmControlView.cs" />
+    <Compile Include="Common\Configuration\ManageAlarmSituationPresenter.cs" />
+    <Compile Include="Common\DateTimePeriodPanel.cs" />
+    <Compile Include="Common\GuiHelpers\HelpProvider.cs" />
+    <Compile Include="Common\GuiHelpers\IVisualTimeZoneInfoMonitor.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeFinder.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeTimeZoneInfo.cs" />
+    <Compile Include="Common\GuiHelpers\VisualTreeTranslator.cs" />
+    <Compile Include="Common\ILayerViewModel.cs" />
+    <Compile Include="Common\Interop\HostViewModel.cs" />
+    <Compile Include="Common\Interop\IHostViewModel.cs" />
+    <Compile Include="Common\Interop\IMultipleHostViewModel.cs" />
+    <Compile Include="Common\Interop\MultipleHostViewModel.cs" />
+    <Compile Include="Common\IObservable.cs" />
+    <Compile Include="Common\IPeopleLoader.cs" />
+    <Compile Include="Common\ISchedulerStateHolder.cs" />
+    <Compile Include="Common\LayerViewModel.cs" />
+    <Compile Include="Common\LayerViewModelCollection.cs" />
+    <Compile Include="Common\MainShiftLayerViewModel.cs" />
+    <Compile Include="Common\MeetingLayerViewModel.cs" />
+    <Compile Include="Common\Messaging\Filters\DialogueHasMoreMessagesThan.cs" />
+    <Compile Include="Common\Messaging\Filters\DialogueIsRepliedSpecification.cs" />
+    <Compile Include="Common\Messaging\Filters\DialogueReplySpecification.cs" />
+    <Compile Include="Common\Messaging\Filters\IFilterTarget.cs" />
+    <Compile Include="Common\Messaging\Filters\PushMessageIsRepliedSpecification.cs" />
+    <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModel.cs" />
+    <Compile Include="Common\Messaging\IFollowUpMessageDialogueViewModel.cs" />
+    <Compile Include="Common\Messaging\IFollowUpPushMessageViewModel.cs" />
+    <Compile Include="Common\Messaging\PushMessageViewModel.cs" />
+    <Compile Include="Common\Messaging\FollowUpPushMessageViewModel.cs" />
+    <Compile Include="Common\Messaging\FollowUpServiceViewModel.cs" />
+    <Compile Include="Common\Messaging\ReplyOptionViewModel.cs" />
+    <Compile Include="Common\Messaging\SendPushMessageViewModel.cs" />
+    <Compile Include="Common\Models\DataModel.cs" />
+    <Compile Include="Common\Models\ModelState.cs" />
+    <Compile Include="Common\PeopleLoader.cs" />
+    <Compile Include="Common\PersonalShiftLayerViewModel.cs" />
+    <Compile Include="Common\OvertimeLayerViewModel.cs" />
+    <Compile Include="Common\PersonPicker\PersonPickerViewModel.cs" />
+    <Compile Include="Common\PersonPicker\SelectablePersonViewModel.cs" />
+    <Compile Include="Common\Rows\RowManagerScheduler.cs" />
+    <Compile Include="Common\Time\DateTimeViewModel.cs" />
+    <Compile Include="Common\Time\IntervalCollection.cs" />
+    <Compile Include="Common\Time\IntervalViewModel.cs" />
+    <Compile Include="Common\Time\ITimeZoomItemViewModel.cs" />
+    <Compile Include="Common\Time\ITimeZoomViewModel.cs" />
+    <Compile Include="Common\Time\Timeline\TimelineControlViewModel.cs" />
+    <Compile Include="Common\Time\Timeline\TimelineViewModel.cs" />
+    <Compile Include="Common\Time\Timeline\TickMarkViewModel.cs" />
+    <Compile Include="Common\Time\TimeZoomItemViewModel.cs" />
+    <Compile Include="Common\Time\TimeZoomViewModel.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeBaseConverter.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeParseMode.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeParser.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeToLocalConverter.cs" />
+    <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverter.cs" />
+    <Compile Include="Converters\DateTimeConverter\IDateTimeBaseConverter.cs" />
+    <Compile Include="Converters\DateTimeConverter\IDateTimeParser.cs" />
+    <Compile Include="Converters\IParseBehavior.cs" />
+    <Compile Include="Converters\Layers\IsMoveAllLayerConverter.cs" />
+    <Compile Include="Converters\ParseBehavior.cs" />
+    <Compile Include="Events\EventExtensions.cs" />
+    <Compile Include="Events\GenericEvent.cs" />
+    <Compile Include="FileImport\DimQueueTable.cs" />
+    <Compile Include="FileImport\FileImportDateTimeParser.cs" />
+    <Compile Include="FileImport\FileImportException.cs" />
+    <Compile Include="FileImport\IFileImportDateTimeParser.cs" />
+    <Compile Include="FileImport\IModel.cs" />
+    <Compile Include="FileImport\ImportFileDo.cs" />
+    <Compile Include="FileImport\ImportFileDoCollection.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillGeneralPresenter.cs" />
+    <Compile Include="Intraday\IDayLayerViewModel.cs" />
+    <Compile Include="Common\ISchedulingResultLoader.cs" />
+    <Compile Include="Intraday\IManageAlarmSituationView.cs" />
+    <Compile Include="Intraday\IntradayLoadProgress.cs" />
+    <Compile Include="Matrix\MatrixNavigationModel.cs" />
+    <Compile Include="Matrix\MatrixNavigationPresenter.cs" />
+    <Compile Include="Meetings\AddressBookPresenter.cs" />
+    <Compile Include="Meetings\AddressBookViewModel.cs" />
+    <Compile Include="Meetings\ContactPersonViewModel.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingViewModel.cs" />
+    <Compile Include="Meetings\MeetingImpactPresenter.cs" />
+    <Compile Include="Meetings\RecurrentMeetingType.cs" />
+    <Compile Include="Meetings\RecurrentMonthlyByWeekMeetingViewModel.cs" />
+    <Compile Include="Meetings\MeetingRecurrencePresenter.cs" />
+    <Compile Include="Meetings\RecurrentMonthlyByDayMeetingViewModel.cs" />
+    <Compile Include="Meetings\RecurrentMeetingOptionViewModelFactory.cs" />
+    <Compile Include="Meetings\RecurrentWeeklyMeetingViewModel.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingRecurrenceView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingImpactView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingSchedulesView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingComposerView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingDetailView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingDetailPresenter.cs" />
+    <Compile Include="Meetings\MeetingComposerPresenter.cs" />
+    <Compile Include="Meetings\Interfaces\IAddressBookView.cs" />
+    <Compile Include="Meetings\Interfaces\IMeetingGeneralView.cs" />
+    <Compile Include="Converters\ConverterComparer.cs" />
+    <Compile Include="Converters\ColumnWidthConverter.cs" />
+    <Compile Include="Converters\AvailableConverter.cs" />
+    <Compile Include="Converters\TimeSpanRoundingConverter.cs" />
+    <Compile Include="Converters\IsNullConverter.cs" />
+    <Compile Include="Converters\PersonNameConverter.cs" />
+    <Compile Include="Converters\ScrollPositionConverter.cs" />
+    <Compile Include="Converters\LayerPeriodConverter.cs" />
+    <Compile Include="Converters\ElapsedTimeConverter.cs" />
+    <Compile Include="Converters\SimpleConverter.cs" />
+    <Compile Include="Intraday\AgentStateViewAdapter.cs" />
+    <Compile Include="Intraday\StaffingEffectViewAdapter.cs" />
+    <Compile Include="Meetings\MeetingViewModel.cs" />
+    <Compile Include="Meetings\RecurrentDailyMeetingViewModel.cs" />
+    <Compile Include="Meetings\RecurrentMeetingOptionViewModel.cs" />
+    <Compile Include="Meetings\MeetingScheduleRangeToLoadCalculator.cs" />
+    <Compile Include="Payroll\CommonViewHolder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\DefinitionSetPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\DefinitionSetViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\ExplorerPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\ExplorerViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\GridViewBaseModel.cs" />
+    <Compile Include="Payroll\Interfaces\IBaseView.cs" />
+    <Compile Include="Payroll\Interfaces\IContainedControl.cs" />
+    <Compile Include="Payroll\Interfaces\IDefinitionSetView.cs" />
+    <Compile Include="Payroll\Interfaces\IGridViewBaseModel.cs" />
+    <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionPresenter.cs" />
+    <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionView.cs" />
+    <Compile Include="Payroll\Interfaces\IMultiplicatorDefinitionViewModel.cs" />
+    <Compile Include="Payroll\Interfaces\IPresenterBase.cs" />
+    <Compile Include="Payroll\Interfaces\IViewModel.cs" />
+    <Compile Include="Payroll\Interfaces\IVisualizeView.cs" />
+    <Compile Include="Payroll\Interfaces\ICommon.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\ICommonBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IDefinitionSetPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IDefinitionSetViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IExplorerPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IExplorerViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IExplorerView.cs" />
+    <Compile Include="Payroll\Interfaces\IPayrollHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\Interfaces\IVisualizePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\MultiplicatorDefinitionAdapter.cs" />
+    <Compile Include="Payroll\MultiplicatorDefinitionPresenter.cs" />
+    <Compile Include="Payroll\MultiplicatorDefinitionViewModel.cs" />
+    <Compile Include="Payroll\PayrollExportPages\IPersonsSelectionView.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportPropertiesPages.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportSmartPart\PayrollExportSmartPartViewModel.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportSmartPart\PayrollResultViewModel.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PayrollExportWizardPages.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PersonsSelectionModel.cs" />
+    <Compile Include="Payroll\PayrollExportPages\PersonsSelectionPresenter.cs" />
+    <Compile Include="Payroll\PayrollHelper.cs" />
+    <Compile Include="Payroll\PayrollViewType.cs" />
+    <Compile Include="Payroll\SortingMode.cs" />
+    <Compile Include="Payroll\ViewModel.cs" />
+    <Compile Include="Payroll\VisualizePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Payroll\VisualPayloadInfo.cs" />
+    <Compile Include="Common\SchedulingResultLoader.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceOutComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodExtraComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodBalanceInComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodBudgetGroupComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\WorkflowControlSetComparer.cs" />
+    <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombination.cs" />
+    <Compile Include="PeopleAdmin\Models\ExternalLogOnDisplay.cs" />
+    <Compile Include="PeopleAdmin\Models\ExternalLogOnParser.cs" />
+    <Compile Include="Presentation\IReportPersonsSelectionView.cs" />
+    <Compile Include="Presentation\IReportScheduledTimePerActivityView.cs" />
+    <Compile Include="Presentation\ReportDetail.cs" />
+    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityPresenter.cs" />
+    <Compile Include="Presentation\IReportSettingsScheduledTimePerActivityView.cs" />
+    <Compile Include="Presentation\IReportSettingsHostView.cs" />
+    <Compile Include="Presentation\IShiftCategoryLimitationView.cs" />
+    <Compile Include="Presentation\ReportSettingsHostPresenter.cs" />
+    <Compile Include="Presentation\ShiftCategoryLimitationViewPresenter.cs" />
+    <Compile Include="Scheduling\AddAbsenceCommand.cs" />
+    <Compile Include="Scheduling\AddAbsenceViewModel.cs" />
+    <Compile Include="Scheduling\AddActivityCommand.cs" />
+    <Compile Include="Scheduling\AddActivityViewModel.cs" />
+    <Compile Include="Scheduling\AddDayOffViewModel.cs" />
+    <Compile Include="Scheduling\AddLayerCommand.cs" />
+    <Compile Include="Scheduling\AddLayerViewModel.cs" />
+    <Compile Include="Scheduling\AddOvertimeCommand.cs" />
+    <Compile Include="Scheduling\AddOvertimeViewModel.cs" />
+    <Compile Include="Scheduling\AddPersonalActivityViewModel.cs" />
+    <Compile Include="Scheduling\AddPersonalShiftCommand.cs" />
+    <Compile Include="Scheduling\AgentInfoHelper.cs" />
+    <Compile Include="Scheduling\BusinessRuleResponseListViewModel.cs" />
+    <Compile Include="Scheduling\BusinessRuleResponseViewModel.cs" />
+    <Compile Include="Scheduling\IPublicNotesAltered.cs" />
+    <Compile Include="Scheduling\GroupScheduleGroupPageDataProvider.cs" />
+    <Compile Include="Scheduling\IAddActivityViewModel.cs" />
+    <Compile Include="Scheduling\IAddOvertimeViewModel.cs" />
+    <Compile Include="Scheduling\IAddScheduleLayers.cs" />
+    <Compile Include="Scheduling\IViewModelIsValid.cs" />
+    <Compile Include="Scheduling\ScheduleNavigatorPresenter.cs" />
+    <Compile Include="Scheduling\PinnedSkillHelper.cs" />
+    <Compile Include="Scheduling\Requests\ApproveRequestFromRequestDetailsView.cs" />
+    <Compile Include="Scheduling\Requests\BudgetAbsenceAllowanceDetailModel.cs" />
+    <Compile Include="Scheduling\Requests\DenyRequestFromRequestDetailsView.cs" />
+    <Compile Include="Scheduling\Requests\IRequestAllowanceView.cs" />
+    <Compile Include="Scheduling\Requests\PersonRequestAuthorization.cs" />
+    <Compile Include="Scheduling\Requests\ReplyAndApproveRequestFromRequestDetailsView.cs" />
+    <Compile Include="Scheduling\Requests\ReplyAndDenyRequestFromRequestDetailsView.cs" />
+    <Compile Include="Scheduling\Requests\ReplyRequestFromRequestDetailsView.cs" />
+    <Compile Include="Scheduling\Requests\RequestAllowanceModel.cs" />
+    <Compile Include="Scheduling\Requests\RequestAllowancePresenter.cs" />
+    <Compile Include="Scheduling\Requests\RequestDetailsPresenter.cs" />
+    <Compile Include="Scheduling\Requests\RequestDetailsShiftTradePresenter.cs" />
+    <Compile Include="Scheduling\Requests\ShowRequestDetailsView.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\PreferenceNightRestChecker.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\IScheduledTimeVersusTargetTimeReportData.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\IScheduleReportDialogGraphicalView.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduledTimeVersusTargetTimeReportData.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalModel.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalPresenter.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDrawHeader.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportGraphicalDrawDayOff.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportGraphicalDrawNameDate.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportGraphicalDrawSchedule.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportGraphicalDrawTimeLine.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayGraphicalToPdfManager.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\StringWidthHandler.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\IScheduleSortCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\NoSortCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\ScheduleSortCommandBase.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByEndAscendingCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByEndDescendingCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartAscendingCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartDescendingCommand.cs" />
+    <Compile Include="Scheduling\SetTagCommand.cs" />
+    <Compile Include="Scheduling\ViewModelIsValidRule.cs" />
+    <Compile Include="Scheduling\Editor\HandleTriggerShiftEditorUpdate.cs" />
+    <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
+    <Compile Include="Scheduling\IAddLayerViewModel.cs" />
+    <Compile Include="Scheduling\INotesAltered.cs" />
+    <Compile Include="Scheduling\INotesEditorViewModel.cs" />
+    <Compile Include="Scheduling\IOptimizerActivitiesPreferencesView.cs" />
+    <Compile Include="Scheduling\IPersonRequestViewModel.cs" />
+    <Compile Include="Scheduling\NotesEditorViewModel.cs" />
+    <Compile Include="Scheduling\OptimizerActivitiesPreferencesPresenter.cs" />
+    <Compile Include="Scheduling\Panels\LengthToDateCalculator.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\IPreferenceCellData.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryGrid.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryView.cs" />
+    <Compile Include="Scheduling\PersistConflictModel.cs" />
+    <Compile Include="Scheduling\Editor\ExpandedLayersViewModel.cs" />
+    <Compile Include="Scheduling\Editor\EditLayerViewModel.cs" />
+    <Compile Include="Scheduling\Editor\ILayerEditor.cs" />
+    <Compile Include="Scheduling\Editor\IShiftEditorSettingsTarget.cs" />
+    <Compile Include="Scheduling\Editor\IWpfShiftEditor.cs" />
+    <Compile Include="Scheduling\Editor\ShiftEditorRoutedCommands.cs" />
+    <Compile Include="Scheduling\Editor\IShiftEditor.cs" />
+    <Compile Include="Scheduling\Editor\IShiftEditorEvents.cs" />
+    <Compile Include="Scheduling\Editor\IShiftEditorObserver.cs" />
+    <Compile Include="Scheduling\Editor\ShiftEditorEventArgs.cs" />
+    <Compile Include="Scheduling\Editor\ShiftEditorSettings.cs" />
+    <Compile Include="Scheduling\Editor\ShiftEditorViewModel.cs" />
+    <Compile Include="Scheduling\ExportToScenarioResultPresenter.cs" />
+    <Compile Include="Scheduling\ExportToScenarioWarningData.cs" />
+    <Compile Include="Scheduling\GridlockDictionary.cs" />
+    <Compile Include="Scheduling\IExportToScenarioResultView.cs" />
+    <Compile Include="Scheduling\IPersistConflictView.cs" />
+    <Compile Include="Scheduling\Panels\IntervalSelector.cs" />
+    <Compile Include="Scheduling\PersistConflictPresenter.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryViewCellModel.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\IWeekHeaderCellData.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\PainterHelper.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\PreferenceCellData.cs" />
+    <Compile Include="Scheduling\Requests\HandlePersonRequestSelectionChanged.cs" />
+    <Compile Include="Scheduling\Requests\IPersonRequestViewModelFilter.cs" />
+    <Compile Include="Scheduling\Requests\PersonRequestViewModelFilter.cs" />
+    <Compile Include="Scheduling\Requests\PersonRequestViewModelIsEditableSpecification.cs" />
+    <Compile Include="Scheduling\Requests\PersonRequestViewModelIsSelectedChanged.cs" />
+    <Compile Include="Scheduling\Requests\ShowOnlyPersonRequestViewModelSpecification.cs" />
+    <Compile Include="Scheduling\RequestViewAdapterField.cs" />
+    <Compile Include="Scheduling\RequestViewOperand.cs" />
+    <Compile Include="Scheduling\Requests\HandlePersonRequestViewModel.cs" />
+    <Compile Include="Scheduling\RestrictionCellValue.cs" />
+    <Compile Include="Scheduling\RestrictionPresenter.cs" />
+    <Compile Include="Scheduling\RestrictionSchedulingOptions.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryModel.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryPresenter.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionModel.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionPresenter.cs" />
+    <Compile Include="Scheduling\RestrictionSummary\WeekHeaderCellData.cs" />
+    <Compile Include="Scheduling\Restriction\AvailabilityRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\AvailableRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\Commands\AddPreferenceRestrictionCommandModel.cs" />
+    <Compile Include="Scheduling\Restriction\Commands\AddStudentAvailabilityCommandModel.cs" />
+    <Compile Include="Scheduling\Restriction\Commands\RestrictionEditorRoutedCommands.cs" />
+    <Compile Include="Scheduling\Restriction\ReadOnlyRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\ILimitationViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\IRestrictionAltered.cs" />
+    <Compile Include="Scheduling\Restriction\IRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\LimitationViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\PreferenceRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\RotationRestrictionViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\WorkTimeLimitationAdapter.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\PdfFontManager.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayToPdfManager.cs" />
+    <Compile Include="Scheduling\SchedulerStateLoader.cs" />
+    <Compile Include="Scheduling\SmartDayOffBackToLegalStateSolverContainer.cs" />
+    <Compile Include="Scheduling\WorkShiftMasterActivityChecker.cs" />
+    <Compile Include="Security\PasswordPolicyServiceViewModel.cs" />
+    <Compile Include="Settings\AbsenceView.cs" />
+    <Compile Include="Settings\PageHelper.cs" />
+    <Compile Include="Settings\TrackerView.cs" />
+    <Compile Include="Common\ControlBinders\TreeViewAdvBinder.cs" />
+    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtender.cs" />
+    <Compile Include="Common\ControlExtenders\TreeViewCheckBoxExtender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\DateTimePeriodController.cs" />
+    <Compile Include="Common\FilterAdvancedSetting.cs" />
+    <Compile Include="Common\FilterBoxAdvancedFilter.cs" />
+    <Compile Include="Common\FilterAdvancedTupleItem.cs" />
+    <Compile Include="Common\GuiHelpers\ApplicationTextHelper.cs" />
+    <Compile Include="Common\GuiHelpers\GuiSettings.cs" />
+    <Compile Include="Common\IGridPasteAction.cs" />
+    <Compile Include="Common\IHandleBusinessRuleResponse.cs" />
+    <Compile Include="Common\IProgress.cs" />
+    <Compile Include="Common\Clipboard\PasteBehavior.cs" />
+    <Compile Include="Common\ITeleoptiGridControl.cs" />
+    <Compile Include="Common\IViewBase.cs" />
+    <Compile Include="Common\Rows\CellInfo.cs" />
+    <Compile Include="Common\Rows\GridRow.cs" />
+    <Compile Include="Common\Rows\IGridRow.cs" />
+    <Compile Include="Common\Rows\IntervalHeaderGridRow.cs" />
+    <Compile Include="Common\Rows\IRowManager.cs" />
+    <Compile Include="Common\Rows\RowManager.cs" />
+    <Compile Include="Common\Rows\SkillStaffPeriodGridRowScheduler.cs" />
+    <Compile Include="Converters\TimeSpanConverter.cs" />
+    <Compile Include="Common\Chart\ChartSettingsManager.cs" />
+    <Compile Include="Forecasting\TextManager.cs" />
+    <Compile Include="Intraday\DayLayerViewModel.cs" />
+    <Compile Include="Intraday\IIntradayView.cs" />
+    <Compile Include="Intraday\IntradayPresenter.cs" />
+    <Compile Include="Meetings\MeetingSchedulesPresenter.cs" />
+    <Compile Include="PeopleAdmin\Comparers\OptionalColumnComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminCultureComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountDescriptionComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountIntegerTimeSpanColumnComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAccountTypeComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAvailabilityCurrentRotationComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonAvailabilityFromDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodContractScheduleComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodExternalLogOnNameComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodPartTimePercentageComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodPersonSkillComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodRuleSetBagComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodTeamComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationCurrentRotationComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationFromDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonRotationStartWeekComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodAverageWorkTimePerDayComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodDaysOffComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodNumberComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodStartDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\SchedulePeriodUnitComparer.cs" />
+    <Compile Include="PeopleAdmin\Culture.cs" />
+    <Compile Include="PeopleAdmin\Models\GridViewModelBase.cs" />
+    <Compile Include="PeopleAdmin\Models\ISchedulePeriodModel.cs" />
+    <Compile Include="PeopleAdmin\Models\ShiftCategoryModel.cs" />
+    <Compile Include="PeopleAdmin\Models\ExternalLogOnModel.cs" />
+    <Compile Include="PeopleAdmin\Models\IPersonAccountChildModel.cs" />
+    <Compile Include="PeopleAdmin\Models\IPersonAccountModel.cs" />
+    <Compile Include="PeopleAdmin\Models\IPersonPeriodModel.cs" />
+    <Compile Include="PeopleAdmin\Models\IRotationModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAccountChildModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAccountModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAvailabilityModelBase.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAvailabilityModelChild.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonAvailabilityModelParent.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonRotationModelChild.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonRotationModelBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminApplicationRoleComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminLanguageComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminTerminalDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PeopleAdminTimeZoneInfoComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodDateComparer.cs" />
+    <Compile Include="PeopleAdmin\Comparers\PersonPeriodContractComparer.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonPeriodChildModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonPeriodModel.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonRotationModelParent.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonSkillModel.cs" />
+    <Compile Include="PeopleAdmin\Models\RolesModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Scheduling\ColumnType.cs" />
+    <Compile Include="Scheduling\DateDateTimePeriodDictionary.cs" />
+    <Compile Include="Scheduling\DayPresenter.cs" />
+    <Compile Include="Scheduling\DetailPresenter.cs" />
+    <Compile Include="Scheduling\IRequestPresenter.cs" />
+    <Compile Include="Scheduling\IResourceOptimizationHelperWin.cs" />
+    <Compile Include="Scheduling\IScheduleViewBase.cs" />
+    <Compile Include="Scheduling\OverviewPresenter.cs" />
+    <Compile Include="Scheduling\Panels\ILengthToTimeCalculator.cs" />
+    <Compile Include="Scheduling\Panels\LengthToTimeCalculator.cs" />
+    <Compile Include="Scheduling\PeriodPresenter.cs" />
+    <Compile Include="Scheduling\Restriction\RestrictionEditorViewModel.cs" />
+    <Compile Include="Scheduling\Restriction\RestrictionViewModel.cs" />
+    <Compile Include="Scheduling\SchedulePartFilter.cs" />
+    <Compile Include="Scheduling\SchedulePresenterBase.cs" />
+    <Compile Include="Scheduling\WeekPresenter.cs" />
+    <Compile Include="Settings\ContractScheduleWeekAdapter.cs" />
+    <Compile Include="Settings\RotationRestrictionView.cs" />
+    <Compile Include="PeopleAdmin\Models\SchedulePeriodChildModel.cs" />
+    <Compile Include="PeopleAdmin\Models\SchedulePeriodModel.cs" />
+    <Compile Include="PeopleAdmin\Models\SiteTeamModel.cs" />
+    <Compile Include="Presentation\TimeSpanSelectorViewModel.cs" />
+    <Compile Include="Scheduling\DateTimePeriodViewModel.cs" />
+    <Compile Include="Scheduling\Gridlock.cs" />
+    <Compile Include="Scheduling\GridlockManager.cs" />
+    <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPages.cs" />
+    <Compile Include="Presentation\BusinessUnitListBoxPresenter.cs" />
+    <Compile Include="Presentation\IEntityPresenter.cs" />
+    <Compile Include="Presentation\IListBoxPresenter.cs" />
+    <Compile Include="Presentation\PersonListBoxPresenter.cs" />
+    <Compile Include="Presentation\SiteListBoxPresenter.cs" />
+    <Compile Include="Presentation\TeamListBoxPresenter.cs" />
+    <Compile Include="Presentation\ListBoxPresenter.cs" />
+    <Compile Include="Common\EntitiesUpdatedEventArgs.cs" />
+    <Compile Include="Common\GuiHelpers\TimeSpanSeconds.cs" />
+    <Compile Include="Common\GuiHelpers\TimePixelRelationHelper.cs" />
+    <Compile Include="Common\ILocalized.cs" />
+    <Compile Include="Common\LanguageResourceHelper.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPages.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPages.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\AfterSavedEventArgs.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPages.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\IPropertyPage.cs" />
+    <Compile Include="Common\PropertyPageAndWizard\WizardNameChangedEventArgs.cs" />
+    <Compile Include="Common\PropertyReflector.cs" />
+    <Compile Include="Common\SchedulerStateHolder.cs" />
+    <Compile Include="Common\Collections\ITreeItem.cs" />
+    <Compile Include="Common\Collections\TreeItem.cs" />
+    <Compile Include="Common\Collections\TreeItemEntityHelper.cs" />
+    <Compile Include="Common\Collections\TreeItemEventArgs.cs" />
+    <Compile Include="Common\CommonStateHolder.cs" />
+    <Compile Include="Common\ControlBinders\ITreeControlBinder.cs" />
+    <Compile Include="Common\ControlBinders\TreeViewBinder.cs" />
+    <Compile Include="Common\DailyAssignmentList.cs" />
+    <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
+    <Compile Include="Common\PasteOptions.cs" />
+    <Compile Include="Forecasting\OpenHourHelper.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillPropertiesPages.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillWizardPages.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPages.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPages.cs" />
+    <Compile Include="PeopleAdmin\IPersonRoleView.cs" />
+    <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
+    <Compile Include="Presentation\AuthorizationEntityListBoxPresenter.cs" />
+    <Compile Include="Scheduling\AgentAssignmentLayer.cs" />
+    <Compile Include="Scheduling\PersonRequestViewModel.cs" />
+    <Compile Include="Scheduling\RequestPresenter.cs" />
+    <Compile Include="Scheduling\ScheduleHelper.cs" />
+    <Compile Include="Scheduling\ViewBaseHelper.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Common\Clip.cs" />
+    <Compile Include="Common\ClipHandler.cs" />
+    <Compile Include="Scheduling\DisplayMode.cs" />
+    <Compile Include="Scheduling\DetailViewHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AvailabilityRestrictionView.cs" />
+    <Compile Include="Settings\ScheduleRestrictionBaseView.cs" />
+    <Compile Include="ShiftCreator\AbsolutePositionView.cs" />
+    <Compile Include="ShiftCreator\AccessibilityDateView.cs" />
+    <Compile Include="ShiftCreator\AutoPositionView.cs" />
+    <Compile Include="ShiftCreator\DaysOfWeekView.cs" />
+    <Compile Include="ShiftCreator\GeneralTemplateView.cs" />
+    <Compile Include="ShiftCreator\ICombinedView.cs" />
+    <Compile Include="ShiftCreator\IGridDataValidator.cs" />
+    <Compile Include="Shifts\ActivityTypeChangedEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Events\RuleSetBagChanged.cs" />
+    <Compile Include="Shifts\Events\RuleSetChanged.cs" />
+    <Compile Include="Shifts\GridClassType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IAccessibilityDatePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IAccessibilityDateViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IActivityPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IActivityTimeLimiterPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IActivityTimeLimiterViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IActivityViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IBaseModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\ICommon.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\ICommonOperation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IDataHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IDaysOfWeekPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IDaysOfWeekViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IExplorerPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IExplorerViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IGeneralPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IGeneralTemplatePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IGeneralTemplateViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\INavigationPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IPresenterBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\ITreeNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IValidate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IVisualizePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Interfaces\IVisualizeViewModel.cs" />
+    <Compile Include="Shifts\Models\AbsolutePositionViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\AccessibilityDateViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\ActivityTimeLimiterViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\ActivityViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\AutoPositionViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\BaseModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\DaysOfWeekViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\ExplorerViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Models\GeneralTemplateViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\MoveType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\AccessibilityDatePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\ActivityPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\ActivityTimeLimiterPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\BasePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\DaysOfWeekPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\ExplorerPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\GeneralPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\GeneralTemplatePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\NavigationPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Presenters\VisualizePresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ShiftCreatorViewType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\ShiftsDataHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Views\IExplorerView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Views\IGeneralView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Views\INavigationView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\Views\IVisualizeView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shifts\VisualPayloadInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tracking\DefaultTracker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
+      <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
+      <Name>Teleopti.Ccc.DayOffPlanning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
+      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
+      <Name>Teleopti.Ccc.Obfuscated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
+      <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
+      <Name>Teleopti.Ccc.Sdk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
+      <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
+      <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Teleopti.Ccc.snk">
+      <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="Common\StateHolderClassDiagram.cd" />
+    <None Include="Meetings\MeetingsClassDiagram.cd" />
+    <None Include="packages.config" />
+    <None Include="ShiftCreator\ShiftCreator.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\ControlBinders\!ReadMe.txt" />
+    <Content Include="Common\ControlExtenders\!ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scheduling\ShiftEditor\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

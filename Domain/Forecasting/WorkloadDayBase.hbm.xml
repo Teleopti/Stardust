@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Forecasting"
+                   default-access="field.camelcase-underscore">
+	<class name="WorkloadDayBase" abstract="true">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+		<!--IEntity-->
+		
+    <property name ="CurrentDate"
+              column="WorkloadDate"
+		  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+		  not-null="false"/>
+    
+		<bag name="OpenHourList">
+			<key column ="Parent" foreign-key="FK_OpenHourList_WorkloadDayBase">
+				<column name="Parent" unique-key="openHourListUnique"/>
+			</key>
+			<composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
+				<nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
+										  name="period" access="field">
+					<property name="Minimum" 
+							unique-key="openHourListUnique"
+							not-null="true"
+							type="TimeSpan"/>
+					<property name="Maximum"
+							unique-key="openHourListUnique"
+							not-null="true"
+							type="TimeSpan"/>
+				</nested-composite-element>
+			</composite-element>
+		</bag>
+
+
+		<bag name="TaskPeriodList" 
+		    cascade="all-delete-orphan"
+		    inverse="true"
+         lazy="false">
+			<key column ="Parent" />
+            <one-to-many class="Teleopti.Ccc.Domain.Forecasting.Template.TemplateTaskPeriod" />
+		</bag>
+		
+		<many-to-one name="Workload"
+		 class="Workload"
+		 not-null="true"/>
+	</class>
+</hibernate-mapping>

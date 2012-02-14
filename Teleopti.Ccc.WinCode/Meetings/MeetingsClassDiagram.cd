@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingPlannerScenariosLoadedEventArgs" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Meetings\MeetingPlannerScenariosLoadedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingPlannerScheduleLoadedEventArgs" Collapsed="true">
+    <Position X="0.5" Y="1.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Meetings\MeetingPlannerScheduleLoadedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingStateHolderFactory" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Meetings\MeetingStateHolderBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.AbstractMeetingOrganizerStateHolder" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgICCBAAAAAAgQQAQAAABAAABAA=</HashCode>
+      <FileName>Meetings\AbstractMeetingOrganizerStateHolder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingBasePresenter&lt;TView&gt;" Collapsed="true">
+    <Position X="5" Y="5.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Meetings\MeetingBasePresenter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingComposerPresenter" Collapsed="true">
+    <Position X="3.75" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAABAAAAAAAAAAQAAAAAACAAAAAAAQAA=</HashCode>
+      <FileName>Meetings\MeetingComposerPresenter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingComposerView" Collapsed="true">
+    <Position X="8" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAIAAAAAARAAAAkQAAAAAAAAAJIgAAAAAAAo=</HashCode>
+      <FileName>Meetings\MeetingComposerView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingOrganizerPresenter" Collapsed="true">
+    <Position X="7" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAQAAAIAgAAgECEBKAAAAAgQQAQAAABAAEBAA=</HashCode>
+      <FileName>Meetings\MeetingOrganizerPresenter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Teleopti.Ccc.WinCode.Meetings.MeetingOrganizerView" Collapsed="true">
+    <Position X="8" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAACIAAAACIBAAAAAAAAAAAAAIgAAA=</HashCode>
+      <FileName>Meetings\MeetingOrganizerView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IMeetingPlannerCommon">
+    <Position X="1.75" Y="4.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Meetings\IMeetingPlannerCommon.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IGlobalMeetingOrganizer" Collapsed="true">
+    <Position X="4.25" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAgAQAQAAABAAAAAA=</HashCode>
+      <FileName>Meetings\IGlobalMeetingOrganizer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IMeetingComposerPresenter" Collapsed="true">
+    <Position X="1" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAABAAAAAAAAAAQAAAAAACAAAAAAAQAA=</HashCode>
+      <FileName>Meetings\IMeetingComposerPresenter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IMeetingComposerView" Collapsed="true">
+    <Position X="8" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAARAAAAEAAAAAAAAAAIAgAAAAAAAo=</HashCode>
+      <FileName>Meetings\IMeetingComposerView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IMeetingOrganizerPresenter" Collapsed="true">
+    <Position X="4" Y="3.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAQAAAIAAAAAEAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Meetings\IMeetingOrganizerPresenter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Teleopti.Ccc.WinCode.Meetings.IMeetingOrganizerView" Collapsed="true">
+    <Position X="8" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACIAAAAAABAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Meetings\IMeetingOrganizerView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:i0="http://schemas.ccc.teleopti.com/sdk/2010/04/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://tempuri.org/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" name="TeleoptiCccSdkService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="TeleoptiCccSdkService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="TeleoptiCccLogOnService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="TeleoptiForecastingService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="TeleoptiSchedulingService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="TeleoptiOrganizationService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="TeleoptiOrganizationService1_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:import namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" location="http://localhost:1335/TeleoptiCccSdkService.svc?wsdl=wsdl0" />
+  <wsdl:types />
+  <wsdl:binding name="TeleoptiCccSdkService" type="i0:TeleoptiCccSdkService">
+    <wsp:PolicyReference URI="#TeleoptiCccSdkService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ConvertToUtc">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkService/ConvertToUtc" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConvertFromUtc">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkService/ConvertFromUtc" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TeleoptiCccLogOnService" type="i0:TeleoptiCccLogOnService">
+    <wsp:PolicyReference URI="#TeleoptiCccLogOnService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TransferSession">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/TransferSession" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataSources">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetDataSources" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOnWindows">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/LogOnWindows" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOnApplication">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/LogOnApplication" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetBusinessUnit">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/SetBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoggedOnPerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetLoggedOnPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetApplicationFunctionsForPerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetApplicationFunctionsForPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefinedApplicationFunctionPaths">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetDefinedApplicationFunctionPaths" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOffUser">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/LogOffUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsAuthenticated">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/IsAuthenticated" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAppSettings">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetAppSettings" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHibernateConfiguration">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetHibernateConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyLicense">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/VerifyLicense" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMessageBrokerConfiguration">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetMessageBrokerConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMatrixReportInfo">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccLogOnService/GetMatrixReportInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TeleoptiForecastingService" type="i0:TeleoptiForecastingService">
+    <wsp:PolicyReference URI="#TeleoptiForecastingService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSkillData">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkillData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSkills">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TeleoptiSchedulingService" type="i0:TeleoptiSchedulingService">
+    <wsp:PolicyReference URI="#TeleoptiSchedulingService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPersonMultiplicatorDataForPerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMultiplicatorDataForPersons">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonMultiplicatorDataForPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateServerScheduleDistribution">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateServerScheduleDistribution" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActivities">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetActivities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAbsences">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAbsences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedulePart">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulePart" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetScheduleParts">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetScheduleParts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedulePartsForPersons">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulePartsForPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveSchedulePart">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveSchedulePart" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShiftCategoriesBelongingToRuleSetBag">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetShiftCategoriesBelongingToRuleSetBag" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePersonRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePersonRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SavePersonAbsenceRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePersonAbsenceRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllPersonRequests">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAllPersonRequests" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonRequests">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetPersonRequests" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRequestModifiedWithinPeriodOrPending">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAllRequestModifiedWithinPeriodOrPending" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateShiftTradeRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/CreateShiftTradeRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SetShiftTradeRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SetShiftTradeRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePersonRequestMessage">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/UpdatePersonRequestMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AcceptShiftTradeRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/AcceptShiftTradeRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DenyShiftTradeRequest">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DenyShiftTradeRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDaysOffs">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetDaysOffs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShiftCategories">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetShiftCategories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdherenceData">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAgentQueueStatDetails">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAgentQueueStatDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdherenceInfo">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePreference">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreference" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePreference">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreference" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveStudentAvailabilityDay">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveStudentAvailabilityDay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteStudentAvailabilityDay">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeleteStudentAvailabilityDay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriod">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TeleoptiOrganizationService" type="i0:TeleoptiOrganizationService">
+    <wsp:PolicyReference URI="#TeleoptiOrganizationService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSites">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetSites" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTeams">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetTeams" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllPermittedTeams">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetAllPermittedTeams" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonsByTeam">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonsByTeam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonTeamMembers">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonTeamMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersons">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SavePerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLoggedOnPersonTeam">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetLoggedOnPersonTeam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPushMessageDialogue">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPushMessageDialogue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPushMessageDialoguesNotRepliedTo">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPushMessageDialoguesNotRepliedTo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePushMessageDialogue">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SavePushMessageDialogue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDialogueReply">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetDialogueReply" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetReply">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetReply" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonAccounts">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonAccounts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMultiplicatorData">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonMultiplicatorData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonSkillPeriodsForPersons">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPersonSkillPeriodsForPersons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetContracts">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetContracts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPartTimePercentages">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPartTimePercentages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOvertimeDefinitions">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetOvertimeDefinitions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TeleoptiOrganizationService1" type="i0:TeleoptiCccSdkInternal">
+    <wsp:PolicyReference URI="#TeleoptiOrganizationService1_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPayrollFormats">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/GetPayrollFormats" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateServerPayrollExport">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/CreateServerPayrollExport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHibernateConfigurationInternal">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/GetHibernateConfigurationInternal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyLicenseInternal">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/VerifyLicenseInternal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransferSessionInternal">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/TransferSessionInternal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetAppSettingsInternal">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiCccSdkInternal/GetAppSettingsInternal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TeleoptiCccSdkService">
+    <wsdl:port name="TeleoptiCccSdkService" binding="tns:TeleoptiCccSdkService">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+    <wsdl:port name="TeleoptiCccLogOnService" binding="tns:TeleoptiCccLogOnService">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+    <wsdl:port name="TeleoptiForecastingService" binding="tns:TeleoptiForecastingService">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+    <wsdl:port name="TeleoptiSchedulingService" binding="tns:TeleoptiSchedulingService">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+    <wsdl:port name="TeleoptiOrganizationService" binding="tns:TeleoptiOrganizationService">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+    <wsdl:port name="TeleoptiOrganizationService1" binding="tns:TeleoptiOrganizationService1">
+      <soap:address location="http://localhost:1335/TeleoptiCccSdkService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.PersonalAccount"
+                   default-access="field.camelcase-underscore">
+  <class name="Account"
+         abstract="true">
+    <id name="Id"
+        type="guid"
+        unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <discriminator column="AccountType"
+                   not-null="true"
+                   type="string"/>
+    <many-to-one name="Parent"
+                 not-null="true"
+                 class="PersonAbsenceAccount"
+                 foreign-key="FK_Account_PersonAbsenceAccount"/>
+    <property name="Extra"
+              access="property"
+              not-null="true"/>
+    <property name="Accrued"
+              access="property"
+              not-null="true"/>
+    <property name="BalanceIn"
+              access="property"
+              not-null="true"/>
+    <property name="BalanceOut"
+              access="property"
+              not-null="true"/>
+    <property name="LatestCalculatedBalance"
+              access="property"
+              not-null="true"/>
+    <property name="StartDate"
+              type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+              not-null="true"/>
+  </class>
+  
+</hibernate-mapping>

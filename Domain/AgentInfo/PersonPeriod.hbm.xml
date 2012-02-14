@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo"
+                   default-access="field.camelcase-underscore">
+  <class name="PersonPeriod">
+    <id name="Id"
+        type="guid"
+        unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <property name="StartDate"
+				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+		  not-null="true" />
+
+    <many-to-one name="Team"
+         class="Team"
+         not-null="true" foreign-key="FK_PersonPeriod_Team"/>
+
+    <property name="Note"
+			  type="string"
+			  length="1024"
+			  not-null="false"/>
+
+    <bag name="PersonSkillCollection"
+            cascade="all-delete-orphan"
+            inverse="true">
+      <key column ="Parent" />
+      <one-to-many class="PersonSkill" />
+    </bag>
+
+
+    <bag name="ExternalLogOnCollection"
+     cascade="none">
+      <key foreign-key="FK_ExternalLogOnCollection_PersonPeriod">
+        <column name="PersonPeriod"
+						not-null="true"
+						unique-key="PersonPeriodLoginUnique"/>
+      </key>
+      <many-to-many class="Teleopti.Ccc.Domain.AgentInfo.ExternalLogOn" foreign-key="FK_ExternalLogOnCollection_ExternalLogOn">
+        <column name="ExternalLogOn"
+						unique-key="PersonPeriodLoginUnique"
+						not-null="true"/>
+      </many-to-many>
+    </bag>
+
+    <many-to-one class="Teleopti.Ccc.Domain.Common.Person"
+              name ="Parent"
+              not-null="true" foreign-key="FK_PersonPeriod_Person"/>
+
+    <many-to-one name="RuleSetBag"
+                 class="Teleopti.Ccc.Domain.Scheduling.ShiftCreator.RuleSetBag" foreign-key="FK_PersonPeriod_RuleSetBag"/>
+
+    <many-to-one name="BudgetGroup"
+               class="Teleopti.Ccc.Domain.Budgeting.BudgetGroup" foreign-key="FK_PersonPeriod_BudgetGroup"/>
+
+    <component name="PersonContract" class="Teleopti.Ccc.Domain.AgentInfo.PersonContract">
+      <many-to-one name="PartTimePercentage"
+              class="Teleopti.Ccc.Domain.Common.PartTimePercentage"
+              not-null="true" foreign-key="FK_PersonPeriod_PartTimePercentage"/>
+      <many-to-one name="Contract" class="Teleopti.Ccc.Domain.Common.Contract"
+              not-null="true" foreign-key="FK_PersonPeriod_Contract"/>
+      <many-to-one name="ContractSchedule"
+             class="Teleopti.Ccc.Domain.Common.ContractSchedule"
+             not-null="true" foreign-key="FK_PersonPeriod_ContractSchedule"/>
+    </component>
+  </class>
+</hibernate-mapping>

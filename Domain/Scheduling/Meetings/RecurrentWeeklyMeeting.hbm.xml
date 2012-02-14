@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Meetings"
+                   default-access="field.camelcase-underscore">
+  <joined-subclass name="RecurrentWeeklyMeeting"
+					extends="RecurrentMeetingOption">
+    <key column="RecurrentMeetingOption" foreign-key="FK_RecurrentWeeklyMeeting_RecurrentMeetingOption"/>
+    <set name="WeekDays" table="RecurrentWeeklyMeetingWeekDays">
+      <key column="RecurrentWeeklyMeeting" foreign-key="FK_RecurrentWeeklyMeetingWeekDays_RecurrentWeeklyMeeting"/>
+      <element column="DayOfWeek" type="System.DayOfWeek"/>
+    </set>
+  </joined-subclass>
+</hibernate-mapping>

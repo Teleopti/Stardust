@@ -1,0 +1,436 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Template;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.InfrastructureTest.Repositories
+{   
+    /// <summary>
+    /// Tests for SkillDayRepository
+    /// </summary>
+    [TestFixture]
+    [Category("LongRunning")]
+    public class SkillDayRepositoryTest : RepositoryTest<ISkillDay>
+    {
+        private IScenario _scenario;
+        private ISkillType _skillType;
+        private IActivity _activity;
+        private IGroupingActivity _groupingActivity;
+        private ISkill _skill;
+        private IWorkload _workload;
+        private DateTime _date;
+
+        /// <summary>
+        /// Runs every test. Implemented by repository's concrete implementation.
+        /// </summary>
+        protected override void ConcreteSetup()
+        {
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            PersistAndRemoveFromUnitOfWork(_scenario);
+
+            _skillType = SkillTypeFactory.CreateSkillType();
+            _skill = SkillFactory.CreateSkill("dummy", _skillType, 15);
+            _activity = ActivityFactory.CreateActivity("dummyActivity");
+            _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
+            _skill.Activity = _activity;
+
+            PersistAndRemoveFromUnitOfWork(_skillType);
+            PersistAndRemoveFromUnitOfWork(_groupingActivity);
+
+            _groupingActivity.AddActivity(_activity);
+
+            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            _skill.TimeZone = timeZoneInfo;
+            PersistAndRemoveFromUnitOfWork(_activity);
+            PersistAndRemoveFromUnitOfWork(_skill);
+
+            _workload = WorkloadFactory.CreateWorkload(_skill);
+            PersistAndRemoveFromUnitOfWork(_workload);
+
+            _date = timeZoneInfo.ConvertTimeToUtc(new DateTime(2008, 1, 8, 0, 0, 0));
+        }
+
+        /// <summary>
+        /// Creates an aggreagte using the Bu of logged in user.
+        /// Should be a "full detailed" aggregate
+        /// </summary>
+        /// <returns></returns>
+        protected override ISkillDay CreateAggregateWithCorrectBusinessUnit()
+        {
+            IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
+            openHourPeriods.Add(new TimePeriod("12:30-17:30"));
+
+            WorkloadDay workloadDay = new WorkloadDay();
+            workloadDay.Create(new DateOnly(_date), _workload, openHourPeriods);
+            workloadDay.Tasks = 7 * 20;
+            workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
+            workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
+
+            IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
+            skillDataPeriods.Add(
+                new SkillDataPeriod(
+                    ServiceAgreement.DefaultValues(),
+                    new SkillPersonData(2, 5), 
+                    new DateTimePeriod(_date,_date.Add(TimeSpan.FromHours(12)))));
+            skillDataPeriods.Add(
+                new SkillDataPeriod(
+                    skillDataPeriods[0].ServiceAgreement,
+                    skillDataPeriods[0].SkillPersonData,
+                    skillDataPeriods[0].Period.MovePeriod(TimeSpan.FromHours(12))));
+            
+            SkillDay skillDay = new SkillDay(new DateOnly(_date), _skill, _scenario, 
+                new List<IWorkloadDay> { workloadDay }, skillDataPeriods);
+
+            _date = _date.AddDays(1);
+
+            return skillDay;
+        }
+
+        /// <summary>
+        /// Verifies the aggregate graph properties.
+        /// </summary>
+        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+        protected override void VerifyAggregateGraphProperties(ISkillDay loadedAggregateFromDatabase)
+        {
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            loadedAggregateFromDatabase.SetupSkillDay();
+            Assert.AreEqual(skillDay.Scenario.Description, loadedAggregateFromDatabase.Scenario.Description);
+            Assert.AreEqual(skillDay.Skill.Name, loadedAggregateFromDatabase.Skill.Name);
+            Assert.AreEqual(skillDay.WorkloadDayCollection.Count, loadedAggregateFromDatabase.WorkloadDayCollection.Count);
+            Assert.AreEqual(skillDay.WorkloadDayCollection[0].AverageTaskTime, loadedAggregateFromDatabase.WorkloadDayCollection[0].AverageTaskTime);
+            Assert.AreEqual(skillDay.WorkloadDayCollection[0].TotalTasks, loadedAggregateFromDatabase.WorkloadDayCollection[0].TotalTasks);
+        }
+
+        /// <summary>
+        /// Determines whether this instance can be created.
+        /// </summary>
+        [Test]
+        public void CanCreate()
+        {
+            new SkillDayRepository(UnitOfWork);
+        }
+
+        [Test]
+        public void CanGetUpdateInfoWhenWorkloadDayIsSaved()
+        {
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
+            PersistAndRemoveFromUnitOfWork(skillDay);
+            PersistAndRemoveFromUnitOfWork(skillDay2);
+
+            SkillDayCalculator calc = new SkillDayCalculator(skillDay2.Skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(2009, 1, 1, 2009, 12, 31));
+            skillDay2.SkillDayCalculator = calc;
+            skillDay2.WorkloadDayCollection[0].Close();
+
+            Thread.Sleep(1000);
+            PersistAndRemoveFromUnitOfWork(skillDay2);
+
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            ICollection<ISkillDay> skillDays = skillDayRepository.FindRange(new DateOnlyPeriod(skillDay.CurrentDate.AddDays(-10), skillDay.CurrentDate.AddDays(30)),
+                _skill, _scenario);
+
+            Assert.IsTrue(skillDays.Count == 2);
+            ISkillDay result = skillDayRepository.FindLatestUpdated(_skill, _scenario, false);
+            Assert.AreEqual(skillDay2, result);
+
+            ISkillDay result2 = skillDayRepository.FindLatestUpdated(_skill, _scenario, true);
+            Assert.IsNull(result2);
+        }
+
+        [Test]
+        public void CanGetLastUpdatedWithLongtermTemplate()
+        {
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
+            SkillDayCalculator calc = new SkillDayCalculator(skillDay2.Skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(2009, 1, 1, 2009, 12, 31));
+            skillDay2.SkillDayCalculator = calc;
+            PersistAndRemoveFromUnitOfWork(skillDay2);
+
+            IWorkloadDay workloadDay = skillDay2.WorkloadDayCollection[0];
+            WorkloadDayTemplateReference templateReference = new WorkloadDayTemplateReference(Guid.Empty, 1, TemplateReference.LongtermTemplateKey, null, _workload);
+            typeof(WorkloadDay).GetField("_templateReference", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+                workloadDay, templateReference);
+            skillDay2.AddWorkloadDay(workloadDay);
+            PersistAndRemoveFromUnitOfWork(skillDay2);
+
+            Thread.Sleep(1000);
+
+            PersistAndRemoveFromUnitOfWork(skillDay);
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+
+            ISkillDay result = skillDayRepository.FindLatestUpdated(_skill, _scenario, true);
+           
+            Assert.AreEqual(skillDay2, result);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can find skill days].
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-01-23
+        /// </remarks>
+        [Test]
+        public void CanFindSkillDays()
+        {
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            ICollection<ISkillDay> skillDays =
+                skillDayRepository.FindRange(new DateOnlyPeriod(skillDay.CurrentDate, skillDay.CurrentDate.AddDays(1)),
+                                             _skill, _scenario);
+
+            Assert.AreEqual(1, skillDays.Count);
+            ISkillDay sd = new List<ISkillDay>(skillDays)[0];
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.SkillDataPeriodCollection));
+            Assert.AreEqual(2, sd.SkillDataPeriodCollection.Count);
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection));
+            Assert.AreEqual(1, sd.WorkloadDayCollection.Count);
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].OpenHourList));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.WorkloadDayCollection[0].TaskPeriodList));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(sd.Scenario));
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can delete skill days].
+        /// </summary>
+        /// <remarks>
+        /// Created by: henryg
+        /// Created date: 2008-12-11
+        /// </remarks>
+        [Test]
+        public void CanDeleteSkillDays()
+        {
+            SkipRollback();
+
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+
+            DateOnlyPeriod dateTimePeriod = new DateOnlyPeriod(skillDay.CurrentDate, skillDay.CurrentDate.AddDays(1));
+            ICollection<ISkillDay> skillDays = skillDayRepository.FindRange(dateTimePeriod, _skill, _scenario);
+            Assert.AreEqual(1, skillDays.Count);
+
+            skillDayRepository.Delete(dateTimePeriod, _skill, _scenario);
+
+            skillDays = skillDayRepository.FindRange(dateTimePeriod, _skill, _scenario);
+            Assert.AreEqual(0, skillDays.Count);
+
+            //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
+            UnitOfWork.Clear();
+            IRepository rep = new Repository(UnitOfWork);
+            rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
+            rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
+            rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
+            rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
+            rep.Remove(new GroupingActivityRepository(UnitOfWork).Load(_skill.Activity.GroupingActivity.Id.Value));
+            rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
+
+
+            UnitOfWork.PersistAll();
+        }
+
+        /// <summary>
+        /// Verifies the get all skill days work.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-01-28
+        /// </remarks>
+        [Test]
+        public void VerifyGetAllSkillDaysWork()
+        {
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            var dateOnly = new DateOnly(_date);
+            ICollection<ISkillDay> skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill, _scenario);
+            Assert.AreEqual(2, skillDays.Count);
+            Assert.IsNotNull(skillDays.ElementAt(0).Id);
+            Assert.IsNotNull(skillDays.ElementAt(1).Id);
+        }
+
+        /// <summary>
+        /// Verifies the get all skill days work without adding to repository.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-04-15
+        /// </remarks>
+        [Test]
+        public void VerifyGetAllSkillDaysWorkWithoutAddingToRepository()
+        {
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            var dateOnly = new DateOnly(_date);
+            ICollection<ISkillDay> skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill, _scenario, false);
+            Assert.AreEqual(2, skillDays.Count);
+            Assert.IsNull(skillDays.ElementAt(0).Id);
+            Assert.IsNull(skillDays.ElementAt(1).Id);
+        }
+
+        [Test]
+        public void ShouldSetCorrectLocalDateForSkillDayInJordanStandardTime()
+        {
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+
+            ICollection<ISkillDay> skillDays =
+                skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(new DateOnly(2011, 3, 30), new DateOnly(2011,4,3)),
+                    new List<ISkillDay>(), _skill, _scenario, false);
+            skillDays.FirstOrDefault(s => s.CurrentDate == new DateOnly(2011, 4, 1)).Should().Not.Be.Null();
+        }
+
+        [Test]
+        public void VerifyGetLatestSkillDayDateWorks()
+        {
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            DateOnly defaultLastSkillDayDate = skillDayRepository.FindLastSkillDayDate(_workload, _scenario);
+
+            Assert.AreEqual(new DateOnly(DateTime.Today.AddMonths(-1)),defaultLastSkillDayDate);
+
+            SkillDay skillDay = createSkillDay(new DateOnly(_date), _workload, _skill, _scenario);
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            SkillDay skillDay1 = createSkillDay(skillDay.CurrentDate.AddDays(-1), _workload, _skill, _scenario);
+            PersistAndRemoveFromUnitOfWork(skillDay1);
+
+            SkillDay skillDay2 = createSkillDay(skillDay.CurrentDate.AddDays(-2), _workload, _skill, _scenario);
+            PersistAndRemoveFromUnitOfWork(skillDay2);
+
+            var lastSkillDayDate = skillDayRepository.FindLastSkillDayDate(skillDay.Skill.WorkloadCollection.First(), _scenario);
+
+            Assert.AreEqual(skillDay.CurrentDate, lastSkillDayDate);
+        }
+        [Test]
+        public void VerifyWorkloadDaysParentAreSet()
+        {
+            var dateTime = new DateOnly(_date);
+            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateTime, dateTime.AddDays(1));
+            
+            IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(dateTime, dateTime, _workload);
+            SkillPersonData skillPersonData = new SkillPersonData(0, 0);
+            ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
+                                                                   TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+                                                                       dateTimePeriod.StartDateTime,
+                                                                       dateTimePeriod.EndDateTime));
+            IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod> { skillDataPeriod };
+            ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
+
+            PersistAndRemoveFromUnitOfWork(skillDay);
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            ICollection<ISkillDay> orgSkillDays =
+                skillDayRepository.FindRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill>{_skill}, _scenario);
+            IList<ISkillDay> skillDays = new List<ISkillDay>(orgSkillDays);
+
+            WorkloadDay workloadDay = (WorkloadDay)skillDays[0].WorkloadDayCollection[0];
+            Assert.AreEqual(1, workloadDay.Parents.Count);
+            Assert.AreEqual(skillDays[0], workloadDay.Parents[0]);
+        }
+
+        [Test]
+        public void VerifyIntervalsAreRemovedWhenSplittingAndMerging()
+        {
+            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+            skillDay.SetupSkillDay();
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            Assert.AreEqual(2, skillDay.SkillDataPeriodCollection.Count);
+
+            skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> {skillDay},
+                                                                 new DateOnlyPeriod());
+            skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
+            skillDay.MergeSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
+            skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
+
+            Assert.AreEqual(96,skillDay.SkillDataPeriodCollection.Count);
+
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            IRepository<ISkillDay> skillDayRepository = TestRepository(UnitOfWork);
+            skillDay = skillDayRepository.Get(skillDay.Id.Value);
+            skillDay.SetupSkillDay();
+            
+            Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
+
+            skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay },
+                                                                 new DateOnlyPeriod());
+            skillDay.MergeSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
+            PersistAndRemoveFromUnitOfWork(skillDay);
+
+            skillDayRepository = TestRepository(UnitOfWork);
+            skillDay = skillDayRepository.Get(skillDay.Id.Value);
+            skillDay.SetupSkillDay();
+
+            Assert.AreEqual(1, skillDay.SkillDataPeriodCollection.Count);
+        }
+
+        private static SkillDay createSkillDay(DateOnly skillDate, IWorkload workload, ISkill skill, IScenario scenario)
+        {
+            IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
+            openHourPeriods.Add(new TimePeriod("12:30-17:30"));
+
+            WorkloadDay workloadDay = new WorkloadDay();
+            workloadDay.Create(skillDate, workload, openHourPeriods);
+            workloadDay.Tasks = 7 * 20;
+            workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
+            workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
+
+            IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
+            skillDataPeriods.Add(
+                new SkillDataPeriod(
+                    ServiceAgreement.DefaultValues(),
+                    new SkillPersonData(2, 5),
+                    DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(skillDate,DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12))));
+            skillDataPeriods.Add(
+                new SkillDataPeriod(
+                    skillDataPeriods[0].ServiceAgreement,
+                    skillDataPeriods[0].SkillPersonData,
+                    skillDataPeriods[0].Period.ChangeStartTime(TimeSpan.FromHours(12))));
+
+            SkillDay skillDay = new SkillDay(skillDate, skill, scenario,
+                new List<IWorkloadDay> { workloadDay }, skillDataPeriods);
+
+            return skillDay;
+        }
+
+        [Test]
+        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
+        {
+            ISkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWorkFactory.Current);
+            Assert.IsNotNull(skillDayRepository);
+        }
+
+        [Test]
+        public void ShouldCreateSkillDayWithCurrentDateAsDateAndNoTime()
+        {
+            _skill = SkillFactory.CreateSiteSkill("bbb");
+            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+            var startDateTime = new DateOnly(2011, 4, 1);
+            DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime.AddDays(1));
+            ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
+                                                                                  _skill, _scenario, false);
+            Assert.AreEqual(2, skilldays.Count);
+            ISkillDay skillDay1 = skilldays.FirstOrDefault();
+            Assert.AreEqual(new DateOnly(2011, 4, 1), skillDay1.CurrentDate);
+        }
+
+        protected override Repository<ISkillDay> TestRepository(IUnitOfWork unitOfWork)
+        {
+            return new SkillDayRepository(unitOfWork);
+        }
+    }
+}

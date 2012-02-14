@@ -1,0 +1,622 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.ResourceCalculation
+{
+    [TestFixture]
+    public class SkillStaffPeriodHolderTest
+    {
+        private SkillStaffPeriodHolder _skillStaffPeriodHolder;
+        private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
+
+        [SetUp]
+        public void Setup()
+        {
+            _skillDays  = new Dictionary<ISkill, IList<ISkillDay>>();
+            _skillStaffPeriodHolder = new SkillStaffPeriodHolder(_skillDays);
+        }
+
+        [Test]
+        public void VerifyCreate()
+        {
+            Assert.IsNotNull(_skillStaffPeriodHolder);
+            Assert.IsNotNull(_skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary);
+        }
+
+        [Test]
+        public void VerifyTheDictionary()
+        {
+            MockRepository mocks = new MockRepository();
+            ISkill skill = mocks.StrictMock<ISkill>();
+            ISkillDay skillDay = mocks.StrictMock<ISkillDay>();
+            IList<ISkillDay> skillDays = new List<ISkillDay>{skillDay};
+
+            var period1 = mocks.StrictMock<ISkillStaffPeriod>();
+            var period2 = mocks.StrictMock<ISkillStaffPeriod>();
+            var period3 = mocks.StrictMock<ISkillStaffPeriod>();
+
+            IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod> { period1, period2, period3};
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods);
+
+            DateTime dateTime = new DateTime(2009,2,1,23,0,0,DateTimeKind.Utc);
+
+            DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+            DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>
+                                                                            {{skill, skillDays}};
+
+            using (mocks.Record())
+            {
+                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods);
+                Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
+                Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+                Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+                Assert.AreEqual(1,_skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+                var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill];
+                Assert.AreEqual(3, dic.Count);
+            }
+        }
+
+        [Test]
+        public void VerifyCanCreateSkillStaffPeriodList()
+        {
+            var mocks = new MockRepository();
+            var skill1 = mocks.StrictMock<ISkill>();
+            var skill2 = mocks.StrictMock<ISkill>();
+            var skillDay1 = mocks.StrictMock<ISkillDay>();
+            var skillDay2 = mocks.StrictMock<ISkillDay>();
+            IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+            IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+
+            var period1 = mocks.StrictMock<ISkillStaffPeriod>();
+            var period2 = mocks.StrictMock<ISkillStaffPeriod>();
+            var period3 = mocks.StrictMock<ISkillStaffPeriod>();
+
+            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3 };
+            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period3 };
+            var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+            var dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+            var dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+            DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 },{skill2,skillDays2} };
+
+            using (mocks.Record())
+            {
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
+                Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+                Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+                Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+                var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+                Assert.AreEqual(3, dic.Count);
+                dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+                Assert.AreEqual(1, dic.Count);
+
+                var list = _skillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> {skill1, skill2},
+                                                                        dateTimePeriod1.ChangeEndTime(
+                                                                            TimeSpan.FromMinutes(30)));
+                Assert.AreEqual(4,list.Count);
+
+                list = _skillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill1 },
+                                                                        dateTimePeriod1.ChangeEndTime(
+                                                                            TimeSpan.FromMinutes(15)));
+                Assert.AreEqual(2, list.Count);
+
+                list = _skillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill2 },
+                                                                        dateTimePeriod1.ChangeEndTime(
+                                                                            TimeSpan.FromMinutes(30)));
+                Assert.AreEqual(1, list.Count);
+            }
+        }
+
+		[Test]
+		public void ShouldReturnDictionaryOnSkill()
+		{
+			var mocks = new MockRepository();
+			var skill1 = mocks.StrictMock<ISkill>();
+			var skill2 = mocks.StrictMock<ISkill>();
+			var skillDay1 = mocks.StrictMock<ISkillDay>();
+			var skillDay2 = mocks.StrictMock<ISkillDay>();
+			IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+			IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+
+			var period1 = mocks.StrictMock<ISkillStaffPeriod>();
+			var period2 = mocks.StrictMock<ISkillStaffPeriod>();
+			var period3 = mocks.StrictMock<ISkillStaffPeriod>();
+
+			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3 };
+			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period3 };
+			var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+			var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+			var dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+			var dateTimePeriodoutside = new DateTimePeriod(dateTime.AddDays(-1), dateTime.AddDays(-1).AddMinutes(15));
+			var dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+			var dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+			var dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+
+			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+
+			using (mocks.Record())
+			{
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(period1.Period).Return(dateTimePeriodoutside).Repeat.AtLeastOnce();
+				Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+				Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+			}
+
+			using (mocks.Playback())
+			{
+				_skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+				Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+				var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+				Assert.AreEqual(3, dic.Count);
+				dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+				Assert.AreEqual(1, dic.Count);
+
+				var list = _skillStaffPeriodHolder.SkillStaffPeriodDictionary(new List<ISkill> { skill1, skill2 },
+																		dateTimePeriod1.ChangeEndTime(
+																			TimeSpan.FromMinutes(30)));
+				Assert.AreEqual(2, list.Count);
+				Assert.That(list[skill1].Count, Is.EqualTo(2));
+
+				list = _skillStaffPeriodHolder.SkillStaffPeriodDictionary(new List<ISkill> { skill1 },
+																		dateTimePeriod1.ChangeEndTime(
+																			TimeSpan.FromMinutes(15)));
+				Assert.AreEqual(1, list.Count);
+
+				list = _skillStaffPeriodHolder.SkillStaffPeriodDictionary(new List<ISkill> { skill2 },
+																		dateTimePeriod1.ChangeEndTime(
+																			TimeSpan.FromMinutes(30)));
+				Assert.AreEqual(1, list.Count);
+			}
+		}
+
+        [Test]
+        public void VerifyCanCreateSkillStaffPeriodListForVirtualSkill()
+        {
+            MockRepository mocks = new MockRepository();
+            ISkill skill1 = mocks.StrictMock<ISkill>();
+            ISkill skill2 = mocks.StrictMock<ISkill>();
+            IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+            ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
+            ISkillDay skillDay2 = mocks.StrictMock<ISkillDay>();
+            IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+            IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+            IList<ISkill> skills = new List<ISkill> { skill1, skill2 };
+            ReadOnlyCollection<ISkill> aggregatedSkills = new ReadOnlyCollection<ISkill>(skills);
+
+            DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+            DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+            DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod4 = dateTimePeriod3.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod5 = dateTimePeriod1.ChangeEndTime(TimeSpan.FromMinutes(45));
+
+            TimeSpan averageTaskTime = TimeSpan.FromSeconds(20);
+            TimeSpan averageAfterTaskTime = TimeSpan.FromSeconds(40);
+            ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod2, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod3, new Task(6, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
+
+            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
+            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+
+            StaffingThresholds tresholds = new StaffingThresholds();
+
+            using (mocks.Record())
+            {
+                Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
+                Expect.Call(skill2.DefaultResolution).Return(60).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+                Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
+                Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+                Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+                var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+                Assert.AreEqual(4, dic.Count);
+                dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+                Assert.AreEqual(1, dic.Count);
+
+                var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod5);
+                Assert.AreEqual(4, list.Count);
+                Assert.AreEqual(6,list[0].Payload.TaskData.Tasks);
+                Assert.AreEqual(6,list[1].Payload.TaskData.Tasks);
+                Assert.AreEqual(7,list[2].Payload.TaskData.Tasks);
+                Assert.AreEqual(6,list[3].Payload.TaskData.Tasks);
+                Assert.IsTrue(((IAggregateSkillStaffPeriod)list[0]).IsAggregate);
+                Assert.IsTrue(((IAggregateSkillStaffPeriod)list[1]).IsAggregate);
+                Assert.IsTrue(((IAggregateSkillStaffPeriod)list[2]).IsAggregate);
+                Assert.IsTrue(((IAggregateSkillStaffPeriod)list[3]).IsAggregate);
+            }
+        }
+
+        [Test]
+        public void VerifyAggregatedPropertiesAreSet()
+        {
+            MockRepository mocks = new MockRepository();
+            ISkill skill1 = mocks.StrictMock<ISkill>();
+            ISkill skill2 = mocks.StrictMock<ISkill>();
+            IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+            ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
+            IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+            IList<ISkill> skills = new List<ISkill> { skill1, skill2 };
+            ReadOnlyCollection<ISkill> aggregatedSkills = new ReadOnlyCollection<ISkill>(skills);
+
+            DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+            DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+
+            TimeSpan averageTaskTime = TimeSpan.FromSeconds(20);
+            TimeSpan averageAfterTaskTime = TimeSpan.FromSeconds(40);
+            SkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            SkillStaffPeriodFactory.InjectEstimatedServiceLevel(period1, new Percent(0.07));
+            SkillStaffPeriodFactory.InjectForecastedIncomingDemand(period1, 99);
+            SkillStaffPeriodFactory.InjectCalculatedResource(period1, 88);
+
+            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1 };
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 } };
+            StaffingThresholds tresholds = new StaffingThresholds();
+
+            using (mocks.Record())
+            {
+                Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
+                Expect.Call(skill2.DefaultResolution).Return(15).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+                Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+
+                var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod1);
+                ISkillStaffPeriod skillStaffPeriod = list[0];
+                ((IAggregateSkillStaffPeriod)skillStaffPeriod).IsAggregate = false;
+                Assert.AreEqual(1, list.Count);
+                Assert.AreEqual(99, skillStaffPeriod.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(88, skillStaffPeriod.Payload.CalculatedResource);
+                Assert.AreEqual(new Percent(0.07), skillStaffPeriod.EstimatedServiceLevel);
+            }
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void VerifyCanCreateSkillStaffPeriodDictionaryForVirtualSkillOn()
+		{
+			MockRepository mocks = new MockRepository();
+			ISkill skill1 = SkillFactory.CreateSkill("skill1");
+			skill1.DefaultResolution = 15;
+			ISkill skill2 = SkillFactory.CreateSkill("skill2");
+			skill2.DefaultResolution = 60;
+			IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+
+			DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+			ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
+			ISkillDay skillDay2 = mocks.StrictMock<ISkillDay>();
+			IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+			IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+			IList<ISkill> skills = new List<ISkill> { skill1, skill2 };
+			ReadOnlyCollection<ISkill> aggregatedSkills = new ReadOnlyCollection<ISkill>(skills);
+
+			DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+			DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+			DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+			DateTimePeriod dateTimePeriod4 = dateTimePeriod3.MovePeriod(TimeSpan.FromMinutes(15));
+			DateTimePeriod dateTimePeriod5 = dateTimePeriod1.ChangeEndTime(TimeSpan.FromMinutes(45));
+
+			TimeSpan averageTaskTime = TimeSpan.FromSeconds(20);
+			TimeSpan averageAfterTaskTime = TimeSpan.FromSeconds(40);
+			ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod2, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod3, new Task(6, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
+
+			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
+			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
+			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+
+			using (mocks.Record())
+			{
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+				Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+			}
+
+			using (mocks.Playback())
+			{
+				_skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+				Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+				var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+				Assert.AreEqual(4, dic.Count);
+				dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+				Assert.AreEqual(1, dic.Count);
+
+				var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod5, true);
+				Assert.AreEqual(4, list.Count);
+				Assert.AreEqual(6, list[dateTimePeriod1].Payload.TaskData.Tasks);
+				Assert.AreEqual(6, list[dateTimePeriod2].Payload.TaskData.Tasks);
+				Assert.AreEqual(7, list[dateTimePeriod3].Payload.TaskData.Tasks);
+				Assert.AreEqual(6, list[dateTimePeriod4].Payload.TaskData.Tasks);
+			}
+		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldHandleEmptyVirtualSkill()
+        {
+            MockRepository mocks = new MockRepository();
+            ISkill skill1 = SkillFactory.CreateSkill("skill1");
+            skill1.DefaultResolution = 15;
+            ISkill skill2 = SkillFactory.CreateSkill("skill2");
+            skill2.DefaultResolution = 60;
+            IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+
+            DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+            ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
+            ISkillDay skillDay2 = mocks.StrictMock<ISkillDay>();
+            IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+            IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+            ReadOnlyCollection<ISkill> aggregatedSkills = new ReadOnlyCollection<ISkill>(new List<ISkill>());
+
+            DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+            DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod4 = dateTimePeriod3.MovePeriod(TimeSpan.FromMinutes(15));
+            DateTimePeriod dateTimePeriod5 = dateTimePeriod1.ChangeEndTime(TimeSpan.FromMinutes(45));
+
+            TimeSpan averageTaskTime = TimeSpan.FromSeconds(20);
+            TimeSpan averageAfterTaskTime = TimeSpan.FromSeconds(40);
+            ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod2, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod3, new Task(6, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+            ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
+
+            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
+            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+
+            using (mocks.Record())
+            {
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+                Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+                var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+                Assert.AreEqual(4, dic.Count);
+                dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+                Assert.AreEqual(1, dic.Count);
+
+                var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod5, true);
+                list.Count.Should().Be.EqualTo(0);
+            }
+        }
+
+        [Test]
+        public void VerifyPerActivityDictionary()
+        {
+            MockRepository mocks = new MockRepository();
+
+            ISkillDay skillDay = mocks.StrictMock<ISkillDay>();
+            ISkillDay skillDay2 = mocks.StrictMock<ISkillDay>();
+
+            IList<ISkillDay> skillDays = new List<ISkillDay> {skillDay};
+            IList<ISkillDay> skillDays2 = new List<ISkillDay> {skillDay2};
+
+            ISkillStaffPeriod period1 = mocks.StrictMock<ISkillStaffPeriod>();
+            ISkillStaffPeriod period2 = mocks.StrictMock<ISkillStaffPeriod>();
+            ISkillStaffPeriod period3 = mocks.StrictMock<ISkillStaffPeriod>();
+            ISkillStaffPeriod period4 = mocks.StrictMock<ISkillStaffPeriod>();
+
+            IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod> {period1, period2};
+            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> {period3, period4};
+
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods =
+                new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods);
+            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 =
+                new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+            DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+            DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+            DateTimePeriod dateTimePeriod2 = new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30));
+            DateTimePeriod dateTimePeriod3 = new DateTimePeriod(dateTime.AddMinutes(15), dateTime.AddMinutes(30));
+            DateTimePeriod dateTimePeriod4 = new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(45));
+
+            ISkill skill1 = mocks.StrictMock<ISkill>();
+            ISkill skill2 = mocks.StrictMock<ISkill>();
+
+            IList<ISkill> skills = new List<ISkill> {skill1, skill2};
+
+            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>
+                                                                            {
+                                                                                {skill1, skillDays},
+                                                                                {skill2, skillDays2}
+                                                                            };
+
+            IActivity activity1 = new Activity("one");
+
+            ISkillStaff payload1 = mocks.StrictMock<ISkillStaff>();
+            ISkillStaff payload2 = mocks.StrictMock<ISkillStaff>();
+            ISkillStaff payload3 = mocks.StrictMock<ISkillStaff>();
+            ISkillStaff payload4 = mocks.StrictMock<ISkillStaff>();
+
+            DateTimePeriod period = new DateTimePeriod(dateTime, dateTime.AddMinutes(45));
+            SkillPersonData skillPersonData = new SkillPersonData(2, 5);
+
+            IPeriodDistribution periodDistribution = mocks.StrictMock<IPeriodDistribution>();
+
+            using (mocks.Record())
+            {
+                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods);
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2);
+
+                Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
+                Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+                Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+                Expect.Call(period4.Period).Return(dateTimePeriod4).Repeat.AtLeastOnce();
+
+                Expect.Call(period1.Payload).Return(payload1).Repeat.AtLeastOnce();
+                Expect.Call(period2.Payload).Return(payload2).Repeat.AtLeastOnce();
+                Expect.Call(period3.Payload).Return(payload3).Repeat.AtLeastOnce();
+                Expect.Call(period4.Payload).Return(payload4).Repeat.AtLeastOnce();
+
+                Expect.Call(payload1.SkillPersonData).Return(skillPersonData).Repeat.Twice();
+                Expect.Call(payload2.SkillPersonData).Return(skillPersonData).Repeat.Twice();
+                Expect.Call(payload3.SkillPersonData).Return(skillPersonData).Repeat.Twice();
+                Expect.Call(payload4.SkillPersonData).Return(skillPersonData).Repeat.Twice();
+
+
+
+                Expect.Call(period1.FStaffTime()).Return(new TimeSpan(0, 50, 0)).Repeat.AtLeastOnce();
+                Expect.Call(period2.FStaffTime()).Return(new TimeSpan(0, 50, 0)).Repeat.AtLeastOnce();
+                Expect.Call(period3.FStaffTime()).Return(new TimeSpan(0, 50, 0)).Repeat.AtLeastOnce();
+                Expect.Call(period4.FStaffTime()).Return(new TimeSpan(0, 50, 0)).Repeat.AtLeastOnce();
+
+                Expect.Call(payload1.CalculatedResource).Return(2);
+                Expect.Call(payload2.CalculatedResource).Return(2);
+                Expect.Call(payload3.CalculatedResource).Return(2);
+                Expect.Call(payload4.CalculatedResource).Return(2);
+
+                Expect.Call(skill1.Activity).Return(activity1).Repeat.AtLeastOnce();
+                Expect.Call(skill2.Activity).Return(activity1).Repeat.AtLeastOnce();
+                Expect.Call(period1.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
+                Expect.Call(period2.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
+                Expect.Call(period3.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
+                Expect.Call(period4.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true)).Return(0).Repeat.AtLeastOnce();
+                Expect.Call(period1.PeriodDistribution).Return(periodDistribution);
+                Expect.Call(period2.PeriodDistribution).Return(periodDistribution);
+                Expect.Call(period3.PeriodDistribution).Return(periodDistribution);
+                Expect.Call(period4.PeriodDistribution).Return(periodDistribution);
+                
+                Expect.Call(skill1.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
+                Expect.Call(skill1.PriorityValue).Return(1).Repeat.AtLeastOnce();
+                Expect.Call(skill2.OverstaffingFactor).Return(new Percent(.5)).Repeat.AtLeastOnce();
+                Expect.Call(skill2.PriorityValue).Return(1).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                _skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+                var ret = _skillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
+                Assert.IsNotNull(ret);
+                var dic = ret[activity1];
+
+                Assert.AreEqual(5, dic[dateTime].MaximumPersons);
+                Assert.AreEqual(10, dic[dateTime.AddMinutes(15)].MaximumPersons);
+                Assert.AreEqual(5, dic[dateTime.AddMinutes(30)].MaximumPersons);
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyBoostFirstAndLastInterval()
+        {
+            var key1 = new DateTime(2009,2,2,8,0,0,DateTimeKind.Utc);
+            var key2 = key1.AddMinutes(15);
+            var key3 = key1.AddMinutes(30);
+            // gap
+            var key4 = key1.AddHours(3);
+            var key5 = key1.AddHours(3).AddMinutes(15);
+            var key6 = key1.AddHours(3).AddMinutes(30);
+
+            var holder1 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key1, key1.AddMinutes(15)), 0, 0, 5,
+                                                         null, new Percent(.5), 1);
+            var holder2 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key2, key2.AddMinutes(15)), 0, 0, 5,
+                                                                     null, new Percent(.5), 1);
+            var holder3 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key3, key3.AddMinutes(15)), 0, 0, 5,
+                                                         null, new Percent(.5), 1);
+            var holder4 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key4, key4.AddMinutes(15)), 0, 0, 5,
+                                                         null, new Percent(.5), 1);
+            var holder5 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key5, key5.AddMinutes(15)), 0, 0, 5,
+                                                         null, new Percent(.5), 1);
+            var holder6 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key6, key6.AddMinutes(15)), 0, 0, 5,
+                                                         null, new Percent(.5), 1);
+
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            dataHolders.Add(key2,holder2);
+            dataHolders.Add(key1, holder1);
+            dataHolders.Add(key6, holder6);
+            dataHolders.Add(key4, holder4);
+            dataHolders.Add(key5, holder5);
+            dataHolders.Add(key3, holder3);
+
+            var result = SkillStaffPeriodHolder.BoostFirstAndLastInterval(dataHolders);
+
+            Assert.IsTrue(result[key1].Boost);
+            Assert.IsFalse(result[key2].Boost);
+            Assert.IsTrue(result[key3].Boost);
+            Assert.IsTrue(result[key4].Boost);
+            Assert.IsFalse(result[key5].Boost);
+            Assert.IsTrue(result[key6].Boost);
+        }
+
+        [Test]
+        public void VerifyIntersectingSkillStaffPeriodList()
+        {
+            IList<ISkill> skills = new List<ISkill>();
+            skills.Add(SkillFactory.CreateSkill("xxx"));
+            IList<ISkillStaffPeriod> ret = _skillStaffPeriodHolder.IntersectingSkillStaffPeriodList(skills,
+                                                                                                    new DateTimePeriod());
+            Assert.AreEqual(0, ret.Count);
+        }
+
+    }
+}

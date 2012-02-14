@@ -1,0 +1,48 @@
+﻿using System.Collections.Generic;
+using System.Data;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Analytics.Etl.Transformer
+{
+    public class AgentSkillTransform : IEtlTransformer<IPerson>
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public void Transform(IEnumerable<IPerson> rootList, DataTable table)
+        {
+            InParameter.NotNull("rootList", rootList);
+            InParameter.NotNull("table", table);
+
+            foreach (var person in rootList)
+            {
+                foreach (var personPeriod in person.PersonPeriodCollection)
+                {
+                    foreach (var personSkill in personPeriod.PersonSkillCollection)
+                    {
+                        AddRow(person, personPeriod, table, personSkill);
+                    }
+                }
+            }
+        }
+
+        private static void AddRow(IPerson person, IPersonPeriod personPeriod, DataTable table, IPersonSkill personSkill)
+        {
+            DataRow row = table.NewRow();
+
+            ICccTimeZoneInfo cccTimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+
+            row["skill_date"] = personPeriod.StartDate.Date;
+            row["interval_id"] = -1;
+            row["person_code"] = person.Id;
+            if (personSkill.Skill.Id != null) row["skill_code"] = personSkill.Skill.Id;
+            row["date_from"] = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
+            row["date_to"] = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.EndDate().Date);
+            row["datasource_id"] = 1;
+
+            table.Rows.Add(row);
+        }
+    }
+
+
+
+}

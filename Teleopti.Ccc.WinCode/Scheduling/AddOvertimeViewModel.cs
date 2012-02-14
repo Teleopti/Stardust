@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCode.Scheduling
+{
+    public class AddOvertimeViewModel : AddLayerViewModel<IActivity>, IAddOvertimeViewModel
+    {
+
+      
+        private readonly ReadOnlyCollection<IMultiplicatorDefinitionSet> _definitionSets;
+
+     
+        public ICollectionView MultiplicatorDefinitionSet
+        {
+            get { return CollectionViewSource.GetDefaultView(_definitionSets); }
+        }
+
+     
+
+
+        public AddOvertimeViewModel(IList<IActivity> activities, IList<IMultiplicatorDefinitionSet> definitionSets, IActivity activity, ISetupDateTimePeriod period,TimeSpan interval)
+            : base(activities, period, UserTexts.Resources.AddOvertime, interval)
+        {
+
+         
+            _definitionSets = new ReadOnlyCollection<IMultiplicatorDefinitionSet>(definitionSets);
+            if(_definitionSets.Count==0) CanOk = false;
+            Payloads.MoveCurrentTo(activity);
+
+        }
+
+        public IMultiplicatorDefinitionSet SelectedMultiplicatorDefinitionSet
+        {
+            get { return MultiplicatorDefinitionSet.CurrentItem as IMultiplicatorDefinitionSet; }
+
+        }
+    }
+
+}

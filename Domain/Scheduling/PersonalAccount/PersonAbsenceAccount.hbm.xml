@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.PersonalAccount"
+                   default-access="field.camelcase-underscore">
+  <class name="PersonAbsenceAccount">
+    <id name="Id"
+        type="guid"
+        unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+     unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" 
+           foreign-key="FK_PersonAbsenceAccount_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_PersonAbsenceAccount_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+    <property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+    
+    <many-to-one name="Person"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 unique-key="UQ_Person_Absence"
+                 not-null="true"
+                 foreign-key="FK_Person_PersonAbsenceAccount"/>
+    <many-to-one name="Absence" 
+                 not-null="true"
+                 unique-key="UQ_Person_Absence"
+                 class="Teleopti.Ccc.Domain.Scheduling.Absence"
+                 foreign-key="FK_Absence_PersonAbsenceAccount"/>
+    <bag name="accountCollection"
+          cascade="all-delete-orphan"
+         access="field"
+          inverse="true">
+      <key column="Parent"/>
+      <one-to-many class="Account"/>
+    </bag>
+  </class>
+</hibernate-mapping>

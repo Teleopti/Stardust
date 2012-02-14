@@ -1,0 +1,10 @@
+<SmartAssembly.License LicenseID="{97cea709-2092-4ce1-b3b5-2d7331557e71}" Version="3.0">
+    <ExceptionReports LoginKey="{ade01fd1-5c51-450c-b230-8a7ea08072c6}" />
+    <Edition>Professional Build Server</Edition>
+    <UserInformation>
+        <FirstName>Anders</FirstName>
+        <LastName>Forsberg</LastName>
+        <Company>Teleopti AB</Company>
+    </UserInformation>
+    <SmartAssembly.Signature>g66UDMKGOY8DW5JdUJvgw/ItpHW8noc2sAqRYc1xopRROmHvk0a0dCDlqwTPu+18vIyBuuYRNny5GKbNUKSZ59PtLVPG5Kk2shyrSCTyBVqAi6fclfX1GSeGn02s+lbIrHc5E6KYAJ3HBWZ9lYNvmiovv9B88okuevEMZNZdMuM=</SmartAssembly.Signature>
+</SmartAssembly.License>

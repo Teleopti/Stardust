@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Payroll"
+                   default-access="field.camelcase-underscore">
+  <class name="PayrollResult">
+    <!--IEntity-->
+    <id name="Id"
+				type="guid"
+				unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <version name="Version"
+		 unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_PayrollResult_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_PayrollResult_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+    <property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+
+    <!--IEntity-->
+
+    <property name="PayrollFormatName"
+            type="string"
+            length="50"
+            not-null="true"/>
+
+    <property name="FinishedOk"
+              not-null="true"/>
+    
+    
+    <property name="PayrollFormatId"
+          type="guid"
+          not-null="true"
+            />
+
+    <many-to-one name="Owner"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true" foreign-key="FK_PayrollResult_Person_Owner"/>
+
+    <component name="Period"
+                   class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
+      <component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces"
+                        name="period" access="field">
+        <property name="Minimum"
+          not-null="true"
+           type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+        <property name="Maximum"
+            not-null="true"
+            type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+      </component>
+
+    </component>
+
+    <property name="Timestamp"
+          not-null="true"
+           type="UtcDateTime"/>
+
+    <many-to-one name="XmlResult"
+					      unique="true"
+                 class="XmlResult"
+					      cascade="all-delete-orphan"
+                not-null="true"/>
+
+    
+    <bag name="Details"
+				 cascade="all-delete-orphan"
+		 inverse="true">
+      <key column="Parent" />
+      <one-to-many class="PayrollResultDetail"/>
+    </bag>
+    
+    <many-to-one name="PayrollExport"
+					 class="Teleopti.Ccc.Domain.Payroll.PayrollExport"
+					 not-null="false" 
+           foreign-key="FK_PayrollResult_PayrollExport"/>
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_PayrollResult_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+
+    
+  </class>
+</hibernate-mapping>
+

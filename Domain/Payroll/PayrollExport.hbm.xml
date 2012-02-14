@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Payroll"
+                   default-access="field.camelcase-underscore">
+  <class name="PayrollExport">
+    <!--IEntity-->
+    <id name="Id"
+				type="guid"
+				unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <version name="Version"
+		 unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_PayrollExport_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_PayrollExport_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+    <property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+
+    <!--IEntity-->
+
+    <property name="Name"
+				  not-null="true"
+				  length="50"/>
+
+    <property name="FileFormat"
+				  not-null="true"/>
+
+    <property name="PayrollFormatName"
+            length="50"
+            not-null="true"/>
+    
+    <property name="PayrollFormatId"
+          not-null="true"
+            />
+
+    <component name="Period"
+                   class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
+      <component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces"
+                        name="period" access="field">
+        <property name="Minimum"
+          not-null="true"
+           type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+        <property name="Maximum"
+            not-null="true"
+            type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+      </component>
+
+    </component>
+
+    <idbag name="Persons"
+	  table ="PersonsInPayrollExport"
+		 cascade="none">
+      <collection-id column="collection_id" type="guid">
+        <generator class="guid.comb"/>
+      </collection-id>
+      <key foreign-key="FK_PersonsInPayrollExport_PersonID">
+        <column name="PersonId"
+					  not-null="true" />
+      </key>
+      <many-to-many class="Teleopti.Ccc.Domain.Common.Person" foreign-key="FK_PersonsInPayrollExport_Person">
+        <column name="Person"
+					  not-null="false" />
+      </many-to-many>
+    </idbag>
+
+
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true" foreign-key="FK_PayrollExport_BusinessUnit"/>
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+
+  </class>
+</hibernate-mapping>
+

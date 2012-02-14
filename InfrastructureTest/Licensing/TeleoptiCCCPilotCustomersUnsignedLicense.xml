@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <CustomerName>This pilot license is stolen!</CustomerName>
+  <ExpirationDate>2018-11-02T12:00:00</ExpirationDate>
+  <ExpirationGracePeriod>P1M</ExpirationGracePeriod>
+  <MaxActiveAgents>1000</MaxActiveAgents>
+  <MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
+  <TeleoptiCCCPilotCustomers>
+    <Base>true</Base>
+    <Forecasts>true</Forecasts>
+    <Shifts>true</Shifts>
+    <!-- comments should be ok -->
+    <People>1</People>
+    <AgentPortal>true</AgentPortal>
+    <Options>true</Options>
+    <Scheduler>true</Scheduler>
+
+    <Intraday>true</Intraday>
+    <Permissions>1</Permissions>
+    <Reports>true</Reports>
+  </TeleoptiCCCPilotCustomers>
+</License>

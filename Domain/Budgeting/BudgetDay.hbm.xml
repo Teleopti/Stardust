@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Budgeting"
+                   default-access="field.camelcase-underscore">
+
+  <class name="BudgetDay">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_BudgetDay_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_BudgetDay_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+    
+    <many-to-one name="Scenario"
+      class="Teleopti.Ccc.Domain.Common.Scenario"
+      not-null="true"
+      foreign-key="FK_BudgetDay_Scenario"/>
+
+    <many-to-one name="BudgetGroup"
+      class="Teleopti.Ccc.Domain.Budgeting.BudgetGroup"
+      not-null="true"
+      foreign-key="FK_BudgetDay_BudgetGroup"/>
+
+    <property name="Contractors" type="double" not-null="true" />
+    <property name="DaysOffPerWeek" type="double" not-null="true" />
+    <property name="ForecastedHours" type="double" not-null="true" />
+    <property name="FulltimeEquivalentHours" type="double" not-null="true" />
+    <property name="OvertimeHours" type="double" not-null="true" />
+    <property name="Recruitment" type="double" not-null="true" />
+    <property name="StaffEmployed" type="double" not-null="false" />
+    <property name="StudentHours" type="double" not-null="true" />
+    <property name="IsClosed" not-null="true" />
+	<property name="AbsenceExtra" type="double"  not-null="false" />
+	<property name="AbsenceOverride" type="double"  not-null="false" />
+	<property name="TotalAllowance" type="double" not-null="true" />
+	<property name="Allowance" type="double" not-null="true" />
+    <property name="Day"
+      type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+      not-null="true" />
+
+    <component name="AttritionRate" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+      <property name="Value" not-null="true" type="double" column="AttritionRate"/>
+    </component>
+
+	<component name="AbsenceThreshold" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value" not-null="true" type="double" column="AbsenceThreshold"/>
+	</component>
+
+      <map name="CustomShrinkages"
+                table="CustomShrinkageBudget"
+                cascade="all-delete-orphan"
+                lazy="false">
+        <key column="Parent" foreign-key="FK_CustomShrinkageBudget_BudgetDay"/>
+        <index type="Guid" column="CustomShrinkage"/>
+        <composite-element class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+          <property name="Value"
+							  not-null="true"
+							  type="Double" />
+        </composite-element>
+      </map>
+
+    <map name="CustomEfficiencyShrinkages"
+              table="CustomEfficiencyShrinkageBudget"
+              cascade="all-delete-orphan"
+              lazy="false">
+      <key column="Parent" foreign-key="FK_CustomEfficiencyShrinkageBudget_BudgetDay"/>
+      <index type="Guid" column="CustomEfficiencyShrinkage"/>
+      <composite-element class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+        <property name="Value"
+              not-null="true"
+              type="Double" />
+      </composite-element>
+    </map>
+    
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_BudgetDay_BusinessUnit"/>
+
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+  </class>
+</hibernate-mapping>

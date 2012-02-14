@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2011/10/" elementFormDefault="qualified" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
+  <xs:complexType name="GetPayrollResultStatusByExportIdQueryDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q1:QueryDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PayrollExportId" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GetPayrollResultStatusByExportIdQueryDto" nillable="true" type="tns:GetPayrollResultStatusByExportIdQueryDto" />
+  <xs:complexType name="GetPayrollResultStatusByIdQueryDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q2:QueryDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PayrollResultId" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GetPayrollResultStatusByIdQueryDto" nillable="true" type="tns:GetPayrollResultStatusByIdQueryDto" />
+  <xs:complexType name="GetCurrentBusinessUnitQueryDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q3:QueryDto">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GetCurrentBusinessUnitQueryDto" nillable="true" type="tns:GetCurrentBusinessUnitQueryDto" />
+</xs:schema>

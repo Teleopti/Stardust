@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--EXTERNAL_PROPERTIES: CCNetWorkingDirectory-->
+<Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
+    <MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="Microsoft.Sdc.Common.tasks"/>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+
+  <Target Name="ClientClickOnce" DependsOnTargets="ClientPropertiesSet;VersionCheck;GetPublishContent;PrepareClickOnceDeployment;DeleteRootFiles;CopyFilesToRoot"/>
+
+  <Target Name="ClientPropertiesSet">
+    <PropertyGroup>
+      <ClickOnceRootDir>$(CCNetWorkingDirectory)\ccnet\temp\ClientClickOnce</ClickOnceRootDir>
+      <PublishDir>Publish</PublishDir>
+      <SolutionName>Teleopti.Ccc.SmartClientPortal.Shell</SolutionName>
+      <SupportUrl>http://www.teleopti.com</SupportUrl>
+      <SigningCert>TeleoptiCodeSigningCertificate.pfx</SigningCert>
+      <SigningCertPassword>chefen00</SigningCertPassword>
+      <Company>Teleopti</Company>
+      <SourceDir>Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDir>
+      <ConfigDir>Config\Local</ConfigDir>
+      <ClickOnceServer>Integration</ClickOnceServer>
+      <PublishDir>$(CCNetWorkingDirectory)\ccnet\Publish</PublishDir>
+      <ClickOnceUrl>http://$(ClickOnceServer)/ClickOnce/</ClickOnceUrl>
+      <ClickOnceApplicationUrl>$(ClickOnceUrl)$(SolutionName).application</ClickOnceApplicationUrl>
+      <ClickOnceAppTitle>Teleopti.Ccc.SmartClientPortal.Shell</ClickOnceAppTitle>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ManifestFile Include="$(SolutionName).exe.manifest"/>
+      <ClickOnceInstallationFiles Include="$(SolutionName).application"/>
+      <ClickOnceInstallationFiles Include="setup.exe"/>
+      <ClickOnceInstallationFiles Include="default.htm"/>
+      <ClickOncePageFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\images\*.*"/>
+      <ClickOnceLandingPage Include="$(CCNetWorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"/>
+      <GetVersionAssembly Include="$(CCNetWorkingDirectory)\$(SourceDir)\$(SolutionName).exe"/>
+      <NHibFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\TeleoptiCCC7.nhib.xml"/>
+
+      <IconFile Include="$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"/>
+      <SourceFiles	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\**\*.*"
+          Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\Teleopti.Ccc.Agentp*.*;
+		 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\*.pdb;
+                 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\Detect35SP1.exe" />
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\Release\Teleopti.Ccc.PayrollFormatter.dll"/>
+
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.ico"/>
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\BuildArtifacts\TeleoptiCCCv7.ico"/>
+
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\syncfusion*.dll" Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\*.application" />
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\Release\Teleopti.Ccc.SmartParts.dll"/>
+      <SourceFiles	Include="$(CCNetWorkingDirectory)\SyncFusion\*.dll" />
+      <SourceFiles	Include="$(CCNetWorkingDirectory)\BuildArtifacts\licensecontext.slf"/>
+
+      <!--
+      <BootstrapperFile Include="Microsoft.Net.Framework.3.5.SP1">
+        <ProductName>.NET Framework 3.5 SP1</ProductName>
+      </BootstrapperFile>
+      <BootstrapperFile Include="Microsoft.Windows.Installer.3.1">
+        <ProductName>Windows Installer 3.1</ProductName>
+      </BootstrapperFile>
+-->
+    </ItemGroup>
+
+  </Target>
+
+  <Target Name="VersionCheck">
+    <PropertyGroup Condition="$(CCCVersion) == ''">
+      <CCCVersion>1.0.0.0</CCCVersion>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="GetPublishContent">
+    <Exec Command="rd /s /q &quot;$(PublishDir)&quot;"/>
+    <Message Text="SourceFiles: @(SourceFiles)"/>
+    <Copy  SourceFiles="@(SourceFiles)"
+				 DestinationFiles="@(SourceFiles->'$(PublishDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy  SourceFiles="@(AppConfigFile)"
+				 DestinationFiles="$(PublishDir)\$(SolutionName).exe.config"/>
+    <Copy  SourceFiles="@(ClickOnceLandingPage)"
+				 DestinationFiles="default.htm"/>
+  </Target>
+
+  <Target Name="PrepareClickOnceDeployment">
+    <Message Text="Preparing for ClickOnce deployment for version $(CCCVersion) ..."/>
+
+    <CreateItem Include="$(PublishDir)\**\*.*">
+      <Output TaskParameter="Include" ItemName="AppManifestContents"/>
+    </CreateItem>
+    <ModifyFile
+			  Path="default.htm"
+			  RegularExpression="#APPLICATION_NAME#"
+			  NewValue="$(SolutionName)"
+			  Force="true"/>
+    <ModifyFile
+			  Path="default.htm"
+			  RegularExpression="#TITLE#"
+			  NewValue="TELEOPTI CCC, version 7"
+			  Force="true"/>
+    <ModifyFile
+			  Path="default.htm"
+			  RegularExpression="#VERSION#"
+			  NewValue="$(CCCVersion)"
+			  Force="true"/>
+    <ModifyFile
+			  Path="default.htm"
+			  RegularExpression="#COMPANY#"
+			  NewValue="$(Company)"
+			  Force="true"/>
+    <ModifyFile
+			  Path="default.htm"
+			  RegularExpression="#SUPPORT_URL#"
+			  NewValue="$(SupportUrl)"
+			  Force="true"/>
+
+
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\ClickOnce\mage.exe&quot; -New Application -TrustLevel FullTrust -ToFile $(SolutionName).exe.manifest -Name &quot;$(SolutionName)&quot; -Version $(CCCVersion) -FromDirectory &quot;$(PublishDir)&quot;"/>
+
+    <ModifyFile
+		  Path="$(SolutionName).exe.manifest"
+		  RegularExpression="&lt;application /&gt;"
+		  NewValue="&lt;description asmv2:iconFile=&quot;$(SolutionName).ico&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot; /&gt;&lt;application /&gt;"
+		  Force="true"/>
+
+    <GenerateDeploymentManifest AssemblyName="$(ClickOnceAppTitle).application"
+												  AssemblyVersion="$(CCCVersion)"
+												  DeploymentUrl="$(ClickOnceApplicationUrl)"
+												  Description="TELEOPTI CCC, version 7"
+												  Product="TELEOPTI CCC, version 7"
+												  Publisher="$(Company)"
+												  EntryPoint="$(SolutionName).exe.manifest"
+												  Install="true"
+												  UpdateEnabled="true"
+												  UpdateMode="Foreground"
+												  OutputManifest="$(SolutionName).application"
+												  MapFileExtensions="true"
+												  MinimumRequiredVersion="$(CCCVersion)"
+                          TrustUrlParameters="false"/>
+
+
+    <!-- UPDATE APPLICATION -->
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\ClickOnce\mage.exe&quot; -u $(SolutionName).application -MinVersion $(CCCVersion) "/>
+
+    <Exec Command="PING 127.0.0.1 -n 5 > NUL"/>
+
+    <GetFrameworkSdkPath>
+      <Output TaskParameter="Path" PropertyName="SdkPath" />
+    </GetFrameworkSdkPath>
+
+
+    <GenerateBootstrapper
+		  ApplicationFile="$(SolutionName).application"
+		  ApplicationName="$(ClickOnceAppTitle)"
+		  ApplicationUrl="$(ClickOnceUrl)"
+		  BootstrapperItems="@(BootstrapperFile)"
+		  Culture="en"
+		  FallbackCulture="en-US"
+		  ComponentsLocation="HomeSite"
+		  CopyComponents="false"
+		  Validate="false"
+		  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
+		  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
+		  OutputPath="." />
+
+  </Target>
+
+  <Target Name="DeleteRootFiles">
+    <Message Text="Deleting Directory $(ClickOnceRootDir)..."/>
+    <Exec Command="IF EXIST &quot;$(ClickOnceRootDir)&quot; RMDIR &quot;$(ClickOnceRootDir)&quot; /S /Q"/>
+
+    <Message Text="Create Directory $(ClickOnceRootDir)..."/>
+    <Exec Command="MKDIR &quot;$(ClickOnceRootDir)&quot;"/>
+  </Target>
+
+  <Target Name="CopyFilesToRoot" DependsOnTargets="PrepareClickOnceDeployment;DeleteRootFiles">
+    <Message Text="Copying files to $(ClickOnceRootDir)..."/>
+
+    <Copy  SourceFiles="@(ClickOnceInstallationFiles)"
+				 DestinationFiles="@(ClickOnceInstallationFiles->'$(ClickOnceRootDir)\%(Filename)%(Extension)')"/>
+    <Copy  SourceFiles="@(AppManifestContents)"
+				 DestinationFiles="@(AppManifestContents->'$(ClickOnceRootDir)\%(RecursiveDir)%(Filename)%(Extension).deploy')"/>
+    <Copy  SourceFiles="@(ManifestFile)"
+				 DestinationFiles="@(ManifestFile->'$(ClickOnceRootDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy  SourceFiles="@(ClickOncePageFiles)"
+				 DestinationFiles="@(ClickOncePageFiles->'$(ClickOnceRootDir)\%(Filename)%(Extension)')"/>
+
+  </Target>
+
+</Project>

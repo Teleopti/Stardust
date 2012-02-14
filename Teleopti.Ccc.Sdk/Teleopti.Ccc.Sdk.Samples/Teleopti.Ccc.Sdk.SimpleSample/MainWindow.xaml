@@ -1,0 +1,65 @@
+﻿<Window x:Class="Teleopti.Ccc.Sdk.SimpleSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+
+        
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0">
+            <TabItem Header="Log On" Name="tabLogOn">
+                <Grid>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="78,74,0,0" Name="textBox1" VerticalAlignment="Top" Width="120" Text="{Binding Path=UserName}" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="78,103,0,0" Name="passwordBox1" VerticalAlignment="Top" Width="120" Text="{Binding Path=Password}" />
+                    <Button Command="{Binding Path=LogOnCommand}" Content="Log On" Height="23" HorizontalAlignment="Left" Margin="123,132,0,0" Name="button1" VerticalAlignment="Top" Width="75" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="People" Name="tabPeople" IsEnabled="{Binding Path=EnableFunctions}">
+                <Grid DataContext="{Binding Path=PeopleViewModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <DatePicker Height="25" Name="datePicker1" Width="115" SelectedDate="{Binding Path=StartDate}" />
+                        <DatePicker Height="25" Name="datePicker2" Width="115" SelectedDate="{Binding Path=EndDate}" />
+                        <Button Content="Find!" Command="{Binding Path=FindAll}" />
+                        <Label Content="{Binding Path=FoundPeople.Count}" ContentStringFormat="Your search ended up with {0} person periods." Height="28" Name="label1" Visibility="{Binding Path=ResultCountVisible}" />
+                    </StackPanel>
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=FoundPeople}">
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Schedule" Name="tabSchedule" IsEnabled="{Binding Path=EnableFunctions}">
+                <Grid DataContext="{Binding Path=ScheduleViewModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <DatePicker Height="25" Name="datePicker3" Width="115" SelectedDate="{Binding Path=StartDate}" />
+                        <DatePicker Height="25" Name="datePicker4" Width="115" SelectedDate="{Binding Path=EndDate}" />
+                        <Button Content="Find!" Command="{Binding Path=FindAll}" />
+                        <Label Content="{Binding Path=FoundSchedules.Count}" ContentStringFormat="Your search ended up with {0} schedule days." Height="28" Name="label2" Visibility="{Binding Path=ResultCountVisible}" />
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Path=FoundSchedules}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DataGrid ItemsSource="{Binding Path=ScheduleDetails}"></DataGrid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

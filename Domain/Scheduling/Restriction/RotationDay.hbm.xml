@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   assembly="Teleopti.Ccc.Domain" 
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
+                   default-access="field.camelcase-underscore">
+  <class name="RotationDay">
+    <!--IUnique-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <!--IUnique-->
+    
+    <many-to-one name="Parent"
+                 class="Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation"  
+                 not-null ="true" foreign-key="FK_RotationDay_Rotation"/>
+
+    <bag name="RestrictionCollection"
+            cascade="all-delete-orphan"
+            inverse="true">
+      <key column ="Parent" />
+      <one-to-many class="Teleopti.Ccc.Domain.Scheduling.Restriction.RotationRestriction" />
+    </bag>
+
+    <property name="Index"
+             access="readonly"
+             column="Day"
+             not-null="true"/>
+  </class>
+         
+</hibernate-mapping>

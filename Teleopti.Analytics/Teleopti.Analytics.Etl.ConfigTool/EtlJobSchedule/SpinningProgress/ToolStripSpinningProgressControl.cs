@@ -1,0 +1,133 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.SpinningProgress
+{
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Windows.Forms.Design.ToolStripItemDesignerAvailability(System.Windows.Forms.Design.ToolStripItemDesignerAvailability.StatusStrip)]
+    public class ToolStripSpinningProgressControl : ToolStripControlHost
+    {
+        public ToolStripSpinningProgressControl()
+            : base(createControlInstance(), "ToolStripSpinningProgress")
+        {
+        }
+
+        public ToolStripSpinningProgressControl(System.Windows.Forms.Control control) : base(control)
+        {
+        }
+
+        public ToolStripSpinningProgressControl(System.Windows.Forms.Control control, string name) : base(control, name)
+        {
+        }
+
+        public SpinningProgressControl SpinningProgressControl
+        {
+            get { return (SpinningProgressControl)Control; }
+        }
+
+// ReSharper disable RedundantOverridenMember
+        public override Size Size
+        {
+            get
+            {
+                return base.Size;
+            }
+            set
+            {
+                base.Size = value;
+            }
+        }
+// ReSharper restore RedundantOverridenMember
+
+        public new bool Visible
+        {
+            get
+            {
+                return base.Visible;
+            }
+            set
+            {
+                base.Visible = value;
+            }
+        }
+
+        public void Refresh()
+        {
+            SpinningProgressControl.Refresh();
+        }
+
+        public Color InactiveSegmentColor
+        {
+            get
+            {
+                return SpinningProgressControl.InactiveSegmentColor;
+            }
+            set
+            {
+                SpinningProgressControl.InactiveSegmentColor = value;
+            }
+        }
+
+        public Color ActiveSegmentColor
+        {
+            get
+            {
+                return SpinningProgressControl.ActiveSegmentColor;
+            }
+            set
+            {
+                SpinningProgressControl.ActiveSegmentColor = value;
+            }
+        }
+ 
+        public Color TransitionSegmentColor
+        {
+            get
+            {
+                return SpinningProgressControl.TransitionSegmentColor;
+            }
+            set
+            {
+                SpinningProgressControl.TransitionSegmentColor = value;
+            }
+        }
+
+        public bool BehindTransitionSegmentIsActive
+        {
+            get
+            {
+                return SpinningProgressControl.BehindTransitionSegmentIsActive;
+            }
+            set
+            {
+                SpinningProgressControl.BehindTransitionSegmentIsActive = value;
+            }
+        }
+
+        public int TransitionSegment
+        {
+            get
+            {
+                return SpinningProgressControl.TransitionSegment;
+            }
+            set
+            {
+                if (value > 11 || value < -1)
+                {
+                    throw new ArgumentException("TransistionSegment must be between -1 and 11");
+                }
+                SpinningProgressControl.TransitionSegment = value;
+            }
+        }
+
+        private static System.Windows.Forms.Control createControlInstance()
+        {
+            SpinningProgressControl c = new SpinningProgressControl();
+            c.AutoSize = false;
+            c.Height = 16;
+
+            return c;
+        }
+    }
+}

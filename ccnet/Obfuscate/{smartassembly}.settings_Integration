@@ -1,0 +1,6 @@
+<SmartAssembly.Settings>
+    <Options>
+        <Database Path="C:\Program Files\{smartassembly}\Database\" Server=".\smartassembly" />
+        <Maps LocalPath="C:\Program Files\{smartassembly}\Maps\" NetworkPath="\\integration\InstallationTemp\Maps" />
+    </Options>
+</SmartAssembly.Settings>

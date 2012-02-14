@@ -1,0 +1,265 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Flags=00000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000100000000000010110000001010
+  Message Font=MS Sans Serif
+  Font Size=8
+  Pages Modified=00001000011000000000000000000000
+  Extra Pages=00000000000000000000000000010000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Step View=&Properties
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\WINDOWS\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\WINDOWS
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Requested Execution Level=asInvoker
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCC7
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DCCC
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SRV
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_PASS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SPASS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_USER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SUSER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SAUTH
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DATABASEINSTALLER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DIR
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=USER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_PASS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PASS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Set Variable
+  Variable=FAILED_MESS
+  Value=Failed to install database
+end
+item: If/While Statement
+  Variable=SAUTH
+  Value=NT
+end
+item: Set Variable
+  Variable=SA
+  Value=-E
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=SA
+  Value=-U"%SUSER%" -P"%SPASS%"
+end
+item: End Block
+end
+item: Remark
+  Text=1) Add logins
+end
+item: Execute Program
+  Pathname=SQLCMD
+  Command Line=-S"%SRV%" -dmaster %SA% -vSQLLOGIN="%USER%" -vSQLPWD="%PASS%" -i"%DIR%forecasts\SQL Logins - Create.sql"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Create Login failed
+  Text=Create Login failed
+  Flags=00001000
+end
+item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Remark
+  Text=2) Restore database
+end
+item: Execute Program
+  Pathname=SQLCMD
+  Command Line=-S"%SRV%" -dmaster %SA% -vBakDir="%DIR%forecasts" -i"%DIR%forecasts\RestoreForecasts.sql"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database Restored Failed
+  Text=Database Restored Failed
+  Flags=00001000
+end
+item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Remark
+  Text=3) Re-map User
+end
+item: Execute Program
+  Pathname=SQLCMD
+  Command Line=-S"%SRV%" -d"%DCCC%" %SA% -vSQLLOGIN="%USER%" -i"%DIR%forecasts\RestoreUsers.sql"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=-re-map failed
+  Text=Database User could be re-mapped to SQL login
+  Flags=00001000
+end
+item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Remark
+  Text=4) Upgrade database version
+end
+item: Execute Program
+  Pathname=DBManager.exe
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database upgrade Failed
+  Text=Database upgrade Failed
+  Flags=00000100
+end
+item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Remark
+  Text=5) Update data
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=TIMEZONE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=TZ
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Execute Program
+  Pathname=SQLCMD
+  Command Line=-S"%SRV%" -d"%DCCC%" %SA% -i"%DIR%Forecasts\UpdateUser.sql" -o"%DIR%DataUpdate.out" -v TIMEZONE = "%TZ%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Could not update data
+  Text=Could not update user in TeleoptiCCC7_Forecast database ...
+  Flags=00000100
+end
+item: End Block
+end
+item: Remark
+  Text=6) Remove the SQL files, since they hold data, passwords and licens info!
+end
+item: Delete File
+  Pathname=%DIR%Forecasts\*.sql
+end

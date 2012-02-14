@@ -1,0 +1,384 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Flags=00000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000100000000000010110000001010
+  Message Font=MS Sans Serif
+  Font Size=8
+  Pages Modified=00001000011000000000000000000000
+  Extra Pages=00000000000000000000000000010000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Step View=&Properties
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\Windows\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\Windows
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Requested Execution Level=asInvoker
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCC7
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DCCC
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DANA
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCCAGG
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DAGG
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS_STAGE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DSTAGE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_MESSAGING
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DMESS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SRV
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_PASS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SPASS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_USER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SUSER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SAUTH
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=MYUSERNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=MYUSER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=USER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_PASSWORD
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PASS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AUTH
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DATABASE_UPGRADE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=UPGRADE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=ETL_TIMEZONE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=TZ
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=BUSINESS_UNIT
+  Variable Name2=_PROP_VAR_
+  Variable Value2=BU
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=CONVERT_CCC6
+  Variable Name2=_PROP_VAR_
+  Variable Value2=CONVERT
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DemoDatabase
+  Variable Name2=_PROP_VAR_
+  Variable Value2=RESTOREDEMO
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Set Variable
+  Variable=C
+end
+item: Set Variable
+  Variable=U
+end
+item: Set Variable
+  Variable=FAILED_MESS
+  Value=Failed to install database
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DATABASEINSTALLER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DIR
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: If/While Statement
+  Variable=UPGRADE
+  Value=NEW
+end
+item: Set Variable
+  Variable=C
+  Value=-C
+end
+item: If/While Statement
+  Variable=AUTH
+  Value=NT
+end
+item: Set Variable
+  Variable=U
+  Value=-W"%MYUSER%"
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=U
+  Value=-L"%USER%:%PASS%"
+end
+item: End Block
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=AUTH
+  Value=NT
+end
+item: Execute Program
+  Pathname=.\ntrights.exe
+  Command Line=+r SeServiceLogonRight -u %MYUSER%
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=SAUTH
+  Value=NT
+end
+item: Set Variable
+  Variable=SA
+  Value=-E
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=SA
+  Value=-U"%SUSER%" -P"%SPASS%"
+end
+item: End Block
+end
+item: Execute Program
+  Pathname=.\DBManager.exe
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U% -T "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database Installation Failed
+  Text=Database Installation Failed for database: %DCCC%
+end
+remarked item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Execute Program
+  Pathname=.\DBManager.exe
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U% -T "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database Installation Failed
+  Text=Database Installation Failed for database: %DAGG%
+end
+remarked item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Execute Program
+  Pathname=DBManager.exe
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U% -T "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database Installation Failed
+  Text=Database Installation Failed for database: %DANA%
+end
+remarked item: Exit Installation
+  Flags=1
+end
+item: End Block
+end
+item: Remark
+  Text=This step initiate default data via ApplicationConfig.exe
+end
+item: If/While Statement
+  Variable=UPGRADE
+  Value=NEW
+end
+item: If/While Statement
+  Variable=CONVERT
+  Value=NO
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=APPLICATIONCONFIGURATION
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DIR
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: If/While Statement
+  Variable=SAUTH
+  Value=NT
+end
+remarked item: Display Message
+  Title=CCCAppCOnfig
+  Text=%DIR%\CCCAppConfig.exe -DS%SRV% -DD%DCCC% -DU%SUSER% -DP%SPASS% -TZ"%TZ%" -BU%BU%
+end
+item: Execute Program
+  Pathname=CccAppConfig.exe
+  Command Line=-DS"%SRV%" -DD"%DCCC%" -EE -BU"%BU%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: Else Statement
+end
+item: Execute Program
+  Pathname=CccAppConfig.exe
+  Command Line=-DS"%SRV%" -DD"%DCCC%" -DU"%SUSER%" -DP"%SPASS%" -BU"%BU%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: End Block
+end
+item: End Block
+end
+item: End Block
+end

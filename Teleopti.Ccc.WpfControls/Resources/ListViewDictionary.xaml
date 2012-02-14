@@ -1,0 +1,330 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\Resources\CommonBrushes.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <!-- Aero style -->
+    <ControlTemplate TargetType="ListView" x:Key="ListView">
+        <Border 
+            BorderThickness="{TemplateBinding Border.BorderThickness}"
+            BorderBrush="{TemplateBinding Border.BorderBrush}"
+            Background="{TemplateBinding Panel.Background}"
+            Name="Bd" 
+            SnapsToDevicePixels="True">
+            <ScrollViewer 
+                Padding="{TemplateBinding Control.Padding}" 
+                Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
+                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+            </ScrollViewer>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ItemsControl.IsGrouping" Value="True">
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled" Value="False">
+                <Setter Property="Panel.Background" TargetName="Bd">
+                    <Setter.Value>
+                        <DynamicResource ResourceKey="{StaticResource RaptorControlBrushKey}" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Aero style -->
+    <ControlTemplate TargetType="ListViewItem" x:Key="ListViewItem">
+        <Border BorderThickness="{TemplateBinding Border.BorderThickness}" CornerRadius="2,2,2,2" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+            <Border BorderThickness="0,0,0,0" CornerRadius="1,1,1,1" Name="InnerBorder">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MaxHeight="11" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#75ffffff" Name="UpperHighlight" Visibility="Collapsed" />
+                    <GridViewRowPresenter Content="{TemplateBinding ContentControl.Content}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Grid.RowSpan="2" Columns="{TemplateBinding GridView.ColumnCollection}">
+                    </GridViewRowPresenter>
+                </Grid>
+            </Border>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                <Setter Property="Panel.Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
+                   
+                <Setter Property="Border.BorderBrush" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
+                    
+                <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                    <Setter.Value>
+                        <x:Static Member="Visibility.Visible" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="Selector.IsSelected" Value="True">
+                <Setter Property="Panel.Background" Value="{StaticResource RaptorStandardGradientBrush}" />
+                 
+             
+                <Setter Property="Border.BorderBrush" Value="{StaticResource RaptorStandardGradientBrush}"/>
+                   
+                <Setter Property="Border.BorderBrush" TargetName="InnerBorder" Value="{StaticResource CommonLightBrush}"/>
+                    
+                <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                    <Setter.Value>
+                        <x:Static Member="Visibility.Visible" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Shape.Fill" TargetName="UpperHighlight" Value="{StaticResource CommonLightBrush}"/>
+                    
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelected" Value="True"/>
+                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Panel.Background" Value="{StaticResource CommonGrayBrush}"/>
+                   
+               
+                <Setter Property="Border.BorderBrush" Value="{StaticResource CommonGrayBrush}"/>
+                   
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Selector.IsSelected" Value="True"/>
+                    <Condition Property="UIElement.IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Panel.Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
+                    
+                <Setter Property="Border.BorderBrush" Value="{StaticResource RaptorStandardGradientBrush}"/>
+                   
+            </MultiTrigger>
+            <Trigger Property="UIElement.IsEnabled" Value="False">
+                <Setter Property="TextElement.Foreground">
+                    <Setter.Value>
+                        <DynamicResource ResourceKey="{StaticResource RaptorGrayTextBrushKey}" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Aero style -->
+    <Style TargetType="GridViewColumnHeader" x:Key="{x:Type GridViewColumnHeader}" >
+        <Style.Triggers>
+            <Trigger Property="GridViewColumnHeader.Role">
+                <Setter Property="UIElement.Opacity" Value="0.4082"/>
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GridViewColumnHeader">
+                            <Canvas Name="PART_FloatingHeaderCanvas">
+                                <Rectangle Fill="{StaticResource RaptorBlack}" Width="{TemplateBinding FrameworkElement.ActualWidth}" Height="{TemplateBinding FrameworkElement.ActualHeight}" Opacity="0.4697" />
+                            </Canvas>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="GridViewColumnHeader.Padding" Value="0,0,0,0"/> 
+                <Trigger.Value>
+                    <x:Static Member="GridViewColumnHeaderRole.Floating" />
+                </Trigger.Value>
+            </Trigger>
+            <Trigger Property="GridViewColumnHeader.Role">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GridViewColumnHeader">
+                            <Border BorderThickness="0,1,0,1" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="HeaderBorder" />
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="FrameworkElement.Height" Value="NaN">
+                                    <Setter Property="FrameworkElement.MinHeight" Value="20"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Trigger.Value>
+                    <x:Static Member="GridViewColumnHeaderRole.Padding" />
+                </Trigger.Value>
+            </Trigger>
+        </Style.Triggers>
+        <Style.Resources>
+            <ResourceDictionary />
+        </Style.Resources>
+        <Setter Property="Control.HorizontalContentAlignment">
+            <Setter.Value>
+                <x:Static Member="HorizontalAlignment.Center" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Control.VerticalContentAlignment">
+            <Setter.Value>
+                <x:Static Member="VerticalAlignment.Center" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Panel.Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
+           
+        <Setter Property="Border.BorderBrush" Value="{StaticResource IntradayBorderBrush}"/>
+        <Setter Property="Border.BorderThickness">
+            <Setter.Value>
+                <Thickness>0,0,0,0</Thickness>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Control.Padding">
+            <Setter.Value>
+                <Thickness>2,0,2,0</Thickness>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextElement.Foreground">
+            <Setter.Value>
+                <DynamicResource ResourceKey="{StaticResource RaptorControlTextBrushKey}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GridViewColumnHeader">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border BorderThickness="1" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="HeaderBorder">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition MaxHeight="7" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Rectangle Fill="{StaticResource LightBrush}" Name="UpperHighlight" Visibility="Collapsed" />
+                                <Border Padding="{TemplateBinding Control.Padding}" Grid.RowSpan="2">
+                                    <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Name="HeaderContent" Margin="0,0,0,1" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border BorderThickness="1,0,1,1" Name="HeaderHoverBorder" Margin="1,1,0,0" />
+                        <Border BorderThickness="1,1,1,0" Name="HeaderPressBorder" Margin="1,0,0,1" />
+                        <Canvas>
+                            <Thumb Name="PART_HeaderGripper">
+                                <Thumb.Style>
+                                    <Style TargetType="Thumb">
+                                        <Style.Resources>
+                                            <ResourceDictionary />
+                                        </Style.Resources>
+                                        <Setter Property="Canvas.Right" Value="-1"/>
+                                        <Setter Property="FrameworkElement.Width" Value="1"/>
+                                        <Setter Property="FrameworkElement.Height">
+                                            <Setter.Value>
+                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Control.Padding">
+                                            <Setter.Value>
+                                                <Thickness>0,0,0,0</Thickness>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Panel.Background" Value="{StaticResource IntradayBorderBrush}"/>
+                                            
+                                        <Setter Property="Control.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Border Padding="{TemplateBinding Control.Padding}" Background="{StaticResource LightBrush}">
+                                                        <Rectangle Fill="{TemplateBinding Panel.Background}" Width="1" HorizontalAlignment="Center" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Thumb.Style>
+                            </Thumb>
+                        </Canvas>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Panel.Background" TargetName="HeaderBorder" Value="{StaticResource RaptorStandardHoverGradientBrush}"/>
+                                
+                           
+                            <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder" Value="{StaticResource RaptorStandardBorderHoverBrush}" />
+                               
+                            <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                                <Setter.Value>
+                                    <x:Static Member="Visibility.Visible" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Panel.Background" TargetName="PART_HeaderGripper" Value="{StaticResource CommonGrayBrush}"/>
+                             
+                        </Trigger>
+                        <Trigger Property="ButtonBase.IsPressed" Value="True">
+                            <Setter Property="Panel.Background" TargetName="HeaderBorder" Value="{StaticResource RaptorStandardBorderBrush}" />
+                              
+                            <Setter Property="Border.BorderBrush" TargetName="HeaderHoverBorder" Value="{StaticResource IntradayBorderBrush}" />
+                                
+                            <Setter Property="Border.BorderBrush" TargetName="HeaderPressBorder" Value="{StaticResource RaptorStandardBorderPressedBrush}" />
+                              
+                            <Setter Property="UIElement.Visibility" TargetName="UpperHighlight">
+                                <Setter.Value>
+                                    <x:Static Member="Visibility.Collapsed" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="UIElement.Visibility" TargetName="PART_HeaderGripper">
+                                <Setter.Value>
+                                    <x:Static Member="Visibility.Hidden" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="FrameworkElement.Margin" TargetName="HeaderContent">
+                                <Setter.Value>
+                                    <Thickness>1,1,0,0</Thickness>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="FrameworkElement.Height" Value="NaN">
+                            <Setter Property="FrameworkElement.MinHeight" Value="20"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground">
+                                <Setter.Value>
+                                    <DynamicResource ResourceKey="{StaticResource  RaptorGrayTextBrushKey}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Aero style -->
+    <Style TargetType="ListView">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template" Value="{StaticResource ListView}"/>
+    </Style>
+
+    <!-- Aero style -->
+    <Style TargetType="ListViewItem">
+        <Setter Property="Template" Value="{StaticResource ListViewItem}"/>
+    </Style>
+    <Style TargetType="ListViewItem" x:Key="listViewItemStyle">
+        <Setter Property="Template" Value="{StaticResource ListViewItem}"/>
+    </Style>
+    
+    <!-- Cell styles -->
+    <Style TargetType="ContentControl" x:Key="listViewItemContainerStyle" >
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+    <Style TargetType="Border" x:Key="cellBorderStyle">
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="-6,-3,-7,-3"/>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="cellTextBlockStyle">
+        <Setter Property="Margin" Value="6,3,6,2"/>
+    </Style>
+
+    <!-- Sorting arrow -->
+    <DataTemplate x:Key="headerTemplateArrowUp">
+        <StackPanel>
+            <Path HorizontalAlignment="Center" Fill="{StaticResource CommonDarkBrush}" Data="M 0,0 L 6,0 L 3,-3"/>
+            <TextBlock HorizontalAlignment="Center" Text="{Binding}"/>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="headerTemplateArrowDown">
+        <StackPanel>
+            <Path HorizontalAlignment="Center" Fill="{StaticResource CommonDarkBrush}" Data="M 0,-3 L 3,0 L 6,-3"/>
+            <TextBlock HorizontalAlignment="Center" Text="{Binding }"/>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,0 +1,365 @@
+﻿<?xml version="1.0"?>
+<!--EXTERNAL_PROPERTIES: CCNetProject;CCNetWorkingDirectory-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<PropertyGroup>
+		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
+		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+		<DBNamePrefix>ccnet_$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
+		<AgentPortalWebSitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</AgentPortalWebSitePath>
+		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>
+		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
+		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
+		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
+		<DBServer>$(Computername)</DBServer>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
+	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
+	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
+	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+
+	<PropertyGroup>
+		<NUnitExe>"$(NugetPackages)\NUnit.2.5.10.11092\tools\nunit-console.exe"</NUnitExe>
+		<NUnitArgs>/nologo /noshadow /config=$(Configuration) /domain=Multiple</NUnitArgs>
+		<TrunkDbCreator>"$(CCNetWorkingDirectory)\Database\Tools\VersionTry.bat"</TrunkDbCreator>
+
+		<CoverageReports>
+			<Report>
+				<ReportType>SymbolModule</ReportType>
+				<Format>Xml</Format>
+				<OutputPath>$(CCNetWorkingDirectory)\symbolmodule.xml</OutputPath>
+			</Report>
+			<!-- <Report>
+				<ReportType>SymbolModuleNamespaceClass</ReportType>
+				<Format>Xml</Format>
+				<OutputPath>$(CCNetWorkingDirectory)\SymbolModuleNamespaceClass.xml</OutputPath>
+			</Report>-->
+		</CoverageReports>
+		<MinimumCoverage>
+			<Threshold>
+				<CoverageMetric>SymbolCoverage</CoverageMetric>
+				<Type>Assembly</Type>
+				<Value>95</Value>
+				<Pattern>.*</Pattern>
+			</Threshold>
+		</MinimumCoverage>
+	</PropertyGroup>
+
+	<Choose>
+		<When Condition="'$(Computername)' == 'INTEGRATION'">
+			<!-- integration, vmintegration, gena -->
+			<PropertyGroup>
+				<DBServer>INTEGRATION\SQLEXPRESS</DBServer>
+			</PropertyGroup>
+		</When>
+	</Choose>
+
+	<Choose>
+		<When Condition="'$(CCNetProject)' == 'BuildMSI-root' or '$(CCNetProject)' == 'BuildMSI-RCbranch' or '$(CCNetProject)' == 'BuildMSI-ReleaseBranch'">
+			<!-- root; rc; Release-->
+			<PropertyGroup>
+				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
+				<DoCodeAnalysis>true</DoCodeAnalysis>
+				<UseDBManager>true</UseDBManager>
+				<RunWebBehaviorTests>true</RunWebBehaviorTests>
+			</PropertyGroup>
+		</When>
+		<When Condition="'$(CCNetProject)' == 'TeamRed-PBI-branch-3' or '$(CCNetProject)' == 'RaptorHg'">
+			<!-- special -->
+			<PropertyGroup>
+				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
+				<DoCodeAnalysis>true</DoCodeAnalysis>
+				<UseDBManager>true</UseDBManager>
+				<RunWebBehaviorTests>true</RunWebBehaviorTests>
+			</PropertyGroup>
+		</When>
+		<When Condition="'$(CCNetProject)' == 'Raptor' or '$(CCNetProject)' == 'RaptorRoger' or '$(CCNetProject)' == 'Root-DJ' or '$(CCNetProject)' == 'TeamRedPBIbranch4' or  '$(CCNetProject)' == 'TeamYellow' or '$(CCNetProject)' == 'TeamYellow-PBI-branch-2'">
+			<!-- special -->
+			<PropertyGroup>
+				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
+				<DoCodeAnalysis>true</DoCodeAnalysis>
+				<UseDBManager>true</UseDBManager>
+				<RunWebBehaviorTests>false</RunWebBehaviorTests>
+			</PropertyGroup>
+		</When>
+		<Otherwise>
+			<!-- else -->
+			<PropertyGroup>
+				<ExcludedTestCategories>/Exclude=LongRunning</ExcludedTestCategories>
+				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;</NCoverAssemblies>
+				<DoCodeAnalysis>true</DoCodeAnalysis>
+				<UseDBManager>false</UseDBManager>
+				<RunWebBehaviorTests>false</RunWebBehaviorTests>
+			</PropertyGroup>
+		</Otherwise>
+	</Choose>
+
+	<ItemGroup>
+		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
+		<SQLFiles Include="$(CCNetWorkingDirectory)\Database\Tools\PK-namingStandard.sql"/>
+		<SQLFiles Include="$(CCNetWorkingDirectory)\Database\Tools\NoHeapsCheck.sql"/>
+		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
+	</ItemGroup>
+
+	<Target Name="BuildAndTest" DependsOnTargets="FxCop">
+		<Message Importance="high" Text="BuildAndTest finished" />
+	</Target>
+
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb">
+		<Message Importance="high" Text="Compile starting..." />
+
+		<MSBuild Projects="@(SolutionFile)"
+				Properties="Configuration=$(Configuration);Platform=Any CPU;TreatWarningsAsErrors=true;RunCodeAnalysis=$(DoCodeAnalysis);"
+			BuildInParallel = "true"
+				Targets="Build">
+		</MSBuild>
+
+		<Message Importance="high" Text="Compile finished." />
+	</Target>
+
+	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'">
+		<!-- create web site/app/VirDir + Copy content-->
+		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSitepath)" />
+		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName)"/>
+	</Target>
+
+	<Target Name="CreateAnalyticsDb">
+		<Message Importance="high" Text="Dropping Analytics DB" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_analytics') BEGIN ALTER DATABASE [$(DBNamePrefix)_analytics] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_analytics] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
+		<Message Importance="high" Text="Dropping Analytics DB finished" />
+
+		<Message Importance="high" Text="Creating Analytics ..."/>
+		<PropertyGroup>
+			<CreateDBCommand>"$(DbManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A</CreateDBCommand>
+		</PropertyGroup>
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" Condition="'$(ErrorCode)' != '0'" />
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" Condition="'$(ErrorCode)' != '0'" />
+
+		<Message Importance="high" Text="Creation of dbs finished." />
+
+		<Message Importance="high" Text="Check Naming Standard ..."/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
+		<Message Importance="high" Text="Check Naming Standard. Finished"/>
+
+		<Message Importance="high" Text="Deploy Cross Db views ..."/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '$(DBNamePrefix)_agg'" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossDatabaseView_load" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
+		<Message Importance="high" Text="Deploy Cross Db views. Finished"/>
+
+		<Message Importance="high" Text="Check all Analytics report controls and reports are working ..."/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
+		<Message Importance="high" Text="Analytics report controls. Finished"/>
+
+		<OnError ExecuteTargets="MessageErrorHandler"/>
+	</Target>
+
+
+	<Target Name="CreateTrunkDb" Condition="'$(UseDBManager)' == 'true'">
+		<Message Importance="high" Text="Dropping database" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
+		<Message Importance="high" Text="Dropping database finished" />
+
+		<Message Importance="high" Text="Creating CCC 7 db ..."/>
+		<PropertyGroup>
+			<CreateDBCommand>"$(DbManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A</CreateDBCommand>
+		</PropertyGroup>
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Condition="'$(ErrorCode)' != '0'" />
+
+		<Message Importance="high" Text="Creation of CCC 7 db finished." />
+
+		<Message Importance="high" Text="Check Naming Standard ..."/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_ccc7;Integrated Security=True"/>
+		<Message Importance="high" Text="Check Naming Standard. Finished"/>
+
+		<OnError ExecuteTargets="MessageErrorHandler"/>
+	</Target>
+
+	<Target Name="MessageErrorHandler">
+		<Message Text="An error has occurred while executing target: CreateTrunkDb. Please review DBManager logfile: $(DbManagerExe)"/>
+	</Target>
+
+
+	<Target Name="CreateNHibDb" Condition="'$(UseDBManager)' == 'false'">
+		<Message Importance="high" Text="Dropping database" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
+		<Message Importance="high" Text="Dropping database finished" />
+
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="CREATE DATABASE [$(DBNamePrefix)_ccc7]" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
+
+	</Target>
+
+	<Target Name="FixConfigFiles">
+
+		<Message Importance="high" Text="Fixing config files..." />
+		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
+								Normal="true" />
+		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+								Normal="true" />
+		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config"
+								Normal="true" />
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
+									Encoding="windows-1252"
+									Regex="_replace_"
+									ReplacementText="$(CCNetWorkingDirectory)\ccnet\infratest.ini"/>
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config"
+									Encoding="windows-1252"
+									Regex="_replace_"
+									ReplacementText="$(CCNetWorkingDirectory)\ccnet\infratest.ini"/>
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+									  Encoding="windows-1252"
+									  Regex="_DBNamePrefix_"
+									  ReplacementText="$(DBNamePrefix)"/>
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+									Encoding="windows-1252"
+									Regex="create=.true."
+									ReplacementText="create='false'"
+									Condition="'$(UseDBManager)' == 'true'"/>
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+									Encoding="windows-1252"
+									Regex="_url_"
+									ReplacementText="$(AgentPortalWebURL)"/>
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+									Encoding="windows-1252"
+									Regex="_sitepath_"
+									ReplacementText="$(AgentPortalWebSitePath)"/>
+		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
+									  Encoding="windows-1252"
+									  Regex="_DBServer_"
+									  ReplacementText="$(DBServer)"/>
+
+		<!-- Only when running Raptor-->
+		<Message Importance="high" Text="Fixing of config files finished" />
+
+		<!--This part is now Obsolete (used previously when Nunit executed CruiseControl.sln)-->
+		<Message Importance="high" Text="Copy Teleopti.Ccc.InfrastructureTest.Config..." />
+		<Exec Command="del /F /Q &quot;$(CCNetWorkingDirectory)\CruiseControl.config&quot;" />
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
+					DestinationFiles="$(CCNetWorkingDirectory)\CruiseControl.config" />
+
+		<!--Explicte copy the correct config to each project that is using it
+		be sure to do this step before compile time; since CopyToLocal will move it to $(OutDir)-->
+		<Message Importance="high" Text="Copy Teleopti.Ccc.InfrastructureTest.Config." />
+
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config" />
+
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
+
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.dll.Config" />
+
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\$(OutDir)\App.config" />
+
+	</Target>
+
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb">
+		<Message Importance="high" Text="Running NCover..." />
+
+		<!--  run tests-->
+		<CallTarget Targets="ProjectsToNCover" />
+		<Message Importance="high" Text="Running NCover finished." />
+	</Target>
+
+	<!--This is how we "går över ån och runt sjön för att hämta vatten"
+		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
+		So instead, try to run tests One By One to mimimize numbers of Mocks included.
+		Collection = $(CCNetWorkingDirectory)\**\*Test.csproj
+		But _exclude_ projects that we don't build as part of CruiseControl.sln
+	-->
+	<ItemGroup>
+		<ProjectsToTest
+				Include="$(CCNetWorkingDirectory)\**\*Test.csproj"
+				Exclude="
+					$(CCNetWorkingDirectory)\MasterActivityPresenterTest\MasterActivityPresenterTest.csproj;
+					$(CCNetWorkingDirectory)\SdkConsoleTest\SdkConsoleTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceTest\Teleopti.Analytics.Etl.ServiceTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHostTest\Teleopti.Analytics.PM.PMServiceHostTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.PortalTest\Teleopti.Analytics.PortalTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LoadTest\Teleopti.Ccc.Sdk.LoadTest.csproj;
+					$(CCNetWorkingDirectory)\WcfTest\WcfTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Ccc.ObfuscatedTest\Teleopti.Ccc.ObfuscatedTest.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Messaging\Teleopti.Messaging.Tests\Teleopti.Messaging.Tests.csproj;
+					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj;
+		"/>
+		<ProjectsToTest Condition="'$(RunWebBehaviorTests)' == 'true'"
+			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"
+	 />
+	</ItemGroup>
+	<Target Name="ProjectsToNCover" Inputs="@(ProjectsToTest)" Outputs="%(Identity).Dummy">
+		<Message Text="@(ProjectsToTest)" />
+
+		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
+		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
+		<MakeDir Directories="$(CCNetWorkingDirectory)\CoverageResult"/>
+
+		<NCover
+						ProjectName="$(CCNetProject)"
+						ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
+						TestRunnerExe="$(NUnitEXE)"
+						TestRunnerArgs="&quot;@(ProjectsToTest)&quot; $(ExcludedTestCategories) $(NUnitArgs) /xml=&quot;$(CCNetWorkingDirectory)\nunit%(filename).xml&quot;"
+						CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
+						WorkingDirectory="$(CCNetWorkingDirectory)"
+						RegisterProfiler="true"
+						ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
+						IncludeAssemblies="$(NCoverAssemblies)">
+		</NCover>
+
+	</Target>
+
+	<!-- ToolPath="$(CCNetWorkingDirectory)\ccnet\ncover64"-->
+	<Target Name="NCoverReporting" DependsOnTargets="NCover">
+		<Message Importance="high" Text="Running NCoverReporting..." />
+		<NCoverReporting
+				ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
+				OutputPath="$(CCNetWorkingDirectory)"
+				OutputReport="$(CoverageReports)"
+				CoverageDataPaths="$(CCNetWorkingDirectory)\NcoverResult\*.ncov"
+				MinimumCoverage="$(MinimumCoverage)"
+				MaxFailedToShow="50"
+				ReportInvalidFiles="true">
+		</NCoverReporting>
+
+		<Message Importance="high" Text="NCoverReporting finished." />
+	</Target>
+
+	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
+		<Message Importance="high" Text="Running FxCop target..." />
+		<CreateItem Include="$(CCNetWorkingDirectory)\**\*.codeanalysislog.xml">
+			<Output ItemName="fxCopResult" TaskParameter="Include"/>
+		</CreateItem>
+		<Message Importance="high" Text="FxCop target finished..." />
+
+		<!--
+		Om man vill skapa ccnetrapport... skiter i det nu
+		<Copy SourceFiles="@(fxCopResult)"
+					DestinationFolder="$(CCNetWorkingDirectory)" />-->
+
+		<ThrowIfWarning Assemblies="@(fxCopResult)" />
+	</Target>
+
+</Project>

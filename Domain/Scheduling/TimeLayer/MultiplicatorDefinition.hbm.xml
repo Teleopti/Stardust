@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.TimeLayer"
+                   default-access="field.camelcase-underscore">
+  <class name="MultiplicatorDefinition" abstract="true">
+    <!--IUnique-->
+    <id name="Id" type="guid" unsaved-value="null"> 
+      <generator class="guid.comb" />
+    </id>
+    <!--IUnique-->
+
+    <discriminator column="DefinitionType" type="string" not-null="true"/>
+    <property name="OrderIndex" access="readonly" not-null="true"/>
+    <many-to-one class="MultiplicatorDefinitionSet"
+                 name="Parent"
+                 not-null="true" foreign-key="FK_MultiplicatorDefinition_MultiplicatorDefinitionSet"/>
+    <many-to-one name="Multiplicator" 
+                 class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.Multiplicator"
+                 not-null="true" foreign-key="FK_Multiplicator_MultiplicatorDefinition"/>
+
+  </class>
+
+</hibernate-mapping>

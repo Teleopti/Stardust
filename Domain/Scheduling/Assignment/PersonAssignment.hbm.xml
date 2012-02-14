@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="Teleopti.Ccc.Domain"
+									 namespace="Teleopti.Ccc.Domain.Scheduling.Assignment"
+									 default-access="field.camelcase-underscore">
+	<class name="PersonAssignment">
+		<!--IEntity-->
+		<id name="Id"
+						type="guid"
+						unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+						 unsaved-value ="null"/>
+		<many-to-one name="CreatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 update="false" foreign-key="FK_PersonAssignment_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 foreign-key="FK_PersonAssignment_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+							type="UtcDateTime"
+							not-null="true"
+							update="false" />
+		<property name="UpdatedOn"
+							type="UtcDateTime"
+							not-null="true"/>
+		<!--IEntity-->
+		<one-to-one name="MainShift"
+					 class="MainShift"
+					 cascade="all-delete-orphan"/>
+
+		<list name="PersonalShiftCollection"
+				cascade="all-delete-orphan"
+				inverse="true">
+			<key column="Parent" />
+			<index type="Byte" column="OrderIndex" />
+			<one-to-many class="PersonalShift"/>
+		</list>
+
+		<list name="OvertimeShiftCollection"
+				cascade="all-delete-orphan"
+				inverse="true">
+			<key column="Parent" />
+			<index type="Byte" column="OrderIndex" />
+			<one-to-many class="OvertimeShift"/>
+		</list>
+
+		<many-to-one name="Person"
+						 class="Teleopti.Ccc.Domain.Common.Person"
+						 not-null="true" foreign-key="FK_PersonAssignment_Person3"/>
+		<many-to-one name="Scenario"
+								 class="Teleopti.Ccc.Domain.Common.Scenario"
+								 not-null="true" foreign-key="FK_PersonAssignment_Scenario"/>
+		<many-to-one name="BusinessUnit"
+				class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+				access="nosetter.camelcase-underscore"
+				not-null="true" foreign-key="FK_PersonAssignment_BusinessUnit"/>
+
+		<component name="DatabasePeriod"
+				class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces"
+				insert="false"
+				update="false"
+				access="property">
+			<component name="period" access="field">
+				<property name="Minimum"
+								not-null="true"
+								type="UtcDateTime" />
+				<property name="Maximum"
+						not-null="true"
+						type="UtcDateTime"/>
+			</component>
+		</component>
+
+		<component name="Period"
+							 class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces"
+							 access="readonly">
+			<component name="period" access="field">
+				<property name="Minimum"
+								not-null="true"
+								type="UtcDateTime" />
+				<property name="Maximum"
+						not-null="true"
+						type="UtcDateTime"/>
+			</component>
+		</component>
+
+		<filter name="businessUnitFilter"
+						condition=":businessUnitParameter = BusinessUnit" />
+
+		<filter name="deletedPeopleFilter"
+						condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>
+
+	</class>
+</hibernate-mapping>

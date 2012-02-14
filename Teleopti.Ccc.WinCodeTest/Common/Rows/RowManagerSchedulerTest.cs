@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCodeTest.Common.Rows
+{
+    [TestFixture]
+    public class RowManagerSchedulerTest
+    {
+        private RowManager<IGridRow, int> _target;
+        private ITeleoptiGridControl _grid;
+        private ISchedulerStateHolder _schedulerState;
+        private MockRepository _mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            _mocks = new MockRepository();
+            _grid = _mocks.StrictMock<ITeleoptiGridControl>();
+            _schedulerState = _mocks.StrictMock<ISchedulerStateHolder>();
+            _target = new RowManagerScheduler<IGridRow, int>(_grid, new List<IntervalDefinition>(), 15, _schedulerState);
+        }
+
+        [Test] 
+        public void VerifyTimeZoneInfo()
+        {
+            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            using (_mocks.Record())
+            {
+                Expect.Call(_schedulerState.TimeZoneInfo).Return(timeZoneInfo);
+            }
+            using (_mocks.Playback())
+            {
+                Assert.AreEqual(timeZoneInfo.DisplayName, _target.TimeZoneInfo.DisplayName);
+            }
+        }
+
+
+    }
+}

@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Win.Common.Controls.Rows
+{
+    public class SkillDayGridRowMinMaxIssues: SkillDayGridRow
+    {
+        private readonly DayHasAboveMaxAgents aboveMaxAgents;
+        private readonly DayHasBelowMinAgents belowMinAgents;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        public SkillDayGridRowMinMaxIssues(RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>> rowManager, string cellType, string displayMember, string rowHeaderText)
+            : base(rowManager, cellType, displayMember, rowHeaderText)
+        {
+            aboveMaxAgents = new DayHasAboveMaxAgents();
+            belowMinAgents = new DayHasBelowMinAgents();
+        }
+
+        public override void QueryCellInfo(CellInfo cellInfo)
+        {
+            base.QueryCellInfo(cellInfo);
+            drawMinMaxIssues(cellInfo);
+        }
+
+        private void drawMinMaxIssues(CellInfo cellInfo)
+        {
+            var skillStaffPeriods = SkillStaffPeriodList;
+            if (skillStaffPeriods==null || skillStaffPeriods.Count() == 0) return;
+
+            StringBuilder toolTip = new StringBuilder();
+            
+            if (aboveMaxAgents.IsSatisfiedBy(skillStaffPeriods)) //Prio 2
+            {
+                cellInfo.Style.Interior = ColorHelper.OverstaffingBrush;
+                toolTip.AppendLine(UserTexts.Resources.MaximumAgents);
+            }
+            if (belowMinAgents.IsSatisfiedBy(skillStaffPeriods)) //Prio 1
+            {
+                cellInfo.Style.Interior = ColorHelper.SeriousOverstaffingBrush;
+                toolTip.AppendLine(UserTexts.Resources.MinimumAgents);
+            }
+            cellInfo.Style.CellTipText = toolTip.ToString();
+        }
+    }
+}

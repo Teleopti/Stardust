@@ -1,0 +1,855 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>Sbalit</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>Rozbalit</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>Vložili jste nesprávnou hodnotu do: </value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>Nevložili jste žádnou hodnotu do: </value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>Přerušené hovory</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>Poměr přerušených hovorů</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>Uskutečněné hovory</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>Uskutečněné nad rámec servisní úrovně</value>
+    <comment>Answered After Service Level</comment>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>Uskutečněné v rámci servisní úrovně</value>
+    <comment>Answered Within Service Level</comment>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>Datum:</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>Datum od:</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>Datum do:</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>Celkový součet</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>Interval:</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>Plánovaný čas</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>Servisní úroveň (%)</value>
+    <comment>Service Level (%)</comment>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>Pracoviště:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>Kvalifikace:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>Tým:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>Pracovní náplň:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>Zobrazit sestavu</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>Interval od:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>Interval do:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>Typ periody:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Nepřítomnost (%)</value>
+    <comment>Absenteeism (%)</comment>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Dodržování (%)</value>
+    <comment>Adherence (%)</comment>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Uskutečněné hovory za plánovanou telefonní hodinu</value>
+    <comment>Answered Calls per Scheduled Phone Hour</comment>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Průměrná činnost po ukončení hovoru (s)</value>
+    <comment>Average After Call Work (s)</comment>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Průměrná doba na vyřízení (s)</value>
+    <comment>Average Handle Time (s)</comment>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Průměrná doba trvání hovoru (s)</value>
+    <comment>Average Talk Time (s)</comment>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Připravenost (%)</value>
+    <comment>Readiness (%)</comment>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>Skutečnost</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>Kpi</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>Předchozí období</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>Cíl</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>Tým skut.</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>Trend</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>Váš pokus o přihlášení byl neúspěšný. Prosím zkuste to znovu.</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>Jméno uživatele:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>Je požadováno heslo.</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>Heslo:</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>Příště si mě pamatuj</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>Přihlásit se</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>Je požadováno jméno uživatele.</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>Zobrazit sestavu</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>Scénář:</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>Poměr přerušených hovorů kromě krátkých hovorů (%)</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>Poměr přerušených hovorů (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>Poměr zodpovězených hovorů (%)</value>
+    <comment>Answer Rate (%)</comment>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>Průměrná rychlost odpovědi (s)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>Průměrný čas do přerušení (s)</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>Datumové období:</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>Nejdelší prodleva ve frontě, Přerušené hovory (s)</value>
+    <comment>Longest Delay in Queue, Abandoned (s)</comment>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>Nejdelší prodleva ve frontě, Uskutečněné hovory (s)</value>
+    <comment>Longest Delay in Queue, Answered  (s)</comment>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>Období</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>Přerušení a rychlost odpovědi</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>Sekundy</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>Čas do přerušení</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>Součty:</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>Procentní</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>Skut. činnost po ukončení hovoru</value>
+    <comment>Actual ACW</comment>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>Skut. průměrná doba trvání hovoru</value>
+    <comment>Actual ATT</comment>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>Činnost po ukončení hovoru</value>
+    <comment>After Call Work (ACW)</comment>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>Průměrná doba trvání hovoru (ATT)</value>
+    <comment>Average Talk Time (ATT)</comment>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>Vypočtené hovory</value>
+    <comment>Calculated Calls</comment>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>Hovory</value>
+    <comment>Calls</comment>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>Odhadovaná činnost po ukončení hovoru</value>
+    <comment>Forecasted ACW</comment>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>Odhadovaná průměrná doba trvání hovoru</value>
+    <comment>Forecasted ATT</comment>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>Odhadované hovory</value>
+    <comment>Forecasted Calls</comment>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>Počet</value>
+    <comment>Number of</comment>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Odhad vs skutečná pracovní náplň</value>
+    <comment>Forecast vs Actual Workload</comment>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>Agenti připraveni</value>
+    <comment>Agents Ready</comment>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>Agenti naplánováni</value>
+    <comment>Agents Scheduled</comment>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>Relativní rozdíl (%)</value>
+    <comment>Relative Difference (%)</comment>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>Odhadovaný čas (hh:mm)</value>
+    <comment>Forecasted Time (hh:mm)</comment>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>Nabízené hovory</value>
+    <comment>Offered Calls</comment>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>Nabízené hovory / Agent připraven</value>
+    <comment>Offered Calls/Agent Ready</comment>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>Nabízené hovory / Plánovaný agent připraven</value>
+    <comment>Offered Calls / Scheduled Agent Ready</comment>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Odhad vs plánované hodiny</value>
+    <comment>Forecast vs Scheduled Hours</comment>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Servisní úroveň a agenti připraveni</value>
+    <comment>Service Level  and Agents Ready</comment>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>Plánovaný prostoj</value>
+    <comment>Scheduled Ready Time</comment>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>Plánovaný vs připravení agenti</value>
+    <comment>Scheduled vs Ready Agents</comment>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>Plynulost (%)</value>
+    <comment>Smoothness (%)</comment>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>Pracovní den / Kvalifikace</value>
+    <comment>Weekday / Skill</comment>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>Kategorie agenta:</value>
+    <comment>Agent Category:</comment>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>Typ kategorie agenta:</value>
+    <comment>Agent Category Type:</comment>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>Agenti:</value>
+    <comment>Agents:</comment>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>Metrika agenta</value>
+    <comment>Agent Schedule Result</comment>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>Dodržení (%)</value>
+    <comment>Adherence (%)</comment>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>Agent / datum</value>
+    <comment>Agent / Date</comment>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>Uskutečnené hovory / Plánovaný čas připravenosti</value>
+    <comment>Answered Calls / Scheduled Ready Hour</comment>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>Obsazení (%)</value>
+    <comment>Occupancy (%)</comment>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>Připravenost (%)</value>
+    <comment>Readiness (%)</comment>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>Prostoj</value>
+    <comment>Ready Time</comment>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>Výpočet dodržování:</value>
+    <comment>Adherence Calculation:</comment>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>Nabízené hovory / Agent</value>
+    <comment>Offered Calls / Agent</comment>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>Servisní úroveň</value>
+    <comment>Service Level</comment>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>Výpočet servisní úrovně:</value>
+    <comment>Service Level Calculation:</comment>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Agent - Dodržování plánu</value>
+    <comment>Agent - Schedule Adherence</comment>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>Seřadit podle:</value>
+    <comment>Sort by:</comment>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Prostoj / Plánovaný prostoj (%)</value>
+    <comment>Ready Time / Scheduled Ready Time  (%)</comment>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>Plánovaní agenti připraveni</value>
+    <comment>Scheduled Agents Ready</comment>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>Odchylka (m)</value>
+    <comment>Deviation (m)</comment>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>Další</value>
+    <comment>Next</comment>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>Předchozí</value>
+    <comment>Previous</comment>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Dodržování / Interval (%)</value>
+    <comment>Adherence / Interval (%)</comment>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>Odchylka / Interval (m)</value>
+    <comment>Deviation / Interval (m)</comment>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>Fronta:</value>
+    <comment>Queue:</comment>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>Statistika fronty</value>
+    <comment>Queue Statistics</comment>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>Přerušené v rámci servisní úrovně</value>
+    <comment>Abandoned Within Service Level</comment>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>Přerušené krátké hovory</value>
+    <comment>Abandoned Short Calls</comment>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>Doba na vyřízení</value>
+    <comment>Handle Time</comment>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>Rychlost odpovědi</value>
+    <comment>Speed of Answer</comment>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>Doba trvání hovoru</value>
+    <comment>Talk Time</comment>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>Převedené hovory</value>
+    <comment>Transferred Calls</comment>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>Fronta</value>
+    <comment>Queue</comment>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>Časové pásmo:</value>
+    <comment>Time Zone:</comment>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>Nejdelší prodleva ve frontě, Přerušené hovory</value>
+    <comment>Longest Delay in Queue, Abandoned</comment>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>Nejdelší prodleva ve frontě, Uskutečněné hovory</value>
+    <comment>Longest Delay in Queue, Answered</comment>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>Čas do přerušení (s)</value>
+    <comment>Time to Abandon (s)</comment>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>Nápověda</value>
+    <comment>Help</comment>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>Acd přihlášení</value>
+    <comment>Acd Login</comment>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>Statistika fronty agenta</value>
+    <comment>Agent Queue Statistics</comment>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>Statistika agenta</value>
+    <comment>Agent Statistics</comment>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>Čas administrace</value>
+    <comment>Admin Time</comment>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>Přímé příchozí hovory</value>
+    <comment>Direct Incoming Calls</comment>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>Doba trvání přímých příchozích hovorů</value>
+    <comment>Direct Incoming Calls Talk Time</comment>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>Přímé odchozí hovory</value>
+    <comment>Direct Outbound Calls</comment>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>Doba trvání přímých odchozích hovorů</value>
+    <comment>Direct Outbound Calls Talk Time</comment>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>Doba čekání</value>
+    <comment>Idle Time</comment>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>Doba přihlášení</value>
+    <comment>Logged In Time</comment>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>Doba zaneprázdnění</value>
+    <comment>Not Ready Time</comment>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>Datum / Interval</value>
+    <comment>Date / Interval</comment>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>Oprávnění odmítnuto</value>
+    <comment>Permission Denied</comment>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>Překročení počtu příchozích hovorů</value>
+    <comment>Overflow In Calls</comment>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>Překročení počtu odchozích hovorů</value>
+    <comment>Overflow Out Calls</comment>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>Odhadovaný čas včetně ztráty (hh:mm)</value>
+    <comment>Forecasted Time incl. Shrinkage (hh:mm)</comment>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>Plánovaný čas (hh:mm)</value>
+    <comment>Scheduled Time (hh:mm)</comment>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>Směrodatná odchylka</value>
+    <comment>Standard Deviation</comment>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>Týden:</value>
+    <comment>Week:</comment>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>Plánovaný čas na agenta</value>
+    <comment>Scheduled Time per Agent</comment>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>Plánovaný čas absence (hh:mm)</value>
+    <comment>Scheduled Absence Time (hh:mm)</comment>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>Plánovaný přesčas (hh:mm)</value>
+    <comment>Scheduled Over Time (hh:mm)</comment>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>Absence:</value>
+    <comment>Absence:</comment>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>Činnost:</value>
+    <comment>Activity:</comment>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>Odhadované hodiny (hh:mm)</value>
+    <comment>Forecasted Hours (hh:mm)</comment>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>Plánované hodiny (hh:mm)</value>
+    <comment>Scheduled Hours (hh:mm)</comment>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>Odhadované hodiny (ztráta) (hh:mm)</value>
+    <comment>Prognostiserade timmar (shrinkage) (hh:mm)</comment>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>Relativní rozdíl včetně ztráty (%)</value>
+    <comment>Relative Difference incl. Shrinkage (%)</comment>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Kategorie směny na den</value>
+    <comment>Shift Category per Day</comment>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>Kategorie směny:</value>
+    <comment>Shift Category:</comment>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Kategorie směny a celodenní absence na agenta</value>
+    <comment>Shift Category And Full Day Absence per Agent</comment>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>Den volna:</value>
+    <comment>Day Off:</comment>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>Výběry</value>
+    <comment>Selections</comment>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>Plánovaný čas na činnost</value>
+    <comment>Scheduled Time per Activity</comment>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>Metrika týmu</value>
+    <comment>Team Metrics</comment>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>Tým / Datum</value>
+    <comment>Team / Date</comment>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>Uskutečněné hovory / Plánovaný prostoj</value>
+    <comment>Answered Calls / Ready Hour</comment>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>Smluvní čas absence (hh:mm)</value>
+    <comment>Contract Absence Time (hh:mm)</comment>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>Smluvní čas (hh:mm)</value>
+    <comment>Contract Time (hh:mm)</comment>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>Placený čas (hh:mm)</value>
+    <comment>Paid Time (hh:mm)</comment>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>Pracovní doba (hh:mm)</value>
+    <comment>Work Time (hh:mm)</comment>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>Přijaté priority</value>
+    <comment>Preferences Accepted</comment>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>Přijaté priority (%)</value>
+    <comment>Preferences Accepted (%)</comment>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>Odmítnuté priority (%)</value>
+    <comment>Preferences Declined</comment>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>Požadované priority</value>
+    <comment>Preferences Requested</comment>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>Kategorie priorit</value>
+    <comment>Preference Category</comment>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>Priorita na den</value>
+    <comment>Preference per Day</comment>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>Priorita na agenta</value>
+    <comment>Preference Per Agent</comment>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>Plánovaní agenti na interval a tým</value>
+    <comment>Scheduled Agents per Interval and Team</comment>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>ZLEPŠIT</value>
+    <comment>IMPROVE</comment>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>Čas na vyřízení / Placený čas (%)</value>
+    <comment>Handling Time / Paid Time (%)</comment>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>Pátek</value>
+    <comment>Friday</comment>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>Pondělí</value>
+    <comment>Monday</comment>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>Sobota</value>
+    <comment>Saturday</comment>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>Neděle</value>
+    <comment>Sunday</comment>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>Čtvrtek</value>
+    <comment>Thursday</comment>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>Úterý</value>
+    <comment>Tuesday</comment>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>Středa</value>
+    <comment>Wednesday</comment>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>Duben </value>
+    <comment>April </comment>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>Srpen</value>
+    <comment>August</comment>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>Prosinec</value>
+    <comment>December</comment>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>Únor</value>
+    <comment>February</comment>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>Leden </value>
+    <comment>January </comment>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>Červenec</value>
+    <comment>July</comment>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>Červen</value>
+    <comment>June</comment>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>Březen</value>
+    <comment>March</comment>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>Květen</value>
+    <comment>May</comment>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>Listopad</value>
+    <comment>November</comment>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>Říjen</value>
+    <comment>October</comment>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>Září</value>
+    <comment>September</comment>
+  </data>
+</root>

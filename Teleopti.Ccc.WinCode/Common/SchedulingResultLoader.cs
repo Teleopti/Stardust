@@ -1,0 +1,228 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling;
+
+namespace Teleopti.Ccc.WinCode.Common
+{
+    public class SchedulingResultLoader : ISchedulingResultLoader
+    {
+        private readonly IRepositoryFactory _repositoryFactory;
+
+        private readonly IEventAggregator _eventAggregator;
+        private readonly ILazyLoadingManager _lazyManager;
+        private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
+        private readonly IPeopleLoader _peopleLoader;
+        private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
+
+        public ISchedulerStateHolder SchedulerState { get; private set; }
+
+        public IEnumerable<IContractSchedule> ContractSchedules { get; private set; }
+
+        public IEnumerable<IContract> Contracts { get; private set; }
+
+        public IEnumerable<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets { get; private set; }
+
+        public SchedulingResultLoader(ISchedulerStateHolder stateHolder,
+                                    IRepositoryFactory repositoryFactory,
+                                    IEventAggregator eventAggregator,
+                                    ILazyLoadingManager lazyManager,
+                                    IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
+                                    IPeopleLoader peopleLoader,
+            ISkillDayLoadHelper skillDayLoadHelper,
+            IResourceOptimizationHelper resourceOptimizationHelper,
+            LoadScheduleByPersonSpecification loadScheduleByPersonSpecification)
+        {
+            SchedulerState = stateHolder;
+
+            _repositoryFactory = repositoryFactory;
+            _eventAggregator = eventAggregator;
+            _lazyManager = lazyManager;
+            _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
+            _peopleLoader = peopleLoader;
+            _skillDayLoadHelper = skillDayLoadHelper;
+            _resourceOptimizationHelper = resourceOptimizationHelper;
+            _loadScheduleByPersonSpecification = loadScheduleByPersonSpecification;
+        }
+
+        public void LoadWithIntradayData(IUnitOfWork unitOfWork)
+        {
+            loadCommonState(unitOfWork);
+            loadContractSchedules(unitOfWork);
+            loadContracts(unitOfWork);
+            loadDefinitionSets(unitOfWork);
+            loadPersonalAccounts(unitOfWork);
+            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingPeopleTreeDots);
+            initializeSkills(unitOfWork);
+            initializeDecider();
+            filterSkills();
+            initializePeopleInOrganization();
+            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingSkillDataTreeDots);
+            initializeSkillDays();
+            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingSchedulesTreeDots);
+            initializeSchedules(unitOfWork);
+            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(
+                UserTexts.Resources.InitializingScheduleDataThreeDots);
+            InitializeScheduleData();
+        }
+
+        private void loadPersonalAccounts(IUnitOfWork uow)
+        {
+            var personAbsenceAccountRepository = _repositoryFactory.CreatePersonAbsenceAccountRepository(uow);
+            SchedulerState.SchedulingResultState.AllPersonAccounts = personAbsenceAccountRepository.LoadAllAccounts();
+        }
+
+        private void loadDefinitionSets(IUnitOfWork uow)
+        {
+            IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = _repositoryFactory.CreateMultiplicatorDefinitionSetRepository(uow);
+            MultiplicatorDefinitionSets = multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
+        }
+
+        public void ReloadForecastData(IUnitOfWork unitOfWork)
+        {
+            initializeSkills(unitOfWork);
+            filterSkills();
+            if (!SchedulerState.SchedulingResultState.Skills.IsEmpty())
+            {
+                initializeSkillDays();
+                InitializeScheduleData();
+            }
+        }
+
+        public void ReloadScheduleData(IUnitOfWork unitOfWork)
+        {
+            unitOfWork.Reassociate(SchedulerState.CommonStateHolder.ShiftCategories);
+            unitOfWork.Reassociate(SchedulerState.CommonStateHolder.Absences);
+            unitOfWork.Reassociate(SchedulerState.CommonStateHolder.Activities);
+            unitOfWork.Reassociate(SchedulerState.CommonStateHolder.DayOffs);
+            reassociatePeople(unitOfWork);
+            initializeSchedules(unitOfWork);
+            InitializeScheduleData();
+        }
+
+        private void filterSkills()
+        {
+            _peopleAndSkillLoaderDecider.FilterSkills(SchedulerState.SchedulingResultState.Skills);
+        }
+
+        private void initializeSkills(IUnitOfWork uow)
+        {
+            ICollection<ISkill> skills = _repositoryFactory
+                .CreateSkillRepository(uow)
+                .FindAllWithSkillDays(SchedulerState.RequestedPeriod.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+
+            SchedulerState.SchedulingResultState.Skills.Clear();
+
+            foreach (ISkill skill in skills)
+            {
+                _lazyManager.Initialize(skill);
+                _lazyManager.Initialize(skill.SkillType);
+                SchedulerState.SchedulingResultState.Skills.Add(skill);
+            }
+        }
+
+        private void initializeSkillDays()
+        {
+            SchedulerState.SchedulingResultState.SkillDays =
+                _skillDayLoadHelper.LoadSchedulerSkillDays(SchedulerState.RequestedPeriod.ToDateOnlyPeriod(SchedulerState.TimeZoneInfo),
+                                                           SchedulerState.SchedulingResultState.Skills,
+                                                           SchedulerState.RequestedScenario);
+        }
+
+        private void initializeDecider()
+        {
+            _peopleLoader.Initialize();
+            _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod,
+                                                 SchedulerState.AllPermittedPersons);
+        }
+
+        private void initializePeopleInOrganization()
+        {
+            ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.PersonsInOrganization;
+            _peopleAndSkillLoaderDecider.FilterPeople(peopleInOrg);
+
+            peopleInOrg = new HashSet<IPerson>(peopleInOrg);
+            SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
+            SchedulerState.SchedulingResultState.PersonsInOrganization = peopleInOrg;
+
+            SchedulerState.ResetFilteredPersons();
+        }
+
+        private void initializeSchedules(IUnitOfWork uow)
+        {
+            IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
+
+            var requestedPeriod = SchedulerState.RequestedPeriod.ChangeEndTime(TimeSpan.FromHours(24));
+
+            IPersonProvider personsInOrganizationProvider =
+                new PersonsInOrganizationProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
+            personsInOrganizationProvider.DoLoadByPerson =
+                _loadScheduleByPersonSpecification.IsSatisfiedBy(_peopleAndSkillLoaderDecider);
+
+            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+
+            var schedulePeriod = new ScheduleDateTimePeriod(requestedPeriod, SchedulerState.AllPermittedPersons);
+            SchedulerState.LoadSchedules(scheduleRepository, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);
+        }
+
+        public void InitializeScheduleData()
+        {
+            var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            var dateOnlyPeriod =
+                SchedulerState.RequestedPeriod.ToDateOnlyPeriod(timeZone);
+            foreach (var dateOnly in dateOnlyPeriod.DayCollection())
+            {
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, true);
+            }
+        }
+
+        private void reassociatePeople(IUnitOfWork uow)
+        {
+            uow.Reassociate(Contracts);
+            uow.Reassociate(ContractSchedules);
+            uow.Reassociate(SchedulerState.SchedulingResultState.PersonsInOrganization);
+        }
+
+        private void loadCommonState(IUnitOfWork uow)
+        {
+            SchedulerState.LoadCommonState(uow, _repositoryFactory);
+        }
+
+        private void loadContractSchedules(IUnitOfWork uow)
+        {
+            using (uow.DisableFilter(QueryFilter.Deleted))
+            {
+                IEnumerable<IContractSchedule> list = _repositoryFactory
+                    .CreateContractScheduleRepository(uow)
+                    .LoadAllAggregate();
+
+                ContractSchedules = new List<IContractSchedule>(list);
+            }
+        }
+
+        private void loadContracts(IUnitOfWork uow)
+        {
+            using (uow.DisableFilter(QueryFilter.Deleted))
+            {
+                IEnumerable<IContract> list = _repositoryFactory
+                    .CreateContractRepository(uow)
+                    .FindAllContractByDescription();
+
+                Contracts = new List<IContract>(list);
+            }
+        }
+    }
+}

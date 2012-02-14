@@ -1,0 +1,274 @@
+﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="62c285c9-3e5e-4358-8962-c0e3120f69a4" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Dim Workload</ID>
+  <Name>Skill Workload</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-2586" scrolltop="-5120" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="11642" y="20320" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.2" tooltip="dim_workload" left="20" top="-2408" logicalid="2" controlid="1" masterid="0" hint1="0" hint2="0" width="4366" height="7408" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000800000e110000f01c0000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_dim_workload" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-2586</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-5120</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>-2408</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ARDiagramLayout</Name>
+      <Value>
+        <DiagramLayout ZoomPercent="100" ViewPortX="0" ViewPortY="0" xmlns="">
+          <Shapes NodeWidth="161">
+            <Shape Id="Dim Workload" Expanded="true">
+              <Attributes>
+                <Attribute Id="Dim Workload" />
+                <Attribute Id="Skill Id" />
+                <Attribute Id="Status" />
+                <Attribute Id="Time Zone Id" />
+              </Attributes>
+              <Position x="20" y="20" />
+            </Shape>
+            <Shape Id="Workload Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Workload Name" />
+              </Attributes>
+              <Position x="226" y="20" />
+            </Shape>
+            <Shape Id="Skill Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Skill Name" />
+              </Attributes>
+              <Position x="432" y="20" />
+            </Shape>
+            <Shape Id="Forecast Method Name" Expanded="false">
+              <Attributes>
+                <Attribute Id="Forecast Method Name" />
+              </Attributes>
+              <Position x="638" y="20" />
+            </Shape>
+          </Shapes>
+        </DiagramLayout>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Source xsi:type="DataSourceViewBinding" dwd:design-time-name="1dbd2138-ea5a-44a8-a71b-52108db02a38">
+    <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+  </Source>
+  <CurrentStorageMode>Molap</CurrentStorageMode>
+  <Attributes>
+    <Attribute dwd:design-time-name="a4925633-c839-4341-9e0e-6628e34c435f">
+      <ID>Dim Workload</ID>
+      <Name>Dim Workload</Name>
+      <Usage>Key</Usage>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="1876070c-59a1-4b21-9ebf-5a82ebd7d716">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="8407cd39-d6f0-4ddc-927e-2f3b6c427626">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>workload_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="e799a8b2-b495-47e9-833b-d20217b88461">
+          <AttributeID>Workload Name</AttributeID>
+          <Name>Workload Name</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="c331f261-36a3-4ed9-a25e-5ebca367c933">
+          <AttributeID>Time Zone Id</AttributeID>
+          <Name>Time Zone Id</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="b004e5e4-e49b-40a4-9fb6-2b9b49a21430">
+          <AttributeID>Skill Id</AttributeID>
+          <Name>Skill Id</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="e4725dbc-05ad-4a13-9a58-284bce96dff7">
+          <AttributeID>Status</AttributeID>
+          <RelationshipType>Rigid</RelationshipType>
+          <Name>Status</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="0080556d-a3b0-43d1-8538-8ca47d142cd1">
+      <ID>Workload Name</ID>
+      <Name>Workload Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="9f6a44cc-6805-4e4d-99f9-93ccdaab62f9">
+          <DataType>WChar</DataType>
+          <DataSize>100</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="5621eb03-e3e5-4efb-bf81-4284a16b7e5e">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>workload_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="33b64fe3-ca3d-4e53-83ec-229ca3e7ba81">
+          <AttributeID>Skill Name</AttributeID>
+          <Name>Skill Name</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="b1865546-bed5-469a-b7de-88df0ab77da7">
+      <ID>Skill Name</ID>
+      <Name>Skill Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="1b62ae40-dd1b-416a-a7f3-9da09d71239e">
+          <DataType>WChar</DataType>
+          <DataSize>100</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="1451aea7-0ae7-490c-8e1b-590559c38047">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>skill_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="bf4a0fa5-cc99-407a-b7b3-bb039260b018">
+          <AttributeID>Forecast Method Name</AttributeID>
+          <Name>Forecast Method Name</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="1749e3db-605f-4cc9-9b99-9b08f28e1e2a">
+      <ID>Time Zone Id</ID>
+      <Name>Time Zone Id</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="394b531e-96fd-4b50-9e9d-fac381d47cc9">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="0064acb2-cc14-47a2-9c01-66a5987f2500">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>time_zone_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="91ee79a1-3c60-4d5c-bf01-7eb8f2ff5385">
+      <ID>Forecast Method Name</ID>
+      <Name>Forecast Method Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="da272771-9938-401e-b3cc-9d8eb8f2409d">
+          <DataType>WChar</DataType>
+          <DataSize>100</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="512fa67e-02f4-406e-9a9a-a735ac151cb2">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>forecast_method_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <OrderBy>Key</OrderBy>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="6d9dc628-d3b4-467e-b52e-7ab7e32ddc69">
+      <ID>Skill Id</ID>
+      <Name>Skill Id</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="bf0e4356-2bd3-476c-95ae-fe165e369a2e">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="aba75c46-88e0-4005-b4f9-92ae0b541d43">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>skill_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="5dd83a81-b1ec-4cf0-ae32-8d17d3845a68">
+      <ID>Status</ID>
+      <Name>Status</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="d6dbbf1f-23ed-4d01-8193-3b2a5eaba2f8">
+          <DataType>WChar</DataType>
+          <DataSize>7</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="fedec5cf-15ac-4695-96f3-143824c98606">
+            <TableID>dbo_dim_workload</TableID>
+            <ColumnID>status</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+    </Attribute>
+  </Attributes>
+  <Hierarchies>
+    <Hierarchy dwd:design-time-name="9b652b40-a8cc-4e1f-8643-4e0b2a9627fd">
+      <ID>Hierarchy</ID>
+      <Name>Skill Workload</Name>
+      <Levels>
+        <Level dwd:design-time-name="199416eb-1d1f-4106-a9c4-0e24dbc9c976">
+          <ID>Forecast Method Name</ID>
+          <Name>Forecast Method Name</Name>
+          <SourceAttributeID>Forecast Method Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="c74a478e-1e6e-43e5-8409-43c1ce53d976">
+          <ID>Skill Name</ID>
+          <Name>Skill Name</Name>
+          <SourceAttributeID>Skill Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="3da6b462-75f1-4c0b-aa0a-42ea79e5b148">
+          <ID>Workload Name</ID>
+          <Name>Workload Name</Name>
+          <SourceAttributeID>Workload Name</SourceAttributeID>
+        </Level>
+      </Levels>
+    </Hierarchy>
+  </Hierarchies>
+</Dimension>

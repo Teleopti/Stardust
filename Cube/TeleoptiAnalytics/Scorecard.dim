@@ -1,0 +1,202 @@
+﻿<Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="2db2e881-5418-4e8f-8a61-f97e57fb97b8" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Dim Scorecard</ID>
+  <Name>Scorecard</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
+      <Value>
+        <dds xmlns="">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="2" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-1620" scrolltop="-6654" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="7646" y="18150" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="0" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+            <font>
+              <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
+            </font>
+            <mouseicon>
+              <ddsxmlobjectstreamwrapper binary="6c74000000000000" />
+            </mouseicon>
+          </diagram>
+          <layoutmanager>
+            <ddsxmlobj />
+          </layoutmanager>
+          <ddscontrol controlprogid="DdsShapes.DdsObjectManagedBridge.1" tooltip="dim_scorecard (dbo.dim_scorecard)" left="20" top="0" logicalid="1" controlid="1" masterid="0" hint1="0" hint2="0" width="4366" height="4842" noresize="0" nomove="0" nodefaultattachpoints="0" autodrag="1" usedefaultiddshape="1" selectable="1" showselectionhandles="1" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobjectstreaminitwrapper binary="000800000e110000ea120000" />
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dbo_dim_scorecard" vartype="8" />
+              </ddsxmlobj>
+            </layoutobject>
+            <shape groupshapeid="0" groupnode="0" />
+          </ddscontrol>
+        </dds>
+      </Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
+      <Value>false</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
+      <Value>-1620</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
+      <Value>-6654</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
+      <Value>20</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
+      <Value>0</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
+      <Value>100</Value>
+    </Annotation>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </Annotations>
+  <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+  <State>Unprocessed</State>
+  <Source xsi:type="DataSourceViewBinding" dwd:design-time-name="6ba82bdc-aa65-4365-83fa-981399decfda">
+    <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+  </Source>
+  <CurrentStorageMode>Molap</CurrentStorageMode>
+  <Attributes>
+    <Attribute dwd:design-time-name="e2fc5388-a59b-4f97-b2da-f7fd0db920d1">
+      <ID>Dim Scorecard</ID>
+      <Name>Dim Scorecard</Name>
+      <Usage>Key</Usage>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="dd2e9ea2-78c9-4289-a78f-691a579bfb73">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="9f84ea99-00ab-4cbf-b408-05a093035a05">
+            <TableID>dbo_dim_scorecard</TableID>
+            <ColumnID>scorecard_id</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <NameColumn dwd:design-time-name="709080c3-3240-46bf-9053-c44d15cd26b9">
+        <DataType>WChar</DataType>
+        <DataSize>255</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="bb4d5a13-2555-4cdd-a66a-8ddadce7afd3">
+          <TableID>dbo_dim_scorecard</TableID>
+          <ColumnID>scorecard_name</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="f34cf6dd-49ff-40b3-9894-daf0edcba844">
+          <AttributeID>Period</AttributeID>
+          <Name>Period</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="1e85a2e9-8d1e-4077-9246-a76fe4b12146">
+          <AttributeID>Scorecard Code</AttributeID>
+          <Name>Scorecard Code</Name>
+        </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="42fa4e83-5f80-42c8-9c91-faee29a21c78">
+          <AttributeID>Scorecard Name</AttributeID>
+          <Name>Scorecard Name</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="041a96eb-b15b-4e71-a8e8-5227962c32f9">
+      <ID>Period</ID>
+      <Name>Period</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="1c2c8ca1-bdda-43cf-9917-c297bff67f7e">
+          <DataType>Integer</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="a86bf2a0-08ef-4746-835c-87cb099c5aa1">
+            <TableID>dbo_dim_scorecard</TableID>
+            <ColumnID>period</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <OrderBy>Key</OrderBy>
+    </Attribute>
+    <Attribute dwd:design-time-name="a96d7b53-a475-4037-acbd-548e3555e3dc">
+      <ID>Scorecard Code</ID>
+      <Name>Scorecard Code</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="37e6afb0-6cb5-4eec-aeb2-03467836fe15">
+          <DataType>WChar</DataType>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="6c38a978-1df0-45f1-a4db-d59b761a2ada">
+            <TableID>dbo_dim_scorecard</TableID>
+            <ColumnID>scorecard_code</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+    </Attribute>
+    <Attribute dwd:design-time-name="75314c3e-7336-4723-9968-7b78f9552a31">
+      <ID>Scorecard Name</ID>
+      <Name>Scorecard Name</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="99e86b07-24c2-4a47-9ef7-bdfe251a95ba">
+          <DataType>WChar</DataType>
+          <DataSize>255</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="f97144db-6235-4ae1-8df8-3e1f0d155d73">
+            <TableID>dbo_dim_scorecard</TableID>
+            <ColumnID>scorecard_name</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+    </Attribute>
+  </Attributes>
+  <Hierarchies>
+    <Hierarchy dwd:design-time-name="714076ea-3640-4478-bd75-1159aad8134b">
+      <ID>Hierarchy</ID>
+      <Name>Scorecard</Name>
+      <Levels>
+        <Level dwd:design-time-name="9c5b4a0f-3411-4969-9dcd-1c3ea945e71c">
+          <ID>Scorecard Name</ID>
+          <Name>Scorecard Name</Name>
+          <SourceAttributeID>Scorecard Name</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="3a72c2e7-7615-4860-9da9-757b20ca81c6">
+          <ID>Scorecard Code</ID>
+          <Name>Scorecard Code</Name>
+          <SourceAttributeID>Scorecard Code</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="203e3a36-d1f9-43e0-adf9-42ce213f470c">
+          <ID>Period</ID>
+          <Name>Period</Name>
+          <SourceAttributeID>Period</SourceAttributeID>
+        </Level>
+      </Levels>
+    </Hierarchy>
+  </Hierarchies>
+</Dimension>

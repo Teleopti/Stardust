@@ -1,0 +1,58 @@
+using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Collection
+{
+    [TestFixture]
+    public class IdenticalLayersSpecificationTest
+    {
+        private IdenticalLayersSpecification _target;
+        private IMainShift _mainShift;
+        private IActivity _baseAct;
+        private IActivity _lunchAct;
+        private IActivity _shbrAct;
+
+        [SetUp]
+        public void Setup()
+        {
+            _baseAct = ActivityFactory.CreateActivity("Tel");
+            _lunchAct = ActivityFactory.CreateActivity("Lunch");
+            _shbrAct = ActivityFactory.CreateActivity("ShBr");
+            _mainShift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
+            IVisualLayerCollection originalLayer = _mainShift.ProjectionService().CreateProjection();
+            _target = new IdenticalLayersSpecification(originalLayer);
+        }
+
+        [Test]
+        public void VerifyIsSatisfiedByPeriod()
+        {
+            IMainShift shiftToCheck = (IMainShift)_mainShift.Clone();
+            Assert.IsTrue(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
+
+            shiftToCheck.LayerCollection[1].MoveLayer(TimeSpan.FromMinutes(1));
+            Assert.IsFalse(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
+
+        }
+
+        [Test]
+        public void VerifyIsSatisfiedByPayload()
+        {
+            IActivity act1 = ActivityFactory.CreateActivity("hepp");
+            IActivity act2 = ActivityFactory.CreateActivity("hopp");
+            DateTimePeriod period =
+                new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+                                   new DateTime(2007, 1, 1, 16, 5, 0, DateTimeKind.Utc));
+            IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("hupp");
+
+            _mainShift = MainShiftFactory.CreateMainShift(act1, period, category);
+            IMainShift shiftToCheck = MainShiftFactory.CreateMainShift(act2, period, category);
+
+            _target = new IdenticalLayersSpecification(_mainShift.ProjectionService().CreateProjection());
+
+            Assert.IsFalse(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
+        }
+    }
+}

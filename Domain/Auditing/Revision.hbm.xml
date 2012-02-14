@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+						 assembly="Teleopti.Ccc.Domain"
+						 namespace="Teleopti.Ccc.Domain.Auditing">
+	<class name="Revision"
+			 schema="Auditing"
+			 mutable="false">
+		<id name="Id">
+			<generator class="identity" />
+		</id>
+		<property name="ModifiedAt" />
+		<many-to-one name="ModifiedBy"
+						 class="Teleopti.Ccc.Domain.Common.Person"
+						 not-null="true" foreign-key="FK_Revision_Person"/>
+	</class>
+
+	<query name="RevisionPeople">
+		<![CDATA[
+		select distinct p from Revision r
+										inner join r.ModifiedBy p
+		]]>
+	</query>
+</hibernate-mapping>

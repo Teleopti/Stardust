@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo.Requests"
+                   default-access="field.camelcase-underscore">
+
+  <class name="Request">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <!--IEntity-->
+    <many-to-one class="PersonRequest"
+                  name ="Parent"
+                  foreign-key="FK_Request_PersonRequest" not-null="true" />
+
+    <component name="Period" 
+               class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+      <component name="period" access="field">
+        <property name="Minimum"
+          column="StartDateTime"
+            not-null="true"
+            type="UtcDateTime" />
+        <property name="Maximum"
+        column="EndDateTime"
+          not-null="true"
+            type="UtcDateTime"  />
+      </component>
+    </component>
+
+  </class>
+</hibernate-mapping>

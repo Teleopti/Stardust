@@ -1,0 +1,1 @@
+--Contains nothing. you should not use Windows Auth in Azure

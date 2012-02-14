@@ -1,0 +1,20 @@
+/* 
+Trunk initiated: 
+2010-06-22 
+08:46
+By: TOPTINET\johanr 
+On TELEOPTI565 
+*/ 
+----------------  
+--Name: Devy Developer  
+--Date: 2010-xx-xx  
+--Desc: Because ...  
+----------------  
+ 
+GO 
+ 
+
+GO
+
+PRINT 'Adding build number to database' 
+INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (287,'7.1.287') 

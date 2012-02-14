@@ -1,0 +1,297 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Interfaces.Domain;
+using log4net;
+
+namespace Teleopti.Ccc.Domain.Optimization
+{
+    public interface IExtendReduceDaysOffOptimizer
+    {
+        bool Execute();
+        IPerson Owner { get; }
+    }
+
+    public class ExtendReduceDaysOffOptimizer : IExtendReduceDaysOffOptimizer
+    {
+        private readonly IPeriodValueCalculator _periodValueCalculator;
+        private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
+        private readonly IExtendReduceDaysOffDecisionMaker _decisionMaker;
+        private readonly IScheduleMatrixLockableBitArrayConverter _matrixConverter;
+        private readonly IScheduleService _scheduleServiceForFlexibleAgents;
+        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
+        //private readonly IDeleteSchedulePartService _deleteService;
+        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+        private readonly IResourceCalculateDaysDecider _decider;
+        private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
+        private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
+        private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
+        private readonly IList<IDayOffLegalStateValidator> _validatorList;
+        private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
+        private readonly IDayOffTemplate _dayOffTemplate;
+        private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
+        private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
+        //private readonly ILog _log;
+
+        public ExtendReduceDaysOffOptimizer(
+            IPeriodValueCalculator periodValueCalculator,
+            IScheduleResultDataExtractor personalSkillsDataExtractor,
+            IExtendReduceDaysOffDecisionMaker decisionMaker,
+            IScheduleMatrixLockableBitArrayConverter matrixConverter,
+            IScheduleService scheduleServiceForFlexibleAgents,
+            IOptimizerOriginalPreferences optimizerPreferences,
+            ISchedulePartModifyAndRollbackService rollbackService,
+            //IDeleteSchedulePartService deleteService,
+            IResourceOptimizationHelper resourceOptimizationHelper,
+            IEffectiveRestrictionCreator effectiveRestrictionCreator,
+            IResourceCalculateDaysDecider decider,
+            IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
+            IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
+            INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService,
+            IList<IDayOffLegalStateValidator> validatorList,
+            IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+            IDayOffTemplate dayOffTemplate,
+            IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
+            IDayOffOptimizerValidator dayOffOptimizerValidator)
+        {
+            _periodValueCalculator = periodValueCalculator;
+            _personalSkillsDataExtractor = personalSkillsDataExtractor;
+            _decisionMaker = decisionMaker;
+            _matrixConverter = matrixConverter;
+            _scheduleServiceForFlexibleAgents = scheduleServiceForFlexibleAgents;
+            _optimizerPreferences = optimizerPreferences;
+            _rollbackService = rollbackService;
+            //_deleteService = deleteService;
+            _resourceOptimizationHelper = resourceOptimizationHelper;
+            _effectiveRestrictionCreator = effectiveRestrictionCreator;
+            _decider = decider;
+            _originalStateContainerForTagChange = originalStateContainerForTagChange;
+            _workTimeBackToLegalStateService = workTimeBackToLegalStateService;
+            _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
+            _validatorList = validatorList;
+            _dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
+            _dayOffTemplate = dayOffTemplate;
+            _dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
+            _dayOffOptimizerValidator = dayOffOptimizerValidator;
+            //_log = LogManager.GetLogger(typeof(ExtendReduceTimeOptimizer));
+        }
+
+        public bool Execute()
+        {
+            _rollbackService.ClearModificationCollection();
+
+            var schedulePeriod = _matrixConverter.SourceMatrix.SchedulePeriod;
+            int targetDaysoff;
+            int currentDaysoff;
+            if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysoff, out currentDaysoff))
+                return false;
+
+            bool success = false;
+
+            ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrixConverter,
+                                                                                             _personalSkillsDataExtractor, _validatorList);
+
+            if (!daysToBeRescheduled.DayToLengthen.HasValue && !daysToBeRescheduled.DayToShorten.HasValue)
+                return false;
+
+            var oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+            if (daysToBeRescheduled.DayToLengthen.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
+            {
+
+                DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
+
+                changedDay changedDayOff = new changedDay();
+                var currentPart = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                
+                changedDayOff.PrevoiousSchedule = currentPart;
+                changedDayOff.DateChanged = dateOnly;
+               
+                currentPart.DeleteDayOff();
+                _rollbackService.Modify(currentPart);
+
+                changedDayOff.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+
+                IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(_matrixConverter.SourceMatrix);  //resource calculation is done automaticaly
+
+                if(rescheduleWhiteSpots(new[] {changedDayOff}, illegalDays, _matrixConverter.SourceMatrix, _originalStateContainerForTagChange))
+                    success = true;
+                else
+                {
+                    _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
+                }
+            }
+
+            if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
+            {
+                DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
+                if(addDayOff(dateOnly, true))
+                    success = true;
+                else
+                {
+                    _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
+                }
+            }
+
+            if(success)
+            {
+                var currentPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+                //bool result =
+                //    _decisionMaker.ValidateArray(
+                //        _matrixConverter.Convert(_optimizerPreferences.DayOffPlannerRules.UsePreWeek,
+                //                                 _optimizerPreferences.DayOffPlannerRules.UsePostWeek), _validatorList);
+                if (currentPeriodValue > oldPeriodValue)
+                {
+                    IList<DateOnly> toResourceCalculate = _rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+                    _rollbackService.Rollback();
+                    foreach (DateOnly dateOnly1 in toResourceCalculate)
+                    {
+                        bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1, true, considerShortBreaks);
+                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1.AddDays(1), true, considerShortBreaks);
+                    }
+                    return false;
+                }
+            }
+            
+                
+            return success;
+        }
+
+        public IPerson Owner
+        {
+            get { return _matrixConverter.SourceMatrix.Person; }
+        }
+
+        private bool rescheduleWhiteSpots(IEnumerable<changedDay> movedDates, IEnumerable<DateOnly> removedIllegalWorkTimeDays, IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer)
+        {
+            var toSchedule = movedDates.Select(changedDay => changedDay.DateChanged).ToList();
+            toSchedule.AddRange(removedIllegalWorkTimeDays);
+            toSchedule.Sort();
+            foreach (DateOnly dateOnly in toSchedule)
+            {
+
+                IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                ISchedulingOptions options = _optimizerPreferences.SchedulingOptions;
+
+                // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
+                //SetTheOriginalShiftCategoryInSchedulingOptions(dateOnly, matrix, originalStateContainer, options);
+                // -->
+
+                // reviewed and fixed version
+                IShiftCategory originalShiftCategory = null;
+                IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
+                IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();
+                if (originalPersonAssignment != null)
+                {
+                    IMainShift originalMainShift = originalPersonAssignment.MainShift;
+                    if (originalMainShift != null)
+                        originalShiftCategory = originalMainShift.ShiftCategory;
+                }
+
+                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, options);
+
+                bool schedulingResult;
+                if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
+                {
+                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, originalShiftCategory);
+                    if (!schedulingResult)
+                        schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+                }
+                else
+                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+
+                if (!schedulingResult)
+                {
+                    int iterations = 0;
+                    while (_nightRestWhiteSpotSolverService.Resolve(matrix) && iterations < 10)
+                    {
+                        iterations++;
+                    }
+
+                    if (originalStateContainer.IsFullyScheduled())
+                        return true;
+
+                    IList<DateOnly> toResourceCalculate = _rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+                    _rollbackService.Rollback();
+                    foreach (DateOnly dateOnly1 in toResourceCalculate)
+                    {
+                        bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1, true, considerShortBreaks);
+                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1.AddDays(1), true, considerShortBreaks);
+                    }
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        private bool addDayOff(DateOnly dateOnly, bool handleConflict)
+        {
+            var matrix = _matrixConverter.SourceMatrix;
+            var currentPart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+            changedDay changed = new changedDay();
+            changed.DateChanged = dateOnly;
+            changed.PrevoiousSchedule = currentPart;
+
+            currentPart.DeleteMainShift(currentPart);
+            currentPart.CreateAndAddDayOff(_dayOffTemplate);
+            _rollbackService.Modify(currentPart);
+
+            changed.CurrentSchedule = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+            resourceCalculateMovedDays(new[] { changed });
+
+            IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(_matrixConverter.SourceMatrix);  //resource calculation is done automaticaly
+
+            if (!rescheduleWhiteSpots(new List<changedDay>(), illegalDays, _matrixConverter.SourceMatrix, _originalStateContainerForTagChange))
+                return false;
+
+            if (handleConflict && !_dayOffOptimizerValidator.Validate(currentPart.DateOnlyAsPeriod.DateOnly, matrix))
+            {
+                //if day off rule validation fails, try to reschedule day before and day after
+                return _dayOffOptimizerConflictHandler.HandleConflict(currentPart.DateOnlyAsPeriod.DateOnly);
+            }
+
+            return true;
+        }
+
+        private void resourceCalculateMovedDays(IEnumerable<changedDay> changedDays)
+        {
+            foreach (changedDay changed in changedDays)
+            {
+                IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
+                foreach (var dateOnly in days)
+                {
+                    bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
+                }
+            }
+        }
+
+        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix)
+        {
+            _workTimeBackToLegalStateService.Execute(matrix);
+            IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
+            //resource calculate removed days
+            foreach (DateOnly dateOnly in removedIllegalDates)
+            {
+                bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, considerShortBreaks);
+            }
+
+            return removedIllegalDates;
+        }
+
+        private class changedDay
+        {
+            public DateOnly DateChanged { get; set; }
+            public IScheduleDay PrevoiousSchedule { get; set; }
+            public IScheduleDay CurrentSchedule { get; set; }
+        }
+    }
+}

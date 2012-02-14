@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <members>
+    <member name="N:Teleopti.Ccc.Sdk.Common.Contracts">
+      <summary>
+        The service contracts containing the operations available in the SDK as well as the extensions points for building custom payroll exports.
+      </summary>
+    </member>
+    <member name="N:Teleopti.Ccc.Sdk.Common.DataTransferObject">
+      <summary>
+        The data transfer objects used to communicate with the SDK.
+      </summary>
+    </member>
+    <member name="N:Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos">
+      <summary>
+        The query objects to supply as argument to some of the SDK queries.
+      </summary>
+    </member>
+  </members>
+</doc>
+

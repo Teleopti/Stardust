@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.ShiftCreator"
+                   default-access="field.camelcase-underscore">
+  <class name="ActivityExtender" 
+          abstract="true">
+    <id name="Id"
+        type="guid"
+        unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <discriminator column="ExtenderType"
+                    type="string"
+                    not-null="true"/>
+    <many-to-one name="Parent"
+             class="WorkShiftRuleSet"
+             not-null ="true" foreign-key="FK_ActivityExtender_WorkShiftRuleSet" />
+    
+    <many-to-one name="ExtendWithActivity"
+                 class="Teleopti.Ccc.Domain.Scheduling.Activity"
+                 not-null="true" foreign-key="FK_ActivityExtender_Activity"/>
+    <component name="ActivityLengthWithSegment" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Interfaces">
+      <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+        <component name="period" access="field">
+          <property name="Minimum"
+                    column="MinimumLength"
+                    not-null="true"
+                    type="TimeSpan" />
+          <property name="Maximum"
+                    column="MaximumLength"
+                    not-null="true"
+                    type="TimeSpan" />
+        </component>
+      </component>
+      <property name="Segment"
+                column="LengthSegment"
+                not-null="true"
+                type="TimeSpan"/>
+    </component>
+
+    <property name="OrderIndex"
+              access="readonly"
+              not-null="true"/>
+  </class>
+</hibernate-mapping>

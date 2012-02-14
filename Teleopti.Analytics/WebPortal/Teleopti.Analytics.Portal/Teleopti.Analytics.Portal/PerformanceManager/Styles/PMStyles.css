@@ -1,0 +1,327 @@
+﻿html, BODY
+{
+	height: 92%;
+	margin-top: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+    color: #000000;
+    font-family: Verdana;
+    background-color: white;
+}
+TD
+{
+    font-size: 12px;
+    color: #000066;
+    font-family: Verdana;
+}
+H2
+{
+    border-top: #003366 1px solid;
+    margin-top: 25px;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    margin-left: -15px;
+    color: #003366;
+}
+H3
+{
+    margin-top: 10px;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    margin-left: -15px;
+    color: #000000;
+}
+UL
+{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+OL
+{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+LI
+{
+    margin-top: 10px;
+    color: #000000;
+}
+FONT.value
+{
+    font-weight: bold;
+    color: darkblue;
+}
+FONT.key
+{
+    font-weight: bold;
+    color: darkgreen;
+}
+.divTag
+{
+    border: 1px;
+    border-style: solid;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    height: auto;
+    width: auto;
+    background-color: #cecece;
+}
+.BannerColumn
+{
+    background-color: #000000;
+}
+.Banner
+{
+    border: 0;
+    padding: 0;
+    
+    }
+.BannerTextCompany
+{
+    font: bold;
+    font-size: 18pt;
+    color: #cecece;
+    font-family: Tahoma;
+    height: 0px;
+    margin-top: 0;
+    margin-left: 8px;
+    margin-bottom: 0;
+    padding: 0px;
+    white-space: nowrap;
+    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
+}
+.BannerTextApplication
+{
+    color: #607EA4;
+    font: bold;
+    font-size: 18pt;
+    font-family: Tahoma;
+    height: 0px;
+    margin-top: 0;
+    margin-left: 8px;
+    margin-bottom: 0;
+    padding: 0px;
+    white-space: nowrap;
+    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
+}
+.BannerText
+{
+    font: bold;
+    font-size: 18pt;
+    font-family: Tahoma;
+    height: 0px;
+    margin-top: 0;
+    margin-left: 8px;
+    margin-bottom: 0;
+    padding: 0px;
+    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
+}
+.BannerSubhead
+{
+    border: 0;
+    padding: 0;
+    height: 16px;
+    margin-top: 0px;
+    margin-left: 10px;
+    color: #ffffff;
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr='#4B3E1A',EndColorStr='#FFFFFF');
+}
+.BannerSubheadText
+{
+    font: bold;
+    height: 11px;
+    font-size: 11px;
+    font-family: Tahoma;
+    margin-top: 1;
+    margin-left: 10;
+    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
+}
+.FooterRule
+{
+    border: 0;
+    padding: 0;
+    height: 1px;
+    margin: 0px;
+    color: #ffffff;
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr='#4B3E1A',EndColorStr='#FFFFFF');
+}
+.FooterText
+{
+    font-size: 11px;
+    font-weight: normal;
+    text-decoration: none;
+    font-family: Verdana;
+    margin-top: 10;
+    margin-left: 0px;
+    margin-bottom: 2;
+    padding: 0px;
+    color: #999999;
+    white-space: nowrap;
+}
+.FooterText A:link
+{
+    font-weight: normal;
+    color: #999999;
+    text-decoration: underline;
+}
+.FooterText A:visited
+{
+    font-weight: normal;
+    color: #999999;
+    text-decoration: underline;
+}
+.FooterText A:active
+{
+    font-weight: normal;
+    color: #999999;
+    text-decoration: underline;
+}
+.FooterText A:hover
+{
+    font-weight: normal;
+    color: #FF6600;
+    text-decoration: underline;
+}
+.ClickOnceInfoText
+{
+    font-size: 11px;
+    font-weight: normal;
+    text-decoration: none;
+    font-family: Tahoma;
+    margin-top: 0;
+    margin-right: 2px;
+    margin-bottom: 0;
+    padding: 0px;
+    color: #000000;
+}
+.InstallTextStyle
+{
+    font: bold;
+    font-size: 14pt;
+    font-family: Tahoma;
+    a: #FF0000;
+    text-decoration: None;
+}
+.DetailsStyle
+{
+    margin-left: 30px;
+}
+.ItemStyle
+{
+    margin-left: -15px;
+    font-weight: bold;
+}
+.StartColorStr
+{
+    background-color: #4B3E1A;
+}
+.JustThisApp A:link
+{
+    font-weight: normal;
+    color: #000066;
+    text-decoration: underline;
+}
+.JustThisApp A:visited
+{
+    font-weight: normal;
+    color: #000066;
+    text-decoration: underline;
+}
+.JustThisApp A:active
+{
+    font-weight: normal;
+    text-decoration: underline;
+}
+.JustThisApp A:hover
+{
+    font-weight: normal;
+    color: #FF6600;
+    text-decoration: underline;
+}
+.banneri1
+{
+    background-image: url("../images/headerborder.png");
+    background-repeat:repeat-x;
+}
+.banneri2
+{
+    background-image: url("../images/edge.png") ;
+    background-repeat:repeat-x;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+.italicSubText
+{
+    font-size: smaller;
+    font-style: italic;
+}
+.subText
+{
+    font-size: smaller;
+}
+.TreeHeader
+{
+	font-weight: bold;	
+}
+.normalNodeMode
+{
+	color: #000066;
+}
+.deleteNodeMode
+{
+	color: #FF6600;
+	font-style: italic;
+}
+hoverNormalNode, a.hoverNormalNode:hover
+{
+	color: #FF6600;
+}
+hoverDeleteNode, a.hoverDeleteNode:hover
+{
+	color: Black;
+}
+.selectedNode
+{
+	border: dotted 1px #000066;
+}
+.reportTitle
+{
+	color: #000066;
+	font-size: 14pt;
+	font-weight: normal;
+}
+.dialogTop
+{
+    background-image: url("../images/edge_small.png") ;
+    background-repeat:repeat-x;
+    
+}
+#divNewPopup{ 
+    background-color: White; 
+    height: 100px; 
+    width: 100px; 
+    display:none; 
+    position:absolute;
+    z-index: 9002;
+} 
+.validate
+{
+	color: Red;
+}
+.actionLink
+{
+	font-weight: normal;
+    color: #000066;
+    text-decoration: underline;
+}
+.systemMessage
+{
+	color: Red;
+	font-size: large;
+}
+.stretchActionBarWidth
+{
+	border-bottom: solid 1px #000066;
+    width: 100%;
+}

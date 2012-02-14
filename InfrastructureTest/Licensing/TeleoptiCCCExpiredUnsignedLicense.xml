@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<License>
+	<CustomerName>This license is stolen!</CustomerName>
+	<ExpirationDate>2008-01-01T00:00:00</ExpirationDate>
+	<ExpirationGracePeriod>P30D</ExpirationGracePeriod>
+	<MaxActiveAgents>10000</MaxActiveAgents>
+	<MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
+	<TeleoptiCCC>
+		<Base>true</Base>
+		<AgentSelfService>true</AgentSelfService>
+		<ShiftTrades>true</ShiftTrades>
+		<AgentScheduleMessenger>true</AgentScheduleMessenger>
+		<HolidayPlanner>true</HolidayPlanner>
+		<RealtimeAdherence>true</RealtimeAdherence>
+		<PerformanceManager>true</PerformanceManager>
+		<PayrollIntegration>true</PayrollIntegration>
+		<MyTimeWeb>true</MyTimeWeb>
+    <Developer>true</Developer>
+	</TeleoptiCCC>
+</License>

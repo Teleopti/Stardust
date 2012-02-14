@@ -1,0 +1,261 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Presentation;
+using Teleopti.Ccc.WinCode.Reporting;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+//Problem to open ScheduleReportViewer in design mode -> remove ReportDateFromToSelector control from this control.
+
+namespace Teleopti.Ccc.Win.Reporting
+{
+    public partial class ReportSettingsScheduledTimePerActivityView : BaseUserControl, IReportSettingsScheduledTimePerActivityView
+    {
+        private readonly IEventAggregator _eventAggregator;
+        private readonly ReportSettingsScheduledTimePerActivityPresenter _presenter;
+        private SchedulerStateHolder _schedulerStateHolder;
+
+        IList<IActivity> _availableActivities = new List<IActivity>();
+        readonly IList<IActivity> _selectedActivities = new List<IActivity>();
+        private ReportSettingsScheduledTimePerActivity _setting;
+        public ReportSettingsScheduledTimePerActivityView(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            InitializeComponent();
+
+            if (!StateHolderReader.IsInitialized || DesignMode) return;
+
+            _presenter = new ReportSettingsScheduledTimePerActivityPresenter(this);
+            _eventAggregator.GetEvent<LoadReportDone>().Subscribe(onLoadReportDone);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (!StateHolderReader.IsInitialized || DesignMode) return;
+
+            SetTexts();
+            
+            reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_setting.StartDate);
+            reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_setting.EndDate);
+           
+            reportAgentSelector1.OpenDialog += reportAgentSelector1BeforeDialog;
+        }
+
+        private void onLoadReportDone(bool obj)
+        {
+            Enabled = true;
+        }
+
+        void reportAgentSelector1BeforeDialog(object sender, EventArgs e)
+        {
+            _schedulerStateHolder.RequestedPeriod =
+                reportDateFromToSelector1.GetSelectedDates[0].ToDateTimePeriod(
+                    TeleoptiPrincipal.Current.Regional.TimeZone);
+        }
+
+        private SchedulerStateHolder createStateHolder()
+        {
+            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var factory = new RepositoryFactory();
+
+                var rep = factory.CreatePersonRepository(unitOfWork);
+
+                var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Now.AddYears(-1), DateTimeKind.Utc),
+                                       DateTime.SpecifyKind(DateTime.Now.AddYears(1), DateTimeKind.Utc));
+
+                
+                _availableActivities = factory.CreateActivityRepository(unitOfWork).LoadAllSortByName();
+                
+                using (unitOfWork.DisableFilter(QueryFilter.Deleted))
+                {
+                    factory.CreateSkillRepository(unitOfWork).LoadAll();
+                }
+
+                factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
+
+                ICollection<IPerson> persons = rep.FindPeopleInOrganization(period, false);
+                return new SchedulerStateHolder(Scenario, period, persons);
+            }
+        }
+
+        public void InitAgentSelector()
+        {
+            _schedulerStateHolder = createStateHolder();
+            reportAgentSelector1.SetStateHolder(_schedulerStateHolder);
+        }
+
+        public void InitActivitiesSelector()
+        {
+            loadSetting();
+            foreach (var availableActivity in _availableActivities)
+            {
+                if (availableActivity.Id.HasValue && _setting.Activities.Contains(availableActivity.Id.Value))
+                    _selectedActivities.Add(availableActivity);
+            }
+            twoListSelector1.Initiate(_availableActivities, _selectedActivities, "Description",
+                                      Resources.Activities, "");
+            //using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            //{
+            //    RepositoryFactory rep = new RepositoryFactory();
+            //    _availableActivities = rep.CreateActivityRepository(unitOfWork).LoadAllSortByName();
+
+            //    twoListSelector1.Initiate(_availableActivities, _selectedActivities, "Description",
+            //                              UserTexts.Resources.Activities, "");
+            //}
+        }
+
+        public void InitializeSettings()
+        {
+            _presenter.InitializeSettings();
+        }
+
+        public IScenario Scenario
+        {
+            get { return reportScenarioSelector1.SelectedItem; }
+        }
+
+        public DateOnlyPeriod Period
+        {
+            get { return reportDateFromToSelector1.GetSelectedDates.First(); }
+        }
+
+        public IList<IPerson> Persons
+        {
+            get { return reportAgentSelector1.SelectedPersons; }
+        }
+
+        public ICccTimeZoneInfo TimeZone
+        {
+            get
+            {
+                if (reportTimeZoneSelector1.Visible)
+                    return reportTimeZoneSelector1.TimeZone();
+
+                return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            }
+
+        }
+
+        public IList<IActivity> Activities
+        {
+            get { return twoListSelector1.GetSelected<IActivity>(); }
+        }
+
+        private void buttonAdvOkClick(object sender, EventArgs e)
+        {
+            Enabled = false;
+            try
+            {
+                saveSetting();
+            }
+            catch (DataSourceException dataSourceException)
+            {
+                using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+                {
+                    view.ShowDialog();
+                }
+
+                Enabled = true;
+                return;
+            }
+            _eventAggregator.GetEvent<LoadReport>().Publish(true);
+        }
+
+        public ReportSettingsScheduledTimePerActivityModel ScheduleTimePerActivitySettingsModel
+        {
+            get { return _presenter.GetSettingsModel(); }
+        }
+
+        public void HideTimeZoneControl()
+        {
+            reportTimeZoneSelector1.Visible = false;
+        }
+
+        private void saveSetting()
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                IList<Guid> personList = new List<Guid>();
+
+                foreach (var person in Persons)
+                {
+                    if (!person.Id.HasValue) throw new ArgumentException("persons");
+
+                    personList.Add(person.Id.Value);
+
+                }
+                _setting.Persons = personList;
+
+                IList<Guid> activities = new List<Guid>();
+                foreach (var selectedActivity in Activities)
+                {
+                    if(selectedActivity.Id.HasValue)
+                        activities.Add(selectedActivity.Id.Value);
+                }
+
+                _setting.Activities = activities;
+
+                if (Scenario.Id.HasValue)
+                    _setting.Scenario = Scenario.Id.Value;
+
+                _setting.StartDate = Period.StartDate.Date;
+                _setting.EndDate = Period.EndDate.Date;
+                _setting.GroupPage = reportAgentSelector1.SelectedGroupPageKey;
+
+                new PersonalSettingDataRepository(uow).PersistSettingValue(_setting);
+                uow.PersistAll();
+            }
+        }
+
+        private void loadSetting()
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _setting = new PersonalSettingDataRepository(uow).FindValueByKey("ReportSettingsScheduledTimePerActivity", new ReportSettingsScheduledTimePerActivity());
+            }
+
+            applySetting();
+        }
+
+        private void applySetting()
+        {
+            if (!_setting.Scenario.HasValue) return;
+
+            IList<IPerson> settingPersons = (from guid in _setting.Persons
+                                             from person in _schedulerStateHolder.AllPermittedPersons
+                                             where person.Id == guid
+                                             select person).ToList();
+
+            reportAgentSelector1.SetSelectedPersons(settingPersons);
+            reportAgentSelector1.UpdateComboWithSelectedAgents();
+            reportAgentSelector1.SelectedGroupPageKey = _setting.GroupPage;
+            
+            using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var scenarioRepository = new ScenarioRepository(unitOfWork);
+                var scenarios = scenarioRepository.LoadAll();
+
+                foreach (var scenario in scenarios)
+                {
+                    if (scenario.Id != _setting.Scenario.Value) continue;
+                    reportScenarioSelector1.SelectedItem = scenario;
+                    break;
+                }
+            }
+
+            
+        }
+    }
+}

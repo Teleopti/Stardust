@@ -1,0 +1,626 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Time;
+using System.Globalization;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.DomainTest.Helper;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
+{
+    [TestFixture]
+    public class SchedulePeriodTest
+    {
+        private DateOnly _from;
+        private SchedulePeriodType _type;
+        private int _number;
+        private SchedulePeriod _periodDay;
+        private SchedulePeriod _periodWeek;
+        private SchedulePeriod _periodMonth;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        private SchedulePeriod _periodException;
+        private TimeSpan _avgWorkTimePerDay;
+        private IPerson _person1;
+        private IPerson _person2;
+        private IPerson _person3;
+        private IPerson _normalPerson;
+        private IPersonContract _personContract;
+        private IContract _contract1;
+        private int _mustHavePreference;
+
+        [SetUp]
+        public void Setup()
+        {
+            _person1 = PersonFactory.CreatePerson();
+            _person1.PermissionInformation.SetCulture(new CultureInfo("en-US"));
+            _person1.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            ITeam simpleTeam = TeamFactory.CreateSimpleTeam();
+            IContract contract = ContractFactory.CreateContract("MyContract");
+            IPartTimePercentage partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
+            IContractSchedule contractSchedule = ContractScheduleFactory.CreateContractSchedule("Mon-Sat");
+            IContractScheduleWeek week1 = new ContractScheduleWeek();
+            week1.Add(DayOfWeek.Monday,true);
+            week1.Add(DayOfWeek.Tuesday, true);
+            week1.Add(DayOfWeek.Wednesday, true);
+            week1.Add(DayOfWeek.Thursday, true);
+            week1.Add(DayOfWeek.Friday, true);
+            contractSchedule.AddContractScheduleWeek(week1);
+            _personContract = new PersonContract(contract,partTime,contractSchedule);
+            _normalPerson = PersonFactory.CreatePerson();
+            _normalPerson.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+            _normalPerson.PermissionInformation.SetDefaultTimeZone(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone); 
+            _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1),
+                                     _personContract, simpleTeam));
+            _person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 3),
+                                     _personContract, simpleTeam));
+            _person2 = PersonFactory.CreatePerson();
+            _person2.PermissionInformation.SetCulture(new CultureInfo("en-US"));
+            _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            _person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2007, 12, 30),
+                                         _personContract, simpleTeam));
+            _person3 = PersonFactory.CreatePerson();
+            _person3.PermissionInformation.SetCulture(new CultureInfo("en-US"));
+            _person3.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            _person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1),
+                                         _personContract, simpleTeam));
+            _from = new DateOnly(2008, 1, 3); //Thursday, sunday before is 12-30
+            _type = SchedulePeriodType.Day;
+            _number = 10;
+            _avgWorkTimePerDay = TimeSpan.FromHours(8d);
+            _periodDay = new SchedulePeriod(_from, _type, _number);
+            _person1.AddSchedulePeriod(_periodDay);
+            _periodWeek = new SchedulePeriod(_from, SchedulePeriodType.Week, 3);
+            _person2.AddSchedulePeriod(_periodWeek);
+            _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
+
+            _person3.AddSchedulePeriod(_periodMonth);
+            _mustHavePreference = 3;
+        }
+
+        [Test]
+        public void CanCreateAndReadProperties()
+        {
+            Assert.AreEqual(_from, _periodDay.DateFrom);
+            Assert.AreEqual(_type, _periodDay.PeriodType);
+            Assert.AreEqual(_number, _periodDay.Number);
+            Assert.AreEqual(_avgWorkTimePerDay, _periodDay.AverageWorkTimePerDay);
+            Assert.AreEqual(3, _periodDay.GetDaysOff(_from));
+
+            Assert.AreEqual(_from, _periodMonth.DateFrom);
+            Assert.AreEqual(_from, _periodWeek.DateFrom);
+            Assert.AreEqual(0, _periodMonth.ShiftCategoryLimitationCollection().Count);
+        }
+
+        [Test]
+        public void CanReturnCorrectWeekPeriod()
+        {
+            DateOnly startPeriod1 = new DateOnly(2008, 12, 29);//Monday
+            DateOnly startPeriod2 = new DateOnly(2009, 1, 5);
+            DateOnly startPeriod3 = new DateOnly(2009, 1, 26);
+
+            ISchedulePeriod weekPeriod1 = new SchedulePeriod(startPeriod1, SchedulePeriodType.Week, 2); 
+            _normalPerson.AddSchedulePeriod(weekPeriod1);
+            ISchedulePeriod weekPeriod2 = new SchedulePeriod(startPeriod2, SchedulePeriodType.Week, 1);
+            _normalPerson.AddSchedulePeriod(weekPeriod2);
+            ISchedulePeriod weekPeriod3 = new SchedulePeriod(startPeriod3, SchedulePeriodType.Week, 1); 
+            _normalPerson.AddSchedulePeriod(weekPeriod3);
+            DateOnly expectedDate = new DateOnly(2009,1,12);
+            DateOnly requestdDateTime = new DateOnly(2009, 1, 15);
+            //DateTime periodStartUtc = _normalPerson.SchedulePeriod(requestdDateTime).GetSchedulePeriod(requestdDateTime).Value.StartDateTime;
+            DateOnly periodStart =
+                _normalPerson.SchedulePeriod(requestdDateTime).GetSchedulePeriod(requestdDateTime).Value.StartDate;
+            //DateTime agentLocal =
+            //    TimeZoneHelper.ConvertFromUtc(periodStartUtc, _normalPerson.PermissionInformation.DefaultTimeZone());
+
+            Assert.AreEqual(weekPeriod1, _normalPerson.SchedulePeriod(new DateOnly(2008, 12, 31)));
+            Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 5)));
+            Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 13)));
+            Assert.AreEqual(expectedDate, new DateOnly(periodStart));
+            Assert.AreEqual(weekPeriod3, _normalPerson.SchedulePeriod(new DateOnly(2009, 3, 6)));
+        }
+
+        [Test]
+        public void CanGetSchedulePeriodWeek()
+        {
+            DateOnly startPeriod1 = new DateOnly(2008, 12, 30);//Tuesday
+            ISchedulePeriod weekPeriod1 = new SchedulePeriod(startPeriod1, SchedulePeriodType.Week, 2);
+            _normalPerson.AddSchedulePeriod(weekPeriod1);
+
+            DateOnly requested = new DateOnly(2008, 12, 31);
+            DateOnly expectedLocalStart = new DateOnly(2008, 12, 30);
+            DateOnly expectedLocalEnd = new DateOnly(2009, 1, 12);
+            //Convert expected local from person timezone
+            DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
+
+            Assert.AreEqual(expectedPeriod, weekPeriod1.GetSchedulePeriod(requested));
+        }
+
+        [Test]
+        public void CanGetSchedulePeriodDay()
+        {
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            DateOnly expectedLocalStart = new DateOnly(2008, 3, 13);
+            DateOnly expectedLocalEnd = new DateOnly(2008, 3, 22);
+            DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
+
+            Assert.AreEqual(expectedPeriod, _periodDay.GetSchedulePeriod(requested));
+        }
+
+        [Test]
+        public void CanGetSchedulePeriodMonth()
+        {
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            DateOnly expectedLocalStart = new DateOnly(2008, 3, 3);
+            DateOnly expectedLocalEnd = new DateOnly(2008, 4, 2);
+            //Convert expected local from person timezone
+            DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
+
+            Assert.AreEqual(expectedPeriod, _periodMonth.GetSchedulePeriod(requested));
+        }
+
+        [Test]
+        public void CanGetSchedulePeriodMonthForTwoMonths()
+        {
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            DateOnly expectedLocalStart = new DateOnly(2008, 3, 3);
+            DateOnly expectedLocalEnd = new DateOnly(2008, 5, 2);
+            //Convert expected local from person timezone
+            DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
+
+            _periodMonth.Number = 2;
+            Assert.AreEqual(expectedPeriod, _periodMonth.GetSchedulePeriod(requested));
+        }
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        //[Test]
+        //public void VerifyPeriodTarget()
+        //{
+        //    DateOnly schedulePeriodStart = new DateOnly(2009, 1, 5); // Mon
+        //    SchedulePeriodType periodType = SchedulePeriodType.Day;
+        //    int periodNumber = 10;
+        //    TimeSpan avgWorkTimePerDay = TimeSpan.FromHours(8d);
+
+        //    SchedulePeriod period = new SchedulePeriod(schedulePeriodStart, periodType, periodNumber);
+        //    period.AverageWorkTimePerDay = avgWorkTimePerDay;
+
+        //    // test 1: no person is given
+        //    TimeSpan targetTime = period.PeriodTarget(schedulePeriodStart);
+        //    Assert.AreEqual(0, targetTime.TotalHours);
+
+        //    // test 2: person is given, no day off in contract
+        //    DateOnly periodPeriodStart = new DateOnly(schedulePeriodStart.Date.Subtract(new TimeSpan(7, 0, 0, 0)));
+        //    IPerson person = PersonFactory.CreatePersonWithPersonPeriod(periodPeriodStart, new List<ISkill>());
+        //    person.AddSchedulePeriod(period);
+
+        //    // 10 workdays, no day offs
+        //    targetTime = period.PeriodTarget(schedulePeriodStart);
+        //    Assert.AreEqual(10 * avgWorkTimePerDay.TotalHours, targetTime.TotalHours);
+
+        //    // add days off in contract
+        //    IContractSchedule contractSchedule = ContractScheduleFactory.CreateContractSchedule("Mon-Sat");
+        //    IContractScheduleWeek week1 = new ContractScheduleWeek();
+        //    week1.Add(DayOfWeek.Monday, true);
+        //    week1.Add(DayOfWeek.Tuesday, true);
+        //    week1.Add(DayOfWeek.Wednesday, true);
+        //    week1.Add(DayOfWeek.Thursday, true);
+        //    week1.Add(DayOfWeek.Friday, true);
+        //    contractSchedule.AddContractScheduleWeek(week1);
+        //    IContract contract = ContractFactory.CreateContract("MyContract");
+        //    IPartTimePercentage partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
+        //    PersonContract personContract = new PersonContract(contract, partTime, contractSchedule);
+        //    person.PersonPeriodCollection[0].PersonContract = personContract;
+
+        //    // 8 workdays, 2 offs
+        //    targetTime = period.PeriodTarget(schedulePeriodStart);
+        //    Assert.AreEqual(8 * avgWorkTimePerDay.TotalHours, targetTime.TotalHours);
+        //}
+ 
+        //[Test]
+        //public void VerifyTargetTimeWithDifferentPeriodType()
+        //{
+        //    TimeSpan targetTime = _periodDay.PeriodTarget(new DateOnly(2008, 3, 5));
+        //    Assert.AreEqual(TimeSpan.FromHours(8*8), targetTime);
+        //    targetTime = _periodWeek.PeriodTarget(new DateOnly(2008, 3, 5));
+        //    Assert.AreEqual(TimeSpan.FromHours(((3*5))*8), targetTime);
+        //    targetTime = _periodMonth.PeriodTarget(new DateOnly(2008, 3, 5));
+        //    Assert.AreEqual(TimeSpan.FromHours(23*8), targetTime);
+        //}
+
+        [Test]
+        public void VerifyEmptyConstructor()
+        {
+            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_periodDay.GetType(), true));
+        }
+
+        [Test]
+        public void VerifyNullOnLowerFromDate()
+        {
+            DateOnly date = new DateOnly(2004, 1, 5);
+            Assert.IsNull(_periodDay.GetSchedulePeriod(date));      
+        }
+
+        //[Test]
+        //public void VerifyZeroTargetTimeOnLowerFromDate()
+        //{
+        //    DateOnly date = new DateOnly(2004, 1, 5);
+        //    Assert.AreEqual(TimeSpan.FromMinutes(0), _periodDay.PeriodTarget(date));
+        //}
+
+        [Test]
+        public void VerifyAdjustForTerminalDateInSchedulePeriod()
+        {
+            DateOnly terminalDate = new DateOnly(2008, 3, 20);
+            _person2.TerminalDate = terminalDate;
+
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            DateOnly expectedLocalStart = new DateOnly(2008, 3, 6);
+            DateOnly expectedLocalEnd = terminalDate;
+            DateOnlyPeriod expectedPeriod = new DateOnlyPeriod(expectedLocalStart, expectedLocalEnd);
+
+            Assert.AreEqual(expectedPeriod, _periodWeek.GetSchedulePeriod(requested));
+        }
+
+        [Test]
+        public void VerifyAdjustForTerminalDateBeforeSchedulePeriod()
+        {
+            DateOnly terminalDate = new DateOnly(2008, 1, 20);
+            _person2.TerminalDate = terminalDate;
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            Assert.IsFalse(_periodWeek.GetSchedulePeriod(requested) != null);    
+        }
+
+        [Test]
+        public void VerifyAdjustForTerminalDateAfterSchedulePeriod()
+        {
+            DateOnly terminalDate = new DateOnly(2008, 5, 20);
+            _person2.TerminalDate = terminalDate;
+
+            DateOnly requested = new DateOnly(2008, 3, 15);
+            DateOnly expectedStart = new DateOnly(2008, 3, 6);
+            DateOnly expectedEnd = new DateOnly(2008, 3, 26);
+            DateOnlyPeriod expectedPeriod =
+                new DateOnlyPeriod(expectedStart, expectedEnd);
+
+            Assert.AreEqual(expectedPeriod.StartDate, _periodWeek.GetSchedulePeriod(requested).Value.StartDate);
+            Assert.AreEqual(expectedPeriod.EndDate, _periodWeek.GetSchedulePeriod(requested).Value.EndDate);
+        }
+
+        /// <summary>
+        /// Verifies the can get contracts.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-06-23
+        /// </remarks>
+        [Test]
+        public void VerifyCanGetContract()
+        {
+            IPersonPeriod personPeriod;
+            _person3.DeletePersonPeriod(_person3.PersonPeriodCollection.First());
+            personPeriod = _periodMonth.GetPersonPeriod();
+            Assert.IsNull(personPeriod);
+
+            IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 12, 30));
+            _person3.AddPersonPeriod(personPeriod1);
+            
+            personPeriod = _periodMonth.GetPersonPeriod();
+            Assert.AreEqual(personPeriod1,personPeriod);
+        }
+
+        [Test]
+        public void VerifySeemsToGetRightPeriod()
+        {
+            _contract1 = new Contract("4Hour");
+            _contract1.WorkTime = new WorkTime(new TimeSpan(4,0,0));
+            
+            IPersonContract personContract1 = new PersonContract(_contract1, 
+                                                                 new PartTimePercentage("Percent"),
+                                                                 new ContractSchedule("Contract"));
+
+            IPersonPeriod period1 = new PersonPeriod(new DateOnly(2009, 2, 2), personContract1, new Team());
+
+            IContract contract2 = new Contract("8Hour");
+            contract2.WorkTime = new WorkTime(new TimeSpan(8, 0, 0));
+
+            IPersonContract personContract2 = new PersonContract(contract2,
+                                                                 new PartTimePercentage("Percent2"),
+                                                                 new ContractSchedule("Contrac2"));
+            DateOnly dateOnly09 = new DateOnly(2009, 2, 9);
+
+            IPersonPeriod period2 = new PersonPeriod(dateOnly09, personContract2, new Team());
+
+            IPerson person = PersonFactory.CreatePerson();
+ 
+            person.AddPersonPeriod(period1);
+            person.AddPersonPeriod(period2);
+
+            ISchedulePeriod schedulePeriod = new SchedulePeriod(dateOnly09, SchedulePeriodType.Day, 1);
+
+            person.AddSchedulePeriod(schedulePeriod);
+
+            IList<IPersonPeriod> periods = person.PersonPeriods(new DateOnlyPeriod(dateOnly09, dateOnly09.AddDays(10)));
+
+            Assert.AreEqual(TimeSpan.FromHours(8), periods[0].PersonContract.Contract.WorkTime.AvgWorkTimePerDay);
+        }
+
+
+
+        /// <summary>
+        /// Verifies the can get average work time from contract.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-06-23
+        /// </remarks>
+        [Test]
+        public void VerifyCanGetAverageWorkTimeFromContract()
+        {
+            IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 12, 30));
+            _person3.AddPersonPeriod(personPeriod1);
+
+            _periodMonth.ResetAverageWorkTimePerDay();
+            //Assert.AreEqual(personPeriod1.PersonContract.AverageWorkTimePerDay,
+            //    _periodMonth.AverageWorkTimePerDay);
+            //Assert.AreEqual(personPeriod1.PersonContract.PartTimePercentage.);
+        }
+
+        /// <summary>
+        /// Verifies the can reset average work time per day.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-06-23
+        /// </remarks>
+        [Test]
+        public void VerifyCanResetAverageWorkTimePerDay()
+        {
+            TimeSpan originalValue = _periodMonth.AverageWorkTimePerDay; //From contract time = 8 hours
+            _periodMonth.AverageWorkTimePerDay = TimeSpan.FromHours(5d);
+            Assert.AreEqual(TimeSpan.FromHours(5d),_periodMonth.AverageWorkTimePerDay);
+            _periodMonth.ResetAverageWorkTimePerDay();
+            Assert.AreEqual(originalValue,_periodMonth.AverageWorkTimePerDay);
+        }
+
+        /// <summary>
+        /// Verifies the can reset days off.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-07-10
+        /// </remarks>
+        [Test]
+        public void VerifyCanResetDaysOff()
+        {
+            int originalValue = _periodMonth.GetDaysOff(_from); //From contract = 8
+            _periodMonth.SetDaysOff(5);
+            Assert.AreEqual(5, _periodMonth.GetDaysOff(_from));
+            Assert.AreEqual(5, _periodMonth.GetDaysOff(new DateOnly(_from.Date.AddYears(1))));
+            _periodMonth.ResetDaysOff();
+            Assert.AreEqual(originalValue, _periodMonth.GetDaysOff(_from));
+        }
+
+        /// <summary>
+        /// Verifies the number of days off cannot be less than one.
+        /// </summary>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 2008-07-10
+        /// </remarks>
+        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyNumberOfDaysOffCannotBeLessThanOne()
+        {
+            _periodMonth.SetDaysOff(-1);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyNumberOfDaysOffCannotBeGreaterThan999()
+        {
+            _periodMonth.SetDaysOff(1000);
+        }
+
+        [Test]
+        public void VerifyNumberOfDaysOffOk()
+        {
+            _periodMonth.SetDaysOff(0);
+            _periodMonth.SetDaysOff(999);
+        }
+
+        [Test]
+        public void VerifyIsDaysOffOverride()
+        {
+            Assert.IsFalse(_periodMonth.IsDaysOffOverride);
+            _periodMonth.SetDaysOff(5);
+            Assert.IsTrue(_periodMonth.IsDaysOffOverride);
+            _periodMonth.ResetDaysOff();
+            Assert.IsFalse(_periodMonth.IsDaysOffOverride);
+        }
+
+        [Test]
+        public void VerifyIsAverageWorkTimePerDayOverride()
+        {
+            Assert.IsFalse(_periodMonth.IsAverageWorkTimePerDayOverride);
+            _periodMonth.AverageWorkTimePerDay = TimeSpan.FromHours(6d);
+            Assert.IsTrue(_periodMonth.IsAverageWorkTimePerDayOverride);
+            _periodMonth.ResetAverageWorkTimePerDay();
+            Assert.IsFalse(_periodMonth.IsAverageWorkTimePerDayOverride);
+        }
+
+        [Test]
+        public void VerifyCanSetFromDate()
+        {
+            DateOnly testDateTime = new DateOnly(DateTime.MinValue);
+            _periodMonth.DateFrom = testDateTime;
+            Assert.AreEqual(testDateTime, _periodMonth.DateFrom);
+        }
+
+        [Test]
+        public void VerifyCanSetPeriodType()
+        {
+            _periodMonth.PeriodType = SchedulePeriodType.Week;
+            Assert.AreEqual(SchedulePeriodType.Week, _periodMonth.PeriodType);
+        }
+
+        [Test]
+        public void VerifyCanSetNumber()
+        {
+            _periodMonth.Number = 80;
+            Assert.AreEqual(80, _periodMonth.Number);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyNumberGreaterThanZero()
+        {
+            _periodDay.Number = 0;
+        }
+
+        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyNumberGreaterThanZeroInConstructor()
+        {
+            _periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
+        }
+
+        [Test]
+        public void VerifyCloneWorks()
+        {
+            SchedulePeriod clonedEntity = (SchedulePeriod)_periodMonth.Clone();
+            Assert.AreNotEqual(clonedEntity, _periodMonth);
+        }
+
+        [Test]
+        public void VerifyGetContractScheduleDaysOff()
+        {
+            Assert.AreEqual(3, _periodDay.GetDaysOff(_from));
+        }
+
+        [Test]
+        public void VerifyGetContractScheduleDaysOffUsesOverride()
+        {
+            _periodDay.SetDaysOff(5);
+            Assert.AreEqual(5, _periodDay.GetDaysOff(_from));
+        }
+
+        [Test]
+        public void VerifyTargetTimeWhenPersonPeriodStartsInSchedulePeriod()
+        {
+            _normalPerson.RemoveAllPersonPeriods();
+            _normalPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2009, 2, 9),
+                                     _personContract, TeamFactory.CreateSimpleTeam()));
+
+            _from = new DateOnly(2009,2,2);
+            _periodMonth = new SchedulePeriod(_from, SchedulePeriodType.Month, 1);
+            _normalPerson.AddSchedulePeriod(_periodMonth);
+
+            int daysOffs = _periodMonth.GetDaysOff(_from);
+            Assert.AreEqual(6, daysOffs);
+
+            DateOnlyPeriod? period = _periodMonth.GetSchedulePeriod(_from);
+            int daysInPeriod = period.Value.DayCount();
+            Assert.AreEqual(28, daysInPeriod);
+
+            int workDays = _periodMonth.GetWorkdays(_from);
+
+            Assert.AreEqual(21 - daysOffs, workDays);
+        }
+
+        [Test]
+        public void CanAddShiftCategoryLimitation()
+        {
+            IShiftCategoryLimitation shiftCategoryLimitation =
+                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
+            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+            Assert.AreEqual(1, _periodMonth.ShiftCategoryLimitationCollection().Count);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void CannotAddShiftCategoryLimitationWithSameCategory()
+        {
+            IShiftCategoryLimitation shiftCategoryLimitation =
+                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
+            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+        }
+
+        [Test]
+        public void CanRemoveShiftCategoryLimitation()
+        {
+            IShiftCategoryLimitation shiftCategoryLimitation =
+                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
+            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+            _periodMonth.RemoveShiftCategoryLimitation(shiftCategoryLimitation.ShiftCategory);
+            Assert.AreEqual(0, _periodMonth.ShiftCategoryLimitationCollection().Count);
+
+            _periodMonth.RemoveShiftCategoryLimitation(shiftCategoryLimitation.ShiftCategory);
+            Assert.AreEqual(0, _periodMonth.ShiftCategoryLimitationCollection().Count);
+        }
+
+        [Test]
+        public void CanClearShiftCategoryLimitation()
+        {
+            IShiftCategoryLimitation shiftCategoryLimitation =
+                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
+            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+            _periodMonth.ClearShiftCategoryLimitation();
+            Assert.AreEqual(0, _periodMonth.ShiftCategoryLimitationCollection().Count);
+        }
+
+        [Test]
+        public void VerifyMustHavePreferences()
+        {
+            _periodMonth.MustHavePreference = _mustHavePreference;
+            Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
+        }
+
+        [Test, ExpectedException (typeof(ArgumentOutOfRangeException))]
+        public void VerifyMustHavePreferencesCannotBeLessThanZero()
+        {
+            _periodMonth.MustHavePreference = -1;
+            Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
+        }
+
+        [Test]
+        public void VerifyBalanceIn()
+        {
+            TimeSpan value = new TimeSpan();
+            _periodDay.BalanceIn = value;
+            Assert.AreEqual(value, _periodDay.BalanceIn);
+        }
+
+        [Test]
+        public void VerifyExtra()
+        {
+            TimeSpan value = new TimeSpan();
+            _periodDay.Extra = value;
+            Assert.AreEqual(value, _periodDay.Extra);
+        }
+
+        [Test]
+        public void VerifyBalanceOut()
+        {
+            TimeSpan value = new TimeSpan();
+            _periodDay.BalanceOut = value;
+            Assert.AreEqual(value, _periodDay.BalanceOut);
+        }
+
+		[Test]
+		public void ShouldReturnRealEndDate()
+		{
+			var startDate = new DateOnly(2011, 1, 1);
+			var endDateDay = new DateOnly(2011, 1, 10);
+			var endDateWeek = new DateOnly(2011, 1, 14);
+			var endDateMonth = new DateOnly(2011, 1, 31);
+			var schedulePeriodDay = new SchedulePeriod(startDate, SchedulePeriodType.Day, 10);
+			var schedulePeriodWeek = new SchedulePeriod(startDate, SchedulePeriodType.Week, 2);
+			var schedulePeriodMonth = new SchedulePeriod(startDate, SchedulePeriodType.Month, 1);
+
+			Assert.AreEqual(endDateDay, schedulePeriodDay.RealDateTo());
+			Assert.AreEqual(endDateWeek, schedulePeriodWeek.RealDateTo());
+			Assert.AreEqual(endDateMonth, schedulePeriodMonth.RealDateTo());
+		}
+    }
+}

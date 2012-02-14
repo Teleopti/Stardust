@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.TimeLayer"
+                   default-access="field.camelcase-underscore">
+  <subclass name="DayOfWeekMultiplicatorDefinition" 
+            extends="MultiplicatorDefinition"
+            discriminator-value="DayOfWeekDefinition">
+
+    <property name="DayOfWeek" not-null="false" type="int"/>
+
+    <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+      <component name="period" access="field">
+        <property name="Minimum" column="WorkTimeMinimum" not-null="false" type="TimeSpan" />
+        <property name="Maximum" column="WorkTimeMaximum" not-null="false" type="TimeSpan"  />
+      </component>
+    </component>
+
+  </subclass>
+
+</hibernate-mapping>

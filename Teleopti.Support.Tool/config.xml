@@ -1,0 +1,96 @@
+﻿<?xml version="1.0"?>
+<configFiles mode="production">
+	<!--The ipath is for the installed version and the patch is from the installed folder ex C:\Program Files\Teleopti -->
+	<!--The dpath is from root folder of the develop project ex C:\Code\Raptor\Root-->
+	
+	<!--\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config is NOT copied to debug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\Analytics\web.config" dpath="\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config">
+		<ConnString type="analyticsDB" elementName="LocalSqlServer" parentElement="add" PersistSecurityInfoKey="Persist Security Info=" IntegratedSecurityKey="Integrated Security=" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password="></ConnString>
+		<ConnString type="analyticsDB" elementName="Database" parentElement="add" PersistSecurityInfoKey="Persist Security Info=" IntegratedSecurityKey="Integrated Security=" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password="></ConnString>
+		<ConnString type="cube" elementName="Cube" parentElement="add" ProviderKey="Provider=" PersistSecurityInfoKey="Persist Security Info=" IntegratedSecurityKey="Integrated Security=" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" ClientCacheSizeKey="Client Cache Size=" AutoSynchPeriod="Auto Synch Period="></ConnString>
+	</File>
+
+	<!-- This is the admin client Nothing To Change in \Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy - If Change we need a resign-->
+	<File ipath="\TeleoptiCCC\Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy" dpath="\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\App.config"></File>
+
+	<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config is NOT copied to dubug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config">
+		<!--<ConnString type="analyticsDB" elementName="stageConnectionString" parentElement="add" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>-->
+		<ConnString type="analyticsDB" elementName="datamartConnectionString" parentElement="add" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="cube" elementName="Cube" parentElement="add" ProviderKey="Provider=" PersistSecurityInfoKey="Persist Security Info=" IntegratedSecurityKey="Integrated Security=" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" ClientCacheSizeKey="Client Cache Size=" AutoSynchPeriod="Auto Synch Period="></ConnString>
+	</File>
+
+		<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\test.nhib.xml IS Copied to debug folder-->
+	<File ipath="\TeleoptiCCC\ETL\Service\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\test.nhib.xml">
+		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
+	</File>
+
+	<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config is NOT copied to dubug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config">
+		<!--<ConnString type="analyticsDB" elementName="stageConnectionString" parentElement="add" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>-->
+		<ConnString type="analyticsDB" elementName="datamartConnectionString" parentElement="add" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="cube" elementName="Cube" parentElement="add" ProviderKey="Provider=" PersistSecurityInfoKey="Persist Security Info=" IntegratedSecurityKey="Integrated Security=" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" ClientCacheSizeKey="Client Cache Size=" AutoSynchPeriod="Auto Synch Period="></ConnString>
+	</File>
+
+	<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\test.nhib.xml IS Copied to debug folder-->
+	<File ipath="\TeleoptiCCC\ETL\Tools\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\test.nhib.xml">
+		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
+	</File>
+
+	<!--\Teleopti.Messaging\Teleopti.Messaging.Management\App.config is NOT copied to dubug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\MessageBroker\Teleopti.Messaging.Management.exe.config" dpath="\Teleopti.Messaging\TeleOpti.Messaging.Bin\Teleopti.Messaging.Management.exe.config">
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+	</File>
+	
+	<!--\Teleopti.Messaging\TeleOpti.Messaging.Bin\Teleopti.Messaging.Svc.exe.config is copied to dubug folder -->
+	<File ipath="\TeleoptiCCC\MessageBroker\Teleopti.Messaging.Svc.exe.config" dpath="\Teleopti.Messaging\TeleOpti.Messaging.Bin\Teleopti.Messaging.Svc.exe.config">
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+	</File>
+
+	<!-- This is the Mytime if pilla we need to resign Nothing To Change in \MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy -->
+	<File ipath="\TeleoptiCCC\MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy" dpath="\AgentPortal\Teleopti.Ccc.AgentPortal\app.config"></File>
+
+	<!-- Nothing To Change in \PMService\web.config -->
+	<File ipath="\TeleoptiCCC\PMService\web.config" dpath="\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\Web.config"></File>
+
+	<!--\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\Web.config is NOT copied to dubug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\RTA\web.config" dpath="\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\Web.config">
+		<ConnString type="analyticsDB" elementName="DataStore" parentElement="add" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+	</File>
+	
+	<!-- Nothing To Change in \RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config is NOT copied to dubug folder (Do we need to swap)-->
+	<File ipath="\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config" dpath="\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config"></File>
+
+	<!-- Doesent \Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug\V7Config.nhib.xml exists then copy a new one-->
+	<File ipath="\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug\V7Config.nhib.xml">
+		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
+	</File>
+	
+	<!-- Doesent \Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug\V7Config.nhib.xml exists then copy a new one. This is only needed in develop environment-->
+	<File ipath="" dpath="\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug\V7Config.nhib.xml">
+		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
+	</File>
+	
+	<!--\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Web.config is NOT copied to dubug folder (Do we need to swap)-->
+	<!--
+	<File ipath="\TeleoptiCCC\SDK\web.config" dpath="\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Web.config">
+		<ConnString type="messageBroker" elementName="MessageBroker" parentElement="add" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
+	</File>
+	-->
+</configFiles>
+
+
+
+
+

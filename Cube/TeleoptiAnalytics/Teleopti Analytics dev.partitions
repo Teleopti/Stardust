@@ -1,0 +1,85 @@
+﻿<Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="c74d259b-1972-4ae3-bba9-35e4b24dabc1" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Teleopti Analytics</ID>
+  <MeasureGroups>
+    <MeasureGroup>
+      <ID>Fact Queue</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="89a5e79c-b739-40dd-ad06-b6b50a68cd24">
+          <ID>Fact Queue</ID>
+          <Name>Fact Queue</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="a8b58e50-171b-4d46-ba77-05b119c007e8">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_queue</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Schedule Shift</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="6e7b2594-8465-4720-b7cb-b31d8a3496cf">
+          <ID>Fact Schedule Shift</ID>
+          <Name>Fact Schedule Shift</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="12bf2d8d-05e9-4e67-8dc7-02e311c56bbd">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_schedule_shift</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Bridge Time Zone</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="bf3cb670-ffb5-4c94-87fa-33d90b539a89">
+          <ID>Bridge Time Zone</ID>
+          <Name>Bridge Time Zone</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="21cf4f96-6260-473a-825b-c5172275a777">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_bridge_time_zone</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+    <MeasureGroup>
+      <ID>Fact Forecast Workload</ID>
+      <Partitions>
+        <Partition dwd:design-time-name="b317c0d8-5984-4366-abbc-1d6e8e77d0a5">
+          <ID>Fact Forecast Workload</ID>
+          <Name>Fact Forecast Workload</Name>
+          <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+          <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+          <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
+          <State>Unprocessed</State>
+          <Source xsi:type="DsvTableBinding" dwd:design-time-name="0aca0ade-9d20-4de1-8cd1-8c723d84ffea">
+            <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            <TableID>dbo_fact_forecast_workload</TableID>
+          </Source>
+          <StorageMode>Molap</StorageMode>
+          <CurrentStorageMode>Molap</CurrentStorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+        </Partition>
+      </Partitions>
+    </MeasureGroup>
+  </MeasureGroups>
+</Cube>

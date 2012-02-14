@@ -1,0 +1,65 @@
+using System;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+{
+    /// <summary>
+    /// Payload layer class containing Activity
+    /// </summary>
+    public class ActivityLayer : Layer<IActivity>, IActivityLayer
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActivityLayer"/> class.
+        /// </summary>
+        /// <param name="activity">The activity.</param>
+        /// <param name="period">The period.</param>
+        public ActivityLayer(IActivity activity, DateTimePeriod period) : base(activity, period)
+        {
+            InParameter.EnsureNoSecondsInPeriod(period);
+        }
+
+        /// <summary>
+        /// Used by nhibernate to reconstitute from datasource
+        /// </summary>
+        protected ActivityLayer()
+        {
+        }
+
+        public override DateTimePeriod Period
+        {
+            get
+            {
+                return base.Period;
+            }
+            set
+            {
+                InParameter.EnsureNoSecondsInPeriod(value);
+                base.Period = value;
+            }
+        }
+
+        public override void ChangeLayerPeriodEnd(TimeSpan timeSpan)
+        {
+            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+            base.ChangeLayerPeriodEnd(timeSpan);
+        }
+
+        public override void ChangeLayerPeriodStart(TimeSpan timeSpan)
+        {
+            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+            base.ChangeLayerPeriodStart(timeSpan);
+        }
+
+        public override void MoveLayer(TimeSpan timeSpan)
+        {
+            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+            base.MoveLayer(timeSpan);
+        }
+
+        public virtual IMultiplicatorDefinitionSet DefinitionSet
+        {
+            get { return null; }
+        }
+    }
+}

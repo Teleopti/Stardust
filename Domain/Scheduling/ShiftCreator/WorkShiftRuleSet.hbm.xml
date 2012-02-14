@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.ShiftCreator"
+                   default-access="field.camelcase-underscore">
+  <class name="WorkShiftRuleSet" >
+    <id name="Id"
+          type="guid"
+          unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_WorkShiftRuleSet_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_WorkShiftRuleSet_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    
+    <!--generator-->
+    <component name="TemplateGenerator" 
+              class="WorkShiftTemplateGenerator">
+      <many-to-one name="BaseActivity"
+                   class="Teleopti.Ccc.Domain.Scheduling.Activity"
+                   foreign-key="FK_WorkShiftRuleSet_Activity"
+                   not-null="true" />
+      <many-to-one name="Category"
+                class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"
+                not-null="true" foreign-key="FK_WorkShiftRuleSet_ShiftCategory"/>
+      <component name="StartPeriod" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Interfaces">
+        <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+          <component name="period" access="field">
+            <property name="Minimum"
+                      column="EarlyStart"
+                      not-null="true"
+                      type="TimeSpan" />
+            <property name="Maximum"
+                      column="LateStart"
+                      not-null="true"
+                      type="TimeSpan" />
+          </component>
+        </component>
+        <property name="Segment"
+                  column="StartSegment"
+                  not-null="true"
+                  type="TimeSpan"/>
+      </component>
+      <component name="EndPeriod" class="Teleopti.Interfaces.Domain.TimePeriodWithSegment, Teleopti.Interfaces">
+        <component name="Period" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+          <component name="period" access="field">
+            <property name="Minimum"
+                      column="EarlyEnd"
+                      not-null="true"
+                      type="TimeSpan" />
+            <property name="Maximum"
+                      column="LateEnd"
+                      not-null="true"
+                      type="TimeSpan" />
+          </component>
+        </component>
+        <property name="Segment"
+                  column="EndSegment"
+                  not-null="true"
+                  type="TimeSpan"/>
+      </component>
+    </component>
+
+    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
+		<property name="Name"
+			not-null="true"
+			type="string"
+			length="50"/>
+		<property name="ShortName"
+			not-null="false"
+			type="string"
+			length="25"/>
+	</component>
+    
+    <property name ="OnlyForRestrictions"
+              type ="boolean"
+              not-null="true"/>
+
+    <list name="ExtenderCollection"
+          cascade="all-delete-orphan"
+          inverse ="true">
+      <key column="Parent" foreign-key="FK_ActivityExtender_WorkShiftRuleSet"/>
+      <index column="OrderIndex"
+             type="int" />
+      <one-to-many class="ActivityExtender"/>
+    </list>
+
+    <bag name="LimiterCollection"
+         cascade="all-delete-orphan"
+         inverse="true">
+      <key column="Parent" foreign-key="FK_WorkShiftRuleSet_WorkShiftLimiter" />
+      <one-to-many class="WorkShiftLimiter"/>
+    </bag>
+
+    <bag name="RuleSetBagCollection"
+         table="RuleSetRuleSetBag"
+         inverse="true">
+      <key column="RuleSet" foreign-key="FK_WorkShiftRuleSet_RuleSetBag" />
+      <many-to-many column="RuleSetBag" 
+                    class="RuleSetBag" />
+    </bag>
+
+    <property name="DefaultAccessibility"
+			not-null="true"/>
+
+    <bag name="AccessibilityDaysOfWeek">
+      <key column="RuleSet" foreign-key="FK_AccessibilityDaysOfWeek_WorkShiftRuleSet"/>
+      <element column="DayOfWeek" type="System.DayOfWeek"/>
+    </bag>
+
+    <bag name="AccessibilityDates">
+      <key column="RuleSet" foreign-key="FK_AccessibilityDates_WorkShiftRuleSet"/>
+      <element column="Date"
+        type="UtcDateTime"/>
+    </bag>
+    
+    <many-to-one name="BusinessUnit"
+        class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+        foreign-key="FK_WorkShiftRuleSet_BusinessUnit"
+        access="nosetter.camelcase-underscore"
+        not-null="true"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+  </class>
+</hibernate-mapping>

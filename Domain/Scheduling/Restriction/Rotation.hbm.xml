@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="Teleopti.Ccc.Domain"
+									 namespace="Teleopti.Ccc.Domain.Scheduling.Restriction"
+									 default-access="field.camelcase-underscore">
+	<class name="Rotation">
+		<id name="Id"
+			type="guid"
+			unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+			 unsaved-value ="null"/>
+
+		<many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_Rotation_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_Rotation_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+					type="UtcDateTime"
+					not-null="true"
+					update="false" />
+		<property name="UpdatedOn"
+					type="UtcDateTime"
+					not-null="true"/>
+		<!--IEntity-->
+			<property name="Name"
+						not-null="true"
+						length="50"/>
+		<list name="RotationDays"
+						cascade="all-delete-orphan"
+							inverse="true">
+			<key column="Parent" />
+			<index type="int" column ="Day" />
+			<one-to-many class="RotationDay"/>
+		</list>
+		
+		<many-to-one name="BusinessUnit"
+			class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+			access="nosetter.camelcase-underscore"
+			not-null="true" foreign-key="FK_Rotation_BusinessUnit"/>
+		<property name="IsDeleted"
+					not-null="true"/>
+		<filter name="businessUnitFilter"
+				condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="deletedFlagFilter"
+			condition="IsDeleted = 0" />
+	</class>
+
+	<query name="LoadRotationsWithHierarchyData">
+		<![CDATA[
+			from Rotation r
+						join fetch r.RotationDays rd
+						join fetch rd.RestrictionCollection rc
+					where exists
+						(
+							select 1 from PersonRotation pr
+								where pr.Rotation = r.Id
+									and pr.Person in (:PersonCollection)
+									and ((not pr.StartDate <
+										(select max(pr2.StartDate) from PersonRotation pr2
+											where pr2.Person = pr.Person
+												and pr2.StartDate <= :StartDate))
+                        or pr.StartDate  >= :StartDate
+                        )
+						)
+			]]>
+		<query-param name="PersonCollection" type="Person[]"/>
+		<query-param name="StartDate" type="DateTime"/>
+	</query>
+</hibernate-mapping>

@@ -1,0 +1,56 @@
+using System.IO;
+using System.Windows;
+using Teleopti.Ccc.WinCode.FileImport;
+using Teleopti.Ccc.WpfControls.FileImport.ViewModels;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WpfControls.FileImport
+{
+    /// <summary>
+    /// Interaction logic for ImportWizardWindow.xaml
+    /// </summary>
+    public partial class ImportWizardWindow : Window
+    {
+        public ImportWizardWindow()
+        {
+            InitializeComponent();
+        }
+
+        public ImportWizardWindow(string fileName, ICccTimeZoneInfo defaultTimeZone)
+        {
+            InitializeComponent();
+            DataContext = new PrepareTextViewModel(fileName, defaultTimeZone);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            {
+                try
+                {
+                    DataContext = ((IModel)DataContext).NextStep();
+
+                 
+                }
+                catch (FileImportException ex)
+                {
+                    MessageBox.Show(ex.Message, UserTexts.Resources.ImportError);
+                    Close();
+                }
+                if (DataContext == null)
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+    }
+}

@@ -1,0 +1,20 @@
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Repositories
+{
+	public interface IScheduleHistoryReport
+	{
+		IEnumerable<ScheduleAuditingReportData> Report(IPerson modifiedBy, 
+		                                               DateOnlyPeriod changedPeriod, 
+		                                               DateOnlyPeriod scheduledPeriod, 
+		                                               IEnumerable<IPerson> agents);
+
+		IEnumerable<ScheduleAuditingReportData> Report(DateOnlyPeriod changedPeriod, 
+																		DateOnlyPeriod scheduledPeriod, 
+																		IEnumerable<IPerson> agents);
+
+		IEnumerable<IPerson> RevisionPeople();
+	}
+}

@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<CCCMajorMinor>7.1</CCCMajorMinor>
+		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
+		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
+		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+		<Company>Teleopti</Company>
+		<ProductName>Teleopti CCC</ProductName>
+		<TfsLibraryLocation>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
+		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
+		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
+		<Configuration>Release</Configuration>
+		<DoCodeAnalysis>false</DoCodeAnalysis>
+		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
+		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
+		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
+		<DocSrcPath>\\integration\Documentation</DocSrcPath>
+		<MSIShare>D:\Installation\msi</MSIShare>
+		<ObfuscateCmd>$(CCNetWorkingDirectory)\ccnet\Obfuscate\RunObfuscation.cmd</ObfuscateCmd>
+		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
+		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
+		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(COMPUTERNAME)' == 'INTEGRATION'" >
+		<TfsLibraryLocation>C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
+		<SDKDocProj>$(CCNetWorkingDirectory)\docSdk.shfbproj</SDKDocProj>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(CCNetProject)' == 'BuildMSI-root'" >
+		<MSIShare>\\neptune\LatestMsi</MSIShare>
+	</PropertyGroup>
+
+	<!-- Entry point for CCNet -->
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;AddToPendingMSI">
+		<Message Text="Done!" Importance="high"/>
+	</Target>
+
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\ClientClickOnce.proj"/>
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\MyTimeClickOnce.proj"/>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
+
+	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
+	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
+	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
+	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+
+	<ItemGroup>
+		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
+		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+
+		<!-- TODO: update _all_ AssemblyInfos. This will not work until this is fixed: http://challenger:8080/tfs/web/wi.aspx?id=14648 -->
+		<AssemblyInfos
+		Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Properties\AssemblyInfo.cs"
+	  />
+
+		<GetVersionAssembly Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe"/>
+	</ItemGroup>
+
+
+	<Target Name="Obfuscate">
+		<Message Importance="high" Text="Obfuscate ..."/>
+		<Message Importance="high" Text="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
+		<Exec Command="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
+		<Message Importance="high" Text="Obfuscate. Done!"/>
+	</Target>
+
+	<Target Name="CompileExtraApps">
+		<MSBuild Projects="@(PreReqTool)" Properties="Configuration=Release" Targets="Build" />
+	</Target>
+
+	<Target Name="CleanUpUnwantedFiles">
+		<ItemGroup>
+			<DeleteFilesCollection
+				Include="$(CCNetWorkingDirectory)\**\*.xml"
+				Exclude="$(CCNetWorkingDirectory)\AutomatedTests\**\*.xml;
+						$(CCNetWorkingDirectory)\BuildArtifacts\**\*.*;
+						$(CCNetWorkingDirectory)\Teleopti.Support.Tool\**\config.xml;
+						$(CCNetWorkingDirectory)\Teleopti.Support.Tool\**\V7Config.nhib.xml;
+						$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\**\RtaStates.xml"/>
+		</ItemGroup>
+		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
+		<Delete Files="@(DeleteFilesCollection)" />
+	</Target>
+			
+	<Target Name="AddToPendingMSI" DependsOnTargets="GetVersion">
+
+		<!--Copy the CreateMSI.proj + CreateAzure.proj to a common folder for all branches -->
+		<!-- Currently we do it this way becasuse we share CompileMSI and CompileAzure for all branches-->
+		<!-- Thus those two CCNet project are not connected to any source code and therefor missing the $(CCNetWorkingDirectory) -->
+
+		<Exec Command="IF NOT EXIST $(SharedMSIWorkingFolder) MKDIR $(SharedMSIWorkingFolder)"/>
+
+		<!--Copy the shared MSBuild project files to a common folder-->
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CreateMSI.proj" DestinationFiles="$(SharedMSIWorkingFolder)\CreateMSI.proj"/>
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CreateAzure.proj" DestinationFiles="$(SharedMSIWorkingFolder)\CreateAzure.proj"/>
+    <Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\FtpUpload.proj" DestinationFiles="$(SharedMSIWorkingFolder)\FtpUpload.proj"/>
+    <Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat" DestinationFiles="$(SharedMSIWorkingFolder)\FTPUpload.bat"/>
+
+		<!--This is how we pass variables to the shared MSBuild project ... -->
+		<Exec Command="ECHO $(CCCVersion) > &quot;$(SharedMSIWorkingFolder)\CCCVersion.html&quot;"/>
+		<Exec Command="ECHO $(CCNetProject) > &quot;$(SharedMSIWorkingFolder)\CCNetProject.html&quot;"/>
+		<Exec Command="ECHO $(CCNetWorkingDirectory) > &quot;$(SharedMSIWorkingFolder)\CCNetWorkingDirectory.html&quot;"/>
+		<Exec Command="ECHO $(MSIShare) > &quot;$(SharedMSIWorkingFolder)\MSIShare.html&quot;"/>
+		<Exec Command="ECHO $(DeployShare) > &quot;$(SharedMSIWorkingFolder)\DeployShare.html&quot;"/>
+
+	</Target>
+
+
+	<Target Name="AllFilesIncluded">
+		<ItemGroup>
+
+
+			<!-- Wise -->
+			<Wise
+			Include="$(CCNetWorkingDirectory)\Wise\**\*.*" />
+
+			<!--AgentPortalWeb-->
+
+			<AgentPortalWeb
+			Include=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.*"
+		Exclude=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\obj\**\*.*;
+    $(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.csproj;
+    $(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.vspscc;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.cs;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\properties\**\*.*;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.Debug.config;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.Release.config"/>
+
+			<!--Analytics-->
+			<Analytics
+			Include=
+	"$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.aspx;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.asax;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.css;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.skin;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.gif;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.png;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.jpg;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.rdlc;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.ascx;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.js;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\*.master;"
+			Exclude=
+	"$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\**\obj\**\*.*;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\**\properties\**\*.*"/>
+
+			<!--PmService-->
+
+			<PMService
+			Include=
+	"$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.aspx;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.css;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.skin;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.gif;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.svc;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.png;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.jpg;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.rdlc;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.ascx;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.master;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\*.chm"
+		   Exclude=
+   "$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\**\obj\**\*.*;
+	$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\**\properties\**\*.*"/>
+
+			<!--ApplicationConfiguration-->
+			<ApplicationConfiguration
+				Include=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\bin\$(Configuration)\**\*.*;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\*.bat"/>
+
+			<!--BuildArtifacts-->
+			<BuildArtifacts
+				Include=
+		"$(CCNetWorkingDirectory)\BuildArtifacts\**\*.*" />
+
+			<!--ClientStandAlone-->
+			<ClientStandAlone
+				Include=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\**\*.*"
+				Exclude=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.nhib.xml"
+		/>
+
+			<!--ToDo: what is this? Move thism to post-Build events or reference with CopyToLocal-->
+			<ClientStandAlone
+				Include=
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartParts.dll;
+		$(CCNetWorkingDirectory)\BuildArtifacts\licensecontext.slf;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\$(Configuration)\Teleopti.Ccc.PayrollFormatter.dll;
+		$(CCNetWorkingDirectory)\SyncFusion\*.dll;
+		$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"
+		    Exclude=
+   "$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.lastcodeanalysissucceeded;
+   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.CodeAnalysisLog.xml"
+		/>
+
+			<!-- Cube -->
+			<Cube
+			Include=
+	"$(CCNetWorkingDirectory)\Cube\Xmla\**\*.*;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll"
+	/>
+
+			<!-- Database -->
+			<Database
+			Include="$(CCNetWorkingDirectory)\Database\**\*.*"
+			  Exclude="$(CCNetWorkingDirectory)\Database\**\Tools\**\*.*;
+	$(CCNetWorkingDirectory)\Database\*.txt;
+  $(CCNetWorkingDirectory)\Database\**\DemoDatabase\**\*.*;
+	$(CCNetWorkingDirectory)\Database\DBManager.exe"/>
+			<Database
+			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe"/>
+
+			<!-- DemoDatabase -->
+			<DemoDatabase
+			Include="$(CCNetWorkingDirectory)\Database\Tools\Wise\DemoDatabase\**\*.*"/>
+
+			<!-- ForecastDatabase -->
+			<ForecastDatabase
+			Include="$(CCNetWorkingDirectory)\Database\Tools\Wise\ForecastDatabase\**\*.*"/>
+
+			<DatabaseEnrypted
+			Include="$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\**\*.*"
+	/>
+
+			<!-- ETL -->
+			<ETLTool
+			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\$(Configuration)\**\*.*"
+			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\$(Configuration)\*.nhib.xml"
+	/>
+
+			<ETLTool
+			  Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
+	/>
+
+			<ETLService
+			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*;
+              $(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
+			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\*.nhib.xml"
+	/>
+
+			<ETLService
+				Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
+	/>
+			<MessageBroker
+			Include="$(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\**\*.*"
+			Exclude="$(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\*.xml;
+			 $(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\*.xsl"/>
+
+			<!-- MyTimeStandAlone -->
+			<MyTimeStandAlone
+			Include="$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\$(Configuration)\**\*.*"
+			Exclude="$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\$(Configuration)\app.config;
+	$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\$(Configuration)\*.application"
+	/>
+			<MyTimeStandAlone
+			Include="$(CCNetWorkingDirectory)\syncfusion*.dll;
+	$(CCNetWorkingDirectory)\BuildArtifacts\licensecontext.slf"
+	/>
+
+			<!-- RTATools -->
+			<RTATools Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\bin\$(Configuration)\**\*.*"/>
+
+			<!-- Azure -->
+			<Azure Include="$(CCNetWorkingDirectory)\ccnet\Azure\**\*.*"/>
+			
+			<!-- RTA -->
+			<RTA
+			Include=
+	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.aspx;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.css;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.skin;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.gif;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.svc;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.png;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.jpg;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.rdlc;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.ascx;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.master;"
+			Exclude=
+	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\obj\**\*.*;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\properties\**\*.*"
+	/>
+
+			<!-- SDK -->
+			<SDK
+			Include=
+	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.asax;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.svc;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.notinuse;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.pdb;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.aspx;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*Client.Config;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.bat;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.txt"
+			Exclude=
+	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\obj\**\*.*;
+	$(CCNetWorkingDirectory)\**\properties\**\*.*"
+	/>
+
+			<!-- PayRollFile -->
+			<PayRollFile Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(Configuration)\Teleopti.Ccc.Payroll.dll"/>
+
+			<!-- ServiceBus -->
+			<ServiceBus
+			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\**\ReadMe.txt;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\$(Configuration)\**\*.*"
+	/>
+
+			<!-- SupportTools -->
+			<SupportTools Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\**\*.*" />
+			<StartStopSystem Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\StartStopSystem\*.*" />
+			<RML Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\RML\**\*.*" />
+      <WiseIISConfig Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\WiseIISConfig\**\*.*" />
+
+      <!-- ClientClickOnce -->
+			<ClientClickOnce Include="$(CCNetWorkingDirectory)\ccnet\Temp\ClientClickOnce\**\*.*" />
+
+			<!-- MyTimeClickOnce -->
+			<MyTimeClickOnce Include="$(CCNetWorkingDirectory)\ccnet\Temp\MyTimeClickOnce\**\*.*" />
+
+			<!-- ClickOnceSign -->
+			<ClickOnceSign Include="$(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\bin\Release\**\*.*;
+				   $(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\TemporaryKey.pfx;
+            $(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\mage.exe"/>
+
+
+			<!-- Pre-Req -->
+			<PreReq
+			Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\CheckPreRequisites.exe;
+	$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\p_raptor_run_before_conversion.sql" />
+
+		</ItemGroup>
+	</Target>
+
+
+
+	<Target Name="GetVersion">
+		<Message Text="Set DeployPath: [$(DeployPath)] ..." Importance="high"/>
+		<ReadLinesFromFile File="@(VersionFile)" >
+			<Output TaskParameter="Lines"
+			  PropertyName="BranchVersion" />
+		</ReadLinesFromFile>
+		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
+		<TfsVersion TfsLibraryLocation="$(TfsLibraryLocation)" LocalPath="$(CCNetWorkingDirectory)">
+			<Output TaskParameter="Changeset" PropertyName="Revision"/>
+		</TfsVersion>
+		<Message Text="TFS ChangeSet: $(Revision)" Importance="high"/>
+
+		<PropertyGroup>
+			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
+			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
+			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
+		</PropertyGroup>
+		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
+		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
+
+	</Target>
+
+
+
+	<!--Enable this target to get version on all assemblies-->
+	<Target Name="UpdateAssemblyInfos" Inputs="@(AssemblyInfos)" Outputs="%(Identity).Dummy" DependsOnTargets="GetVersion">
+
+		<Message Text="Setting readWrite on all files named: AssemblyInfo.cs  ..."/>
+		<Exec Command="attrib -R &quot;%(AssemblyInfos.FullPath)&quot;"/>
+		<Message Text="Setting readWrite on AssemblyInfo.cs. Done!"/>
+
+		<!-- mark all assemblies with version-->
+		<Message Text="Set version on assembly: %(AssemblyInfos.FullPath) ..."/>
+
+
+		<AssemblyInfo CodeLanguage="CS"
+						OutputFile="%(AssemblyInfos.FullPath)"
+					AssemblyCompany="$(Company)"
+					AssemblyProduct="$(ProductName)"
+					AssemblyCopyright="Copyright © Teleopti AB 2009"
+					AssemblyVersion="$(CCCVersion)"
+					AssemblyFileVersion="$(CCCVersion)"
+					CLSCompliant ="false"
+					ComVisible="false"
+				 
+		/>
+		<Message Text="Done"/>
+
+	</Target>
+
+	<Target Name="UpdateClientAssemblyInfos" DependsOnTargets="GetVersion">
+
+		<Message Text="Setting readWrite on all file $(ClientProperties)\AssemblyInfo.cs  ..."/>
+		<Exec Command="attrib -R &quot;$(ClientProperties)\AssemblyInfo.cs&quot;"/>
+		<Message Text="Setting readWrite. Done!"/>
+
+
+		<Message Text="Update Client Version ..."/>
+		<!-- adding additional info for the the Client-->
+		<AssemblyInfo CodeLanguage="CS"
+						OutputFile="$(ClientProperties)\AssemblyInfo.cs"
+						AssemblyTitle="Teleopti CCC, version 7"
+					AssemblyDescription="Teleopti CCC, version 7"
+					AssemblyConfiguration=""
+					AssemblyCompany="$(Company)"
+					AssemblyProduct="$(ProductName)"
+					AssemblyCopyright="Copyright © Teleopti AB 2009"
+					AssemblyTrademark=""
+					CLSCompliant ="false"
+					ComVisible="false"
+					AssemblyVersion="$(CCCVersion)"
+					AssemblyFileVersion="$(CCCVersion)"
+		/>
+		<Message Text="Update Client Version. done"/>
+
+		<Message Text="Setting readWrite on all file $(MyTimeProperties)\AssemblyInfo.cs  ..."/>
+		<Exec Command="attrib -R &quot;$(MyTimeProperties)\AssemblyInfo.cs&quot;"/>
+		<Message Text="Setting readWrite. Done!"/>
+
+		<Message Text="Update MyTime Version ..."/>
+		<AssemblyInfo CodeLanguage="CS"
+				OutputFile="$(MyTimeProperties)\AssemblyInfo.cs"
+				AssemblyTitle="TELEOPTI CCC, version 7 - MyTime"
+				AssemblyDescription="TELEOPTI CCC, version 7 - MyTime"
+				AssemblyConfiguration=""
+				AssemblyCompany="$(Company)"
+				AssemblyProduct="$(ProductName)"
+				AssemblyCopyright="Copyright © Teleopti AB 2009"
+				AssemblyTrademark=""
+				CLSCompliant ="false"
+				ComVisible="false"
+				AssemblyVersion="$(CCCVersion)"
+				AssemblyFileVersion="$(CCCVersion)"
+		/>
+
+		<Message Text="Update MyTime. done"/>
+	</Target>
+
+
+	<!-- Create SDK chm file -->
+	<Target Name="GenerateSdkDoc">
+		<Message Text="Generating SDK help file. Skipping this step for now. SandCastle and HTML help stuff needed as pre-reqs"/>
+		<Message Text="Generating SDK help file to $(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\ ..."/>
+		<Message Text="SDKDocProj is: $(SDKDocProj)"/>
+		<Message Text="Properties is: Configuration=$(Configuration);HtmlHelpName=Documentation"/>
+		<MSBuild Projects="$(SDKDocProj)"
+		Properties="Configuration=$(Configuration);HtmlHelpName=Documentation" />
+		<Message Text="Generating SDK help file. Done"/>
+	</Target>
+
+	<!--
+  <Target Name="CreateDeployShare">
+	<Message Text="Create new directory for this build"/>
+	<Exec Command="MKDIR &quot;$(DeployPath)&quot;"/>
+	<Exec Command="MKDIR &quot;$(MSIPath)&quot;"/>
+	<Message Text="Create new directory for this build. done"/>
+  </Target>
+-->
+
+	<!-- Note: Each Copy command have a corresponding set of files in the above "ItemGroup" -->
+	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded">
+		<Message Text="Copying files to $(DeployPath)..."/>
+		<Copy 	SourceFiles="@(Analytics)"
+			DestinationFiles="@(Analytics->'$(DeployPath)\Analytics\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(PMService)"
+			DestinationFiles="@(PMService->'$(DeployPath)\PMService\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(ApplicationConfiguration)"
+			DestinationFiles="@(ApplicationConfiguration->'$(DeployPath)\ApplicationConfiguration\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(BuildArtifacts)"
+			DestinationFiles="@(BuildArtifacts->'$(DeployPath)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(ClientStandAlone)"
+			DestinationFiles="@(ClientStandAlone->'$(DeployPath)\Client\StandAlone\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(PayrollFiles)"
+			DestinationFiles="@(PayrollFiles->'$(DeployPath)\Client\StandAlone\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(ClientStandAlone)"
+			DestinationFiles="@(ClientStandAlone->'$(DeployPath)\Client\Forecasts\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(Cube)"
+			DestinationFiles="@(Cube->'$(DeployPath)\Cube\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(Database)"
+			DestinationFiles="@(Database->'$(DeployPath)\Database\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy 	SourceFiles="@(DatabaseEnrypted)"
+			DestinationFiles="@(DatabaseEnrypted->'$(DeployPath)\Database\Enrypted\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(ETLTool)"
+			DestinationFiles="@(ETLTool->'$(DeployPath)\ETL\Tool\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy	SourceFiles="@(ETLService)"
+			DestinationFiles="@(ETLService->'$(DeployPath)\ETL\Service\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy	SourceFiles="@(MessageBroker)"
+			DestinationFiles="@(MessageBroker->'$(DeployPath)\MessageBroker\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy 	SourceFiles="@(MyTimeStandAlone)"
+			DestinationFiles="@(MyTimeStandAlone->'$(DeployPath)\MyTime\StandAlone\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(RTATools)"
+			DestinationFiles="@(RTATools->'$(DeployPath)\RTATools\Testapplication\Web\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(RTA)"
+			DestinationFiles="@(RTA->'$(DeployPath)\RTA\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(SDK)"
+			DestinationFiles="@(SDK->'$(DeployPath)\SDK\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(PayRollFile)"
+			DestinationFiles="@(PayRollFile->'$(DeployPath)\SDK\bin\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(ServiceBus)"
+			DestinationFiles="@(ServiceBus->'$(DeployPath)\ServiceBus\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(SupportTools)"
+			DestinationFiles="@(SupportTools->'$(DeployPath)\SupportTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(StartStopSystem)"
+			DestinationFiles="@(StartStopSystem->'$(DeployPath)\SupportTools\StartStopSystem\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(RML)"
+			DestinationFiles="@(RML->'$(DeployPath)\SupportTools\RML\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy	SourceFiles="@(WiseIISConfig)"
+      DestinationFiles="@(WiseIISConfig->'$(DeployPath)\SupportTools\WiseIISConfig\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    <Copy	SourceFiles="@(Azure)"
+			DestinationFiles="@(Azure->'$(DeployPath)\Azure\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(ClientClickOnce)"
+			DestinationFiles="@(ClientClickOnce->'$(DeployPath)\Client\ClickOnce\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(MyTimeClickOnce)"
+			DestinationFiles="@(MyTimeClickOnce->'$(DeployPath)\MyTime\ClickOnce\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(Wise)"
+			DestinationFiles="@(Wise->'$(DeployPath)\Wise\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(ClickOnceSign)"
+			DestinationFiles="@(ClickOnceSign->'$(DeployPath)\ClickOnceSignTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(AgentPortalWeb)"
+			DestinationFiles="@(AgentPortalWeb->'$(DeployPath)\AgentPortalWeb\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(DemoDatabase)"
+			  DestinationFiles="@(DemoDatabase->'$(DeployPath)\DemoDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(ForecastDatabase)"
+		  DestinationFiles="@(ForecastDatabase->'$(DeployPath)\ForecastDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="$(SDKDocOutput)"
+			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm" />
+
+		<!-- Content outside WISE => copy straight to MSI-folder-->
+		<Message Importance="high" Text="make folder ..."/>
+		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
+		<Message Importance="high" Text="make folderWiki. Done!"/>
+		
+		<Message Importance="high" Text="Fetch latest Wiki ..."/>
+		<Exec Command="&quot;$(FetchContextHelp)&quot; &quot;$(MSIPath)&quot;"/>
+		<Message Importance="high" Text="Fetch latest Wiki. Done!"/>
+		
+		<Copy SourceFiles="@(PreReq)"
+			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="$(SDKDocOutput)"
+			  DestinationFiles="$(MSIPath)\SdkDoc.chm"/>
+
+		<Message Text="Copying files to $(DeployPath). Done"/>
+	</Target>
+
+	<!-- The two target below ar only called by RootMSI-build-->
+	<Target Name="CreateDBRelease">
+
+    <Message Importance="high" Text="Creating Db release ..."/>
+		<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+    </Exec>
+    <Message Text="The exit code is: $(ErrorCode)"/>
+    <Error Text="Error while building new release. Please check build logs for details!" Condition="'$(ErrorCode)' != '0'" />
+    
+		<Message Importance="high" Text="Creating Db release. Done!"/>
+
+    <OnError ExecuteTargets="MessageErrorHandler"/>
+	</Target>
+
+  <Target Name="MessageErrorHandler">
+    <Message Text="Error while building new release. Please check build logs for details!"/>
+  </Target>
+
+</Project>

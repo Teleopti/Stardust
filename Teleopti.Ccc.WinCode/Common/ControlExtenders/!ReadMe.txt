@@ -1,0 +1,1 @@
+Added functionalities to controls.

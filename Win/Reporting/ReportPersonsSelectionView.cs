@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Autofac;
+using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Grouping;
+using Teleopti.Ccc.WinCode.Presentation;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Win.Reporting
+{
+    public partial class ReportPersonsSelectionView : BaseRibbonForm, IReportPersonsSelectionView
+    {
+        private readonly IPersonSelectorPresenter _personSelectorPresenter;
+        private ReportPersonsSelectionView(){}
+
+        public ReportPersonsSelectionView(DateOnly dateOnly, IEnumerable<Guid> selectedAgentGuids, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage)
+        {
+            InitializeComponent();
+
+            _personSelectorPresenter =
+                componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPersonSelectorPresenter>();
+            _personSelectorPresenter.ApplicationFunction = applicationFunction;
+            var view = (Control)_personSelectorPresenter.View;
+            panel1.Controls.Add(view);
+            view.Dock = DockStyle.Fill;
+
+            var selectorView = _personSelectorPresenter.View;
+            selectorView.SetDate(dateOnly);
+            _personSelectorPresenter.ShowPersons = true;
+            _personSelectorPresenter.ShowUsers = false;
+            selectorView.PreselectedPersonIds = selectedAgentGuids;
+            selectorView.ShowCheckBoxes = true;
+            
+            selectorView.ShowDateSelection = false;
+            selectorView.HideMenu = true;
+            _personSelectorPresenter.LoadTabs();
+            _personSelectorPresenter.SetSelectedTab(selectedGroupPage);
+            SetTexts();
+            BackColor = ColorHelper.OfficeBlue;
+        }
+
+        public HashSet<Guid> SelectedAgentGuids()
+        {
+            return _personSelectorPresenter.CheckedPersonGuids;
+        }
+
+        public string SelectedGroupPageKey
+        {
+            get { return _personSelectorPresenter.SelectedGroupPageKey(); }
+        }
+    }
+}

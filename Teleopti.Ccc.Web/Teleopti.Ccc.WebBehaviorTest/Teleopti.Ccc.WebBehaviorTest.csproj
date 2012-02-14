@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7784CC87-2CAD-416B-A254-CDE14C589FF5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Ccc.WebBehaviorTest</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.WebBehaviorTest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CassiniDev4-lib">
+      <HintPath>..\..\packages\CassiniDev.4.0\lib\net40\CassiniDev4-lib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpTestsEx">
+      <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web" />
+    <Reference Include="TechTalk.SpecFlow">
+      <HintPath>..\..\packages\SpecFlow.1.6.1\lib\net35\TechTalk.SpecFlow.dll</HintPath>
+    </Reference>
+    <Reference Include="WatiN.Core">
+      <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\RuleSetBag.cs" />
+    <Content Include="Data\TestData.autofac.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="MobileSignInStepDefinitions.cs" />
+    <Compile Include="Data\User\AbsenceToday.cs" />
+    <Compile Include="Data\User\UserWithoutMobileReportsAccess.cs" />
+    <Compile Include="Data\User\AgentWithoutTeamDataAccess.cs" />
+    <Compile Include="Data\User\AgentWithSiteAccess.cs" />
+    <Compile Include="Data\User\AnotherSitesSecondTeam.cs" />
+    <Compile Include="Data\User\AnotherSitesTeam.cs" />
+    <Compile Include="Data\User\AnotherTeam.cs" />
+    <Compile Include="Data\User\GeneratedTeam.cs" />
+    <Compile Include="Data\User\HawaiiTimeZone.cs" />
+    <Compile Include="Data\User\Interfaces\IDataSetup.cs" />
+    <Compile Include="Data\User\NoVirtualSchedulePeriod.cs" />
+    <Compile Include="Data\User\DayOffToday.cs" />
+    <Compile Include="Data\User\SchedulePeriod.cs" />
+    <Compile Include="Data\User\ShiftToday.cs" />
+    <Compile Include="Data\User\ShiftWithConfidentialAbsence.cs" />
+    <Compile Include="Data\User\Team.cs" />
+    <Compile Include="Data\User\TwoWeeksAbsence.cs" />
+    <Compile Include="MobileSignIn.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileSignIn.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Common\SelectBox.cs" />
+    <Compile Include="Pages\Common\SignInPageBase.cs" />
+    <Compile Include="Pages\MobileSignInPage.cs" />
+    <Compile Include="Pages\TeamSchedulePage.cs" />
+    <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />
+    <Compile Include="Bindings\NavigationStepDefinitions.cs" />
+    <Compile Include="Data\User\Administrator.cs" />
+    <Compile Include="Data\User\Supervisor.cs" />
+    <Compile Include="MobileReports.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileReports.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MobileReportsStepDefinitions.cs" />
+    <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
+    <Compile Include="Pages\MobileReportsPage.cs" />
+    <Compile Include="PreferencesFeedback2.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesFeedback.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Routing.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Routing.feature</DependentUpon>
+    </Compile>
+    <Compile Include="RoutingStepDefinition.cs" />
+    <Compile Include="TeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TeamSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TeamScheduleStepDefinition.cs" />
+    <Compile Include="TextRequestFromRequests.feature.cs">
+      <DependentUpon>TextRequestFromRequests.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\User\AgentWithoutRequestsAccess.cs" />
+    <Compile Include="Data\User\AgentWithoutTextRequestsAccess.cs" />
+    <Compile Include="Data\User\ExistingTextRequest.cs" />
+    <Compile Include="Data\User\AgentWithoutPreferencesAccess.cs" />
+    <Compile Include="Core\Eventual.cs" />
+    <Compile Include="Core\Extensions\LogExtensions.cs" />
+    <Compile Include="Data\User\Agent.cs" />
+    <Compile Include="Data\User\AgentWithoutStudentAvailabilityAccess.cs" />
+    <Compile Include="ApplicationStartRecovery.feature.cs">
+      <DependentUpon>ApplicationStartRecovery.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\TestData.cs" />
+    <Compile Include="Data\UserTestData.cs" />
+    <Compile Include="Data\User\AnotherStandardPreference.cs" />
+    <Compile Include="Data\User\BasePreference.cs" />
+    <Compile Include="Data\User\ExistingTextRequestOver2Days.cs" />
+    <Compile Include="Data\User\Interfaces\IPostSetup.cs" />
+    <Compile Include="Data\User\MoreThanOnePageOfRequests.cs" />
+    <Compile Include="Data\User\PreferenceClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\User\PreferenceOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\User\ExistingWorkflowControlSet.cs" />
+    <Compile Include="Data\User\PreferenceOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\User\DayOffPreference.cs" />
+    <Compile Include="Data\User\AbsencePreference.cs" />
+    <Compile Include="Data\User\DoNotHaveVirtualSchedulePeriods.cs" />
+    <Compile Include="Data\User\MultipleVirtualSchedulePeriods.cs" />
+    <Compile Include="Data\User\NoWorkflowControlSet.cs" />
+    <Compile Include="Data\User\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
+    <Compile Include="Data\User\ScheduleIsNotPublished.cs" />
+    <Compile Include="Data\User\ScheduleIsPublishedUntilWednesday.cs" />
+    <Compile Include="Data\User\ShiftCategoryPreference.cs" />
+    <Compile Include="Data\User\StandardPreference.cs" />
+    <Compile Include="Data\User\StudentAvailabilityClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\User\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\User\StudentAvailabilityOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\User\StudentAvailability.cs" />
+    <Compile Include="Data\User\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
+    <Compile Include="Data\User\USCulture.cs" />
+    <Compile Include="Data\User\PersonAndSchedulePeriod.cs" />
+    <Compile Include="Data\User\Interfaces\IUserDataSetup.cs" />
+    <Compile Include="Data\User\Interfaces\IUserSetup.cs" />
+    <Compile Include="Core\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="LicenseStepDefinitions.cs" />
+    <Compile Include="Data\User\MeetingOnThursday.cs" />
+    <Compile Include="Data\User\NightShiftOnMonday.cs" />
+    <Compile Include="Pages\Common\ICancelButton.cs" />
+    <Compile Include="Pages\Common\IOkButton.cs" />
+    <Compile Include="Pages\Pages.cs" />
+    <Compile Include="Pages\Common\CalendarCellsPage.cs" />
+    <Compile Include="Pages\Common\DatePicker.cs" />
+    <Compile Include="Data\User\ScheduleIsPublished.cs" />
+    <Compile Include="Data\User\StudentAgent.cs" />
+    <Compile Include="Pages\Common\IDeleteButton.cs" />
+    <Compile Include="Pages\Common\IDateRangeSelector.cs" />
+    <Compile Include="Core\Extensions\ElementExtensions.cs" />
+    <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
+    <Compile Include="Pages\jQuery\jQuery.cs" />
+    <Compile Include="Pages\jQuery\JQueryExpression.cs" />
+    <Compile Include="Pages\PortalPage.cs" />
+    <Compile Include="Pages\PreferencePage.cs" />
+    <Compile Include="Pages\Common\SplitButton.cs" />
+    <Compile Include="Core\ScenarioContextLazy.cs" />
+    <Compile Include="Preferences.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Preferences.feature</DependentUpon>
+    </Compile>
+    <Compile Include="PreferenceStepDefinition.cs" />
+    <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
+    <Compile Include="Bindings\SharedStepDefinitions.cs" />
+    <Compile Include="Data\User\PublicNoteOnWednesday.cs" />
+    <Compile Include="Data\User\ShiftForDate.cs" />
+    <Compile Include="Data\User\ShiftOnThursday.cs" />
+    <Compile Include="Data\User\ShiftsForTwoWeeks.cs" />
+    <Compile Include="Requests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Requests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RequestsPage.cs" />
+    <Compile Include="RequestsStepDefinition.cs" />
+    <Compile Include="StudentAvailability.feature.cs">
+      <DependentUpon>StudentAvailability.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="License.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>License.feature</DependentUpon>
+    </Compile>
+    <Compile Include="SignOutStepDefinitions.cs" />
+    <Compile Include="Bindings\EventDefinition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security.feature.cs">
+      <DependentUpon>Security.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SecurityStepDefinitions.cs" />
+    <Compile Include="SignIn.feature.cs">
+      <DependentUpon>SignIn.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignInStepDefinitions.cs" />
+    <Compile Include="SignOut.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SignOut.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\StudentAvailabilityPage.cs" />
+    <Compile Include="StudentAvailabilityStepDefinitions.cs" />
+    <Compile Include="Data\TestDataSetup.cs" />
+    <Compile Include="Data\User\SwedishCulture.cs" />
+    <Compile Include="Core\SystemLevelLock.cs" />
+    <Compile Include="Data\TestSiteConfigurationSetup.cs" />
+    <Compile Include="Core\Browser.cs" />
+    <Compile Include="Pages\WeekSchedulePage.cs" />
+    <Compile Include="Core\Extensions\FuncExtensions.cs" />
+    <Compile Include="Core\Navigation.cs" />
+    <Compile Include="Pages\SignInPage.cs" />
+    <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
+    <Compile Include="Data\UserFactory.cs" />
+    <Compile Include="Bindings\UserStepDefinitions.cs" />
+    <Compile Include="TextRequestFromSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TextRequestStepDefinitions.cs" />
+    <Compile Include="WeekSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WeekSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="WeekScheduleStepDefinitions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\TestData.nhib.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ApplicationStartRecovery.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MobileReports.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MobileSignIn.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Routing.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Routing.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TeamSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TextRequestFromRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TextRequestFromRequests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Preferences.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Preferences.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Requests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Requests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="StudentAvailability.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>StudentAvailability.feature.cs</LastGenOutput>
+    </None>
+    <None Include="License.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>License.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Security.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Security.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignIn.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignOut.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignOut.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TextRequestFromSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TextRequestFromSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesFeedback.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedback2.feature.cs</LastGenOutput>
+    </None>
+    <None Include="WeekSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekSchedule.feature.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>::tasklist /fi "imagename eq iexplore.exe*" | FIND "INFO: No tasks" &gt; NUL
+::if %25errorlevel%25 NEQ 0 taskkill /IM iexplore.exe* /F</PreBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

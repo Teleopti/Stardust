@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Teleopti.Ccc.WpfControls.Demo.Views.PersonAccountDayView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ViewModels="clr-namespace:Teleopti.Ccc.WpfControls.Demo.ViewModels"
+    xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Demo.Views">
+
+    <Grid>
+        <Expander>
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="{Binding Path=StartDateTime}" VerticalAlignment="Center"/>
+                    <TextBlock Text="    Calculated: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=CalculatedTimes}"/>
+                    <TextBlock Text=" times.  " VerticalAlignment="Center"/>
+                    <TextBlock Text="BalanceIn: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=BalanceIn}"/>
+                    <TextBlock Text="BalanceOut: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=BalanceOut}"/>
+                    <TextBlock Text="Accrued: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=Accrued}"/>
+                    <TextBlock Text="Extra: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=Extra}"/>
+                    <Button Content="Used " Click="Get_Used_Clicked"/>
+                    <TextBlock Text="{Binding Path=Used}"/>
+                </StackPanel>
+            </Expander.Header>
+            <ListBox ItemsSource="{Binding Path=Tracks}"/>
+        </Expander>
+    </Grid>
+</UserControl>

@@ -1,0 +1,57 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_permission_report_load]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_permission_report_load]
+GO
+
+
+-- =============================================
+-- Author:		<KJ>
+-- Create date: <2008-06-27>
+-- Description:	<Loads permission data från stage db>
+-- Update date: 2009-02-11
+-- 2009-02-11 New mart schema KJ
+-- 2009-02-09 Stage moved to mart db, removed view KJ
+-- 2009-06-30 Added join to mart.report on INSERT KJ
+-- 2011-04-07 Added input parameter for business uint ME
+-- =============================================
+CREATE PROCEDURE [mart].[etl_permission_report_load]
+@business_unit_code uniqueidentifier
+AS
+
+--DELETE OLD PERMISSIONS
+DELETE FROM mart.permission_report
+WHERE business_unit_id = 
+	(
+		SELECT DISTINCT
+			business_unit_id
+		FROM mart.dim_business_unit
+		WHERE business_unit_code = @business_unit_code
+	)
+
+--SAVE NEW PERMISSIONS
+INSERT mart.permission_report
+	(report_id, person_code, team_id, my_own, business_unit_id, datasource_id, datasource_update_date)
+SELECT	report_id				= pr.report_id,
+		person_code				= pr.person_code,
+		team_id					= dt.team_id,
+		my_own					= pr.my_own,
+		business_unit_id		= bu.business_unit_id,
+		datasource_id			= pr.datasource_id, 
+		datasource_update_date	= pr.datasource_update_date
+FROM 
+	Stage.stg_permission_report pr
+INNER JOIN 
+	mart.dim_team dt 
+ON 
+	dt.team_code = pr.team_id
+INNER JOIN
+	mart.dim_business_unit bu
+ON
+	pr.business_unit_code = bu.business_unit_code
+INNER JOIN 
+	mart.report r
+ON
+	pr.report_id= r.report_id
+ORDER BY pr.report_id, pr.person_code
+
+GO
+

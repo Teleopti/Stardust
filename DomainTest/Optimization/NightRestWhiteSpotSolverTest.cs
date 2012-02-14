@@ -1,0 +1,372 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Optimization
+{
+    [TestFixture]
+    public class NightRestWhiteSpotSolverTest
+    {
+        private INightRestWhiteSpotSolver _target;
+        private MockRepository _mocks;
+        private IScheduleMatrixPro _matrix;
+        private IScheduleDayPro _scheduleDayPro1;
+        private IScheduleDayPro _scheduleDayPro2;
+        private IScheduleDayPro _scheduleDayPro3;
+        private IScheduleDayPro _scheduleDayPro4;
+        private IScheduleDayPro _scheduleDayPro5;
+        private IScheduleDayPro _scheduleDayPro6;
+        private IScheduleDayPro _scheduleDayPro7;
+        private IScheduleDayPro _scheduleDayPro8;
+
+        private IScheduleDay _schedulePartEmpty;
+        private IScheduleDay _schedulePartDo;
+        private IScheduleDay _schedulePartContractDo;
+        private IScheduleDay _schedulePartAbsence;
+        private IScheduleDay _schedulePartShift;
+
+        [SetUp]
+        public void Setup()
+        {
+            _target = new NightRestWhiteSpotSolver();
+            _mocks = new MockRepository();
+            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+            _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro5 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro6 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro7 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro8 = _mocks.StrictMock<IScheduleDayPro>();
+            _schedulePartEmpty = _mocks.StrictMock<IScheduleDay>();
+            _schedulePartDo = _mocks.StrictMock<IScheduleDay>();
+            _schedulePartContractDo = _mocks.StrictMock<IScheduleDay>();
+            _schedulePartAbsence = _mocks.StrictMock<IScheduleDay>();
+            _schedulePartShift = _mocks.StrictMock<IScheduleDay>();
+
+        }
+
+        [Test]
+        public void SolverShouldFindWhiteSpotsAndSuggestDayBefore()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                simplePeriod();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using(_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(2, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[1]);
+
+            Assert.AreEqual(4, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule()[2]);
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule()[3]);
+        }
+
+        [Test]
+        public void ShouldSkipIfFirstDayInSchedulePeriod()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                firstDay();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using(_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(1, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+
+            Assert.AreEqual(2, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+        }
+
+        [Test]
+        public void ShouldSkipIfTwoWhiteSpotsInARow()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                twoDaysInARow();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(1, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+
+            Assert.AreEqual(2, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+        }
+
+        [Test]
+        public void ShouldConsiderIfDayAfterEffectivePeriodIsEmpty()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                lastAndNextDayEmpty();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(1, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToDelete[0]);
+
+            Assert.AreEqual(2, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 3), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 2), result.DaysToReschedule()[1]);
+        }
+
+        [Test]
+        public void ShouldSkipIfDayBeforeWhiteSpotIsLocked()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(lockDay2());
+                simplePeriod();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(1, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+
+            Assert.AreEqual(2, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+        }
+
+        [Test]
+        public void ShouldSkipIfWhiteSpotIsLocked()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(lockDay3());
+                simplePeriod();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(1, result.DaysToDelete.Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToDelete[0]);
+
+            Assert.AreEqual(2, result.DaysToReschedule().Count);
+            Assert.AreEqual(new DateOnly(2010, 1, 6), result.DaysToReschedule()[0]);
+            Assert.AreEqual(new DateOnly(2010, 1, 5), result.DaysToReschedule()[1]);
+        }
+
+        [Test]
+        public void ShouldSkipIfDayBeforeWhiteSpotIsDayOff()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                dayOffBeforeEmptyDay();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(0, result.DaysToDelete.Count);
+
+            Assert.AreEqual(0, result.DaysToReschedule().Count);
+        }
+
+        private void mockExpectations(IList<IScheduleDayPro> unlockedList)
+        {
+            IPerson person = PersonFactory.CreatePerson();
+
+            IList<IScheduleDayPro> periodList = new List<IScheduleDayPro>
+                                                    {
+                                                        _scheduleDayPro1,
+                                                        _scheduleDayPro2,
+                                                        _scheduleDayPro3,
+                                                        _scheduleDayPro4,
+                                                        _scheduleDayPro5,
+                                                        _scheduleDayPro6,
+                                                        _scheduleDayPro7,
+                                                    };
+
+
+
+            Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
+            for (int i = 0; i < 7; i++)
+            {
+                var day = periodList[i];
+                Expect.Call(day.Day).Return(new DateOnly(2010, 1, 1).AddDays(i)).Repeat.Any();
+                Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 1).AddDays(i))).Return(periodList[i]).
+                    Repeat.Any();
+            }
+            Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 8))).Return(_scheduleDayPro8).Repeat.Any();
+            Expect.Call(_schedulePartEmpty.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
+            Expect.Call(_schedulePartDo.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
+            Expect.Call(_schedulePartContractDo.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
+            Expect.Call(_schedulePartAbsence.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
+            Expect.Call(_schedulePartShift.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
+            Expect.Call(_schedulePartEmpty.IsScheduled()).Return(false).Repeat.Any();
+            Expect.Call(_schedulePartDo.IsScheduled()).Return(true).Repeat.Any();
+            Expect.Call(_schedulePartContractDo.IsScheduled()).Return(true).Repeat.Any();
+            Expect.Call(_schedulePartAbsence.IsScheduled()).Return(true).Repeat.Any();
+            Expect.Call(_schedulePartShift.IsScheduled()).Return(true).Repeat.Any();
+            //Expect.Call(earlyAssignment.MainShift).Return(earlyShift).Repeat.Any();
+            //Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
+            //Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
+            //Expect.Call(lateAssignment.MainShift).Return(lateShift).Repeat.Any();
+            //Expect.Call(lateShift.ShiftCategory).Return(late).Repeat.Any();
+            Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
+            //Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2009, 12, 31))).Return(null).
+            //        Repeat.Any();
+            //Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 01, 11))).Return(null).
+            //        Repeat.Any();
+            Expect.Call(_matrix.Person).Return(person).Repeat.Any();
+
+        }
+
+        private void simplePeriod()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+        }
+
+        private void dayOffBeforeEmptyDay()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartDo).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+        }
+
+        private void firstDay()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+        }
+
+        private void twoDaysInARow()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+        }
+
+        private void lastAndNextDayEmpty()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+        }
+
+        private IList<IScheduleDayPro> allUnlocked()
+        {
+            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
+                                                    {
+                                                        _scheduleDayPro1,
+                                                        _scheduleDayPro2,
+                                                        _scheduleDayPro3,
+                                                        _scheduleDayPro4,
+                                                        _scheduleDayPro5,
+                                                        _scheduleDayPro6,
+                                                        _scheduleDayPro7, 
+                                                        _scheduleDayPro8
+                                                    };
+            return unlockedList;
+        }
+
+        private IList<IScheduleDayPro> lockDay2()
+        {
+            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
+                                                    {
+                                                        _scheduleDayPro1,
+                                                        _scheduleDayPro3,
+                                                        _scheduleDayPro4,
+                                                        _scheduleDayPro5,
+                                                        _scheduleDayPro6,
+                                                        _scheduleDayPro7, 
+                                                        _scheduleDayPro8
+                                                    };
+            return unlockedList;
+        }
+
+        private IList<IScheduleDayPro> lockDay3()
+        {
+            IList<IScheduleDayPro> unlockedList = new List<IScheduleDayPro>
+                                                    {
+                                                        _scheduleDayPro1,
+                                                        _scheduleDayPro2,
+                                                        _scheduleDayPro4,
+                                                        _scheduleDayPro5,
+                                                        _scheduleDayPro6,
+                                                        _scheduleDayPro7, 
+                                                        _scheduleDayPro8
+                                                    };
+            return unlockedList;
+        }
+    }
+}

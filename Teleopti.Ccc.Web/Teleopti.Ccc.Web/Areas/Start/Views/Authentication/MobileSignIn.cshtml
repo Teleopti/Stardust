@@ -1,0 +1,130 @@
+﻿@using Teleopti.Ccc.UserTexts
+@model Teleopti.Ccc.Web.Areas.Start.Models.Authentication.SignInViewModel
+@{
+	Layout = "~/Views/Shared/MobileLayoutBase.cshtml";
+}
+@section jsBeforeMobile {
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Mobile.Common.js")"> </script>
+	<script>
+		var cNs = Teleopti.Start.Mobile.Common;
+		$('#application-signin').live('pageinit', function () {
+			$("#application-signin-button").bind("click", function () {
+				cNs.ClearError();
+				var signInModel = {
+					"UserName": $('#ApplicationSignIn_SignIn_UserName').val(),
+					"Password": $('#ApplicationSignIn_SignIn_Password').val(),
+					"DataSourceName": $('input[name="signin-sel-datasource"]:checked', $('#application-signin')).val()
+				};
+				
+				cNs.XRequest('#application-signin', 'Application', signInModel, function (data) {
+					updateBusinessUnitsList(data.BusinessUnits);
+					$('#businessunit-signin').data('SignIn', data.SignIn);
+					$.mobile.changePage("#businessunit-signin", { transition: "slide" });
+				});
+			});
+			function updateBusinessUnitsList(buNodes) {
+				var holder = $('#business-unit-listview-holder'); // TODO PW make cancel work!
+				holder.empty();
+				holder.append($('<legend/>').html(holder.data('bu-legend')));
+
+				$.each(buNodes, function (o, i) {
+					$('<input type="radio"/>').attr({ name: 'signin-sel-businessunit', id: 'radio-choice-bu-' + this.Id, value: this.Id
+					}).appendTo(holder);
+					$('<label />', { 'for': 'radio-choice-bu-' + this.Id }).html(this.Name)
+						.appendTo(holder);
+				});
+				holder.trigger('create');
+			}
+		});
+		
+		$('#businessunit-signin').live('pageinit', function () {
+			$("#businessunit-ok-button").bind("click", function () {
+				cNs.ClearError();
+				var signInModel = $('#businessunit-signin').data('SignIn');
+				signInModel.BusinessUnitId = $('input[name="signin-sel-businessunit"]:checked', $('#businessunit-signin')).val() || signInModel.BusinessUnitId;
+				cNs.XRequest('#businessunit-signin', 'Logon', signInModel, function () { });
+			});
+		});
+
+		$(document).bind("mobileinit", function () {
+			$.mobile.orientationChangeEnabled = false;
+			$.mobile.loadingMessage = '@(Html.Raw(HttpUtility.JavaScriptStringEncode(Resources.LoadingThreeDots)))';
+			$.mobile.pageLoadErrorMessage = '@(Html.Raw(HttpUtility.JavaScriptStringEncode(Resources.CommunicationErrorEndPoint)))';
+		});
+	</script>
+}
+<div data-role="page" id="application-signin">
+	<div data-role="content">
+		<div class="center-wrapper">
+			<img class="custom-image" src="@Url.Content("~/Areas/MobileReports/Content/Images/logo.png")" alt="Teleopti CCC@nywhere" title="Teleopti CCC@anywhere" />
+		</div>
+		<ul data-role="listview" data-inset="true" data-theme="b" id="sel-datasource">
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+					<legend>@Resources.PleaseChooseADatasource</legend>
+					@foreach (var item in Model.ApplicationSignIn.DataSources)
+	 {
+		 var encodedName = Html.AttributeEncode(string.Format("signin-sel-datasource-{0}", item.Name));
+
+						<input type="radio" name="signin-sel-datasource" id="@encodedName" value="@Html.AttributeEncode(item.Name)" />
+						<label for="@encodedName">@item.Name</label>
+	 }
+				</fieldset>
+				<div data-role="fieldcontain">
+					@Html.LabelFor(m => m.ApplicationSignIn.SignIn.UserName)
+					@Html.TextBoxFor(m => m.ApplicationSignIn.SignIn.UserName, new { placeholder = Resources.UserName })
+				</div>
+				<div data-role="fieldcontain">
+					@Html.LabelFor(m => m.ApplicationSignIn.SignIn.Password)
+					@Html.PasswordFor(m => m.ApplicationSignIn.SignIn.Password, new { placeholder = Resources.Password })
+				</div>
+			</li>
+		</ul>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				&nbsp;
+			</div>
+			<div class="ui-block-b">
+				<div class="right-wrapper">
+					<button id="application-signin-button" type="button" data-theme="a" data-inline="true">@Resources.LogOn</button>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</div>
+<div data-role="page" id="businessunit-signin">
+	<div data-role="content">
+		<div class="center-wrapper">
+			<img class="custom-image" src="@Url.Content("~/Areas/MobileReports/Content/Images/logo.png")" alt="@Html.AttributeEncode(ViewBag.Title)"
+				 title="@Html.AttributeEncode(ViewBag.Title)" />
+		</div>
+		<ul data-role="listview" id="business-unit-listview" data-inset="true" data-theme="b">
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup" id="business-unit-listview-holder" data-bu-legend="@Html.AttributeEncode(Resources.PleaseChooseABusinessUnit)">
+					<legend>@Resources.PleaseChooseABusinessUnit</legend>
+				</fieldset>
+			</li>
+		</ul>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				<a href="#application-signin" data-role="button" data-theme="a" data-inline="true">@Resources.Cancel</a>
+			</div>
+			<div class="ui-block-b">
+				<div class="right-wrapper">
+					<button id="businessunit-ok-button" type="button" data-theme="a" data-inline="true">@Resources.Ok</button>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</div>
+<ul data-role="listview" id="error-message" style="display: none;" data-inset="true"
+	data-theme="b">
+	<li data-role="fieldcontain">
+		<div class="center-wrapper">
+			<br />
+			<span class="error"></span>
+			<br />
+			<br />
+		</div>
+	</li>
+</ul>

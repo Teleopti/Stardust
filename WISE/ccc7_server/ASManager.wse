@@ -1,0 +1,215 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Title=item: Custom Script Item
+  Flags=00000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000100000000000010110000001010
+  Message Font=MS Sans Serif
+  Font Size=8
+  Pages Modified=00001000011000000000000000000000
+  Extra Pages=00000000000000000000000000010000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Step View=&Properties
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\Windows\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\Windows
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Requested Execution Level=asInvoker
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_DATABASE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AD
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SD
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SUSER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_PASSWORD
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SPASS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_USER_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AUTH
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_PROCESS_CUBE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PROCESS
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=CUBE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DIR
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: If/While Statement
+  Variable=AUTH
+  Value=NT
+end
+item: Set Variable
+  Variable=SA
+  Value=-EE
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=SA
+  Value=-SU"%SUSER%" -SP"%SPASS%"
+end
+item: End Block
+end
+item: Remark
+  Text=Drop AS Database
+end
+remarked item: Set Variable
+  Variable=FP
+  Value=%DIR%DropDatabase.xmla
+end
+remarked item: Display Message
+  Title=aa
+  Text=.\Cube\AnalysisServicesManager.exe -AS%AS% -AD%AD% -SS%SS% -SD%SD% %SA% -FP"%FP%"
+end
+remarked item: Execute Program
+  Pathname=.\AnalysisServicesManager.exe
+  Command Line=-AS%AS% -AD%AD% -SS%SS% -SD%SD% %SA% -FP"%FP%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: Remark
+  Text=Create AS Database
+end
+item: Set Variable
+  Variable=FP
+  Value=%DIR%CreateDatabase.xmla
+end
+item: Execute Program
+  Pathname=.\AnalysisServicesManager.exe
+  Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Database Installation Failed
+  Text=Couldn't create Analysis Services database: %AD% on server: %AS%
+end
+item: End Block
+end
+item: Execute Program
+  Pathname=PING
+  Command Line=127.0.0.1 -n 3 -w 1000 > nul
+  Flags=00000010
+end
+item: Remark
+  Text=Process Database
+end
+item: If/While Statement
+  Variable=PROCESS
+  Value=TRUE
+end
+item: Set Variable
+  Variable=FP
+  Value=%DIR%ProcessDatabase.xmla
+end
+item: Execute Program
+  Pathname=.\AnalysisServicesManager.exe
+  Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: If/While Statement
+  Variable=INSTALL_RESULT
+  Value=0
+  Flags=00000001
+end
+item: Display Message
+  Title=Process Database Failed
+  Text=The Proccesing of: %AD% on server %AS% failed. Please investigate and process manually
+end
+item: End Block
+end
+item: End Block
+end

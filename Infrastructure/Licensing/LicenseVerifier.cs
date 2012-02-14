@@ -1,0 +1,122 @@
+﻿using System;
+using System.Globalization;
+using System.Xml;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Infrastructure.Licensing
+{
+	public class LicenseVerifier : ILicenseVerifier
+	{
+		private readonly ILicenseFeedback _licenseFeedback;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IPersonRepository _personRepository;
+		private readonly ILicenseRepository _licenseRepository;
+
+		public LicenseVerifier(ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, ILicenseRepository licenseRepository)
+		{
+			
+			_licenseFeedback = licenseFeedback;
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_personRepository = personRepository;
+			_licenseRepository = licenseRepository;
+		}
+
+		public ILicenseService LoadAndVerifyLicense()
+		{
+			using (PerformanceOutput.ForOperation("Verifying license"))
+			{
+				ILicenseService licenseService = null;
+				try
+				{
+					int numberOfActiveAgents;
+					using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+					{
+						numberOfActiveAgents = _personRepository.NumberOfActiveAgents();
+						licenseService = XmlLicenseService(numberOfActiveAgents);
+					} 
+					
+					if (licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents))
+					{
+						string warningMessage = getAlmostTooManyAgentsWarning(numberOfActiveAgents, licenseService);
+						_licenseFeedback.Warning(warningMessage);
+					}
+
+					if (licenseService.ExpirationDate.Subtract(licenseService.ExpirationGracePeriod) < DateTime.Now)
+					{
+						string warningMessage =
+							String.Format(CultureInfo.CurrentCulture, Resources.YourLicensWillExpireDoNotForgetToRenewItInTime,
+										  licenseService.ExpirationDate);
+						_licenseFeedback.Warning(warningMessage);
+					}
+				}
+				catch (LicenseMissingException)
+				{
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.NoLicensePleaseApplyANewOne);
+					licenseService = null;
+				}
+				catch (SignatureValidationException)
+				{
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					licenseService = null;
+				}
+				catch (LicenseExpiredException)
+				{
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.LicenseHasExpiredPleaseApplyANewOne);
+					licenseService = null;
+				}
+				catch (TooManyActiveAgentsException e)
+				{
+					string explanation = getTooManyAgentsExplanation(e);
+					_licenseFeedback.Error(explanation);
+					licenseService = null;
+				}
+				catch (XmlException)
+				{
+					_licenseFeedback.Error(Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					licenseService = null;
+				}
+				catch (FormatException)
+				{
+					_licenseFeedback.Error(Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					licenseService = null;
+				}
+				return licenseService;
+			}
+		}
+
+		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
+		{
+			string warningMessage;
+			if(licenseService.LicenseType.Equals(LicenseType.Agent))
+			{
+				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
+								  numberOfActiveAgents, licenseService.MaxActiveAgents);
+			}
+			else
+			{
+				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
+											   licenseService.MaxSeats);
+							
+			}
+			return warningMessage;
+		}
+
+		private string getTooManyAgentsExplanation(TooManyActiveAgentsException e)
+		{
+			var datasourceName = _unitOfWorkFactory.Name;
+			if(e.LicenseType == LicenseType.Agent)
+				return datasourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
+								 e.NumberOfAttemptedActiveAgents, e.NumberOfLicensed);
+			return datasourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
+								 e.NumberOfLicensed);
+		}
+
+		protected virtual ILicenseService XmlLicenseService(int numberOfActiveAgents)
+		{
+			return new XmlLicenseService(_licenseRepository, numberOfActiveAgents);
+		}
+	}
+}

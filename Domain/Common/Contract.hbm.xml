@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+
+  <class name="Contract">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_Contract_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_Contract_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+
+    <property name="PositivePeriodWorkTimeTolerance"
+					not-null="true"
+					type="TimeSpan" />
+
+    <property name="NegativePeriodWorkTimeTolerance"
+					not-null="true"
+					type="TimeSpan" />
+
+    <property name="MinTimeSchedulePeriod"
+          not-null="true"
+          type="TimeSpan"/>
+    
+    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
+		  <property name="Name"
+					not-null="true"
+					type="string"
+					length="50"/>
+		  <property name="ShortName"
+					not-null="false"
+					type="string"
+					length="25"/>
+	  </component>
+						 
+	  <property name="EmploymentType"				
+				not-null="true" />
+	  <component name="WorkTime" class="Teleopti.Interfaces.Domain.WorkTime, Teleopti.Interfaces">
+		  <property name="AvgWorkTimePerDay"
+					not-null="true"
+					type="TimeSpan" />
+	  </component>
+	  <component name="WorkTimeDirective" class="Teleopti.Interfaces.Domain.WorkTimeDirective, Teleopti.Interfaces">
+		  <property name="MaxTimePerWeek"
+					not-null="true"
+					type="TimeSpan" />
+		  <property name="NightlyRest"
+					not-null="true"
+					type="TimeSpan" />
+		  <property name="WeeklyRest"
+					not-null="true"
+					type="TimeSpan" />
+	  </component>
+
+    <bag name="MultiplicatorDefinitionSetCollection"
+     cascade="none">
+      <key foreign-key="FK_MultiplicatorDefinitionSet_Contract">
+        <column name="Contract"
+						not-null="true"
+						unique-key="ContractMultiplicatorDefinitionSetUnique"/>
+      </key>
+      <many-to-many class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet" foreign-key="FK_MultiplicatorDefinitionSetCollection_Contract">
+        <column name="MultiplicatorDefinitionSet"
+						unique-key="ContractMultiplicatorDefinitionSetUnique"
+						not-null="true"/>
+      </many-to-many>
+    </bag>
+    <property name="PlanningTimeBankMax" not-null="true"/>
+    <property name="PlanningTimeBankMin" not-null="true"/>
+    <property name="AdjustTimeBankWithSeasonality"
+      type="boolean"
+      not-null="true"/>
+    <property name="AdjustTimeBankWithPartTimePercentage"
+      type="boolean"
+      not-null="true"/>
+    <property name="PositiveDayOffTolerance" not-null="true"/>
+    <property name="NegativeDayOffTolerance" not-null="true"/>
+    
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_Contract_BusinessUnit"/>
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+  </class>
+</hibernate-mapping>

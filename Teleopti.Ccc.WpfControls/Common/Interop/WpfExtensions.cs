@@ -1,0 +1,77 @@
+﻿using System;
+using System.Windows;
+using System.Windows.Forms.Integration;
+using Syncfusion.Windows.Shared;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Interfaces.Domain;
+using FlowDirection=System.Windows.FlowDirection;
+
+namespace Teleopti.Ccc.WpfControls.Common.Interop
+{
+    public static class WpfExtensions
+    {
+        /// <summary>
+        /// Shows a wpf windows
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <remarks>
+        /// Use this instead of Show, it enables textinput, right to left
+        /// Add SetTexts?
+        /// Created by: henrika
+        /// Created date: 2009-06-10
+        /// </remarks>
+        public static void ShowFromWinForms(this Window window)
+        {
+            SetupWpfWindow(window, true);
+            window.Show();
+        }
+
+        //Bug in syncfusion makes databindings go crazy, can start window without visualstyle
+        public static void ShowFromWinForms(this Window window, bool useVisualStyle)
+        {
+            SetupWpfWindow(window, useVisualStyle);
+            window.Show();
+        }
+
+        private static void SetupWpfWindow(Window window, bool useVisualStyle)
+        {
+            //todos.....
+            //timezone
+            //set help?
+
+            if (StateHolderReader.IsInitialized)
+            {
+                //Set right to left:
+                window.FlowDirection =
+                    (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+                
+                //Set timezone:
+                VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone.TimeZoneInfoObject as TimeZoneInfo);
+                
+                //Set ui-culture
+                //FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(TeleoptiPrincipal.Current.Regional.Culture.ToString())));
+             
+            }
+
+            var mvvm = new ResourceDictionary {Source = new Uri("/Teleopti.CCC.WpfControls;component/Resources/MVVM.xaml", UriKind.RelativeOrAbsolute)};
+            var commonResources = new ResourceDictionary { Source = new Uri("/Teleopti.CCC.WpfControls;component/Resources/Common.xaml", UriKind.RelativeOrAbsolute) };
+            var syncfusionWpf = new ResourceDictionary { Source = new Uri("/syncfusion.Shared.WPF;component/SkinManager/SkinManager.xaml", UriKind.RelativeOrAbsolute) };
+            window.Resources.MergedDictionaries.Add(mvvm);
+            window.Resources.MergedDictionaries.Add(commonResources);
+            window.Resources.MergedDictionaries.Add(syncfusionWpf);
+
+            if(useVisualStyle)
+                SkinStorage.SetVisualStyle(window, "Office2007Blue");
+            
+            ElementHost.EnableModelessKeyboardInterop(window);
+        }
+
+        public static bool? ShowDialogFromWinForms(this Window window, bool useVisualStyle)
+        {
+            SetupWpfWindow(window, useVisualStyle);
+            return  window.ShowDialog();
+        }
+    }
+}

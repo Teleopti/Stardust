@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Scheduling.Meetings"
+                   default-access="field.camelcase-underscore">
+  
+  <class abstract="true" name="RecurrentMeetingOption">
+    <id name="Id" type="guid" unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+
+    <many-to-one class="Meeting" 
+                 name="Parent" 
+                 not-null ="true" foreign-key="FK_RecurrentMeetingOption_Meeting"/>
+
+    <property name="IncrementCount" type="int" not-null="true"/>
+    
+  </class>
+</hibernate-mapping>

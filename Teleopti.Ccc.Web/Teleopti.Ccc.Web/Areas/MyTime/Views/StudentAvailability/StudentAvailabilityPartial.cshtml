@@ -1,0 +1,99 @@
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
+@using Teleopti.Interfaces.Domain
+@model StudentAvailabilityViewModel
+@{
+	Layout = null;
+}
+
+<div id="StudentAvailability-period" class="pd5 info-pnl">
+	@if (Model.StudentAvailabilityPeriod == null)
+	{
+		@string.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
+	}
+	else
+	{
+		@string.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
+		@string.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
+	}
+</div>
+<div id="StudentAvailability-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+	<style>
+		@foreach (var style in Model.Styles)
+		{
+			@string.Format(".calendarview-week li.{0} div.day-content{{border-left-color: #{1}; border-right-color: #{1};}}\n", style.Name, style.ColorHex)
+		}
+
+		
+	</style>
+	<div id="StudentAvailability-body-inner" class="body-calendarview-inner clearfix">
+		<ul class="weekdays">
+			@foreach (var weekDayName in Model.WeekDayHeaders)
+			{
+				<li>@weekDayName.Title</li>
+			}
+		</ul>
+		@foreach (var week in Model.Weeks)
+		{
+			<ul class="calendarview-week">
+				<li>
+					<div>
+						<span>@week.Summary.MinWorkTime</span>
+						<span>@week.Summary.MaxWorkTime</span>
+					</div>
+				</li>
+				@foreach (var day in week.Days)
+				{
+					<li data-mytime-state="@Html.Schedule().FormatState(day.State)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
+						<div>
+							<div class="day-header">
+								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
+							</div>
+							@Html.DayContent(day)
+						</div>
+					</li>
+				}
+			</ul>
+		}
+	</div>
+</div>
+<div id="StudentAvailability-edit-section" class="edit-section col-1 floatleft mt10 displaynone">
+	<div class="edit-section-content col-1">
+		<div class="edit-module ui-corner-all">
+			<div class="edit-module-inner clearfix">
+				<div class="edit-module-element floatleft">
+					<label class="displayblock" for="StudentAvailability-edit-starttime-input">@Resources.FromColon</label>
+					<select id="StudentAvailability-edit-starttime" class="time-input combobox">
+						@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+						{
+							<option value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+						}
+					</select>
+				</div>
+				<div class="edit-module-element floatleft">
+					<label class="displayblock" for="StudentAvailability-edit-endtime-input">@Resources.ToColon</label>
+					<select id="StudentAvailability-edit-endtime" class="time-input combobox">
+						@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
+						{
+							<option value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+						}
+					</select>
+				</div>
+				<div class="edit-module-element floatleft">
+					<input id="StudentAvailability-edit-nextday-cb" type="checkbox" />
+					<label for="StudentAvailability-edit-nextday-cb">@Resources.NextDay</label>
+				</div>
+			</div>
+		</div>
+		<div class="edit-button-bar mr5 ml5 clearleftfloat">
+			<div id="StudentAvailability-edit-error" class="error floatleft">
+			</div>
+			<div class="floatright">
+				<input id="StudentAvailability-edit-ok-button" type="button" class="button mb5" value="@Html.AttributeEncode(Resources.Save)"/>
+				<input id="StudentAvailability-edit-cancel-button" type="button" class="button cancel mb5" value="@Html.AttributeEncode(Resources.Cancel)" />
+			</div>
+		</div>
+	</div>
+</div>

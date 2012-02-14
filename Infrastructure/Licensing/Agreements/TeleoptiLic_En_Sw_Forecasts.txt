@@ -1,0 +1,38 @@
+LICENSE AGREEMENT TELEOPTI CCC FORECASTS
+
+1. License Grant
+Teleopti AB, org.no. 556523-5925, a Swedish corporation with it principal place of business at PO Box 721, SE-182 17 Danderyd, Sweden ("TELEOPTI"), hereby grants to Licensee a nonexclusive, nontransferable, worldwide, revocable license to install and use the software Teleopti CCC Forecasts ("Software") during the Term (as defined below in section 5) whether the Software is distributed by Teleopti or from a Teleopti Distributor or Reseller, in object code form only, and solely for internal use within Licensee's own business. 
+Licensee may make one (1) back-up copy of the Software in machine-readable form, provided such copy is used for back-up only and provided all copyright information contained on the original is included in the copy. The use of the Software is subject to the registration and authorization requirements stipulated by TELEOPTI from time to time, and the fulfillment of all requirements stipulated in this License. 
+
+2. Restrictions on Use
+Except as expressly permitted by mandatory applicable law and this License, Licensee agrees not to copy, modify, decompile, reverse engineer, disassemble, or otherwise discover, or to rent, lease, or loan the Software, or to otherwise publish, distribute or make the Software available the in any form, in whole or in part. Licensee further agrees not to build additional applications based on the technology and output from the Software, nor to include logical and functional features of the Software in any in any third party software. TELEOPTI reserves all right, title, and interest in and to the Software not explicitly licensed herein, including without limitation all copyrights, patents, and other proprietary rights. Licensee shall not remove or obscure any copyright notices or proprietary legends contained within the Software.
+
+3. Support, Updates and Upgrades, Information 
+Licensee will be granted technical support via email free of charge. Licensee may subscribe for TELEOPTI'S or TELEOPTI'S Distributors' or Resellers' additional Support Offerings in effect from time to time. Any updates and/or upgrades provided pursuant to such Support Offering shall be governed by this License.
+Licensee grants TELEOPTI the right to contact Licensee and/or send Licensee information regarding TELEOPTI and TELEOPTI's partners product updates, offerings and other product and promotional information. Licensee further allows TELEOPTI to track Licensee's total time of usage of the Software. 
+
+4. License Fees
+This License is granted free of charge for the Term specified below in section 5. 
+
+5. Term and Termination 
+This License shall be effective upon acceptance by Licensee and shall remain in for a term of three (3) month. Upon request from Licensee TELEOPTI might extend the term. The initial term of three month and any extension granted by teleoptI shall be referred to as the "Term". Licensee's rights under this License will terminate automatically without notice from TELEOPTI if Licensee fails to comply with any term(s) of this License. Upon termination, Licensee shall destroy all copies of the Software in Licensee's possession. 
+
+6. NO WARRANTY
+Since the rights granted under this License are free of charge the Software is provided "as is", without express or implied warranties of any kind.
+TELEOPTI EXPRESSLY DISCLAIM ALL WARRANTIES AND/OR CONDITIONS, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES AND/OR CONDITIONS OF MERCHANTABILITY OR SATISFACTORY QUALITY AND FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT OF THIRD PARTY RIGHTS.  TELEOPTI DOES NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THE SOFTWARE WILL MEET LICENSEE'S REQUIREMENTS, OR THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, OR THAT DEFECTS IN THE SOFTWARE WILL BE CORRECTED.  FURTHERMORE, TELEOPTI DOES NOT WARRANT OR MAKE ANY REPRESENTATIONS REGARDING THE USE OR THE RESULTS OF THE USE OF THE SOFTWARE OR IN TERMS OF THEIR CORRECTNESS, ACCURACY, RELIABILITY, OR OTHERWISE.  NO ORAL OR WRITTEN INFORMATION OR ADVICE GIVEN BY TELEOPTI OR A TELEOPTI AUTHORIZED REPRESENTATIVE SHALL CREATE A WARRANTY OR IN ANY WAY INCREASE THE SCOPE OF THIS WARRANTY.  
+
+7. Patent and Copyright Indemnity 
+Teleopti shall have the right, at its own expense, defend or settle any suit or proceeding that is instituted against Licensee to the extent such suit or proceeding alleges that any Software licensed by Teleopti hereunder infringes any patent right or copyright of a third party, and shall pay all damages awarded therein against Licensee or agreed upon in settlement by Teleopti; provided that Licensee (i) gives Teleopti immediate notice in writing of any such suit, proceeding or threat thereof; (ii) permits Teleopti sole control, through counsel of Teleopti's choice, to answer the charge of infringement and defend and/or settle such suit; and (iii) gives Teleopti all the needed information, reasonable assistance and authority, at Teleopti's expense, to enable Teleopti to defend or settle such suit.
+The above provision shall not apply to, and Teleopti shall have no liability or obligation for, any infringement arising from the following:  (i) any modification, amendment or addition made to the Software by anyone other than Teleopti; (ii) the use of such a Software as a part of or in combination with any devices, parts or software not provided by Teleopti; (iii) compliance with Licensee's design requirements or specifications; (iv) the use of other than a current unaltered release of the Software available from Teleopti; or (v) the use of such Software to practice any method or process which does not occur wholly within the Software.  This exclusion applies to the extent that the infringement would have been avoided but for such modification, combination, compliance with specifications, use of other than the current release, or practice of such method or process.
+In the event the use of any Software purchased from Teleopti be enjoined, or in the event Teleopti wishes to minimize its potential liability hereunder, Teleopti may, at its sole option and expense and without any cost or harm to Licensee:  (i) procure for Licensee the right to use such Software;  (ii) substitute a functionally equivalent, non-infringing unit of the Software;  (iii) modify such Software so that it no longer infringes but remains functionally equivalent; or  
+
+8. Limitation of Liability 
+TO THE EXTENT PERMITTED BY LAW, IN NO EVENT SHALL TELEOPTI BE LIABLE FOR PERSONAL INJURY OR ANY INCIDENTAL, SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR RELATING TO THIS LICENSE NOR SHALL TELEOPTI BE LIABLE FOR ANY LOSS OF DATA, BUSINESS INTERRUPTION OR ANY COMMERCIAL DAMAGES OR LOSSES EVEN IF TELEOPTI HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSSES.
+
+9. Controlling Law, Disputes and Severability
+This License shall be governed by the laws of Sweden excluding it conflict of law provisions. Any controversy or claim arising out of or relating to this License, or the breach, termination or invalidity thereof shall be finally settled by in a court of competent jurisdiction in Sweden.  If for any reason a court of competent jurisdiction finds any provision, or portion thereof, to be unenforceable, the remainder of this License shall continue in full force and effect.  
+
+10. Complete License
+This License constitutes the entire agreement between the parties with respect to the use of the Software and supersedes all prior or contemporaneous understandings regarding such subject matter.  No amendment to or modification of this License will be binding unless in writing and signed by TELEOPTI. 
+
+

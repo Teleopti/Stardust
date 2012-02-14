@@ -1,0 +1,134 @@
+﻿using System.Linq;
+using log4net;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
+
+namespace Teleopti.Ccc.WinCode.Intraday
+{
+    public interface IMessageHandlerCommand
+    {
+        void Execute(IEventMessage eventMessage);
+    }
+
+    public class OnEventScheduleMessageCommand : IMessageHandlerCommand
+    {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(OnEventScheduleMessageCommand));
+
+        private readonly IIntradayView _view;
+        private readonly ISchedulingResultLoader _schedulingResultLoader;
+        private readonly IRtaStateHolder _rtaStateHolder;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IRepositoryFactory _repositoryFactory;
+
+        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IRtaStateHolder rtaStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
+        {
+            _view = view;
+            _schedulingResultLoader = schedulingResultLoader;
+            _rtaStateHolder = rtaStateHolder;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _repositoryFactory = repositoryFactory;
+        }
+
+		protected OnEventScheduleMessageCommand()
+		{
+		}
+
+        public virtual void Execute(IEventMessage eventMessage)
+        {
+            if (eventMessage.DomainUpdateType == DomainUpdateType.Delete)
+            {
+                deleteOnEvent(eventMessage);
+            }
+            else
+            {
+                updateInsertOnEvent(eventMessage);
+            }
+
+            _schedulingResultLoader.InitializeScheduleData();
+            if (_rtaStateHolder != null)
+                _rtaStateHolder.InitializeSchedules();
+            _view.DrawSkillGrid();
+        }
+
+
+        private void deleteOnEvent(IEventMessage message)
+        {
+            if (Logger.IsInfoEnabled)
+                Logger.Info("Message broker - Removing " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
+
+			if (message.InterfaceType.IsAssignableFrom(typeof(IMeeting)))
+			{
+				_schedulingResultLoader.SchedulerState.Schedules.DeleteMeetingFromBroker(message.DomainObjectId);
+			}
+			else
+			{
+				_schedulingResultLoader.SchedulerState.Schedules.DeleteFromBroker(message.DomainObjectId);
+			}
+        }
+
+        private void updateInsertOnEvent(IEventMessage message)
+        {
+            using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                if (Logger.IsInfoEnabled)
+                    Logger.Info("Message broker - Updating " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
+
+                uow.Reassociate(_schedulingResultLoader.Contracts);
+                uow.Reassociate(_schedulingResultLoader.ContractSchedules);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.RequestedScenario);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
+
+                var person =
+                    _schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.FirstOrDefault(
+                        p => p.Id == message.ReferenceObjectId);
+
+                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
+                {
+                    associateRootsForPersonAssignment(uow);
+                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonAssignmentRepository(uow), message.DomainObjectId);
+                    _view.ReloadScheduleDayInEditor(person);
+                    return;
+                }
+                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonDayOff)))
+                {
+                    uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.DayOffs);
+                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonDayOffRepository(uow), message.DomainObjectId);
+                    _view.ReloadScheduleDayInEditor(person);
+                    return;
+                }
+                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
+                {
+                    associateRoootsForPersonAbsence(uow);
+                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonAbsenceRepository(uow), message.DomainObjectId);
+                    _view.ReloadScheduleDayInEditor(person);
+                    return;
+                }
+				if (message.InterfaceType.IsAssignableFrom(typeof(IMeeting)))
+				{
+					deleteOnEvent(message);
+					associateRootsForPersonAssignment(uow);
+					_schedulingResultLoader.SchedulerState.Schedules.MeetingUpdateFromBroker(_repositoryFactory.CreateMeetingRepository(uow), message.DomainObjectId);
+					_view.ReloadScheduleDayInEditor(person);
+					return;
+				}
+
+                Logger.Warn("Message broker - Got a message of an unknown IScheduleData type: " + message.DomainObjectType);
+            }
+        }
+
+        private void associateRoootsForPersonAbsence(IUnitOfWork uow)
+        {
+            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Absences);
+        }
+
+        private void associateRootsForPersonAssignment(IUnitOfWork uow)
+        {
+            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
+            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
+        }
+    }
+}

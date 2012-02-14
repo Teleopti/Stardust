@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Security.AuthorizationEntities"
+                   default-access="field.camelcase-underscore">
+  <class name="ApplicationRole">
+    <!--IEntity-->
+	  <id name="Id"
+			  type="guid"
+			  unsaved-value="null">
+		  <generator class="guid.comb" />
+	  </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" foreign-key="FK_ApplicationRole_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_ApplicationRole_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+ 
+    <property name="Name"
+			not-null="true"
+			type="string"
+			length="50"/>
+
+	<property name="DescriptionText"
+			not-null="false"
+			type="string"
+			length="255"/>
+
+	<property name="BuiltIn"
+		  not-null="true"
+		  type="boolean" />
+
+    <bag name="ApplicationFunctionCollection"
+         table ="ApplicationFunctionInRole"
+            cascade="none">
+      <key foreign-key="FK_ApplicationFunctionInRole_ApplicationRole">
+        <column name="ApplicationRole"
+                not-null="true"
+                unique-key="GrantedUserFunctionUnique" />
+      </key>
+      <many-to-many class="ApplicationFunction" foreign-key="FK_ApplicationFunctionInRole_ApplicationFunction">
+        <column name="ApplicationFunction"
+                unique-key="GrantedUserFunctionUnique"
+                not-null="true"/>
+      </many-to-many>
+    </bag>
+
+	<one-to-one name="AvailableData"
+			    class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.AvailableData"
+				property-ref="ApplicationRole"/>
+	  
+    <many-to-one name="BusinessUnit"
+        class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+        access="nosetter.camelcase-underscore"
+        not-null="false" foreign-key="FK_ApplicationRole_BusinessUnit"/>
+
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+
+    <filter name="businessUnitFilter"
+    condition="(BusinessUnit is NULL Or :businessUnitParameter = BusinessUnit)" />
+	<filter name="deletedFlagFilter"
+	condition="IsDeleted = 0" />
+	  
+  </class>
+</hibernate-mapping>

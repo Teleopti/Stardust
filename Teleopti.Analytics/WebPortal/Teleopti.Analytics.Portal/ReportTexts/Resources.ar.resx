@@ -1,0 +1,973 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>طي</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>توسيع</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>تم إدخال قيمة غير صالحة في: </value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>لم يتم إدخال أي شيء في: </value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>مكالمات غير مكتملة</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>معدل عدم الاكتمال</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>وكيل</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>مكالمات تم الرد عليها</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>مستوى الخدمة بعد الرد على المكالمة</value>
+    <comment>مستوى الخدمة بعد الرد على المكالمة</comment>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>مستوى الخدمة خلال الرد على المكالمة</value>
+    <comment>مستوى الخدمة خلال الرد على المكالمة</comment>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>التاريخ</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>التاريخ:</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>من تاريخ:</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>إلى تاريخ:</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>الإجمالي الكلي</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>الفاصل الزمني</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>الفاصل الزمني:</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>وقت مُجدول</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>مستوى الخدمة (%)</value>
+    <comment>مستوى الخدمة (%)</comment>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>الموقع:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>المهارة:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>الفريق:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>العمل:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>إظهار التقرير</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>فاصل زمني من:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>فاصل زمني إلى:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>نوع الفترة:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>معدل الغياب (%)</value>
+    <comment>معدل الغياب (%)</comment>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>نسبة الالتزام (%)</value>
+    <comment>نسبة الالتزام (%)</comment>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>مكالمات تم الرد عليها تبعًا للساعة المحددة للهاتف</value>
+    <comment>مكالمات تم الرد عليها تبعًا للساعة المحددة للهاتف</comment>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>متوسط العمل المترتب على المكالمة (ث)</value>
+    <comment>متوسط العمل المترتب على المكالمة (ث)</comment>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>متوسط وقت المعالجة (ث)</value>
+    <comment>متوسط وقت المعالجة (ث)</comment>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>متوسط وقت التحدث (ث)</value>
+    <comment>متوسط وقت التحدث (ث)</comment>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>نسبة الاستعداد (%)</value>
+    <comment>نسبة الاستعداد (%)</comment>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>فعلي</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>مؤشر الأداء الأساسي</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>فترة سابقة</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>الهدف</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>فريق فعلي</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>الاتجاه</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>لم تنجح محاولة تسجيل الدخول التي قمت بها. يُرجى إعادة المحاولة.</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>اسم المستخدم:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>كلمة مرور جديدة</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>كلمة المرور مطلوبة.</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>كلمة المرور:</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>تذكر بياناتي في المرة القادمة</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>اسم المستخدم مطلوب.</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>إظهار التقرير</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>السيناريو:</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>معدل عدم الاكتمال مع استبعاد المكالمات القصيرة (%)</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>معدل عدم الاكتمال (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>معدل الرد (%)</value>
+    <comment>معدل الرد (%)</comment>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>متوسط سرعة الرد (ث)</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>متوسط وقت عدم الاكتمال (ث)</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>تاريخ الفترة:</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>أطول فترة تأخير في قائمة الانتظار، غير مكتمل (ث)</value>
+    <comment>أطول فترة تأخير في قائمة الانتظار، غير مكتمل (ث)</comment>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>أطول فترة تأخير في قائمة الانتظار، تم الرد  (ث)</value>
+    <comment>أطول فترة تأخير في قائمة الانتظار، تم الرد  (ث)</comment>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>الفترة</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>عدم اكتمال المكالمة وسرعة الرد</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>ثوانٍ</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>وقت عدم الاكتمال</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>إجماليات:</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>نسبة مئوية</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>العمل الفعلي المترتب على المكالمة</value>
+    <comment>العمل الفعلي المترتب على المكالمة</comment>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>متوسط وقت التحدث الفعلي</value>
+    <comment>متوسط وقت التحدث الفعلي</comment>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>زمن العمل المترتب على المكالمة</value>
+    <comment>زمن العمل المترتب على المكالمة</comment>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>متوسط وقت التحدث</value>
+    <comment>متوسط وقت التحدث</comment>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>المكالمات المحسوبة</value>
+    <comment>المكالمات المحسوبة</comment>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>المكالمات</value>
+    <comment>المكالمات</comment>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>العمل المتوقع المترتب على المكالمة</value>
+    <comment>العمل المتوقع المترتب على المكالمة</comment>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>متوسط وقت التحدث المتوقع</value>
+    <comment>متوسط وقت التحدث المتوقع</comment>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>المكالمات المتوقعة</value>
+    <comment>المكالمات المتوقعة</comment>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>عدد</value>
+    <comment>عدد</comment>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>العمل المتوقع مقابل العمل الفعلي</value>
+    <comment>العمل المتوقع مقابل العمل الفعلي</comment>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>استعداد الوكلاء</value>
+    <comment>استعداد الوكلاء</comment>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>الوكلاء المجدولون</value>
+    <comment>الوكلاء المجدولون</comment>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>فرق نسبي (%)</value>
+    <comment>فرق نسبي (%)</comment>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>الوقت المتوقع (ق‏ق:س‏س)</value>
+    <comment>الوقت المتوقع (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>مكالمات مقدمة</value>
+    <comment>مكالمات مقدمة</comment>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>مكالمات مقدمة / استعداد الوكيل</value>
+    <comment>مكالمات مقدمة / استعداد الوكيل</comment>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>مكالمات مقدمة / استعداد الوكيل المجدول</value>
+    <comment>مكالمات مقدمة / استعداد الوكيل المجدول</comment>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>الساعات المتوقعة مقابل الساعات المجدولة</value>
+    <comment>الساعات المتوقعة مقابل الساعات المجدولة</comment>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>مستوى الخدمة واستعداد الوكلاء</value>
+    <comment>مستوى الخدمة واستعداد الوكلاء</comment>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>وقت الاستعداد المجدول</value>
+    <comment>وقت الاستعداد المجدول</comment>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>الوكلاء المجدولون مقابل الوكلاء المستعدون</value>
+    <comment>الوكلاء المجدولون مقابل الوكلاء المستعدون</comment>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>نسبة التجانس (%)</value>
+    <comment>نسبة التجانس (%)</comment>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>اليوم / المهارة</value>
+    <comment>اليوم / المهارة</comment>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>فئة الوكيل:</value>
+    <comment>فئة الوكيل:</comment>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>نوع فئة الوكيل:</value>
+    <comment>نوع فئة الوكيل:</comment>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>الوكلاء:</value>
+    <comment>الوكلاء:</comment>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>نتيجة جدولة الوكيل</value>
+    <comment>نتيجة جدولة الوكيل</comment>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>نسبة الالتزام (%)</value>
+    <comment>نسبة الالتزام (%)</comment>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>الوكيل / التاريخ</value>
+    <comment>الوكيل / التاريخ</comment>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>مكالمات تم الرد عليها / ساعة الاستعداد المجدولة</value>
+    <comment>مكالمات تم الرد عليها / ساعة الاستعداد المجدولة</comment>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>نسبة الإشغال (%)</value>
+    <comment>نسبة الإشغال (%)</comment>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>نسبة الاستعداد (%)</value>
+    <comment>نسبة الاستعداد (%)</comment>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>وقت الاستعداد</value>
+    <comment>وقت الاستعداد</comment>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>حساب الالتزام:</value>
+    <comment>حساب الالتزام:</comment>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>مكالمات مقدمة / الوكيل</value>
+    <comment>مكالمات مقدمة / الوكيل</comment>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>مستوى الخدمة</value>
+    <comment>مستوى الخدمة</comment>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>حساب مستوى الخدمة:</value>
+    <comment>حساب مستوى الخدمة:</comment>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>الوكيل - الالتزام بالجدولة</value>
+    <comment>الوكيل - الالتزام بالجدولة</comment>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>فرز حسب:</value>
+    <comment>فرز حسب:</comment>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>وقت الاستعداد / وقت الاستعداد المُجدول (%)</value>
+    <comment>وقت الاستعداد / وقت الاستعداد المُجدول (%)</comment>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>استعداد الوكلاء المُجدولين</value>
+    <comment>استعداد الوكلاء المُجدولين</comment>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>الانحراف (ق)</value>
+    <comment>الانحراف (ق)</comment>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>التالي</value>
+    <comment>التالي</comment>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>السابق</value>
+    <comment>السابق</comment>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>نسبة الالتزام / الفاصل الزمني (%)</value>
+    <comment>نسبة الالتزام / الفاصل الزمني (%)</comment>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>الانحراف / الفاصل الزمني (ق)</value>
+    <comment>الانحراف / الفاصل الزمني (ق)</comment>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>قائمة الانتظار:</value>
+    <comment>قائمة الانتظار:</comment>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>إحصائيات قائمة الانتظار</value>
+    <comment>إحصائيات قائمة الانتظار</comment>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>مستوى الخدمة عند عدم اكتمال المكالمة</value>
+    <comment>مستوى الخدمة عند عدم اكتمال المكالمة</comment>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>المكالمات القصيرة غير المكتملة</value>
+    <comment>المكالمات القصيرة غير المكتملة</comment>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>وقت المعالجة</value>
+    <comment>وقت المعالجة</comment>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>سرعة الرد</value>
+    <comment>سرعة الرد</comment>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>وقت التحدث</value>
+    <comment>وقت التحدث</comment>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>مكالمات محولة</value>
+    <comment>مكالمات محولة</comment>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>قائمة الانتظار</value>
+    <comment>قائمة الانتظار</comment>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>المنطقة الزمنية:</value>
+    <comment>المنطقة الزمنية:</comment>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>أطول فترة تأخير في قائمة الانتظار، غير مكتمل</value>
+    <comment>أطول فترة تأخير في قائمة الانتظار، غير مكتمل</comment>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>أطول فترة تأخير في قائمة الانتظار، تم الرد</value>
+    <comment>أطول فترة تأخير في قائمة الانتظار، تم الرد</comment>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>وقت عدم الاكتمال (ث)</value>
+    <comment>وقت عدم الاكتمال (ث)</comment>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>تعليمات</value>
+    <comment>تعليمات</comment>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>تسجيل الدخول في Acd</value>
+    <comment>تسجيل الدخول في Acd</comment>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>إحصائيات قائمة انتظار الوكلاء</value>
+    <comment>إحصائيات قائمة انتظار الوكلاء</comment>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>إحصائيات الوكيل</value>
+    <comment>إحصائيات الوكيل</comment>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>وقت الإدارة</value>
+    <comment>وقت الإدارة</comment>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>المكالمات الواردة المباشرة</value>
+    <comment>المكالمات الواردة المباشرة</comment>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>وقت التحدث في المكالمات الواردة المباشرة</value>
+    <comment>وقت التحدث في المكالمات الواردة المباشرة</comment>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>المكالمات الصادرة المباشرة</value>
+    <comment>المكالمات الصادرة المباشرة</comment>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>وقت التحدث في المكالمات الصادرة المباشرة</value>
+    <comment>وقت التحدث في المكالمات الصادرة المباشرة</comment>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>وقت الخمول</value>
+    <comment>وقت الخمول</comment>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>وقت تسجيل الدخول</value>
+    <comment>وقت تسجيل الدخول</comment>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>وقت عدم الاستعداد</value>
+    <comment>وقت عدم الاستعداد</comment>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>التاريخ / الفاصل الزمني</value>
+    <comment>التاريخ / الفاصل الزمني</comment>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>إذن مرفوض</value>
+    <comment>إذن مرفوض</comment>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>تدفق زائد في المكالمات الواردة</value>
+    <comment>تدفق زائد في المكالمات الواردة</comment>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>تدفق زائد في المكالمات الصادرة</value>
+    <comment>تدفق زائد في المكالمات الصادرة</comment>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>الوقت المتوقع متضمنًا نسبة الانكماش (ق‏ق:س‏س)</value>
+    <comment>الوقت المتوقع متضمنًا نسبة الانكماش (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>الوقت المجدول (ق‏ق:س‏س)</value>
+    <comment>الوقت المجدول (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>الانحراف المعياري</value>
+    <comment>الانحراف المعياري</comment>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>الأسبوع:</value>
+    <comment>الأسبوع:</comment>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>الوقت المجدول لكل وكيل</value>
+    <comment>الوقت المجدول لكل وكيل</comment>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>وقت الغياب المجدول (ق‏ق:س‏س)</value>
+    <comment>وقت الغياب المجدول (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>الوقت الإضافي المجدول (ق‏ق:س‏س)</value>
+    <comment>الوقت الإضافي المجدول (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResReportScheuduledTimePerAbsenceActivity" xml:space="preserve">
+    <value>الوقت المجدول لكل حالة غياب/نشاط</value>
+    <comment>الوقت المجدول لكل حالة غياب/نشاط</comment>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>الغياب:</value>
+    <comment>الغياب:</comment>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>النشاط:</value>
+    <comment>النشاط:</comment>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>الساعات المتوقعة (ق‏ق:س‏س)</value>
+    <comment>الساعات المتوقعة (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>الساعات المجدولة (ق‏ق:س‏س)</value>
+    <comment>الساعات المجدولة (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>الساعات المتوقعة (نسبة الانكماش) (ق‏ق:س‏س)</value>
+    <comment>الساعات المتوقعة (نسبة الانكماش) (ق‏ق:س‏س)</comment>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>الفرق النسبي متضمنًا نسبة الانكماش (%)</value>
+    <comment>الفرق النسبي متضمنًا نسبة الانكماش (%)</comment>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>فئة نوبة العمل لليوم</value>
+    <comment>فئة نوبة العمل لليوم</comment>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>فئة نوبة العمل:</value>
+    <comment>فئة نوبة العمل:</comment>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>فئة نوبة العمل وغياب يوم كامل لكل وكيل</value>
+    <comment>فئة نوبة العمل وغياب يوم كامل لكل وكيل</comment>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>العطلة:</value>
+    <comment>العطلة:</comment>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>تحديدات</value>
+    <comment>تحديدات</comment>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>الجمعة</value>
+    <comment>Friday</comment>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>الاثنين</value>
+    <comment>Monday</comment>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>السبت</value>
+    <comment>Saturday</comment>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>الأحد</value>
+    <comment>Sunday</comment>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>الخميس</value>
+    <comment>Thursday</comment>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>الثلاثاء</value>
+    <comment>Tuesday</comment>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>الأربعاء</value>
+    <comment>Wednesday</comment>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>إبريل</value>
+    <comment>April </comment>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>أغسطس</value>
+    <comment>August</comment>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>ديسمبر</value>
+    <comment>December</comment>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>فبراير</value>
+    <comment>February</comment>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>يناير</value>
+    <comment>January </comment>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>يوليو</value>
+    <comment>July</comment>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>يونيو</value>
+    <comment>June</comment>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>مارس</value>
+    <comment>March</comment>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>مايو</value>
+    <comment>May</comment>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>نوفمبر</value>
+    <comment>November</comment>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>أكتوبر</value>
+    <comment>October</comment>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>سبتمبر</value>
+    <comment>September</comment>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>الوقت المجدول حسب النشاط</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>نتيجة جدولة الفريق</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>الفريق / التلريخ</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>المكالمات التي تم الرد عليها / ساعة الاستعداد</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>الغياب بحسب العقد (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>الوقت بحسب العقد (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>الوقت المدفوع  (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>وقت العمل  (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>تفضيل مقبول</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>تفضيل مقبول (%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>تفضيل مرفوض</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>طلب تفضيل</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>فئة التفضيل</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>التفضيل بحسب اليوم</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>التفضيل بحسب الوكيل</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>العميل المجدول بحسب الفترة والفريق</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>تحسين (خدمة امبروف)</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>وقت المعالجة / الوقت المدفوع (%)</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>بطاقة أداء الوكيل</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>الوقت المدفوع  (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>وقت العمل  (ق‏ق:س‏س)</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>وقت الغياب لكل وكيل</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>يوم كامل</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>جزء يوم</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>تصريح مرفوض للمستخدم</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>لا يجوزاستخدام تصريحات التطبيق على جهة المستخدم عند استخدام تصريح الوندوز على تطبيقات الشبكة</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>الرجاء الاستعاضة بتسجيل الدخول الخاص بالتطبيق</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>حل محتمل</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>الرجاء التأكد من تطابق التصاريح مع خدمة ETL</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>الرجاء اغلاق المستخدم و اعادة تسجيل الدخول باستخدام تصريح الوندوز, او طلب تغيير تصريح الشبكة الىى نماذج من مشرف الشبكة</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>معلومات فنية</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>عطل غير معروف</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>غياب</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>نشاط</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>التزام</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>مكالمات تم الرد عليها خلال عتبة مستوى الخدمة  / مكالمات تم الرد عليها </value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>مكالمات تم الرد عليها و لم يتم الرد عليها خلال عتبة مستوى الخدمة / المكالمات المقدمة </value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>مكالمات تم الرد عليها خلال عتبة مستوى الخدمة / المكالمات المقدمة </value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>يوم</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>يوم عطلة</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>تفضيل ممدد </value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>الاسم الاول</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>الجمعة</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>نصف ساعة</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>ساعة</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>اسم العائلة</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>الاثنين</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>شهر</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>غيلر معرف</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>وقت الاستعداد / وقت الجدول المتعاقد عليه</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>وقت الاستعداد / وقت الاستعداد المُجدول</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>وقت الاستعداد / الوقت المُجدول (يتضمن الوقت قبل و بعد بداية نوبة العمل)</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>السبت</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>فئة نوبة العمل</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>وقت بداية نوبة العمل</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>الاحد</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>الخميس</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>الثلاثاء</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>الاربعاء</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>اسبوع</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>يوم عمل</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>الوكيل</value>
+  </data>
+</root>

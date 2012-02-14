@@ -1,0 +1,104 @@
+using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+
+namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
+{
+    public class NightlyJobCollection : List<IJobStep>
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public NightlyJobCollection(IJobParameters jobParameters)
+        {
+            // CLEANUP
+            Add(new DimPersonDeleteJobStep(jobParameters));     // BU independent
+            Add(new DimPersonTrimJobStep(jobParameters));     // BU independent
+            Add(new DimScenarioDeleteJobStep(jobParameters));   // BU independent
+            Add(new MaintenanceJobStep(jobParameters));     // BU independent
+
+            // STAGE TABLES
+            Add(new StageDateJobStep(jobParameters));                    // BU independent
+            Add(new DimDateJobStep(jobParameters));                     // BU independent
+            Add(new StageTimeZoneJobStep(jobParameters));               // BU independent
+            Add(new DimTimeZoneJobStep(jobParameters));                 // BU independent
+            Add(new StageTimeZoneBridgeJobStep(jobParameters));         // BU independent
+            Add(new StageBusinessUnitJobStep(jobParameters));            // BU independent
+            Add(new DimQueueJobStep(jobParameters));                    // BU independent
+            Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
+            Add(new RaptorQueueSynchronizationStep(jobParameters));
+            Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
+            Add(new StagePersonJobStep(jobParameters));
+            Add(new StageAgentSkillJobStep(jobParameters));
+            Add(new StageActivityJobStep(jobParameters));
+            Add(new StageAbsenceJobStep(jobParameters));
+            Add(new StageScenarioJobStep(jobParameters));
+            Add(new StageShiftCategoryJobStep(jobParameters));
+            Add(new StageScheduleJobStep(jobParameters));
+            Add(new StageScheduleForecastSkillJobStep(jobParameters));
+            Add(new StageScheduleDayOffCountJobStep(jobParameters));
+            Add(new StageSchedulePreferenceJobStep(jobParameters));
+            //Add(new StageDayOffJobStep(jobParameters)); // Redesign of day offs in Raptor needed before we can fetch day offs.
+            Add(new StageSkillJobStep(jobParameters));
+            Add(new StageWorkloadJobStep(jobParameters));
+            Add(new StageForecastWorkloadJobStep(jobParameters));
+            Add(new StageKpiJobStep(jobParameters));
+            Add(new StageScorecardJobStep(jobParameters));
+            Add(new StageScorecardKpiJobStep(jobParameters));
+            Add(new StageKpiTargetTeamJobStep(jobParameters));
+            Add(new StagePermissionJobStep(jobParameters));
+            Add(new StageUserJobStep(jobParameters));                   // BU independent
+            Add(new StageGroupPagePersonJobStep(jobParameters));
+        	Add(new StageOvertimeJobStep(jobParameters));
+            Add(new StageRequestJobStep(jobParameters));
+
+            // DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
+            Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
+            Add(new DimBusinessUnitJobStep(jobParameters));
+            Add(new DimScorecardJobStep(jobParameters));
+            Add(new DimSiteJobStep(jobParameters));
+            Add(new DimTeamJobStep(jobParameters));
+            Add(new DimSkillJobStep(jobParameters));
+            Add(new DimSkillSetJobStep(jobParameters));
+            Add(new DimPersonJobStep(jobParameters));
+            Add(new DimActivityJobStep(jobParameters));
+            Add(new DimAbsenceJobStep(jobParameters));
+            Add(new DimScenarioJobStep(jobParameters));
+            Add(new DimShiftCategoryJobStep(jobParameters));
+            Add(new DimShiftLengthJobStep(jobParameters));
+            Add(new DimDayOffJobStep(jobParameters));
+            Add(new DimWorkloadJobStep(jobParameters));
+            Add(new DimKpiJobStep(jobParameters));
+            Add(new ScorecardKpiJobStep(jobParameters));
+            Add(new BridgeSkillSetSkillJobStep(jobParameters));
+            Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
+            Add(new BridgeQueueWorkloadJobStep(jobParameters));
+            Add(new AspNetUsersJobStep(jobParameters));                 // BU independent
+            Add(new DimGroupPageJobStep(jobParameters));
+            Add(new BridgeGroupPagePersonJobStep(jobParameters));
+        	Add(new DimOvertimeJobStep(jobParameters));
+
+            // FACT TABLES
+            Add(new FactScheduleJobStep(jobParameters));
+            Add(new FactScheduleDayCountJobStep(jobParameters));
+            Add(new FactSchedulePreferenceJobStep(jobParameters));
+            //Add(new FactScheduleContractJobStep(jobParameters));
+            Add(new FactScheduleForecastSkillJobStep(jobParameters));
+            Add(new FactQueueJobStep(jobParameters));                   // BU independent
+            Add(new FactForecastWorkloadJobStep(jobParameters));
+            Add(new FactAgentJobStep(jobParameters));                   // BU independent
+            Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
+            Add(new FactScheduleDeviationJobStep(jobParameters));
+            Add(new FactKpiTargetTeamJobStep(jobParameters));
+            Add(new PermissionReportJobStep(jobParameters));
+            Add(new FactRequestJobStep(jobParameters));
+            // If PM is installed then show PM job steps
+            if (jobParameters.IsPmInstalled)
+            {
+                Add(new PerformanceManagerJobStep(jobParameters));
+                Add(new PmPermissionJobStep(jobParameters));
+            }
+        }
+    }
+
+}

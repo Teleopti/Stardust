@@ -1,0 +1,152 @@
+﻿using System;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Scheduling.Meetings
+{
+    /// <summary>
+    /// class for meeting to be used in schedule
+    /// </summary>
+    public class PersonMeeting : AggregateRootWithBusinessUnit, IPersonMeeting
+    {
+        private readonly IMeetingPerson _meetingPerson;
+        private readonly IMeeting _belongsToMeeting;
+        private readonly DateTimePeriod _period;
+
+        /// <summary>
+        /// Meeting to be used in schedules
+        /// </summary>
+        /// <param name="meeting">The meeting.</param>
+        /// <param name="meetingPerson">The meeting person.</param>
+        /// <param name="period">The period.</param>
+        public PersonMeeting(IMeeting meeting, IMeetingPerson meetingPerson, DateTimePeriod period)
+        {
+            _period = period;
+            _meetingPerson = meetingPerson;
+            _belongsToMeeting = meeting;
+        }
+
+        /// <summary>
+        /// Optional
+        /// </summary>
+        public Boolean Optional
+        {
+            get { return _meetingPerson.Optional; }
+        }
+
+        /// <summary>
+        /// Meeting this personMeeting belongs to
+        /// </summary>
+        public IMeeting BelongsToMeeting
+        {
+            get { return _belongsToMeeting; }
+        }
+
+        public ILayer<IActivity> ToLayer()
+        {
+            return new ActivityLayer(_belongsToMeeting.Activity, _period);
+        }
+
+        /// <summary>
+        /// Person
+        /// </summary>
+        public IPerson Person
+        {
+            get { return _meetingPerson.Person; }
+        }
+
+        /// <summary>
+        /// Scenario
+        /// </summary>
+        public virtual IScenario Scenario
+        {
+            get { return _belongsToMeeting.Scenario; }
+        }
+
+        /// <summary>
+        /// Period
+        /// </summary>
+        public DateTimePeriod Period
+        {
+            get { return _period; }
+        }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone()
+        {
+            return EntityClone();
+        }
+
+        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
+        {
+			var addExtraEndDayDueToNightShifts = dateAndPeriod.Period().ChangeEndTime(TimeSpan.FromDays(1));
+			return addExtraEndDayDueToNightShifts.Contains(_period.StartDateTime);
+        }
+
+        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
+        {
+            DateTimePeriod dateTimePeriod =
+                dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
+
+            var addExtraEndDayDueToNightShifts = dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1));
+            return addExtraEndDayDueToNightShifts.Contains(Period.StartDateTime);
+        }
+
+        public virtual bool BelongsToScenario(IScenario scenario)
+        {
+            return Scenario.Equals(scenario);
+        }
+
+        /// <summary>
+        /// Returns a clone of this T with IEntitiy.Id set to null.
+        /// </summary>
+        /// <returns></returns>
+        public IPersonMeeting NoneEntityClone()
+        {
+            PersonMeeting retobj = (PersonMeeting)MemberwiseClone();
+            retobj.SetId(null);
+           
+            return retobj;
+        }
+
+        /// <summary>
+        /// Returns a clone of this T with IEntitiy.Id as this T.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Created by: micke
+        /// Created date: 2008-05-27
+        /// </remarks>
+        public IPersonMeeting EntityClone()
+        {
+            PersonMeeting retobj = (PersonMeeting)MemberwiseClone();
+           
+            return retobj;
+        }
+
+        public IVisualLayerFactory CreateVisualLayerFactory()
+        {
+            return new VisualLayerFactory();
+        }
+
+		public override int GetHashCode()
+		{
+			return Person.GetHashCode() ^ BelongsToMeeting.GetHashCode() ^ Period.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			var casted = obj as IPersonMeeting;
+			if (casted == null)
+				return false;
+
+			return casted.Person.Equals(Person) && casted.BelongsToMeeting.Equals(BelongsToMeeting) && casted.Period.Equals(Period);
+		}
+    }
+}

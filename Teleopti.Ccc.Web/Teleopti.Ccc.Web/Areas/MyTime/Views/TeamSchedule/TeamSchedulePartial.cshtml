@@ -1,0 +1,60 @@
+﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
+@model TeamScheduleViewModel
+@{
+	Layout = null;
+	const int scheduleWidth = 835;
+}
+<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+	<div class="body-teamschedule-inner">
+		
+		<div class="teamschedule relative ui-corner-all">
+			
+			<div class="teamschedule-timeline absolute">
+				<div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
+				<ul class="teamschedule-timeline-times floatleft relative">
+					@foreach (var time in Model.TimeLine)
+					{
+						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
+							<div class="teamschedule-timeline-label ui-corner-all" title="@time.LongTime">@time.ShortTime</div>
+						</li>
+					}
+				</ul>
+			</div>
+			
+			<ul class="teamschedule-agents">
+
+				@foreach (var agentSchedule in Model.AgentSchedules)
+				{
+					<li class="teamschedule-agent relative">
+						<div class="teamschedule-agent-name floatleft">@agentSchedule.AgentName</div>
+						<ul class="teamschedule-agent-schedule floatleft relative">
+							@if (agentSchedule.DayOffText != null)
+							{
+								<li class="dayoff ui-corner-all absolute">@agentSchedule.DayOffText</li>
+							}
+							else
+							{
+								foreach (var layer in agentSchedule.Layers)
+								{
+									var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
+									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
+									var widthPixel = rightPixel - leftPixel;
+									<li class="layer absolute tooltip" data-mytime-activity="@layer.ActivityName" data-mytime-start-time="@layer.StartTime" data-mytime-end-time="@layer.EndTime"
+											style="width: @(widthPixel)px;
+												left: @(leftPixel)px;
+												background-color: @layer.Color;
+												background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
+												filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='@layer.Color',GradientType=0 ); /* IE6-9 */"> </li>
+								}
+							}
+						</ul>
+					</li>
+				}
+
+			</ul>
+
+		</div>
+
+	</div>
+</div>

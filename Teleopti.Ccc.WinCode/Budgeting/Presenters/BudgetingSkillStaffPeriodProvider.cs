@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.WinCode.Budgeting.Models;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
+{
+	public class BudgetingSkillStaffPeriodProvider : IBudgetSkillStaffPeriodProvider
+	{
+		private readonly BudgetGroupMainModel _mainModel;
+		private readonly ISelectedBudgetDays _selectedBudgetDays;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+
+		public BudgetingSkillStaffPeriodProvider(BudgetGroupMainModel mainModel, ISelectedBudgetDays selectedBudgetDays, ISkillDayLoadHelper skillDayLoadHelper)
+		{
+			_mainModel = mainModel;
+			_selectedBudgetDays = selectedBudgetDays;
+			_skillDayLoadHelper = skillDayLoadHelper;
+		}
+
+		public IBudgetSkillStaffPeriodContainer CreateContainer()
+		{
+			var selectedBudgetDays = _selectedBudgetDays.Find();
+			if (selectedBudgetDays.IsEmpty())
+			{
+				return new BudgetSkillStaffPeriodContainer(new List<ISkillStaffPeriod>(),new List<IBudgetGroupDayDetailModel>());
+			}
+
+			var selectedDatePeriod = GetPeriodFromBudgetDays(selectedBudgetDays);
+            var skillDaysForSkills = _skillDayLoadHelper.LoadSchedulerSkillDays(selectedDatePeriod,
+			                                                                    _mainModel.BudgetGroup.SkillCollection,
+			                                                                    _mainModel.Scenario);
+
+            var resolver = new ClosedBudgetDayResolver(selectedBudgetDays,skillDaysForSkills);
+            resolver.InjectClosedDaysFromSkillDays();
+
+		    var allSkillStaffPeriods = GetAllSkillStaffPeriods(skillDaysForSkills);
+
+			return new BudgetSkillStaffPeriodContainer(allSkillStaffPeriods, selectedBudgetDays);
+		}
+
+	    private static IEnumerable<ISkillStaffPeriod> GetAllSkillStaffPeriods(IDictionary<ISkill, IList<ISkillDay>> skillDaysForSkills)
+		{
+			var allSkillDays = from s in skillDaysForSkills.Values
+			                   from d in s
+			                   select d;
+			return from s in allSkillDays
+			       from p in s.SkillStaffPeriodCollection
+			       select p;
+		}
+
+		private static DateOnlyPeriod GetPeriodFromBudgetDays(IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays)
+		{
+			var startDate = selectedBudgetDays.Min(d => d.BudgetDay.Day);
+			var endDate = selectedBudgetDays.Max(d => d.BudgetDay.Day);
+			return new DateOnlyPeriod(startDate, endDate);
+		}
+	}
+}

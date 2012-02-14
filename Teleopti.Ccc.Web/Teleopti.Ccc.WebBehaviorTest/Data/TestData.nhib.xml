@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<datasource>
+	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+		<session-factory name="TestData">
+			<!-- properties -->
+			<property name="connection.provider">Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure</property>
+			<property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+			<property name="connection.connection_string">_connectionString_</property>
+			<property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
+			<property name="default_schema">dbo</property>
+			<property name="transaction.factory_class">NHibernate.Transaction.AdoNetTransactionFactory, NHibernate</property>
+			<property name="current_session_context_class">web</property>
+		</session-factory>
+	</hibernate-configuration>
+	<matrix name="MatrixDatamartDemo">
+		<connectionString>_connectionStringMatrix_</connectionString>
+	</matrix>
+</datasource>

@@ -1,0 +1,25 @@
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCode.Scheduling.GridlockCommands
+{
+    public class GridlockTagCommand : IExecutableCommand
+    {
+        private readonly IGridlockManager _gridlockManager;
+        private readonly IScheduleDayTagExtractor _scheduleDayTagExtractor;
+        private readonly IScheduleTag _tag;
+
+        public GridlockTagCommand(IGridlockManager gridlockManager, IScheduleDayTagExtractor scheduleDayTagExtractor, IScheduleTag tag)
+        {
+            _gridlockManager = gridlockManager;
+            _scheduleDayTagExtractor = scheduleDayTagExtractor;
+            _tag = tag;
+        }
+
+        public void Execute()
+        {
+            _gridlockManager.AddLock(_scheduleDayTagExtractor.Tag(_tag), LockType.Normal);
+        }
+    }
+}

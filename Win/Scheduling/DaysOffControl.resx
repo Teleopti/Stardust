@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tableLayoutPanelBody.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="labelSubHeader2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="labelSubHeader2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="labelSubHeader2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt, style=Bold</value>
+  </data>
+  <data name="labelSubHeader2.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="labelSubHeader2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelSubHeader2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 6</value>
+  </data>
+  <data name="labelSubHeader2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 13</value>
+  </data>
+  <data name="labelSubHeader2.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelSubHeader2.Text" xml:space="preserve">
+    <value>xxEnterSettingsForDaysOff</value>
+  </data>
+  <data name="labelSubHeader2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader2.Name" xml:space="preserve">
+    <value>labelSubHeader2</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader2.Parent" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader2</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 175</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>493, 26</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader2.Name" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader2.Parent" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelSubHeader2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="autoLabelFlexibility.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelFlexibility.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelFlexibility.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 56</value>
+  </data>
+  <data name="autoLabelFlexibility.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 20</value>
+  </data>
+  <data name="autoLabelFlexibility.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="autoLabelFlexibility.Text" xml:space="preserve">
+    <value>xxFlexibilityColon</value>
+  </data>
+  <data name="autoLabelFlexibility.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelFlexibility.Name" xml:space="preserve">
+    <value>autoLabelFlexibility</value>
+  </data>
+  <data name="&gt;&gt;autoLabelFlexibility.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelFlexibility.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelFlexibility.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="autoLabelAnchor.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelAnchor.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelAnchor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelAnchor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 4</value>
+  </data>
+  <data name="autoLabelAnchor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 20</value>
+  </data>
+  <data name="autoLabelAnchor.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="autoLabelAnchor.Text" xml:space="preserve">
+    <value>xxAnchorColon</value>
+  </data>
+  <data name="autoLabelAnchor.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelAnchor.Name" xml:space="preserve">
+    <value>autoLabelAnchor</value>
+  </data>
+  <data name="&gt;&gt;autoLabelAnchor.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelAnchor.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelAnchor.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="autoLabelTargetLength.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelTargetLength.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelTargetLength.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelTargetLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 32</value>
+  </data>
+  <data name="autoLabelTargetLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 20</value>
+  </data>
+  <data name="autoLabelTargetLength.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="autoLabelTargetLength.Text" xml:space="preserve">
+    <value>xxTargetLengthColon</value>
+  </data>
+  <data name="autoLabelTargetLength.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelTargetLength.Name" xml:space="preserve">
+    <value>autoLabelTargetLength</value>
+  </data>
+  <data name="&gt;&gt;autoLabelTargetLength.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelTargetLength.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelTargetLength.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="timeSpanTextBoxTargetLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 28</value>
+  </data>
+  <data name="timeSpanTextBoxTargetLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="timeSpanTextBoxTargetLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="timeSpanTextBoxTargetLength.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxTargetLength.Name" xml:space="preserve">
+    <value>timeSpanTextBoxTargetLength</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxTargetLength.Type" xml:space="preserve">
+    <value>Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxTargetLength.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxTargetLength.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="timeSpanTextBoxFlexibility.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 56</value>
+  </data>
+  <data name="timeSpanTextBoxFlexibility.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="timeSpanTextBoxFlexibility.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="timeSpanTextBoxFlexibility.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxFlexibility.Name" xml:space="preserve">
+    <value>timeSpanTextBoxFlexibility</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxFlexibility.Type" xml:space="preserve">
+    <value>Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxFlexibility.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxFlexibility.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="timeSpanTextBoxAnchor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 0</value>
+  </data>
+  <data name="timeSpanTextBoxAnchor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="timeSpanTextBoxAnchor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="timeSpanTextBoxAnchor.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxAnchor.Name" xml:space="preserve">
+    <value>timeSpanTextBoxAnchor</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxAnchor.Type" xml:space="preserve">
+    <value>Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxAnchor.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;timeSpanTextBoxAnchor.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 207</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>493, 78</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelFlexibility" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelAnchor" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelTargetLength" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="timeSpanTextBoxTargetLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="timeSpanTextBoxFlexibility" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="timeSpanTextBoxAnchor" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,178,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Absolute,28,Absolute,28,Absolute,28" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.Location" type="System.Drawing.Point, System.Drawing">
+    <value>175, 108</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 3, 0</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.Size" type="System.Drawing.Size, System.Drawing">
+    <value>315, 26</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.Text" xml:space="preserve">
+    <value>xxInfoAboutChanges</value>
+  </data>
+  <data name="autoLabelInfoAboutChanges.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelInfoAboutChanges.Name" xml:space="preserve">
+    <value>autoLabelInfoAboutChanges</value>
+  </data>
+  <data name="&gt;&gt;autoLabelInfoAboutChanges.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelInfoAboutChanges.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelInfoAboutChanges.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="autoLabelChangeInfo.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelChangeInfo.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelChangeInfo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelChangeInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 110</value>
+  </data>
+  <data name="autoLabelChangeInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 21</value>
+  </data>
+  <data name="autoLabelChangeInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="autoLabelChangeInfo.Text" xml:space="preserve">
+    <value>xxChangeInfoColon</value>
+  </data>
+  <data name="autoLabelChangeInfo.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelChangeInfo.Name" xml:space="preserve">
+    <value>autoLabelChangeInfo</value>
+  </data>
+  <data name="&gt;&gt;autoLabelChangeInfo.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelChangeInfo.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelChangeInfo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 81</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 20</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.Text" xml:space="preserve">
+    <value>xxPayrollCodeColon</value>
+  </data>
+  <data name="autoLabelPayrollCodeColon.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelPayrollCodeColon.Name" xml:space="preserve">
+    <value>autoLabelPayrollCodeColon</value>
+  </data>
+  <data name="&gt;&gt;autoLabelPayrollCodeColon.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelPayrollCodeColon.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelPayrollCodeColon.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="textBoxExtShortName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 57</value>
+  </data>
+  <data name="textBoxExtShortName.MaxLength" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="textBoxExtShortName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 21</value>
+  </data>
+  <data name="textBoxExtShortName.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="textBoxExtShortName.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtShortName.Name" xml:space="preserve">
+    <value>textBoxExtShortName</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtShortName.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtShortName.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtShortName.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="autoLabelShortNamecaption.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelShortNamecaption.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelShortNamecaption.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelShortNamecaption.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 57</value>
+  </data>
+  <data name="autoLabelShortNamecaption.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 21</value>
+  </data>
+  <data name="autoLabelShortNamecaption.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="autoLabelShortNamecaption.Text" xml:space="preserve">
+    <value>xxShortNameColon</value>
+  </data>
+  <data name="autoLabelShortNamecaption.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelShortNamecaption.Name" xml:space="preserve">
+    <value>autoLabelShortNamecaption</value>
+  </data>
+  <data name="&gt;&gt;autoLabelShortNamecaption.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelShortNamecaption.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelShortNamecaption.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="autoLabelScenario.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelScenario.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelScenario.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelScenario.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="autoLabelScenario.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 21</value>
+  </data>
+  <data name="autoLabelScenario.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="autoLabelScenario.Text" xml:space="preserve">
+    <value>xxDaysOffColon</value>
+  </data>
+  <data name="autoLabelScenario.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelScenario.Name" xml:space="preserve">
+    <value>autoLabelScenario</value>
+  </data>
+  <data name="&gt;&gt;autoLabelScenario.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelScenario.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelScenario.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="comboBoxAdvDaysOffCollection.Items" xml:space="preserve">
+    <value>New Scenario</value>
+  </data>
+  <data name="comboBoxAdvDaysOffCollection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 3</value>
+  </data>
+  <data name="comboBoxAdvDaysOffCollection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 21</value>
+  </data>
+  <data name="comboBoxAdvDaysOffCollection.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="comboBoxAdvDaysOffCollection.Text" xml:space="preserve">
+    <value>New Scenario</value>
+  </data>
+  <data name="&gt;&gt;comboBoxAdvDaysOffCollection.Name" xml:space="preserve">
+    <value>comboBoxAdvDaysOffCollection</value>
+  </data>
+  <data name="&gt;&gt;comboBoxAdvDaysOffCollection.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;comboBoxAdvDaysOffCollection.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;comboBoxAdvDaysOffCollection.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="textBoxDescription.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 30</value>
+  </data>
+  <data name="textBoxDescription.MaxLength" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="textBoxDescription.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 21</value>
+  </data>
+  <data name="textBoxDescription.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="textBoxDescription.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;textBoxDescription.Name" xml:space="preserve">
+    <value>textBoxDescription</value>
+  </data>
+  <data name="&gt;&gt;textBoxDescription.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;textBoxDescription.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;textBoxDescription.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="autoLabelDescription.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelDescription.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelDescription.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelDescription.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 30</value>
+  </data>
+  <data name="autoLabelDescription.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 21</value>
+  </data>
+  <data name="autoLabelDescription.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="autoLabelDescription.Text" xml:space="preserve">
+    <value>xxNameColon</value>
+  </data>
+  <data name="autoLabelDescription.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelDescription.Name" xml:space="preserve">
+    <value>autoLabelDescription</value>
+  </data>
+  <data name="&gt;&gt;autoLabelDescription.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelDescription.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;autoLabelDescription.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="textBoxExtPayrollCode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 84</value>
+  </data>
+  <data name="textBoxExtPayrollCode.MaxLength" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="textBoxExtPayrollCode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 21</value>
+  </data>
+  <data name="textBoxExtPayrollCode.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtPayrollCode.Name" xml:space="preserve">
+    <value>textBoxExtPayrollCode</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtPayrollCode.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtPayrollCode.Parent" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;textBoxExtPayrollCode.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 35</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>493, 134</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelControlContainer.Name" xml:space="preserve">
+    <value>tableLayoutPanelControlContainer</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelControlContainer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelControlContainer.Parent" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelControlContainer.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelInfoAboutChanges" Row="4" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelChangeInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelPayrollCodeColon" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxExtShortName" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelShortNamecaption" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxAdvDaysOffCollection" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxDescription" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelDescription" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBoxExtPayrollCode" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Percent,100,Absolute,22" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="buttonDelete.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="buttonDelete.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="buttonDelete.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 1</value>
+  </data>
+  <data name="buttonDelete.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 0, 3</value>
+  </data>
+  <data name="buttonDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 24</value>
+  </data>
+  <data name="buttonDelete.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;buttonDelete.Name" xml:space="preserve">
+    <value>buttonDelete</value>
+  </data>
+  <data name="&gt;&gt;buttonDelete.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;buttonDelete.Parent" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader1</value>
+  </data>
+  <data name="&gt;&gt;buttonDelete.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="buttonNew.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="buttonNew.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="buttonNew.Location" type="System.Drawing.Point, System.Drawing">
+    <value>442, 1</value>
+  </data>
+  <data name="buttonNew.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 0, 3</value>
+  </data>
+  <data name="buttonNew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 24</value>
+  </data>
+  <data name="buttonNew.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;buttonNew.Name" xml:space="preserve">
+    <value>buttonNew</value>
+  </data>
+  <data name="&gt;&gt;buttonNew.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonNew.Parent" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader1</value>
+  </data>
+  <data name="&gt;&gt;buttonNew.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelSubHeader1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="labelSubHeader1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelSubHeader1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt, style=Bold</value>
+  </data>
+  <data name="labelSubHeader1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelSubHeader1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 7</value>
+  </data>
+  <data name="labelSubHeader1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 13</value>
+  </data>
+  <data name="labelSubHeader1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelSubHeader1.Text" xml:space="preserve">
+    <value>xxChooseDaysOffToChange</value>
+  </data>
+  <data name="labelSubHeader1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader1.Name" xml:space="preserve">
+    <value>labelSubHeader1</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader1.Parent" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader1</value>
+  </data>
+  <data name="&gt;&gt;labelSubHeader1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>493, 26</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader1.Name" xml:space="preserve">
+    <value>tableLayoutPanelSubHeader1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader1.Parent" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelSubHeader1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanelSubHeader1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonDelete" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonNew" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanelBody.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanelBody.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 55</value>
+  </data>
+  <data name="tableLayoutPanelBody.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tableLayoutPanelBody.Size" type="System.Drawing.Size, System.Drawing">
+    <value>499, 264</value>
+  </data>
+  <data name="tableLayoutPanelBody.TabIndex" type="System.Int32, mscorlib">
+    <value>57</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelBody.Name" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelBody.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelBody.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelBody.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanelBody.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanelSubHeader2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelControlContainer" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,32,Absolute,140,Absolute,32,Absolute,84" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gradientPanelHeader.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="tableLayoutPanelHeader.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="labelHeader.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="labelHeader.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="labelHeader.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 11.25pt</value>
+  </data>
+  <data name="labelHeader.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="labelHeader.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 8</value>
+  </data>
+  <data name="labelHeader.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 0, 0, 0</value>
+  </data>
+  <data name="labelHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 18</value>
+  </data>
+  <data name="labelHeader.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelHeader.Text" xml:space="preserve">
+    <value>xxManageDayOff</value>
+  </data>
+  <data name="&gt;&gt;labelHeader.Name" xml:space="preserve">
+    <value>labelHeader</value>
+  </data>
+  <data name="&gt;&gt;labelHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelHeader.Parent" xml:space="preserve">
+    <value>tableLayoutPanelHeader</value>
+  </data>
+  <data name="&gt;&gt;labelHeader.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanelHeader.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanelHeader.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 10</value>
+  </data>
+  <data name="tableLayoutPanelHeader.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tableLayoutPanelHeader.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanelHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>479, 35</value>
+  </data>
+  <data name="tableLayoutPanelHeader.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelHeader.Name" xml:space="preserve">
+    <value>tableLayoutPanelHeader</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelHeader.Parent" xml:space="preserve">
+    <value>gradientPanelHeader</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanelHeader.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanelHeader.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelHeader" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,543,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gradientPanelHeader.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="gradientPanelHeader.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="gradientPanelHeader.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>10, 10, 10, 10</value>
+  </data>
+  <data name="gradientPanelHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>499, 55</value>
+  </data>
+  <data name="gradientPanelHeader.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="&gt;&gt;gradientPanelHeader.Name" xml:space="preserve">
+    <value>gradientPanelHeader</value>
+  </data>
+  <data name="&gt;&gt;gradientPanelHeader.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;gradientPanelHeader.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gradientPanelHeader.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>499, 319</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
+    <value>toolTip1</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>DaysOffControl</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Teleopti.Ccc.Win.Common.BaseUserControl, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+</root>

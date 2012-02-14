@@ -1,0 +1,324 @@
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@model Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout.ReportViewModel
+@{ Layout = "~/Views/Shared/MobileLayoutBase.cshtml"; }
+@section csshead {
+	<link rel="stylesheet" href="@Url.Content("~/Content/MobileContent/DateBox/jquery.mobile.datebox-1.0.1.css")" />
+}
+@section jsBeforeMobile {
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/Teleopti.MobileReports.Common.js")"></script>
+	<script>
+		$(function () {
+			var cNs = Teleopti.MobileReports.Common;
+
+			$('#report-view-date-nav-current').width($(window).width() - 100);
+			$(window).resize(function () {
+				$('#report-view-date-nav-current').width($(window).width() - 100);
+			});
+
+
+			$("#report-view").live("pageinit", function () {
+				$('#report-view').bind('report', function () {
+					cNs.ClearError();
+					var currentData = reportDataOrBack();
+					if (currentData == null) return;
+
+					$.ajax({
+						url: 'Report/Report',
+						dataType: 'json',
+						contentType: 'application/json; charset=utf-8',
+						type: 'POST',
+						cache: false,
+						data: JSON.stringify(currentData),
+						beforeSend: function () {
+							$.mobile.showPageLoadingMsg();
+							$('#report-view').find('.ui-btn:not(.ui-disabled)').each(function () {
+								$(this).addClass('ui-disabled').addClass('by-me');
+							});
+						},
+						complete: function (jqXHR, textStatus) {
+							$('#report-view').find('.ui-btn.by-me').each(function () {
+								$(this).removeClass('ui-disabled').removeClass('by-me');
+							});
+							$.mobile.hidePageLoadingMsg();
+						},
+						success: function (data, textStatus, jqXHR) {
+							updateView(data);
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status == 400) {
+								var data = $.parseJSON(jqXHR.responseText);
+								updateView(data);
+								return;
+							} else if (jqXHR.status == 500) {
+								cNs.AddError('#report-view', 'Server returned an error');
+							}
+						}
+					});
+				});
+
+				$('#report-view').live('pageshow', function () {
+					$('#report-view').trigger('report');
+				});
+
+				function reportDataOrBack() {
+					var currentData = $('#report-view').data('report-settings');
+					if (!(typeof currentData != 'undefined' && currentData != null)) {
+						$.mobile.changePage($('#report-settings-view'));
+						return null;
+					}
+					return currentData;
+				}
+
+				function updateView(data) {
+					$('#report-graph-holder').hide();
+					$('#report-table-holder').hide();
+
+					if (typeof data.Errors != 'undefined') {
+						cNs.AddError('#report-view', data.Errors.join('<br />'));
+						return;
+					}
+					if (typeof data.Report != 'undefined' && data.Report) {
+						var reportInfo = data.Report.ReportInfo;
+						if (typeof reportInfo != 'undefined' && reportInfo) {
+							$('.ui-btn-text', '#report-view-date-nav-current').html(reportInfo.ReportDate);
+							$('#report-name').html(reportInfo.ReportName);
+							$('#report-skillset').html(reportInfo.SkillNames);
+
+
+							var reportChart = data.Report.ReportChart;
+							if (typeof reportChart != 'undefined' && reportChart) {
+								$('#report-graph-holder').html("<img style='min-width: 100%;' src='" + reportChart.ReportImagePath + "' alt='" + reportInfo.ReportName + "' />").show();
+							}
+
+							var reportData = data.Report.ReportData;
+							if (typeof reportData != 'undefined' && reportData) {
+								$('#report-table-holder').html(generateReportTable(reportInfo, reportData)).show();
+							}
+						}
+
+					}
+				}
+
+
+				function generateReportTable(reportInfo, tableData) {
+					var tab = [];
+					tab[tab.length] = '<table><thead><tr><th scope"col">';
+					tab[tab.length] = reportInfo.PeriodLegend;
+					tab[tab.length] = '</th><th scope="col">';
+					tab[tab.length] = reportInfo.Y1Legend;
+					tab[tab.length] = '</th><th scope="col">';
+					tab[tab.length] = reportInfo.Y2Legend;
+					tab[tab.length] = '</th></tr></thead><tbody>';
+					$.each(tableData, function () {
+						tab[tab.length] = rowBuilder(this);
+					});
+					tab[tab.length] = "</tbody></table>";
+					return tab.join('');
+				}
+
+				function rowBuilder(curRow) {
+					var row = '<tr>';
+					$.each(curRow, function () {
+						row += '<td>' + this + '</td>';
+					});
+					row += '</tr>';
+					return row;
+				}
+
+				$('#report-view-date-nav-next').bind('click', function () {
+					navDate(1);
+				});
+				$('#report-view-date-nav-prev').bind('click', function () {
+					navDate(-1);
+				});
+				$('#report-view-date-nav-current').bind('swipeleft', function () {
+					navDate(1);
+				}).bind('swiperight', function () {
+					navDate(-1);
+				});
+
+				function navDate(dir) {
+					var currentData = reportDataOrBack();
+					if (currentData == null) return;
+
+					var date = cNs.FixedDateToDate(currentData.ReportDate);
+					date.setDate(date.getDate() + (dir * currentData.ReportIntervalType));
+					currentData.ReportDate = cNs.DateToFixedDate(date);
+
+					$('#report-view').data('report-settings', currentData);
+					$('#report-view').trigger('report');
+					$('#report-settings-view').trigger('datachange');
+				}
+			});
+
+			$("#report-settings-view").live("pageinit", function () {
+				$('#sel-date').datebox();
+				$('#report-view-show-button').bind('click', function () {
+					$('#report-view').data('report-settings', modelFromSettings()); // Save the values to #report-view data.
+					$.mobile.changePage($('#report-view'));
+
+				});
+				function modelFromSettings() {
+					var parent = $('#report-settings-view');
+					var reportRequestParam = {
+						"ReportId": $('input[name="sel-report"]:checked', parent).val(),
+						"ReportDate": cNs.DateToFixedDate($('#sel-date').data('datebox').theDate),
+						"ReportIntervalType": $('input[name="sel-interval"]:checked', parent).val(),
+						"SkillSet": $('#sel-skill').val().join(','),
+						"table": $('#report-settings-type-table').is(':checked'),
+						"graph": $('#report-settings-type-graph').is(':checked')
+					};
+					return reportRequestParam;
+				}
+
+				function adjustSettingsToData() {
+					// {"ReportId": "Id", "ReportDate": "Fixed Date", "ReportIntervalType": "1 / 7", "SkillSet": "-2,3,45,5", "table": "True/False", "graph": "True/False"}
+					var parent = $('#report-settings-view');
+
+				}
+			});
+
+		});
+		$(document).bind("mobileinit", function () {
+			$.mobile.orientationChangeEnabled = false;
+			$.mobile.loadingMessage = '@(Html.Raw(HttpUtility.JavaScriptStringEncode(Resources.LoadingThreeDots)))';
+			$.mobile.pageLoadErrorMessage = '@(Html.Raw(HttpUtility.JavaScriptStringEncode(Resources.CommunicationErrorEndPoint)))';
+		});
+	</script>
+}
+@section jsAfterMobile {
+	<script src="@Url.Content("~/Content/MobileContent/DateBox/jquery.mobile.datebox-1.0.1.js")"></script>
+	<script>
+		$.extend($.mobile.datebox.prototype.options.lang, {
+			'loc': @Html.Raw(Model.DateBoxGlobalization.ToJson())
+		});
+
+		$.extend($.mobile.datebox.prototype.options, {
+			useLang: 'loc'
+		});
+	</script>
+}
+<div data-role="page" id="home-view">
+	<div data-role="header">
+		<h1>
+			Mobile Reports
+		</h1>
+		@Html.ActionLink(Resources.LogOut, "SignOut", "Authentication", new
+																			{
+																				area = "MobileReports"
+																			}, new { id = "signout-button", data_icon = "delete", data_iconpos = "left", @class = "ui-btn-right", data_theme = "b", rel = "external" })
+	</div>
+	<div data-role="content">
+		<ul data-role="listview" data-inset="true" data-theme="b">
+			<li data-role="list-divider">@Resources.Reports</li>
+			<li><a href="#report-settings-view" data-icon="info">@Resources.Show</a></li>
+		</ul>
+	</div>
+</div>
+<div data-role="page" id="report-settings-view">
+	<div data-role="header">
+		<h1>@Resources.Settings</h1>
+		<a href="#" data-rel="back" data-icon="home" data-direction="reverse" title="@Html.AttributeEncode(Resources.Back)"
+		   data-theme="b">@Resources.Home</a>
+	</div>
+	<div data-role="content">
+		<ul data-role="listview" data-inset="true">
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+					<legend>@Resources.Reports</legend>
+					@foreach (var report in Model.Reports)
+	 {
+		 var encodedId = Html.AttributeEncode(string.Format("sel-report-{0}", report.ReportId));
+
+						<input type="radio" name="sel-report" id="@encodedId" value="@Html.AttributeEncode(report.ReportId)" />
+						<label for="@encodedId">@report.ReportName</label>
+	 }
+				</fieldset>
+			</li>
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<label for="sel-date">@Resources.DateSelection</label>
+					<input name="sel-date" id="sel-date" data-theme="b" type="date" data-role="datebox"
+						data-options='{"mode": "calbox", "pickPageTheme": "b", "pickPageButtonTheme": "b"}'>
+				</fieldset>
+			</li>
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Interval (loc)</legend>
+					<input type="radio" name="sel-interval" id="sel-interval-day" value="1" checked="checked" />
+					<label for="sel-interval-day">
+						@Resources.Day</label>
+					<input type="radio" name="sel-interval" id="sel-interval-week" value="7" />
+					<label for="sel-interval-week">
+						@Resources.Week</label>
+				</fieldset>
+			</li>
+			<li data-role="fieldcontain">
+				<label for="sel-skill">@Resources.Skill</label>
+				<select name="sel-skill" id="sel-skill" data-native-menu="false" multiple="multiple">
+					@foreach (var skill in Model.Skills)
+	 {
+		 var encodedId = Html.AttributeEncode(string.Format("{0}", skill.SkillId));
+						<option value="@encodedId" @(skill.AllSkills ? "selected=\"selected\"" : string.Empty)>@skill.SkillName</option>
+	 }
+				</select>
+			</li>
+			<li data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+					<legend>Type (loc)</legend>
+					<input type="checkbox" name="report-settings-type-graph" id="report-settings-type-graph" />
+					<label for="report-settings-type-graph">
+						Graph (loc)</label>
+					<input type="checkbox" name="report-settings-type-table" id="report-settings-type-table" />
+					<label for="report-settings-type-table">
+						Table (loc)
+					</label>
+				</fieldset>
+			</li>
+		</ul>
+		<div class="right-wrapper">
+			<a id="report-view-show-button" data-role="button" data-theme="a" data-inline="true">@Resources.Show</a>
+		</div>
+	</div>
+</div>
+<div data-role="page" id="report-view">
+	<div data-role="header">
+		<a href="#" data-rel="back" data-icon="gear" data-direction="reverse" data-theme="b"
+			title="Back">@Resources.Settings</a><h1>@Resources.ShowResult</h1>
+	</div>
+	<div data-role="content">
+		<div data-role="controlgroup" data-type="horizontal" class="center-wrapper mt0">
+			<a data-role="button" data-icon="arrow-l" data-iconpos="left" class="icon-only" id="report-view-date-nav-prev">
+				&nbsp;</a> <a href="#" data-role="button" id="report-view-date-nav-current">&nbsp;</a>
+			<a data-role="button" data-icon="arrow-r" data-iconpos="right" class="icon-only"
+				id="report-view-date-nav-next">&nbsp;</a>
+		</div>
+		<ul data-role="listview" data-inset="true" data-theme="b">
+			<li data-role="list-divider" id="report-name"></li>
+			<li data-role="fieldcontain">
+				<div class="center-wrapper" id="report-skillset">
+				</div>
+			</li>
+			<li data-role="fieldcontain" class="pdr0 pdl0">
+				<div id="report-graph-holder" class="center-wrapper">
+				</div>
+			</li>
+			<li data-role="fieldcontain" class="pd0">
+				<div id="report-table-holder" class="center-wrapper">
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<ul data-role="listview" id="error-message" style="display: none;" data-inset="true"
+	data-theme="b">
+	<li data-role="fieldcontain">
+		<div class="center-wrapper">
+			<br />
+			<span class="error"></span>
+			<br />
+			<br />
+		</div>
+	</li>
+</ul>

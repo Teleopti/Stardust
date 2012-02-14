@@ -1,0 +1,29 @@
+<Window x:Class="Teleopti.Analytics.Etl.ConfigTool.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Control="clr-namespace:Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control"
+    Title="Teleopti Analytics ETL Tool" Height="700" Width="800" WindowState="Maximized"  
+    ContentRendered="Window_ContentRendered">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu IsMainMenu="True" Grid.Row="0">
+            <MenuItem Header="_Settings">
+                <MenuItem x:Name="menuItemDataSourceConfiguration" Header="_Datasource Configuration..." Click="MenuItem_Click"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Manual ETL" IsEnabled="{Binding Path=CanRun}">
+                <Control:ManualEtl x:Name="manualEtl">
+                </Control:ManualEtl>
+            </TabItem>
+            <TabItem Header="Schedule" IsEnabled="{Binding Path=CanRun}">
+                <Control:ScheduleControl x:Name="scheduleControl">
+                </Control:ScheduleControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,945 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Interfaces</RootNamespace>
+    <AssemblyName>Teleopti.Interfaces</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>Messages.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Teleopti.Interfaces.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\DailyBuild\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Interfaces.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
+    <OutputPath>bin\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Teleopti.Interfaces.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
+    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Interfaces.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\AlarmTypeMode.cs" />
+    <Compile Include="Domain\AxisLocation.cs" />
+    <Compile Include="Domain\BlockFinderType.cs" />
+    <Compile Include="Domain\BlockSchedulingServiceEventArgs.cs" />
+    <Compile Include="Domain\BudgetCalculationResult.cs" />
+    <Compile Include="Domain\BudgetSection.cs" />
+    <Compile Include="Domain\ChartSeriesDisplayType.cs" />
+    <Compile Include="Domain\ClipboardAction.cs" />
+    <Compile Include="Domain\IActivityNormalExtender.cs" />
+    <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
+    <Compile Include="Domain\DetailLevel.cs" />
+    <Compile Include="Domain\IAuditSetting.cs" />
+    <Compile Include="Domain\IAuditSettingRepository.cs" />
+    <Compile Include="Domain\IAuthorizeOrganisationDetail.cs" />
+    <Compile Include="Domain\IAutoPositionedActivityExtender.cs" />
+    <Compile Include="Domain\IBaseConfiguration.cs" />
+    <Compile Include="Domain\IBudgetPermissionService.cs" />
+    <Compile Include="Domain\IBudgetGroupAllowanceSpecification.cs" />
+    <Compile Include="Domain\ICanExecute.cs" />
+    <Compile Include="Domain\ICustomChangedEntity.cs" />
+    <Compile Include="Domain\IDayOffDecisionMakerExecuter.cs" />
+    <Compile Include="Domain\IDayOffOptimizationService.cs" />
+    <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
+    <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
+    <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\ILightPerson.cs" />
+    <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
+    <Compile Include="Domain\IOptimizationPreferences.cs" />
+    <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
+    <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
+    <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
+    <Compile Include="Domain\IJobResult.cs" />
+    <Compile Include="Domain\IJobResultDetail.cs" />
+    <Compile Include="Domain\IProjectionProvider.cs" />
+    <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
+    <Compile Include="Domain\IRevision.cs" />
+    <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
+    <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
+    <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
+    <Compile Include="Domain\IScheduleDayRestrictionExtractor.cs" />
+    <Compile Include="Domain\INow.cs" />
+    <Compile Include="Domain\IOutlier.cs" />
+    <Compile Include="Domain\IOutlierDateProvider.cs" />
+    <Compile Include="Domain\IJobResultProgress.cs" />
+    <Compile Include="Domain\IPeriodScheduledAndRestrictionDaysOff.cs" />
+    <Compile Include="Domain\IProjectionMerger.cs" />
+    <Compile Include="Domain\IPublicNote.cs" />
+    <Compile Include="Domain\IDayOffOptimizer.cs" />
+    <Compile Include="Domain\IBestShiftCategoryResult.cs" />
+    <Compile Include="Domain\DateDayModel.cs" />
+    <Compile Include="Domain\IDayOffsInPeriodCalculator.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionCreator.cs" />
+    <Compile Include="Domain\IGroupBlockScheduleDecider.cs" />
+    <Compile Include="Domain\IGroupShiftCategoryFairnessCreator.cs" />
+    <Compile Include="Domain\IIncreasePeriodByOne.cs" />
+    <Compile Include="Domain\IIntraDayOptimizer2Creator.cs" />
+    <Compile Include="Domain\IIntradayOptimizer2.cs" />
+    <Compile Include="Domain\IIntradayDecisionMaker.cs" />
+    <Compile Include="Domain\ICommonNameDescriptionSetting.cs" />
+    <Compile Include="Domain\IBudgetGroup.cs" />
+    <Compile Include="Domain\ICustomEfficiencyShrinkage.cs" />
+    <Compile Include="Domain\ICustomEfficiencyShrinkageWrapper.cs" />
+    <Compile Include="Domain\ICustomShrinkage.cs" />
+    <Compile Include="Domain\ICustomShrinkageWrapper.cs" />
+    <Compile Include="Domain\IDayOffDecisionMaker.cs" />
+    <Compile Include="Domain\IKeepRestrictionCreator.cs" />
+    <Compile Include="Domain\IMasterActivity.cs" />
+    <Compile Include="Domain\IGroupPageOptions.cs" />
+    <Compile Include="Domain\IMoveTimeDecisionMaker.cs" />
+    <Compile Include="Domain\EnumTargetValueType.cs" />
+    <Compile Include="Domain\IAbsenceRequestOpenPeriodMerger.cs" />
+    <Compile Include="Domain\IAbsenceRequestValidator.cs" />
+    <Compile Include="Domain\IChildPersonGroup.cs" />
+    <Compile Include="Domain\ICreatePersonAbsence.cs" />
+    <Compile Include="Domain\IDateOnlyAsDateTimePeriod.cs" />
+    <Compile Include="Domain\IGroupPage.cs" />
+    <Compile Include="Domain\IGroupPageDataProvider.cs" />
+    <Compile Include="Domain\IGroupPerson.cs" />
+    <Compile Include="Domain\IKeyPerformanceIndicator.cs" />
+    <Compile Include="Domain\IKpiTarget.cs" />
+    <Compile Include="Domain\IMoveTimeOptimizer.cs" />
+    <Compile Include="Domain\IMoveTimeOptimizerCreator.cs" />
+    <Compile Include="Domain\INewBusinessRule.cs" />
+    <Compile Include="Domain\INewBusinessRuleCollection.cs" />
+    <Compile Include="Domain\INewSkillStaffPeriodValues.cs" />
+    <Compile Include="Domain\INonBlendSkillCalculator.cs" />
+    <Compile Include="Domain\IOccupiedSeatCalculator.cs" />
+    <Compile Include="Domain\IOptimizerActivitiesPreferences.cs" />
+    <Compile Include="Domain\IPasswordPolicy.cs" />
+    <Compile Include="Domain\IPasswordStrengthRule.cs" />
+    <Compile Include="Domain\IPayrollResultDetail.cs" />
+    <Compile Include="Domain\IPersonAccountCollection.cs" />
+    <Compile Include="Domain\IAssignmentPeriodRule.cs" />
+    <Compile Include="Domain\IBinaryValidator.cs" />
+    <Compile Include="Domain\IDayOffOptimizerContainer.cs" />
+    <Compile Include="Domain\IExecutableCommand.cs" />
+    <Compile Include="Domain\ILockableBitArray.cs" />
+    <Compile Include="Domain\ILongestPeriodForAssignmentCalculator.cs" />
+    <Compile Include="Domain\INote.cs" />
+    <Compile Include="Domain\IAbsenceRequestOpenPeriod.cs" />
+    <Compile Include="Domain\IOpenAbsenceRequestPeriodExtractor.cs" />
+    <Compile Include="Domain\IOpenAbsenceRequestPeriodProjection.cs" />
+    <Compile Include="Domain\IOfficialWeekendDays.cs" />
+    <Compile Include="Domain\IPeriodValueCalculator.cs" />
+    <Compile Include="Domain\IPersonAbsenceAccount.cs" />
+    <Compile Include="Domain\IPersonAccountBalanceCalculator.cs" />
+    <Compile Include="Domain\IPersonGroup.cs" />
+    <Compile Include="Domain\IPersonProvider.cs" />
+    <Compile Include="Domain\IPersonRequestCheckAuthorization.cs" />
+    <Compile Include="Domain\IPossibleMinMaxWorkShiftLengthExtractor.cs" />
+    <Compile Include="Domain\IPreferenceRestrictionTemplate.cs" />
+    <Compile Include="Domain\IProcessAbsenceRequest.cs" />
+    <Compile Include="Domain\IQueueStatisticsProvider.cs" />
+    <Compile Include="Domain\IScheduleResultDailyValueCalculator.cs" />
+    <Compile Include="Domain\IRootPersonGroup.cs" />
+    <Compile Include="Domain\IScheduleAuditTrailReportData.cs" />
+    <Compile Include="Domain\IScheduleDay.cs" />
+    <Compile Include="Domain\IScheduleDayRotationRestrictionExtractor.cs" />
+    <Compile Include="Domain\IScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
+    <Compile Include="Domain\IScheduleDictionaryLoadOptions.cs" />
+    <Compile Include="Domain\IScheduleHistoryRepository.cs" />
+    <Compile Include="Domain\IScheduleMatrixBackToLegalStateBrutalForceServiceContainer.cs" />
+    <Compile Include="Domain\IScheduleMatrixBitArrayConverter.cs" />
+    <Compile Include="Domain\IScheduleMatrixListCreator.cs" />
+    <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
+    <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
+    <Compile Include="Domain\IScheduleOptimizationService.cs" />
+    <Compile Include="Domain\ISchedulePart.cs" />
+    <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
+    <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
+    <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
+    <Compile Include="Domain\IAverageShiftLengthValueCalculator.cs" />
+    <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
+    <Compile Include="Domain\IBlockSchedulingService.cs" />
+    <Compile Include="Domain\IFairnessValueCalculator.cs" />
+    <Compile Include="Domain\IPreSchedulingStatusChecker.cs" />
+    <Compile Include="Domain\ISchedulePeriodTargetCalculator.cs" />
+    <Compile Include="Domain\ISchedulePeriodTargetCalculatorFactory.cs" />
+    <Compile Include="Domain\IScheduleService.cs" />
+    <Compile Include="Domain\IScheduleResultDataExtractor.cs" />
+    <Compile Include="Domain\IScheduleTag.cs" />
+    <Compile Include="Domain\IScheduleTagSetter.cs" />
+    <Compile Include="Domain\ISchedulingObjectContainer.cs" />
+    <Compile Include="Domain\IPersonSkillPeriodsDataHolderManager.cs" />
+    <Compile Include="Domain\IBlockFinder.cs" />
+    <Compile Include="Domain\IBlockFinderResult.cs" />
+    <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
+    <Compile Include="Domain\IRestrictionExtractor.cs" />
+    <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
+    <Compile Include="Domain\IScheduleMatrixSchedulePeriodContainer.cs" />
+    <Compile Include="Domain\ISchedulePartExtractor.cs" />
+    <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateService.cs" />
+    <Compile Include="Domain\IDataSourceEtl.cs" />
+    <Compile Include="Domain\IDeviationStatisticData.cs" />
+    <Compile Include="Domain\IDeviationStatisticsCalculator.cs" />
+    <Compile Include="Domain\IExportToAnotherScenario.cs" />
+    <Compile Include="Domain\IFullWeekOuterWeekPeriodCreator.cs" />
+    <Compile Include="Domain\IFairnessValueResult.cs" />
+    <Compile Include="Domain\IMultiplicatorDefinitionAdapter.cs" />
+    <Compile Include="Domain\IntervalDefinition.cs" />
+    <Compile Include="Domain\IOptimizerAdvancedPreferences.cs" />
+    <Compile Include="Domain\IOptimizerOriginalPreferences.cs" />
+    <Compile Include="Domain\IRemoveShiftCategoryBackToLegalService.cs" />
+    <Compile Include="Domain\IScheduleDayService.cs" />
+    <Compile Include="Domain\IResourceOptimizationFactory.cs" />
+    <Compile Include="Domain\IScheduleMatrixPro.cs" />
+    <Compile Include="Domain\IScheduleMatrixValueCalculatorPro.cs" />
+    <Compile Include="Domain\IPermissionCheck.cs" />
+    <Compile Include="Domain\IScheduleDayPro.cs" />
+    <Compile Include="Domain\IScheduleFairnessCalculator.cs" />
+    <Compile Include="Domain\IScheduleMatrixValueCalculatorProFactory.cs" />
+    <Compile Include="Domain\ISchedulingResultService.cs" />
+    <Compile Include="Domain\IScorecard.cs" />
+    <Compile Include="Domain\IScorecardPeriod.cs" />
+    <Compile Include="Domain\IShiftCategoryFairness.cs" />
+    <Compile Include="Domain\IShiftCategoryFairnessFactors.cs" />
+    <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
+    <Compile Include="Domain\IShiftCategoryLimitation.cs" />
+    <Compile Include="Domain\IRemoveShiftCategoryOnBestDateService.cs" />
+    <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
+    <Compile Include="Domain\IShiftCreatorService.cs" />
+    <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftProjectionCache.cs" />
+    <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
+    <Compile Include="Domain\IShiftProjectionCasheFilter.cs" />
+    <Compile Include="Domain\ISmartDayOffBackToLegalStateSolverContainer.cs" />
+    <Compile Include="Domain\ISwapRawService.cs" />
+    <Compile Include="Domain\ISwapServiceNew.cs" />
+    <Compile Include="Domain\ISystemCheck.cs" />
+    <Compile Include="Domain\IExtendedPreferenceTemplate.cs" />
+    <Compile Include="Domain\IterationOperationOption.cs" />
+    <Compile Include="Domain\ITimeZoneDim.cs" />
+    <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
+    <Compile Include="Domain\IUnsafePersonProvider.cs" />
+    <Compile Include="Domain\IUnsavedDaysInfo.cs" />
+    <Compile Include="Domain\IUserDetail.cs" />
+    <Compile Include="Domain\IUserTimeZone.cs" />
+    <Compile Include="Domain\IValidatedVolumeDay.cs" />
+    <Compile Include="Domain\IVirtualSchedulePeriod.cs" />
+    <Compile Include="Domain\IVirtualSchedulePeriodSplitChecker.cs" />
+    <Compile Include="Domain\IVirtualSkillHelper.cs" />
+    <Compile Include="Domain\IWorkflowControlSet.cs" />
+    <Compile Include="Domain\IWorkShiftCalculator.cs" />
+    <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
+    <Compile Include="Domain\IWorkShiftFinderService.cs" />
+    <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
+    <Compile Include="Domain\DateOnlyPeriod.cs" />
+    <Compile Include="Domain\DayOff.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\AuthenticationTypeOption.cs" />
+    <Compile Include="Domain\AvailableDataRangeOption.cs" />
+    <Compile Include="Domain\DateOnly.cs" />
+    <Compile Include="Domain\ExchangeDataOption.cs" />
+    <Compile Include="Domain\ExportFormat.cs" />
+    <Compile Include="Domain\IActivityRestriction.cs" />
+    <Compile Include="Domain\IAffectedPersonSkillService.cs" />
+    <Compile Include="Domain\IAgentState.cs" />
+    <Compile Include="Domain\IAggregateSkillStaffPeriod.cs" />
+    <Compile Include="Domain\IAlarmType.cs" />
+    <Compile Include="Domain\IAvailabilityDay.cs" />
+    <Compile Include="Domain\IAvailabilityRestriction.cs" />
+    <Compile Include="Domain\IAvailabilityRotation.cs" />
+    <Compile Include="Domain\IBelongsToBusinessUnit.cs" />
+    <Compile Include="Domain\IBudgetDay.cs" />
+    <Compile Include="Domain\IChartSeriesSetting.cs" />
+    <Compile Include="Domain\ICommandLineArgument.cs" />
+    <Compile Include="Domain\IEffectiveRestriction.cs" />
+    <Compile Include="Domain\ILegalStateCheckerOptions.cs" />
+    <Compile Include="Domain\IMeetingPayload.cs" />
+    <Compile Include="Domain\IMoveDataBetweenSchedules.cs" />
+    <Compile Include="Domain\IPersonCollection.cs" />
+    <Compile Include="Domain\IPreferenceDay.cs" />
+    <Compile Include="Domain\IPreferenceRestriction.cs" />
+    <Compile Include="Domain\IPushMessage.cs" />
+    <Compile Include="Domain\IPushMessageDialogue.cs" />
+    <Compile Include="Domain\IDataExchange.cs" />
+    <Compile Include="Domain\IDayOffTemplate.cs" />
+    <Compile Include="Domain\EndTimeLimitation.cs" />
+    <Compile Include="Domain\IAnnotatable.cs" />
+    <Compile Include="Domain\IAnnotatableGrid.cs" />
+    <Compile Include="Domain\IAbsenceRequest.cs" />
+    <Compile Include="Domain\IExternalAgentState.cs" />
+    <Compile Include="Domain\IFilterOnPeriodOptimizer.cs" />
+    <Compile Include="Domain\IFurnessData.cs" />
+    <Compile Include="Domain\IFurnessEvaluator.cs" />
+    <Compile Include="Domain\ILicense.cs" />
+    <Compile Include="Domain\ILimitation.cs" />
+    <Compile Include="Domain\IMemento.cs" />
+    <Compile Include="Domain\IMementoInformation.cs" />
+    <Compile Include="Domain\IMultiplicator.cs" />
+    <Compile Include="Domain\IMultiplicatorDefinition.cs" />
+    <Compile Include="Domain\IMultiplicatorDefinitionSet.cs" />
+    <Compile Include="Domain\IMultiplicatorLayer.cs" />
+    <Compile Include="Domain\IMultiplicatorProjectionService.cs" />
+    <Compile Include="Domain\IMultisiteDay.cs" />
+    <Compile Include="Domain\IMyReportAdherenceInfo.cs" />
+    <Compile Include="Domain\IMyReportAgentQueueInfo.cs" />
+    <Compile Include="Domain\IMyReportLogOnInfo.cs" />
+    <Compile Include="Domain\IMyReportSource.cs" />
+    <Compile Include="Domain\IOptionalColumn.cs" />
+    <Compile Include="Domain\IOptionalColumnValue.cs" />
+    <Compile Include="Domain\IOriginator.cs" />
+    <Compile Include="Domain\IOvertimeShift.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
+    <Compile Include="Domain\IPair.cs" />
+    <Compile Include="Domain\IPairDictionaryFactory.cs" />
+    <Compile Include="Domain\IPairMatrixService.cs" />
+    <Compile Include="Domain\IPayrollExport.cs" />
+    <Compile Include="Domain\IPayrollResult.cs" />
+    <Compile Include="Domain\IPeriodDistribution.cs" />
+    <Compile Include="Domain\IPersonAbsenceRepository.cs" />
+    <Compile Include="Domain\IPersonAccountDataProvider.cs" />
+    <Compile Include="Domain\IPersonAccountProjectionService.cs" />
+    <Compile Include="Domain\IPersonRequest.cs" />
+    <Compile Include="Domain\IPopulationStatisticsCalculator.cs" />
+    <Compile Include="Domain\IPopulationStatisticsData.cs" />
+    <Compile Include="Domain\IRecurrentDailyMeeting.cs" />
+    <Compile Include="Domain\IRecurrentMeeting.cs" />
+    <Compile Include="Domain\IRecurrentMeetingOption.cs" />
+    <Compile Include="Domain\IDialogueMessage.cs" />
+    <Compile Include="Domain\IRecurrentMonthlyByDayMeeting.cs" />
+    <Compile Include="Domain\IRecurrentMonthlyByWeekMeeting.cs" />
+    <Compile Include="Domain\IRecurrentWeeklyMeeting.cs" />
+    <Compile Include="Domain\IRemoveLayerFromScheduleService.cs" />
+    <Compile Include="Domain\IRepositoryNonGeneric.cs" />
+    <Compile Include="Domain\IRequestApprovalService.cs" />
+    <Compile Include="Domain\IRequest.cs" />
+    <Compile Include="Domain\IResourceOptimizationHelper.cs" />
+    <Compile Include="Domain\IRestrictionBase.cs" />
+    <Compile Include="Domain\IRestrictionOwner.cs" />
+    <Compile Include="Domain\IRotationDay.cs" />
+    <Compile Include="Domain\IRotation.cs" />
+    <Compile Include="Domain\IRotationRestriction.cs" />
+    <Compile Include="Domain\IRtaVisualLayer.cs" />
+    <Compile Include="Domain\IScheduleData.cs" />
+    <Compile Include="Domain\IScheduleDataRestriction.cs" />
+    <Compile Include="Domain\IScheduleDayTracker.cs" />
+    <Compile Include="Domain\ISchedulePartModifyAndRollbackService.cs" />
+    <Compile Include="Domain\IRtaState.cs" />
+    <Compile Include="Domain\IRtaStateGroup.cs" />
+    <Compile Include="Domain\ISchedulePartTracker.cs" />
+    <Compile Include="Domain\IScheduleRepository.cs" />
+    <Compile Include="Domain\ISchedulingOptions.cs" />
+    <Compile Include="Domain\ISchedulingResultStateHolder.cs" />
+    <Compile Include="Domain\ISettingData.cs" />
+    <Compile Include="Domain\ISettingValue.cs" />
+    <Compile Include="Domain\IShiftTradeRequest.cs" />
+    <Compile Include="Domain\IShiftTradeRequestSetChecksum.cs" />
+    <Compile Include="Domain\IShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="Domain\IShiftTradeSwapDetail.cs" />
+    <Compile Include="Domain\ISignificantPartProvider.cs" />
+    <Compile Include="Domain\ISignificantPartService.cs" />
+    <Compile Include="Domain\ISkillSkillStaffPeriodExtendedDictionary.cs" />
+    <Compile Include="Domain\ISkillStaffPeriodDataHolder.cs" />
+    <Compile Include="Domain\ISkillStaffPeriodDictionary.cs" />
+    <Compile Include="Domain\ISkillStaffPeriodHolder.cs" />
+    <Compile Include="Domain\ISkillStaffPeriodView.cs" />
+    <Compile Include="Domain\ISkillTypeEmail.cs" />
+    <Compile Include="Domain\ISkillTypePhone.cs" />
+    <Compile Include="Domain\ISpecification.cs" />
+    <Compile Include="Domain\IStaffingCalculatorService.cs" />
+    <Compile Include="Domain\IStateGroupActivityAlarm.cs" />
+    <Compile Include="Domain\IStudentAvailabilityDay.cs" />
+    <Compile Include="Domain\ISwapDetail.cs" />
+    <Compile Include="Domain\ISystemSetting.cs" />
+    <Compile Include="Domain\ITemplateReference.cs" />
+    <Compile Include="Domain\IPersonalShiftActivityLayer.cs" />
+    <Compile Include="Domain\IMainShiftActivityLayer.cs" />
+    <Compile Include="Domain\DateHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\DateTimePeriod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\DefaultAccessibility.cs" />
+    <Compile Include="Domain\Description.cs" />
+    <Compile Include="Domain\DifferenceCollectionItem.cs" />
+    <Compile Include="Domain\DifferenceStatus.cs" />
+    <Compile Include="Domain\DistributionType.cs" />
+    <Compile Include="Domain\EmploymentType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ForecastSource.cs" />
+    <Compile Include="Domain\IAbsence.cs" />
+    <Compile Include="Domain\IAbsenceLayer.cs" />
+    <Compile Include="Domain\IActiveAgentCount.cs" />
+    <Compile Include="Domain\IActivity.cs" />
+    <Compile Include="Domain\IActivityLayer.cs" />
+    <Compile Include="Domain\IAggregateEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IAggregateRoot.cs" />
+    <Compile Include="Domain\IApplicationAuthenticationInfo.cs" />
+    <Compile Include="Domain\IApplicationData.cs" />
+    <Compile Include="Domain\IApplicationFunction.cs" />
+    <Compile Include="Domain\IApplicationRole.cs" />
+    <Compile Include="Domain\IAuthenticationSettings.cs" />
+    <Compile Include="Domain\IAuthorizationEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IAuthorizationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IAuthorizationSettings.cs" />
+    <Compile Include="Domain\IAuthorizationStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IAvailableData.cs" />
+    <Compile Include="Domain\IAvailableDataEntry.cs" />
+    <Compile Include="Domain\IBusinessRuleResponse.cs" />
+    <Compile Include="Domain\IBusinessUnit.cs" />
+    <Compile Include="Domain\IBusinessUnitHierarchyEntity.cs" />
+    <Compile Include="Domain\ICampaign.cs" />
+    <Compile Include="Domain\IChangeInfo.cs" />
+    <Compile Include="Domain\IChildSkill.cs" />
+    <Compile Include="Domain\ICloneableEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IContract.cs" />
+    <Compile Include="Domain\IContractSchedule.cs" />
+    <Compile Include="Domain\IContractScheduleWeek.cs" />
+    <Compile Include="Domain\ICreateInfo.cs" />
+    <Compile Include="Domain\IDataSource.cs" />
+    <Compile Include="Domain\IDatesToPeriod.cs" />
+    <Compile Include="Domain\IDayOffPlannerRules.cs" />
+    <Compile Include="Domain\IDifferenceCollection.cs" />
+    <Compile Include="Domain\IDifferenceCollectionService.cs" />
+    <Compile Include="Domain\IForecastData.cs" />
+    <Compile Include="Domain\IForecastProcessReport.cs" />
+    <Compile Include="Domain\IMeeting.cs" />
+    <Compile Include="Domain\IMultisiteDayTemplate.cs" />
+    <Compile Include="Domain\IMultisitePeriod.cs" />
+    <Compile Include="Domain\IMultisiteSkill.cs" />
+    <Compile Include="Domain\IPeriodType.cs" />
+    <Compile Include="Domain\IAccount.cs" />
+    <Compile Include="Domain\IPersonAvailability.cs" />
+    <Compile Include="Domain\IPersonRotation.cs" />
+    <Compile Include="Domain\ISchedule.cs" />
+    <Compile Include="Domain\IScheduleDateTimePeriod.cs" />
+    <Compile Include="Domain\IScheduleDictionary.cs" />
+    <Compile Include="Domain\IScheduleExtractor.cs" />
+    <Compile Include="Domain\IScheduleRange.cs" />
+    <Compile Include="Domain\ICccTimeZoneInfo.cs" />
+    <Compile Include="Domain\ISchedulerRangeToLoadCalculator.cs" />
+    <Compile Include="Domain\ISkillDataPeriod.cs" />
+    <Compile Include="Domain\ISkillDay.cs" />
+    <Compile Include="Domain\ISkillDayCalculator.cs" />
+    <Compile Include="Domain\ISkillStaff.cs" />
+    <Compile Include="Domain\ISkillStaffPeriod.cs" />
+    <Compile Include="Domain\ISkillStaffSegment.cs" />
+    <Compile Include="Domain\ISkillStaffSegmentPeriod.cs" />
+    <Compile Include="Domain\ISlpsService.cs" />
+    <Compile Include="Domain\ISwapService.cs" />
+    <Compile Include="Domain\ITaskTimeDistributionService.cs" />
+    <Compile Include="Domain\ITemplateDay.cs" />
+    <Compile Include="Domain\ITemplateMultisitePeriod.cs" />
+    <Compile Include="Domain\ITemplateTaskPeriodView.cs" />
+    <Compile Include="Domain\IWorkShiftMinMaxCalculator.cs" />
+    <Compile Include="Domain\IWorkShiftVisualLayerInfo.cs" />
+    <Compile Include="Domain\IWorkShiftWeekMinMaxCalculator.cs" />
+    <Compile Include="Domain\IWorkTimeBackToLegalStateService.cs" />
+    <Compile Include="Domain\IWorkTimeMinMax.cs" />
+    <Compile Include="Domain\IPersonWriteProtectionInfo.cs" />
+    <Compile Include="Domain\IWorkTimeMinMaxCalculator.cs" />
+    <Compile Include="Domain\MeetingChangedDetail.cs" />
+    <Compile Include="Domain\MeetingChangedEntity.cs" />
+    <Compile Include="Domain\MinMaxStaffBroken.cs" />
+    <Compile Include="Domain\MultipleBool.cs" />
+    <Compile Include="Domain\OptimizationRestriction.cs" />
+    <Compile Include="Domain\JobResultProgress.cs" />
+    <Compile Include="Domain\PositiveTimeSpan.cs" />
+    <Compile Include="Domain\QueueAdjustment.cs" />
+    <Compile Include="Domain\ResourceOptimizerProgressEventArgs.cs" />
+    <Compile Include="Domain\ITimeLayer.cs" />
+    <Compile Include="Domain\ITimeLayerOfDouble.cs" />
+    <Compile Include="Domain\ITracker.cs" />
+    <Compile Include="Domain\ITrackerCalculator.cs" />
+    <Compile Include="Domain\ITrackingDataProvider.cs" />
+    <Compile Include="Domain\IUndoRedoContainer.cs" />
+    <Compile Include="Domain\IVersioned.cs" />
+    <Compile Include="Domain\IAggregateSkill.cs" />
+    <Compile Include="Domain\IVisualLayerFactoryFactory.cs" />
+    <Compile Include="Domain\IVisualLayerFactory.cs" />
+    <Compile Include="Domain\IWorkloadDay.cs" />
+    <Compile Include="Domain\IWorkloadDayBase.cs" />
+    <Compile Include="Domain\IWorkShiftFilterResult.cs" />
+    <Compile Include="Domain\IWorkShiftFinderResult.cs" />
+    <Compile Include="Domain\IMinMaxContractTimeCalculator.cs" />
+    <Compile Include="Domain\ModifyEventArgs.cs" />
+    <Compile Include="Domain\PeriodValueCalculationMethodOption.cs" />
+    <Compile Include="Domain\ExternalAgentState.cs" />
+    <Compile Include="Domain\ScheduleModifier.cs" />
+    <Compile Include="Domain\SchedulePartView.cs" />
+    <Compile Include="Domain\ScheduleVisibleReasons.cs" />
+    <Compile Include="Domain\ScheduleVisualization.cs" />
+    <Compile Include="Domain\SchedulingServiceBaseEventArgs.cs" />
+    <Compile Include="Domain\SettingKeys.cs" />
+    <Compile Include="Domain\ReportLevelDetail.cs" />
+    <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
+    <Compile Include="Domain\ShiftTradeStatus.cs" />
+    <Compile Include="Domain\ShrinkageType.cs" />
+    <Compile Include="Domain\StaffingThreshold.cs" />
+    <Compile Include="Domain\StaffingThresholds.cs" />
+    <Compile Include="Domain\StartTimeLimitation.cs" />
+    <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
+    <Compile Include="Domain\TimeFormatsType.cs" />
+    <Compile Include="Domain\IMyReportScheduleInfo.cs" />
+    <Compile Include="Domain\IMyReportVisualPayloadInfo.cs" />
+    <Compile Include="Domain\MultiplicatorType.cs" />
+    <Compile Include="Domain\TimeOfDay.cs" />
+    <Compile Include="Domain\WeekNumber.cs" />
+    <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
+    <Compile Include="Domain\WorkTimeLimitation.cs" />
+    <Compile Include="Domain\IReplyOptionsSource.cs" />
+    <Compile Include="Domain\IReplyOptionTarget.cs" />
+    <Compile Include="Domain\ILogWriter.cs" />
+    <Compile Include="IMapiMailMessage.cs" />
+    <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
+    <Compile Include="Infrastructure\EncryptionConstants.cs" />
+    <Compile Include="Infrastructure\ICheckLicenseAtPersist.cs" />
+    <Compile Include="Infrastructure\ICustomDataCache.cs" />
+    <Compile Include="Infrastructure\IDeleteTag.cs" />
+    <Compile Include="Domain\IEntity.cs" />
+    <Compile Include="Domain\IExternalLogOn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IExternalLogOnRepository.cs" />
+    <Compile Include="Domain\IForecastDayTemplate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IForecastTemplateOwner.cs" />
+    <Compile Include="Domain\IGroupingAbsence.cs" />
+    <Compile Include="Domain\IGroupingActivity.cs" />
+    <Compile Include="Domain\ILayer.cs" />
+    <Compile Include="Domain\ILayerCollection.cs" />
+    <Compile Include="Domain\ILayerCollectionOwner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ILayerSorter.cs" />
+    <Compile Include="Domain\ILoadAggregateById.cs" />
+    <Compile Include="Domain\IMainShift.cs" />
+    <Compile Include="Domain\IMeetingPerson.cs" />
+    <Compile Include="Domain\InParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IParentChildEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IPartTimePercentage.cs" />
+    <Compile Include="Domain\IPeriodized.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IPermissionInformation.cs" />
+    <Compile Include="Domain\IPerson.cs" />
+    <Compile Include="Domain\IPersonAbsence.cs" />
+    <Compile Include="Domain\IPersonalShift.cs" />
+    <Compile Include="Domain\IPersonAssignment.cs" />
+    <Compile Include="Domain\IPersonAssignmentRepository.cs" />
+    <Compile Include="Domain\IPersonContract.cs" />
+    <Compile Include="Domain\IPersonDayOff.cs" />
+    <Compile Include="Domain\IPersonMeeting.cs" />
+    <Compile Include="Domain\IPersonPeriod.cs" />
+    <Compile Include="Domain\IPersonSkill.cs" />
+    <Compile Include="Domain\IProjectionSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IProjectionService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IQueueSource.cs" />
+    <Compile Include="Domain\IRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IRestrictionChecker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IRestrictionSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Infrastructure\ILicenseService.cs" />
+    <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
+    <Compile Include="Infrastructure\IMainReference.cs" />
+    <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
+    <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
+    <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
+    <Compile Include="Infrastructure\IQueryFilter.cs" />
+    <Compile Include="Infrastructure\IRootChangeInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IRuleSetBag.cs" />
+    <Compile Include="Domain\IScenario.cs" />
+    <Compile Include="Domain\IPerstistableScheduleData.cs" />
+    <Compile Include="Domain\IScheduleParameters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ISchedulePeriod.cs" />
+    <Compile Include="Domain\IServiceLevel.cs" />
+    <Compile Include="Domain\IShift.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IShiftCategory.cs" />
+    <Compile Include="Domain\ISite.cs" />
+    <Compile Include="Domain\ISkill.cs" />
+    <Compile Include="Domain\ISkillDayTemplate.cs" />
+    <Compile Include="Domain\ISkillRestrictionSet.cs" />
+    <Compile Include="Domain\ISkillType.cs" />
+    <Compile Include="Domain\IStat.cs" />
+    <Compile Include="Domain\IStateHolderReader.cs" />
+    <Compile Include="Domain\IStateReader.cs" />
+    <Compile Include="Domain\IStatisticTask.cs" />
+    <Compile Include="Domain\ITask.cs" />
+    <Compile Include="Domain\ITaskOwner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ITaskSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\ITeam.cs" />
+    <Compile Include="Domain\ITemplateSkillDataPeriod.cs" />
+    <Compile Include="Domain\ITemplateTaskPeriod.cs" />
+    <Compile Include="Domain\IVisualLayer.cs" />
+    <Compile Include="Domain\IVisualLayerCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IPayload.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IWindowsAuthenticationInfo.cs" />
+    <Compile Include="Domain\IWorkload.cs" />
+    <Compile Include="Domain\IWorkloadDayTemplate.cs" />
+    <Compile Include="Domain\IWorkShift.cs" />
+    <Compile Include="Domain\IWorkShiftExtender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IWorkShiftLimiter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IWorkShiftRuleSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\IWorkShiftTemplateGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\LogOnModeOption.cs" />
+    <Compile Include="Domain\MinMax.cs" />
+    <Compile Include="Domain\Name.cs" />
+    <Compile Include="Domain\NameOrderOption.cs" />
+    <Compile Include="Domain\Percent.cs" />
+    <Compile Include="Domain\PermissionOption.cs" />
+    <Compile Include="Domain\SchedulePeriodType.cs" />
+    <Compile Include="Domain\ServiceAgreement.cs" />
+    <Compile Include="Domain\ServiceLevel.cs" />
+    <Compile Include="Domain\SkillPersonData.cs" />
+    <Compile Include="Domain\StateHolderReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\TaskPeriodType.cs" />
+    <Compile Include="Domain\TemplateTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\TimeHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\TimePeriod.cs" />
+    <Compile Include="Domain\TimePeriodWithSegment.cs" />
+    <Compile Include="Domain\TimeZoneHelper.cs" />
+    <Compile Include="Domain\WorkTime.cs" />
+    <Compile Include="Domain\WorkTimeDirective.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Infrastructure\IMessageBrokerModule.cs" />
+    <Compile Include="Infrastructure\ISessionData.cs" />
+    <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
+    <Compile Include="Infrastructure\IUnitOfWork.cs" />
+    <Compile Include="Infrastructure\IUnitOfWorkFactory.cs" />
+    <Compile Include="Infrastructure\IWriteToFile.cs" />
+    <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
+    <Compile Include="Infrastructure\LicenseType.cs" />
+    <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Client\IMessageDispatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Client\IMessageSender.cs" />
+    <Compile Include="MessageBroker\Client\IStaticDataManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Coders\IEventFilterDecoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventFilterEncoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventHeartbeatDecoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventHeartbeatEncoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventMessageDecoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventMessageEncoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventSubscriberDecoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventSubscriberEncoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventUserDecoder.cs" />
+    <Compile Include="MessageBroker\Coders\IEventUserEncoder.cs" />
+    <Compile Include="MessageBroker\Core\BroadcastDirection.cs" />
+    <Compile Include="MessageBroker\Core\Consts.cs" />
+    <Compile Include="MessageBroker\Core\IBrokerProcessor.cs" />
+    <Compile Include="MessageBroker\Core\IBrokerService.cs" />
+    <Compile Include="MessageBroker\Core\ICache.cs" />
+    <Compile Include="MessageBroker\Core\IChat.cs" />
+    <Compile Include="MessageBroker\Core\IConfigurationInfo.cs" />
+    <Compile Include="MessageBroker\Core\ICustomTcpListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\ICustomThreadPool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\ICustomUdpListener.cs" />
+    <Compile Include="MessageBroker\Core\IDataMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IDomainObjectFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IFramer.cs" />
+    <Compile Include="MessageBroker\Core\ILogbookEntry.cs" />
+    <Compile Include="MessageBroker\Core\ILogEntry.cs" />
+    <Compile Include="MessageBroker\Core\ILogEntryDecoder.cs" />
+    <Compile Include="MessageBroker\Core\ILogEntryEncoder.cs" />
+    <Compile Include="MessageBroker\Core\IMapperBase.cs" />
+    <Compile Include="MessageBroker\Core\IMessageFilterManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IMessageRegistrationManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IMessagingProtocol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IMulticastAddressInfo.cs" />
+    <Compile Include="MessageBroker\Core\IMulticastSubscriber.cs" />
+    <Compile Include="MessageBroker\Core\IObjectInserter.cs" />
+    <Compile Include="MessageBroker\Core\IObjectReader.cs" />
+    <Compile Include="MessageBroker\Core\IPollingManager.cs" />
+    <Compile Include="MessageBroker\Core\IProtocol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\ISocketInfo.cs" />
+    <Compile Include="MessageBroker\Core\IStartedService.cs" />
+    <Compile Include="MessageBroker\Core\ITcpSender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Core\IUdpSender.cs" />
+    <Compile Include="MessageBroker\Core\ThreadPoolThreadSettings.cs" />
+    <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
+    <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
+    <Compile Include="MessageBroker\Events\IEventFilter.cs" />
+    <Compile Include="MessageBroker\Events\IEventHeartbeat.cs" />
+    <Compile Include="MessageBroker\Events\IEventMessage.cs" />
+    <Compile Include="MessageBroker\Events\IEventReceipt.cs" />
+    <Compile Include="MessageBroker\Events\IEventSubscriber.cs" />
+    <Compile Include="MessageBroker\Events\IEventUser.cs" />
+    <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
+    <Compile Include="MessageBroker\Notification.cs" />
+    <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
+    <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
+    <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
+    <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
+    <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
+    <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
+    <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
+    <Compile Include="Messages\General\RunPayrollExport.cs" />
+    <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
+    <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
+    <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
+    <Compile Include="Messages\RaptorDomainMessage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\SettingValueTypes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Teleopti.Ccc.snk">
+      <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Messages.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

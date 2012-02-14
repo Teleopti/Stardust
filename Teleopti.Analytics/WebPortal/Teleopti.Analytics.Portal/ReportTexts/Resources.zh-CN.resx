@@ -1,0 +1,912 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>要求的偏好　</value>
+  </data>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>崩溃</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>扩展</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>你在此输入的值无效：</value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>你没有输入任何内容：</value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>放弃的电话</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>放弃的比率</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>座席代表</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>应答的电话</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>低于服务水平的应答</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>符合服务水平的应答</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>日期：</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>起始日期：</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>终止日期：</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>总计</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>间隔</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>间隔：</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>计划时间</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>服务水平（％）</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>运营点：</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>技能：</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>小组：</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>工作量：</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>显示报告</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>间隔开始时间：</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>间隔结束时间：</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>缺勤率（％）</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>遵时率（％）　</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>排班电话时段每小时应答电话数</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>平均应答电话后工作时间（秒）</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>平均处理时间（秒）　　</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>平均通话时间（秒）</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>状态就绪比率（％）</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>实际</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>趋势</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>登录失败。请重试</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>用户名：</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>请输入密码</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>密码：</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>下次自动记住登录信息</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>请输入用户名。</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>显示报告</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>情形：</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>除去短时呼叫的放弃应答比例（％）</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>放弃应答的比例（％）　</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>应答比例（％）　</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>平均应答所需时间（秒）</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>平均放弃时间（秒）</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>最长列队等待时间，放弃（秒）</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>最长列队等待时间，应答（秒）　</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>放弃与应答速度</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>放弃所用时间</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>总计：</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>比例</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>实际电话后工作</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>实际平均通话时间</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>电话后工作(ACW) </value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>平均通话时间(ATT) </value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>统计的电话量　</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>电话量</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>预测的电话量</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>数字</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>预计工作量与实际工作量</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>状态就绪的座席代表</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>排班的座席代表</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>预测的时间（小时：分钟）</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>休息日：</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>每个活动排班的时间</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>小组数据</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>小组／日期</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>应答电话量／状态就绪小时</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>合同内缺勤时间（小时：分钟）</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>合同时间（小时：分钟）</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>付薪时间（小时：分钟）</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>工作时间（小时：分钟）　</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>接受的偏好</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>接受的偏好比例（％）</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>未接受的偏好</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>偏好的类型</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>每天的偏好</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>每个座席代表的偏好</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>改进</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>处理时间/付薪时间（％）　</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>星期五</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>星期一</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>星期六</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>星期天</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>星期四</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>星期二</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>星期三</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>四月</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>八月</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>十二月</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>二月</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>一月</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>七月</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>六月</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>三月</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>五月</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>十一月</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>十月</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>九月</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>时间段类型：</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>主要评估指标</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>上个时间段</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>实际的小组</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>日期时间段：</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>时间段</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>预测的电话后工作</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>预测的平均通话时间</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>相对差异（％）</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>呼叫的电话</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>呼叫的电话/状态就绪的座席代表</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>呼叫的电话/排班的且状态就绪的座席代表</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>预测的工作时间与排班的工作时间的对比</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>服务水平与状态就绪的座席代表</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>排班的准备时间</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>排班的座席代表与状态就绪的座席代表的对比</value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>平稳率（％）</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>工作日／技能</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>座席代表的类别：</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>座席代表类别的类型：</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>座席代表：</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>座席统计</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>遵时率（％）</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>座席代表/日期</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>应答电话/排班的状态就绪的小时数</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>占用率（％）</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>状态就绪（％）</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>就绪时间</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>遵时率统计：</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>呼叫通话／座席代表</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>服务水平</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>服务水平统计：</value>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>座席代表—遵时率</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>排序：</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>准备时间/排班的准备时间（％）</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>排班的状态就绪的座席代表</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>偏差（秒）</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>下一步</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>前一步</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>遵时率/间隔（％）</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>偏差/间隔（秒）</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>列队：</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>列队统计数据</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>服务水平内的未应答电话</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>放弃的短呼叫电话</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>处理时间</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>应答速度</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>通话时间</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>转接的电话</value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>列队</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>时区：</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>列队呼叫中的最长等待时间，挂断</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>列队呼叫中的最长等待时间，应答</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>挂断前的等待时间（秒）</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>Acd 登录</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>座席代表列队统计数字</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>座席代表统计数字</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>管理时间</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>直接呼入电话</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>直接呼入电话通话时间</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>直接呼出电话</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>直接呼出电话通话时间</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>空闲时间</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>登录所用时间　</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>状态未就绪时间</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>日期／间隔</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>未被许可</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>超量呼入电话</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>超量呼出电话</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>预测的时间包括损耗时间（小时：分钟）</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>排班的时间（小时：分钟）</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>标准偏差</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>周：</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>每个座席代表的排班时间</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>排班内的缺勤时间（小时：分钟）</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>排班的超时工作时间（小时：分钟）</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>缺勤：</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>活动：</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>预测的小时数（小时：分钟）</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>排班的小时数（小时：分钟）</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>预测的小时数（损耗）（小时：分钟）</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>包括损耗的相对区别（％）</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>每天的班次分类</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>班次分类：</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>每个座席代表的班次分类与整天缺勤</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>每个间隔与小组排班的座席代表</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>座席代表记分卡</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>支付时间</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value>登录成功</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>工作时间</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>每座席缺勤时间</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>全天</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>非全天</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>用户认证失败</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>当Web程序应用Windows认证时，客户端不能使用应用程序认证．</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>请采用应用程序认证登录</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>可能的解决办法</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>确认权限设置与ETL服务同步</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>关闭程序并用Windows认证重新登录；或者由系统管理员将认证修改为应用程序登录．</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>技术信息</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>未知错误</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>缺勤</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>遵时</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>所有</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>服务水平目标时间内应答电话数／应答电话总数</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>服务水平目标时间内应答及放弃电话数／呼入电话数</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>服务水平目标时间内应答电话数／呼入电话总数</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>休息日</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>扩展偏好</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>名</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>星期五</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>半小时</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>小时</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>姓</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>星期一</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>未定义</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>可用时长vs合同排班时长</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>可用时长vs排班可用时长</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>可用时长vs排班时长（包含班次开始时前后时长）</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>星期六</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>班次类型</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>班次开始时间</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>星期日</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>星期四</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>星期二</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>星期三</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>周工作日</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>座席</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>无可用记分卡</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>按照缺勤类型的缺勤时间</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>组织结构</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>合同</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>合同排班</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>兼职时间百分比</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>班次包</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>组:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>每个座席加班的排班</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>加班:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>加班类别:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>平均ACW (s)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>平均处理时间 (s)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>平均交谈时间 (s)</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>座席队列度量</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>每个座席的活动时间</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>加班 (hh:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>班次结束时间</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>班次类别和每天的全天缺勤</value>
+  </data>
+</root>

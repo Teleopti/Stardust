@@ -1,0 +1,1 @@
+iif(IsEmpty([Measures].[Scheduled Time m]),[Measures].[Scheduled Time m], CSTR(Int([Measures].[Scheduled Time m]/60)) + iif(([Measures].[Scheduled Time m] - (Int([Measures].[Scheduled Time m]/60) * 60))<10,":0",":") + CSTR([Measures].[Scheduled Time m] - (Int([Measures].[Scheduled Time m]/60)*60)) +":00")

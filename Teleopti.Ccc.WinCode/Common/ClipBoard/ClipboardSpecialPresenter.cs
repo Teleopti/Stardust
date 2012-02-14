@@ -1,0 +1,98 @@
+﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
+
+namespace Teleopti.Ccc.WinCode.Common.Clipboard
+{
+    public class ClipboardSpecialPresenter
+    {
+        private IClipboardSpecialView _view;
+        private PasteOptions _model;
+        private bool _deleteMode;
+        private bool _showRestrictions;
+
+        public ClipboardSpecialPresenter(IClipboardSpecialView view, PasteOptions model, bool deleteMode, bool showRestrictions)
+        {
+            _view = view;
+            _model = model;
+            _deleteMode = deleteMode;
+            _showRestrictions = showRestrictions;
+        }
+
+        public void Initialize()
+        {
+            _view.SetTexts();
+            _view.SetColor();
+            _view.SetPermissionOnAbsences(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
+            _view.SetPermissionOnDayOffs(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+            _view.SetPermissionOnPersonalAssignments(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnAssignments(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnOvertime(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionsOnRestrictions(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
+            _view.ShowRestrictions(_showRestrictions);
+        }
+
+        public bool IsCanceled()
+        {
+            return _model != null ? false : true;
+        }
+
+        public void OnButtonOkClick()
+        {
+            _view.HideForm();
+        }
+
+        public void OnButtonCancelClick()
+        {
+            _model = null;
+            _view.HideForm();
+        }
+
+        public void OnFormClosing()
+        {
+            _model = null;
+        }
+
+        public void OnCheckBoxAssignmentsCheckedChanged(bool check)
+        {
+            _model.MainShift = check; 
+        }
+
+        public void OnCheckBoxAbsencesCheckedChanged(bool check)
+        {
+            if (check)
+            {
+                if (_deleteMode)
+                    _model.Absences = PasteAction.Replace;
+                else
+                    _model.Absences = PasteAction.Add;
+            }
+            else
+                _model.Absences = PasteAction.Ignore;
+        }
+
+        public void OnCheckBoxDayOffsCheckedChanged(bool check)
+        {
+            _model.DayOff = check;
+        }
+
+        public void OnCheckBoxPersonalAssignmentsCheckedChanged(bool check)
+        {
+            _model.PersonalShifts = check;
+        }
+
+        public void OnCheckBoxOvertimeCheckedChanged(bool check)
+        {
+            _model.Overtime = check;
+        }
+
+        public void OnCheckBoxPreferencesCheckedChanged(bool check)
+        {
+            _model.Preference = check;
+        }
+
+        public void OnCheckBoxStudentAvailabilityCheckedChange(bool check)
+        {
+            _model.StudentAvailability = check;
+        }
+    }
+}

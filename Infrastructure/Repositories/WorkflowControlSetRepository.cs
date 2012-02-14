@@ -1,0 +1,47 @@
+using System.Collections.Generic;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Infrastructure.Repositories
+{
+    public class WorkflowControlSetRepository : Repository<IWorkflowControlSet>, IWorkflowControlSetRepository
+    {
+
+        public WorkflowControlSetRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            : base(unitOfWorkFactory)
+        {
+        }
+
+        public WorkflowControlSetRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        public IList<IWorkflowControlSet> LoadAllSortByName()
+        {
+            var list = Session.CreateCriteria<WorkflowControlSet>()
+                .AddOrder(Order.Asc("Name"))
+                .SetFetchMode("AbsenceRequestOpenPeriods",FetchMode.Join)
+                .SetFetchMode("AbsenceRequestOpenPeriods.Absence",FetchMode.Join)
+                .SetFetchMode("MustMatchSkills", FetchMode.Join)
+                .SetFetchMode("AllowedPreferenceDayOffs", FetchMode.Join)
+                .SetFetchMode("AllowedPreferenceShiftCategories", FetchMode.Join)
+                .SetFetchMode("AllowedPreferenceAbsences", FetchMode.Join)
+                .SetResultTransformer(Transformers.DistinctRootEntity)
+                .List<IWorkflowControlSet>();
+            foreach (var workflowControlSet in list)
+            {
+                if (!LazyLoadingManager.IsInitialized(workflowControlSet.UpdatedBy))
+                    LazyLoadingManager.Initialize(workflowControlSet.UpdatedBy);
+                if (!LazyLoadingManager.IsInitialized(workflowControlSet.CreatedBy))
+                    LazyLoadingManager.Initialize(workflowControlSet.CreatedBy);
+            }
+            return list;
+        }
+    }
+}

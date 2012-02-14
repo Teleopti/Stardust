@@ -1,0 +1,112 @@
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Win.Scheduling
+{
+    public class WeekView : ScheduleViewBase
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public WeekView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
+            SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, 
+            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
+            : base(grid)
+        {
+            Presenter = new WeekPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag)
+                            {VisibleWeeks = 1};
+            grid.Name = "WeekView";
+        }
+
+        protected override int CellWidth()
+        {
+            return 189;
+        }
+
+        //draw cell
+        internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
+        {
+            if (e.RowIndex > 1 && e.ColIndex >=(int)ColumnType.StartScheduleColumns)
+            {
+                var scheduleRange = e.Style.CellValue as IScheduleDay;
+                if (scheduleRange != null)
+                {
+                    var significantPart = scheduleRange.SignificantPart();
+                    DrawSchedule(e, WeekPresenter.CreateSpanDictionaryFromSchedule(scheduleRange),significantPart);
+                    drawInfoTextInCell(e, scheduleRange, significantPart);
+                    AddMarkersToCell(e, scheduleRange, significantPart);
+                    addWeekViewMarkersToCell(e, scheduleRange);
+                }
+            }
+        }
+
+        private void drawInfoTextInCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
+        {
+            IList<string> infoList = ViewBaseHelper.GetInfoTextWeekView(scheduleRange, significantPart);
+            string infoText = infoList[0];
+            string periodText = infoList[1];
+            string timeText = infoList[2];
+
+            if (!string.IsNullOrEmpty(infoText))
+            {
+                SizeF stringWidth1 = e.Graphics.MeasureString(infoText, CellFontSmall);
+                SizeF stringWidth2 = e.Graphics.MeasureString(periodText, CellFontSmall);
+                SizeF stringWidth3 = e.Graphics.MeasureString(timeText, CellFontSmall);
+
+                var point1 =
+                    new Point(e.Bounds.X - (int)stringWidth1.Width / 2 + e.Bounds.Width / 2,
+                              e.Bounds.Y + 2);
+
+                var point2 =
+                    new Point(e.Bounds.X - (int)stringWidth2.Width / 2 + e.Bounds.Width / 2,
+                              point1.Y + (int)stringWidth1.Height + 2);
+
+                var point3 =
+                    new Point(e.Bounds.X - (int)stringWidth3.Width / 2 + e.Bounds.Width / 2,
+                              point2.Y + (int)stringWidth2.Height + 2);
+
+                e.Graphics.DrawString(infoText, CellFontSmall, Brushes.Black, point1);
+                e.Graphics.DrawString(periodText, CellFontSmall, Brushes.Black, point2);
+                e.Graphics.DrawString(timeText, CellFontSmall, Brushes.Black, point3);
+            }
+        }
+
+        private static void addWeekViewMarkersToCell(GridDrawCellEventArgs e, IScheduleDay schedulePart)
+        {
+            var restrictionChecker = new RestrictionChecker(schedulePart);
+
+            PermissionState permissionState = restrictionChecker.CheckAvailability();
+            var drawRestrictionIcon = new DrawRestrictionIcon(e);
+            drawRestrictionIcon.DrawAvailability(permissionState);
+
+            permissionState = restrictionChecker.CheckRotations();
+            drawRestrictionIcon.DrawRotation(permissionState);
+
+            permissionState = restrictionChecker.CheckPreference();
+            drawRestrictionIcon.DrawPreference(permissionState);
+
+            permissionState = restrictionChecker.CheckStudentAvailability();
+            drawRestrictionIcon.DrawStudentAvailability(permissionState);
+
+        }
+
+        internal override void QueryRowHeight(object sender, GridRowColSizeEventArgs e)
+        {
+            if(e.Index > 1)
+            {
+                e.Size = 70;
+                e.Handled = true;
+            }
+            else
+            {
+                e.Size = 22;
+                e.Handled = true;
+            }
+        }
+    }
+}

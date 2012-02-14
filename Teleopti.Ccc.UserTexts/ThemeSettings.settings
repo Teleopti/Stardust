@@ -1,0 +1,87 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Teleopti.Ccc.UserTexts" GeneratedClassName="ThemeSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ForecasterTemplateNaturalDayButton" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">40, 255, 41</Value>
+    </Setting>
+    <Setting Name="XptaskBarHeaderColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">199, 216, 237</Value>
+    </Setting>
+    <Setting Name="XptaskBarBackground" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">216, 228, 246</Value>
+    </Setting>
+    <Setting Name="ChartInteriorBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">223, 236, 250</Value>
+    </Setting>
+    <Setting Name="ChartInteriorForeColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">165, 194, 229</Value>
+    </Setting>
+    <Setting Name="ChartControlBackInteriorForeColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">223, 237, 254</Value>
+    </Setting>
+    <Setting Name="ChartControlBackInteriorBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">177, 204, 234</Value>
+    </Setting>
+    <Setting Name="ChartAreaBackInteriorForeColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Transparent</Value>
+    </Setting>
+    <Setting Name="ChartAreaBackInteriorBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Transparent</Value>
+    </Setting>
+    <Setting Name="ChartControlChartInteriorForeColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">165, 194, 229</Value>
+    </Setting>
+    <Setting Name="ChartControlChartInteriorBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">223, 236, 250</Value>
+    </Setting>
+    <Setting Name="ChartControlBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">177, 204, 234</Value>
+    </Setting>
+    <Setting Name="RibbonContextTabColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">180, 226, 255</Value>
+    </Setting>
+    <Setting Name="GradientPanelBackgroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">216, 228, 246</Value>
+    </Setting>
+    <Setting Name="RibbonBaseColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">157, 185, 235</Value>
+    </Setting>
+    <Setting Name="TabBackgroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">216, 228, 246</Value>
+    </Setting>
+    <Setting Name="GridExteriorColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">227, 235, 245</Value>
+    </Setting>
+    <Setting Name="GridInteriorColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="StandardForegroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="GridClosedCellColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="GridHolidayHeaderColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">IndianRed</Value>
+    </Setting>
+    <Setting Name="GridHolidayCellColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 243, 222</Value>
+    </Setting>
+    <Setting Name="StandardPanelBackgroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">195, 211, 232</Value>
+    </Setting>
+    <Setting Name="StandardFormBackgroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">190, 206, 236</Value>
+    </Setting>
+    <Setting Name="StandardContextMenuBackgroundColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">232, 240, 250</Value>
+    </Setting>
+    <Setting Name="GridClosedCellFontColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">95, 95, 95</Value>
+    </Setting>
+    <Setting Name="StandardOfficeFormBackground" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">227, 239, 255</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

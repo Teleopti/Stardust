@@ -1,0 +1,103 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NHibernate;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Composites;
+
+namespace Teleopti.Ccc.Infrastructure.Foundation
+{
+    /// <summary>
+    /// Sends messages to message broker of domain entity changes
+    /// </summary>
+    /// <remarks>
+    /// Created by: rogerkr
+    /// Created date: 2008-06-10
+    /// </remarks>
+    public class NotifyMessageBroker
+    {
+        private readonly IMessageBroker _messageBroker;
+
+        public NotifyMessageBroker(IMessageBroker messageBroker)
+        {
+            _messageBroker = messageBroker;
+        }
+
+        public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
+        {
+            if (_messageBroker==null || !_messageBroker.IsInitialized) return;
+            
+			var eventMessages = new List<IEventMessage>();
+            foreach (IRootChangeInfo change in rootModifications)
+            {
+                if (!MessageFilterManager.Instance.FilterDictionary.ContainsKey(change.Root.GetType())) continue;
+                eventMessages.Add(CreateEventMessage(change, moduleId));
+
+            	var provideCustomChangeInfo = change.Root as IProvideCustomChangeInfo;
+				if (provideCustomChangeInfo == null) continue;
+
+            	var changes = provideCustomChangeInfo.CustomChanges(change.Status);
+            	eventMessages.AddRange(changes.Select(rootChangeInfo => CreateEventMessage(rootChangeInfo, moduleId)));
+            }
+            if (eventMessages.Count > 0)
+            {
+                _messageBroker.SendEventMessages(eventMessages.ToArray());
+            }
+        }
+
+        protected IEventMessage CreateEventMessage(IRootChangeInfo change, Guid moduleId)
+        {
+            IMainReference changeWithRoot = change.Root as IMainReference; 
+            IPeriodized periodRoot = change.Root as IPeriodized;
+        	Guid rootId = extractId(change.Root);
+            Type rootType = change.Root.GetType();
+            IEventMessage eventMessage;
+            if (periodRoot == null)
+            {
+                if(changeWithRoot==null)
+                    eventMessage = _messageBroker.CreateEventMessage(moduleId, rootId, rootType, change.Status);
+                else
+                    eventMessage = _messageBroker.CreateEventMessage(moduleId, 
+                                                                    changeWithRoot.MainRoot.Id.Value,
+                                                                    realType(changeWithRoot.MainRoot),
+                                                                    rootId, 
+                                                                    rootType, 
+                                                                    change.Status);
+            }
+            else
+            {
+                DateTimePeriod period = periodRoot.Period;
+                if(changeWithRoot==null)
+                    eventMessage = _messageBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, moduleId, rootId, rootType, change.Status);
+                else
+                    eventMessage = _messageBroker.CreateEventMessage(period.StartDateTime, 
+                                                                     period.EndDateTime,
+                                                                     moduleId, 
+                                                                     changeWithRoot.MainRoot.Id.Value,
+                                                                     realType(changeWithRoot.MainRoot),
+                                                                     rootId, 
+                                                                     rootType, 
+                                                                     change.Status);
+            }
+            return eventMessage;
+        }
+
+    	private static Guid extractId(object root)
+    	{
+    		var entity = root as IEntity;
+			if (entity != null) return entity.Id.GetValueOrDefault();
+
+    		var custom = root as ICustomChangedEntity;
+			if (custom != null) return custom.Id.GetValueOrDefault();
+
+    		return Guid.Empty;
+    	}
+
+    	private static Type realType(object possibleProxy)
+        {
+            return NHibernateUtil.GetClass(possibleProxy);
+        }
+    }
+}

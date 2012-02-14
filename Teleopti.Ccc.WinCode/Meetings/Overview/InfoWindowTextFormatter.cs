@@ -1,0 +1,77 @@
+using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.WinCode.Meetings.Overview
+{
+    public interface IInfoWindowTextFormatter
+    {
+        string GetInfoText(IMeeting meeting);
+    }
+
+    public class InfoWindowTextFormatter : IInfoWindowTextFormatter
+    {
+        private readonly ISettingDataRepository _settingDataRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly CommonNameDescriptionSetting _commonNameDescription;
+        private readonly ICccTimeZoneInfo _userTimeZone;
+
+        public InfoWindowTextFormatter(ISettingDataRepository settingDataRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            if(settingDataRepository == null)
+                throw new ArgumentNullException("settingDataRepository");
+
+            if(unitOfWorkFactory == null)
+                throw new ArgumentNullException("unitOfWorkFactory");
+
+            _settingDataRepository = settingDataRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                _commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription",
+                                                                               new CommonNameDescriptionSetting());
+            }
+            _userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+        }
+
+        public string GetInfoText(IMeeting meeting)
+        {
+            if (meeting == null) return string.Empty;
+            string text;
+            try
+            {
+                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                {
+                    var person = meeting.Organizer;
+                    uow.Reassociate(person);
+                    text = _commonNameDescription.BuildCommonNameDescription(person) + "\r\n";
+                    text = text + meeting.Subject + "\r\n";
+                    text = text + meeting.Location + "\r\n\r\n";
+                    var persons = meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
+                    foreach (var p in persons)
+                    {
+                        uow.Reassociate(p);
+                        text = text + _commonNameDescription.BuildCommonNameDescription(p) + "\r\n";
+                    }
+                    text = text + "\r\n" + meeting.Description + "\r\n\r\n";
+
+                    if (meeting.UpdatedOn.HasValue)
+                        text = text + _userTimeZone.ConvertTimeFromUtc(meeting.UpdatedOn.Value, _userTimeZone);
+                }
+            }
+            catch (DataSourceException)
+            {
+                text = Resources.ServerUnavailable;
+            }
+            
+
+            return text;
+        }
+    }
+}

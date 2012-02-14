@@ -1,0 +1,698 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0A5EBAA1-BDC2-4997-873F-4FA43E3BC275}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Ccc.Web</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>true</MvcBuildViews>
+    <BaseIntermediateOutputPath>
+    </BaseIntermediateOutputPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseIISExpress>false</UseIISExpress>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <PublishDatabases>false</PublishDatabases>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\AutoFac\NET4\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\AutoFac\NET4\Autofac.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\AutoFac\NET4\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.7.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SignalR\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
+      <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\ASP.NET MVC 3\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Routing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
+    <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\IDateBoxGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\IReportRequestValidator.cs" />
+    <Compile Include="Areas\MobileReports\Core\IWebReportUserInfoProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\DefinedReportProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\IDefinedReportProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\IoC\MobileReportsAreaModule.cs" />
+    <Compile Include="Areas\MobileReports\Core\IReportViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\ISkillProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MobileReports\Core\Matrix\TestDataWebReportRepository.cs" />
+    <Compile Include="Areas\MobileReports\Core\ReportDataFetcher.cs" />
+    <Compile Include="Areas\MobileReports\Core\ReportViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\Matrix\IReportDataService.cs" />
+    <Compile Include="Areas\MobileReports\Core\Matrix\ReportDataService.cs" />
+    <Compile Include="Areas\MobileReports\Core\SkillProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\WebReportUserInfoProvider.cs" />
+    <Compile Include="Areas\MobileReports\MobileReportsAreaRegistration.cs" />
+    <Compile Include="Areas\MobileReports\Models\Layout\DateBoxGlobalizationViewModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportChartInfo.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportDataPeriodEntry.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportDataParam.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportGenerationResult.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportInfo.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportRequestModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Layout\ReportSelectionViewModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Layout\ReportViewModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Layout\SkillSelectionViewModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportDataFetchResult.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportResponse.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
+    <Compile Include="Areas\MobileReports\Models\WebReportUserInformation.cs" />
+    <Compile Include="Areas\MobileReports\Models\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\WorkTimeMinMaxDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
+    <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILinkProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ISchedulePersonProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\LinkProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\SchedulePersonProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\HtmlHelperExtension.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseHtmlHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamScheduleProjectionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjection.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\LayoutBase\ICultureSpecificViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\LayoutBase\LayoutBaseViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\Redirector.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\IRedirector.cs" />
+    <Compile Include="Core\RequestContext\CultureProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\RequestContext\CurrentDataSourceProvider.cs" />
+    <Compile Include="Core\RequestContext\CurrentPrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\ICultureProvider.cs" />
+    <Compile Include="Core\RequestContext\ICurrentDataSourceProvider.cs" />
+    <Compile Include="Core\RequestContext\ICurrentPrincipalProvider.cs" />
+    <Compile Include="Models\Shared\Link.cs" />
+    <Compile Include="Areas\Start\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
+    <Compile Include="Areas\Start\Core\LayoutBase\LayoutBaseHtmlHelper.cs" />
+    <Compile Include="Areas\Start\Core\Shared\ILayoutBaseViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Shared\LayoutBaseViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Models\LayoutBase\CultureSpecificViewModel.cs" />
+    <Compile Include="Areas\Start\Models\LayoutBase\LayoutBaseViewModel.cs" />
+    <Compile Include="Areas\Start\StartAreaRegistration.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\BusinessUnitProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\DataSourcesProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IDataSourcesProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IWindowsAccountProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccount.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccountProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\FormsAuthenticationWrapper.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\IAuthenticator.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\IFormsAuthentication.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\AuthenticationViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IAuthenticationViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\IoC\AuthenticationAreaModule.cs" />
+    <Compile Include="Areas\MyTime\Core\DatePatternConverter.cs" />
+    <Compile Include="Core\IoC\AutofacWebTypesModuleFromRepository20111123.cs" />
+    <Compile Include="Core\IoC\CommonModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Startup\BootstrapperModule.cs" />
+    <Compile Include="Core\RequestContext\ISessionSpecificDataProvider.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificData.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInTypeViewModelBase.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsViewModel.cs" />
+    <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationController.cs" />
+    <Compile Include="Core\CoreExtensions.cs" />
+    <Compile Include="Core\Logging\Log4NetModule.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\ILayoutBaseViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ITextRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Controllers\RequestsController.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\TextRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\TextRequestFormMappingProfile.cs" />
+    <Compile Include="Core\Startup\Booter\Bootstrapper.cs" />
+    <Compile Include="Core\Startup\Booter\IBootstrapper.cs" />
+    <Compile Include="Core\Startup\Booter\IBootstrapperTask.cs" />
+    <Compile Include="Core\Startup\Booter\TaskPriorityAttribute.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\AppConfigSettings.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\InitializeApplicationModule.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\InitializeApplicationTask.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\IPhysicalApplicationPath.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\ISettings.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\PhysicalApplicationPath.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\WebState.cs" />
+    <Compile Include="Core\Startup\VerifyLicense\VerifyLicenseModule.cs" />
+    <Compile Include="Core\Startup\VerifyLicense\VerifyLicenseTask.cs" />
+    <Compile Include="Filters\AjaxJavaScriptRedirectAttribute.cs" />
+    <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Shared\DatePickerGlobalizationViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodForm.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\TextRequestForm.cs" />
+    <Compile Include="Areas\MyTime\Core\HttpPostOrPutAttribute.cs" />
+    <Compile Include="Areas\MyTime\Controllers\PreferenceController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultDateCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IDefaultDateCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\IPreferenceOptionsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IStudentAvailabilityProvider.cs" />
+    <Compile Include="Core\ModelStateExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\DateOnlyExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceOptionsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceWeekDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\PreferenceHtmlExtension.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
+    <Compile Include="Core\UserTimeZone.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPersonRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PersonRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\DateTimeExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\RequestsViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDayDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputResult.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormResult.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayForm.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
+    <Compile Include="Filters\ApplicationFunctionAttribute.cs" />
+    <Compile Include="Areas\MyTime\Controllers\PortalController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityController.cs" />
+    <Compile Include="Core\ErrorMessageProvider.cs" />
+    <Compile Include="Core\IErrorMessageProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\IPermissionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\PermissionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\PortalViewModelFactory.cs" />
+    <Compile Include="Core\RequestContext\DefaultSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
+    <Compile Include="Core\RequestContext\ISessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\IRequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\IPrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\PrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\RequestContextInitializer.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificCookieDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
+    <Compile Include="Areas\MyTime\Core\IoC\MyTimeAreaModule.cs" />
+    <Compile Include="Core\RequestContext\SetThreadCulture.cs" />
+    <Compile Include="Areas\MyTime\Core\Mapping\AutoMapperConfiguration.cs" />
+    <Compile Include="Areas\MyTime\Core\ColorExtensions.cs" />
+    <Compile Include="Areas\Start\Core\LayoutBase\CultureSpecificViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\LayoutBase\ICultureSpecificViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\IPortalViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\PortalHtmlHelper.cs" />
+    <Compile Include="Core\RequestContext\LoggedOnUser.cs" />
+    <Compile Include="Core\RequestContext\ILoggedOnUser.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultScenarioScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ScheduleHtmlHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IHeaderViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IPeriodSelectionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IPeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\PeriodSelectionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\PeriodViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduleViewModelTestDataFactory.cs" />
+    <Compile Include="Core\Startup\ApplicationStartModule.cs" />
+    <Compile Include="Core\IoC\ContainerConfiguration.cs" />
+    <Compile Include="Core\Startup\RegisterModelBindersTask.cs" />
+    <Compile Include="Core\IoC\IContainerConfiguration.cs" />
+    <Compile Include="Core\Startup\RegisterGlobalFiltersTask.cs" />
+    <Compile Include="Core\Startup\RegisterRoutesTask.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IVirtualSchedulePeriodProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\StudentAvilabilityHtmlExtension.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
+    <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
+    <Compile Include="Filters\CheckStartupExceptionAttribute.cs" />
+    <Compile Include="Filters\EnsureInPortalAttribute.cs" />
+    <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttribute.cs" />
+    <Compile Include="Filters\UnitOfWorkActionAttribute.cs" />
+    <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodDateRangeViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodNavigationViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\PeriodSelection\PeriodSelectionViewModel.cs" />
+    <Compile Include="Models\Shared\ErrorViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Portal\PortalViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
+    <Content Include="Areas\MobileReports\Content\Images\logo.png" />
+    <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
+    <Content Include="Areas\MyTime\Content\Css\TeamSchedule.css" />
+    <Content Include="Areas\MyTime\Content\Images\ajax-loader-small.gif" />
+    <Content Include="Areas\MyTime\Content\Images\arrow-right.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamSchedule.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.connector.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.TextRequest.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
+    <Content Include="Areas\Start\Content\Css\jquery.ui.custom.css" />
+    <Content Include="Areas\Start\Content\Css\Site.css" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.labeledinput.css" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.splitbutton.css" />
+    <Content Include="Areas\MyTime\Content\Images\alpha-gradient.png" />
+    <Content Include="Areas\MyTime\Content\Images\arrow-down.png" />
+    <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
+    <Content Include="Areas\MyTime\Content\Css\jquery.ui.custom.css" />
+    <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
+    <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
+    <Content Include="Content\Error\404.htm" />
+    <Content Include="Content\Error\error.htm" />
+    <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
+    <Content Include="Areas\MyTime\Content\Images\body_bg.jpg" />
+    <Content Include="Areas\MyTime\Content\Images\button_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\calendarview_week_wide_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\checkbox_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\date_field_bg.gif" />
+    <Content Include="Areas\MyTime\Content\Images\day_color_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\edit_module_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\edit_section_bg_bottom.png" />
+    <Content Include="Areas\MyTime\Content\Images\edit_section_bg_top.png" />
+    <Content Include="Areas\MyTime\Content\Images\error_icon.png" />
+    <Content Include="Areas\MyTime\Content\Images\header_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
+    <Content Include="Areas\Start\Content\Images\login_logo.png" />
+    <Content Include="Areas\Start\Content\Images\login_page_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\main_content_bg.jpg" />
+    <Content Include="Areas\MyTime\Content\Images\main_content_top_bg.jpg" />
+    <Content Include="Areas\MyTime\Content\Images\calendarview_week_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\radio_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\semi_transp_white.png" />
+    <Content Include="Areas\Start\Content\Images\signin_bg_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\toolbar_bg.gif" />
+    <Content Include="Areas\MyTime\Content\Images\tooltip_bg_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Images\view_repeater_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\view_repeater_wide_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\view_top_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
+    <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
+    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.0.min.css" />
+    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.0.min.js" />
+    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.1.css" />
+    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.1.js" />
+    <Content Include="Content\MobileContent\jquery-1.6.4.min.js" />
+    <Content Include="Content\MobileContent\Mobile\images\ajax-loader.png" />
+    <Content Include="Content\MobileContent\Mobile\images\icons-18-black.png" />
+    <Content Include="Content\MobileContent\Mobile\images\icons-18-white.png" />
+    <Content Include="Content\MobileContent\Mobile\images\icons-36-black.png" />
+    <Content Include="Content\MobileContent\Mobile\images\icons-36-white.png" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.css" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.js" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.min.css" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.min.js" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.css" />
+    <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.min.css" />
+    <Content Include="Content\Scripts\date.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.calendarselectable.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Portal.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.js" />
+    <Content Include="Areas\MyTime\Content\Css\Site.css" />
+    <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_bdd9e3_1x400.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_6ab9d3_1x400.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_e3f1f4_1x400.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-bg_highlight-soft_75_61abc5_.png" />
+    <Content Include="Areas\MyTime\Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="favicon.ico" />
+    <Content Include="Content\Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Content\Scripts\jquery-1.6.4.js" />
+    <Content Include="Content\Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Content\Scripts\jquery-ui-1.8.16.js" />
+    <Content Include="Content\Scripts\jquery-ui-1.8.16.min.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.js" />
+    <Content Include="Content\Scripts\json2.js" />
+    <Content Include="Content\Scripts\modernizr-1.7.js" />
+    <Content Include="Content\Scripts\modernizr-1.7.min.js" />
+    <Content Include="Content\Scripts\jquery.ba-hashchange.js" />
+    <Content Include="Content\Scripts\jquery.ba-hashchange.min.js" />
+    <Content Include="Content\Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Content\Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Content\Scripts\jquery.validate.js" />
+    <Content Include="Content\Scripts\jquery.validate.min.js" />
+    <Content Include="Content\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Areas\MobileReports\Content\Css\anywhere-custom.css" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.css" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.min.css" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\ajax-loader.png" />
+    <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
+    <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\custom\logo.png" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-18-black.png" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-18-white.png" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-36-black.png" />
+    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-36-white.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\Scripts\MicrosoftAjax.js" />
+    <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Content\Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="WiseIISConfig\adsutil.vbs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Schedule\WeekPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Portal\Navigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WiseIISConfig\IIS7ConfigAgentPortalWeb.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Portal\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WiseIISConfig\IIS6ConfigAgentPortalWeb.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\StudentAvailability\NoSchedulePeriodPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Preference\PreferencePartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Preference\NoSchedulePeriodPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Requests\RequestsPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MobileReports\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\ErrorPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\SignInApplicationPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\SignInBusinessUnitPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\SignInWindowsPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Shared\_LayoutBase.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Shared\ErrorPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\Shared\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Shared\_LayoutBase.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Shared\ErrorPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\MyTime\Core\WeekSchedule\DataProvider\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\MobileReports\Views\Shared\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\MobileLayoutBase.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Authentication\MobileSignIn.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>52858</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+</Project>

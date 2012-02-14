@@ -1,0 +1,55 @@
+using System.Collections.Generic;
+using NUnit.Framework;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerTest.FakeData;
+
+namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
+{
+    [TestFixture]
+    public class PermissionJobStepsTest
+    {
+        private IJobParameters _jobParameters;
+
+        [SetUp]
+        public void Setup()
+        {
+            _jobParameters = JobParametersFactory.SimpleParameters(false);
+            _jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(),null, null);
+        }
+
+        [Test]
+        public void VerifyStagePermissionJobStep()
+        {
+            var ss = new StagePermissionJobStep(_jobParameters);
+            IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+            Assert.IsNotNull(jobStepResult);
+        }
+
+        [Test]
+        public void VerifyStageUserJobStep()
+        {
+            var ss = new StageUserJobStep(_jobParameters);
+            IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+            Assert.IsNotNull(jobStepResult);
+        }
+
+        [Test]
+        public void VerifyAspNetUsersJobStep()
+        {
+            var ss = new AspNetUsersJobStep(_jobParameters);
+            IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+            Assert.IsNotNull(jobStepResult);
+        }
+
+        [Test]
+        public void VerifyPermissionReportJobStep()
+        {
+            var ss = new PermissionReportJobStep(_jobParameters);
+            IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+            Assert.IsNotNull(jobStepResult);
+        }
+    }
+}

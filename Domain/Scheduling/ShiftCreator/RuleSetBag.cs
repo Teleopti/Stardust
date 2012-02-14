@@ -1,0 +1,252 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
+{
+    /// <summary>
+    /// A bag of workshiftrulesets
+    /// </summary>
+    /// <remarks>
+    /// Created by: rogerkr
+    /// Created date: 2008-03-27
+    /// </remarks>
+    public class RuleSetBag : AggregateRootWithBusinessUnit, IRuleSetBag, IDeleteTag
+    {
+
+		#region Fields (2) 
+
+        private Description _description;
+        private IList<IWorkShiftRuleSet> _ruleSetCollection;
+        private bool _isDeleted;
+
+        #endregion Fields 
+
+		#region Constructors (1) 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuleSetBag"/> class.
+        /// </summary>
+        /// <remarks>
+        /// Created by: rogerkr
+        /// Created date: 2008-03-27
+        /// </remarks>
+        public RuleSetBag()
+        {
+            _description = new Description();
+            _ruleSetCollection = new List<IWorkShiftRuleSet>();
+        }
+
+		#endregion Constructors 
+
+		#region Properties (2) 
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        /// <remarks>
+        /// Created by: rogerkr
+        /// Created date: 2008-03-27
+        /// </remarks>
+        public virtual Description Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
+        /// <summary>
+        /// Gets the rule set collection.
+        /// </summary>
+        /// <value>The rule set collection.</value>
+        /// <remarks>
+        /// Created by: rogerkr
+        /// Created date: 2008-03-27
+        /// </remarks>
+        public virtual ReadOnlyCollection<IWorkShiftRuleSet> RuleSetCollection
+        {
+            get { return new ReadOnlyCollection<IWorkShiftRuleSet>(RuleSetCollectionWritable); }
+        }
+
+        /// <summary>
+        /// Gets the internal modifiable rule set collection.
+        /// </summary>
+        /// <value>The rule set collection internal.</value>
+        public virtual IList<IWorkShiftRuleSet> RuleSetCollectionWritable
+        {
+            get
+            {
+                return _ruleSetCollection;
+            }
+        }
+
+
+        public virtual IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService,
+                                                        DateOnly onDate,
+                                                        IEffectiveRestriction restriction)
+        {
+
+            if (restriction == null)
+                return null;
+
+            if (restriction.DayOffTemplate != null)
+                return null;
+
+            IWorkTimeMinMax retVal = null;
+
+            var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
+            
+            var nonRestrictionSets = validRuleSets.Where(workShiftRuleSet => !workShiftRuleSet.OnlyForRestrictions).ToList();
+            retVal = GetRetVal(restriction, nonRestrictionSets, ruleSetProjectionService, retVal);
+
+            if(retVal == null && restriction.IsRestriction)
+            {
+                var restrictionSets = validRuleSets.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions).ToList();
+                retVal = GetRetVal(restriction, restrictionSets, ruleSetProjectionService, retVal);
+            }
+
+            return retVal;
+        }
+
+        private static IWorkTimeMinMax GetRetVal(IEffectiveRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets, 
+            IRuleSetProjectionService ruleSetProjectionService, IWorkTimeMinMax retVal)
+        {
+            foreach (var workShiftRuleSet in validRuleSets)
+            {
+                
+                if (restriction.ShiftCategory != null &&
+                    !workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
+                    continue;
+
+                var ruleSetWorkTimeMinMax = workShiftRuleSet.MinMaxWorkTime(ruleSetProjectionService, restriction);
+                if (ruleSetWorkTimeMinMax != null)
+                {
+                    if (retVal == null)
+                        retVal = new WorkTimeMinMax();
+
+                    retVal = retVal.Combine(ruleSetWorkTimeMinMax);
+                }
+
+            }
+            return retVal;
+        }
+
+        #endregion Properties 
+
+        public virtual void AddRuleSet(IWorkShiftRuleSet workShiftRuleSet)
+        {
+            InParameter.NotNull("workShiftRuleSet", workShiftRuleSet);
+            WorkShiftRuleSet concrete = workShiftRuleSet as WorkShiftRuleSet;
+            if(concrete!=null)
+                concrete.RuleSetBagCollectionWritable.Add(this);
+            _ruleSetCollection.Add(workShiftRuleSet);
+        }
+
+        public virtual void RemoveRuleSet(IWorkShiftRuleSet workShiftRuleSet)
+        {
+            WorkShiftRuleSet concrete = workShiftRuleSet as WorkShiftRuleSet;
+            if (concrete != null)
+                concrete.RuleSetBagCollectionWritable.Remove(this);
+            _ruleSetCollection.Remove(workShiftRuleSet);
+        }
+
+        public virtual void ClearRuleSetCollection()
+        {
+            for (int i = _ruleSetCollection.Count - 1; i >= 0; i--)
+            {
+                RemoveRuleSet(_ruleSetCollection[i]);
+            }
+        }
+
+        public virtual IList<IShiftCategory> ShiftCategoriesInBag()
+        {
+            IList<IShiftCategory> categories = new List<IShiftCategory>();
+            foreach (IWorkShiftRuleSet workShiftRuleSet in _ruleSetCollection)
+            {
+                if (!categories.Contains(workShiftRuleSet.TemplateGenerator.Category))
+                    categories.Add(workShiftRuleSet.TemplateGenerator.Category);
+            }
+            return categories;
+        }
+
+        public virtual bool IsChoosable
+        {
+            get { return !IsDeleted; }
+        }
+
+        public virtual bool IsDeleted
+        {
+            get { return _isDeleted; }
+        }
+
+        #region ICloneableEntity<RuleSetBag> Members (2) 
+
+        /// <summary>
+        /// Returns a clone of this T with IEntitiy.Id set to null.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Created by: kosalanp
+        /// Created date: 2008-07-07
+        /// </remarks>
+        public virtual IRuleSetBag NoneEntityClone()
+        {
+            RuleSetBag retObj = (RuleSetBag)MemberwiseClone();
+            //retObj.Description = new Description(Description.Name + " - copy", Description.ShortName);
+            retObj.SetId(null);
+
+            retObj._ruleSetCollection = new List<IWorkShiftRuleSet>();
+            foreach (IWorkShiftRuleSet ruleSet in _ruleSetCollection)
+            {
+                retObj.AddRuleSet(ruleSet);
+            }
+            return retObj;
+        }
+
+        /// <summary>
+        /// Returns a clone of this T with IEntitiy.Id as this T.
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Created by: kosalanp
+        /// Created date: 2008-07-07
+        /// </remarks>
+        public virtual IRuleSetBag EntityClone()
+        {
+            RuleSetBag retObj = (RuleSetBag)MemberwiseClone();
+            retObj._ruleSetCollection = new List<IWorkShiftRuleSet>();
+            foreach (IWorkShiftRuleSet ruleSet in _ruleSetCollection)
+            {
+                retObj.AddRuleSet(ruleSet); // Jus link without cloning.
+            }
+            return retObj;
+        }
+
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        /// <remarks>
+        /// Created by:VirajS
+        /// Created date: 2008-09-10
+        /// </remarks>
+        public virtual object Clone()
+        {
+            return EntityClone();
+        }
+
+        #endregion
+
+        public virtual void SetDeleted()
+        {
+            _isDeleted = true;
+        }
+    }
+}

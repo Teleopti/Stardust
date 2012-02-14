@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Teleopti.Ccc.Win.Forecasting.Forms.Forecaster" Collapsed="true">
+    <Position X="1.5" Y="2" Width="3" />
+    <NestedTypes>
+      <Class Name="Teleopti.Ccc.Win.Forecasting.Forms.Forecaster.RenameTemplateTag" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Forecasting\Forms\Forecaster.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>KsaaH6/pfDdNqu9AhwX9gR0LxCFJE3ZHSOgpl+jtKGc=</HashCode>
+      <FileName>Forecasting\Forms\Forecaster.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_gridCollection" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Teleopti.Ccc.Win.Common.BaseRibbonFormWithUnitOfWork" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEACAAAAAAAEAAQAAAAAgCAAAAgAAAAAAABYEAAAA=</HashCode>
+      <FileName>Common\BaseRibbonFormWithUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl" Collapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KQAATRgAIADIggooCRwMQFlAAQKIUYAAABMAcQADMCI=</HashCode>
+      <FileName>Common\Controls\TeleoptiGridControl.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

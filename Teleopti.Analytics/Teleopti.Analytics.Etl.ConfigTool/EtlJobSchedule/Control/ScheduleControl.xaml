@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control.ScheduleControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    >
+    <Grid>
+            <ListView ItemsSource="{Binding}" Name="lv" MouseDoubleClick="MenuItemSelect">
+                <ListView.ContextMenu>
+                    <ContextMenu >
+                        <MenuItem Header="New..." Click="MenuItemNew"/>
+                        <MenuItem Header="Edit..." Click="MenuItemEdit" />                        
+                        <MenuItem Header="Delete" Click="MenuItemDelete" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="120" Header="ScheduleName"  DisplayMemberBinding="{Binding ScheduleName}" />
+                        <GridViewColumn Width="120" Header="JobName" DisplayMemberBinding="{Binding JobName}" />
+                        <GridViewColumn Width="120" Header="Enabled" DisplayMemberBinding="{Binding Enabled}" />
+                        <GridViewColumn Width="250" Header="Description" DisplayMemberBinding="{Binding Description}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+    </Grid>
+</UserControl>

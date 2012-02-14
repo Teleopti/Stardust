@@ -1,0 +1,21 @@
+﻿@using Teleopti.Ccc.Web.Models.Shared
+@model ErrorViewModel
+@{
+	Layout = null;
+}
+<script>
+    jQuery(function () {
+    	Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+    });
+</script>
+<div id="error-panel" class="ui-tabs-panel ui-widget-content ui-corner-bottom fullwidth">
+	<div class="error app-error">
+		<h1>@Model.Message</h1>
+	</div>
+    <div class="floatleft clearboth ml10 mt5">
+		<a href="javascript: history.go(-1)" class="button">@Teleopti.Ccc.UserTexts.Resources.Back</a>
+    </div>
+	<div class="floatright mr10 mt5">
+		@Html.ActionLink(Teleopti.Ccc.UserTexts.Resources.Cancel, "SignOut", "Authentication", new { returnUrl = "~/" }, new { @class = "button" })	
+	</div>
+</div>

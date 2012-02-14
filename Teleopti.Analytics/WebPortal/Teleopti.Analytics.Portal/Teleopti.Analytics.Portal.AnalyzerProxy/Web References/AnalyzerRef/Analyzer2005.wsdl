@@ -1,0 +1,3791 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://strategycompanion.com/webservices/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://strategycompanion.com/webservices/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://strategycompanion.com/webservices/">
+      <s:element name="ImportBookmark">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ownerId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isPublic" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="handle" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SecurityContext">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BaseState">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StackTrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ImportBookmarkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportBookmarkResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ownerId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inherited" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="handle" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportReportResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportReportWithDataSourceInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ownerId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inherited" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="handle" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="asDatabaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="asCubeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportReportWithDataSourceInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportReportWithDataSourceInfoResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListReportNullRefDataSources">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListReportNullRefDataSourcesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListReportNullRefDataSourcesResult" type="tns:ArrayOfCatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCatalogItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CatalogItem" nillable="true" type="tns:CatalogItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CatalogItem">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ItemType" type="tns:CatalogItemType" />
+              <s:element minOccurs="1" maxOccurs="1" name="ParentId" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Path" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CreationDate" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="ModifiedDate" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="CreatedBy" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="ModifiedBy" type="s:int" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="CatalogItemType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Folder" />
+          <s:enumeration value="Report" />
+          <s:enumeration value="DataSource" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ImportFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ownerId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inherited" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportFolderResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportDataSource">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceType" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="serverName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="initialCatalog" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="certType" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="ownerId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="inherited" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportDataSourceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportDataSourceResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConfigMailServer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="serverName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="port" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="defaultSender" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="authenticate" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="sendUsing" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="useSSL" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConfigMailServerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConfigMailServerResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetObjectPermissions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="item" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetObjectPermissionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetObjectPermissionsResult" type="tns:ArrayOfObjectPermission" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfObjectPermission">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ObjectPermission" nillable="true" type="tns:ObjectPermission" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ObjectPermission">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="ObjectId" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="MemberId" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="MemberType" type="tns:SecurityMemberType" />
+              <s:element minOccurs="1" maxOccurs="1" name="Permission" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="PermissionInfo" type="tns:PermissionInfo" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="SecurityMemberType">
+        <s:restriction base="s:string">
+          <s:enumeration value="User" />
+          <s:enumeration value="Group" />
+          <s:enumeration value="Role" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="PermissionInfo">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Read" type="tns:PermissionState" />
+              <s:element minOccurs="1" maxOccurs="1" name="Write" type="tns:PermissionState" />
+              <s:element minOccurs="1" maxOccurs="1" name="Execute" type="tns:PermissionState" />
+              <s:element minOccurs="1" maxOccurs="1" name="Export" type="tns:PermissionState" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="PermissionState">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotSpecified" />
+          <s:enumeration value="Grant" />
+          <s:enumeration value="Deny" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetUserPermission">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="item" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserPermissionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserPermissionResult" type="tns:PermissionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserRoles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserRolesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserRolesResult" type="tns:ArrayOfRole" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRole">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Role" nillable="true" type="tns:Role" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Role">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CatalogItem">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="PreferredLanguage" type="tns:SystemLanguages" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="SystemLanguages">
+        <s:restriction base="s:string">
+          <s:enumeration value="English" />
+          <s:enumeration value="TradChinese" />
+          <s:enumeration value="SimpChinese" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="IsDescendFrom">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="item" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="ascendantId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsDescendFromResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsDescendFromResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="domainName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="expiration" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LogonUserResult" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUserWithRoles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="domainName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="roles" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="expiration" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUserWithRolesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LogonUserWithRolesResult" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUserWithCompanyId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="domainName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="companyId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="expiration" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogonUserWithCompanyIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LogonUserWithCompanyIdResult" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogoffUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogoffUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LogoffUserResult" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListChildren">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListChildrenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListChildrenResult" type="tns:ArrayOfCatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindCatalogItemById">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindCatalogItemByIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindCatalogItemByIdResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindCatalogItemByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindCatalogItemByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindCatalogItemByNameResult" type="tns:ArrayOfCatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="folder" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateFolderResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="folder" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateFolderResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="folderId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteFolderResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPPSMode">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="1" maxOccurs="1" name="mode" type="tns:PPSModes" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ReportInstance">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Id" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ReportId" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="ComponentNames" type="tns:ArrayOfString" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="PPSModes">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="DesignTime" />
+          <s:enumeration value="Runtime" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SetPPSModeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetPPSModeResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="report" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="save" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateReportResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReportAllowDuplicated">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="report" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="save" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReportAllowDuplicatedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateReportAllowDuplicatedResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReportWithOptions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="report" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="databaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cubeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pivotTable" type="tns:PivotTable" />
+            <s:element minOccurs="0" maxOccurs="1" name="hiddenButtons" type="tns:ArrayOfToolbarButton" />
+            <s:element minOccurs="1" maxOccurs="1" name="schemaVisible" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceVisible" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PivotTable">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Rows" type="tns:ArrayOfDimension" />
+              <s:element minOccurs="0" maxOccurs="1" name="Columns" type="tns:ArrayOfDimension" />
+              <s:element minOccurs="0" maxOccurs="1" name="Slicer" type="tns:ArrayOfDimension" />
+              <s:element minOccurs="0" maxOccurs="1" name="Measures" type="tns:ArrayOfMeasure" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfDimension">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Dimension" nillable="true" type="tns:Dimension" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Dimension">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CubeElement">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="DimensionType" type="tns:DimensionTypes" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CubeElement">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Measure">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CubeElement">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="MeasureType" type="tns:MeasureTypes" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="MeasureTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Regular" />
+          <s:enumeration value="KPIAll" />
+          <s:enumeration value="KPIValue" />
+          <s:enumeration value="KPIGoal" />
+          <s:enumeration value="KPIStatus" />
+          <s:enumeration value="KPITrend" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DimensionTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Hierarchy" />
+          <s:enumeration value="Dimension" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfMeasure">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Measure" nillable="true" type="tns:Measure" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfToolbarButton">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ToolbarButton" type="tns:ToolbarButton" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ToolbarButton">
+        <s:restriction base="s:string">
+          <s:enumeration value="DataSource" />
+          <s:enumeration value="SchemaTree" />
+          <s:enumeration value="ObjectPanel" />
+          <s:enumeration value="BookmarkPanel" />
+          <s:enumeration value="KPIPanel" />
+          <s:enumeration value="LanguagePanel" />
+          <s:enumeration value="Save" />
+          <s:enumeration value="SaveAs" />
+          <s:enumeration value="SendMsg" />
+          <s:enumeration value="CreateBookmark" />
+          <s:enumeration value="UpdateBookmark" />
+          <s:enumeration value="Close" />
+          <s:enumeration value="Config" />
+          <s:enumeration value="PlayVideo" />
+          <s:enumeration value="Refresh" />
+          <s:enumeration value="ZoomIn" />
+          <s:enumeration value="ZoomOut" />
+          <s:enumeration value="ResetZoom" />
+          <s:enumeration value="SwitchBorder" />
+          <s:enumeration value="Excel" />
+          <s:enumeration value="Print" />
+          <s:enumeration value="EntireToolbar" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="CreateReportWithOptionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateReportWithOptionsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateReportWithOptions2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="report" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="databaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cubeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pivotTable" type="tns:PivotTable" />
+            <s:element minOccurs="0" maxOccurs="1" name="cubes" type="tns:ArrayOfAdditionalCube" />
+            <s:element minOccurs="0" maxOccurs="1" name="hiddenButtons" type="tns:ArrayOfToolbarButton" />
+            <s:element minOccurs="1" maxOccurs="1" name="schemaVisible" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceVisible" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAdditionalCube">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AdditionalCube" nillable="true" type="tns:AdditionalCube" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AdditionalCube">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="DataSourceId" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="DatabaseName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CubeName" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="CreateReportWithOptions2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateReportWithOptions2Result" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="report" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateReportResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteReportResult" type="tns:CatalogItem" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReportLinkUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="serverPath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReportLinkUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetReportLinkUrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReportInstanceUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="serverPath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReportInstanceUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetReportInstanceUrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSecureReportInstanceUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="serverPath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSecureReportInstanceUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSecureReportInstanceUrlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OpenReportResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReportWithOptions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="hiddenButtons" type="tns:ArrayOfToolbarButton" />
+            <s:element minOccurs="1" maxOccurs="1" name="schemaVisible" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceVisible" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReportWithOptionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OpenReportWithOptionsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReportWithOptions2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="reportId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="hiddenButtons" type="tns:ArrayOfToolbarButton" />
+            <s:element minOccurs="1" maxOccurs="1" name="schemaVisible" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceVisible" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="reportFilter" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenReportWithOptions2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OpenReportWithOptions2Result" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddAdditionalCubes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="cubes" type="tns:ArrayOfAdditionalCube" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddAdditionalCubesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddAdditionalCubesResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearAdditionalCubes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearAdditionalCubesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClearAdditionalCubesResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InitializeCube">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="componentName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="databaseName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cubeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InitializeCubeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="InitializeCubeResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InitializePivotTable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="componentName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pivotTable" type="tns:PivotTable" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InitializePivotTableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="InitializePivotTableResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HideToolbarButtons">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="buttons" type="tns:ArrayOfToolbarButton" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HideToolbarButtonsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HideToolbarButtonsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddCustomToolbarButtons">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="buttons" type="tns:ArrayOfCustomButton" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCustomButton">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CustomButton" nillable="true" type="tns:CustomButton" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CustomButton">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Icon" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Hint" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Script" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="AddCustomToolbarButtonsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddCustomToolbarButtonsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearCustomToolbarButtons">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearCustomToolbarButtonsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClearCustomToolbarButtonsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HideSchemaTreePanel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceOnly" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="HideSchemaTreePanelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HideSchemaTreePanelResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AssignReportFilter">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="0" maxOccurs="1" name="members" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AssignReportFilterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AssignReportFilterResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaveReportResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveReportAs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="newName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveReportAsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SaveReportAsResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CloseReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="instance" type="tns:ReportInstance" />
+            <s:element minOccurs="1" maxOccurs="1" name="saveBeforeClose" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CloseReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CloseReportResult" type="tns:ReportInstance" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListDataSources">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListDataSourcesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListDataSourcesResult" type="tns:ArrayOfDataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDataSource">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DataSource" nillable="true" type="tns:DataSource" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DataSource">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CatalogItem">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="SourceType" type="tns:DataSourceType" />
+              <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="InitialCatalog" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="DataSourceType">
+        <s:restriction base="s:string">
+          <s:enumeration value="SqlAs2000" />
+          <s:enumeration value="SqlAs2005" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="CreateDataSource">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="dataSource" type="tns:DataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateDataSourceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateDataSourceResult" type="tns:DataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateDataSource">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="dataSource" type="tns:DataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateDataSourceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateDataSourceResult" type="tns:DataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteDataSource">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="dataSourceId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteDataSourceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteDataSourceResult" type="tns:DataSource" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddObjectPermission">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="objectPermission" type="tns:ObjectPermission" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddObjectPermissionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddObjectPermissionResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeObjectPermission">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="objectPermission" type="tns:ObjectPermission" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeObjectPermissionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangeObjectPermissionResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveObjectPermission">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="objectId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="memberId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveObjectPermissionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RemoveObjectPermissionResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearObjectPermissions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="objectId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearObjectPermissionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClearObjectPermissionsResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InheritParentPermissions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="item" type="tns:CatalogItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="inherited" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InheritParentPermissionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="InheritParentPermissionsResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListSystemLogs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListSystemLogsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListSystemLogsResult" type="tns:ArrayOfSystemLog" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSystemLog">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SystemLog" nillable="true" type="tns:SystemLog" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SystemLog">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="ObjectId" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="ObjectName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ObjectType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Action" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="UserId" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="UserHost" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="LogTime" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="TruncateSystemLog">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TruncateSystemLogResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TruncateSystemLogResult" type="tns:SystemLog" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BackupSystemLog">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BackupSystemLogResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="BackupSystemLogResult" type="tns:SystemLog" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeSystemLogPolicy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="policy" type="tns:LogPolicy" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LogPolicy">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Login" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="CreateObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="OpenObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="ModifyObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="DeleteObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="ExecuteObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="CopyObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="SendObject" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="MaxRecords" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="BackupBeforeTruncate" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ChangeSystemLogPolicyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangeSystemLogPolicyResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListUsers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListUsersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListUsersResult" type="tns:ArrayOfUser" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfUser">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="User" nillable="true" type="tns:User" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="User">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CatalogItem">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="EMailAddress" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="PreferredLanguage" type="tns:SystemLanguages" />
+              <s:element minOccurs="1" maxOccurs="1" name="RowsPerPage" type="tns:RowsPerPage" />
+              <s:element minOccurs="1" maxOccurs="1" name="DefaultHomePage" type="tns:DefaultHomePages" />
+              <s:element minOccurs="1" maxOccurs="1" name="AllowSendMessage" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="RowsPerPage">
+        <s:restriction base="s:string">
+          <s:enumeration value="Fifteen" />
+          <s:enumeration value="Thirty" />
+          <s:enumeration value="Fifty" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DefaultHomePages">
+        <s:restriction base="s:string">
+          <s:enumeration value="WorkingArea" />
+          <s:enumeration value="SharedReports" />
+          <s:enumeration value="PersonalReports" />
+          <s:enumeration value="KPIWatchList" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="FindUserById">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="userId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindUserByIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindUserByIdResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindUserByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindUserByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindUserByNameResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCurrentUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCurrentUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCurrentUserResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="user" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateUserResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="user" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateUserResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="userId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteUserResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListRoles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListRolesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListRolesResult" type="tns:ArrayOfRole" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindRoleById">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="roleId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindRoleByIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindRoleByIdResult" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindRoleByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="roleName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FindRoleByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FindRoleByNameResult" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateRole">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="role" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateRoleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateRoleResult" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateRole">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="0" maxOccurs="1" name="role" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateRoleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateRoleResult" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRole">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="roleId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRoleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteRoleResult" type="tns:Role" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddRoleMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="roleId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="member" type="tns:RoleMember" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RoleMember">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseState">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="RoleId" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="MemberId" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="MemberType" type="tns:RoleMemberType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="RoleMemberType">
+        <s:restriction base="s:string">
+          <s:enumeration value="User" />
+          <s:enumeration value="Group" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="AddRoleMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddRoleMemberResult" type="tns:RoleMember" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRoleMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="roleId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="member" type="tns:RoleMember" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRoleMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteRoleMemberResult" type="tns:RoleMember" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearRoleMembers">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="tns:SecurityContext" />
+            <s:element minOccurs="1" maxOccurs="1" name="roleId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClearRoleMembersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClearRoleMembersResult" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateDefinition64">
+        <s:complexType />
+      </s:element>
+      <s:element name="CreateDefinition64Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateDefinition64Result" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AppendDefinition64">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="handle" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="definition64" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AppendDefinition64Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AppendDefinition64Result" type="tns:BaseState" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ImportBookmarkSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportBookmark" />
+  </wsdl:message>
+  <wsdl:message name="ImportBookmarkSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportBookmarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportReportSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportReport" />
+  </wsdl:message>
+  <wsdl:message name="ImportReportSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportReportWithDataSourceInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportReportWithDataSourceInfo" />
+  </wsdl:message>
+  <wsdl:message name="ImportReportWithDataSourceInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportReportWithDataSourceInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListReportNullRefDataSourcesSoapIn">
+    <wsdl:part name="parameters" element="tns:ListReportNullRefDataSources" />
+  </wsdl:message>
+  <wsdl:message name="ListReportNullRefDataSourcesSoapOut">
+    <wsdl:part name="parameters" element="tns:ListReportNullRefDataSourcesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportFolder" />
+  </wsdl:message>
+  <wsdl:message name="ImportFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportDataSourceSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportDataSource" />
+  </wsdl:message>
+  <wsdl:message name="ImportDataSourceSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportDataSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConfigMailServerSoapIn">
+    <wsdl:part name="parameters" element="tns:ConfigMailServer" />
+  </wsdl:message>
+  <wsdl:message name="ConfigMailServerSoapOut">
+    <wsdl:part name="parameters" element="tns:ConfigMailServerResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetObjectPermissionsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetObjectPermissions" />
+  </wsdl:message>
+  <wsdl:message name="GetObjectPermissionsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetObjectPermissionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserPermissionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserPermission" />
+  </wsdl:message>
+  <wsdl:message name="GetUserPermissionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserPermissionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserRolesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserRoles" />
+  </wsdl:message>
+  <wsdl:message name="GetUserRolesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsDescendFromSoapIn">
+    <wsdl:part name="parameters" element="tns:IsDescendFrom" />
+  </wsdl:message>
+  <wsdl:message name="IsDescendFromSoapOut">
+    <wsdl:part name="parameters" element="tns:IsDescendFromResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserSoapIn">
+    <wsdl:part name="parameters" element="tns:LogonUser" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserSoapOut">
+    <wsdl:part name="parameters" element="tns:LogonUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserWithRolesSoapIn">
+    <wsdl:part name="parameters" element="tns:LogonUserWithRoles" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserWithRolesSoapOut">
+    <wsdl:part name="parameters" element="tns:LogonUserWithRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserWithCompanyIdSoapIn">
+    <wsdl:part name="parameters" element="tns:LogonUserWithCompanyId" />
+  </wsdl:message>
+  <wsdl:message name="LogonUserWithCompanyIdSoapOut">
+    <wsdl:part name="parameters" element="tns:LogonUserWithCompanyIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogoffUserSoapIn">
+    <wsdl:part name="parameters" element="tns:LogoffUser" />
+  </wsdl:message>
+  <wsdl:message name="LogoffUserSoapOut">
+    <wsdl:part name="parameters" element="tns:LogoffUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListChildrenSoapIn">
+    <wsdl:part name="parameters" element="tns:ListChildren" />
+  </wsdl:message>
+  <wsdl:message name="ListChildrenSoapOut">
+    <wsdl:part name="parameters" element="tns:ListChildrenResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindCatalogItemByIdSoapIn">
+    <wsdl:part name="parameters" element="tns:FindCatalogItemById" />
+  </wsdl:message>
+  <wsdl:message name="FindCatalogItemByIdSoapOut">
+    <wsdl:part name="parameters" element="tns:FindCatalogItemByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindCatalogItemByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:FindCatalogItemByName" />
+  </wsdl:message>
+  <wsdl:message name="FindCatalogItemByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:FindCatalogItemByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateFolder" />
+  </wsdl:message>
+  <wsdl:message name="CreateFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateFolder" />
+  </wsdl:message>
+  <wsdl:message name="UpdateFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteFolder" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPPSModeSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPPSMode" />
+  </wsdl:message>
+  <wsdl:message name="SetPPSModeSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPPSModeResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateReport" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportAllowDuplicatedSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateReportAllowDuplicated" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportAllowDuplicatedSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateReportAllowDuplicatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportWithOptionsSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateReportWithOptions" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportWithOptionsSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateReportWithOptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportWithOptions2SoapIn">
+    <wsdl:part name="parameters" element="tns:CreateReportWithOptions2" />
+  </wsdl:message>
+  <wsdl:message name="CreateReportWithOptions2SoapOut">
+    <wsdl:part name="parameters" element="tns:CreateReportWithOptions2Response" />
+  </wsdl:message>
+  <wsdl:message name="UpdateReportSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateReport" />
+  </wsdl:message>
+  <wsdl:message name="UpdateReportSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteReportSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteReport" />
+  </wsdl:message>
+  <wsdl:message name="DeleteReportSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetReportLinkUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetReportLinkUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetReportLinkUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetReportLinkUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetReportInstanceUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetReportInstanceUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetReportInstanceUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetReportInstanceUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSecureReportInstanceUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSecureReportInstanceUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetSecureReportInstanceUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSecureReportInstanceUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportSoapIn">
+    <wsdl:part name="parameters" element="tns:OpenReport" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportSoapOut">
+    <wsdl:part name="parameters" element="tns:OpenReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportWithOptionsSoapIn">
+    <wsdl:part name="parameters" element="tns:OpenReportWithOptions" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportWithOptionsSoapOut">
+    <wsdl:part name="parameters" element="tns:OpenReportWithOptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportWithOptions2SoapIn">
+    <wsdl:part name="parameters" element="tns:OpenReportWithOptions2" />
+  </wsdl:message>
+  <wsdl:message name="OpenReportWithOptions2SoapOut">
+    <wsdl:part name="parameters" element="tns:OpenReportWithOptions2Response" />
+  </wsdl:message>
+  <wsdl:message name="AddAdditionalCubesSoapIn">
+    <wsdl:part name="parameters" element="tns:AddAdditionalCubes" />
+  </wsdl:message>
+  <wsdl:message name="AddAdditionalCubesSoapOut">
+    <wsdl:part name="parameters" element="tns:AddAdditionalCubesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClearAdditionalCubesSoapIn">
+    <wsdl:part name="parameters" element="tns:ClearAdditionalCubes" />
+  </wsdl:message>
+  <wsdl:message name="ClearAdditionalCubesSoapOut">
+    <wsdl:part name="parameters" element="tns:ClearAdditionalCubesResponse" />
+  </wsdl:message>
+  <wsdl:message name="InitializeCubeSoapIn">
+    <wsdl:part name="parameters" element="tns:InitializeCube" />
+  </wsdl:message>
+  <wsdl:message name="InitializeCubeSoapOut">
+    <wsdl:part name="parameters" element="tns:InitializeCubeResponse" />
+  </wsdl:message>
+  <wsdl:message name="InitializePivotTableSoapIn">
+    <wsdl:part name="parameters" element="tns:InitializePivotTable" />
+  </wsdl:message>
+  <wsdl:message name="InitializePivotTableSoapOut">
+    <wsdl:part name="parameters" element="tns:InitializePivotTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="HideToolbarButtonsSoapIn">
+    <wsdl:part name="parameters" element="tns:HideToolbarButtons" />
+  </wsdl:message>
+  <wsdl:message name="HideToolbarButtonsSoapOut">
+    <wsdl:part name="parameters" element="tns:HideToolbarButtonsResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomToolbarButtonsSoapIn">
+    <wsdl:part name="parameters" element="tns:AddCustomToolbarButtons" />
+  </wsdl:message>
+  <wsdl:message name="AddCustomToolbarButtonsSoapOut">
+    <wsdl:part name="parameters" element="tns:AddCustomToolbarButtonsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClearCustomToolbarButtonsSoapIn">
+    <wsdl:part name="parameters" element="tns:ClearCustomToolbarButtons" />
+  </wsdl:message>
+  <wsdl:message name="ClearCustomToolbarButtonsSoapOut">
+    <wsdl:part name="parameters" element="tns:ClearCustomToolbarButtonsResponse" />
+  </wsdl:message>
+  <wsdl:message name="HideSchemaTreePanelSoapIn">
+    <wsdl:part name="parameters" element="tns:HideSchemaTreePanel" />
+  </wsdl:message>
+  <wsdl:message name="HideSchemaTreePanelSoapOut">
+    <wsdl:part name="parameters" element="tns:HideSchemaTreePanelResponse" />
+  </wsdl:message>
+  <wsdl:message name="AssignReportFilterSoapIn">
+    <wsdl:part name="parameters" element="tns:AssignReportFilter" />
+  </wsdl:message>
+  <wsdl:message name="AssignReportFilterSoapOut">
+    <wsdl:part name="parameters" element="tns:AssignReportFilterResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveReportSoapIn">
+    <wsdl:part name="parameters" element="tns:SaveReport" />
+  </wsdl:message>
+  <wsdl:message name="SaveReportSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveReportAsSoapIn">
+    <wsdl:part name="parameters" element="tns:SaveReportAs" />
+  </wsdl:message>
+  <wsdl:message name="SaveReportAsSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveReportAsResponse" />
+  </wsdl:message>
+  <wsdl:message name="CloseReportSoapIn">
+    <wsdl:part name="parameters" element="tns:CloseReport" />
+  </wsdl:message>
+  <wsdl:message name="CloseReportSoapOut">
+    <wsdl:part name="parameters" element="tns:CloseReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListDataSourcesSoapIn">
+    <wsdl:part name="parameters" element="tns:ListDataSources" />
+  </wsdl:message>
+  <wsdl:message name="ListDataSourcesSoapOut">
+    <wsdl:part name="parameters" element="tns:ListDataSourcesResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateDataSourceSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateDataSource" />
+  </wsdl:message>
+  <wsdl:message name="CreateDataSourceSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateDataSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateDataSourceSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateDataSource" />
+  </wsdl:message>
+  <wsdl:message name="UpdateDataSourceSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateDataSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteDataSourceSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteDataSource" />
+  </wsdl:message>
+  <wsdl:message name="DeleteDataSourceSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteDataSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddObjectPermissionSoapIn">
+    <wsdl:part name="parameters" element="tns:AddObjectPermission" />
+  </wsdl:message>
+  <wsdl:message name="AddObjectPermissionSoapOut">
+    <wsdl:part name="parameters" element="tns:AddObjectPermissionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangeObjectPermissionSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangeObjectPermission" />
+  </wsdl:message>
+  <wsdl:message name="ChangeObjectPermissionSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangeObjectPermissionResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveObjectPermissionSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveObjectPermission" />
+  </wsdl:message>
+  <wsdl:message name="RemoveObjectPermissionSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveObjectPermissionResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClearObjectPermissionsSoapIn">
+    <wsdl:part name="parameters" element="tns:ClearObjectPermissions" />
+  </wsdl:message>
+  <wsdl:message name="ClearObjectPermissionsSoapOut">
+    <wsdl:part name="parameters" element="tns:ClearObjectPermissionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="InheritParentPermissionsSoapIn">
+    <wsdl:part name="parameters" element="tns:InheritParentPermissions" />
+  </wsdl:message>
+  <wsdl:message name="InheritParentPermissionsSoapOut">
+    <wsdl:part name="parameters" element="tns:InheritParentPermissionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListSystemLogsSoapIn">
+    <wsdl:part name="parameters" element="tns:ListSystemLogs" />
+  </wsdl:message>
+  <wsdl:message name="ListSystemLogsSoapOut">
+    <wsdl:part name="parameters" element="tns:ListSystemLogsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TruncateSystemLogSoapIn">
+    <wsdl:part name="parameters" element="tns:TruncateSystemLog" />
+  </wsdl:message>
+  <wsdl:message name="TruncateSystemLogSoapOut">
+    <wsdl:part name="parameters" element="tns:TruncateSystemLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="BackupSystemLogSoapIn">
+    <wsdl:part name="parameters" element="tns:BackupSystemLog" />
+  </wsdl:message>
+  <wsdl:message name="BackupSystemLogSoapOut">
+    <wsdl:part name="parameters" element="tns:BackupSystemLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangeSystemLogPolicySoapIn">
+    <wsdl:part name="parameters" element="tns:ChangeSystemLogPolicy" />
+  </wsdl:message>
+  <wsdl:message name="ChangeSystemLogPolicySoapOut">
+    <wsdl:part name="parameters" element="tns:ChangeSystemLogPolicyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListUsersSoapIn">
+    <wsdl:part name="parameters" element="tns:ListUsers" />
+  </wsdl:message>
+  <wsdl:message name="ListUsersSoapOut">
+    <wsdl:part name="parameters" element="tns:ListUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindUserByIdSoapIn">
+    <wsdl:part name="parameters" element="tns:FindUserById" />
+  </wsdl:message>
+  <wsdl:message name="FindUserByIdSoapOut">
+    <wsdl:part name="parameters" element="tns:FindUserByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindUserByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:FindUserByName" />
+  </wsdl:message>
+  <wsdl:message name="FindUserByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:FindUserByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCurrentUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCurrentUser" />
+  </wsdl:message>
+  <wsdl:message name="GetCurrentUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCurrentUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateUser" />
+  </wsdl:message>
+  <wsdl:message name="CreateUserSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="UpdateUserSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteUserSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteUser" />
+  </wsdl:message>
+  <wsdl:message name="DeleteUserSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListRolesSoapIn">
+    <wsdl:part name="parameters" element="tns:ListRoles" />
+  </wsdl:message>
+  <wsdl:message name="ListRolesSoapOut">
+    <wsdl:part name="parameters" element="tns:ListRolesResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindRoleByIdSoapIn">
+    <wsdl:part name="parameters" element="tns:FindRoleById" />
+  </wsdl:message>
+  <wsdl:message name="FindRoleByIdSoapOut">
+    <wsdl:part name="parameters" element="tns:FindRoleByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="FindRoleByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:FindRoleByName" />
+  </wsdl:message>
+  <wsdl:message name="FindRoleByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:FindRoleByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateRoleSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateRole" />
+  </wsdl:message>
+  <wsdl:message name="CreateRoleSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateRoleSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateRole" />
+  </wsdl:message>
+  <wsdl:message name="UpdateRoleSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRoleSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteRole" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRoleSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddRoleMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:AddRoleMember" />
+  </wsdl:message>
+  <wsdl:message name="AddRoleMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:AddRoleMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRoleMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteRoleMember" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRoleMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteRoleMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClearRoleMembersSoapIn">
+    <wsdl:part name="parameters" element="tns:ClearRoleMembers" />
+  </wsdl:message>
+  <wsdl:message name="ClearRoleMembersSoapOut">
+    <wsdl:part name="parameters" element="tns:ClearRoleMembersResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateDefinition64SoapIn">
+    <wsdl:part name="parameters" element="tns:CreateDefinition64" />
+  </wsdl:message>
+  <wsdl:message name="CreateDefinition64SoapOut">
+    <wsdl:part name="parameters" element="tns:CreateDefinition64Response" />
+  </wsdl:message>
+  <wsdl:message name="AppendDefinition64SoapIn">
+    <wsdl:part name="parameters" element="tns:AppendDefinition64" />
+  </wsdl:message>
+  <wsdl:message name="AppendDefinition64SoapOut">
+    <wsdl:part name="parameters" element="tns:AppendDefinition64Response" />
+  </wsdl:message>
+  <wsdl:portType name="Analyzer2005Soap">
+    <wsdl:operation name="ImportBookmark">
+      <wsdl:input message="tns:ImportBookmarkSoapIn" />
+      <wsdl:output message="tns:ImportBookmarkSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportReport">
+      <wsdl:input message="tns:ImportReportSoapIn" />
+      <wsdl:output message="tns:ImportReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportReportWithDataSourceInfo">
+      <wsdl:input message="tns:ImportReportWithDataSourceInfoSoapIn" />
+      <wsdl:output message="tns:ImportReportWithDataSourceInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListReportNullRefDataSources">
+      <wsdl:input message="tns:ListReportNullRefDataSourcesSoapIn" />
+      <wsdl:output message="tns:ListReportNullRefDataSourcesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportFolder">
+      <wsdl:input message="tns:ImportFolderSoapIn" />
+      <wsdl:output message="tns:ImportFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportDataSource">
+      <wsdl:input message="tns:ImportDataSourceSoapIn" />
+      <wsdl:output message="tns:ImportDataSourceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfigMailServer">
+      <wsdl:input message="tns:ConfigMailServerSoapIn" />
+      <wsdl:output message="tns:ConfigMailServerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetObjectPermissions">
+      <wsdl:input message="tns:GetObjectPermissionsSoapIn" />
+      <wsdl:output message="tns:GetObjectPermissionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPermission">
+      <wsdl:input message="tns:GetUserPermissionSoapIn" />
+      <wsdl:output message="tns:GetUserPermissionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserRoles">
+      <wsdl:input message="tns:GetUserRolesSoapIn" />
+      <wsdl:output message="tns:GetUserRolesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsDescendFrom">
+      <wsdl:input message="tns:IsDescendFromSoapIn" />
+      <wsdl:output message="tns:IsDescendFromSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogonUser">
+      <wsdl:input message="tns:LogonUserSoapIn" />
+      <wsdl:output message="tns:LogonUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithRoles">
+      <wsdl:input message="tns:LogonUserWithRolesSoapIn" />
+      <wsdl:output message="tns:LogonUserWithRolesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithCompanyId">
+      <wsdl:input message="tns:LogonUserWithCompanyIdSoapIn" />
+      <wsdl:output message="tns:LogonUserWithCompanyIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogoffUser">
+      <wsdl:input message="tns:LogoffUserSoapIn" />
+      <wsdl:output message="tns:LogoffUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListChildren">
+      <wsdl:input message="tns:ListChildrenSoapIn" />
+      <wsdl:output message="tns:ListChildrenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemById">
+      <wsdl:input message="tns:FindCatalogItemByIdSoapIn" />
+      <wsdl:output message="tns:FindCatalogItemByIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemByName">
+      <wsdl:input message="tns:FindCatalogItemByNameSoapIn" />
+      <wsdl:output message="tns:FindCatalogItemByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateFolder">
+      <wsdl:input message="tns:CreateFolderSoapIn" />
+      <wsdl:output message="tns:CreateFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateFolder">
+      <wsdl:input message="tns:UpdateFolderSoapIn" />
+      <wsdl:output message="tns:UpdateFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <wsdl:input message="tns:DeleteFolderSoapIn" />
+      <wsdl:output message="tns:DeleteFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPPSMode">
+      <wsdl:input message="tns:SetPPSModeSoapIn" />
+      <wsdl:output message="tns:SetPPSModeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReport">
+      <wsdl:input message="tns:CreateReportSoapIn" />
+      <wsdl:output message="tns:CreateReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportAllowDuplicated">
+      <wsdl:input message="tns:CreateReportAllowDuplicatedSoapIn" />
+      <wsdl:output message="tns:CreateReportAllowDuplicatedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions">
+      <wsdl:input message="tns:CreateReportWithOptionsSoapIn" />
+      <wsdl:output message="tns:CreateReportWithOptionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions2">
+      <wsdl:input message="tns:CreateReportWithOptions2SoapIn" />
+      <wsdl:output message="tns:CreateReportWithOptions2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReport">
+      <wsdl:input message="tns:UpdateReportSoapIn" />
+      <wsdl:output message="tns:UpdateReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteReport">
+      <wsdl:input message="tns:DeleteReportSoapIn" />
+      <wsdl:output message="tns:DeleteReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReportLinkUrl">
+      <wsdl:input message="tns:GetReportLinkUrlSoapIn" />
+      <wsdl:output message="tns:GetReportLinkUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReportInstanceUrl">
+      <wsdl:input message="tns:GetReportInstanceUrlSoapIn" />
+      <wsdl:output message="tns:GetReportInstanceUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSecureReportInstanceUrl">
+      <wsdl:input message="tns:GetSecureReportInstanceUrlSoapIn" />
+      <wsdl:output message="tns:GetSecureReportInstanceUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenReport">
+      <wsdl:input message="tns:OpenReportSoapIn" />
+      <wsdl:output message="tns:OpenReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions">
+      <wsdl:input message="tns:OpenReportWithOptionsSoapIn" />
+      <wsdl:output message="tns:OpenReportWithOptionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions2">
+      <wsdl:input message="tns:OpenReportWithOptions2SoapIn" />
+      <wsdl:output message="tns:OpenReportWithOptions2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddAdditionalCubes">
+      <wsdl:input message="tns:AddAdditionalCubesSoapIn" />
+      <wsdl:output message="tns:AddAdditionalCubesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearAdditionalCubes">
+      <wsdl:input message="tns:ClearAdditionalCubesSoapIn" />
+      <wsdl:output message="tns:ClearAdditionalCubesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InitializeCube">
+      <wsdl:input message="tns:InitializeCubeSoapIn" />
+      <wsdl:output message="tns:InitializeCubeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InitializePivotTable">
+      <wsdl:input message="tns:InitializePivotTableSoapIn" />
+      <wsdl:output message="tns:InitializePivotTableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HideToolbarButtons">
+      <wsdl:input message="tns:HideToolbarButtonsSoapIn" />
+      <wsdl:output message="tns:HideToolbarButtonsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomToolbarButtons">
+      <wsdl:input message="tns:AddCustomToolbarButtonsSoapIn" />
+      <wsdl:output message="tns:AddCustomToolbarButtonsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearCustomToolbarButtons">
+      <wsdl:input message="tns:ClearCustomToolbarButtonsSoapIn" />
+      <wsdl:output message="tns:ClearCustomToolbarButtonsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="HideSchemaTreePanel">
+      <wsdl:input message="tns:HideSchemaTreePanelSoapIn" />
+      <wsdl:output message="tns:HideSchemaTreePanelSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AssignReportFilter">
+      <wsdl:input message="tns:AssignReportFilterSoapIn" />
+      <wsdl:output message="tns:AssignReportFilterSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveReport">
+      <wsdl:input message="tns:SaveReportSoapIn" />
+      <wsdl:output message="tns:SaveReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveReportAs">
+      <wsdl:input message="tns:SaveReportAsSoapIn" />
+      <wsdl:output message="tns:SaveReportAsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CloseReport">
+      <wsdl:input message="tns:CloseReportSoapIn" />
+      <wsdl:output message="tns:CloseReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListDataSources">
+      <wsdl:input message="tns:ListDataSourcesSoapIn" />
+      <wsdl:output message="tns:ListDataSourcesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateDataSource">
+      <wsdl:input message="tns:CreateDataSourceSoapIn" />
+      <wsdl:output message="tns:CreateDataSourceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateDataSource">
+      <wsdl:input message="tns:UpdateDataSourceSoapIn" />
+      <wsdl:output message="tns:UpdateDataSourceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDataSource">
+      <wsdl:input message="tns:DeleteDataSourceSoapIn" />
+      <wsdl:output message="tns:DeleteDataSourceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddObjectPermission">
+      <wsdl:input message="tns:AddObjectPermissionSoapIn" />
+      <wsdl:output message="tns:AddObjectPermissionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeObjectPermission">
+      <wsdl:input message="tns:ChangeObjectPermissionSoapIn" />
+      <wsdl:output message="tns:ChangeObjectPermissionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveObjectPermission">
+      <wsdl:input message="tns:RemoveObjectPermissionSoapIn" />
+      <wsdl:output message="tns:RemoveObjectPermissionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearObjectPermissions">
+      <wsdl:input message="tns:ClearObjectPermissionsSoapIn" />
+      <wsdl:output message="tns:ClearObjectPermissionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InheritParentPermissions">
+      <wsdl:input message="tns:InheritParentPermissionsSoapIn" />
+      <wsdl:output message="tns:InheritParentPermissionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListSystemLogs">
+      <wsdl:input message="tns:ListSystemLogsSoapIn" />
+      <wsdl:output message="tns:ListSystemLogsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TruncateSystemLog">
+      <wsdl:input message="tns:TruncateSystemLogSoapIn" />
+      <wsdl:output message="tns:TruncateSystemLogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BackupSystemLog">
+      <wsdl:input message="tns:BackupSystemLogSoapIn" />
+      <wsdl:output message="tns:BackupSystemLogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSystemLogPolicy">
+      <wsdl:input message="tns:ChangeSystemLogPolicySoapIn" />
+      <wsdl:output message="tns:ChangeSystemLogPolicySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListUsers">
+      <wsdl:input message="tns:ListUsersSoapIn" />
+      <wsdl:output message="tns:ListUsersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserById">
+      <wsdl:input message="tns:FindUserByIdSoapIn" />
+      <wsdl:output message="tns:FindUserByIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByName">
+      <wsdl:input message="tns:FindUserByNameSoapIn" />
+      <wsdl:output message="tns:FindUserByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentUser">
+      <wsdl:input message="tns:GetCurrentUserSoapIn" />
+      <wsdl:output message="tns:GetCurrentUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <wsdl:input message="tns:CreateUserSoapIn" />
+      <wsdl:output message="tns:CreateUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input message="tns:UpdateUserSoapIn" />
+      <wsdl:output message="tns:UpdateUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input message="tns:DeleteUserSoapIn" />
+      <wsdl:output message="tns:DeleteUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListRoles">
+      <wsdl:input message="tns:ListRolesSoapIn" />
+      <wsdl:output message="tns:ListRolesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleById">
+      <wsdl:input message="tns:FindRoleByIdSoapIn" />
+      <wsdl:output message="tns:FindRoleByIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleByName">
+      <wsdl:input message="tns:FindRoleByNameSoapIn" />
+      <wsdl:output message="tns:FindRoleByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateRole">
+      <wsdl:input message="tns:CreateRoleSoapIn" />
+      <wsdl:output message="tns:CreateRoleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRole">
+      <wsdl:input message="tns:UpdateRoleSoapIn" />
+      <wsdl:output message="tns:UpdateRoleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRole">
+      <wsdl:input message="tns:DeleteRoleSoapIn" />
+      <wsdl:output message="tns:DeleteRoleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddRoleMember">
+      <wsdl:input message="tns:AddRoleMemberSoapIn" />
+      <wsdl:output message="tns:AddRoleMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRoleMember">
+      <wsdl:input message="tns:DeleteRoleMemberSoapIn" />
+      <wsdl:output message="tns:DeleteRoleMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClearRoleMembers">
+      <wsdl:input message="tns:ClearRoleMembersSoapIn" />
+      <wsdl:output message="tns:ClearRoleMembersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateDefinition64">
+      <wsdl:input message="tns:CreateDefinition64SoapIn" />
+      <wsdl:output message="tns:CreateDefinition64SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AppendDefinition64">
+      <wsdl:input message="tns:AppendDefinition64SoapIn" />
+      <wsdl:output message="tns:AppendDefinition64SoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Analyzer2005Soap" type="tns:Analyzer2005Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportBookmark">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ImportBookmark" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ImportReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportReportWithDataSourceInfo">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ImportReportWithDataSourceInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListReportNullRefDataSources">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListReportNullRefDataSources" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportFolder">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ImportFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportDataSource">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ImportDataSource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfigMailServer">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ConfigMailServer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetObjectPermissions">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetObjectPermissions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPermission">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetUserPermission" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserRoles">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetUserRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsDescendFrom">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/IsDescendFrom" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/LogonUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithRoles">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/LogonUserWithRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithCompanyId">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/LogonUserWithCompanyId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogoffUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/LogoffUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListChildren">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListChildren" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemById">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindCatalogItemById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemByName">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindCatalogItemByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateFolder">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateFolder">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/UpdateFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPPSMode">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/SetPPSMode" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportAllowDuplicated">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateReportAllowDuplicated" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateReportWithOptions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions2">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateReportWithOptions2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/UpdateReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReportLinkUrl">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetReportLinkUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReportInstanceUrl">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetReportInstanceUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSecureReportInstanceUrl">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetSecureReportInstanceUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/OpenReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/OpenReportWithOptions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions2">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/OpenReportWithOptions2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdditionalCubes">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AddAdditionalCubes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearAdditionalCubes">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ClearAdditionalCubes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InitializeCube">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/InitializeCube" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InitializePivotTable">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/InitializePivotTable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HideToolbarButtons">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/HideToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomToolbarButtons">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AddCustomToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearCustomToolbarButtons">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ClearCustomToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HideSchemaTreePanel">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/HideSchemaTreePanel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssignReportFilter">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AssignReportFilter" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/SaveReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveReportAs">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/SaveReportAs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseReport">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CloseReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListDataSources">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListDataSources" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDataSource">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateDataSource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateDataSource">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/UpdateDataSource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDataSource">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteDataSource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddObjectPermission">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AddObjectPermission" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeObjectPermission">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ChangeObjectPermission" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveObjectPermission">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/RemoveObjectPermission" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearObjectPermissions">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ClearObjectPermissions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InheritParentPermissions">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/InheritParentPermissions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSystemLogs">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListSystemLogs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TruncateSystemLog">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/TruncateSystemLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackupSystemLog">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/BackupSystemLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSystemLogPolicy">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ChangeSystemLogPolicy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListUsers">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserById">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindUserById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByName">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindUserByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/GetCurrentUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListRoles">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ListRoles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleById">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindRoleById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleByName">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/FindRoleByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRole">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRole">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/UpdateRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRole">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRoleMember">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AddRoleMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRoleMember">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/DeleteRoleMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearRoleMembers">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/ClearRoleMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDefinition64">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/CreateDefinition64" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AppendDefinition64">
+      <soap:operation soapAction="http://strategycompanion.com/webservices/AppendDefinition64" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Analyzer2005Soap12" type="tns:Analyzer2005Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportBookmark">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ImportBookmark" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ImportReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportReportWithDataSourceInfo">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ImportReportWithDataSourceInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListReportNullRefDataSources">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListReportNullRefDataSources" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportFolder">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ImportFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportDataSource">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ImportDataSource" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfigMailServer">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ConfigMailServer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetObjectPermissions">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetObjectPermissions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPermission">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetUserPermission" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserRoles">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetUserRoles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsDescendFrom">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/IsDescendFrom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/LogonUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithRoles">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/LogonUserWithRoles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogonUserWithCompanyId">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/LogonUserWithCompanyId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogoffUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/LogoffUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListChildren">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListChildren" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemById">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindCatalogItemById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindCatalogItemByName">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindCatalogItemByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateFolder">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateFolder">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/UpdateFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFolder">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPPSMode">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/SetPPSMode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportAllowDuplicated">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateReportAllowDuplicated" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateReportWithOptions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReportWithOptions2">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateReportWithOptions2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/UpdateReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReportLinkUrl">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetReportLinkUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReportInstanceUrl">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetReportInstanceUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSecureReportInstanceUrl">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetSecureReportInstanceUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/OpenReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/OpenReportWithOptions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenReportWithOptions2">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/OpenReportWithOptions2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAdditionalCubes">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AddAdditionalCubes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearAdditionalCubes">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ClearAdditionalCubes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InitializeCube">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/InitializeCube" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InitializePivotTable">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/InitializePivotTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HideToolbarButtons">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/HideToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCustomToolbarButtons">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AddCustomToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearCustomToolbarButtons">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ClearCustomToolbarButtons" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HideSchemaTreePanel">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/HideSchemaTreePanel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssignReportFilter">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AssignReportFilter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/SaveReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveReportAs">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/SaveReportAs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseReport">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CloseReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListDataSources">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListDataSources" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDataSource">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateDataSource" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateDataSource">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/UpdateDataSource" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDataSource">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteDataSource" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddObjectPermission">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AddObjectPermission" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeObjectPermission">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ChangeObjectPermission" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveObjectPermission">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/RemoveObjectPermission" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearObjectPermissions">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ClearObjectPermissions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InheritParentPermissions">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/InheritParentPermissions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSystemLogs">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListSystemLogs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TruncateSystemLog">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/TruncateSystemLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackupSystemLog">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/BackupSystemLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeSystemLogPolicy">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ChangeSystemLogPolicy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListUsers">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserById">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindUserById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByName">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindUserByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/GetCurrentUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListRoles">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ListRoles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleById">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindRoleById" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindRoleByName">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/FindRoleByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRole">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateRole" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRole">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/UpdateRole" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRole">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteRole" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRoleMember">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AddRoleMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRoleMember">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/DeleteRoleMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClearRoleMembers">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/ClearRoleMembers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateDefinition64">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/CreateDefinition64" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AppendDefinition64">
+      <soap12:operation soapAction="http://strategycompanion.com/webservices/AppendDefinition64" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Analyzer2005">
+    <wsdl:port name="Analyzer2005Soap" binding="tns:Analyzer2005Soap">
+      <soap:address location="http://ccctestts/analyzer/services/Analyzer2005.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Analyzer2005Soap12" binding="tns:Analyzer2005Soap12">
+      <soap12:address location="http://ccctestts/analyzer/services/Analyzer2005.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

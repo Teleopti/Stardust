@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.Forecasting"
+				   default-access="field.camelcase-underscore">
+	<class name="Skill">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+				 unsaved-value ="null"/>
+		<many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 update="false" foreign-key="FK_Skill_Person_CreatedBy"/>
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_Skill_Person_UpdatedBy"/>
+		<property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"
+				  update="false" />
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+		<!--IEntity-->
+
+		<property name="Name"
+				  type="string"
+				  not-null="true"
+				  length="50"/>
+		<property name="DisplayColor"
+		  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
+				  not-null="true"/>
+		<property name="Description"
+				  type="string"
+				  not-null="true"
+				  length="1024"/>
+		<property name="DefaultResolution"
+				  type="int"
+				  not-null="true"/>
+		<many-to-one class="SkillType"
+				 name="SkillType" 
+				 not-null="true" foreign-key="FK_Skill_SkillType"/>
+		<many-to-one class="Teleopti.Ccc.Domain.Scheduling.Activity"
+				 name="Activity" 
+				 not-null="true" foreign-key="FK_Skill_Activity"/>
+
+		<property name="TimeZone"
+				  type="string"
+				  length="50"
+				  not-null="true" />
+	
+	<property name="MidnightBreakOffset"
+				  not-null="true" />
+	
+	<map name="TemplateWeekCollection"
+				cascade="all-delete-orphan" 
+			  inverse="true">
+	  <key column="Parent" />
+	  <index type="int">
+		<column name="WeekdayIndex" not-null="true"/>
+	  </index>
+	  <one-to-many class="Teleopti.Ccc.Domain.Forecasting.SkillDayTemplate" />
+	</map>
+	
+		<set name="WorkloadCollection"
+				 cascade="none">
+
+			<key column="Skill"  />
+			<one-to-many class="Workload" />
+	  <filter name="deletedFlagFilter"
+			condition="IsDeleted = 0" />
+		</set>
+	
+	<component name="StaffingThresholds" class="Teleopti.Interfaces.Domain.StaffingThresholds, Teleopti.Interfaces">
+	  <component name="SeriousUnderstaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+		<property name="Value"
+			not-null="true"
+			type="double"
+			column="SeriousUnderstaffing"/>
+	  </component>
+	  <component name="Understaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+		<property name="Value"
+			not-null="true"
+			type="double"
+			column="Understaffing"/>
+	  </component>
+	  <component name="Overstaffing" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+		<property name="Value"
+			not-null="true"
+			type="double"
+			column="Overstaffing"/>
+	  </component>
+	  <component name="UnderstaffingFor" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+		<property name="Value"
+			not-null="true"
+			type="double"
+			column="UnderstaffingFor"/>
+	  </component>
+	</component>
+	<property name="Priority"
+				  type="int"
+				  not-null="true"/>
+	<component name="OverstaffingFactor" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value"
+			not-null="true"
+			column="OverstaffingFactor"/>
+	</component>
+	<many-to-one name="BusinessUnit"
+	  class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+	  access="nosetter.camelcase-underscore"
+	  not-null="true" foreign-key="FK_Skill_BusinessUnit"/>
+	<property name="IsDeleted"
+		  type="boolean"
+		  not-null="true"/>
+	<filter name="businessUnitFilter"
+		condition=":businessUnitParameter = BusinessUnit" />
+	<filter name="deletedFlagFilter"
+	  condition="IsDeleted = 0" />
+  </class>
+	
+	<query name ="loadInboundTelephonySkills">
+		<![CDATA[
+				select skill FROM Skill skill
+						join skill.SkillType skillType
+						where skillType.ForecastSource =:forecastSource
+							and skill.class=Skill
+							and skill.DefaultResolution=:defaultResolution
+	]]>
+	</query>
+</hibernate-mapping>

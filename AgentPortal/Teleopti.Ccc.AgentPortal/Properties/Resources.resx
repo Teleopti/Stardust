@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ccc_Contract" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_contract.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_save.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_PersonalAccount" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_PersonalAccount.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="help_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\help_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Right_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Right_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Copy_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Copy_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Agent_schedule_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_schedule_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Agent_schedule_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_schedule_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_WorkloadGridMonth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_workloadgridmonth.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_reports.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_SchedulePeriodView_korr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_scheduleperiodview_korr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="information_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\information_16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Advanced_settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Advanced_settings2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Cancel_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\ccc_Cancel_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Remove.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Agent_denyRequest_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_denyRequest_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_ForecastValidate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\ccc_ForecastValidate.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Sort" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_sort.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Cut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Cut.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kuvert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\kuvert.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_PeopleScehdulePeriodView1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_peoplescehduleperiodview.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_SkillTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_skilltime.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_PeopleScehdulePeriodView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_peoplescehduleperiodview.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Left_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Left_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="heart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\heart.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ccc_New" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAA0VJREFUWEftVtlO
+        E1EYnkcxJoaEhFcghmcw+hQCCiiUtbjdiCyKinvEDaRAQRPuBOMVIJQphVJo6UopSwullNLt8/xnOu0g
+        tTRD1Qs9yZecnJmeb/n/f1JBOGElx4Umwknv/bbn8QlBJPw2glwXM+clmD4HAu3/qIjkN6HIoDsPeDQc
+        tG/v6EH9nc85UVbWekG1UCKlese+CCZMngHcNQAMEmhPZ1PFgF0LhM3s/OgicVpt//fS0uaLqkQkvwrF
+        iQlBGxsXzJg6y5zXZgTQns4mi5iAJmDflFXA2Nh8uKXlFCJk5SRG1JWmS4CFS1lJlSooAbc7gIKJ6Ors
+        5g3IERKPOc5WglAokhbR0HDKJMgRpksksPVq1JYT9H48noBShEbTN6O6J7gAqjchj6UfM/5yQlQ1JRdA
+        0ecRfy59dI96AYqbTyqB8rlSkOb2p8IIyKMKR15JJpOIxeKo+xsC4okEotE4DiJR1N4aLUwC+ZTg5YiN
+        u44cxhA+OERoP4LamwUSkKsEctxp4nAEwdABdnb3cf3GSGESyCYgkZDqfBhNOU4R7wb3EdgJYTuwh2ut
+        +sIIkEtAMb8YseK5nmF4Bc+GlvGU4cmgBT26JTweWOLEm9tB+DZ3UHNaAayZQRHzxkq5peaSaxzcC/Oo
+        /czxlj+Ija1dTuz1BeDx+lGtHVafAH1aj5EqY2bEabeM2LsRwJrPz4lda9tweDZR1aJSAH1AIocpp4xU
+        itjCIyY8+mjGw37CIrr7FvHgwwIndXq24HBvYtW1AZvTh6rmIXUJ1LH53WOdrIxYWVse8brklEjtLkbq
+        lEit9nUsr3o5rqoVQPMbyBJxNlKrw5cmXLKugWBe8WCR4UrToLoEaH7lTia3FPH99yZ0vTOh8+08Ot4Y
+        0Z7CvV4j2npFtL0WcZfBtOTCPMHsRGWjSgE0v3InyxFTvBSrxeaVHC67YbK4OZmRkYmLDogLDswpUNGo
+        U5dAjVbP6ivVVo6YouWkKXdESGQGkx2z86uYMRJsR1DRoFJANRsf2TERLzBickqkGUIbpkUrpuesmDSs
+        ZDCb2ZfXD6hLgMaHOpiaqJLAoqQ4yVF5wwDoYsJlGRq2/xmpZ6r+kPz/0T+RwA81tV8SRjAEHgAAAABJ
+        RU5ErkJggg==
+</value>
+  </data>
+  <data name="ccc_Print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_print.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_temp_Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_temp_export.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WorkTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\WorkTime.PNG;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Denied" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Denied.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_LineGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_linegraph.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Add.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="heart_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\heart_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_PrintPreview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_printpreview.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_MeetingPlanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_meetingplanner.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_save_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_save_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StartTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\StartTime.PNG;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Cut_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Cut_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Agent_schedule_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_schedule_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_temp_DeleteGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_temp_deletegroup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Delete_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Delete_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EndTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\AgentPreferenceView\Resources\EndTime.PNG;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\box.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magnifier_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\magnifier_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Queue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\ccc_queue2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Approve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Approve.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="week32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\week32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_paste_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_paste_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Agent_schedule_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_schedule_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="boll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\boll.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Close" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ccc_SkillEmail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_SkillEmail1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>

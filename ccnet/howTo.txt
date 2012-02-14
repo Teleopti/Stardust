@@ -1,0 +1,319 @@
+------------------------------------------------------
+------------------------------------------------------
+--                                                  --
+--                                                  --
+--                                                  --
+--              Standard Build Server               --
+--                                                  --
+--                                                  --
+--                                                  --
+------------------------------------------------------
+------------------------------------------------------
+
+----------
+Windows - account
+----------
+Add "Toptinet\TFSIntegration" to the local Administrators group
+Note: Use this account "Toptinet\TFSIntegration" to manage the installations.
+(SyncFusion needs it for local licensing activation on Windows Profile!)
+
+-------------
+Logon to Windows
+-------------
+use "Toptinet\TFSIntegration"
+Use this account for all installations! It's important in order for some licenses to be applied correct
+
+--------------
+disable UAC
+--------------
+Because we hate it
+Type UAC in search window. Get the slider to the bottom.
+
+--------------
+disable Hibernate 
+--------------
+so that our new build server don't fall a sleep
+Run CMD as Administrator and execute:
+powercfg.exe -h off
+
+--------------
+File Explorer
+--------------
+Disable grandma-mode (she usally hides file extensions, system files, etc)
+
+--------------
+minimize page file
+--------------
+well... this is not recommended. But with current got only 80 Gb SSD-drives, so we need all the disk space we can get!
+Computer=>properties=>Advance system settings=>Performance=>blabla.=>Virtual Memory
+min  500 Mb
+max 1000 Mb
+
+------------------
+Get needed software
+------------------
+Open a command promt and Execute:
+\\a380\hangaren\#PROGRAM\Develop\_Teleopti-MyPrograms\CopyFilesAfterWindowsInstall.bat 1
+
+-----------------
+Install software
+-----------------
+Install all software in the folder: c:\temp\Download
+Please keep the order given by the folder layout
+Make sure to start and/or run any scripts and programs with "Run as Adminsitrator"
+Some programs will require a Re-boot, go along when you are promted to avoid "a previous program required a re-boot"
+
+Note: SQL Server 2008 R2 Express, Use D:\SQLData as DataDir (or what ever Drive letter you have available for larger storage)
+
+VS2010, See screen shot of needed features
+VS2010, Use default installation path, C:\Program Files (x86)\Microsoft Visual Studio 10.0
+Azure, Use default installation path: C:\Program Files\Windows Azure SDK\
+
+-----------------
+SQL Server configure remote access
+-----------------
+::enable tcpip
+"C:\Program Files\Microsoft SQL Server (x86)\100\Tools\Binn\SQLPS.exe" "$MachineObject = new-object ('Microsoft.SqlServer.Management.Smo.WMI.ManagedComputer') .;$ProtocolUri = 'ManagedComputer[@Name=''' + (get-item env:\computername).Value + ''']/ServerInstance[@Name=''mssqlserver'']/ServerProtocol';$tcp = $MachineObject.getsmoobject($ProtocolUri + '[@Name=''Tcp'']');$tcp.IsEnabled = $true;$tcp.alter();"
+
+::enable remote connections
+SQLCMD -S. -E -Q"EXEC sys.sp_configure N'remote access', N'1'"
+SQLCMD -S. -E -Q"RECONFIGURE WITH OVERRIDE"
+
+::Add firewall rule
+netsh advfirewall firewall add rule name = SQL_1433 dir = in protocol = tcp action = allow localport = 1433 remoteip = any profile = DOMAIN
+
+::restart
+NET STOP MSSQLSERVER
+NET START MSSQLSERVER
+
+------------------
+Windows Update
+------------------
+type "update" in the search window and start Windows Update
+Pick the Chefs recommendation of to day
+Use this setting: "Download updates but let me choose whether to install them"
+We need to be carefull with this => We don't to risk Microsotf to mess up our Build server!
+
+------------------
+IIS 7 prep
+------------------
+=> Register .NET 4 in IIS
+=> Make sure the DefaultAppPool (= CCnet) still runs v2.0
+=> Share inetpub for reading (handy for debugging/Log4Net review)
+=> reset IIS, just in case
+
+::Fast Track
+%systemRoot%\Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis -i
+"%systemroot%\system32\inetsrv\APPCMD.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v2.0
+net share inetpub="c:\inetpub" /GRANT:everyone,READ
+iisreset
+
+------------------
+VS2010 prep
+------------------
+Open up VS 2010 as TFSIntegration
+"Visual C# Development Settings"
+Connect TeamExplorer to TFS-server (challenger)
+Map $/RaptorScrum = D:\TFSData (Do NOT get latest at this point!)
+GetLatest on "$/RaptorScrum/Root/ccnet"
+
+------------------
+SyncFusion license
+------------------
+Execute:
+\\a380\Hangaren\#PROGRAM\Develop\Syncfusion\BuildServer\BuildServerSetup.reg
+
+------------------
+NCover
+------------------
+Well it is checked into TF, but ...
+Will cause an exeption until registered.
+We have already tried to register as part of MSBuild. Works, but it will fail when/if folder structures are changed.
+
+::Fast Track
+D:
+CD "D:\TFSData\Root\ccnet\NCover64"
+NCover.Registration.exe //License NC3CMPLIC.lic
+
+------------------
+CruiseControl
+------------------
+Version: 1.6.7981.1
+http://sourceforge.net/projects/ccnet/files/CruiseControl.NET%20Releases/CruiseControl.NET%201.6/CruiseControl.NET-1.6.7981.1-Setup.exe/download
+Note, make the install on the fastest I/O sub system!
+Since "WorkingDirectory" are relative the CruiseControl installation dir
+Install Path: C:\Program Files (x86)\CruiseControl.NET
+
+Expected error on 64-bit:
+"The installer attempted to set the ASP.NET version for the CruisControl.NET web Dashboard but was not successful ...."
+reason: CCNet installation will not detect the 64-bit OS (and framework) so you will get an error during install.
+Run this to make the same thing happen manually:
+"C:\Windows\Microsoft.NET\Framework64\v2.0.50727\aspnet_regiis.exe" -s "W3SVC/1/ROOT/ccnet"
+
+verify the URL
+http://localhost/ccnet
+Expected: A web page with: "No connection could be made because the target machine actively refused it 127.0.0.1:21234"
+
+-ccService.exe.config
+Open up this file: C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config
+Replace all content with this template: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2F\Deployment
+NOTE: Make sure you edit the string: [COMPUTERNAME] => current machine
+Save and close
+
+-ccnet.config - Working folder
+Create Dir for the "whatProjectsToBuildFile"
+MKDIR "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
+
+-ccnet.config - Create new file
+Create and add a new file in TFS; $/RaptorScrum/CcNetServer/[COMPUTERNAME]_ccnet.config
+Check out and Edit, make sure all Workspaces match your new [COMPUTERNAME]
+Start off with a few projects, but <project name="ccnetserver"> is mandatory!
+Check into TFS
+
+-ccnet.config - Copy to server
+$/RaptorScrum/CcNetServer/[COMPUTERNAME]_ccnet.config
+This time (The very first time) you need to copy the file manually to your new Buildserver => "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
+Make sure it is set as "ReadOnly"
+
+- open Firewall
+netsh advfirewall firewall add rule name = IIS_80 dir = in protocol = tcp action = allow localport = 80 remoteip = any profile = DOMAIN
+netsh advfirewall firewall add rule name = CCTray dir = in protocol = tcp action = allow localport = 21234 remoteip = any profile = DOMAIN
+
+-WebDashBoard
+unzip this file: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2FDeployment%2Fwebdashboard.zip
+Into c:\Program Files (x86)\CruiseControl.NET\webdashboard
+merge and "Copy and Replace" for all Items
+
+- CCService Service Config
+Start: "services.msc"
+Find the service: "CruiseControl.NET Server"
+The service needs to "Logon as" = "toptinet\TFSIntegration"
+NET START "CruiseControl.NET Server"
+
+The service should now be running, if not check the Windows Event log: "Eventvwr.exe"
+
+- Force a build of project "ccnetserver"
+
+- Force a build of project "AnyGivenProject"
+
+------------------------------------------------------------------------------------------------------------------
+
+Additionally we obfuscate, build SDk documentaionand create MSI files.
+
+------------------------------------------------------
+------------------------------------------------------
+--                                                  --
+--                                                  --
+--                                                  --
+--            below: MSI BUILD Server               --
+--                                                  --
+--                                                  --
+--                                                  --
+------------------------------------------------------
+------------------------------------------------------
+
+
+------------------
+SandCastle
+------------------
+\\A380\Hangaren\#PROGRAM\Develop\SandCastle
+Installer\SandcastleInstaller.exe
+
+Follow the wizard.
+Install "HtmlHelp"
+InstallDir: C:\Program Files (x86)\HTML Help Workshop
+Skip "HtmlHelp 2", we don't compile HxS-files
+Dialog: "Sandcastle Tools => "install SandCastle"
+InstallDir: C:\Program Files (x86)\Sandcastle\
+Dialog: "Sandcastle Patch" => "Apply patch"
+Skip GE languange pack
+Skip MAML Guide
+Skip web project custom code
+Skip HTML to MAML
+Skip MAML Schema int.sence for VS
+Dialog: "Sandcastle Help File Builder" => "install SHFB"
+InstallDir: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
+Completed => Close
+
+------------------
+Manually "Compile-MSI"
+------------------
+Add new file in TFS for the server: $/RaptorScrum/Root/WISE/Machines/<COMPUTERNAME>.bat
+Edit and make sure we point to the correct paths and .exe
+
+Test it locally at BuildServer
+"\\Integration\Installation\PreviousBuilds\7.1.335.48774\WISE\CompileAll.bat" 7.1.335.48774 0 \\neptune\LatestMsi \\Integration\Installation\PreviousBuilds
+
+
+------------------
+Wise
+------------------
+\\a380\Hangaren\#PROGRAM\Develop\Wise 7.0
+
+Install using "Toptinet\TFSIntegration"
+Default features
+InstallDir: C:\Program Files (x86)\Altiris\Wise\
+Start WISE: "C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe"
+Open: 
+Under Tools/Options/ tab=.NET Assemblies
+=> [Default Application Type] = ".NET Application"
+=> [Scan Dependencies] = "Never scan dependencies"
+= Untick all of this:
+"Rescan COM interop registry keys on compile"
+"Rescan assemblies dependencies on compile"
+"Rescan assemblies attributes on compile"
+
+Some files missing!
+This seems to bother Forecast project, as we still use "Pre-requsites" in that project.
+From command line:
+XCOPY "C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\Stub" "C:\Program Files\Altiris\Wise\Windows Installer Editor\Stub\" /S /E
+
+--------------
+SQL Server 2008 R2 Express - instance: "SMARTASSEMBLY"
+--------------
+From command line:
+"\\a380\hangaren\#PROGRAM\Develop\SQL Server\2008 R2\Express\64bit\64bit-Install.bat" SMARTASSEMBLY
+DataDir: D:\SQLData
+
+--------------
+{smartassembly} (obfuscate)
+--------------
+install:
+\\a380\Hangaren\#PROGRAM\Develop\{smartassembly}\{smartassembly}.Setup_3.2.3343.msi
+installDir: C:\Program Files (x86)\{smartassembly}\
+
+Add new setting for new machine. Se current machines:
+$branch\ccnet\Obfuscate\{smartassembly}.settings_[COMPUTERNAME]
+Edit your DB-file settings!
+Licens and settings checked into TFS and will be re-deployed as part of every build!
+
+
+--------------------
+Enable file sharing in Win7 to computer outside domain
+--------------------
+reg add HKLM\SYSTEM\CurrentControlSet\services\LanmanServer\Parameters /v Size /t REG_DWORD /d 3 /f
+reg add HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management /v LargeSystemCache /t REG_DWORD /d 1 /f
+NET STOP Browser
+NET STOP LanmanServer
+
+NET START LanmanServer
+NET START Browser
+--------------------
+
+//------------------
+//ClickOnce bootstrapper pre-reqs
+=> Bootstrapper not used for the time beeing.
+Keep comments here, in case we need to enabled it again ...
+//------------------
+//Apply section "2.3.1.1" from this document: http://download.microsoft.com/download/A/2/8/A2807F78-C861-4B66-9B31-9205C3F22252/VS2008SP1Readme.htm
+//(Note: do NOT install .NET 3.5 sp1, only unpack it using command line .exe with flag /x)
+//
+//note1: If your are on a 64-bit server you also need to apply this:
+//MKDIR "C:\Program Files\Microsoft SDKs\Windows\v7.0A"
+//xcopy "C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A" "C:\Program Files\Microsoft SDKs\Windows\v7.0A" /E
+
+//note2: On some machine, you might still have to copy 6.0A => 7.0A
+//xcopy "C:\Program Files\Microsoft SDKs\Windows\v6.0A\Bootstrapper\Packages\DotNetFX35SP1" "C:\Program Files\Microsoft SDKs\Windows\v7.0A\Bootstrapper\Packages\DotNetFX35SP1" /E
+//
+//note3: On some machines, you need to "Update the Package Data" => packages.xml under "v7.0A" rather then "v6.0A"
+

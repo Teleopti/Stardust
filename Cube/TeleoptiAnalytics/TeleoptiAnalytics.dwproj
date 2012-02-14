@@ -1,0 +1,171 @@
+﻿<Project xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0">
+  <ProductVersion>10.50.2500.0</ProductVersion>
+  <SchemaVersion>9.0.2.10</SchemaVersion>
+  <State>$base64$PFNvdXJjZUNvbnRyb2xJbmZvIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOmRkbDI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yIiB4bWxuczpkZGwyXzI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yLzIiIHhtbG5zOmRkbDEwMF8xMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDA4L2VuZ2luZS8xMDAvMTAwIiB4bWxuczpkZGwyMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAiIHhtbG5zOmRkbDIwMF8yMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAvMjAwIiB4bWxuczpkd2Q9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vRGF0YVdhcmVob3VzZS9EZXNpZ25lci8xLjAiPg0KICA8RW5hYmxlZD50cnVlPC9FbmFibGVkPg0KICA8UHJvamVjdE5hbWU+U0FLPC9Qcm9qZWN0TmFtZT4NCiAgPEF1eFBhdGg+U0FLPC9BdXhQYXRoPg0KICA8TG9jYWxQYXRoPlNBSzwvTG9jYWxQYXRoPg0KICA8UHJvdmlkZXI+U0FLPC9Qcm92aWRlcj4NCjwvU291cmNlQ29udHJvbEluZm8+</State>
+  <Database>
+    <Name>TeleoptiAnalytics.database</Name>
+    <FullPath>TeleoptiAnalytics.database</FullPath>
+  </Database>
+  <Cubes>
+    <ProjectItem>
+      <Name>Teleopti Analytics.cube</Name>
+      <FullPath>Teleopti Analytics.cube</FullPath>
+      <Dependencies>
+        <ProjectItem>
+          <Name>Teleopti Analytics.partitions</Name>
+          <FullPath>Teleopti Analytics.partitions</FullPath>
+        </ProjectItem>
+      </Dependencies>
+    </ProjectItem>
+  </Cubes>
+  <Dimensions>
+    <ProjectItem>
+      <Name>Date.dim</Name>
+      <FullPath>Date.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Activity.dim</Name>
+      <FullPath>Activity.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Interval.dim</Name>
+      <FullPath>Interval.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Person.dim</Name>
+      <FullPath>Person.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Scenario.dim</Name>
+      <FullPath>Scenario.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Queue.dim</Name>
+      <FullPath>Queue.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Shift Length.dim</Name>
+      <FullPath>Shift Length.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Shift Category.dim</Name>
+      <FullPath>Shift Category.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Time Zone.dim</Name>
+      <FullPath>Time Zone.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Skill Workload.dim</Name>
+      <FullPath>Skill Workload.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Skill.dim</Name>
+      <FullPath>Skill.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>KPI.dim</Name>
+      <FullPath>KPI.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Team.dim</Name>
+      <FullPath>Team.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Absence.dim</Name>
+      <FullPath>Absence.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Scorecard.dim</Name>
+      <FullPath>Scorecard.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>ACD Login.dim</Name>
+      <FullPath>ACD Login.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Adherence Calculation.dim</Name>
+      <FullPath>Adherence Calculation.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Business Unit.dim</Name>
+      <FullPath>Business Unit.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Service Level Calculation.dim</Name>
+      <FullPath>Service Level Calculation.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Preference.dim</Name>
+      <FullPath>Preference.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Day Off.dim</Name>
+      <FullPath>Day Off.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Group Page Person.dim</Name>
+      <FullPath>Group Page Person.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Overtime.dim</Name>
+      <FullPath>Overtime.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Request Status.dim</Name>
+      <FullPath>Request Status.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Request Type.dim</Name>
+      <FullPath>Request Type.dim</FullPath>
+    </ProjectItem>
+  </Dimensions>
+  <DataSources>
+    <ProjectItem>
+      <Name>Teleopti Analytics.ds</Name>
+      <FullPath>Teleopti Analytics.ds</FullPath>
+    </ProjectItem>
+  </DataSources>
+  <DataSourceViews>
+    <ProjectItem>
+      <Name>Teleopti Analytics.dsv</Name>
+      <FullPath>Teleopti Analytics.dsv</FullPath>
+    </ProjectItem>
+  </DataSourceViews>
+  <Roles>
+    <ProjectItem>
+      <Name>FullControl.role</Name>
+      <FullPath>FullControl.role</FullPath>
+    </ProjectItem>
+  </Roles>
+  <Configurations>
+    <Configuration>
+      <Name>CreateDatabase2005</Name>
+      <Options>
+        <ConnectionMappings>
+          <ConfigurationSetting>
+            <Id>Teleopti Analytics</Id>
+            <Name>Teleopti Analytics</Name>
+            <Value xsi:type="xsd:string">Provider=SQLNCLI10.1;Data Source=.;Integrated Security=SSPI;Initial Catalog=TeleoptiAnalytics_Demo</Value>
+          </ConfigurationSetting>
+        </ConnectionMappings>
+        <ConnectionProviderMappings>
+          <ConfigurationSetting>
+            <Id>Teleopti Analytics</Id>
+            <Name>Teleopti Analytics</Name>
+          </ConfigurationSetting>
+        </ConnectionProviderMappings>
+        <ConnectionSecurityMappings>
+          <ConfigurationSetting>
+            <Id>Teleopti Analytics</Id>
+            <Name>Teleopti Analytics</Name>
+            <Value xsi:type="xsd:int">0</Value>
+          </ConfigurationSetting>
+        </ConnectionSecurityMappings>
+        <RemovePasswords>false</RemovePasswords>
+        <DeploymentServerEdition>Standard</DeploymentServerEdition>
+        <DeploymentServerVersion>9.0</DeploymentServerVersion>
+      </Options>
+    </Configuration>
+  </Configurations>
+</Project>
