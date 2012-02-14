@@ -12,10 +12,14 @@
     <RootNamespace>Teleopti.Analytics.Portal</RootNamespace>
     <AssemblyName>Teleopti.Analytics.Portal</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <ApplicationIcon>images\ccc_Menu.ico</ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
