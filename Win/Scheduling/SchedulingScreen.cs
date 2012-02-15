@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Win.Optimization;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -1331,6 +1332,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				IList<IGroupPage> groupPages = _cachedGroupPages;
 
+                IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
+
+                using (var optimizationPreferencesDialog =
+                    new OptimizationPreferencesDialog(optimizerPreferences, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
+                {
+                    if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        optimizerPreferences = optimizationPreferencesDialog.Preferences;
+                    }
+                }
 				using (var optimizerOptionsDialog =
 					new ResourceOptimizerPreferencesDialog(_optimizerOriginalPreferences,
 													   _schedulerState.CommonStateHolder.ShiftCategories, groupPages,
