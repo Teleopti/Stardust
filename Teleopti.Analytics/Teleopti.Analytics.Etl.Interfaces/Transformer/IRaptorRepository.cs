@@ -198,5 +198,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
 		int PersistRequest(DataTable dataTable);
     	int FillFactRequestMart(DateTimePeriod period);
+        int FillFactRequestedDaysMart(DateTimePeriod period);
     }
 }
