@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             using (PerformanceOutput.ForOperation("Day off optimization for " + agent))
             {
-                return _decisionMakers.Any(decisionMaker => runDecisionMaker(decisionMaker));
+                return _decisionMakers.Any(runDecisionMaker);
             }
         }
 
@@ -64,15 +64,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             var dayOffOptimizer = _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter ,_ruleSet,_validatorList,_allSelectedPersons);
 
             bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes);
-            if (dayOffOptimizerResult)
-            {
-                return true;
-            }
-
-            return false;
+            return dayOffOptimizerResult;
         }
-
-        
 
         public IPerson Owner
         {

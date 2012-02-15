@@ -145,10 +145,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_backgroundWorker.CancellationPending)
                 return;
 
-            // checking for maximum moveble days user settings limitation
-            if (optimizerPreferences.AdvancedPreferences.MaximumMovableDayOffPercentagePerPerson == 0)
-                return;
-
             IList<IScheduleMatrixPro> matrixList =
                 matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
@@ -327,9 +323,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             var groupDayOffOptimizerCreator = _container.Resolve<IGroupDayOffOptimizerCreator>();
 
             var restrictionChecker = new RestrictionChecker();
-            var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
-            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationUserPreferences);
-
+            var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationPreferences);
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
