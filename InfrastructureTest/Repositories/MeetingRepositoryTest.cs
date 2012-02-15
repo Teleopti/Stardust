@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Time;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -217,6 +219,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMeetingRepository meetingRepository = new MeetingRepository(UnitOfWorkFactory.Current);
             Assert.IsNotNull(meetingRepository);
         }
+
+		[Test]
+		public void ShouldHandleNoChangesInChangeTracker()
+		{
+			IMeeting meeting = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(meeting);
+
+			Meeting meetingLoaded = (Meeting)new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.Value);
+			var changeTracker = new MeetingChangeTracker();
+			changeTracker.TakeSnapshot((IMeeting)meetingLoaded.BeforeChanges());
+			var changes = changeTracker.CustomChanges(meetingLoaded, DomainUpdateType.Update);
+			changes.Count().Should().Be.EqualTo(0);
+		}
 
         [Test]
         public void ShouldReturnMeetingsWithOriginalId()
