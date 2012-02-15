@@ -8,7 +8,7 @@ CREATE Proc [mart].[report_control_site_get]
 @date_from datetime,
 @date_to datetime = @date_from,
 @group_page_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier
@@ -22,6 +22,7 @@ Last modified: 20090706
 20080924 Changed language translation handling if @language is missing in language_translation(then return english) KJ
 20090211 Added new schema mart KJ
 20090414 Added COLLATE database_default for joins on strings KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 CREATE TABLE #sites (counter int identity(1,1),id int, name nvarchar(50)) 

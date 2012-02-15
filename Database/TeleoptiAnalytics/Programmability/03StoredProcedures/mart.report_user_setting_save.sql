@@ -11,8 +11,9 @@ CREATE  PROCEDURE [mart].[report_user_setting_save]
 	Om man inte sparar en namngiven (dvs vid automatiskt sparande)
 	skickas -1 in i @saved_name_id
 	20090211 Added new mart schema KJ
+	-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
-	@report_id int,
+	@report_id uniqueidentifier,
 	@person_code uniqueidentifier,
 	@param_name varchar(50),
 	@saved_name_id int,
@@ -24,7 +25,7 @@ DECLARE @current_setting varchar(MAX)
 
 SELECT @current_setting = control_setting
 FROM mart.report_user_setting
-WHERE report_id = @report_id
+WHERE ReportId = @report_id
 AND param_name = @param_name
 AND person_code = @person_code
 AND saved_name_id = @saved_name_id
@@ -38,7 +39,7 @@ ELSE
 BEGIN
 	UPDATE mart.report_user_setting
 	SET control_setting = @setting
-	WHERE report_id = @report_id
+	WHERE ReportId = @report_id
 	AND param_name = @param_name 
 	AND person_code = @person_code
 	AND saved_name_id = @saved_name_id

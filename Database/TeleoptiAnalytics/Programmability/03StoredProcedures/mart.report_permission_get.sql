@@ -8,19 +8,20 @@ GO
 -- Create date: <2008-06-26>
 -- 20090211 Added new mart schema KJ
 -- Description:	<Checks if a user has permission on a report>
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_permission_get]
 @person_code uniqueidentifier,
-@report_id int
+@report_id uniqueidentifier
 AS
 BEGIN
 	
 SET NOCOUNT ON
 
-SELECT COUNT(report_id) report_permission_count 
+SELECT COUNT(ReportId) report_permission_count 
 FROM mart.permission_report
 WHERE person_code=@person_code
-AND report_id=@report_id
+AND ReportId=@report_id
 
 END
 

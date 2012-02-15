@@ -6,10 +6,11 @@ GO
 Last Updated:2008-09-10
 20080910 Added parameter @bu_id KJ
 20090211 New mart schema
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 CREATE Proc [mart].[report_control_hour_get]
 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier

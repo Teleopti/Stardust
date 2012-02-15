@@ -12,9 +12,10 @@ GO
 -- Change Log
 -- Date			Author	Description
 -- 20100727		DJ		Added hard coded filter: is_deleted
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROC [mart].[report_control_twolist_activity_get]
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
