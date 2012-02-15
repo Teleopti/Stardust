@@ -287,6 +287,7 @@
     <Compile Include="Optimization\IWorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\IRuleSetBagCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDecider.cs" />
     <Compile Include="Optimization\OptimizationPreferences.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProvider.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolver.cs" />
