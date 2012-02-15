@@ -8,6 +8,7 @@ SET ROOTDIR=%~dp0
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 SET /A CROSSDB=0
 SET /A ISCCC7=0
+SET TRUNK=-T
 
 COLOR A
 cls
@@ -22,6 +23,13 @@ SET /P DATABASE=Database name to patch:
 
 SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
 ECHO %DATABASETYPE% > "%temp%\DATABASETYPE.txt"
+
+::Apply trunk?
+ECHO.
+SET TRUNK=
+SET /P IFTRUNK=Would like to deploy the Trunk on top of the Release code? [Y/N]
+IF "%IFTRUNK%"=="Y" SET TRUNK=-T
+IF "%IFTRUNK%"=="y" SET TRUNK=-T
 
 findstr /C:"TeleoptiAnalytics" /I "%temp%\DATABASETYPE.txt"
 If %ERRORLEVEL% EQU 0 (
@@ -56,8 +64,8 @@ GOTO :error
 ::Patch DB
 ::Upgrade DB to latest version (WITHOUT Trunk)
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E
-"%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E
+ECHO "%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E  %TRUNK%
+"%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E  %TRUNK%
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
