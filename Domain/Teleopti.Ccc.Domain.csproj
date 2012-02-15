@@ -281,6 +281,7 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsChecker.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateChecker.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodChecker.cs" />
+    <Compile Include="Optimization\IOptimizationOverLimitDecider.cs" />
     <Compile Include="Optimization\IPersonExtractor.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="Optimization\IRuleSetBagCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDecider.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\OptimizationPreferences.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProvider.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolver.cs" />
