@@ -1150,8 +1150,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Local
 
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private IDayOffOptimizerContainer createOptimizer(
             IScheduleMatrixPro scheduleMatrix,
@@ -1190,8 +1188,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                                         rollbackServiceDayOffConflict);
 
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
-            int moveMaxDaysOff = MaximumMovableDayOff(optimizerPreferences, scheduleMatrixArrayConverter);
-            int moveMaxWorkShift = MaximumMovableWorkShift(optimizerPreferences, scheduleMatrixArrayConverter);
+
+            var restrictionChecker = new RestrictionChecker();
+            var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationUserPreferences);
+
 
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
@@ -1213,8 +1214,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   dayOffOptimizerValidator,
                                                   dayOffOptimizerConflictHandler,
                                                   originalStateContainer,
-                                                  moveMaxDaysOff,
-                                                  moveMaxWorkShift,
+                                                  optimizerOverLimitDecider,
                                                   nightRestWhiteSpotSolverService);
 
             IDayOffOptimizerContainer optimizerContainer =

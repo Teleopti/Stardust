@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
+        private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
 
         [SetUp]
         public void Setup()
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
+            _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
             _nightRestWhiteSpotSolverService = _mocks.StrictMock<INightRestWhiteSpotSolverService>();
         }
 
@@ -127,12 +129,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
-                Expect.Call(_originalStateContainer.CountChangedDayOffs())
-                    .Return(0).Repeat.AtLeastOnce();
-                Expect.Call(_originalStateContainer.CountChangedWorkShifts())
-                    .Return(0).Repeat.AtLeastOnce();
-
-                // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false)
+                    .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
 
@@ -196,10 +195,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
                 Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(new DateOnly())).Return(false);
                 Expect.Call(() => _rollbackService.Rollback());
-                Expect.Call(_originalStateContainer.CountChangedDayOffs())
-                    .Return(0);
-                Expect.Call(_originalStateContainer.CountChangedWorkShifts())
-                    .Return(0);
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
             }
 
             bool result;
@@ -268,10 +265,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(5).Repeat.AtLeastOnce();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).
                     IgnoreArguments().Return(_effectiveRestriction).Repeat.AtLeastOnce();
-                Expect.Call(_originalStateContainer.CountChangedDayOffs())
-                    .Return(0).Repeat.AtLeastOnce();
-                Expect.Call(_originalStateContainer.CountChangedWorkShifts())
-                    .Return(0).Repeat.AtLeastOnce();
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+            .Return(false)
+            .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
 
@@ -403,12 +399,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
-                Expect.Call(_originalStateContainer.CountChangedDayOffs())
-                    .Return(0).Repeat.AtLeastOnce();
-                Expect.Call(_originalStateContainer.CountChangedWorkShifts())
-                    .Return(0).Repeat.AtLeastOnce();
-
-                // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false)
+                    .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
 
@@ -440,8 +433,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _dayOffOptimizerValidator,
                                       _dayOffOptimizerConflictHandler,
                                       _originalStateContainer, 
-                                      0,
-                                      0,
+                                      _optimizationOverLimitDecider,
                                       _nightRestWhiteSpotSolverService
                                       );
         }

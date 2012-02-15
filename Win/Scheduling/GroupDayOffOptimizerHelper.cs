@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -280,7 +281,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private IGroupDayOffOptimizerContainer createOptimizer(
-            IScheduleMatrixOriginalStateContainer scheduleMatrixContainer,
+            IScheduleMatrixOriginalStateContainer originalStateContainer,
             DayOffPlannerSessionRuleSet ruleSet,
             IOptimizerOriginalPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
@@ -291,7 +292,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IScheduleMatrixPro> allMatrixes,
             IList<IPerson> selectedPersons)
         {
-            IScheduleMatrixPro scheduleMatrix = scheduleMatrixContainer.ScheduleMatrix;
+            IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
                OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, rollbackService, _container);
@@ -325,8 +326,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             var resourceCalculateDaysDecider = _container.Resolve<IResourceCalculateDaysDecider>();
             var groupDayOffOptimizerCreator = _container.Resolve<IGroupDayOffOptimizerCreator>();
 
-            int moveMaxDaysOff = ScheduleOptimizerHelper.MaximumMovableDayOff(optimizerPreferences, scheduleMatrixArrayConverter);
-            int moveMaxWorkShifts = ScheduleOptimizerHelper.MaximumMovableDayOff(optimizerPreferences, scheduleMatrixArrayConverter);
+            var restrictionChecker = new RestrictionChecker();
+            var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationUserPreferences);
+
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -342,9 +345,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   resourceCalculateDaysDecider,
                                                   dayOffOptimizerValidator,
                                                   dayOffOptimizerConflictHandler, 
-                                                  scheduleMatrixContainer,
-                                                  moveMaxDaysOff,
-                                                  moveMaxWorkShifts, null
+                                                  originalStateContainer,
+                                                  optimizerOverLimitDecider,
+                                                  null
                                                   );
 
             var optimizerContainer =

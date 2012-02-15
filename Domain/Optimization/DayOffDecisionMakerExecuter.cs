@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private readonly int _moveMaxDaysOff;
-        private readonly int _moveMaxWorkShift;
+        private readonly IOptimizationOverLimitDecider _overLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
 
         public DayOffDecisionMakerExecuter(
@@ -43,9 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IDayOffOptimizerValidator dayOffOptimizerValidator,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
-            IScheduleMatrixOriginalStateContainer originalStateContainer, 
-            int moveMaxDaysOff, 
-            int moveMaxWorkShift,
+            IScheduleMatrixOriginalStateContainer originalStateContainer,
+            IOptimizationOverLimitDecider overLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService
             )
         {
@@ -63,8 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _dayOffOptimizerValidator = dayOffOptimizerValidator;
             _dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
             _originalStateContainer = originalStateContainer;
-            _moveMaxDaysOff = moveMaxDaysOff;
-            _moveMaxWorkShift = moveMaxWorkShift;
+            _overLimitDecider = overLimitDecider;
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
         }
 
@@ -76,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (movesOverMaxDaysLimit(logWriter))
                 return false;
 
-            if(workingBitArray == null)
+            if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
 
             var changesTracker = new LockableBitArrayChangesTracker();
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays, logWriter);
             }
 
-            if(doReschedule)
+            if (doReschedule)
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
             IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!result.Result)
             {
-                if(doReschedule)
+                if (doReschedule)
                     rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
                 return false;
             }
@@ -151,28 +148,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private bool movesOverMaxDaysLimit(ILogWriter log)
+        private bool movesOverMaxDaysLimit(ILogWriter logWriter)
         {
-            if (_moveMaxDaysOff > -1)
-            {
-                if (_originalStateContainer.CountChangedDayOffs() > _moveMaxDaysOff)
-                {
-                    string name = _originalStateContainer.ScheduleMatrix.Person.Name.ToString();
-                    log.LogInfo("Maximum " + _moveMaxDaysOff + " day off have already been moved for " + name);
-                    return true;
-                }
-            }
-            if (_moveMaxWorkShift > -1)
-            {
-                int changedWorkShifts = _originalStateContainer.CountChangedWorkShifts();
-                if (changedWorkShifts > _moveMaxWorkShift)
-                {
-                    string name = _originalStateContainer.ScheduleMatrix.Person.Name.ToString();
-                    log.LogInfo("Maximum " + _moveMaxWorkShift + " workshift have already been moved for " + name);
-                    return true;
-                }
-            }
-            return false;
+            return _overLimitDecider.OverLimit(logWriter);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]

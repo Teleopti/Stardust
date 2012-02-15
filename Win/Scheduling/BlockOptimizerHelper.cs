@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -380,9 +381,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
             var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 
-            int moveMaxDaysOff = ScheduleOptimizerHelper.MaximumMovableDayOff(optimizerPreferences, scheduleMatrixArrayConverter);
-            int moveMaxWorkShift = ScheduleOptimizerHelper.MaximumMovableWorkShift(optimizerPreferences, scheduleMatrixArrayConverter);
-
+            var restrictionChecker = new RestrictionChecker();
+            var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationUserPreferences);
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -398,9 +399,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   new ResourceCalculateDaysDecider(),
                                                   dayOffOptimizerValidator,
                                                   dayOffOptimizerConflictHandler, 
-                                                  originalStateContainer, 
-                                                  moveMaxDaysOff, 
-                                                  moveMaxWorkShift, null
+                                                  originalStateContainer,
+                                                  optimizerOverLimitDecider,
+                                                  null
                                                   );
 
             var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 {
 
     [TestFixture]
-    public class OptimizationUserPreferencesTest
+    public class OptimizationPreferencesTest
     {
         private OptimizationPreferences _target;
 
