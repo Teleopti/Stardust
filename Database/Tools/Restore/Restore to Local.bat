@@ -29,13 +29,14 @@ SET SUPPORTTOOL=
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
+SET HgFolder=%CD%
 CALL :BRANCH %CD%
 ECHO Current branch is: %BRANCH%
 ECHO.
 
 ::Clean up last log files
 CD "%ROOTDIR%"
-DEL DBManager*.log /Q
+IF EXIST DBManager*.log DEL DBManager*.log /Q
 
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%COMPUTERNAME%
@@ -73,7 +74,7 @@ SET DEVENV="%ProgramFiles%\%IDE%\devenv.exe"
 )
 
 ECHO.
-CLS
+
 goto MakeCustomPath
 :MakeCustomPath
 if exist "%CustomPathConfig%" (
@@ -83,9 +84,26 @@ CALL :GETDATAPATH
 )
 
 if not "%CustomPath:~1,2%"==":\" (
-echo We are soon switching to Hg. The data storage path must now be a valid local path, separate from your source control folder^(s^)
+COLOR E
+CLS
+ECHO Sorry
+echo The data storage path must now be a valid local path, separate from your source control folder^(s^)
 CALL :GETDATAPATH
 )
+
+echo "%CustomPath%" | FIND "%HgFolder%"
+if %errorlevel% equ 0 (
+COLOR E
+CLS
+ECHO Sorry
+ECHO CustomPath is : %CustomPath%
+ECHO HgPath is     : %HgFolder%
+ECHO.
+echo You should not keep database files under any Hg Repository.
+ECHO Please separate database files etc. from your source control folder^(s^)
+CALL :GETDATAPATH
+)
+COLOR A
 
 IF NOT EXIST "%CustomPath%" MKDIR "%CustomPath%"
 IF %ERRORLEVEL% NEQ 0 (
