@@ -11,6 +11,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
         {
             Add(new StageRequestJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters));
+            Add(new FactRequestedDaysJobStep(jobParameters));
         }
 	}
 }

@@ -906,7 +906,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
+	    public int FillFactRequestedDaysMart(DateTimePeriod period)
+	    {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
+            parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
+
+            return
+                HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_load", parameterList,
+                                              _dataMartConnectionString);
+	    }
+
+	    public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
 		{
 			DataTable dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
 																 "mart.etl_bridge_time_zone_get_load_period", null,
