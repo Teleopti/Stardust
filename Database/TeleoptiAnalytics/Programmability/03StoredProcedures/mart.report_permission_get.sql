@@ -1,7 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_permission_get]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_permission_get]
 GO
-
+SELECT NEWID()
 
 -- =============================================
 -- Author:		<KJ
@@ -9,6 +9,7 @@ GO
 -- 20090211 Added new mart schema KJ
 -- Description:	<Checks if a user has permission on a report>
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- EXEC [mart].[report_permission_get] '362951B7-A91E-4212-A343-B36C61DC0108', '362951B7-A91E-4212-A343-B36C61DC0108'
 -- =============================================
 CREATE PROCEDURE [mart].[report_permission_get]
 @person_code uniqueidentifier,

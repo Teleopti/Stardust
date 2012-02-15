@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
         protected void Page_Load(object sender, EventArgs e)
         {
             _cccReports = new CccReports(OlapConnectionString);
-            _commonReports = new CommonReports(ConnectionString,0);
+            _commonReports = new CommonReports(ConnectionString,new Guid());
             LoggedOnUser.Text = LoggedOnUserInformation;
             
             if (!Page.IsPostBack)

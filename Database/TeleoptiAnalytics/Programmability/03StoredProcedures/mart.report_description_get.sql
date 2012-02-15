@@ -15,7 +15,7 @@ CREATE   PROCEDURE [mart].[report_description_get]
 Ola 2008-03-20
 tillfälligt utan koll mot sparat
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
-
+exec mart.report_description_get @report_id='19233876-05A6-4198-9B56-30E25EFEC0F3',@saved_name_id=-1
 */
 @report_id uniqueidentifier,
 @saved_name_id int

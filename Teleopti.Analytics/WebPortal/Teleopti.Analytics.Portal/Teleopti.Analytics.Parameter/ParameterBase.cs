@@ -291,7 +291,7 @@ namespace Teleopti.Analytics.Parameters
 
 	    public string Text { get; set; }
 
-	    public int Component { get; set; }
+	    public Guid Component { get; set; }
 
 	    public string ProcName { get; set; }
 

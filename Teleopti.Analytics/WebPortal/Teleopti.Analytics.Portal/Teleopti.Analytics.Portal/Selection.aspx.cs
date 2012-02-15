@@ -17,8 +17,8 @@ namespace Teleopti.Analytics.Portal
             LoggedOnUser.Text = LoggedOnUserInformation;
             if (!Page.IsPostBack)
             {
-                if (ReportId != 0)
-                    HiddenID.Value = ReportId.ToString(CultureInfo.CurrentCulture);
+                if (ReportId != new Guid())
+                    HiddenID.Value = ReportId.ToString(); // .ToString(CultureInfo.CurrentCulture);
                 else Response.End();
             }
 
