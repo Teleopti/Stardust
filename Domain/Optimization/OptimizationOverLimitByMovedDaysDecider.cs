@@ -18,6 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _moveMaxWorkShift = moveMaxWorkShift;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
+        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "workshift"), 
+        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         public bool OverLimit(ILogWriter logWriter)
         {
             if (_moveMaxDaysOff > -1)

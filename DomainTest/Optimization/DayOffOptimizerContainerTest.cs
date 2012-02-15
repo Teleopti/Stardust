@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private DayOffPlannerSessionRuleSet _ruleSet;
         private IScheduleMatrixPro _matrix;
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
         private IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
 
         [SetUp]
@@ -34,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _ruleSet = new DayOffPlannerSessionRuleSet();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _optimizerPreferences = new OptimizerOriginalPreferences();
-            _optimizerPreferences.AdvancedPreferences.MaximumMovableDayOffPercentagePerPerson = 1;
             _dayOffDecisionMakerExecuter = _mocks.StrictMock<IDayOffDecisionMakerExecuter>();
         }
 

@@ -50,9 +50,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _backgroundWorker = backgroundWorker;
 
-            if (optimizerPreferences.AdvancedPreferences.MaximumMovableDayOffPercentagePerPerson == 0)
-                return;
-
             IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedDays, schedulerStateHolder.SchedulingResultState, _container);
             lockDaysForExtendReduceOptimization(matrixList);
 
@@ -69,8 +66,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             //IExtendReduceTimeOptimizerService extendReduceTimeOptimizerService = new ExtendReduceTimeOptimizerService(allSkillsPeriodValueCalculator);
             IExtendReduceDaysOffOptimizerService extendReduceDaysOffOptimizerService = new ExtendReduceDaysOffOptimizerService(allSkillsPeriodValueCalculator);
             
-
-
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
                 _container.Resolve<IPossibleMinMaxWorkShiftLengthExtractor>();
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyInstanciate()
+        public void VerifyInstantiate()
         {
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _matrixOriginalStateContainer,

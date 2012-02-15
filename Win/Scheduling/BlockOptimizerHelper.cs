@@ -229,10 +229,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_backgroundWorker.CancellationPending)
                 return;
 
-            // checking for maximum moveble days user settings limitation
-            if (optimizerPreferences.AdvancedPreferences.MaximumMovableDayOffPercentagePerPerson == 0)
-                return;
-
             IList<IScheduleMatrixPro> matrixList =
                matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
@@ -310,8 +306,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 rollbackService.Modify(originalPart);
             }
         }
-
-        
 
         void resourceOptimizer_PersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
         {
@@ -413,13 +407,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                 resourceOptimizationHelper);
 
             IBlockDayOffOptimizerContainer optimizerContainer =
-                new BlockDayOffOptimizerContainer(scheduleMatrixArrayConverter,
-                                             decisionMakers,
-                                             ruleSet,
-                                             scheduleMatrix,
-                                             optimizerPreferences,
-                                             originalStateContainer,
-                                             blockDayOffOptimizer);
+                new BlockDayOffOptimizerContainer(
+                    decisionMakers,
+                    scheduleMatrix,
+                    originalStateContainer,
+                    blockDayOffOptimizer);
             return optimizerContainer;
         }
 

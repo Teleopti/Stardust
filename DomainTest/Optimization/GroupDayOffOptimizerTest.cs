@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
             _dataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
             _ruleSet = new DayOffPlannerSessionRuleSet();
-            var originalPreferences = new OptimizerOriginalPreferences();
-            originalPreferences.AdvancedPreferences.MaximumMovableDayOffPercentagePerPerson = 1;
             _dayOffDecisionMakerExecuter = _mocks.StrictMock<IDayOffDecisionMakerExecuter>();
             _lockableBitArrayChangesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
