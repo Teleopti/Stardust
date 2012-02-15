@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual IAggregateRoot BeforeChanges()
 		{
-			return _meetingChangeTracker.BeforeChanges();
+			return _meetingChangeTracker.BeforeChanges() ?? this;
 		}
 	}
 }
