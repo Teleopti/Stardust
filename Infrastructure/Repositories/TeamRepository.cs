@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 ICollection<ITeam> retList = Session.CreateCriteria<Team>()
                        .Add(Restrictions.InG("Id", currentBatchIds))
+                       .SetFetchMode("Site", FetchMode.Join)
+                       .SetFetchMode("Site.BusinessUnit", FetchMode.Join)
                       .SetResultTransformer(Transformers.DistinctRootEntity)
                       .List<ITeam>();
 
