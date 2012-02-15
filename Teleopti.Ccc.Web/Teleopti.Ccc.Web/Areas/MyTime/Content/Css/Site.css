@@ -352,6 +352,7 @@ html.full-height #push{
 	 position: absolute;
 	 right: 0;
 	 top: 78px;
+ 	z-index: 1000;
 }
 .ie7  #loading{left: 50%; margin-left: -483px;}
 
