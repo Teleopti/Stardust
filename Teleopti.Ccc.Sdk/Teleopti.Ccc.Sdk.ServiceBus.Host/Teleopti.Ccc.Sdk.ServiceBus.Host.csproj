@@ -316,7 +316,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernate\Cache_Providers\*.dll" "$(TargetDir)" /y
+    <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y
 if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
 xcopy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll" "$(TargetDir)Payroll" /y</PostBuildEvent>
     <PreBuildEvent>
