@@ -347,3 +347,74 @@ ALTER TABLE mart.report_control_collection ADD CONSTRAINT
 	 ON DELETE  NO ACTION 
 	
 GO
+
+CREATE TABLE [mart].[custom_report_control](
+	[control_name] [varchar](50) NULL,
+	[fill_proc_name] [varchar](200) NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_custom_report_control] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
+) ON [MART]
+
+GO
+
+CREATE TABLE [mart].[custom_report_control_collection](
+	[control_collection_id] [int] NOT NULL,
+	[print_order] [int] NOT NULL,
+	[default_value] [nvarchar](4000) NOT NULL,
+	[control_name_resource_key] [nvarchar](50) NOT NULL,
+	[fill_proc_param] [varchar](100) NULL,
+	[param_name] [varchar](50) NULL,
+	[depend_of1] [int] NULL,
+	[depend_of2] [int] NULL,
+	[depend_of3] [int] NULL,
+	[depend_of4] [int] NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+	[CollectionId] [uniqueidentifier] NOT NULL,
+	[ControlId] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_custom_report_control_collection] PRIMARY KEY CLUSTERED 
+(
+	[control_collection_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
+) ON [MART]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [mart].[custom_report_control_collection]  WITH CHECK ADD  CONSTRAINT [FK_custom_report_control_collection_report_control] FOREIGN KEY([ControlId])
+REFERENCES [mart].[custom_report_control] ([Id])
+GO
+
+ALTER TABLE [mart].[custom_report_control_collection] CHECK CONSTRAINT [FK_custom_report_control_collection_report_control]
+GO
+
+
+CREATE TABLE [mart].[custom_report](
+	[url] [nvarchar](500) NULL,
+	[target] [nvarchar](50) NULL,
+	[report_name] [nvarchar](500) NULL,
+	[report_name_resource_key] [nvarchar](50) NOT NULL,
+	[visible] [bit] NOT NULL,
+	[rpt_file_name] [varchar](100) NOT NULL,
+	[proc_name] [varchar](100) NOT NULL,
+	[help_key] [nvarchar](500) NULL,
+	[sub1_name] [varchar](50) NOT NULL,
+	[sub1_proc_name] [varchar](50) NOT NULL,
+	[sub2_name] [varchar](50) NOT NULL,
+	[sub2_proc_name] [varchar](50) NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+	[ControlCollectionId] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_custom_report] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
+) ON [MART]
+
+GO
+
+ALTER TABLE [mart].[custom_report] ADD  CONSTRAINT [DF_custom_report_visible]  DEFAULT ((1)) FOR [visible]
+GO
