@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 SELECT
 	cc.control_collection_id
 FROM 
-	mart.report_control_collection cc
+	mart.v_report_control_collection cc
 INNER JOIN
 	mart.report r
 ON

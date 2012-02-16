@@ -20,7 +20,7 @@ exec mart.report_info_get '482D0EE3-1D55-44D5-828E-15DEED5230CE'
 AS
 
 SELECT rpt_file_name, url, proc_name, sub1_name, sub1_proc_name, sub2_name, sub2_proc_name, report_name, report_name_resource_key, help_key
-FROM mart.report
+FROM mart.v_report
 WHERE Id = @report_id
 
 GO

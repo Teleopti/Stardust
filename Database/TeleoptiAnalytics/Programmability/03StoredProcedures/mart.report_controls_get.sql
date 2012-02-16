@@ -68,7 +68,7 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 				param_name,
 				print_order,
 				@display AS display
-			FROM mart.report r
+			FROM mart.v_report r
 				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
@@ -89,7 +89,7 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 				param_name,
 				print_order,
 				@dont_display AS display
-			FROM mart.report r
+			FROM mart.v_report r
 				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id

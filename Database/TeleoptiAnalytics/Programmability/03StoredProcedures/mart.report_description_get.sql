@@ -28,7 +28,7 @@ CREATE TABLE #out (report_name_resource_key nvarchar(50), saved_name nvarchar(20
 
 INSERT into #out
 SELECT report_name_resource_key, '', null, null, help_key
-FROM mart.report
+FROM mart.v_report
 WHERE Id = @report_id
 --
 --INSERT INTO @out

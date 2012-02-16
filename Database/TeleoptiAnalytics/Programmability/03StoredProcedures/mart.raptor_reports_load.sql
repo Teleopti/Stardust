@@ -9,11 +9,11 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT 
-        report_id as ReportId,
+        Id as ReportId,
         'xx' + report_name_resource_key as ReportName, 
         url as ReportUrl,
         target as TargetFrame
-    FROM mart.report
+    FROM mart.v_report
 	WHERE visible = 1
 END
 GO
