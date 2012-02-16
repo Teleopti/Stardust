@@ -428,6 +428,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(new DateOnly(2011, 4, 1), skillDay1.CurrentDate);
         }
 
+		[Test]
+		public void ShouldCreateWorkloadDayForNewlyAddedWorkload()
+		{
+			_skill = SkillFactory.CreateSiteSkill("bbb");
+			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var startDateTime = new DateOnly(2011, 4, 1);
+			DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime);
+			ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
+																				  _skill, _scenario, false);
+
+			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(0);
+			_skill.AddWorkload(WorkloadFactory.CreateWorkload("New WL", _skill));
+
+			skilldays = skillDayRepository.GetAllSkillDays(period, skilldays, _skill, _scenario, false);
+			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(1);
+		}
+
         protected override Repository<ISkillDay> TestRepository(IUnitOfWork unitOfWork)
         {
             return new SkillDayRepository(unitOfWork);

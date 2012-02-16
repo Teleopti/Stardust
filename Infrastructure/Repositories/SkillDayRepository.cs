@@ -233,9 +233,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					skillDays.Add(skillDay);
 					skillDaysToRepository.Add(skillDay);
 				}
-				_workloadDayHelper.CreateLongtermWorkloadDays(skill,skillDays);
 				if (addToRepository) AddRange(skillDaysToRepository);
 			}
+
+			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);
 
 			skillDays = skillDays.OrderBy(wd => wd.CurrentDate).ToList();
 			return skillDays;

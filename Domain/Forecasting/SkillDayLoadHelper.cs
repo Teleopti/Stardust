@@ -165,16 +165,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         	foreach (var workload in skill.WorkloadCollection)
         	{
-        		IDictionary<DayOfWeek, IWorkloadDayTemplate> basicTemplates = GetDefaultWorkloadDayTemplatesAsLongterm(workload);
-
         		var skillDaysToProcess = from sd in skillDays
         		                         group sd by sd.WorkloadDayCollection.Count(wd => wd.Workload.Equals(workload))
         		                         into g
         		                         where g.Key == 0
         		                         select g;
 
-        		if (skillDaysToProcess.Count() > 0)
-        		{
+				if (skillDaysToProcess.Any())
+				{
+					IDictionary<DayOfWeek, IWorkloadDayTemplate> basicTemplates = GetDefaultWorkloadDayTemplatesAsLongterm(workload);
 
         			var skillDaysForProcessing = skillDaysToProcess.First();
         			TaskOwnerHelper taskOwnerHelper = new TaskOwnerHelper(skillDaysForProcessing);
