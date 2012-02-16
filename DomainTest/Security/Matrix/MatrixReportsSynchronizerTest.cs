@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -39,14 +40,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
         public void Setup()
         {
             _matrixReports = new List<MatrixReportInfo>();
-
+            
             _applicationRoles = ApplicationRoleFactory.CreateShippedRoles(out _adminRole, out _agentRole, out _unitRole, out _siteRole, out _teamRole);
 
             _availableDataList = CreateAvailableDatas(out _adminAvailableData, out _agentAvailableData, out _siteAvailableData);
 
-            _matrixReports.Add(new MatrixReportInfo(1, "Agent List"));
-            _matrixReports.Add(new MatrixReportInfo(3, "Site List"));
-            _matrixReports.Add(new MatrixReportInfo(4, "Team List"));
+            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Agent List"));
+            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Site List"));
+            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Team List"));
 
             _applicationFunctions = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
 
@@ -148,11 +149,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
         public void VerifyCreateMatrixReportApplicationFunction()
         {
             string reportDescription = "xxViewAgents";
-            MatrixReportInfo info = new MatrixReportInfo(3, reportDescription);
+            MatrixReportInfo info = new MatrixReportInfo(Guid.NewGuid(), reportDescription);
             IApplicationFunction app = _target.CreateMatrixReportApplicationFunction(_applicationFunctions,  info);
             Assert.AreEqual(app.FunctionDescription, reportDescription);
             Assert.AreEqual(DefinedForeignSourceNames.SourceMatrix, app.ForeignSource);
-            Assert.AreEqual(info.ReportId.ToString(CultureInfo.InvariantCulture), app.ForeignId);
+            Assert.AreEqual(info.ReportId.ToString(), app.ForeignId);
         }
 
         [Test]
@@ -308,6 +309,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             availableDatas.Add(agentAvailableData);
             availableDatas.Add(siteAvailableData);
             return availableDatas;
+        }
+
+        [Test]
+        public void Shouldsame()
+        {
+            var guid1 = new Guid("0E3F340F-C05D-4A98-AD23-A019607745C9");
+            var guid2 = new Guid("0E3F340F-C05D-4A98-AD23-A019607745C9");
+            Assert.That(guid1.Equals(guid2), Is.True);
         }
     }
 }
