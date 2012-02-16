@@ -7,6 +7,8 @@
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
+		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
+		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<Company>Teleopti</Company>
 		<ProductName>Teleopti CCC</ProductName>
@@ -46,6 +48,7 @@
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
+	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
 
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
@@ -362,11 +365,17 @@
 			  PropertyName="BranchVersion" />
 		</ReadLinesFromFile>
 		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
+		<!--
 		<TfsVersion TfsLibraryLocation="$(TfsLibraryLocation)" LocalPath="$(CCNetWorkingDirectory)">
 			<Output TaskParameter="Changeset" PropertyName="Revision"/>
 		</TfsVersion>
 		<Message Text="TFS ChangeSet: $(Revision)" Importance="high"/>
-
+		-->
+		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
+			<Output TaskParameter="Revision" PropertyName="Revision" />
+		</HgVersion>
+		<Message Text="HG Revision: $(Revision)" Importance="high"/>
+		
 		<PropertyGroup>
 			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
 			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
@@ -563,12 +572,12 @@
 	<Target Name="CreateDBRelease">
 
     <Message Importance="high" Text="Creating Db release ..."/>
-		<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
+	<!--	<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
     </Exec>
     <Message Text="The exit code is: $(ErrorCode)"/>
     <Error Text="Error while building new release. Please check build logs for details!" Condition="'$(ErrorCode)' != '0'" />
-    
+    -->
 		<Message Importance="high" Text="Creating Db release. Done!"/>
 
     <OnError ExecuteTargets="MessageErrorHandler"/>

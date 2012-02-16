@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Tools.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -25,6 +26,7 @@ using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -136,7 +138,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             try
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
+				{
+					loadBusinessUnitIntoUnitOfWork(uow);
+
                     if (SelectorPresenter.IsOnOrganizationTab)
                     {
                         var teamRep = new TeamRepository(uow);
@@ -167,6 +171,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+		private static void loadBusinessUnitIntoUnitOfWork(IUnitOfWork uow)
+		{
+			var businessUnitRepository = new BusinessUnitRepository(uow);
+			businessUnitRepository.Get(
+				((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
+		}
 
         private void tsAddGroupPageClick(object sender, EventArgs e)
         {

@@ -5639,11 +5639,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_scheduleView.ViewGrid.CurrentCell.Activate(1, 1, GridSetCurrentCellOptions.SetFocus);
 					_scheduleView.ViewGrid.Selections.ChangeSelection(info, info, true);
 
-					if (scheduleParts != null)
-					{
-						if (!scheduleParts.IsEmpty())
-							schedulerSplitters1.RestrictionSummeryGrid.SingleAgentRestrictionPresenter.SetSelection(scheduleParts[0]);
-					}
+                    if (scheduleParts != null)
+                    {
+                        if (!scheduleParts.IsEmpty())
+                        {
+                            schedulerSplitters1.RestrictionSummeryGrid.SingleAgentRestrictionPresenter.SetSelection(scheduleParts[0]);
+                            _dateNavigateControl.SetSelectedDateNoInvoke(scheduleParts[0].DateOnlyAsPeriod.DateOnly);
+                        }
+                    }
 
 					ActiveControl = _grid;
 					restrictionViewMode(true);
