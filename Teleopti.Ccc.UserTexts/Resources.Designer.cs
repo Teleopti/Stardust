@@ -20910,6 +20910,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is the default scenario.
+        /// </summary>
+        public static string ThisIsTheDefaultScenario {
+            get {
+                return ResourceManager.GetString("ThisIsTheDefaultScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This role cannot be deleted.
         /// </summary>
         public static string ThisRoleCannotBeDeleted {

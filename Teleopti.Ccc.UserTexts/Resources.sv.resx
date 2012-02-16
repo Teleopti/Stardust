@@ -10077,4 +10077,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Justera för flexibla lediga dager</value>
     <comment>ExtendReduceDaysoffForFlexibleAgents</comment>
   </data>
+  <data name="ThisIsTheDefaultScenario" xml:space="preserve">
+    <value>Det här är standardscenariot</value>
+    <comment>Det här är standardscenariot</comment>
+  </data>
 </root>
