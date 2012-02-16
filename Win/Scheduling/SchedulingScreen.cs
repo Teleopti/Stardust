@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
+	    private readonly IOptimizationPreferences _optimizationPreferences;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
         private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
@@ -404,6 +405,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
 			_optimizerOriginalPreferences = _container.Resolve<IOptimizerOriginalPreferences>();
+            _optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
 			_ruleSetProjectionService = _container.Resolve<IRuleSetProjectionService>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
@@ -1217,7 +1219,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					disableAllExceptCancelInRibbon();
 					_backgroundWorkerRunning = true;
 					_backgroundWorkerOptimization.RunWorkerAsync
-						(new SchedulingAndOptimizeArgugument(_scheduleView.SelectedSchedules())
+						(new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
 							OptimizationMethod = OptimizationMethod.BackToLegalState
 						});
@@ -1295,7 +1297,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					preferences.AllowAlterBetween;
 				_currentSchedulingScreenSettings.OptimizeActivitiesSettings.DoNotMoveActivitiesGuids = guidList;
 
-				var optimizationPreferences = new SchedulingAndOptimizeArgugument(_scheduleView.SelectedSchedules())
+				var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 													  {
 														  OptimizationMethod = OptimizationMethod.IntradayActivityOptimization,
 														  OptimizerActivitiesPreferences = preferences
@@ -1322,7 +1324,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_scheduleView.AllSelectedDates().Count == 0)
 					return;
-				var optimizationPreferences = new SchedulingAndOptimizeArgugument(_scheduleView.SelectedSchedules())
+				var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 												  {
 													  OptimizationMethod = OptimizationMethod.ReOptimize
 												  };
@@ -4143,7 +4145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
 						options.Refresh();
 
-						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgugument(_scheduleView.SelectedSchedules()), true);
+						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 					}
 				}
 			}
@@ -4189,7 +4191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						Refresh();
 
-						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgugument(_scheduleView.SelectedSchedules()), true);
+						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 					}
 				}
 			}
@@ -4199,7 +4201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 
-			int selectedScheduleCount = ((SchedulingAndOptimizeArgugument)argument).ScheduleDays.Count;
+			int selectedScheduleCount = ((SchedulingAndOptimizeArgument)argument).ScheduleDays.Count;
 			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, selectedScheduleCount);
 
 			Cursor = Cursors.WaitCursor;
@@ -4251,13 +4253,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		}
 
-		private class SchedulingAndOptimizeArgugument
+		private class SchedulingAndOptimizeArgument
 		{
 			public IList<IScheduleDay> ScheduleDays { get; private set; }
 			public IOptimizerActivitiesPreferences OptimizerActivitiesPreferences;
 			public OptimizationMethod OptimizationMethod { get; set; }
 
-			public SchedulingAndOptimizeArgugument(IList<IScheduleDay> scheduleDays)
+			public SchedulingAndOptimizeArgument(IList<IScheduleDay> scheduleDays)
 			{
 				ScheduleDays = scheduleDays;
 
@@ -4274,7 +4276,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
 
 			_totalScheduled = 0;
-			var argument = (SchedulingAndOptimizeArgugument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 		   
 			IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new DayOffPlannerRules(), new OptimizerAdvancedPreferences(),
 																					  _optimizerOriginalPreferences.SchedulingOptions);
@@ -4494,7 +4496,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var options = (SchedulingAndOptimizeArgugument)e.Argument;
+			var options = (SchedulingAndOptimizeArgument)e.Argument;
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
