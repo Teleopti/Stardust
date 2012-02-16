@@ -1,7 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_permission_get]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_permission_get]
 GO
-SELECT NEWID()
+
 
 -- =============================================
 -- Author:		<KJ

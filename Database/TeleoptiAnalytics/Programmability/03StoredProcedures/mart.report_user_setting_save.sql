@@ -12,6 +12,7 @@ CREATE  PROCEDURE [mart].[report_user_setting_save]
 	skickas -1 in i @saved_name_id
 	20090211 Added new mart schema KJ
 	-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+	exec mart.report_user_setting_save @person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='0E3F340F-C05D-4A98-AD23-A019607745C9',@param_name=N'@date_from',@saved_name_id=-1,@setting=N'2012-02-16 00:00:00'
 */
 	@report_id uniqueidentifier,
 	@person_code uniqueidentifier,
@@ -33,7 +34,7 @@ AND saved_name_id = @saved_name_id
 IF @current_setting IS NULL
 BEGIN
 	INSERT INTO mart.report_user_setting
-		SELECT @person_code, @report_id, @param_name, @saved_name_id, @setting
+		SELECT @person_code, @param_name, @saved_name_id, @setting, @report_id
 END
 ELSE
 BEGIN

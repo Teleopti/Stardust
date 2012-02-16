@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[repo
 DROP PROCEDURE [mart].[report_control_site_get]
 GO
 
---exec report_control_site_get '2006-01-01','2006-01-02',10,'C04803E2-8D6F-4936-9A90-9B2000148778',1053,'4AD43E49-B233-4D03-A813-9B2000102EBE'
+--exec mart.report_control_site_get @date_from='2012-02-16 00:00:00',@date_to='2012-02-16 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@report_id='0E3F340F-C05D-4A98-AD23-A019607745C9',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@language_id=1053,@bu_id='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 CREATE Proc [mart].[report_control_site_get]
 @date_from datetime,
