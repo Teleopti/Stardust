@@ -42,6 +42,6 @@ packages/
 *.vssscc
 *.vsps
 log.txt
-.jrs
-.esent
-.chk
+*.jrs
+*.esent
+*.chk
