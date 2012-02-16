@@ -589,6 +589,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 												   _dataMartConnectionString);
 		}
 
+		public int PerformPurge()
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var purgeCommand = new PurgeApplicationData(UnitOfWorkFactory.Current);
+				purgeCommand.Execute();
+			}
+			return 1;
+		}
+
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();

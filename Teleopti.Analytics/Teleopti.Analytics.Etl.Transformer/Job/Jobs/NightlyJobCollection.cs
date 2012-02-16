@@ -98,6 +98,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
                 Add(new PerformanceManagerJobStep(jobParameters));
                 Add(new PmPermissionJobStep(jobParameters));
             }
+
+			// MORE CLEAN UP!
+			Add(new PurgeJobStep(jobParameters));     // BU independent
         }
     }
 

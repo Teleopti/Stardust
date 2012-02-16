@@ -41,3 +41,4 @@ packages/
 *.stub
 *.vssscc
 *.vsps
+Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/log.txt
