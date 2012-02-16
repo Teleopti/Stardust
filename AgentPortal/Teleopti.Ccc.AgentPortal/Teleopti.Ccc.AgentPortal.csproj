@@ -258,7 +258,6 @@
     <Compile Include="AgentPreferenceView\ClipboardControl.Designer.cs">
       <DependentUpon>ClipboardControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgentPreferenceView\PreferenceCellPainters\ContractDayOffPainter.cs" />
     <Compile Include="AgentPreferenceView\PreferenceCellPainters\PreferredAbsencePainter.cs" />
     <Compile Include="AgentPreferenceView\PreferenceCellPainters\ViolatesNightlyRestPainter.cs" />
     <Compile Include="AgentSchedule\AllTeamsSelection.cs" />
