@@ -571,12 +571,12 @@
 	<Target Name="CreateDBRelease">
 
     <Message Importance="high" Text="Creating Db release ..."/>
-		<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
+	<!--	<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
     </Exec>
     <Message Text="The exit code is: $(ErrorCode)"/>
     <Error Text="Error while building new release. Please check build logs for details!" Condition="'$(ErrorCode)' != '0'" />
-    
+    -->
 		<Message Importance="high" Text="Creating Db release. Done!"/>
 
     <OnError ExecuteTargets="MessageErrorHandler"/>
