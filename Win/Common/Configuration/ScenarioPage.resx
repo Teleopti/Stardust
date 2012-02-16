@@ -172,13 +172,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelSubHeader2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 128</value>
+    <value>3, 151</value>
   </data>
   <data name="tableLayoutPanelSubHeader2.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanelSubHeader2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 27</value>
+    <value>594, 28</value>
   </data>
   <data name="tableLayoutPanelSubHeader2.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -198,7 +198,7 @@
   <data name="tableLayoutPanelSubHeader2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelSubHeader2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tableLayoutPanelControlContainer.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="autoLabelDefaultScenario.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -211,16 +211,16 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelDefaultScenario.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 2</value>
+    <value>3, 83</value>
   </data>
   <data name="autoLabelDefaultScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
+    <value>568, 21</value>
   </data>
   <data name="autoLabelDefaultScenario.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>10</value>
   </data>
   <data name="autoLabelDefaultScenario.Text" xml:space="preserve">
-    <value>xxDefaultScenarioColon</value>
+    <value>xxThisIsTheDefaultScenario</value>
   </data>
   <data name="autoLabelDefaultScenario.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -229,271 +229,13 @@
     <value>autoLabelDefaultScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelDefaultScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelDefaultScenario.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+    <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;autoLabelDefaultScenario.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="checkBoxAdvDefaultScenario.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 3</value>
-  </data>
-  <data name="checkBoxAdvDefaultScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>18, 19</value>
-  </data>
-  <data name="checkBoxAdvDefaultScenario.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvDefaultScenario.Name" xml:space="preserve">
-    <value>checkBoxAdvDefaultScenario</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvDefaultScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvDefaultScenario.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvDefaultScenario.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="autoLabelAuditTrail.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Left</value>
-  </data>
-  <data name="autoLabelAuditTrail.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="autoLabelAuditTrail.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="autoLabelAuditTrail.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 28</value>
-  </data>
-  <data name="autoLabelAuditTrail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
-  </data>
-  <data name="autoLabelAuditTrail.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="autoLabelAuditTrail.Text" xml:space="preserve">
-    <value>xxAuditTrailColon</value>
-  </data>
-  <data name="autoLabelAuditTrail.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;autoLabelAuditTrail.Name" xml:space="preserve">
-    <value>autoLabelAuditTrail</value>
-  </data>
-  <data name="&gt;&gt;autoLabelAuditTrail.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;autoLabelAuditTrail.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;autoLabelAuditTrail.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="checkBoxAdvAuditTrail.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 28</value>
-  </data>
-  <data name="checkBoxAdvAuditTrail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 21</value>
-  </data>
-  <data name="checkBoxAdvAuditTrail.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvAuditTrail.Name" xml:space="preserve">
-    <value>checkBoxAdvAuditTrail</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvAuditTrail.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvAuditTrail.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvAuditTrail.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="autoLabelEnableReporting.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Left</value>
-  </data>
-  <data name="autoLabelEnableReporting.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="autoLabelEnableReporting.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="autoLabelEnableReporting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 55</value>
-  </data>
-  <data name="autoLabelEnableReporting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
-  </data>
-  <data name="autoLabelEnableReporting.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="autoLabelEnableReporting.Text" xml:space="preserve">
-    <value>xxEnableReportingColon</value>
-  </data>
-  <data name="autoLabelEnableReporting.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;autoLabelEnableReporting.Name" xml:space="preserve">
-    <value>autoLabelEnableReporting</value>
-  </data>
-  <data name="&gt;&gt;autoLabelEnableReporting.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;autoLabelEnableReporting.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;autoLabelEnableReporting.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="checkBoxAdvEnableReporting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 55</value>
-  </data>
-  <data name="checkBoxAdvEnableReporting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 21</value>
-  </data>
-  <data name="checkBoxAdvEnableReporting.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvEnableReporting.Name" xml:space="preserve">
-    <value>checkBoxAdvEnableReporting</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvEnableReporting.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvEnableReporting.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvEnableReporting.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 119</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.Size" type="System.Drawing.Size, System.Drawing">
-    <value>568, 21</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.Text" xml:space="preserve">
-    <value>xx*Maximum 5 scenarios may be used for reporting.</value>
-  </data>
-  <data name="autoLabelMax5Scenarios.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;autoLabelMax5Scenarios.Name" xml:space="preserve">
-    <value>autoLabelMax5Scenarios</value>
-  </data>
-  <data name="&gt;&gt;autoLabelMax5Scenarios.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;autoLabelMax5Scenarios.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;autoLabelMax5Scenarios.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="autoLabelRestricted.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Left</value>
-  </data>
-  <data name="autoLabelRestricted.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="autoLabelRestricted.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="autoLabelRestricted.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 82</value>
-  </data>
-  <data name="autoLabelRestricted.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
-  </data>
-  <data name="autoLabelRestricted.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="autoLabelRestricted.Text" xml:space="preserve">
-    <value>xxRestricted</value>
-  </data>
-  <data name="autoLabelRestricted.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;autoLabelRestricted.Name" xml:space="preserve">
-    <value>autoLabelRestricted</value>
-  </data>
-  <data name="&gt;&gt;autoLabelRestricted.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;autoLabelRestricted.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;autoLabelRestricted.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="checkBoxAdvRestricted.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 82</value>
-  </data>
-  <data name="checkBoxAdvRestricted.Size" type="System.Drawing.Size, System.Drawing">
-    <value>17, 21</value>
-  </data>
-  <data name="checkBoxAdvRestricted.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvRestricted.Name" xml:space="preserve">
-    <value>checkBoxAdvRestricted</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvRestricted.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvRestricted.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;checkBoxAdvRestricted.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 161</value>
-  </data>
-  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 140</value>
-  </data>
-  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
-    <value>tableLayoutPanelBody</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelDefaultScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvDefaultScenario" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelAuditTrail" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvAuditTrail" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelEnableReporting" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvEnableReporting" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelMax5Scenarios" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelRestricted" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvRestricted" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Absolute,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tableLayoutPanelControlContainer.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
   </data>
   <data name="autoLabelChangeInfo.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Left</value>
@@ -505,7 +247,7 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelChangeInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 59</value>
+    <value>3, 55</value>
   </data>
   <data name="autoLabelChangeInfo.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 21</value>
@@ -523,13 +265,13 @@
     <value>autoLabelChangeInfo</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="autoLabelScenario.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Left</value>
@@ -559,13 +301,13 @@
     <value>autoLabelScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="comboBoxAdvScenarioCollection.Items" xml:space="preserve">
     <value>New Scenario</value>
@@ -586,13 +328,13 @@
     <value>comboBoxAdvScenarioCollection</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvScenarioCollection.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvScenarioCollection.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;comboBoxAdvScenarioCollection.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="textBoxExtDescription.Location" type="System.Drawing.Point, System.Drawing">
     <value>178, 30</value>
@@ -613,13 +355,13 @@
     <value>textBoxExtDescription</value>
   </data>
   <data name="&gt;&gt;textBoxExtDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;textBoxExtDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;textBoxExtDescription.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="autoLabelDescription.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Left</value>
@@ -649,13 +391,13 @@
     <value>autoLabelDescription</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="autoLabelInfoAboutChanges.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -673,7 +415,7 @@
     <value>0, 0, 3, 0</value>
   </data>
   <data name="autoLabelInfoAboutChanges.Size" type="System.Drawing.Size, System.Drawing">
-    <value>416, 33</value>
+    <value>416, 25</value>
   </data>
   <data name="autoLabelInfoAboutChanges.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -688,13 +430,13 @@
     <value>autoLabelInfoAboutChanges</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tableLayoutPanelControlContainer.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -703,10 +445,10 @@
     <value>3, 36</value>
   </data>
   <data name="tableLayoutPanelControlContainer.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tableLayoutPanelControlContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 86</value>
+    <value>594, 109</value>
   </data>
   <data name="tableLayoutPanelControlContainer.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -721,10 +463,10 @@
     <value>tableLayoutPanelBody</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelControlContainer.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tableLayoutPanelControlContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelChangeInfo" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxAdvScenarioCollection" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxExtDescription" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelDescription" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelInfoAboutChanges" Row="2" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelDefaultScenario" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelChangeInfo" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxAdvScenarioCollection" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBoxExtDescription" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelDescription" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelInfoAboutChanges" Row="2" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Absolute,25,Absolute,9" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -751,7 +493,7 @@
     <value>buttonDelete</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -853,10 +595,190 @@
     <value>tableLayoutPanelBody</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelSubHeader1.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonDelete" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonNew" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="autoLabelEnableReporting.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelEnableReporting.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelEnableReporting.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelEnableReporting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="autoLabelEnableReporting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 21</value>
+  </data>
+  <data name="autoLabelEnableReporting.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="autoLabelEnableReporting.Text" xml:space="preserve">
+    <value>xxEnableReportingColon</value>
+  </data>
+  <data name="autoLabelEnableReporting.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelEnableReporting.Name" xml:space="preserve">
+    <value>autoLabelEnableReporting</value>
+  </data>
+  <data name="&gt;&gt;autoLabelEnableReporting.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelEnableReporting.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelEnableReporting.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="checkBoxAdvEnableReporting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 3</value>
+  </data>
+  <data name="checkBoxAdvEnableReporting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>17, 21</value>
+  </data>
+  <data name="checkBoxAdvEnableReporting.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvEnableReporting.Name" xml:space="preserve">
+    <value>checkBoxAdvEnableReporting</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvEnableReporting.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvEnableReporting.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvEnableReporting.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 91</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.Size" type="System.Drawing.Size, System.Drawing">
+    <value>568, 21</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.Text" xml:space="preserve">
+    <value>xx*Maximum 5 scenarios may be used for reporting.</value>
+  </data>
+  <data name="autoLabelMax5Scenarios.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelMax5Scenarios.Name" xml:space="preserve">
+    <value>autoLabelMax5Scenarios</value>
+  </data>
+  <data name="&gt;&gt;autoLabelMax5Scenarios.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelMax5Scenarios.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelMax5Scenarios.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="autoLabelRestricted.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoLabelRestricted.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="autoLabelRestricted.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="autoLabelRestricted.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 30</value>
+  </data>
+  <data name="autoLabelRestricted.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 21</value>
+  </data>
+  <data name="autoLabelRestricted.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="autoLabelRestricted.Text" xml:space="preserve">
+    <value>xxRestricted</value>
+  </data>
+  <data name="autoLabelRestricted.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;autoLabelRestricted.Name" xml:space="preserve">
+    <value>autoLabelRestricted</value>
+  </data>
+  <data name="&gt;&gt;autoLabelRestricted.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;autoLabelRestricted.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;autoLabelRestricted.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="checkBoxAdvRestricted.Location" type="System.Drawing.Point, System.Drawing">
+    <value>178, 30</value>
+  </data>
+  <data name="checkBoxAdvRestricted.Size" type="System.Drawing.Size, System.Drawing">
+    <value>17, 21</value>
+  </data>
+  <data name="checkBoxAdvRestricted.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvRestricted.Name" xml:space="preserve">
+    <value>checkBoxAdvRestricted</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvRestricted.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.CheckBoxAdv, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvRestricted.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;checkBoxAdvRestricted.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 185</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>594, 112</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>tableLayoutPanelBody</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelEnableReporting" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvEnableReporting" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelMax5Scenarios" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelRestricted" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkBoxAdvRestricted" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Absolute,25,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanelBody.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -886,7 +808,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanelBody.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanelSubHeader2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="tableLayoutPanelControlContainer" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,33,Absolute,92,Absolute,33,Absolute,70" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanelSubHeader2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelControlContainer" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="3" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,33,Absolute,115,Absolute,34,Absolute,46" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gradientPanelHeader.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
@@ -985,7 +907,7 @@
     <value>gradientPanelHeader</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Parent" xml:space="preserve">
     <value>$this</value>
