@@ -384,3 +384,32 @@ BEGIN
 	)
 END
 GO
+
+
+/*
+Anders F
+2012-02-06
+Purge old data for app db.
+*/
+
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PurgeSetting]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[PurgeSetting](
+	[Key] [nvarchar](50) NOT NULL,
+	[KeepYears] [int] NOT NULL
+	)
+
+
+ALTER TABLE [dbo].[PurgeSetting] ADD CONSTRAINT PK_PurgeSetting PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC
+)
+
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PurgeSetting] WHERE [Key] ='Forecast')
+	INSERT INTO [dbo].[PurgeSetting] ([Key], [KeepYears]) VALUES('Forecast',10)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PurgeSetting] WHERE [Key] ='Schedule')
+	INSERT INTO [dbo].[PurgeSetting] ([Key], [KeepYears]) VALUES('Schedule',10)
+GO

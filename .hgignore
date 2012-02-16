@@ -41,7 +41,7 @@ packages/
 *.stub
 *.vssscc
 *.vsps
-log.txt
+*log.txt
 *.jrs
 *.esent
 *.chk

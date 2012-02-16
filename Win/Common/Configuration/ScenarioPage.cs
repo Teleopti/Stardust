@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             comboBoxAdvScenarioCollection.SelectedIndexChanged += ComboBoxAdvScenarioCollectionSelectedIndexChanged;
             textBoxExtDescription.Validating += TextBoxDescriptionValidating;
             textBoxExtDescription.Validated += TextBoxDescriptionValidated;
-            checkBoxAdvDefaultScenario.Validated += CheckBoxDefaultScenarioValidated;
-            checkBoxAdvAuditTrail.Validated += CheckBoxAuditTrailValidated;
+            //checkBoxAdvDefaultScenario.Validated += CheckBoxDefaultScenarioValidated;
+            //checkBoxAdvAuditTrail.Validated += CheckBoxAuditTrailValidated;
             checkBoxAdvEnableReporting.Validated += CheckBoxAdvEnableReportingValidated;
 			checkBoxAdvRestricted.Validated += CheckBoxAdvRestrictedValidated;
             buttonNew.Click += ButtonNewClick;
@@ -150,29 +150,29 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-        private void changeDefaultScenario()
-        {
-            // Default scenario cannot be unchecked.
-            if (SelectedScenario.DefaultScenario)
-            {
-                checkBoxAdvDefaultScenario.Checked = true;
-            }
-            else if (checkBoxAdvDefaultScenario.Checked)
-            {
-                // Removes default scenario.
-                IScenario defaultScenario = _scenarioList.Where(s => s.DefaultScenario).SingleOrDefault();
-                if (defaultScenario != null)
-                {
-                    defaultScenario.DefaultScenario = false;
-                }
-                SelectedScenario.DefaultScenario = true;
-            }
-        }
+        //private void changeDefaultScenario()
+        //{
+        //    // Default scenario cannot be unchecked.
+        //    if (SelectedScenario.DefaultScenario)
+        //    {
+        //        checkBoxAdvDefaultScenario.Checked = true;
+        //    }
+        //    else if (checkBoxAdvDefaultScenario.Checked)
+        //    {
+        //        // Removes default scenario.
+        //        IScenario defaultScenario = _scenarioList.Where(s => s.DefaultScenario).SingleOrDefault();
+        //        if (defaultScenario != null)
+        //        {
+        //            defaultScenario.DefaultScenario = false;
+        //        }
+        //        SelectedScenario.DefaultScenario = true;
+        //    }
+        //}
 
-        private void changeAuditTrail()
-        {
-            SelectedScenario.AuditTrail = checkBoxAdvAuditTrail.Checked;
-        }
+        //private void changeAuditTrail()
+        //{
+        //    SelectedScenario.AuditTrail = checkBoxAdvAuditTrail.Checked;
+        //}
 
         private void changeEnableReporting()
         {
@@ -223,11 +223,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
         	if (SelectedScenario == null) return;
         	textBoxExtDescription.Text = SelectedScenario.Description.Name;
-        	checkBoxAdvDefaultScenario.Checked = SelectedScenario.DefaultScenario;
-        	checkBoxAdvAuditTrail.Checked = SelectedScenario.AuditTrail;
+        	//checkBoxAdvDefaultScenario.Checked = SelectedScenario.DefaultScenario;
+            autoLabelDefaultScenario.Visible = SelectedScenario.DefaultScenario;
+        	//checkBoxAdvAuditTrail.Checked = SelectedScenario.AuditTrail;
         	checkBoxAdvEnableReporting.Checked = SelectedScenario.EnableReporting;
         	checkBoxAdvRestricted.Checked = SelectedScenario.Restricted;
         	setEnableReportingState();
+            buttonDelete.Enabled = !SelectedScenario.DefaultScenario;
         }
 
         private void setEnableReportingState()
@@ -305,13 +307,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	comboBoxAdvScenarioCollection.SelectedIndex = selected;
         }
 
-        private void CheckBoxAuditTrailValidated(object sender, EventArgs e)
-        {
-            if (SelectedScenario != null)
-            {
-                changeAuditTrail();
-            }
-        }
+        //private void CheckBoxAuditTrailValidated(object sender, EventArgs e)
+        //{
+        //    if (SelectedScenario != null)
+        //    {
+        //        changeAuditTrail();
+        //    }
+        //}
 
         private void CheckBoxAdvEnableReportingValidated(object sender, EventArgs e)
         {
@@ -329,13 +331,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-        private void CheckBoxDefaultScenarioValidated(object sender, EventArgs e)
-        {
-        	if (SelectedScenario == null) return;
-        	Cursor.Current = Cursors.WaitCursor;
-        	changeDefaultScenario();
-        	Cursor.Current = Cursors.Default;
-        }
+        //private void CheckBoxDefaultScenarioValidated(object sender, EventArgs e)
+        //{
+        //    if (SelectedScenario == null) return;
+        //    Cursor.Current = Cursors.WaitCursor;
+        //    changeDefaultScenario();
+        //    Cursor.Current = Cursors.Default;
+        //}
 
         private void ComboBoxAdvScenarioCollectionSelectedIndexChanged(object sender, EventArgs e)
         {

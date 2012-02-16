@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -88,18 +89,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<ITeam> teams = new TeamRepository(UnitOfWork).FindTeamByDescriptionName(teamName).ToList();
             Assert.AreEqual(teamName, teams[0].Description.Name);
         }
-        
-        [Test]
-        public void ShouldFindTeamByIds()
-        {
-            ITeam team = CreateAggregateWithCorrectBusinessUnit();
-            ITeam team2 = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(team);
-            PersistAndRemoveFromUnitOfWork(team2);
 
-            var teams = new TeamRepository(UnitOfWork).FindTeams(new List<Guid> {team.Id.Value,team2.Id.Value});
-            Assert.That(teams.Count, Is.EqualTo(2));
-        }
+		[Test]
+		public void ShouldFindTeamByIds()
+		{
+			ITeam team = CreateAggregateWithCorrectBusinessUnit();
+			ITeam team2 = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(team);
+			PersistAndRemoveFromUnitOfWork(team2);
+
+			var teams = new TeamRepository(UnitOfWork).FindTeams(new List<Guid> { team.Id.Value, team2.Id.Value });
+			Assert.That(teams.Count, Is.EqualTo(2));
+			Assert.That(LazyLoadingManager.IsInitialized(teams.First().Site), Is.True);
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()

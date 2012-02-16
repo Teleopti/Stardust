@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Jobs
         {
             IList<IJobStep> jobStepList = new CleanupJobCollection(_parameters);
 
-            Assert.AreEqual(4, jobStepList.Count);
+            Assert.AreEqual(5, jobStepList.Count);
         }
     }
 }
