@@ -7,7 +7,8 @@
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
-		<MSBuildMercurialPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialPath>
+		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
+		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<Company>Teleopti</Company>
 		<ProductName>Teleopti CCC</ProductName>
@@ -47,7 +48,7 @@
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
-	<Import Project="$(MSBuildMercurialPath)\MSBuild.Mercurial.Tasks"/>
+	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
 
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
