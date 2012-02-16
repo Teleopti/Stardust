@@ -97,6 +97,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MobileSignIn.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyProfile.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyProfile.feature</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
@@ -298,6 +303,10 @@
     <None Include="MobileSignIn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyProfile.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
     <None Include="Routing.feature">

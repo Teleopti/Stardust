@@ -158,3 +158,59 @@ Scenario: Default to first virtual schedule period overlapping open preference p
 	And I have a workflow control set with preference periods open next month
 	When I view preferences
 	Then I should see the first virtual schedule period overlapping open preference period
+
+
+
+
+Scenario: See scheduled shift
+	Given I am an agent
+	And I have a shift today
+	And My schedule is published
+	When I view preferences
+	Then I should see my shift
+
+Scenario: Can not add preference on scheduled day
+	Given I am an agent
+	And I have a shift today
+	And My schedule is published
+	When I view preferences
+	Then I should see my shift
+	And I should not be able to add preference today
+
+Scenario: See scheduled dayoff
+	Given I am an agent
+	And I have a dayoff today
+	And My schedule is published
+	When I view preferences
+	Then I should see the dayoff
+
+Scenario: See scheduled absence
+	Given I am an agent
+	And I have a shift today
+	And I have a full-day absence today
+	And My schedule is published
+	When I view preferences
+	Then I should see the absence
+
+Scenario: See scheduled absence when no underlying shift
+	Given I am an agent
+	And I have a full-day absence today
+	And My schedule is published
+	When I view preferences
+	Then I should see the absence
+
+Scenario: See scheduled absence on schedule dayoff
+	Given I am an agent
+	And I have a dayoff today
+	And I have a full-day absence today
+	And My schedule is published
+	When I view preferences
+	Then I should see the absence
+
+Scenario: See scheduled absence on contract dayoff
+	Given I am an agent
+	And I have a contract dayoff today
+	And I have a full-day absence today
+	And My schedule is published
+	When I view preferences
+	Then I should see the absence
