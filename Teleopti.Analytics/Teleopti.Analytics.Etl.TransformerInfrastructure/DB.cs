@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -13,21 +12,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
     public class DB : IDB
     {
-
-		#region Fields (7) 
-
-        private string _commandText;
+        private readonly string _commandText;
         private readonly CommandType _commandType;
         private readonly string _connString;
         private bool _disposed;
         private readonly IList<IDbDataParameter> _procParam;
-        // Fields
-        private  IDbCommand cmd;
+        private IDbCommand cmd;
         private IDbConnection conn;
-
-		#endregion Fields 
-
-		#region Constructors (3) 
 
         public DB(CommandType commandType, string commandText, string connectionString)
             : this()
@@ -35,12 +26,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             _connString = connectionString;
             _commandType = commandType;
             _commandText = commandText;
-            //if (_commandType == CommandType.StoredProcedure)
-            //    SetProcName();
-
         }
 
-        // Methods
         private DB()
         {
             _procParam = new List<IDbDataParameter>();
@@ -51,11 +38,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             Dispose(false);
         }
 
-		#endregion Constructors 
-
-		#region Properties (1) 
-
-        // Properties
         protected virtual CommandBehavior CmdBehavior
         {
             get
@@ -63,13 +45,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 return CommandBehavior.CloseConnection;
             }
         }
-
-		#endregion Properties 
-
-		#region Methods (14) 
-
-
-		// Public Methods (8) 
 
         public void AddProcParameter(IDbDataParameter parameter)
         {
@@ -95,16 +70,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             AddProcParameter(new SqlParameter(parameterName, RuntimeHelpers.GetObjectValue(value)));
         }
 
-        //private string buildConnectionString(string server, string db)
-        //{
-        //    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        //    builder.DataSource = server.Trim();
-        //    builder.InitialCatalog = db.Trim();
-        //    builder.IntegratedSecurity = false;
-        //    builder.UserID = "toptiUser";
-        //    builder.Password = "semtex315";
-        //    return builder.ConnectionString;
-        //}
         public void Close()
         {
             if (_disposed)
@@ -126,12 +91,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             {
                 throw new ObjectDisposedException("Db object disposed!");
             }
-            //Trace.WriteLine("Prepare to get datareader - " + _commandText, "Db");
-            GrabConnection();
+
+			GrabConnection();
             SetCommand();
             setParams();
-            //Trace.WriteLine("Starting reading stream - " + _commandText, "Db");
-            return cmd.ExecuteReader(CmdBehavior);
+            
+			return cmd.ExecuteReader(CmdBehavior);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -141,8 +106,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             {
                 throw new ObjectDisposedException("Db object disposed!");
             }
-            //Trace.WriteLine("Getting datatable - " + _commandText, "Db");
-            IDbDataAdapter adapter = null;
+            
+			IDbDataAdapter adapter = null;
             DataSet dataSet = new DataSet();
             try
             {
@@ -157,7 +122,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             catch (Exception)
             {
                 dataSet.Dispose();
-                //dataSet = null;
                 throw;
             }
             finally
@@ -165,7 +129,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 if (adapter != null) ((IDisposable) adapter).Dispose();
             }
             
-            //Trace.WriteLine("Finished getting datatable - " + _commandText, "Db");
             return dataSet;
         }
 
@@ -175,13 +138,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             {
                 throw new ObjectDisposedException("Db object disposed!");
             }
-            //Trace.WriteLine("Executing command - " + _commandText, "Db");
-            GrabConnection();
+            
+			GrabConnection();
             SetCommand();
             setParams();
             int num2 = cmd.ExecuteNonQuery();
-            //Trace.WriteLine("Finished command - " + _commandText, "Db");
-            return num2;
+            
+			return num2;
         }
 
         public object ExecuteScalar()
@@ -190,18 +153,14 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             {
                 throw new ObjectDisposedException("Db object disposed!");
             }
-            //Trace.WriteLine("Executing scalar command - " + _commandText, "Db");
-            GrabConnection();
+            
+			GrabConnection();
             SetCommand();
             setParams();
             object retVal = cmd.ExecuteScalar();
-            //Trace.WriteLine("Finished executing scalar command - " + _commandText, "Db");
-            return retVal;
+            
+			return retVal;
         }
-
-
-
-		// Protected Methods (4) 
 
         protected virtual void Dispose(bool calledExplicit)
         {
@@ -237,22 +196,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             cmd = new SqlCommand();
             cmd.CommandText = _commandText;
             cmd.Connection = conn;
-            //cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandType = _commandType;
             cmd.CommandTimeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
         }
-
-        //protected void SetProcName()
-        //{
-        //    if (!_commandText.StartsWith("dbo.",StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        _commandText = "dbo." + _commandText;
-        //    }
-        //}
-
-
-
-		// Private Methods (2) 
 
         private void GrabConnection()
         {
@@ -268,10 +214,5 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 cmd.Parameters.Add(_procParam[i]);
             }
         }
-
-
-		#endregion Methods 
     }
-
-
 }
