@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         public PurgeJobStep(IJobParameters jobParameters)
             : base(jobParameters)
         {
-            Name = "Purge";
+            Name = "Purge Old Application Data";
             IsBusinessUnitIndependent = true;
         }
 

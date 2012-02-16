@@ -16,7 +16,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new DimPersonTrimJobStep(jobParameters));     // BU independent
             Add(new DimScenarioDeleteJobStep(jobParameters));   // BU independent
             Add(new MaintenanceJobStep(jobParameters));     // BU independent
-            Add(new PurgeJobStep(jobParameters));     // BU independent
 
             // STAGE TABLES
             Add(new StageDateJobStep(jobParameters));                    // BU independent
@@ -99,6 +98,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
                 Add(new PerformanceManagerJobStep(jobParameters));
                 Add(new PmPermissionJobStep(jobParameters));
             }
+
+			// MORE CLEAN UP!
+			Add(new PurgeJobStep(jobParameters));     // BU independent
         }
     }
 
