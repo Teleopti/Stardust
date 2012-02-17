@@ -112,7 +112,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
         private void RegisterClientCloseWindow()
         {
             var script = new StringBuilder();
-            script.Append("window.close();");
+            script.Append("top.window.close();");
 
             Page.ClientScript.RegisterClientScriptBlock(GetType(), "close_window_script", script.ToString(), true);
         }
