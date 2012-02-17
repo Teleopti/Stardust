@@ -10381,4 +10381,10 @@ These options are activated:
     <value>This is the default scenario</value>
     <comment>This is the default scenario</comment>
   </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>Maximum is {0} hours.</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>Minimum is {0} hours.</value>
+  </data>
 </root>

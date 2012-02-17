@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls
@@ -46,8 +47,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
            {
                SetOkStatus();
            }
-            if(timeValue < _minimumValue || timeValue > _maximumValue )
-                SetErrorStatus(UserTexts.Resources.IllegalInput);
+            var culture = TeleoptiPrincipal.Current.Regional.UICulture; 
+           if (timeValue < _minimumValue)
+               SetErrorStatus(string.Format(culture, UserTexts.Resources.MinimumIsParameterHoursDot, _minimumValue.TotalHours));
+           else if (timeValue > _maximumValue)
+               SetErrorStatus(string.Format(culture, UserTexts.Resources.MaximumIsParameterHoursDot, _maximumValue.TotalHours));
             return timeValue;
         }
 

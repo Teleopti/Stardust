@@ -9193,4 +9193,10 @@ Periods</comment>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
     <value>您的请求由于超出预算配额而被系统自动拒绝。</value>
   </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>最多为{0}小时。</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>至少为{0}小时。</value>
+  </data>
 </root>
