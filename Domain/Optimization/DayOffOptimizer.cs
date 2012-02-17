@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IDayOffDecisionMaker _decisionMaker;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private ILockableBitArray _workingBitArray;
 
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public DayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDayOffPlannerSessionRuleSet ruleSet,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter)
         {
             _converter = converter;

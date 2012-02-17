@@ -3571,7 +3571,6 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="Forecasting\Forms\Forecaster.cd" />
-    <None Include="Intraday\IntradayMVP.cd" />
     <None Include="Resources\ccc_Absence.png" />
     <None Include="Resources\ccc_Activities_settings2.png" />
     <None Include="Resources\avaya_ccc.png" />

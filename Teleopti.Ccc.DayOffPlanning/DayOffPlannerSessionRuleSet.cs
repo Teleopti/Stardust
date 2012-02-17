@@ -2,7 +2,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanning
 {
-    public class DayOffPlannerSessionRuleSet
+    public interface IDayOffPlannerSessionRuleSet
+    {
+        MinMax<int> DaysOffPerWeek { get; set; }
+        MinMax<int> ConsecutiveDaysOff { get; set; }
+        MinMax<int> ConsecutiveWorkdays { get; set; }
+        MinMax<int> FreeWeekends { get; set; }
+        MinMax<int> FreeWeekendDays { get; set; }
+        bool UseDaysOffPerWeek { get; set; }
+        bool UseConsecutiveDaysOff { get; set; }
+        bool UseConsecutiveWorkdays { get; set; }
+        bool UseFreeWeekends { get; set; }
+        bool UseFreeWeekendDays { get; set; }
+        bool ConsiderWeekBefore { get; set; }
+        bool ConsiderWeekAfter { get; set; }
+    }
+
+    public class DayOffPlannerSessionRuleSet : IDayOffPlannerSessionRuleSet
     {
         public MinMax<int> DaysOffPerWeek { get; set; }
         public MinMax<int> ConsecutiveDaysOff { get; set; }

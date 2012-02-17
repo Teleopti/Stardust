@@ -23,14 +23,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsNotNull(_target.DaysOff);
             Assert.IsNotNull(_target.Extra);
             Assert.IsNotNull(_target.Advanced);
+            Assert.IsNotNull(_target.LocalSchedulingOptions);
         }
 
         [Test]
         public void VerifyGeneralSettingsDefaultValues()
         {
-            Assert.IsTrue(_target.General.OptimizationForDaysOff);
-            Assert.IsTrue(_target.General.OptimizationForShiftsWithinDay);
-            Assert.IsTrue(_target.General.AllowMoveShiftsWithinDay);
+            Assert.IsTrue(_target.General.OptimizationStepDaysOff);
+            Assert.IsTrue(_target.General.OptimizationStepShiftsWithinDay);
+            Assert.IsTrue(_target.General.OptimizationStepTimeBetweenDays);
             Assert.IsTrue(_target.General.UsePreferences);
             Assert.IsTrue(_target.General.UseMustHaves);
             Assert.IsTrue(_target.General.UseRotations);
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.General.UseStudentAvailabilities);
             Assert.IsTrue(_target.General.UseShiftCategoryLimitations);
 
-            Assert.IsFalse(_target.General.ShiftsForFlexibleWorkTime);
-            Assert.IsFalse(_target.General.DaysOffForFlexibleWorkTime);
+            Assert.IsFalse(_target.General.OptimizationStepShiftsForFlexibleWorkTime);
+            Assert.IsFalse(_target.General.OptimizationStepDaysOffForFlexibleWorkTime);
 
         }
 
@@ -58,6 +59,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyExtraSettingsDefaultValues()
         {
             Assert.AreEqual(_target.Extra.BlockFinderOptionsValue, BlockFinderType.BetweenDayOff);
+        }
+
+        [Test]
+        public void VerifyLocalSchedulingOptionsDefaultValues()
+        {
+            Assert.IsTrue(_target.LocalSchedulingOptions.ConsiderShortBreaks);
         }
     }
 }

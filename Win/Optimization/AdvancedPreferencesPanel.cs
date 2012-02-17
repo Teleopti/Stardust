@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Win.Optimization
         private void getDataFromControls()
         {
             if (radioButtonStandardDeviation.Checked)
-                Preferences.TargetValue = TargetValueOptions.StandardDeviation;
+                Preferences.TargetValueCalculation = TargetValueOptions.StandardDeviation;
             if (radioButtonRootMeanSquare.Checked)
-                Preferences.TargetValue = TargetValueOptions.RootMeanSquare;
+                Preferences.TargetValueCalculation = TargetValueOptions.RootMeanSquare;
             if (radioButtonTeleopti.Checked)
-                Preferences.TargetValue = TargetValueOptions.Teleopti;
+                Preferences.TargetValueCalculation = TargetValueOptions.Teleopti;
 
 
             Preferences.UseIntraIntervalDeviation = checkBoxUseIntraIntervalDeviation.Checked;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void setDataInControls()
         {
-            switch (Preferences.TargetValue)
+            switch (Preferences.TargetValueCalculation)
             {
                 case TargetValueOptions.StandardDeviation:
                     radioButtonStandardDeviation.Checked = true;

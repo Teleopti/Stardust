@@ -7,8 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupDayOffOptimizerCreator
     {
-        IGroupDayOffOptimizer CreateDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter, IDayOffDecisionMaker decisionMaker, IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
-                                                                    DayOffPlannerSessionRuleSet ruleSet, IList<IDayOffLegalStateValidator> validatorList, IList<IPerson> allSelectedPersons);
+        IGroupDayOffOptimizer CreateDayOffOptimizer(
+            IScheduleMatrixLockableBitArrayConverter converter, 
+            IDayOffDecisionMaker decisionMaker, 
+            IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
+            IDayOffPlannerSessionRuleSet ruleSet, 
+            IList<IDayOffLegalStateValidator> validatorList, 
+            IList<IPerson> allSelectedPersons);
     }
 
     public class GroupDayOffOptimizerCreator : IGroupDayOffOptimizerCreator
@@ -21,9 +26,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private readonly IGroupMatrixHelper _groupMatrixHelper;
 
-        public GroupDayOffOptimizerCreator(IOptimizerOriginalPreferences optimizerPreferences, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-            ILockableBitArrayChangesTracker changesTracker, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-            IGroupSchedulingService groupSchedulingService, IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, IGroupMatrixHelper groupMatrixHelper)
+        public GroupDayOffOptimizerCreator(
+            IOptimizerOriginalPreferences optimizerPreferences, 
+            IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+            ILockableBitArrayChangesTracker changesTracker, 
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+            IGroupSchedulingService groupSchedulingService, 
+            IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
+            IGroupMatrixHelper groupMatrixHelper)
         {
             _optimizerPreferences = optimizerPreferences;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
@@ -34,8 +44,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMatrixHelper = groupMatrixHelper;
         }
 
-        public IGroupDayOffOptimizer CreateDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter, IDayOffDecisionMaker decisionMaker,
-           IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, DayOffPlannerSessionRuleSet ruleSet, IList<IDayOffLegalStateValidator> validatorList, IList<IPerson> allSelectedPersons)
+        public IGroupDayOffOptimizer CreateDayOffOptimizer(
+            IScheduleMatrixLockableBitArrayConverter converter, 
+            IDayOffDecisionMaker decisionMaker,
+            IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, 
+            IDayOffPlannerSessionRuleSet ruleSet, 
+            IList<IDayOffLegalStateValidator> validatorList, 
+            IList<IPerson> allSelectedPersons)
         {
             if (_optimizerPreferences.SchedulingOptions.UseSameDayOffs)
                 return new GroupDayOffOptimizer(converter,

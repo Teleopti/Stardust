@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         
         private readonly IList<IDayOffLegalStateValidator> _validators 
             = new List<IDayOffLegalStateValidator>();
-        private readonly IDayOffPlannerRules _dayOffPlannerRules;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IOfficialWeekendDays _officialWeekendDays;
         private readonly MinMax<int> _periodIndexRange;
         private readonly BitArray _originalPeriod;
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.DayOffPlanning
         #region Constructor
 
         public DayOffOptimizationLegalStateValidatorListCreator(
-            IDayOffPlannerRules dayOffPlannerRules,
+            IDaysOffPreferences daysOffPreferences,
             IOfficialWeekendDays officialWeekendDays,
             BitArray originalPeriod,
             MinMax<int> periodIndexRange)
         {
-            _dayOffPlannerRules = dayOffPlannerRules;
+            _daysOffPreferences = daysOffPreferences;
             _officialWeekendDays = officialWeekendDays;
             _originalPeriod = originalPeriod;
             _periodIndexRange = periodIndexRange;
@@ -61,45 +61,45 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateConsecutiveDayOffValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseConsecutiveDaysOff)
+            if (_daysOffPreferences.UseConsecutiveDaysOff)
             {
                 IDayOffLegalStateValidator validator = new ConsecutiveDayOffValidator(
-                    _dayOffPlannerRules.ConsecutiveDaysOff,
-                    _dayOffPlannerRules.UsePreWeek,
-                    _dayOffPlannerRules.UsePostWeek);
+                    _daysOffPreferences.ConsecutiveDaysOffValue,
+                    _daysOffPreferences.ConsiderWeekBefore,
+                    _daysOffPreferences.ConsiderWeekAfter);
                 _validators.Add(validator);
             }
         }
 
         private void CreateConsecutiveWorkdayValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseConsecutiveWorkdays)
+            if (_daysOffPreferences.UseConsecutiveWorkdays)
             {
                 IDayOffLegalStateValidator validator = new ConsecutiveWorkdayValidator( 
-                    _dayOffPlannerRules.ConsecutiveWorkdays,
-                    _dayOffPlannerRules.UsePreWeek, 
-                    _dayOffPlannerRules.UsePostWeek);
+                    _daysOffPreferences.ConsecutiveWorkdaysValue,
+                    _daysOffPreferences.ConsiderWeekBefore,
+                    _daysOffPreferences.ConsiderWeekAfter);
                 _validators.Add(validator);
             }
         }
 
         private void CreateWeeklyDayOffValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseDaysOffPerWeek)
+            if (_daysOffPreferences.UseDaysOffPerWeek)
             {
                 IDayOffLegalStateValidator validator =
-                    new WeeklyDayOffValidator(_dayOffPlannerRules.DaysOffPerWeek);
+                    new WeeklyDayOffValidator(_daysOffPreferences.DaysOffPerWeekValue);
                 _validators.Add(validator);
             }
         }
 
         private void CreateFreeWeekendDaysValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseFreeWeekendDays)
+            if (_daysOffPreferences.KeepFreeWeekendDays)
             {
                 IDayOffLegalStateValidator validator =
                     new FreeWeekendDayValidator(
-                        _dayOffPlannerRules.FreeWeekendDays,
+                        _daysOffPreferences.WeekEndDaysOffValue,
                         _officialWeekendDays,
                         _periodIndexRange);
                 _validators.Add(validator);
@@ -108,11 +108,11 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateFreeWeekendsValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseFreeWeekends)
+            if (_daysOffPreferences.UseFullWeekendsOff)
             {
                 IDayOffLegalStateValidator validator =
                     new FreeWeekendValidator(
-                        _dayOffPlannerRules.FreeWeekends,
+                        _daysOffPreferences.FullWeekendsOffValue,
                         _officialWeekendDays, 
                         _periodIndexRange);
                 _validators.Add(validator);
@@ -121,7 +121,8 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateKeepFreeWeekendDaysValidatorConditionally()
         {
-            if (_dayOffPlannerRules.KeepFreeWeekendDays)
+            // ***** check settings
+            if (_daysOffPreferences.KeepFreeWeekendDays)
             {
                 IDayOffLegalStateValidator validator =
                     new KeepFreeWeekendDayValidator(
@@ -134,7 +135,8 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateKeepFreeWeekendsValidatorConditionally()
         {
-            if (_dayOffPlannerRules.KeepFreeWeekends)
+            // ***** check settings
+            if (_daysOffPreferences.KeepFreeWeekends)
             {
                 IDayOffLegalStateValidator validator =
                     new KeepFreeWeekendValidator(

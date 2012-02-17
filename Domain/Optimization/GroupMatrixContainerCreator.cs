@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
-            DayOffPlannerSessionRuleSet ruleSet);
+            IDayOffPlannerSessionRuleSet ruleSet);
     }
 
     public class GroupMatrixContainerCreator : IGroupMatrixContainerCreator
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
-            DayOffPlannerSessionRuleSet ruleSet)
+            IDayOffPlannerSessionRuleSet ruleSet)
         {
             if (ruleSet == null) return null;
             IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IEnumerable<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
             ILockableBitArray personWorkingArray,
-            DayOffPlannerSessionRuleSet ruleSet)
+            IDayOffPlannerSessionRuleSet ruleSet)
         {
             foreach (var dateOnly in daysOffToRemove)
             {

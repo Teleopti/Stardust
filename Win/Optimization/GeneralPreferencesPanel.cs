@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
                 comboBoxAdvTag.SelectedItem = _generalPreferences.ScheduleTag;
 
-                checkBoxDaysOff.Checked = _generalPreferences.OptimizationForDaysOff;
-                checkBoxTimeBetweenDays.Checked = _generalPreferences.OptimizationForShiftsWithinDay;
-                checkBoxShiftsForFlexibleWorkTime.Checked = _generalPreferences.ShiftsForFlexibleWorkTime;
-                checkBoxDaysOffFromFlexibleWorkTime.Checked = _generalPreferences.DaysOffForFlexibleWorkTime;
-                checkBoxShiftsWithinDay.Checked = _generalPreferences.AllowMoveShiftsWithinDay;
+                checkBoxDaysOff.Checked = _generalPreferences.OptimizationStepDaysOff;
+                checkBoxTimeBetweenDays.Checked = _generalPreferences.OptimizationStepShiftsWithinDay;
+                checkBoxShiftsForFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime;
+                checkBoxDaysOffFromFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime;
+                checkBoxShiftsWithinDay.Checked = _generalPreferences.OptimizationStepTimeBetweenDays;
 
                 checkBoxPreferences.Checked = _generalPreferences.UsePreferences;
                 checkBoxMustHaves.Checked = _generalPreferences.UseMustHaves;
@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Win.Optimization
             {
                 _generalPreferences.ScheduleTag = (IScheduleTag)comboBoxAdvTag.SelectedItem;
 
-                _generalPreferences.OptimizationForDaysOff = checkBoxDaysOff.Checked;
-                _generalPreferences.OptimizationForShiftsWithinDay = checkBoxTimeBetweenDays.Checked;
-                _generalPreferences.ShiftsForFlexibleWorkTime = checkBoxShiftsForFlexibleWorkTime.Checked;
-                _generalPreferences.DaysOffForFlexibleWorkTime = checkBoxDaysOffFromFlexibleWorkTime.Checked;
-                _generalPreferences.AllowMoveShiftsWithinDay = checkBoxShiftsWithinDay.Checked;
+                _generalPreferences.OptimizationStepDaysOff = checkBoxDaysOff.Checked;
+                _generalPreferences.OptimizationStepShiftsWithinDay = checkBoxTimeBetweenDays.Checked;
+                _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime = checkBoxShiftsForFlexibleWorkTime.Checked;
+                _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime = checkBoxDaysOffFromFlexibleWorkTime.Checked;
+                _generalPreferences.OptimizationStepTimeBetweenDays = checkBoxShiftsWithinDay.Checked;
 
                 _generalPreferences.UsePreferences = checkBoxPreferences.Checked;
                 _generalPreferences.UseMustHaves = checkBoxMustHaves.Checked;

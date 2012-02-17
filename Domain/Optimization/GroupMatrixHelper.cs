@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IGroupPerson groupPerson,
-            DayOffPlannerSessionRuleSet ruleSet);
+            IDayOffPlannerSessionRuleSet ruleSet);
     }
 
     public class GroupMatrixHelper : IGroupMatrixHelper
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove, 
             IList<DateOnly> daysOffToAdd, 
             IGroupPerson groupPerson, 
-            DayOffPlannerSessionRuleSet ruleSet
+            IDayOffPlannerSessionRuleSet ruleSet
             )
         {
             IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>();

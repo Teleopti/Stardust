@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return SchedulePersonOnDay(schedulePart, useOccupancyAdjustment, effectiveRestriction);
         }
 
+        public ISchedulingOptions SchedulingOptions
+        {
+            get { return _schedulingOptions; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool SchedulePersonOnDay(IScheduleDay schedulePart, bool useOccupancyAdjustment, IEffectiveRestriction effectiveRestriction)
         {

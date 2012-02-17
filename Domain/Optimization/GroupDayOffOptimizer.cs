@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
         private readonly IDayOffDecisionMaker _decisionMaker;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public GroupDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDayOffPlannerSessionRuleSet ruleSet,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             ILockableBitArrayChangesTracker changesTracker,
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

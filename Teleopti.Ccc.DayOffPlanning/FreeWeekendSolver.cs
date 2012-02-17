@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class FreeWeekendSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly DayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDayOffPlannerSessionRuleSet _sessionRuleSet;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
 
 
-        public FreeWeekendSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public FreeWeekendSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;
