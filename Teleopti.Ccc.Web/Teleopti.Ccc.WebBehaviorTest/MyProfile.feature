@@ -65,11 +65,16 @@ Scenario: Change my language to computer's default
 
 Scenario: Change my password
 	Given I am an agent
-	When I change password
+	When I change my password
 	And I sign out
 	And I sign in using my new password
 	Then I should be signed in
 	
+Scenario: Continue browsing after changing password
+	Given I am an agent
+	When I change my password
+	Then I should be able to continue browsing the site
+
 Scenario: Incorrect current password when changing password
 	Given I am an agent
 	When I am changing password
