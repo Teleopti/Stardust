@@ -386,6 +386,9 @@
     <EmbeddedResource Include="Reports\Ccc\report_shift_category_per_day.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_agent.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_team_metrics.rdlc" />
+    <Content Include="Reports\Custom\PrognosMotSchemalagt.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

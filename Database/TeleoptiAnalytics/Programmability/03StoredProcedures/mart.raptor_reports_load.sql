@@ -10,7 +10,12 @@ BEGIN
 
     SELECT 
         Id as ReportId,
-        'xx' + report_name_resource_key as ReportName, 
+        CASE 
+			WHEN report_name_resource_key = '' THEN  report_name
+			ELSE 'xx' + report_name_resource_key 
+		END 
+		as ReportName 
+        , 
         url as ReportUrl,
         target as TargetFrame
     FROM mart.v_report

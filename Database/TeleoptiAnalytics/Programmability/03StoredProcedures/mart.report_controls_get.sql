@@ -3,7 +3,7 @@ DROP PROCEDURE [mart].[report_controls_get]
 GO
 
 
--- exec mart.report_controls_get @report_id='0E3F340F-C05D-4A98-AD23-A019607745C9', @group_page_code='E12C7EB1-23B6-4730-8019-5013C9758663'
+-- exec mart.report_controls_get @report_id='3DC549EA-2BB5-4643-8523-CA5FC02FE571',@group_page_code='D5AE2A10-2E17-4B3C-816C-1A0E81CD767C'	
 
 CREATE PROCEDURE [mart].[report_controls_get]
 /*
@@ -44,7 +44,7 @@ CREATE TABLE #grouppagecontrols (id uniqueidentifier)
 
 IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_page_code = @group_page_code)
 	BEGIN
-		-- Get set of controls for other group page than Main (Business Hierarchy)
+			-- Get set of controls for other group page than Main (Business Hierarchy)
 		INSERT into #grouppagecontrols  SELECT  'E12C7EB1-23B6-4730-8019-5013C9758663'
 		INSERT into #grouppagecontrols SELECT  'AF3DCA13-71A9-4598-96A7-7EFE703F3C9F'
 		INSERT into #grouppagecontrols SELECT  '6BDA3854-7915-4689-910E-9CEEE52D014B'
@@ -123,7 +123,7 @@ ELSE
 				param_name,
 				print_order,
 				@display AS Display
-			FROM mart.report r
+			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
@@ -144,7 +144,7 @@ ELSE
 				param_name,
 				print_order,
 				@dont_display AS Display
-			FROM mart.report r
+			FROM mart.v_report r
 				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
 				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id

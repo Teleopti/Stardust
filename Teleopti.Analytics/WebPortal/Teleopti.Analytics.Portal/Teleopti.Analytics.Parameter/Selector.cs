@@ -364,7 +364,8 @@ namespace Teleopti.Analytics.Parameters
                     var name = (string)row.ItemArray[1];
                     var resourceKey = (string)row.ItemArray[2];
                     string text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
-
+                    if (string.IsNullOrEmpty(text))
+                        text = resourceKey;
                     var defaultValue = (string)row.ItemArray[3];
                     var procName = (string)row.ItemArray[4];
                     var procParam = (string)row.ItemArray[9];
