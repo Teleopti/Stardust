@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		private Guid domainReferenceId;
 		private DateTime startDate;
 		private DateTime endDate;
+		private Guid businessUnitId;
 
 		[SetUp]
 		public void Setup()
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			domainId = Guid.NewGuid();
 			domainReferenceId = Guid.NewGuid();
 			moduleId = Guid.NewGuid();
+			businessUnitId = Guid.NewGuid();
 			startDate = DateTime.Today;
 			endDate = startDate.AddDays(1);
 			target = new Notification
@@ -34,7 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			         		DomainType = "type",
 			         		DomainUpdateType = 1,
 			         		StartDate = Subscription.DateToString(startDate),
-			         		EndDate = Subscription.DateToString(endDate)
+			         		EndDate = Subscription.DateToString(endDate),
+							DataSource = "datasource",
+							BusinessUnitId = Subscription.IdToString(businessUnitId)
 			         	};
 		}
 
@@ -45,11 +49,13 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target.DomainIdAsGuid().Should().Be.EqualTo(domainId);
 			target.DomainReferenceIdAsGuid().Should().Be.EqualTo(domainReferenceId);
 			target.ModuleIdAsGuid().Should().Be.EqualTo(moduleId);
+			target.BusinessUnitIdAsGuid().Should().Be.EqualTo(businessUnitId);
 			target.DomainReferenceType.Should().Be.EqualTo("ref");
 			target.DomainType.Should().Be.EqualTo("type");
 			target.DomainUpdateTypeAsDomainUpdateType().Should().Be.EqualTo(DomainUpdateType.Update);
 			target.StartDateAsDateTime().Should().Be.EqualTo(startDate);
 			target.EndDateAsDateTime().Should().Be.EqualTo(endDate);
+			target.DataSource.Should().Be.EqualTo("datasource");
 		}
 	}
 
@@ -62,6 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		private Guid domainReferenceId;
 		private DateTime startDate;
 		private DateTime endDate;
+		private Guid businessUnitId;
 
 		[SetUp]
 		public void Setup()
@@ -69,6 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			domainId = Guid.NewGuid();
 			domainReferenceId = Guid.NewGuid();
 			subscriptionId = Guid.NewGuid();
+			businessUnitId = Guid.NewGuid();
 			startDate = DateTime.Today;
 			endDate = startDate.AddDays(1);
 			target = new Subscription
@@ -79,7 +87,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
 				DomainType = "type",
 				SubscriptionId = Subscription.IdToString(subscriptionId),
 				LowerBoundary = Subscription.DateToString(startDate),
-				UpperBoundary = Subscription.DateToString(endDate)
+				UpperBoundary = Subscription.DateToString(endDate),
+				DataSource = "datasource",
+				BusinessUnitId = Subscription.IdToString(businessUnitId)
 			};
 		}
 
