@@ -5351,7 +5351,7 @@ Periods</comment>
     <comment>Within:</comment>
   </data>
   <data name="Wizard" xml:space="preserve">
-    <value>引导</value>
+    <value>向导</value>
     <comment>Wizard</comment>
   </data>
   <data name="Workflow" xml:space="preserve">
@@ -5415,15 +5415,15 @@ Periods</comment>
     <comment>Workload template</comment>
   </data>
   <data name="WorkloadWizard" xml:space="preserve">
-    <value>工足量引导</value>
+    <value>工作量向导</value>
     <comment>Workload wizard</comment>
   </data>
   <data name="WorkloadWizardInformation" xml:space="preserve">
-    <value>该引导帮助你创建工作量。</value>
+    <value>该向导帮助你创建工作量。</value>
     <comment>This Wizard helps you to create a workload.</comment>
   </data>
   <data name="WorkloadWizardWelcome" xml:space="preserve">
-    <value>欢迎使用工作量引导</value>
+    <value>欢迎使用工作量向导</value>
     <comment>Welcome to the workload wizard</comment>
   </data>
   <data name="WorkShiftRule" xml:space="preserve">
@@ -5698,7 +5698,14 @@ Periods</comment>
     <value>有人在你之前更改了该数据。</value>
   </data>
   <data name="License" xml:space="preserve">
-    <value>这个产品的授权从"{0}"到"{1}"。       这个授权证书最多可用于{2}激活状态的坐席代表。　　该授权方案的计划为"{3}".     这些选项已被激活:{4}</value>
+    <value>这个产品的授权从"{0}"到"{1}"。
+
+这个授权证书最多可用于{2}激活状态的坐席代表。
+
+该授权方案的计划为"{3}"。
+
+这些选项已被激活:
+{4}</value>
   </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>工作日期</value>
@@ -9192,5 +9199,11 @@ Periods</comment>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
     <value>您的请求由于超出预算配额而被系统自动拒绝。</value>
+  </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>最多为{0}小时。</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>至少为{0}小时。</value>
   </data>
 </root>

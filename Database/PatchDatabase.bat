@@ -22,7 +22,7 @@ SET CROSSDB=1
 )
 
 ::Patch DB
-"%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E
+"%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -T
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR_Schema
 
 IF %CROSSDB% EQU 1 (

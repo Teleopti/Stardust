@@ -41,8 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CassiniDev4-lib">
-      <HintPath>..\..\packages\CassiniDev.4.0\lib\net40\CassiniDev4-lib.dll</HintPath>
+    <Reference Include="CassiniDev4-lib, Version=4.0.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CassiniDev\AnyCPU build\CassiniDev4-lib.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
@@ -96,6 +97,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MobileSignIn.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyProfile.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
@@ -298,6 +304,10 @@
     <None Include="MobileSignIn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyProfile.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
     <None Include="Routing.feature">

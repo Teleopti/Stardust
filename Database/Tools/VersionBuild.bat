@@ -40,26 +40,18 @@ ECHO total size is: %size%
 
 IF %size% EQU 0 goto :NothingToBuild
 
-::tf.exe
-SET tf=C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\tf.exe
-IF "%PROCESSOR_ARCHITECTURE%"=="x86" SET tf=C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\tf.exe
-
-::Get Latest from TFS
-::"%tf%" get $/raptorScrum/root/Database /all /recursive
-
-::Check out Version.txt
-"%tf%" checkout /lock:checkout "%ROOTDIR%\..\ActiveBranchVersion.txt"
-echo.%Build% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
-
+::pull latest from hg (don't know if this is necessary really...)
+hg pull
+hg update tip
 
 ::Build each DB
-if %myError% EQU 0 call:CreateRelease "TeleoptiAnalytics" "%ReleaseFile%" "%SYSTEMVERSION%" "%tf%" myError
-if %myError% EQU 0 call:CreateRelease "TeleoptiCCC7" "%ReleaseFile%" "%SYSTEMVERSION%" "%tf%" myError
-if %myError% EQU 0 call:CreateRelease "TeleoptiCCCAgg" "%ReleaseFile%" "%SYSTEMVERSION%" "%tf%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiAnalytics %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiCCC7 %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiCCCAgg %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
 
 ::Checkin changes
 if %myError% EQU 0 (
-"%tf%" checkin /comment:"Automated database build: %SYSTEMVERSION%" /author:%USERNAME% /noprompt /recursive "%ROOTDIR%" "%ROOTDIR%\..\ActiveBranchVersion.txt"
+hg commit -m "Automated database build: %SYSTEMVERSION%" -u %USERNAME%
 set myError=%errorlevel%
 Echo Cannot check files!
 )
@@ -107,18 +99,11 @@ ECHO PRINT 'Adding build number to database' >> "%BUILDFILE%"
 ECHO INSERT INTO DatabaseVersion^(BuildNumber, SystemVersion^) VALUES ^(%Build%,'%SYSTEMVERSION%'^) >> "%BUILDFILE%"
 )
 
-::Add the new release file to TFS
-if %myError% EQU 0 %4 add "%BUILDFILE%"
+::Add the new release file to hg
+if %myError% EQU 0 hg add "%BUILDFILE%"
 if %errorlevel% NEQ 0 (
 set /a "myError=%myError%+1"
 echo Sorry, I cannot add new release.
-)
-
-::Check out Trunk.sql
-if %myError% EQU 0 %4 checkout /lock:checkout "%TRUNKFILE%"
-if %errorlevel% NEQ 0 (
-set /a "myError=%myError%+1"
-echo Sorry, I cannot lock the trunk-file.
 )
 
 ::Re-init  the Trunk
