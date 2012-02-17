@@ -197,6 +197,5 @@ echo.There is no changes in current trunks. Skip database build
 goto:finished
 
 :finished
-pause
 ping 127.0.0.1 -n 3 > NUL
 exit %myError%
