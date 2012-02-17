@@ -148,6 +148,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
         /// <param name="applicationFunctions">The application functions.</param>
         /// <param name="info">The info.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper")]
         protected virtual IApplicationFunction CreateMatrixReportApplicationFunction(IEnumerable<IApplicationFunction> applicationFunctions, MatrixReportInfo info)
         {
             IApplicationFunction newFunction = new ApplicationFunction();
@@ -240,7 +241,8 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             }
         }
 
-        private bool isGuid(string hopefullyGuid)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        private static bool isGuid(string hopefullyGuid)
         {
             try
             {

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="list">The list.</param>
         /// <param name="id">The id.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static MatrixReportInfo FindByReportId(IEnumerable<MatrixReportInfo> list, Guid id)
         {
             foreach (MatrixReportInfo info in list)

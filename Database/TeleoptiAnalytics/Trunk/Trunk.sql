@@ -275,14 +275,76 @@ ALTER TABLE mart.permission_report ADD CONSTRAINT
 	
 GO
 
-ALTER TABLE stage.stg_permission_report ADD
-	ReportId uniqueidentifier NULL
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_stg_permission_datasource_id]') AND type = 'D')
+BEGIN
+ALTER TABLE [stage].[stg_permission_report] DROP CONSTRAINT [DF_stg_permission_datasource_id]
+END
+
 GO
-ALTER TABLE stage.stg_permission_report
-	DROP COLUMN report_id
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_stg_permission_insert_date]') AND type = 'D')
+BEGIN
+ALTER TABLE [stage].[stg_permission_report] DROP CONSTRAINT [DF_stg_permission_insert_date]
+END
+
 GO
-ALTER TABLE stage.stg_permission_report SET (LOCK_ESCALATION = TABLE)
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_stg_permission_update_date]') AND type = 'D')
+BEGIN
+ALTER TABLE [stage].[stg_permission_report] DROP CONSTRAINT [DF_stg_permission_update_date]
+END
+
 GO
+
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_stg_permission_report_datasource_update_date]') AND type = 'D')
+BEGIN
+ALTER TABLE [stage].[stg_permission_report] DROP CONSTRAINT [DF_stg_permission_report_datasource_update_date]
+END
+
+GO
+
+/****** Object:  Table [stage].[stg_permission_report]    Script Date: 02/17/2012 11:12:20 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_permission_report]') AND type in (N'U'))
+DROP TABLE [stage].[stg_permission_report]
+GO
+
+/****** Object:  Table [stage].[stg_permission_report]    Script Date: 02/17/2012 11:12:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [stage].[stg_permission_report](
+	[person_code] [uniqueidentifier] NULL,
+	[ReportId] [uniqueidentifier] NULL,
+	[team_id] [uniqueidentifier] NULL,
+	[my_own] [bit] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[business_unit_name] [nvarchar](50) NOT NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[datasource_update_date] [smalldatetime] NULL
+	
+) ON [STAGE]
+
+GO
+
+ALTER TABLE [stage].[stg_permission_report] ADD  CONSTRAINT [DF_stg_permission_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [stage].[stg_permission_report] ADD  CONSTRAINT [DF_stg_permission_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [stage].[stg_permission_report] ADD  CONSTRAINT [DF_stg_permission_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
+ALTER TABLE [stage].[stg_permission_report] ADD  CONSTRAINT [DF_stg_permission_report_datasource_update_date]  DEFAULT (getdate()) FOR [datasource_update_date]
+GO
+
+
+
 
 -- remove the old and unused stuff
 ALTER TABLE mart.permission_report DROP COLUMN report_id
