@@ -4,7 +4,7 @@ GO
 
 
 CREATE Proc [mart].[report_control_service_level_calculation_get]
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
@@ -13,6 +13,7 @@ as
 --	20080910 Added parameter @bu_id KJ
 --	20090211 Added new mart schema KJ
 --  20090701 Added new join on resource_key and removed join on term_id KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 SELECT
 	id		= service_level_id,
 	name	= isnull(term_language,service_level_name)

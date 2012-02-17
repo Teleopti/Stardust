@@ -29,6 +29,7 @@ GO
 --				2011-03-16 #14091
 --				2012-01-09 Passed BU to ReportAgents
 --				2012-01-23 Change parameters @group_page_group_id and @team_id to sets and nvarchar(max)
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Agent Metrics Report
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_agent_schedule_result] 
@@ -45,7 +46,7 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_result]
 @adherence_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

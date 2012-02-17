@@ -122,14 +122,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             IApplicationFunction root = CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
             IApplicationFunction matrix = CreateApplicationFunction(ApplicationFunction.GetCode(DefinedRaptorApplicationFunctionPaths.AccessToReports), root);
-
+            var idToRemove = new Guid("1C2BDC8C-BFED-4BB3-AD13-6614488310BE");
             functions.Add(root);
             functions.Add(matrix);
             functions.Add(CreateApplicationFunction("Function1", root));
-            functions.Add(CreateApplicationFunction("AgentReport", matrix, DefinedForeignSourceNames.SourceMatrix, "1"));
+            functions.Add(CreateApplicationFunction("AgentReport", matrix, DefinedForeignSourceNames.SourceMatrix, Guid.NewGuid().ToString()));
             functions.Add(CreateApplicationFunction("Function2", root));
-            functions.Add(CreateApplicationFunction("ReportToRemove", matrix, DefinedForeignSourceNames.SourceMatrix, "2"));
-            functions.Add(CreateApplicationFunction("SiteReport", matrix, DefinedForeignSourceNames.SourceMatrix, "3"));
+            functions.Add(CreateApplicationFunction("ReportToRemove", matrix, DefinedForeignSourceNames.SourceMatrix, idToRemove.ToString()));
+            functions.Add(CreateApplicationFunction("SiteReport", matrix, DefinedForeignSourceNames.SourceMatrix, Guid.NewGuid().ToString()));
 
             return functions;
         }

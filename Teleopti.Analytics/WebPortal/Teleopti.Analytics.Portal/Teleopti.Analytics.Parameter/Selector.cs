@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Parameters
     //ToolboxData("<{0}:Selector runat=server></{0}:Selector>")]
     public class Selector : WebControl, INamingContainer
     {
-        private int _reportId = 1000;
+        private Guid _reportId;
         private int _savedId = -1;
         private ValidationSummary _valSum;
         private IList<SqlParameter> _startParams = new List<SqlParameter>();
@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Parameters
             }
         }
 
-        public int ReportId
+        public Guid ReportId
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Parameters
         protected override void LoadViewState(object savedState)
         {
             base.LoadViewState(savedState);
-            var reportId = ViewState["ReportId"] as int?;
+            var reportId = ViewState["ReportId"] as Guid?;
             if (reportId.HasValue)
                 _reportId = reportId.Value;
         }

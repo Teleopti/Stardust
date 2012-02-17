@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Parameters
 			_connection.ConnectionString = connectionString;
 		}
 
-		public DataSet LoadReportControls(int reportId, Guid groupPageIndex)
+		public DataSet LoadReportControls(Guid reportId, Guid groupPageIndex)
 		{
 //			if (Disposed == true)
 //			{
@@ -51,7 +51,7 @@ namespace Teleopti.Analytics.Parameters
 			return ret;		
 		}
 
-        public DataTable ReportProperties(int reportId, int savedId)
+        public DataTable ReportProperties(Guid reportId, int savedId)
         {
             var ret = new DataSet();
             var adap = new SqlDataAdapter();
@@ -80,7 +80,7 @@ namespace Teleopti.Analytics.Parameters
 
 
 
-        public DataSet LoadControlData(string proc, IList<SqlParameter> @params, int componentId, Guid personCode, Guid buCode)
+        public DataSet LoadControlData(string proc, IList<SqlParameter> @params, Guid componentId, Guid personCode, Guid buCode)
 		{
 //			SqlParameter param;
 //			if (Disposed == true)
@@ -115,7 +115,7 @@ namespace Teleopti.Analytics.Parameters
 			return ret;
 		}
 
-		public string LoadUserSetting(int componentId, Guid personCode, string parameter, int savedId)
+		public string LoadUserSetting(Guid componentId, Guid personCode, string parameter, int savedId)
 		{
 //			SqlParameter param;
 //			if (Disposed == true)
@@ -175,7 +175,7 @@ namespace Teleopti.Analytics.Parameters
 			_connection.Close();
 		}
 
-		public void SaveUserSetting(int componentId, Guid personCode, string parameter, int savedId, string setting)
+		public void SaveUserSetting(Guid componentId, Guid personCode, string parameter, int savedId, string setting)
 		{
 			//			SqlParameter param;
 //			if (Disposed == true)
@@ -198,7 +198,7 @@ namespace Teleopti.Analytics.Parameters
 			_connection.Close();
 		}
 
-        public bool IsReportPermissionsGranted(int reportId, Guid userId)
+        public bool IsReportPermissionsGranted(Guid reportId, Guid userId)
         {
             bool returnValue = false;
             var cmd = new SqlCommand

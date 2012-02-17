@@ -8,23 +8,24 @@ GO
 -- Create date: 2010-09-04
 -- Description:	Get a control_collection_id for the given report.
 -- =============================================
--- EXEC mart.report_group_page_control_collection_get 1
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- EXEC mart.report_group_page_control_collection_get 'A9718D69-77A9-4D1D-9D44-DBA7EA7E92F5'
 CREATE PROCEDURE [mart].[report_group_page_control_collection_get]
-@report_id int
+@report_id uniqueidentifier
 AS
 SET NOCOUNT ON;
 
 SELECT
 	cc.control_collection_id
 FROM 
-	mart.report_control_collection cc
+	mart.v_report_control_collection cc
 INNER JOIN
 	mart.report r
 ON
-	cc.collection_id = r.control_collection_id
+	cc.CollectionId = r.ControlCollectionId
 WHERE
-	r.report_id = @report_id
-	AND cc.control_id = 29
+	r.Id = @report_id
+	AND cc.ControlId = 'A9718D69-77A9-4D1D-9D44-DBA7EA7E92F5' --29
 
 GO
 

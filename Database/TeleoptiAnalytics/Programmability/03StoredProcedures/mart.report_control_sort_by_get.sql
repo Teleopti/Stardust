@@ -14,13 +14,14 @@ GO
 --				20090812 Changed fetch of texts from the new table Ola
 --				20090818 Corrected the new fetch of texts from the new table Ola
 --				20110808 Corrected the fetch and (re)added shift start and shift end 
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	<Gets sorting for report Agent Schedule Adherence>
 -- =============================================
 --exec report_control_sort_by_get 13,'C04803E2-8D6F-4936-9A90-9B2000148778',1053,'4AD43E49-B233-4D03-A813-9B2000102EBE'
 -- mart.report_control_sort_by_get 13, '10957ad5-5489-48e0-959a-9b5e015b2b5c', 1033, '928dd0bc-bf40-412e-b970-9b5e015aadea'
 
 CREATE PROCEDURE [mart].[report_control_sort_by_get]
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier

@@ -11,11 +11,12 @@ GO
 -- =============================================
 -- Author:		Jonas n
 -- Create date: 2011-10-19
--- Description:	Laod data for report control twolistGroupPageGroup
+-- Description:	Load data for report control twolistGroupPageGroup
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_control_twolist_group_page_group_get]
 @group_page_code uniqueidentifier, --parent group page
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier

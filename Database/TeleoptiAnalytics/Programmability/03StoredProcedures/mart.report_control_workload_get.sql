@@ -4,7 +4,7 @@ GO
 
 
 CREATE Proc [mart].[report_control_workload_get]
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @skill_set nvarchar(max),--Kj lista på skills
@@ -15,6 +15,7 @@ Last Modified: 20090211 KJ
 	20080910 Added parameter @bu_id KJ
 	20090211 Added new mart schema KJ
 	20091114 Added Is_deleted filter DJ
+	-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 CREATE TABLE #workloads (counter int identity(1,1),id int, name nvarchar(50)) 
