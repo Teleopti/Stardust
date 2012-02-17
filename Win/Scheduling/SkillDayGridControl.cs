@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                GridMergeCellsMode.MergeColumnsInRow;
 
                 var dateTimePeriods = stateHolder.RequestedPeriod.WholeDayCollection();
-                _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, skill.TimeZone))).ToList();
+                _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
                 createGridRows(skill, _dates, stateHolder);
 
                 // in ViewPoint
