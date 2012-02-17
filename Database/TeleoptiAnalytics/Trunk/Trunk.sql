@@ -102,14 +102,27 @@ WHERE control_id = 38
 
 
 ALTER TABLE mart.report_control_collection
-ADD Id uniqueidentifier null
+ADD Id uniqueidentifier null,
+	DependOf1 uniqueidentifier NULL,
+	DependOf2 uniqueidentifier NULL,
+	DependOf3 uniqueidentifier NULL,
+	DependOf4 uniqueidentifier NULL
 GO
 UPDATE mart.report_control_collection SET Id = NEWID()
 GO
 ALTER TABLE mart.report_control_collection
 ALTER COLUMN Id uniqueidentifier not null
 GO
+ALTER TABLE mart.report_control_collection
+	DROP CONSTRAINT PK_report_control_collection
+GO
+ALTER TABLE mart.report_control_collection ADD CONSTRAINT
+	PK_report_control_collection PRIMARY KEY CLUSTERED 
+	(
+	Id
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
 
+GO
 CREATE TABLE #collections(id int not null, collId uniqueidentifier not null)
 INSERT INTO #collections SELECT DISTINCT collection_id, NEWID() FROM mart.report_control_collection
 
@@ -135,6 +148,29 @@ ON cc.control_id = c.control_id
 GO 
 ALTER TABLE mart.report_control_collection
 ALTER COLUMN ControlId uniqueidentifier not null
+GO
+
+SELECT control_collection_id as control, Id INTO #ids FROM mart.report_control_collection
+ 
+UPDATE mart.report_control_collection SET DependOf1 = #ids.Id
+FROM mart.report_control_collection  
+INNER JOIN #ids
+ON #ids.control = depend_of1
+	
+UPDATE mart.report_control_collection SET DependOf2 = #ids.Id
+FROM mart.report_control_collection  
+INNER JOIN #ids
+ON #ids.control = depend_of2
+	
+UPDATE mart.report_control_collection SET DependOf3 = #ids.Id
+FROM mart.report_control_collection  
+INNER JOIN #ids
+ON #ids.control = depend_of3
+	
+UPDATE mart.report_control_collection SET DependOf4 = #ids.Id
+FROM mart.report_control_collection  
+INNER JOIN #ids
+ON #ids.control = depend_of4
 GO
 
 ALTER TABLE mart.report
@@ -423,28 +459,24 @@ CREATE TABLE [mart].[custom_report_control](
 GO
 
 CREATE TABLE [mart].[custom_report_control_collection](
-	[control_collection_id] [int] NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+	[CollectionId] [uniqueidentifier] NOT NULL,
+	[ControlId] [uniqueidentifier] NOT NULL,
 	[print_order] [int] NOT NULL,
 	[default_value] [nvarchar](4000) NOT NULL,
 	[control_name_resource_key] [nvarchar](50) NOT NULL,
 	[fill_proc_param] [varchar](100) NULL,
 	[param_name] [varchar](50) NULL,
-	[depend_of1] [int] NULL,
-	[depend_of2] [int] NULL,
-	[depend_of3] [int] NULL,
-	[depend_of4] [int] NULL,
-	[Id] [uniqueidentifier] NOT NULL,
-	[CollectionId] [uniqueidentifier] NOT NULL,
-	[ControlId] [uniqueidentifier] NOT NULL,
+	[DependOf1] [uniqueidentifier] NULL,
+	[DependOf2] [uniqueidentifier] NULL,
+	[DependOf3] [uniqueidentifier] NULL,
+	[DependOf4] [uniqueidentifier] NULL,
  CONSTRAINT [PK_custom_report_control_collection] PRIMARY KEY CLUSTERED 
 (
-	[control_collection_id] ASC
+	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
 ) ON [MART]
 
-GO
-
-SET ANSI_PADDING OFF
 GO
 
 ALTER TABLE [mart].[custom_report_control_collection]  WITH CHECK ADD  CONSTRAINT [FK_custom_report_control_collection_report_control] FOREIGN KEY([ControlId])

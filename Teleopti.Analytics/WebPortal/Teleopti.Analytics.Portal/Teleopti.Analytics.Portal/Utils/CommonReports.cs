@@ -146,9 +146,9 @@ namespace Teleopti.Analytics.Portal.Utils
             _connection.Dispose();
         }
 
-        public int GetGroupPageComboBoxControlCollectionId()
+        public Guid GetGroupPageComboBoxControlCollectionId()
         {
-            int returnValue = -1;
+            var returnValue = new Guid();
             IList<SqlParameter> parameters = new List<SqlParameter> {new SqlParameter("@report_id", _reportId)};
 
             DataSet dataSet = ExecuteDataSet("mart.report_group_page_control_collection_get", parameters);
@@ -156,7 +156,7 @@ namespace Teleopti.Analytics.Portal.Utils
             {
                 if (dataSet.Tables[0].Rows.Count == 1)
                 {
-                    returnValue = (int)dataSet.Tables[0].Rows[0]["control_collection_id"];                    
+                    returnValue = (Guid)dataSet.Tables[0].Rows[0]["Id"];                    
                 }
             }
 

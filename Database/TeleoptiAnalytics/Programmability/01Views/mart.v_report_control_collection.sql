@@ -6,34 +6,33 @@ GO
 
 CREATE View [mart].[v_report_control_collection]
 AS
-SELECT		control_collection_id,
+SELECT		Id, 
+			CollectionId, 
+			ControlId,
 			print_order, 
 			default_value, 
 			control_name_resource_key, 
 			fill_proc_param, 
 			param_name, 
-			depend_of1, 
-			depend_of2, 
-			depend_of3, 
-			depend_of4, 
-			Id, 
-			CollectionId, 
-			ControlId
+			DependOf1,
+			DependOf2,
+			DependOf3,
+			DependOf4
+			
 FROM         mart.report_control_collection
 UNION
-SELECT		control_collection_id,
+SELECT		Id, 
+			CollectionId, 
+			ControlId,
 			print_order, 
 			default_value, 
 			control_name_resource_key, 
 			fill_proc_param, 
 			param_name, 
-			depend_of1, 
-			depend_of2, 
-			depend_of3, 
-			depend_of4, 
-			Id, 
-			CollectionId, 
-			ControlId
+			DependOf1,
+			DependOf2,
+			DependOf3,
+			DependOf4
 FROM         mart.custom_report_control_collection
 GO
 

@@ -360,7 +360,7 @@ namespace Teleopti.Analytics.Parameters
                 {
                     IList<ParameterBase> dependent = new List<ParameterBase>();
 
-                    var dbId = (int)row.ItemArray[0];
+                    var dbId = (Guid)row.ItemArray[0];
                     var name = (string)row.ItemArray[1];
                     var resourceKey = (string)row.ItemArray[2];
                     string text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
@@ -395,25 +395,25 @@ namespace Teleopti.Analytics.Parameters
 
                     ParameterBase dep;
 
-                    if ((int)row.ItemArray[5] != 0)
+                    if ((Guid)row.ItemArray[5] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[5].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[6] != 0)
+                    if ((Guid)row.ItemArray[6] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[6].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[7] != 0)
+                    if ((Guid)row.ItemArray[7] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[7].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[8] != 0)
+                    if ((Guid)row.ItemArray[8] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[8].ToString());
                         dependent.Add(dep);

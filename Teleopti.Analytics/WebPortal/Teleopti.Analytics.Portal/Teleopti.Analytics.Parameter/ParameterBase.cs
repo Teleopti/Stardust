@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Parameters
 	{
 		private Reader _reader;
 		protected DataSet MyData;
-	    protected int Dbid;
+	    protected Guid Dbid;
 
 	    //protected System.Guid _UserID;
 	    private string _defaultValue;
@@ -256,7 +256,7 @@ namespace Teleopti.Analytics.Parameters
 
 	    public string Name { get; set; }
 
-	    public int DBID 
+	    public Guid DBID 
 		{
 			set
 			{

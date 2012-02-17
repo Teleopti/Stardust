@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Portal
                 return; 
 
                 var commonReports = new CommonReports(ConnectionString, _reportId);
-                int groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
+                Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
                 string groupPageComboBoxControlCollectionIdName = string.Format("Parameter$Drop{0}", groupPageComboBoxControlCollectionId);
                 if (string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName)))
                 {

@@ -3,7 +3,7 @@ DROP PROCEDURE [mart].[report_controls_get]
 GO
 
 
--- exec mart.report_controls_get @report_id='D2DEB55A-14E4-4610-B7D5-11A66908CD44', @group_page_code='E12C7EB1-23B6-4730-8019-5013C9758663'
+-- exec mart.report_controls_get @report_id='0E3F340F-C05D-4A98-AD23-A019607745C9', @group_page_code='E12C7EB1-23B6-4730-8019-5013C9758663'
 
 CREATE PROCEDURE [mart].[report_controls_get]
 /*
@@ -55,43 +55,43 @@ IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_
 		SELECT Controls.* FROM
 		(
 			SELECT 
-				cc.control_collection_id, 
+				cc.Id, 
 				c.control_name, 
 				cc.control_name_resource_key, 
 				default_value, 
 				fill_proc_name,
-				ISNULL(depend_of1,0) AS depend_of1, 
-				ISNULL(depend_of2,0) AS depend_of2, 
-				ISNULL(depend_of3,0) as depend_of3, 
-				ISNULL(depend_of4,0) as depend_of4,
+				ISNULL(DependOf1, '00000000-0000-0000-0000-000000000000') AS DependOf1, 
+				ISNULL(DependOf2,'00000000-0000-0000-0000-000000000000') AS DependOf2, 
+				ISNULL(DependOf3,'00000000-0000-0000-0000-000000000000') as DependOf3, 
+				ISNULL(DependOf4,'00000000-0000-0000-0000-000000000000') as DependOf4,
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
 				@display AS display
 			FROM mart.v_report r
-				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
-				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
+				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
+				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
 				AND cc.ControlId NOT IN(select * from #grouppagecontrols)
 			--ORDER BY print_order
 			UNION
 			SELECT 
-				cc.control_collection_id, 
+				cc.Id, 
 				c.control_name, 
 				cc.control_name_resource_key, 
 				default_value, 
 				fill_proc_name,
-				ISNULL(depend_of1,0) AS depend_of1, 
-				ISNULL(depend_of2,0) AS depend_of2, 
-				ISNULL(depend_of3,0) as depend_of3, 
-				ISNULL(depend_of4,0) as depend_of4,
+				ISNULL(DependOf1, '00000000-0000-0000-0000-000000000000') AS DependOf1, 
+				ISNULL(DependOf2,'00000000-0000-0000-0000-000000000000') AS DependOf2, 
+				ISNULL(DependOf3,'00000000-0000-0000-0000-000000000000') as DependOf3, 
+				ISNULL(DependOf4,'00000000-0000-0000-0000-000000000000') as DependOf4,
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
 				@dont_display AS display
 			FROM mart.v_report r
-				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
-				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
+				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
+				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
 				AND cc.ControlId IN(select * from #grouppagecontrols)
 		) AS Controls
@@ -110,43 +110,43 @@ ELSE
 		SELECT Controls.* FROM
 		(
 			SELECT 
-				cc.control_collection_id, 
+				cc.Id, 
 				c.control_name, 
 				cc.control_name_resource_key, 
 				default_value, 
 				fill_proc_name,
-				ISNULL(depend_of1,0) AS depend_of1, 
-				ISNULL(depend_of2,0) AS depend_of2, 
-				ISNULL(depend_of3,0) as depend_of3, 
-				ISNULL(depend_of4,0) as depend_of4,
+				ISNULL(DependOf1, '00000000-0000-0000-0000-000000000000') AS DependOf1, 
+				ISNULL(DependOf2,'00000000-0000-0000-0000-000000000000') AS DependOf2, 
+				ISNULL(DependOf3,'00000000-0000-0000-0000-000000000000') as DependOf3, 
+				ISNULL(DependOf4,'00000000-0000-0000-0000-000000000000') as DependOf4,
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
 				@display AS Display
 			FROM mart.report r
-				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
-				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
+				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
+				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
 				AND cc.ControlId NOT IN(select * from #grouppagecontrols)
 			--ORDER BY print_order
 			UNION
 			SELECT 
-				cc.control_collection_id, 
+				cc.Id, 
 				c.control_name, 
 				cc.control_name_resource_key, 
 				default_value, 
 				fill_proc_name,
-				ISNULL(depend_of1,0) AS depend_of1, 
-				ISNULL(depend_of2,0) AS depend_of2, 
-				ISNULL(depend_of3,0) as depend_of3, 
-				ISNULL(depend_of4,0) as depend_of4,
+				ISNULL(DependOf1, '00000000-0000-0000-0000-000000000000') AS DependOf1, 
+				ISNULL(DependOf2,'00000000-0000-0000-0000-000000000000') AS DependOf2, 
+				ISNULL(DependOf3,'00000000-0000-0000-0000-000000000000') as DependOf3, 
+				ISNULL(DependOf4,'00000000-0000-0000-0000-000000000000') as DependOf4,
 				ISNULL(fill_proc_param, -1000) as fill_proc_param,
 				param_name,
 				print_order,
 				@dont_display AS Display
 			FROM mart.report r
-				INNER JOIN mart.report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
-				INNER JOIN mart.report_control c ON cc.ControlId = c.Id
+				INNER JOIN mart.v_report_control_collection cc ON cc.CollectionId = r.ControlCollectionId
+				INNER JOIN mart.v_report_control c ON cc.ControlId = c.Id
 			WHERE r.Id = @report_id
 				AND cc.ControlId IN(select * from #grouppagecontrols)
 			--ORDER BY print_order
