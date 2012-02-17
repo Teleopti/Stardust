@@ -99,7 +99,6 @@ ECHO PRINT 'Adding build number to database' >> "%BUILDFILE%"
 ECHO INSERT INTO DatabaseVersion^(BuildNumber, SystemVersion^) VALUES ^(%Build%,'%SYSTEMVERSION%'^) >> "%BUILDFILE%"
 )
 
-echo roger..."%BUILDFILE%"
 ::Add the new release file to hg
 if %myError% EQU 0 hg add "%BUILDFILE%"
 if %errorlevel% NEQ 0 (
