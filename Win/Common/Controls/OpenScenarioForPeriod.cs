@@ -317,11 +317,17 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private bool hasDataPermissionForRestrictedScearios(DateOnly dateOnly)
         {
-            if (_selectedEntityList == null)
-                return true;
+            if (_selectedEntityList == null) return true;
+
             var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
-            return _selectedEntityList.OfType<ITeam>()
-                .All(team => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, team));
+
+            if (_selectedEntityList.OfType<ITeam>().Count() > 0) 
+                return _selectedEntityList.OfType<ITeam>().All(team => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, team));
+
+            if (_selectedEntityList.OfType<IPerson>().Count() > 0) 
+                return _selectedEntityList.OfType<IPerson>().All(person => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, person));
+
+            return true;
         }
 
         private static bool hasFunctionPermissionForRestrictedScenarios()

@@ -116,19 +116,59 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void openWizard()
         {
             Cursor.Current = Cursors.WaitCursor;
-            using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode))
+
+
+            var entityList = getSelectedEntities();
+
+            if (entityList == null)
+            {
+                Cursor.Current = Cursors.Default;
+                return;
+            }
+
+            using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode, entityList))
             {
                 if (openSchedule.ShowDialog() != DialogResult.Cancel)
                 {
                     LogPointOutput.LogInfo("Scheduler.LoadAndOptimizeData:openWizard", "Started");
-
-                    var entityList = new Collection<IEntity>();
-                    StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation,
-                        openSchedule.Validation, openSchedule.TeamLeaderMode, entityList);
-
+                    StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation, openSchedule.Validation, openSchedule.TeamLeaderMode, entityList);
                 }
             }
+
             Cursor.Current = Cursors.Default;
+        }
+
+        private Collection<IEntity> getSelectedEntities()
+        {
+            var entityList = new Collection<IEntity>(); 
+
+            try
+            {
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    loadBusinessUnitIntoUnitOfWork(uow);
+
+                    if (SelectorPresenter.IsOnOrganizationTab)
+                    {
+                        var teamRep = new TeamRepository(uow);
+                        var teams = teamRep.FindTeams(SelectorPresenter.SelectedTeamGuids);
+                        entityList.AddRange(teams.Cast<IEntity>());
+                    }
+                    else
+                    {
+                        var rep = new PersonRepository(uow);
+                        IEnumerable<IPerson> persons = rep.FindPeople(SelectorPresenter.SelectedPersonGuids);
+                        entityList.AddRange(persons.Cast<IEntity>());
+                    }
+                }
+            }
+            catch (DataSourceException dataSourceException)
+            {
+                ShowDataSourceException(dataSourceException, Resources.OpenTeleoptiCCC);
+                return null;
+            }
+
+            return entityList;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -137,24 +177,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             try
             {
-                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					loadBusinessUnitIntoUnitOfWork(uow);
-
-                    if (SelectorPresenter.IsOnOrganizationTab)
-                    {
-                        var teamRep = new TeamRepository(uow);
-                        var teams = teamRep.FindTeams(SelectorPresenter.SelectedTeamGuids);
-                        entityCollection.AddRange(teams.Cast<IEntity>());
-                    }
-                    else
-                    {
-                        var rep = new PersonRepository(uow);
-                        IEnumerable<IPerson> persons = rep.FindPeople(SelectorPresenter.SelectedPersonGuids);
-                        entityCollection.AddRange(persons.Cast<IEntity>());
-                    }
-                    
-                }
                 var sc = new SchedulingScreen(_container,
                                                            selectedPeriod,
                                                            scenario,
