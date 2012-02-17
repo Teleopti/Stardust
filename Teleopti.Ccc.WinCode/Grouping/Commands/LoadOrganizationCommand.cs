@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             }
             //skapa treeviewnoder av det vi fått kvar
             var nodes = new List<TreeNodeAdv>();
-            var root = new TreeNodeAdv(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Name) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>() };
+            var root = new TreeNodeAdv(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Name) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>(), TagObject = new List<Guid>() };
             nodes.Add(root);
             var usersNode = new TreeNodeAdv(Resources.UserName) { LeftImageIndices = new[] { 1 } ,Tag = new List<Guid>()};
             root.Nodes.Add(usersNode);
@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                     currTeam = new TreeNodeAdv(personSelectorOrganization.Team) { LeftImageIndices = new[] { 2 } ,Tag = new List<Guid>(), TagObject = new List<Guid>{personSelectorOrganization.TeamId.Value}};
                     currSite.Nodes.Add(currTeam);
                     ((IList<Guid>)currSite.TagObject).Add(personSelectorOrganization.TeamId.Value);
+                    ((IList<Guid>)root.TagObject).Add(personSelectorOrganization.TeamId.Value);
                 }
                 TreeNodeAdv personNode = null;
                 // and here have a list with one guid
