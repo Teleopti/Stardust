@@ -4,7 +4,7 @@ GO
 
 
 CREATE PROC [mart].[report_control_person_category_type_get]
-@report_id		int,
+@report_id		uniqueidentifier,
 @person_code	uniqueidentifier,
 @language_id	int,
 @bu_id			uniqueidentifier
@@ -14,6 +14,7 @@ Created:20080619 KJ
 Last modified:
 20080910 Added parameter @bu_id KJ
 20090211 Added new mart5 schema KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 -----------------------------------------------------------------

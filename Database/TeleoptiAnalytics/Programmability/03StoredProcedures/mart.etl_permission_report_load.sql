@@ -29,8 +29,8 @@ WHERE business_unit_id =
 
 --SAVE NEW PERMISSIONS
 INSERT mart.permission_report
-	(report_id, person_code, team_id, my_own, business_unit_id, datasource_id, datasource_update_date)
-SELECT	report_id				= pr.report_id,
+	(ReportId, person_code, team_id, my_own, business_unit_id, datasource_id, datasource_update_date)
+SELECT	ReportId				= pr.ReportId,
 		person_code				= pr.person_code,
 		team_id					= dt.team_id,
 		my_own					= pr.my_own,
@@ -50,8 +50,8 @@ ON
 INNER JOIN 
 	mart.report r
 ON
-	pr.report_id= r.report_id
-ORDER BY pr.report_id, pr.person_code
+	pr.ReportId= r.Id
+ORDER BY pr.ReportId, pr.person_code
 
 GO
 

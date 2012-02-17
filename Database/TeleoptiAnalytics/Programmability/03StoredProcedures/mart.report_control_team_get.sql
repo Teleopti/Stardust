@@ -9,7 +9,7 @@ CREATE PROC [mart].[report_control_team_get]
 @date_from		datetime,
 @date_to		datetime = @date_from,
 @site_id		int,
-@report_id		int,
+@report_id		uniqueidentifier,
 @person_code	uniqueidentifier,
 @language_id	int,
 @bu_id uniqueidentifier
@@ -24,6 +24,7 @@ Last modified:20090706
 20080924 Changed language translation handling if @language is missing in language_translation(then return english) KJ
 20081029 Bug fix on correct bu_id KJ
 20090211 Added new mart schema KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 --select * from dim_team
 --Load "all" first

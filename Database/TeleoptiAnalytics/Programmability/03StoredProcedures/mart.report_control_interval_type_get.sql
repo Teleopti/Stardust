@@ -8,7 +8,7 @@ GO
 
 CREATE PROCEDURE [mart].[report_control_interval_type_get]
 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier
@@ -21,6 +21,7 @@ CREATE PROCEDURE [mart].[report_control_interval_type_get]
 20090211 Added new mart schema KJ
 20090701 Added join on resourcekey, removed join on term_id KJ
 20110715 Collation conflict for Analytics="Cyrillic_General_CI_AS" vs. tempdb = "Finnish_Swedish_CI_AS" 
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 AS
 CREATE TABLE #lang(

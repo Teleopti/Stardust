@@ -9,11 +9,16 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT 
-        report_id as ReportId,
-        'xx' + report_name_resource_key as ReportName, 
+        Id as ReportId,
+        CASE 
+			WHEN report_name_resource_key = '' THEN  report_name
+			ELSE 'xx' + report_name_resource_key 
+		END 
+		as ReportName 
+        , 
         url as ReportUrl,
         target as TargetFrame
-    FROM mart.report
+    FROM mart.v_report
 	WHERE visible = 1
 END
 GO
