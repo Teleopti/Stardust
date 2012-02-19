@@ -10081,4 +10081,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Det här är standardscenariot</value>
     <comment>Det här är standardscenariot</comment>
   </data>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Kundanpassade rapporter</value>
+    <comment>CustomReports</comment>
+  </data>
 </root>

@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
             var customTreeNode = new MatrixTreeNode
                                      {
-                                         DisplayName = "xx Custom",
+                                         DisplayName = Resources.CustomReports,
                                          ImageIndex = 0,
                                          Nodes = from o in orphanMatrixFunctions
                                                  let node = CreateTreeNode(o)
