@@ -48,7 +48,7 @@ INNER JOIN
 ON
 	pr.business_unit_code = bu.business_unit_code
 INNER JOIN 
-	mart.report r
+	mart.v_report r
 ON
 	pr.ReportId= r.Id
 ORDER BY pr.ReportId, pr.person_code

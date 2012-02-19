@@ -299,17 +299,6 @@ ALTER TABLE mart.report ADD CONSTRAINT
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
 
 GO
-ALTER TABLE mart.permission_report ADD CONSTRAINT
-	FK_permission_report_report FOREIGN KEY
-	(
-	ReportId
-	) REFERENCES mart.report
-	(
-	Id
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION 
-	
-GO
 
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_stg_permission_datasource_id]') AND type = 'D')
 BEGIN
