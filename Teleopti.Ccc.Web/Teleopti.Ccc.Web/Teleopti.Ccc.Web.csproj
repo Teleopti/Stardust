@@ -386,6 +386,8 @@
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
+    <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			                     				ReportNameResourceKey =
 			                     					"ResReportServiceLevelAndAgentsReady",
 			                     				FunctionCode =
-			                     					"ResReportForecastvsActualWorkload",
+			                     					"ResReportServiceLevelAndAgentsReady",
 			                     				GenerateReport =
 			                     					(service, input) =>
 			                     					service.GetScheduledAndActual(input),

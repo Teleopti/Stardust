@@ -27,6 +27,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-view-date-nav-prev")] public Link ReportViewPrevDateNavigation;
 		[FindBy(Id = "report-view-show-button")] public Link ReportViewShowButton;
 
+		public RadioButtonCollection Reports
+		{
+			get { return Document.RadioButtons.Filter(Find.ByName("sel-report")); }
+		}
+
 		private DivCollection DatePickerContenainerDayDivs
 		{
 			get { return ReportSelectionDatePickerContainer.Divs.Filter(_datePickerContenainerCellConstraint); }

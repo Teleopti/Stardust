@@ -75,3 +75,9 @@ Scenario: Navigate within report view to next day
 	When I am view a Report
 	And I click next date
 	Then I should see a report for next date
+
+Scenario: Enter Application with partial access to reports
+	Given I am user with partial access to reports
+	When I view ReportSettings
+	Then I should only see reports i have access to
+
