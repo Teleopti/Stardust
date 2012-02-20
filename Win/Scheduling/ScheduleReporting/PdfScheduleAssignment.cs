@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             const float headerTop = top;
 
             IVisualLayerCollection projection = schedulePart.ProjectionService().CreateProjection();
-            DateTime start = projection.Period().Value.StartDateTimeLocal(timeZoneInfo);
-            DateTime end = projection.Period().Value.EndDateTimeLocal(timeZoneInfo);
+        	var projectedPeriod = projection.Period().GetValueOrDefault();
+            DateTime start = projectedPeriod.StartDateTimeLocal(timeZoneInfo);
+            DateTime end = projectedPeriod.EndDateTimeLocal(timeZoneInfo);
             IShiftCategory category = schedulePart.PersonAssignmentCollection()[0].MainShift.ShiftCategory;
 
 
