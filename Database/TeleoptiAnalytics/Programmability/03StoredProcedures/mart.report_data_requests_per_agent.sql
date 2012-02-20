@@ -10,6 +10,7 @@ GO
 -- Date			Author	Description
 ------------------------------------------------
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
+-- 2012-02-14	DavidJ	#	- refactor tables
 -- =============================================
 --Static dimension table
 --------------------------------------------------------
@@ -19,9 +20,9 @@ GO
 --2					Absence Request		ResAbsenceRequest
 --3					Shift Trade Request	ResShiftTradeRequest
 --------------------------------------------------------
-/*
-exec mart.report_data_requests_per_agent @date_from='2012-01-31 00:00:00',@date_to='2012-03-31 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'0',@team_set=N'7',@agent_set=N'11610fe4-0130-4568-97de-9b5e015b2564',@request_type_id=N'-2',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id=27,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-*/
+
+--exec mart.report_data_requests_per_agent @date_from='2012-03-05 00:00:00',@date_to='2012-03-06 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'0',@team_set=N'7',@agent_set=N'11610fe4-0130-4568-97de-9b5e015b2564',@request_type_id=N'-2',@time_zone_id=N'1',@person_code='826F2A46-93BB-4B04-8D5E-9B5E015B2577',@report_id=27,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+
 CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 @date_from datetime,
 @date_to datetime,
@@ -47,7 +48,9 @@ CREATE TABLE  #rights_agents (right_id int)
 CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #selected_agents (selected_id int)
 CREATE TABLE #result(
-	date smalldatetime,
+	start_date smalldatetime,
+	end_date smalldatetime,
+	date_of_request smalldatetime,
 	person_id int,
 	person_name nvarchar(100),
 	request_type_id int,
@@ -59,7 +62,7 @@ CREATE TABLE #result(
 	hide_time_zone bit
 	)
 
---Handle "all" request types from selection
+--Handle "all" request types from select	ion
 IF @request_type_id=-2
 	INSERT INTO #request_type
 	SELECT request_type_id FROM mart.dim_request_type
@@ -101,19 +104,21 @@ ELSE
 --------------
 INSERT INTO #result
 SELECT
-	date					= d.date_date,
+	start_date				= f.request_startdate,
+	end_date                = f.request_enddate,
+	date_of_request		    = f.application_datetime,
 	person_id				= p.person_id,
 	person_name				= p.person_name,
 	request_type_id			= rt.request_type_id,
 	request_type_name		= ISNULL(typeTranslations.term_language, rt.request_type_name),
 	request_status_id		= rs.request_status_id,
 	request_status_name		= ISNULL(statusTranslations.term_language, rs.request_status_name),
-	request_start_date_count= sum(f.request_start_date_count),
-	request_day_count		= sum(f.request_day_count),
+	request_start_date_count= (f.request_start_date_count),
+	request_day_count		= (f.request_day_count),
 	hide_time_zone			= @hide_time_zone
 FROM mart.fact_request f
 inner join mart.dim_date d
-	on f.date_id_local = d.date_id
+	on f.request_start_date_id = d.date_id
 inner join mart.dim_person p
 	on p.person_id = f.person_id
 inner join #selected_agents s
@@ -133,19 +138,20 @@ AND d.date_date between @date_from AND @date_to
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id IN (SELECT right_id FROM #rights_agents)
 
-GROUP BY
+/*GROUP BY
 	d.date_date,
 	p.person_id,
 	p.person_name,
 	rt.request_type_id,
 	ISNULL(typeTranslations.term_language, rt.request_type_name),
 	rs.request_status_id,
-	ISNULL(statusTranslations.term_language, rs.request_status_name)
+	ISNULL(statusTranslations.term_language, rs.request_status_name)*/
 order by
 	p.person_id,
 	d.date_date
 	
 	
 SELECT * FROM #result	
+
 END
 GO

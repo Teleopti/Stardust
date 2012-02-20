@@ -1159,4 +1159,12 @@
     <value>Status</value>
     <comment>Status</comment>
   </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Ansökningsdatum</value>
+    <comment>Ansökningsdatum</comment>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>FörfrågningsPeriod</value>
+    <comment>FörfrågningsPeriod</comment>
+  </data>
 </root>
