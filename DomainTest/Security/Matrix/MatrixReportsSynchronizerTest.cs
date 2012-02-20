@@ -45,9 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
 
             _availableDataList = CreateAvailableDatas(out _adminAvailableData, out _agentAvailableData, out _siteAvailableData);
 
-            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Agent List"));
-            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Site List"));
-            _matrixReports.Add(new MatrixReportInfo(Guid.NewGuid(), "Team List"));
+            var idOne = "09DB7510-ED3C-49CE-B49C-D43D94EC7263";
+            var idTwo = "1C2BDC8C-BFED-4BB3-AD13-6614488310BE";
+            var idFour = "78AD4AF8-41E8-416F-8AE2-FCAC2D98B81F";
+
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idOne), "Agent List"));
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idTwo), "Site List"));
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idFour), "Team List"));
 
             _applicationFunctions = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
 
@@ -153,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             IApplicationFunction app = _target.CreateMatrixReportApplicationFunction(_applicationFunctions,  info);
             Assert.AreEqual(app.FunctionDescription, reportDescription);
             Assert.AreEqual(DefinedForeignSourceNames.SourceMatrix, app.ForeignSource);
-            Assert.AreEqual(info.ReportId.ToString(), app.ForeignId);
+            Assert.AreEqual(info.ReportId.ToString().ToUpper(), app.ForeignId);
         }
 
         [Test]
@@ -197,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             IList<IApplicationFunction> resultList = new List<IApplicationFunction>(result);
 
             Assert.AreEqual(1, resultList.Count);
-            Assert.AreSame(resultList[0], _applicationFunctions[5]);
+            Assert.AreSame(resultList[0], _applicationFunctions[6]);
         }
 
         [Test]
@@ -206,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             IList<IApplicationFunction> matrixApplicationFunctionList = _target.FilterExistingMatrixReportApplicationFunctions(_applicationFunctions);
             matrixApplicationFunctionList[0].FunctionDescription = "Agent";
 
-            Assert.AreEqual(_matrixReports[0].ReportId, int.Parse(matrixApplicationFunctionList[0].ForeignId, CultureInfo.InvariantCulture));
+            Assert.AreEqual(_matrixReports[0].ReportId.ToString().ToUpper(), matrixApplicationFunctionList[0].ForeignId);
             Assert.AreNotEqual(_matrixReports[0].ReportName, matrixApplicationFunctionList[0].FunctionDescription);
 
             _target.UpdateMatrixApplicationFunctions(matrixApplicationFunctionList, _matrixReports);
