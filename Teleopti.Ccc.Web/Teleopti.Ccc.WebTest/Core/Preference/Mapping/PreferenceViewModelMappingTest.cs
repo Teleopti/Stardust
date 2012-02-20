@@ -190,32 +190,25 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldFillStateEditable()
+		public void ShouldSetEditable()
 		{
 			var result = Mapper.Map<PreferenceDayDomainData, DayViewModelBase>(new PreferenceDayDomainData(data.SelectedDate, data.Period, null, null, null, data.WorkflowControlSet, null));
 
-			var actual = DayState.Editable & result.State;
-			actual.Should().Be(DayState.Editable);
+			result.Editable.Should().Be.True();
 		}
 
-		[Test, Ignore]
-		public void ShouldFillStateDeletableWhenStudentAvailabilityDayExists() { Assert.Fail(); }
-
-		[Test, Ignore]
-		public void ShouldNotFillStateDeletableWhenNoStudentAvailabilityDay() { Assert.Fail(); }
-
 		[Test]
-		public void ShouldNotFillEditableOrDeletableStateWhenOutsideSchedulePeriod()
+		public void ShouldNotBeEditablWhenOutsideSchedulePeriod()
 		{
 			var outsideDate = data.Period.EndDate.AddDays(1);
 
 			var result = Mapper.Map<PreferenceDayDomainData, DayViewModelBase>(new PreferenceDayDomainData(outsideDate, data.Period, null, null, null, null, null));
 
-			result.State.Should().Be(DayState.None);
+			result.Editable.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldNotFillEditableOrDeletableWhenNoWorkflowControlSet()
+		public void ShouldNotBeEditablWhenNoWorkflowControlSet()
 		{
 			data.WorkflowControlSet = null;
 
@@ -228,11 +221,11 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.Cast<PreferenceDayViewModel>()
 				.Single();
 
-			dayViewModel.State.Should().Be(DayState.None);
+			dayViewModel.Editable.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldNotFillEditableOrDeletableWhenOutsidePreferenceInputPeriod()
+		public void ShouldNotBeEditableWhenOutsidePreferenceInputPeriod()
 		{
 			var closedDate = DateOnly.Today.AddDays(1);
 			data.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(closedDate, closedDate);
@@ -247,11 +240,11 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.Cast<PreferenceDayViewModel>()
 				.Single();
 
-			dayViewModel.State.Should().Be(DayState.None);
+			dayViewModel.Editable.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldNotFillEditableOrDeletableWhenOutsidePreferencePeriod()
+		public void ShouldNotBeEditableWhenOutsidePreferencePeriod()
 		{
 			var closedDate = DateOnly.Today.AddDays(1);
 			data.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
@@ -266,9 +259,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.Cast<PreferenceDayViewModel>()
 				.Single();
 
-			dayViewModel.State.Should().Be(DayState.None);
+			dayViewModel.Editable.Should().Be.False();
 		}
-
 
 		[Test]
 		public void ShouldMapShiftCategory()

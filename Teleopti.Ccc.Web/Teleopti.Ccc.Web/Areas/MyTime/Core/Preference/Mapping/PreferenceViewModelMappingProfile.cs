@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																					return null;
 																				}))
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.State, o => o.MapFrom(s =>
+				.ForMember(d => d.Editable, o => o.MapFrom(s =>
 																		{
 																			if (s.WorkflowControlSet != null)
 																			{
@@ -133,10 +133,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																					s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
 
 																				if (isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod)
-																					return DayState.Editable;
+																					return true;
 																			}
 
-																			return DayState.None;
+																			return false;
 																		}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())

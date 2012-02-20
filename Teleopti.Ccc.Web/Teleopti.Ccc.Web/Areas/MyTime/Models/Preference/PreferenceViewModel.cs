@@ -32,16 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class DayViewModelBase
 	{
 		public DateOnly Date { get; set; }
-		public DayState State { get; set; }
+		public bool Editable { get; set; }
 		public HeaderViewModel Header { get; set; }
 		public string StyleClassName { get; set; }
-	}
-
-	[Flags]
-	public enum DayState
-	{
-		None = 0,
-		Editable = 1
 	}
 
 	public class HeaderViewModel
