@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IMoveTimeDecisionMaker _decisionMaker;
         private IScheduleMatrixLockableBitArrayConverter _bitArrayConverter;
 		private IScheduleService _scheduleService;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private IOptimizationPreferences _optimizerPreferences;
         private IScheduleMatrixPro _scheduleMatrix;
         private DateOnly _mostUnderStaffDate;
         private DateOnly _mostOverStaffDate;
@@ -36,8 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IEffectiveRestriction _effectiveRestriction;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
-        private IScheduleMatrixOriginalStateContainer _scheduleMatrixOriginalStateContainer;
         private IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
+        private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
 
         [SetUp]
         public void Setup()
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _decisionMaker = _mockRepository.StrictMock<IMoveTimeDecisionMaker>();
             _bitArrayConverter = _mockRepository.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
 			_scheduleService = _mockRepository.StrictMock<IScheduleService>();
-            _optimizerPreferences = _mockRepository.StrictMock<IOptimizerOriginalPreferences>();
+            _optimizerPreferences = _mockRepository.StrictMock<IOptimizationPreferences>();
             _scheduleMatrix = _mockRepository.StrictMock<IScheduleMatrixPro>();
             _mostOverStaffDate = new DateOnly(2010, 01, 08);
             _mostUnderStaffDate = new DateOnly(2010, 01, 09);
@@ -68,8 +69,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = _mockRepository.StrictMock<IEffectiveRestriction>();
             _resourceCalculateDaysDecider = _mockRepository.StrictMock<IResourceCalculateDaysDecider>();
-            _scheduleMatrixOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _workShiftOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
+            _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitDecider>();
+            _schedulingOptionsSyncronizer = _mockRepository.StrictMock<ISchedulingOptionsSyncronizer>();
             
             _target = new MoveTimeOptimizer(
                 _periodValueCalculator,
@@ -83,8 +85,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _resourceOptimizationHelper,
                 _effectiveRestrictionCreator,
                 _resourceCalculateDaysDecider,
-                _scheduleMatrixOriginalStateContainer,
-                _workShiftOriginalStateContainer);
+                _workShiftOriginalStateContainer,
+                _optimizationOverLimitDecider, 
+                _schedulingOptionsSyncronizer);
         }
 
         [Test]
@@ -108,9 +111,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void expectationsForSuccessfullExecute()
         {
             IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
-            Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                .Return(advancedPreferences)
-                .Repeat.AtLeastOnce();
+            //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+            //    .Return(advancedPreferences)
+            //    .Repeat.AtLeastOnce();
 
             Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
 
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
                 
-            Expect.Call(_optimizerPreferences.SchedulingOptions).Return(_schedulingOptions).Repeat.Any();
+            //Expect.Call(_optimizerPreferences.SchedulingOptions).Return(_schedulingOptions).Repeat.Any();
             Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
             Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
 
@@ -205,10 +208,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void makeDecisionMakerFailure()
         {
-            IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
-            Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                .Return(advancedPreferences)
-                .Repeat.AtLeastOnce();
+            //IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
+            //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+            //    .Return(advancedPreferences)
+            //    .Repeat.AtLeastOnce();
 
             Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                 .IgnoreArguments()
@@ -223,10 +226,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mockRepository.Record())
             {
-                IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
+                //IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
 
                 Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.AtLeastOnce();
                 
@@ -238,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
 
-                Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
+                //Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
 
                 Expect.Call(schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
                 Expect.Call(schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
@@ -322,10 +325,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
 
-                IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
+                //IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
 
                 Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.AtLeastOnce();
 
@@ -337,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
 
-                Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
+                //Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
                 Expect.Call(schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
                 Expect.Call(schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
 
@@ -426,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
 
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
-                Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
+                //Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
 
                 Expect.Call(_mostOverStaffDay.DaySchedulePart()).Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
                 Expect.Call(_mostUnderStaffDay.DaySchedulePart()).Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
@@ -473,10 +476,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(schedulingOptions.ConsiderShortBreaks)
                     .Return(true).Repeat.AtLeastOnce();
 
-                IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
+                //IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 1 };
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
 
                 // rollback
                 _rollbackService.ClearModificationCollection();
@@ -513,7 +516,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
 
-                Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
+                //Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions).Repeat.Any();
                 Expect.Call(schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
 
                 Expect.Call(_mostUnderStaffDay.DaySchedulePart()).Return(_mostUnderStaffSchedulePart).Repeat.AtLeastOnce();
@@ -546,10 +549,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, schedulingOptions))
                         .Return(_effectiveRestriction);
 
-                IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences{ MaximumMovableWorkShiftPercentagePerPerson = 1 };
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
+                //IOptimizerAdvancedPreferences advancedPreferences = new OptimizerAdvancedPreferences{ MaximumMovableWorkShiftPercentagePerPerson = 1 };
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
 
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, false, _effectiveRestriction))
                     .Return(false);
@@ -583,13 +586,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mockRepository.Record())
             {
                 Expect.Call(_bitArrayConverter.Workdays()).Return(12);
-                var advancedPreferences = new OptimizerAdvancedPreferences {MaximumMovableWorkShiftPercentagePerPerson = 0.25};
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixOriginalStateContainer.CountChangedWorkShifts())
-                    .Return(1)
-                    .Repeat.AtLeastOnce();
+                //var advancedPreferences = new OptimizerAdvancedPreferences {MaximumMovableWorkShiftPercentagePerPerson = 0.25};
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
+                //Expect.Call(_scheduleMatrixOriginalStateContainer.CountChangedWorkShifts())
+                //    .Return(1)
+                //    .Repeat.AtLeastOnce();
             }
             using(_mockRepository.Playback())
             {
@@ -604,13 +607,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_bitArrayConverter.Workdays()).Return(12);
-                var advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 0.25 };
-                Expect.Call(_optimizerPreferences.AdvancedPreferences)
-                    .Return(advancedPreferences)
-                    .Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixOriginalStateContainer.CountChangedWorkShifts())
-                    .Return(4)
-                    .Repeat.AtLeastOnce();
+                //var advancedPreferences = new OptimizerAdvancedPreferences { MaximumMovableWorkShiftPercentagePerPerson = 0.25 };
+                //Expect.Call(_optimizerPreferences.AdvancedPreferences)
+                //    .Return(advancedPreferences)
+                //    .Repeat.AtLeastOnce();
+                //Expect.Call(_scheduleMatrixOriginalStateContainer.CountChangedWorkShifts())
+                //    .Return(4)
+                //    .Repeat.AtLeastOnce();
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix)
                     .Repeat.AtLeastOnce();

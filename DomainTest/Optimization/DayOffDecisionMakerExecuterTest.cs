@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _scheduleMatrix;
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private IDayOffTemplate _dayOffTemplate;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private IOptimizationPreferences _optimizerPreferences;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IScheduleService _scheduleService;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
 
         [SetUp]
         public void Setup()
@@ -52,14 +53,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleService = _mocks.StrictMock<IScheduleService>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
-            _optimizerPreferences = new OptimizerOriginalPreferences();
+            _optimizerPreferences = new OptimizationPreferences();
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
             _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
             _nightRestWhiteSpotSolverService = _mocks.StrictMock<INightRestWhiteSpotSolverService>();
+            _schedulingOptionsSyncronizer = _mocks.StrictMock<ISchedulingOptionsSyncronizer>();
         }
+
 
         [Test]
         public void VerifyExecuteReturnsTrue()
@@ -148,6 +151,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnFalseWhenBreakingDayOffRule()
         {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
             bitArrayBeforeMove.Set(0, true);
             ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
@@ -192,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleDay9.Day).Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true)).Repeat.Twice();
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
-                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(new DateOnly())).Return(false);
+                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly())).Return(false);
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
                     .Return(false);
@@ -213,6 +218,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldReturnTrueWhenBreakingDayOffRuleButHandleConflict()
         {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
             bitArrayBeforeMove.Set(0, true);
             ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
@@ -259,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix)).Return(true).Repeat.Once();
                 Expect.Call(_workShiftBackToLegalStateService.RemovedDays).Return(new List<DateOnly>());
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
-                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(new DateOnly())).Return(true);
+                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly())).Return(true);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(null, true, _effectiveRestriction)).IgnoreArguments().Return(true).Repeat.Twice();
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(5).Repeat.AtLeastOnce();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).
@@ -433,7 +440,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _dayOffOptimizerConflictHandler,
                                       _originalStateContainer, 
                                       _optimizationOverLimitDecider,
-                                      _nightRestWhiteSpotSolverService
+                                      _nightRestWhiteSpotSolverService,
+                                      _schedulingOptionsSyncronizer
                                       );
         }
     }

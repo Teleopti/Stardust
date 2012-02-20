@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -9,19 +10,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private SchedulingOptionsSyncronizer _target;
         private IOptimizationPreferences _optimizationPreferences;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
         {
             _optimizationPreferences = new OptimizationPreferences();
+            _schedulingOptions = new SchedulingOptions();
             _target = new SchedulingOptionsSyncronizer();
         }
 
         [Test]
         public void ShouldCreateNewSchedulingOption()
         {
-            ISchedulingOptions result = _target.CreateSchedulingOption(_optimizationPreferences);
-            Assert.IsNotNull(result);
+            _target.SyncronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsNotNull(_target.DaysOff);
             Assert.IsNotNull(_target.Extra);
             Assert.IsNotNull(_target.Advanced);
-            Assert.IsNotNull(_target.LocalSchedulingOptions);
+            Assert.IsNotNull(_target.Rescheduling);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyLocalSchedulingOptionsDefaultValues()
         {
-            Assert.IsTrue(_target.LocalSchedulingOptions.ConsiderShortBreaks);
+            Assert.IsTrue(_target.Rescheduling.ConsiderShortBreaks);
         }
     }
 }

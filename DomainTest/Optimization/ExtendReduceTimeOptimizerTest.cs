@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IResourceCalculateDaysDecider _decider;
-        private IScheduleMatrixOriginalStateContainer _originalStateContainerForMoveMaxShifts;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
+        private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
         //private ILog _log;
 
         private IScheduleMatrixPro _matrix;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
         private IEffectiveRestriction _effectiveRestriction;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private IOptimizationPreferences _optimizerPreferences;
 
         [SetUp]
         public void Setup()
@@ -52,16 +53,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
-            _originalStateContainerForMoveMaxShifts = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _optimizerPreferences = new OptimizerOriginalPreferences();
+            _optimizerPreferences = new OptimizationPreferences();
+            _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
+            _schedulingOptionsSyncronizer = _mocks.StrictMock<ISchedulingOptionsSyncronizer>();
 
-            _target = new ExtendReduceTimeOptimizer(_periodValueCalculator, _dataExtractor, _decisionMaker,
-                                                    _scheduleMatrixLockableBitArrayConverter, _scheduleService,
-                                                    _optimizerPreferences, _rollbackService,
-                                                    _deleteService, _resourceOptimizationHelper,
-                                                    _effectiveRestrictionCreator, _decider,
-                                                    _originalStateContainerForMoveMaxShifts, _originalStateContainerForTagChange);
+            _target = new ExtendReduceTimeOptimizer(
+                _periodValueCalculator, 
+                _dataExtractor, 
+                _decisionMaker,
+                _scheduleMatrixLockableBitArrayConverter, 
+                _scheduleService,
+                _optimizerPreferences, 
+                _rollbackService,
+                _deleteService, 
+                _resourceOptimizationHelper,
+                _effectiveRestrictionCreator, 
+                _decider, 
+                _originalStateContainerForTagChange, 
+                _optimizationOverLimitDecider, 
+                _schedulingOptionsSyncronizer);
 
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
@@ -284,10 +295,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1))).Repeat.AtLeastOnce();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 2, 2011, 1, 2))).Repeat.AtLeastOnce();
 
-            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _optimizerPreferences.SchedulingOptions))
-                .Return(_effectiveRestriction);
-            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _optimizerPreferences.SchedulingOptions))
-                .Return(_effectiveRestriction);
+            //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _optimizerPreferences.SchedulingOptions))
+            //    .Return(_effectiveRestriction);
+            //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _optimizerPreferences.SchedulingOptions))
+            //    .Return(_effectiveRestriction);
 
 
             

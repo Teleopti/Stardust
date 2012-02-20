@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IExtendReduceDaysOffDecisionMaker _decisionMaker;
         private IScheduleMatrixLockableBitArrayConverter _matrixConverter;
         private IScheduleService _scheduleServiceForFlexibleAgents;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private IOptimizationPreferences _optimizerPreferences;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPersonAssignment _personAssignment;
         private IEffectiveRestriction _effectiveRestriction;
         private DateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
+        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             ;
             _matrixConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _scheduleServiceForFlexibleAgents = _mocks.StrictMock<IScheduleService>();
-            _optimizerPreferences = new OptimizerOriginalPreferences();
+            _optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayOffTemplate = _mocks.StrictMock<IDayOffTemplate>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
+            _schedulingOptionsSyncronizer = _mocks.StrictMock<ISchedulingOptionsSyncronizer>();
             _target = new ExtendReduceDaysOffOptimizer(_personalSkillPeriodValueCalculator,
                                                        _personalScheduleResultDataExtractor, _decisionMaker,
                                                        _matrixConverter, _scheduleServiceForFlexibleAgents,
@@ -78,7 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                        _workTimeBackToLegalStateService,
                                                        _nightRestWhiteSpotSolverService, _validatorList,
                                                        _dayOffsInPeriodCalculator, _dayOffTemplate,
-                                                       _dayOffOptimizerConflictHandler, _dayOffOptimizerValidator);
+                                                       _dayOffOptimizerConflictHandler, _dayOffOptimizerValidator, 
+                                                       _schedulingOptionsSyncronizer);
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+                //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, true,
                                                                                   _personAssignment.MainShift.
                                                                                       ShiftCategory)).Return(true).Repeat.AtLeastOnce();
@@ -187,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+                //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, true,
                                                                                   _personAssignment.MainShift.
                                                                                       ShiftCategory)).Return(true).Repeat.AtLeastOnce();
@@ -249,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+                //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, true,
                                                                                   _personAssignment.MainShift.
                                                                                       ShiftCategory)).Return(false).Repeat.AtLeastOnce();
