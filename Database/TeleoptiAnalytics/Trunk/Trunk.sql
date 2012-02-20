@@ -368,7 +368,11 @@ GO
 ALTER TABLE [stage].[stg_permission_report] ADD  CONSTRAINT [DF_stg_permission_report_datasource_update_date]  DEFAULT (getdate()) FOR [datasource_update_date]
 GO
 
-
+CREATE CLUSTERED INDEX [CIX_stg_permisssion_report] ON [stage].[stg_permission_report] 
+(
+	[person_code] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [STAGE]
+GO
 
 
 -- remove the old and unused stuff
@@ -474,7 +478,6 @@ GO
 
 ALTER TABLE [mart].[custom_report_control_collection] CHECK CONSTRAINT [FK_custom_report_control_collection_report_control]
 GO
-
 
 CREATE TABLE [mart].[custom_report](
 	[url] [nvarchar](500) NULL,
