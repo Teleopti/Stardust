@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
 
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
         public void VerifyCreateMatrixReportApplicationFunction()
         {
             string reportDescription = "xxViewAgents";
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             Assert.AreSame(resultList[0], _applicationFunctions[6]);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
         public void VerifyUpdateMatrixReports()
         {
             IList<IApplicationFunction> matrixApplicationFunctionList = _target.FilterExistingMatrixReportApplicationFunctions(_applicationFunctions);
@@ -315,12 +315,5 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             return availableDatas;
         }
 
-        [Test]
-        public void Shouldsame()
-        {
-            var guid1 = new Guid("0E3F340F-C05D-4A98-AD23-A019607745C9");
-            var guid2 = new Guid("0E3F340F-C05D-4A98-AD23-A019607745C9");
-            Assert.That(guid1.Equals(guid2), Is.True);
-        }
     }
 }
