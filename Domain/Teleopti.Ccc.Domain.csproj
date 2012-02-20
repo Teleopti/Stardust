@@ -1141,6 +1141,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
+    <Compile Include="WorkflowControl\AlreadyAbsentValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculator.cs" />

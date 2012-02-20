@@ -160,6 +160,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                         personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
                     }
 
+
+					//Check absence validator!
+
                     var allNewRules = NewBusinessRuleCollection.Minimum(); 
                     var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
                                                                                              _schedulingResultStateHolder,
