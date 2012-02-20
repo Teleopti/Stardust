@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -19,13 +20,13 @@ namespace Teleopti.Analytics.Etl.Transformer
             
             foreach (MatrixPermissionHolder permissionHolder in rootList)
             {
-                int reportId;
-                if (!int.TryParse(permissionHolder.ApplicationFunction.ForeignId, out reportId))
+                Guid reportId;
+                if (!isGuid(permissionHolder.ApplicationFunction.ForeignId, out reportId))
                     continue;
 
                 DataRow row = table.NewRow();
                 row["person_code"] = permissionHolder.Person.Id;
-                row["report_id"] = reportId;
+                row["ReportId"] = reportId;
                 row["team_id"] = permissionHolder.Team.Id;
                 row["business_unit_code"] = permissionHolder.Team.BusinessUnitExplicit.Id;
                 row["business_unit_name"] = permissionHolder.Team.BusinessUnitExplicit.Name;
@@ -33,6 +34,20 @@ namespace Teleopti.Analytics.Etl.Transformer
                 row["datasource_id"] = 1;
                 table.Rows.Add(row);
             }
+        }
+
+        private bool isGuid(string hopefullyGuid, out Guid guid)
+       {
+           try
+            {
+                guid = new Guid(hopefullyGuid);
+            }
+            catch (Exception)
+            {
+                guid = new Guid();
+                return false;
+            }
+            return true;
         }
     }
 }

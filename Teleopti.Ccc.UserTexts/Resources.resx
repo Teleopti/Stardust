@@ -10387,4 +10387,8 @@ These options are activated:
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>Minimum is {0} hours.</value>
   </data>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Custom reports</value>
+    <comment>Custom reports</comment>
+  </data>
 </root>

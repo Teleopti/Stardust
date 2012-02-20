@@ -12,6 +12,7 @@ GO
 --2011-08-31	ME	Bug fix -- @overtime_set was not used
 --2012-01-09	ME	Pass BU to ReportAgents
 --2012-01-26	JN	Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --exec mart.report_data_scheduled_overtime_per_agent @scenario_id=N'0',@date_from='2010-11-22 00:00:00',@date_to='2010-11-22 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'-2',@agent_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@overtime_set=N'1',@time_zone_id=N'2',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id=23,@language_id=1053
 --exec mart.report_data_scheduled_overtime_per_agent @scenario_id=N'0',@date_from='2009-02-01 00:00:00',@date_to='2009-02-28 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'-2',@agent_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@overtime_set=N'1',@time_zone_id=N'2',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id=23,@language_id=1053
@@ -31,7 +32,7 @@ CREATE PROCEDURE [mart].[report_data_scheduled_overtime_per_agent]
 @overtime_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

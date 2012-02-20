@@ -19,6 +19,7 @@ GO
 -- 20081009 Bug fix Date, Week and Month Formats changed KJ
 -- 20080708 Added new id:s for period_type
 -- 20080808 Added parameter time_zone_id and added connection to bridge_queue_workload KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Queue Statistics -  Abandoned Calls
 -- =============================================
 --exec report_data_queue_stat_abnd @skill_set=N'0,1,2',@workload_set=N'0',@interval_type=N'6',@date_from='2006-01-01 00:00:00:000',@date_to='2006-01-10 00:00:00:000',@interval_from=N'0',@interval_to=N'287',@time_zone_id='1',@person_code='79C90699-C7C0-4D17-ADBF-9B2F0012C85A',@report_id=8,@language_id=1053
@@ -33,7 +34,7 @@ CREATE PROCEDURE [mart].[report_data_queue_stat_abnd]
 @interval_to int,
 @time_zone_id int,
 @person_code uniqueidentifier ,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

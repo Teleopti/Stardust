@@ -7,13 +7,14 @@ GO
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --EXEC report_permission_data_check_test '2000-01-01','2003-01-10',21,'0,8,10,51,123,754,755','37D3CD63-90D8-4E89-94B9-9ABE00250819',12
 
 --SELECT * FROM DIM_PERSON WHERE TEAM_ID=21
 CREATE PROCEDURE [mart].[report_permission_data_check_test]
 @person_code uniqueidentifier,
-@report_id int
+@report_id uniqueidentifier
 AS
 	
 SET NOCOUNT ON

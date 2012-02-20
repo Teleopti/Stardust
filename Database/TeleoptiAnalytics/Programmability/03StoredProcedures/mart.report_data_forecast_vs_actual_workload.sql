@@ -15,6 +15,7 @@ GO
 -- 20080808 Added parameter time_zone_id and added connection to bridge_queue_workload KJ
 -- 20100705 Added real calculation of calculated calls
 -- 20110622 Azure fix DJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Forecast vs Actual Workload
 -- OBS! TODO: @time_zone_id, dateformat, check calculations with week and month selections,calculated calls not in db
 -- =============================================
@@ -32,7 +33,7 @@ CREATE PROCEDURE [mart].[report_data_forecast_vs_actual_workload]
 @interval_to int,
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS
