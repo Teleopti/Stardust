@@ -51,7 +51,7 @@ if %myError% EQU 0 call:CreateRelease TeleoptiCCCAgg %ReleaseFile% "%SYSTEMVERSI
 
 ::Commit changes
 if %myError% EQU 0 (
-hg commit -m "Automated database build: %SYSTEMVERSION%" -u %USERNAME%
+hg commit -m "Automated database build: %SYSTEMVERSION%"
 set myError=%errorlevel%
 Echo Cannot check files!
 )
