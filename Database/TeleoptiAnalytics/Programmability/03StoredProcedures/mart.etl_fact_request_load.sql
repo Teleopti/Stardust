@@ -165,8 +165,8 @@ request_startdate	= stg.request_startdate,
 request_enddate		= stg.request_enddate,
 request_type_id		= rt.request_type_id,
 request_status_id	= rs.request_status_id,
+request_day_count	= -1,
 request_start_date_count= stg.request_start_date_count,
-request_day_count	= stg.request_day_count,
 business_unit_id	= bu.business_unit_id,
 datasource_id		= stg.datasource_id,
 insert_date			= stg.insert_date,
@@ -194,6 +194,21 @@ INNER JOIN mart.dim_request_type rt
 INNER JOIN mart.dim_request_status rs
 	ON rs.request_status_id = stg.request_status_code
 WHERE stg.request_startdate BETWEEN @start_date AND @end_date
+
+--update the count
+update mart.fact_request
+set request_day_count = temp.Numday
+from 
+(select stg.request_code, SUM(stg.request_day_count) as Numday
+from stage.stg_request stg
+inner join mart.fact_request f
+on f.request_code = stg.request_code
+group by stg.request_code
+) temp
+inner join mart.fact_request f
+on temp.request_code = f.request_code
+
+
 
 END
 GO

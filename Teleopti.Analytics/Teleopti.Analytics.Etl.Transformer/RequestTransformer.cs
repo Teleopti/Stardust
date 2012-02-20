@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void Transform(IEnumerable<IPersonRequest> rootList, int intervalsPerDay, DataTable table)
-		{
+        {
             InParameter.NotNull("rootList", rootList);
             InParameter.NotNull("table", table);
             
@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 foreach (var dateOnly in dayCollection)
                 {
                     DataRow row = table.NewRow();
-
+            
                     row["request_code"] = personRequest.Id;
                     row["person_code"] = personRequest.Person.Id;
                     
@@ -65,7 +65,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                     row["request_startdate"] = numOfDays.StartDate.Date;
                     row["request_enddate"] = numOfDays.EndDate.Date;
                     row["business_unit_code"] = personRequest.BusinessUnit.Id;
-                    
+
                     row["request_day_count"] = 1;
                     row["request_start_date_count"] = dateOnly == numOfDays.StartDate ? 1 : 0;
                     row["datasource_id"] = 1;
