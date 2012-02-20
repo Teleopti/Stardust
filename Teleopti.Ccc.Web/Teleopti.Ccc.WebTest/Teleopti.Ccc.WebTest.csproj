@@ -171,7 +171,6 @@
     <Compile Include="Core\Preference\Mapping\PreferenceDomainDataMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceViewModelMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceInputMappingTest.cs" />
-    <Compile Include="Core\Preference\PreferenceHtmlExtensionTest.cs" />
     <Compile Include="Core\Preference\ViewModelFactory\PreferenceViewModelFactoryTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PersonRequestProviderTest.cs" />
     <Compile Include="Core\UserTimeZoneTest.cs" />

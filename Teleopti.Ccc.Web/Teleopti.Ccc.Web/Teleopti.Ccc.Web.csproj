@@ -279,7 +279,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceWeekDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\PreferenceHtmlExtension.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
     <Compile Include="Core\UserTimeZone.cs" />
