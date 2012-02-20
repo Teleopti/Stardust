@@ -83,22 +83,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var scheduleDate = ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var personPeriod = ScheduleDay.Person.Period(scheduleDate);
+				long workLengthTicks = 0;
+				var shouldWork = false;
 				if (personPeriod != null)
 				{
-					var workLengthTicks = personPeriod.PersonContract.AverageWorkTimePerDay.Ticks;
-					var shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate);
-					var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
-					if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
-						projection.Add(fakeLayer);
+					workLengthTicks = personPeriod.PersonContract.AverageWorkTimePerDay.Ticks;
+					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate) &&
+						ScheduleDay.PersonDayOffCollection().IsEmpty();
 				}
+				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
+				if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
+					projection.Add(fakeLayer);
 			}
 		}
 
 		private bool fakeLayerMightBeAdded(IEnumerable<IVisualLayer> projection, IEnumerable<IPersonAbsence> personAbsences)
 		{
 			return projection.IsEmpty() &&
-					!personAbsences.IsEmpty() &&
-					ScheduleDay.PersonDayOffCollection().IsEmpty();
+					!personAbsences.IsEmpty();
 		}
 
 		private void removeUnusedFakeActivities(IList<IVisualLayer> fakeLayers)
