@@ -80,7 +80,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (movesOverMaxDaysLimit(logWriter))
                 return false;
 
-            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
+            ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
+
+            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             var changesTracker = new LockableBitArrayChangesTracker();
 
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
-            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, matrix, _scheduleService.SchedulingOptions, handleDayOffConflict);
+            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, matrix, schedulingOptions, handleDayOffConflict);
             IEnumerable<changedDay> movedDates = result.MovedDays;
 
             if (!result.Result)

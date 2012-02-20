@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -29,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
         private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
-        //private ILog _log;
 
         private IScheduleMatrixPro _matrix;
         private IScheduleDayPro _scheduleDayPro1;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay2;
         private IEffectiveRestriction _effectiveRestriction;
         private IOptimizationPreferences _optimizerPreferences;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -80,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
             _effectiveRestriction = _mocks.Stub<IEffectiveRestriction>();
+            _schedulingOptions = new SchedulingOptions();
         }
 
         [Test]
@@ -93,19 +95,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction)).Return(
-                true);
-
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction)).Return(
-                    false);
-
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-
-                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 1))).Return(true)
-                   .Repeat.Any();
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction))
+                    .Return(true);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction))
+                    .Return(false);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
+                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 1)))
+                    .Return(true).Repeat.Any();
             }
 
             bool result;
@@ -129,22 +130,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction)).Return(
-                false);
-
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction)).Return(
-                    true);
-
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-
-                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2))).Return(false)
-                    .Repeat.Any();
-
-                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState[new DateOnly(2011, 1, 2)]).Return(
-                    _scheduleDay2).Repeat.Any();
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction))
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction))
+                    .Return(true);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
+                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
+                    .Return(false).Repeat.Any();
+                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState[new DateOnly(2011, 1, 2)])
+                    .Return(_scheduleDay2).Repeat.Any();
             }
 
             bool result;
@@ -168,15 +165,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction)).Return(
-                false);
-
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction)).Return(
-                    false);
-
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-                
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction))
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction))
+                    .Return(false);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
             }
 
             bool result;
@@ -271,37 +267,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void commonMocks(ExtendReduceTimeDecisionMakerResult decisionMakerResult)
         {
-            Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor)).Return(
-                    decisionMakerResult);
-            Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                40);
-            Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix).Repeat.Any();
-            Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToLengthen.Value)).Return(
-                _scheduleDayPro1).Repeat.Any();
-            Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToShorten.Value)).Return(
-                _scheduleDayPro2).Repeat.Any();
-            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1).Repeat.Any();
-            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2).Repeat.Any();
-            Expect.Call(_scheduleDay1.Clone()).Return(_scheduleDay1).Repeat.Any();
-            Expect.Call(_scheduleDay2.Clone()).Return(_scheduleDay2).Repeat.Any();
-            Expect.Call(_decider.DecideDates(null, null)).IgnoreArguments().Return(new List<DateOnly> { new DateOnly(2011, 1, 1) }).
-                Repeat.Any();
-            Expect.Call(
-                () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), true, true)).
-                Repeat.Any();
-            Expect.Call(
-                () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 2), true, true)).
-                Repeat.Any();
+            Expect.Call(_scheduleService.SchedulingOptions).Return(_schedulingOptions).Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
+            Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
+                .Return(decisionMakerResult);
+            Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                .Return(40);
+            Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix)
+                .Return(_matrix).Repeat.Any();
+            Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToLengthen.Value))
+                .Return(_scheduleDayPro1).Repeat.Any();
+            Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToShorten.Value))
+                .Return(_scheduleDayPro2).Repeat.Any();
+            Expect.Call(_scheduleDayPro1.DaySchedulePart())
+                .Return(_scheduleDay1).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart())
+                .Return(_scheduleDay2).Repeat.Any();
+            Expect.Call(_scheduleDay1.Clone())
+                .Return(_scheduleDay1).Repeat.Any();
+            Expect.Call(_scheduleDay2.Clone())
+                .Return(_scheduleDay2).Repeat.Any();
+            Expect.Call(_decider.DecideDates(null, null)).IgnoreArguments()
+                .Return(new List<DateOnly> { new DateOnly(2011, 1, 1) }).Repeat.Any();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), true, true)).Repeat.Any();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 2), true, true)).Repeat.Any();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1))).Repeat.AtLeastOnce();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 2, 2011, 1, 2))).Repeat.AtLeastOnce();
-
-            //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _optimizerPreferences.SchedulingOptions))
-            //    .Return(_effectiveRestriction);
-            //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _optimizerPreferences.SchedulingOptions))
-            //    .Return(_effectiveRestriction);
-
-
-            
+            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions))
+                .Return(_effectiveRestriction);
+            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay2, _schedulingOptions))
+                .Return(_effectiveRestriction);
         }
     }
 }

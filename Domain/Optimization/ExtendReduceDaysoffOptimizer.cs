@@ -88,7 +88,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool success = false;
 
-            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _scheduleServiceForFlexibleAgents.SchedulingOptions);
+            var schedulingOptions = _scheduleServiceForFlexibleAgents.SchedulingOptions;
+            var sourceMatrix = _matrixConverter.SourceMatrix;
+
+            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled =
                 _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor, _validatorList);
@@ -104,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
                 changedDay changedDayOff = new changedDay();
-                var currentPart = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                var currentPart = sourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
                 
                 changedDayOff.PrevoiousSchedule = currentPart;
                 changedDayOff.DateChanged = dateOnly;
@@ -112,14 +115,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                 currentPart.DeleteDayOff();
                 _rollbackService.Modify(currentPart);
 
-                changedDayOff.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                changedDayOff.CurrentSchedule = sourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-                IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(_matrixConverter.SourceMatrix);  //resource calculation is done automaticaly
+                IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(sourceMatrix);  //resource calculation is done automaticaly
 
-                if(rescheduleWhiteSpots(new[] {changedDayOff}, illegalDays, _matrixConverter.SourceMatrix, _originalStateContainerForTagChange, _scheduleServiceForFlexibleAgents.SchedulingOptions))
+                if (rescheduleWhiteSpots(new[] { changedDayOff }, illegalDays, sourceMatrix, _originalStateContainerForTagChange, schedulingOptions))
                     success = true;
                 else
-                    _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
+                    sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToLengthen.Value, daysToBeRescheduled.DayToLengthen.Value));
             }
 
             if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (addDayOff(dateOnly, true, _scheduleServiceForFlexibleAgents.SchedulingOptions))
                     success = true;
                 else
-                    _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
+                    sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
             }
 
             if(success)
@@ -172,11 +175,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-                // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
-                //SetTheOriginalShiftCategoryInSchedulingOptions(dateOnly, matrix, originalStateContainer, options);
-                // -->
-
-                // reviewed and fixed version
                 IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
                 IPersonAssignment originalPersonAssignment = originalScheduleDay.AssignmentHighZOrder();

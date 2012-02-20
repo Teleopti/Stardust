@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyExecuteReturnsTrue()
         {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null)
                                                        {PeriodArea = new MinMax<int>(0, 1)};
             bitArrayBeforeMove.Set(0, true);
@@ -100,6 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
+                Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
+                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                  _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
@@ -182,6 +186,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
+                Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
+                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
@@ -249,6 +255,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
+                Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
+                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.AtLeastOnce();
@@ -316,8 +324,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var dateOnlyPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
             var dateOnly = new DateOnly();
 
-            //Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix)).Return(true).Repeat.Once();
-            //Expect.Call(_workShiftBackToLegalStateService.RemovedDays).Return(new List<DateOnly>());
             Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().Return(null).Repeat.Once();
             Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments().Return(true).Repeat.Once();
             Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.Any();
@@ -331,6 +337,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyExecuteWithBackToLegalState()
         {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null)
                                                        {PeriodArea = new MinMax<int>(0, 1)};
             bitArrayBeforeMove.Set(0, true);
@@ -364,6 +372,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mocks.Record())
             {
+                Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
+                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(
