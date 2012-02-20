@@ -1164,7 +1164,7 @@
     <comment>Ansökningsdatum</comment>
   </data>
   <data name="ResRequestPeriod" xml:space="preserve">
-    <value>FörfrågningsPeriod</value>
-    <comment>FörfrågningsPeriod</comment>
+    <value>Förfrågningsperiod</value>
+    <comment>Förfrågningsperiod</comment>
   </data>
 </root>
