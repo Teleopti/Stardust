@@ -36,7 +36,8 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        private bool isGuid(string hopefullyGuid, out Guid guid)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        private static bool isGuid(string hopefullyGuid, out Guid guid)
        {
            try
             {
