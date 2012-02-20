@@ -57,6 +57,12 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target.EndDateAsDateTime().Should().Be.EqualTo(endDate);
 			target.DataSource.Should().Be.EqualTo("datasource");
 		}
+
+		[Test]
+		public void ShouldHaveCorrectRoute()
+		{
+			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
+		}
 	}
 
 	[TestFixture]
@@ -99,10 +105,17 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target.DomainIdAsGuid().Should().Be.EqualTo(domainId);
 			target.DomainReferenceIdAsGuid().Should().Be.EqualTo(domainReferenceId);
 			target.SubscriptionIdAsGuid().Should().Be.EqualTo(subscriptionId);
+			target.BusinessUnitIdAsGuid().Should().Be.EqualTo(businessUnitId);
 			target.DomainReferenceType.Should().Be.EqualTo("ref");
 			target.DomainType.Should().Be.EqualTo("type");
 			target.LowerBoundaryAsDateTime().Should().Be.EqualTo(startDate);
 			target.UpperBoundaryAsDateTime().Should().Be.EqualTo(endDate);
+		}
+
+		[Test]
+		public void ShouldHaveCorrectRoute()
+		{
+			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
 		}
 	}
 }
