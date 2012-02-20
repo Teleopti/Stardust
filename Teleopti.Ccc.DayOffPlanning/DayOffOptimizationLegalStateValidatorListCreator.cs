@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateFreeWeekendDaysValidatorConditionally()
         {
-            if (_daysOffPreferences.KeepFreeWeekendDays)
+            if (_daysOffPreferences.UseWeekEndDaysOff)
             {
                 IDayOffLegalStateValidator validator =
                     new FreeWeekendDayValidator(
