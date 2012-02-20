@@ -130,6 +130,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction))
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction))
@@ -195,24 +197,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 commonMocks(decisionMakerResult);
-
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction)).Return(
-                false);
-
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction)).Return(
-                    true);
-
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    30);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(
-                    100);
-
-                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2))).Return(false)
-                    .Repeat.Any();
-
-                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState[new DateOnly(2011, 1, 2)]).Return(
-                    _scheduleDay2).Repeat.Any();
-
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, false, _effectiveRestriction))
+                    .Return(false);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, false, _effectiveRestriction))
+                    .Return(true);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(30);
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+                    .Return(100);
+                Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
+                    .Return(false).Repeat.Any();
+                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState[new DateOnly(2011, 1, 2)])
+                    .Return(_scheduleDay2).Repeat.Any();
             }
 
             bool result;
@@ -232,8 +230,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor)).Return(
-                    decisionMakerResult);
+                Expect.Call(_scheduleService.SchedulingOptions).Return(_schedulingOptions).Repeat.AtLeastOnce();
+                Expect.Call(() => _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
+                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                    .Return(false);
+                Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
+                    .Return(decisionMakerResult);
 
             }
 

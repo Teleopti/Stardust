@@ -175,8 +175,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 int x;
                 int y;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
-                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulingOptions).Return(_schedulingOptions);
-                Expect.Call(() => _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
@@ -252,7 +250,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                //Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _optimizerPreferences.SchedulingOptions)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, true,
                                                                                   _personAssignment.MainShift.
                                                                                       ShiftCategory)).Return(false).Repeat.AtLeastOnce();
@@ -306,14 +303,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _rollbackService.ClearModificationCollection());
             Expect.Call(_matrixConverter.SourceMatrix).Return(_matrix).Repeat.Any();
             Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
-
-            Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToLengthen.Value)).Return
-                    (_scheduleDayPro).Repeat.Any();
-            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Any();
-            Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
-            Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToShorten.Value)).Return
-                    (_scheduleDayPro).Repeat.Any();
-            
+            Expect.Call(_scheduleServiceForFlexibleAgents.SchedulingOptions)
+                .Return(_schedulingOptions).Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).Repeat.AtLeastOnce();
+            Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToLengthen.Value))
+                .Return(_scheduleDayPro).Repeat.Any();
+            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay)
+                .Repeat.Any();
+            Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(_personAssignment)
+                .Repeat.Any();
+            Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToShorten.Value))
+                .Return(_scheduleDayPro).Repeat.Any();
+            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
+                .Return(_effectiveRestriction);
         }
     }
 }
