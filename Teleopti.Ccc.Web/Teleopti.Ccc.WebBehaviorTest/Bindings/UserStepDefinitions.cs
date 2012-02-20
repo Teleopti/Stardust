@@ -151,6 +151,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I have (existing|a) shift category preference")]
+		[Given(@"I have (existing|a) preference")]
 		public void GivenIHaveExistingShiftCategoryPreference(string aOrExisting)
 		{
 			UserFactory.User().Setup(new ShiftCategoryPreference());
