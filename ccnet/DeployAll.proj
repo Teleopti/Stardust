@@ -38,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;AddToPendingMSI">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -96,31 +96,16 @@
 		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
 		<Delete Files="@(DeleteFilesCollection)" />
 	</Target>
-			
-	<Target Name="AddToPendingMSI" DependsOnTargets="GetVersion">
-
-		<!--Copy the CreateMSI.proj + CreateAzure.proj to a common folder for all branches -->
-		<!-- Currently we do it this way becasuse we share CompileMSI and CompileAzure for all branches-->
-		<!-- Thus those two CCNet project are not connected to any source code and therefor missing the $(CCNetWorkingDirectory) -->
-
-		<Exec Command="IF NOT EXIST $(SharedMSIWorkingFolder) MKDIR $(SharedMSIWorkingFolder)"/>
-
-		<!--Copy the shared MSBuild project files to a common folder-->
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CreateMSI.proj" DestinationFiles="$(SharedMSIWorkingFolder)\CreateMSI.proj"/>
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CreateAzure.proj" DestinationFiles="$(SharedMSIWorkingFolder)\CreateAzure.proj"/>
-    <Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\FtpUpload.proj" DestinationFiles="$(SharedMSIWorkingFolder)\FtpUpload.proj"/>
-    <Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat" DestinationFiles="$(SharedMSIWorkingFolder)\FTPUpload.bat"/>
-
-		<!--This is how we pass variables to the shared MSBuild project ... -->
-		<Exec Command="ECHO $(CCCVersion) > &quot;$(SharedMSIWorkingFolder)\CCCVersion.html&quot;"/>
-		<Exec Command="ECHO $(CCNetProject) > &quot;$(SharedMSIWorkingFolder)\CCNetProject.html&quot;"/>
-		<Exec Command="ECHO $(CCNetWorkingDirectory) > &quot;$(SharedMSIWorkingFolder)\CCNetWorkingDirectory.html&quot;"/>
-		<Exec Command="ECHO $(MSIShare) > &quot;$(SharedMSIWorkingFolder)\MSIShare.html&quot;"/>
-		<Exec Command="ECHO $(DeployShare) > &quot;$(SharedMSIWorkingFolder)\DeployShare.html&quot;"/>
-
+	
+	
+	<Target Name="CreateMSI" DependsOnTargets="GetBuildParameters">
+		<Message Text="Building MSI..." Importance="high" />
+		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
-
-
+	
+			
 	<Target Name="AllFilesIncluded">
 		<ItemGroup>
 
