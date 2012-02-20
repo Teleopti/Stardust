@@ -3,11 +3,22 @@
 @{
 	Layout = "~/Views/Shared/MobileLayoutBase.cshtml";
 }
+@section csshead {
+	<link rel="stylesheet" href="@Url.Content("~/Areas/Start/Content/Css/mobile.custom.css")" />
+}
 @section jsBeforeMobile {
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Mobile.Common.js")"> </script>
 	<script>
 		var cNs = Teleopti.Start.Mobile.Common;
 		$('#application-signin').live('pageinit', function () {
+			function setRadioGrpValue(sel, name) {
+				var parent = $(sel), val = $('input[name="' + name + '"]:checked', parent).val();
+				if (typeof (val) == 'undefined') {
+					$('input[name="' + name + '"]', parent).first().attr('checked', true).checkboxradio("refresh"); ;
+				}
+			}
+			setRadioGrpValue('#application-signin', 'signin-sel-datasource');
+
 			$("#application-signin-button").bind("click", function () {
 				cNs.ClearError();
 				var signInModel = {
@@ -15,7 +26,7 @@
 					"Password": $('#ApplicationSignIn_SignIn_Password').val(),
 					"DataSourceName": $('input[name="signin-sel-datasource"]:checked', $('#application-signin')).val()
 				};
-				
+
 				cNs.XRequest('#application-signin', 'Application', signInModel, function (data) {
 					updateBusinessUnitsList(data.BusinessUnits);
 					$('#businessunit-signin').data('SignIn', data.SignIn);
@@ -36,7 +47,7 @@
 				holder.trigger('create');
 			}
 		});
-		
+
 		$('#businessunit-signin').live('pageinit', function () {
 			$("#businessunit-ok-button").bind("click", function () {
 				cNs.ClearError();
@@ -56,7 +67,8 @@
 <div data-role="page" id="application-signin">
 	<div data-role="content">
 		<div class="center-wrapper">
-			<img class="custom-image" src="@Url.Content("~/Areas/MobileReports/Content/Images/logo.png")" alt="Teleopti CCC@nywhere" title="Teleopti CCC@anywhere" />
+			<img class="custom-image" src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")" alt="@Html.AttributeEncode(ViewBag.Title)"
+				 title="@Html.AttributeEncode(ViewBag.Title)" />
 		</div>
 		<ul data-role="listview" data-inset="true" data-theme="b" id="sel-datasource">
 			<li data-role="fieldcontain">
@@ -95,7 +107,7 @@
 <div data-role="page" id="businessunit-signin">
 	<div data-role="content">
 		<div class="center-wrapper">
-			<img class="custom-image" src="@Url.Content("~/Areas/MobileReports/Content/Images/logo.png")" alt="@Html.AttributeEncode(ViewBag.Title)"
+			<img class="custom-image" src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")" alt="@Html.AttributeEncode(ViewBag.Title)"
 				 title="@Html.AttributeEncode(ViewBag.Title)" />
 		</div>
 		<ul data-role="listview" id="business-unit-listview" data-inset="true" data-theme="b">

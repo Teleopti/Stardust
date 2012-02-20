@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.WebReport;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
+using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 using Teleopti.Interfaces.Domain;
 
@@ -84,6 +84,63 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		}
 
 		[Test]
+		public void ShouldCreateReportInformationAndDisplayDateOnlyWhenDatesEquals()
+		{
+			var expectedResult = new ReportInfo
+			                     	{
+			                     		ReportDate = "2012-01-23",
+			                     	};
+
+			var source = new ReportGenerationResult
+			             	{
+			             		ReportInput = new ReportDataParam
+			             		              	{
+			             		              		Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 23),
+			             		              	}
+			             	};
+
+			var result = Mapper.Map<ReportGenerationResult, ReportInfo>(source);
+
+			result.ReportDate.Should().Be.EqualTo(expectedResult.ReportDate);
+		}
+
+		[Test]
+		public void ShouldCreateReportInformationForInterval()
+		{
+			var expectedResult = new ReportInfo
+			                     	{
+			                     		PeriodLegend = Resources.Time,
+			                     		ChartTypeHint = "line"
+			                     	};
+
+			var source = new ReportGenerationResult
+			             	{
+			             		Report =
+			             			new DefinedReportInformation
+			             				{
+			             					ReportNameResourceKey = "resReportName",
+			             					ReportInfo =
+			             						new ReportMetaInfo
+			             							{
+			             								SeriesResourceKeys = new[] {"resY1Legend", "resY2Legend"},
+			             								ChartTypeHint = new[] {"line", "stackedbar"}
+			             							}
+			             				},
+			             		ReportInput = new ReportDataParam
+			             		              	{
+			             		              		IntervalType = 1,
+			             		              		Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 30),
+			             		              		SkillSet = "1,2,3"
+			             		              	}
+			             	};
+
+			var result = Mapper.Map<ReportGenerationResult, ReportInfo>(source);
+
+			result.PeriodLegend.Should().Be.EqualTo(expectedResult.PeriodLegend);
+			result.ChartTypeHint.Should().Be.EqualTo(expectedResult.ChartTypeHint);
+		}
+
+		[Test]
 		public void ShouldCreateReportInformationWithFormattedDateAndSkillNames()
 		{
 			var expectedResult = new ReportInfo
@@ -93,14 +150,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			                     		SkillNames = "Telephone, BO1, BO2",
 			                     		Y1Legend = "resY1LegendLoc",
 			                     		Y2Legend = "resY2LegendLoc",
-			                     		ReportName = "resReportNameLoc"
+			                     		ReportName = "resReportNameLoc",
+			                     		ChartTypeHint = "stackedbar",
+			                     		Y1DecimalsHint = 2,
+			                     		Y2DecimalsHint = 1
 			                     	};
 
 			var source = new ReportGenerationResult
 			             	{
 			             		Report =
 			             			new DefinedReportInformation
-			             				{ReportNameResourceKey = "resReportName", LegendResourceKeys = new[] {"resY1Legend", "resY2Legend"}},
+			             				{
+			             					ReportNameResourceKey = "resReportName",
+			             					ReportInfo =
+			             						new ReportMetaInfo
+			             							{
+			             								SeriesResourceKeys = new[] {"resY1Legend", "resY2Legend"},
+			             								ChartTypeHint = new[] {"line", "stackedbar"},
+			             								SeriesFixedDecimalHint = new[] {2, 1}
+			             							}
+			             				},
 			             		ReportInput = new ReportDataParam
 			             		              	{
 			             		              		IntervalType = 7,
@@ -116,28 +185,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			result.SkillNames.Should().Be.EqualTo(expectedResult.SkillNames);
 			result.Y1Legend.Should().Be.EqualTo(expectedResult.Y1Legend);
 			result.Y2Legend.Should().Be.EqualTo(expectedResult.Y2Legend);
+			result.ChartTypeHint.Should().Be.EqualTo(expectedResult.ChartTypeHint);
 			result.ReportName.Should().Be.EqualTo(expectedResult.ReportName);
-		}
-
-		[Test]
-		public void ShouldCreateReportInformationAndDisplayDateOnlyWhenDatesEquals()
-		{
-			var expectedResult = new ReportInfo
-			{
-				ReportDate = "2012-01-23",
-			};
-
-			var source = new ReportGenerationResult
-			{
-				ReportInput = new ReportDataParam
-				{
-					Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 23),
-				}
-			};
-
-			var result = Mapper.Map<ReportGenerationResult, ReportInfo>(source);
-
-			result.ReportDate.Should().Be.EqualTo(expectedResult.ReportDate);
+			result.Y1DecimalsHint.Should().Be.EqualTo(expectedResult.Y1DecimalsHint);
+			result.Y2DecimalsHint.Should().Be.EqualTo(expectedResult.Y2DecimalsHint);
 		}
 
 		[Test]
@@ -160,19 +211,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		}
 
 		[Test]
-		public void ShouldMapReportDataPeriodEntryToReportRowViewModel()
-		{
-			var source = new ReportDataPeriodEntry {Period = "00:00", Y1 = 1.5M, Y2 = 200.55M};
-
-			var result = Mapper.Map<ReportDataPeriodEntry, ReportTableRowViewModel>(source);
-
-			result.Period.Should().Be.EqualTo("00:00");
-			result.DataColumn1.Should().Be.EqualTo("1,5");
-			result.DataColumn2.Should().Be.EqualTo("200,6");
-		}
-
-
-		[Test]
 		public void ShouldMapReportDataPeriodEntryToReportRowViewModelAndTranslatePeriodIfDefined()
 		{
 			var source = new ReportDataPeriodEntry {Period = "ResDayOfWeekMonday", Y1 = 1.5M, Y2 = 200.4M};
@@ -180,8 +218,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			var result = Mapper.Map<ReportDataPeriodEntry, ReportTableRowViewModel>(source);
 
 			result.Period.Should().Be.EqualTo("ResDayOfWeekMonday" + "Loc");
-			result.DataColumn1.Should().Be.EqualTo("1,5");
-			result.DataColumn2.Should().Be.EqualTo("200,4");
+			result.DataColumn1.Should().Be.EqualTo("1.50");
+			result.DataColumn2.Should().Be.EqualTo("200.40");
+		}
+
+		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		public void ShouldMapReportDataPeriodEntryToReportRowViewModelWithPunctiationForSwedishCulture()
+		{
+			var source = new ReportDataPeriodEntry {Period = "00:00", Y1 = 1.5M, Y2 = 200.556M};
+
+			var result = Mapper.Map<ReportDataPeriodEntry, ReportTableRowViewModel>(source);
+
+			result.Period.Should().Be.EqualTo("00:00");
+			result.DataColumn1.Should().Be.EqualTo("1.50");
+			result.DataColumn2.Should().Be.EqualTo("200.56");
+		}
+
+		[Test, SetCulture("en-US"), SetUICulture("en-US")]
+		public void ShouldMapReportDataPeriodEntryToReportRowViewModelWithPunctiationForUsCulture()
+		{
+			var source = new ReportDataPeriodEntry {Period = "00:00", Y1 = 210000000.5M, Y2 = 200.55M};
+
+			var result = Mapper.Map<ReportDataPeriodEntry, ReportTableRowViewModel>(source);
+
+			result.Period.Should().Be.EqualTo("00:00");
+			result.DataColumn1.Should().Be.EqualTo("210000000.50");
+			result.DataColumn2.Should().Be.EqualTo("200.55");
 		}
 
 

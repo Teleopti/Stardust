@@ -152,7 +152,7 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\WebReportUserInformation.cs" />
-    <Compile Include="Areas\MobileReports\Models\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\WorkTimeMinMaxDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
@@ -379,9 +379,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
+    <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.graph.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -454,6 +458,21 @@
     <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.min.js" />
     <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.css" />
     <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.min.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.js" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
+    <Content Include="Content\Mobile\images\ajax-loader.png" />
+    <Content Include="Content\Mobile\images\icons-18-black.png" />
+    <Content Include="Content\Mobile\images\icons-18-white.png" />
+    <Content Include="Content\Mobile\images\icons-36-black.png" />
+    <Content Include="Content\Mobile\images\icons-36-white.png" />
+    <Content Include="Content\Mobile\jquery.mobile-1.0.1.css" />
+    <Content Include="Content\Mobile\jquery.mobile-1.0.1.js" />
+    <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.css" />
+    <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.js" />
+    <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.css" />
+    <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.min.css" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
@@ -465,7 +484,14 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Portal.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.js" />
     <Content Include="Areas\MyTime\Content\Css\Site.css" />
+    <Content Include="Content\Scripts\excanvas.compressed.js" />
+    <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\Scripts\RGraph.bar.js" />
+    <Content Include="Content\Scripts\RGraph.common.context.js" />
+    <Content Include="Content\Scripts\RGraph.common.core.js" />
+    <Content Include="Content\Scripts\RGraph.common.key.js" />
+    <Content Include="Content\Scripts\RGraph.line.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -498,6 +524,13 @@
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_e3f1f4_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_highlight-soft_75_61abc5_.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\mobile\images\ajax-loader.png" />
+    <Content Include="Content\themes\mobile\images\icons-18-black.png" />
+    <Content Include="Content\themes\mobile\images\icons-18-white.png" />
+    <Content Include="Content\themes\mobile\images\icons-36-black.png" />
+    <Content Include="Content\themes\mobile\images\icons-36-white.png" />
+    <Content Include="Content\themes\mobile\mobile.css" />
+    <Content Include="Content\themes\mobile\mobile.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Content\Scripts\jquery-1.6.4.js" />
@@ -518,7 +551,6 @@
     <Content Include="Content\Scripts\jquery.validate.min.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Areas\MobileReports\Content\Css\anywhere-custom.css" />
     <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.css" />
     <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.min.css" />
     <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\ajax-loader.png" />

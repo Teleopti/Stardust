@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models;
+using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {

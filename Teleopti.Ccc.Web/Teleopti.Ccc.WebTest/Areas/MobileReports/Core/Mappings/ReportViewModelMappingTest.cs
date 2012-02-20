@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models;
+using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 using Teleopti.Ccc.Web.Core.RequestContext;
 

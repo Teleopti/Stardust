@@ -1,54 +1,59 @@
-using System;
-using AutoMapper;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.WebReport;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
+	using System;
+
+	using AutoMapper;
+
+	using Teleopti.Ccc.Domain.Common;
+	using Teleopti.Ccc.Domain.WebReport;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
+	using Teleopti.Interfaces.Domain;
+
 	public class ReportViewModelMappingProfile : Profile
 	{
-		private readonly Func<IDefinedReportProvider> _definedReportProvider;
-		private readonly Func<IMappingEngine> _mappingEngine;
-		private readonly Func<ISkillProvider> _skillProvider;
-		private readonly Func<IUserTextTranslator> _userTextTranslator;
 		private readonly Func<IDateBoxGlobalizationViewModelFactory> _dateBoxGlobalizationViewModelFactory;
 
+		private readonly Func<IDefinedReportProvider> _definedReportProvider;
 
-		public ReportViewModelMappingProfile(Func<IMappingEngine> mappingEngine,
-		                                     Func<IUserTextTranslator> userTextTranslator,
-		                                     Func<IDefinedReportProvider> definedReportProvider,
-		                                     Func<ISkillProvider> skillProvider, 
-											 Func<IDateBoxGlobalizationViewModelFactory> dateBoxGlobalizationViewModelFactory)
+		private readonly Func<IMappingEngine> _mappingEngine;
+
+		private readonly Func<ISkillProvider> _skillProvider;
+
+		private readonly Func<IUserTextTranslator> _userTextTranslator;
+
+		public ReportViewModelMappingProfile(
+			Func<IMappingEngine> mappingEngine,
+			Func<IUserTextTranslator> userTextTranslator,
+			Func<IDefinedReportProvider> definedReportProvider,
+			Func<ISkillProvider> skillProvider,
+			Func<IDateBoxGlobalizationViewModelFactory> dateBoxGlobalizationViewModelFactory)
 		{
-			_mappingEngine = mappingEngine;
-			_userTextTranslator = userTextTranslator;
-			_definedReportProvider = definedReportProvider;
-			_skillProvider = skillProvider;
-			_dateBoxGlobalizationViewModelFactory = dateBoxGlobalizationViewModelFactory;
+			this._mappingEngine = mappingEngine;
+			this._userTextTranslator = userTextTranslator;
+			this._definedReportProvider = definedReportProvider;
+			this._skillProvider = skillProvider;
+			this._dateBoxGlobalizationViewModelFactory = dateBoxGlobalizationViewModelFactory;
 		}
 
 		protected override void Configure()
 		{
 			base.Configure();
 
-			CreateMap<DateOnly, ReportViewModel>()
-				.ForMember(d => d.Reports, o => o.MapFrom(s => _definedReportProvider.Invoke().GetDefinedReports()))
-				.ForMember(d => d.Skills, o => o.MapFrom(s => _skillProvider.Invoke().GetAvailableSkills()))
-				.ForMember(d => d.DateBoxGlobalization, o => o.MapFrom(s => _dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
+			this.CreateMap<DateOnly, ReportViewModel>().ForMember(
+				d => d.Reports, o => o.MapFrom(s => this._definedReportProvider.Invoke().GetDefinedReports())).ForMember(
+					d => d.Skills, o => o.MapFrom(s => this._skillProvider.Invoke().GetAvailableSkills())).ForMember(
+						d => d.DateBoxGlobalization,
+						o => o.MapFrom(s => this._dateBoxGlobalizationViewModelFactory.Invoke().CreateDateBoxGlobalizationViewModel()));
 
-			CreateMap<DefinedReportInformation, ReportSelectionViewModel>()
-				.ForMember(d => d.ReportId, a => a.MapFrom(s => s.ReportId))
-				.ForMember(d => d.ReportName,
-				           a => a.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
+			this.CreateMap<DefinedReportInformation, ReportSelectionViewModel>().ForMember(
+				d => d.ReportId, a => a.MapFrom(s => s.ReportId)).ForMember(
+					d => d.ReportName, a => a.MapFrom(s => this._userTextTranslator.Invoke().TranslateText(s.ReportNameResourceKey)));
 
 			// -2 for all special all skill from Mart
-			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>()
-				.ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
-				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name))
-				.ForMember(d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
+			this.CreateMap<ReportControlSkillGet, SkillSelectionViewModel>().ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
+				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name)).ForMember(
+					d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
 		}
 	}
 }

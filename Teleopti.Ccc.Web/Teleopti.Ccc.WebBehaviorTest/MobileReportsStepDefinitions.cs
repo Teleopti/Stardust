@@ -1,22 +1,19 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
-using Control = WatiN.Core.Control;
-using Element = WatiN.Core.Element;
+using Table = WatiN.Core.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	[Binding]
 	public class MobileReportsStepDefinitions
 	{
+		private static readonly DateOnly StartDateForNextPrevNavigation = new DateOnly(2001, 1, 1);
 		private MobileReportsPage _page;
-		private static readonly DateOnly StartDateForNextPrevNavigation = new DateOnly(2001, 1,1);
 
 		[Given(@"I view MobileReports")]
 		[When(@"I view MobileReports")]
@@ -44,14 +41,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I open the date-picker")]
-		public void WhenIOpenTheDate_Picker()
+		public void WhenIOpenTheDatePicker()
 		{
 			_page.ReportSelectionDateOpener.Click();
 			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I open the skill-picker")]
-		public void WhenIOpenTheSkill_Picker()
+		public void WhenIOpenTheSkillPicker()
 		{
 			_page.ReportSkillSelectionOpener.Click();
 			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.True);
@@ -74,11 +71,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I close the skill-picker")]
-		public void WhenICloseTheSkill_Picker()
+		public void WhenICloseTheSkillPicker()
 		{
-
 			_page.ReportSkillSelectionCloseButton.Click();
-			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen() , Is.False);
+			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.False);
 		}
 
 		[Then(@"I should see the selected skill")]
@@ -96,7 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"the date-picker should close")]
-		public void ThenTheDate_PickerShouldClose()
+		public void ThenTheDatePickerShouldClose()
 		{
 			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayHidden(), Is.True);
 		}
@@ -166,29 +162,30 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickViewReportButton()
 		{
 			_page.ReportViewShowButton.Click();
-
 		}
 
 		[Then(@"I should se a report")]
 		public void ThenIShouldSeAReport()
 		{
-			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
+			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(5000, 100));
 		}
 
 		[Then(@"I should see a graph")]
 		public void ThenIShouldSeeAGraph()
 		{
-			//ScenarioContext.Current.Pending();
+			Assert.That(() => _page.ReportGraphContainer.DisplayVisible(), Is.True.After(5000, 100));
+			Assert.That(() => _page.ReportGraph.DisplayVisible(), Is.True.After(5000, 100));
 		}
 
 		[Then(@"I should see a table")]
 		public void ThenIShouldSeeATable()
 		{
-			var table = _page.ReportTableContainer.ElementOfType<WatiN.Core.Table>(table1 => true);
+			var table = _page.ReportTableContainer.ElementOfType<Table>(table1 => true);
 			var count = table.TableCells.Count;
-			
+
 			/*  3 + (96 * 3) */
-			Assert.That(() => count.Equals(291), Is.True.After(1000, 100), string.Format("Table should have 291 rows not: {0}!", count));
+			Assert.That(() => count.Equals(291), Is.True.After(1000, 100),
+			            string.Format("Table should have 291 rows not: {0}!", count));
 		}
 
 		[When(@"I am view a Report")]
@@ -208,11 +205,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
 		}
+
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
 			_page.ReportViewNextDateNavigation.Click();
 		}
+
 		[When(@"I click previous date")]
 		public void WhenIClickPreviousDate()
 		{
@@ -224,16 +223,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = StartDateForNextPrevNavigation;
 			var expexted = date.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			Assert.That(() => expexted.Equals(_page.ReportCurrentDate), Is.True.After(1000, 100), string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
+			Assert.That(() => expexted.Equals(_page.ReportCurrentDate), Is.True.After(1000, 100),
+			            string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
 		}
+
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
 			var date = StartDateForNextPrevNavigation;
 			var expexted = date.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
-			Assert.That(() => expexted.Equals(_page.ReportCurrentDate), Is.True.After(1000, 100), string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
-
+			Assert.That(() => expexted.Equals(_page.ReportCurrentDate), Is.True.After(1000, 100),
+			            string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
 		}
 	}
-
 }

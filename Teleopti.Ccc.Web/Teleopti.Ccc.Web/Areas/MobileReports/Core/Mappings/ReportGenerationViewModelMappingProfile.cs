@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 	public class ReportGenerationViewModelMappingProfile : Profile
 	{
 		private readonly Func<IReportDataService> _dataService;
+		private readonly NumberFormatInfo _fixedFormatInfo;
 		private readonly Func<IMappingEngine> _mappingEngine;
 		private readonly Func<ISkillProvider> _skillProvider;
 		private readonly Func<IUserTextTranslator> _userTextTranslator;
@@ -26,7 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 			_userTextTranslator = userTextTranslator;
 			_skillProvider = skillProvider;
 			_dataService = dataService;
+
+
+			_fixedFormatInfo = new NumberFormatInfo {NumberDecimalSeparator = "."};
 		}
+
 
 		protected override void Configure()
 		{
@@ -64,30 +69,33 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	s.Report.LegendResourceKeys[0] == null
+				           	s.Report.ReportInfo.SeriesResourceKeys[0] == null
 				           		? string.Empty
-				           		: _userTextTranslator.Invoke().TranslateText(s.Report.LegendResourceKeys[0])))
+				           		: _userTextTranslator.Invoke().TranslateText(s.Report.ReportInfo.SeriesResourceKeys[0])))
 				.ForMember(d => d.Y2Legend,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	s.Report.LegendResourceKeys[1] == null
+				           	s.Report.ReportInfo.SeriesResourceKeys[1] == null
 				           		? string.Empty
-				           		: _userTextTranslator.Invoke().TranslateText(s.Report.LegendResourceKeys[1])));
+				           		: _userTextTranslator.Invoke().TranslateText(s.Report.ReportInfo.SeriesResourceKeys[1])))
+				.ForMember(d => d.ChartTypeHint,
+				           o =>
+				           o.MapFrom(s => s.Report.ReportInfo.ChartTypeHint[s.ReportInput.IntervalType == 1 ? 0 : 1]))
+				.ForMember(d => d.Y1DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[0]))
+				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));
 
-
+			
 			CreateMap<ReportDataPeriodEntry, ReportTableRowViewModel>()
 				.ForMember(d => d.Period, o => o.ResolveUsing(new PeriodValueResolver(_userTextTranslator)))
-				.ForMember(d => d.DataColumn1, o => o.MapFrom(s => string.Format("{0:0.0}", s.Y1)))
-				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format("{0:0.0}", s.Y2)));
+				.ForMember(d => d.DataColumn1, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y1)))
+				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y2)));
 
 			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>()
 				.ConvertUsing(
 					s =>
 					_mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(s.ReportData));
 
-
-			//_mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>,ReportTableRowViewModel[]>(s.ReportData)
 
 			CreateMap<ReportGenerationResult, ReportResponseModel>()
 				.ForMember(d => d.Report, o => o.MapFrom(s => s));
@@ -96,15 +104,6 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.ReportInfo, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportData, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportChart, o => o.UseValue(null));
-
-
-			/*
-			// -2 for all special all skill from Mart
-			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>()
-				.ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
-				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name))
-				.ForMember(d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
-			 * */
 		}
 	}
 
