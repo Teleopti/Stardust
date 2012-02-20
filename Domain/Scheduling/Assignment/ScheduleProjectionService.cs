@@ -12,9 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IActivity _fakeActivityNotInContractTime;
 		private readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
 
-
-		//rk - I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
-		//Remove scheduleDay param from here!
+		/// <summary>
+		/// I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
+		/// You probably want to use <see cref="IProjectionProvider"/> instead!
+		/// </summary>
+		/// <param name="scheduleDay"></param>
+		/// <param name="projectionMerger"></param>
 		public ScheduleProjectionService(IScheduleDay scheduleDay, IProjectionMerger projectionMerger)
 		{
 			ScheduleDay = scheduleDay;
@@ -97,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		private bool fakeLayerMightBeAdded(IEnumerable<IVisualLayer> projection, IEnumerable<IPersonAbsence> personAbsences)
+		private static bool fakeLayerMightBeAdded(IEnumerable<IVisualLayer> projection, IEnumerable<IPersonAbsence> personAbsences)
 		{
 			return projection.IsEmpty() &&
 					!personAbsences.IsEmpty();
