@@ -85,5 +85,17 @@ INNER JOIN mart.dim_request_status rs
 	ON rs.request_status_id = stg.request_status_code
 WHERE stg.request_date BETWEEN @start_date AND @end_date
 
+----------------
+--updating request statuses
+----------------
+UPDATE mart.fact_requested_days
+SET
+ request_status_id = stg.request_status_code
+FROM stage.stg_request stg
+INNER JOIN mart.fact_requested_days f
+ ON stg.request_code = f.request_code
+INNER JOIN mart.dim_request_status rs
+ ON rs.request_status_id = stg.request_status_code
+
 END
 GO
