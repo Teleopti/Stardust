@@ -49,12 +49,15 @@ if %myError% EQU 0 call:CreateRelease TeleoptiAnalytics %ReleaseFile% "%SYSTEMVE
 if %myError% EQU 0 call:CreateRelease TeleoptiCCC7 %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
 if %myError% EQU 0 call:CreateRelease TeleoptiCCCAgg %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
 
-::Checkin changes
+::Commit changes
 if %myError% EQU 0 (
-hg commit -m "Automated database build: %SYSTEMVERSION%" -u %USERNAME%
+hg commit -m "Automated database build: %SYSTEMVERSION%"
 set myError=%errorlevel%
 Echo Cannot check files!
 )
+
+::push changes
+hg push
 
 if %myError% NEQ 0 GOTO:error
 

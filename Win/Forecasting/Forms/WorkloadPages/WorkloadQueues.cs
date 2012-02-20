@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,7 +12,6 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System.Linq;
 using Teleopti.Ccc.WpfControls.FileImport;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
@@ -60,25 +57,23 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 
             listViewQueues.RightToLeftLayout = (RightToLeft == RightToLeft.Yes);
 
-            var columnHeader1 = new ColumnHeader();
-            columnHeader1.Text = UserTexts.Resources.Queue;
-            columnHeader1.Width = 120;
-
-            var columnHeader2 = new ColumnHeader();
-            columnHeader2.Text = UserTexts.Resources.LogObject;
-            columnHeader2.Width = listViewQueues.ClientSize.Width - columnHeader1.Width;
+            var columnHeader1 = new ColumnHeader {Text = UserTexts.Resources.Queue, Width = 120};
+            var columnHeader2 = new ColumnHeader {Text = UserTexts.Resources.LogObject, Width = 100};
+            var columnHeader3 = new ColumnHeader {Text = UserTexts.Resources.Description, Width = 120};
 
             listViewQueues.Columns.Add(columnHeader1);
             listViewQueues.Columns.Add(columnHeader2);
+            listViewQueues.Columns.Add(columnHeader3);
 
             var queues = getQueues(sortOrder);
 
             foreach (IQueueSource qSource in queues)
             {
-                var lvi = new ListViewItem(qSource.Description);
+                var lvi = new ListViewItem(qSource.Name);
                 lvi.Tag = qSource;
                 lvi.Name = qSource.Id.ToString();
                 lvi.SubItems.Add(qSource.LogObjectName);
+                lvi.SubItems.Add(qSource.Description);
                 if (_workload.QueueSourceCollection.Contains(qSource))
                 {
                     lvi.Checked = true;
@@ -99,13 +94,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
                 if (sortOrder == SortOrder.Descending)
                 {
                     queues = from queueSource in queueSourceRepository.LoadAll()
-                             orderby queueSource.Description descending
+                             orderby queueSource.Name descending
                              select queueSource;
                 }
                 else
                 {
                     queues = from queueSource in queueSourceRepository.LoadAll()
-                             orderby queueSource.Description ascending
+                             orderby queueSource.Name ascending
                              select queueSource;
                 }
             }
@@ -153,7 +148,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         private void listViewQueues_Resize(object sender, EventArgs e)
         {
             listViewQueues.Columns[0].Width = 120;
-            listViewQueues.Columns[1].Width = listViewQueues.ClientSize.Width - listViewQueues.Columns[0].Width;
+            listViewQueues.Columns[1].Width = 100;
+            listViewQueues.Columns[2].Width = 120;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
