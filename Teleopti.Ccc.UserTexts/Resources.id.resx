@@ -7833,4 +7833,7 @@ R&amp;D Teleopti</value>
   <data name="NetNetStaff" xml:space="preserve">
     <value>Staf netto</value>
   </data>
+  <data name="EmployeeNoDot" xml:space="preserve">
+    <value>Karyawan #</value>
+  </data>
 </root>
