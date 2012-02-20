@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.WinCode.Common.Filter
 {
@@ -21,15 +22,16 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
                 return _allItems;
 
             var splitted = filterOn.Split(new []{" "},StringSplitOptions.RemoveEmptyEntries);
-            var info = CultureInfo.CurrentCulture;
+            var info = TeleoptiPrincipal.Current.Regional.UICulture;
 
             var toBeFiltered = new List<ListViewItem>(_allItems);
 
             foreach (var s in splitted)
             {
-                 var g = (from d in _allItems
+                var g = (from d in _allItems
                          where !(d.Text.ToLower(info).Contains(s.ToLower(info))
-                               || d.SubItems[1].Text.ToLower(info).Contains(s.ToLower(info)))
+                                 || d.SubItems.OfType<ListViewItem.ListViewSubItem>().Any(
+                                     i => i.Text.ToLower(info).Contains(s.ToLower(info))))
                          select d).ToList();
 
                 foreach (var listViewItem in g)
