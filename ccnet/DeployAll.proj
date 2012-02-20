@@ -38,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -105,6 +105,36 @@
 		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
 	
+	<Target Name="ZipServerInstall">
+    <Zip Files="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).msi"
+     WorkingDirectory="$(MSIShare)\$(CCCVersion)\"
+     ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip"
+     ZipLevel="9" />
+  </Target>
+
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;UploadRoot;UploadRC;UploadReleased;UploadNew">
+    <Message Text="Calling upload target"/>
+  </Target>
+
+  <Target Name="UploadRC" Condition="'$(CallingCCNetProject)' == 'BuildMSI-RC'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; RC &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; RC &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
+
+  <Target Name="UploadRoot" Condition="'$(CallingCCNetProject)' == 'BuildMSI-main'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
+
+  <Target Name="UploadReleased" Condition="'$(CallingCCNetProject)' == 'BuildMSI-Released'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Released &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Released &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
+
+  <Target Name="UploadNew" Condition="'$(CallingCCNetProject)' != 'BuildMSI-Released' and '$(CallingCCNetProject)' != 'BuildMSI-RC' and '$(CallingCCNetProject)' != 'BuildMSI-main'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CallingCCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CallingCCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
 			
 	<Target Name="AllFilesIncluded">
 		<ItemGroup>
