@@ -84,13 +84,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 	public class ResolveUsingDependencyResolver<T> : IResolve<T>
 	{
-		#region IResolve<T> Members
-
-		public T Invoke()
-		{
-			return DependencyResolver.Current.GetService<T>();
-		}
-
-		#endregion
+		public T Invoke() { return DependencyResolver.Current.GetService<T>(); }
 	}
 }

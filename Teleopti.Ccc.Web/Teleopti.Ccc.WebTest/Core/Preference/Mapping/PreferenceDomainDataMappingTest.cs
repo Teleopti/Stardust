@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
@@ -45,7 +46,13 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDomainDataMappingProfile(() => virtualScheduleProvider, () => preferenceProvider, () => loggedOnUser, () => workTimeMinMaxCalculator)));
+			Mapper.Initialize(c => c.AddProfile(
+				new PreferenceDomainDataMappingProfile(
+					Resolver.Of(() => virtualScheduleProvider),
+					Resolver.Of(() => preferenceProvider),
+					Resolver.Of(() => loggedOnUser),
+					Resolver.Of(() => workTimeMinMaxCalculator)
+					)));
 		}
 
 		[Test]
