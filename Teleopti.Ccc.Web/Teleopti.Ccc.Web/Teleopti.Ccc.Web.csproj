@@ -153,7 +153,6 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\WebReportUserInformation.cs" />
     <Compile Include="Areas\MobileReports\Models\DefinedReportInformation.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\WorkTimeMinMaxDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
@@ -272,13 +271,11 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceOptionsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputResultMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceWeekDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
     <Compile Include="Core\UserTimeZone.cs" />

@@ -11,4 +11,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public IWorkflowControlSet WorkflowControlSet { get; set; }
 		public IEnumerable<WorkTimeMinMaxDomainData> WorkTimeMinMax { get; set; }
 	}
+
+	public class WorkTimeMinMaxDomainData
+	{
+		public IWorkTimeMinMax WorkTimeMinMax { get; set; }
+		public DateOnly Date { get; set; }
+
+		public WorkTimeMinMaxDomainData(IWorkTimeMinMax workTimeMinMax, DateOnly date)
+		{
+			WorkTimeMinMax = workTimeMinMax;
+			Date = date;
+		}
+	}
+
 }
