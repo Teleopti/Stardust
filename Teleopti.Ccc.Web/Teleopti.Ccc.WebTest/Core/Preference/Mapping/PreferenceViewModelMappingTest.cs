@@ -26,16 +26,17 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 
 			data = new PreferenceDomainData
-						{
-							SelectedDate = DateOnly.Today,
-							Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-							WorkflowControlSet =
-								new WorkflowControlSet(null)
-								{
-									PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-									PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
-								}
-						};
+			       	{
+			       		SelectedDate = DateOnly.Today,
+			       		Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+			       		Days = new[] {new PreferenceDayDomainData {Date = DateOnly.Today}},
+			       		WorkflowControlSet =
+			       			new WorkflowControlSet(null)
+			       				{
+			       					PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+			       					PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
+			       				}
+			       	};
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new PreferenceViewModelMappingProfile(() => Mapper.Engine)));
@@ -276,8 +277,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var shiftCategory = new ShiftCategory("PM");
 			var preferenceRestriction = new PreferenceRestriction { ShiftCategory = shiftCategory };
-			var preferenceDays = new List<IPreferenceDay> { new PreferenceDay(null, data.SelectedDate, preferenceRestriction) };
-			data.PreferenceDays = preferenceDays;
+			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
+			data.Days = new[] { new PreferenceDayDomainData {Date = data.SelectedDate, PreferenceDay = preferenceDay} };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -313,8 +314,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description("Day off", "DO"));
 			var preferenceRestriction = new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
-			var preferenceDays = new List<IPreferenceDay> { new PreferenceDay(null, data.SelectedDate, preferenceRestriction) };
-			data.PreferenceDays = preferenceDays;
+			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -341,8 +342,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var absence = new Absence { Description = new Description("Ill") };
 			var preferenceRestriction = new PreferenceRestriction { Absence = absence };
-			var preferenceDays = new List<IPreferenceDay> { new PreferenceDay(null, data.SelectedDate, preferenceRestriction) };
-			data.PreferenceDays = preferenceDays;
+			var preferenceDay = new PreferenceDay(null, data.SelectedDate, preferenceRestriction);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 

@@ -35,14 +35,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DateOnly, PreferenceDomainData>()
 				.ConvertUsing(s =>
 				              	{
-				              		var domainData = new PreferenceDomainData
-				              		                 	{
-				              		                 		SelectedDate = s,
-				              		                 		Period = _virtualSchedulePeriodProvider.Invoke().GetCurrentOrNextVirtualPeriodForDate(s),
-				              		                 		WorkflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet
-				              		                 	};
-				              		domainData.PreferenceDays = _preferenceProvider.Invoke().GetPreferencesForPeriod(domainData.Period);
-				              		domainData.WorkTimeMinMax = from d in domainData.Period.DayCollection()
+				              		var period = _virtualSchedulePeriodProvider.Invoke().GetCurrentOrNextVirtualPeriodForDate(s);
+				              		var preferenceDays = _preferenceProvider.Invoke().GetPreferencesForPeriod(period);
+				              		preferenceDays = preferenceDays ?? new IPreferenceDay[] {};
+									var dates = period.DayCollection();
+				              		var days = (from d in dates
+				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).SingleOrDefault()
+				              		            select new PreferenceDayDomainData
+				              		                   	{
+				              		                   		Date = d,
+				              		                   		PreferenceDay = preferenceDay
+				              		                   	}).ToArray();
+
+									var workTimeMinMax = from d in dates
 				              		                            let personPeriod = _loggedOnUser.Invoke().CurrentUser().PersonPeriods(new DateOnlyPeriod(d, d)).
 				              		                            	FirstOrDefault()
 				              		                            where personPeriod != null
@@ -51,7 +56,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              		                            where ruleSetBag != null
 				              		                            select
 				              		                            	new WorkTimeMinMaxDomainData(_workTimeMinMaxCalculator.Invoke().WorkTimeMinMax(ruleSetBag, d), d);
-				              		return domainData;
+
+				              		return new PreferenceDomainData
+				              		       	{
+				              		       		SelectedDate = s,
+				              		       		Period = period,
+				              		       		WorkflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet,
+				              		       		WorkTimeMinMax = workTimeMinMax,
+
+				              		       		Days = days
+				              		       	};
 				              	});
 		}
 	}

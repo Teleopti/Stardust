@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -78,25 +79,42 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldMapPreferenceDays()
-		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var preferenceDays = new IPreferenceDay[] { new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) };
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(preferenceDays);
-
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.PreferenceDays.Should().Be.SameInstanceAs(preferenceDays);
-		}
-
-		[Test]
 		public void ShouldMapWorkflowControlSet()
 		{
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
+		}
+
+
+
+
+
+		[Test]
+		public void ShouldMapDays()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3));
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			var expected = DateOnly.Today.DateRange(4);
+			result.Days.Select(d => d.Date).Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
+		public void ShouldMapPreferenceDay()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var preferenceDay = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(new[] { preferenceDay });
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay);
 		}
 
 		[Test]
