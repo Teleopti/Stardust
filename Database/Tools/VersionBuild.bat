@@ -44,6 +44,8 @@ IF %size% EQU 0 goto :NothingToBuild
 hg pull
 hg update tip
 
+echo.%Build% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
+
 ::Build each DB
 if %myError% EQU 0 call:CreateRelease TeleoptiAnalytics %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
 if %myError% EQU 0 call:CreateRelease TeleoptiCCC7 %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError

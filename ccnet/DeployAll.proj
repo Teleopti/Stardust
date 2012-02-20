@@ -38,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -105,6 +105,33 @@
 		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
 	
+	<Target Name="CreateAzure">
+		<Message Text="Building Azure packages ..." Importance="high" />
+		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="Building Azure packages . Done!" Importance="high" />
+	</Target>
+	
+	<Target Name="ZipServerInstall">
+    <Zip Files="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).msi"
+     WorkingDirectory="$(MSIShare)\$(CCCVersion)\"
+     ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip"
+     ZipLevel="9" />
+  </Target>
+
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;UploadRoot;UploadNew">
+    <Message Text="Calling upload target"/>
+  </Target>
+
+  <Target Name="UploadRoot" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
+
+  <Target Name="UploadNew" Condition="'$(CCNetProject)' != 'BuildMSI-main'">
+    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
+  </Target>
 			
 	<Target Name="AllFilesIncluded">
 		<ItemGroup>
