@@ -98,7 +98,7 @@
 	</Target>
 	
 	
-	<Target Name="CreateMSI" DependsOnTargets="GetBuildParameters">
+	<Target Name="CreateMSI">
 		<Message Text="Building MSI..." Importance="high" />
 		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
 		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
