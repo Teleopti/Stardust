@@ -184,6 +184,7 @@
     <Compile Include="Domain\IBudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Domain\ICanExecute.cs" />
     <Compile Include="Domain\ICustomChangedEntity.cs" />
+    <Compile Include="Domain\IDateSupplier.cs" />
     <Compile Include="Domain\IDayOffDecisionMakerExecuter.cs" />
     <Compile Include="Domain\IDayOffOptimizationService.cs" />
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
@@ -213,7 +214,6 @@
     <Compile Include="Domain\IPublicNote.cs" />
     <Compile Include="Domain\IDayOffOptimizer.cs" />
     <Compile Include="Domain\IBestShiftCategoryResult.cs" />
-    <Compile Include="Domain\DateDayModel.cs" />
     <Compile Include="Domain\IDayOffsInPeriodCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCreator.cs" />
     <Compile Include="Domain\IGroupBlockScheduleDecider.cs" />
