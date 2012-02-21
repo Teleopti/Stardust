@@ -1164,3 +1164,36 @@ footer p
 {
 	display: none;
 }
+
+.striped 
+{
+	background-image: url(../Images/stripe.png);
+	
+	/* Until IE supports gradites for real
+
+	-webkit-background-size: 6px 6px;
+	background-image: -webkit-linear-gradient(-45deg, 
+			rgba(0, 0, 0, .5) 0%, 
+			rgba(0, 0, 0, .5) 10%, 
+			transparent 10%, 
+			transparent 50%, 
+			rgba(0, 0, 0, .5) 50%, 
+			rgba(0, 0, 0, .5) 60%, 
+			transparent 60%, 
+			transparent 100%)*/
+}
+
+.ie7 .striped
+{
+	background-image: url(../Images/stripe.png);	
+}
+
+.ie8 .striped
+{
+	background-image: url(../Images/stripe.png);	
+}
+
+.ie9 .striped
+{
+	background-image: url(../Images/stripe.png);
+}

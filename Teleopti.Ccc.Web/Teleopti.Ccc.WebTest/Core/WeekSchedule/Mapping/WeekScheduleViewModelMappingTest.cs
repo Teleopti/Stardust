@@ -281,5 +281,47 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 				.Should().Have.SameValuesAs(new[] {color.ToHtml()});
 		}
 
+		[Test]
+		public void ShouldMapStyleClassForAbsenceOnPersonDayOff()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub();
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence,
+																new StubFactory().PersonDayOffStub(), null, new[] { absence }, null);
+			var projection = stubs.ProjectionStub();
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection };
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.Summary.StyleClassName.Should().Contain("striped");
+		}
+
+		[Test]
+		public void ShouldMapStylClassForAbsenceOnContractDayOff()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			var personContract = MockRepository.GenerateMock<IPersonContract>();
+			var contract = MockRepository.GenerateMock<IContract>();
+			var contractSchedule = MockRepository.GenerateMock<IContractSchedule>();
+
+			person.Stub(x => x.Period(DateOnly.Today)).Return(personPeriod);
+			personPeriod.Stub(x => x.PersonContract).Return(personContract);
+			personContract.Stub(x => x.Contract).Return(contract);
+			contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
+			personContract.Stub(x => x.ContractSchedule).Return(contractSchedule);
+			contractSchedule.Stub(x => x.IsWorkday(Arg<DateOnly>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(false);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, person, SchedulePartView.FullDayAbsence, null,
+																null, new[] { absence }, null);
+			var projection = stubs.ProjectionStub();
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection };
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.Summary.StyleClassName.Should().Contain("striped");
+		}
 	}
 }

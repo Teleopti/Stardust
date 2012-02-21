@@ -26,6 +26,14 @@
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
+		<FullBuild>Yes</FullBuild>
+		<ProductsToBuild>0</ProductsToBuild>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
+		<FullBuild>No</FullBuild>
+		<ProductsToBuild>1</ProductsToBuild> 
+		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(COMPUTERNAME)' == 'INTEGRATION'" >
@@ -100,12 +108,12 @@
 	
 	<Target Name="CreateMSI">
 		<Message Text="Building MSI..." Importance="high" />
-		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
-		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
+		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
 		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
 	
-	<Target Name="CreateAzure">
+	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
 		<Message Text="Building Azure packages ..." Importance="high" />
 		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
@@ -118,11 +126,15 @@
      ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip"
      ZipLevel="9" />
   </Target>
-
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;UploadRoot;UploadNew">
-    <Message Text="Calling upload target"/>
+  
+  <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
 
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;UploadRoot;UploadNew">
+    <Message Text="Calling upload target"/>
+  </Target>
+  
   <Target Name="UploadRoot" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
     <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
     <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>

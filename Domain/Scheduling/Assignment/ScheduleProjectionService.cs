@@ -12,9 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IActivity _fakeActivityNotInContractTime;
 		private readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
 
-
-		//rk - I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
-		//Remove scheduleDay param from here!
+		/// <summary>
+		/// I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
+		/// You probably want to use <see cref="IProjectionProvider"/> instead!
+		/// </summary>
+		/// <param name="scheduleDay"></param>
+		/// <param name="projectionMerger"></param>
 		public ScheduleProjectionService(IScheduleDay scheduleDay, IProjectionMerger projectionMerger)
 		{
 			ScheduleDay = scheduleDay;
@@ -83,22 +86,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var scheduleDate = ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var personPeriod = ScheduleDay.Person.Period(scheduleDate);
+				long workLengthTicks = 0;
+				var shouldWork = false;
 				if (personPeriod != null)
 				{
-					var workLengthTicks = personPeriod.PersonContract.AverageWorkTimePerDay.Ticks;
-					var shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate);
-					var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
-					if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
-						projection.Add(fakeLayer);
+					workLengthTicks = personPeriod.PersonContract.AverageWorkTimePerDay.Ticks;
+					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate) &&
+						ScheduleDay.PersonDayOffCollection().IsEmpty();
 				}
+				var fakeLayer = createFakeLayer(workLengthTicks, ScheduleDay.DateOnlyAsPeriod, shouldWork);
+				if (personAbsenceOnScheduleDay.Any(abs => abs.Period.Contains(fakeLayer.Period)))
+					projection.Add(fakeLayer);
 			}
 		}
 
-		private bool fakeLayerMightBeAdded(IEnumerable<IVisualLayer> projection, IEnumerable<IPersonAbsence> personAbsences)
+		private static bool fakeLayerMightBeAdded(IEnumerable<IVisualLayer> projection, IEnumerable<IPersonAbsence> personAbsences)
 		{
 			return projection.IsEmpty() &&
-					!personAbsences.IsEmpty() &&
-					ScheduleDay.PersonDayOffCollection().IsEmpty();
+					!personAbsences.IsEmpty();
 		}
 
 		private void removeUnusedFakeActivities(IList<IVisualLayer> fakeLayers)
