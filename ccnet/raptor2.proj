@@ -50,49 +50,26 @@
 	</PropertyGroup>
 
 	<Choose>
-		<When Condition="'$(Computername)' == 'INTEGRATION'">
-			<!-- integration, vmintegration, gena -->
-			<PropertyGroup>
-				<DBServer>INTEGRATION\SQLEXPRESS</DBServer>
-			</PropertyGroup>
-		</When>
-	</Choose>
-
-	<Choose>
-		<When Condition="'$(CCNetProject)' == 'BuildMSI-root' or '$(CCNetProject)' == 'BuildMSI-RCbranch' or '$(CCNetProject)' == 'BuildMSI-ReleaseBranch'">
-			<!-- root; rc; Release-->
+		<When Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject.Substring(0, 8))' == 'BuildMSI'">
+			<!-- Run RunWebBehaviorTests on:
+			PBI15494	= Special for team Red
+			RaptorMain	= http://atom:5000/main
+			BuildMSI*	= Represents MSI builds on Main, RC and Released
+			-->
 			<PropertyGroup>
 				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
 				<DoCodeAnalysis>true</DoCodeAnalysis>
 				<UseDBManager>true</UseDBManager>
 				<RunWebBehaviorTests>true</RunWebBehaviorTests>
-			</PropertyGroup>
-		</When>
-		<When Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'RaptorHg'">
-			<!-- special -->
-			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>true</UseDBManager>
-				<RunWebBehaviorTests>true</RunWebBehaviorTests>
-			</PropertyGroup>
-		</When>
-		<When Condition="'$(CCNetProject)' == 'Raptor' or '$(CCNetProject)' == 'RaptorRoger' or '$(CCNetProject)' == 'Root-DJ' or '$(CCNetProject)' == 'TeamRedPBIbranch4' or  '$(CCNetProject)' == 'TeamYellow' or '$(CCNetProject)' == 'TeamYellow-PBI-branch-2'">
-			<!-- special -->
-			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>true</UseDBManager>
-				<RunWebBehaviorTests>false</RunWebBehaviorTests>
 			</PropertyGroup>
 		</When>
 		<Otherwise>
 			<!-- else -->
 			<PropertyGroup>
-				<ExcludedTestCategories>/Exclude=LongRunning</ExcludedTestCategories>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;</NCoverAssemblies>
+<!--			<ExcludedTestCategories>/Exclude=LongRunning</ExcludedTestCategories> -->
+				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
 				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>false</UseDBManager>
+				<UseDBManager>true</UseDBManager>
 				<RunWebBehaviorTests>false</RunWebBehaviorTests>
 			</PropertyGroup>
 		</Otherwise>
