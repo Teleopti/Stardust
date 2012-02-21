@@ -46,3 +46,4 @@ packages/
 *.jrs
 *.esent
 *.chk
+*.nhib.xml

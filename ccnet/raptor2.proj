@@ -68,7 +68,7 @@
 				<RunWebBehaviorTests>true</RunWebBehaviorTests>
 			</PropertyGroup>
 		</When>
-		<When Condition="'$(CCNetProject)' == 'TeamRed-PBI-branch-3' or '$(CCNetProject)' == 'RaptorHg'">
+		<When Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'RaptorHg'">
 			<!-- special -->
 			<PropertyGroup>
 				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>

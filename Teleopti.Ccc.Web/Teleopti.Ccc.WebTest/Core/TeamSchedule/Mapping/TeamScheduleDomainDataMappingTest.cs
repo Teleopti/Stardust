@@ -229,5 +229,19 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(expectedEndDateTime);
 		}
 
+		[Test]
+		public void ShouldMapHasDayOffUnderAbsence()
+		{
+			var persons = new[] { new Person() };
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.FullDayAbsence, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
+
+			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty)).Return(persons);
+			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
+
+			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+
+			result.Days.First().HasDayOffUnder.Should().Be.True();
+		}
+
 	}
 }
