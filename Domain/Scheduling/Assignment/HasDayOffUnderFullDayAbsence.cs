@@ -4,7 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class HasDayOffUnderFullDayAbsence
+	public interface IHasDayOffUnderFullDayAbsence
+	{
+		bool HasDayOff();
+	}
+	
+	public class HasDayOffUnderFullDayAbsence : IHasDayOffUnderFullDayAbsence
 	{
 		private readonly IScheduleDay _scheduleDay;
 		private SchedulePartView _significantPart;
