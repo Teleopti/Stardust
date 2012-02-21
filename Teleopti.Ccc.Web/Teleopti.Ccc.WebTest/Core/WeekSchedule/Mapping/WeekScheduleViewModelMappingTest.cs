@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Summary.StyleClassName.Should().Contain("on-day-off");
+			result.Summary.StyleClassName.Should().Contain("striped");
 		}
 
 		[Test]
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Summary.StyleClassName.Should().Contain("on-day-off");
+			result.Summary.StyleClassName.Should().Contain("striped");
 		}
 	}
 }

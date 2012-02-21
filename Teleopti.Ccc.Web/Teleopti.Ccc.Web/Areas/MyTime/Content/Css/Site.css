@@ -1165,8 +1165,12 @@ footer p
 	display: none;
 }
 
-.on-day-off 
+.striped 
 {
+	background-image: url(../Images/stripe.png);
+	
+	/* Until IE supports gradites for real
+
 	-webkit-background-size: 6px 6px;
 	background-image: -webkit-linear-gradient(-45deg, 
 			rgba(0, 0, 0, .5) 0%, 
@@ -1176,20 +1180,20 @@ footer p
 			rgba(0, 0, 0, .5) 50%, 
 			rgba(0, 0, 0, .5) 60%, 
 			transparent 60%, 
-			transparent 100%)
+			transparent 100%)*/
 }
 
-.ie7 .on-day-off
+.ie7 .striped
 {
-	background-color: lightgray;	
+	background-image: url(../Images/stripe.png);	
 }
 
-.ie8 .on-day-off
+.ie8 .striped
 {
-	background-color: lightgray;	
+	background-image: url(../Images/stripe.png);	
 }
 
-.ie9 .on-day-off
+.ie9 .striped
 {
-	background-color: lightgray;	
+	background-image: url(../Images/stripe.png);
 }

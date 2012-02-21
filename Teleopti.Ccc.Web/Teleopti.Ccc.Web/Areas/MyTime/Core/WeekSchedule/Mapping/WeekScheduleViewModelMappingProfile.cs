@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 							if (hasDayOffUnderFullDayAbsence.HasDayOff())
 							{
 								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-								periodViewModel.StyleClassName += " on-day-off";
+								periodViewModel.StyleClassName += " striped";
 								return periodViewModel;
 							}
 							if (significantPart == SchedulePartView.DayOff)
