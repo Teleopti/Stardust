@@ -13,7 +13,7 @@
 				line: [
 					null,
 					function (id, gd) {
-						var g = new RGraph.Line(id, gd.Y1, gd.Y2);
+						var g = new RGraph.Line(id, gd.Y1, gd.Y2 || undefined);
 						g.Set('chart.shadow', true);
 						g.Set('chart.color', ['red', 'green']);
 						g.Set('chart.chart.numxticks', 1);
@@ -23,7 +23,7 @@
 				stackedline: [
 					null,
 					function (id, gd) {
-						var g = new RGraph.Line(id, gd.Y1, gd.Y2);
+						var g = new RGraph.Line(id, gd.Y1, gd.Y2 || undefined);
 						g.Set('chart.filled', true);
 						g.Set('chart.filled.accumulative', true);
 						g.Set('chart.colors', ['green', 'red']);
@@ -54,7 +54,6 @@
 				var graphFn = o.chartTypes[o.chartType][1];
 				if (!$.isFunction(graphFn))
 					console.log('ChartType: ' + o.chartType + ' not defined!');
-				console.log('id: ' + id + ' gd' + JSON.stringify(gd));
 				var graph = graphFn(id, gd);
 				graph.context.clearRect(0, 0, o.width, o.height);
 
@@ -194,7 +193,12 @@
 			o.chartType = data.ReportInfo.ChartTypeHint;
 			o.chartSeries = data.ReportInfo.Y2Legend.length === 0 ? 1 : 2;
 			var prepFn = o.chartTypes[o.chartType][0] || self._prepareData;
-			self.element.trigger('graph', { 'method': 'data', 'data': prepFn.call(self, data) });
+			var chartData = prepFn.call(self, data);
+			if (o.chartSeries < 2) {
+				chartData.Legends = [chartData.Legends[0]];
+				chartData.Y2 = null;
+			}
+			self.element.trigger('graph', { 'method': 'data', 'data': chartData });
 		},
 		clean: function () {
 			var self = this;
