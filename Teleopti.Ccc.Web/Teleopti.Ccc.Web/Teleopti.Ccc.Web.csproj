@@ -670,7 +670,7 @@
     <Content Include="Areas\Start\Views\Authentication\MobileSignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\MyTime\Views\Settings\SettingsPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Index()
 		{
 			var viewModel = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
-			return View("SettingsPartial", viewModel);
+			return View("RegionalSettingsPartial", viewModel);
 		}
 	}
 }

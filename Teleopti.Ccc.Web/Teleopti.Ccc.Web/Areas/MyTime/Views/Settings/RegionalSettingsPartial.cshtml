@@ -12,9 +12,13 @@ Culture...<select>@foreach(var c in Model.Cultures)
 						}</select>
 <br/>
 UiCulture...<select>@foreach(var c in Model.Cultures)
-						{
-							<option value="@c.LCID" @if(c.LCID == Model.ChoosenUiCulture.LCID)
+						  {
+						  	<option value="@c.LCID" @if(c.LCID == Model.ChoosenUiCulture.LCID)
 															{
-<text>selected='selected'</text>
+																<text>selected='selected'</text>
 															}>@c.DisplayName</option>
-						}</select>
+						  }</select>
+<br/><br/>
+
+nytt passowre<textarea></textarea><br/>
+confirm passowre<textarea></textarea><br/>
