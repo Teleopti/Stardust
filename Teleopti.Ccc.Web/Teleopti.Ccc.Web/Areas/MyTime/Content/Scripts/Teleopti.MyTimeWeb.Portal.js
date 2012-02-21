@@ -313,3 +313,12 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 })(jQuery);
 
 
+$(".dropdown dt span").live("click", function () {
+	$(".dropdown dd ul").toggle();
+});
+
+$(document).bind('click', function (e) {
+	var $clicked = $(e.target);
+	if (!$clicked.parents().hasClass("dropdown"))
+		$(".dropdown dd ul").hide();
+});

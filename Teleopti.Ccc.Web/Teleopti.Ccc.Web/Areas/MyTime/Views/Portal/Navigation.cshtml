@@ -8,13 +8,13 @@
 </div>
 		<ul>
 			@foreach (var navSection in Model.NavigationItems)
-   {
+	{
 			<li><a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a></li>
-   }
+	}
 		</ul>
 		@foreach (var navSection in Model.NavigationItems)
-		 {
-		 	<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
+  {
+			<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 				<div class="toolbar-inner">
 					@**** - Commented this until we add Month schedule view -  ****@
 					@*<div id="@string.Format("{0}TabNav", navSection.Controller)" class="buttonset-nav floatleft">
@@ -24,14 +24,14 @@
 	 }
 				</div>*@
 					@foreach (var toolbarItem in navSection.ToolBarItems)
-					{
-						if (toolbarItem is ToolBarSeparatorItem)
-						{
+	  {
+		  if (toolbarItem is ToolBarSeparatorItem)
+		  {
 							<div class="seperator"></div>
-						}
-						if (toolbarItem is ToolBarDatePicker)
-						{
-							ToolBarDatePicker dpicker = toolbarItem as ToolBarDatePicker;
+		  }
+		  if (toolbarItem is ToolBarDatePicker)
+		  {
+			  var dpicker = toolbarItem as ToolBarDatePicker;
 							<div id="@string.Format("{0}DateRangeSelector", navSection.Controller)" class="date-range-selector floatleft ml10">
 								<button data-mytime-action="#" class="first">@dpicker.PrevTitle</button>
 								<input id="@string.Format("{0}DatePicker", navSection.Controller)" type="text" class="datepicker" />
@@ -39,54 +39,51 @@
 								<span class="selected-date-period displayblock"></span>
 								<a class="displaynone" data-mytime-action="#"></a>
 							</div>
-						}
-						if (toolbarItem is ToolBarButtonItem)
-						{
-							ToolBarButtonItem button = toolbarItem as ToolBarButtonItem;
+		  }
+		  if (toolbarItem is ToolBarButtonItem)
+		  {
+			  var button = toolbarItem as ToolBarButtonItem;
 							<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft mr10">@button.Title</button>
-						}
-						if (toolbarItem is ToolBarSplitButton)
-						{
-							ToolBarSplitButton splitButton = toolbarItem as ToolBarSplitButton;
+		  }
+		  if (toolbarItem is ToolBarSplitButton)
+		  {
+			  var splitButton = toolbarItem as ToolBarSplitButton;
 							<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
 								<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
 								<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
 									@foreach (var preferenceOption in splitButton.PreferenceOptions)
-									{
+			{
 										<option value="@preferenceOption.Value">@preferenceOption.Text</option>
-									}
+			}
 								</select>
 							</div>
-						}
-						if (toolbarItem is ToolBarSelectBox)
-						{
-							ToolBarSelectBox selectBox = toolbarItem as ToolBarSelectBox;
+		  }
+		  if (toolbarItem is ToolBarSelectBox)
+		  {
+			  var selectBox = toolbarItem as ToolBarSelectBox;
 							<select title="@Html.AttributeEncode(selectBox.Title)" class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
 								@foreach (var option in selectBox.Options)
-								{
+		  {
 									<option value="@option.Value">@option.Text</option>
-								}
+		  }
 							</select>
-						}
-					}
+		  }
+	  }
 				</div>
 			</section>
-		 }
+  }
 			
-		<section id="toolbar-right" class="col-main floatright">
+	<section id="toolbar-right" class="col-main floatright">
 			<div class="toolbar-inner">
-				<div class="floatleft">
-					<span class="icon employee icon-left" title="@Teleopti.Ccc.UserTexts.Resources.UserName" id="username">@User.Identity.Name</span>
-				</div>
-				<div class="seperator" style="visibility:hidden"></div>
-				<div class="floatleft" style="visibility:hidden">
-					<button class="icon icon-left mail" title="Inbox">(0)</button>
-				</div>
-				<div class="seperator"></div>
-				<div class="floatleft">
-					@Html.ActionLink("Log out", "SignOut", "Authentication", new { area = "Start" }, new { @class = "ir icon logout", title = @Teleopti.Ccc.UserTexts.Resources.LogOut, id = "signout" })
-				</div>
+				<dl class="dropdown">
+						<dt><span class="icon employee icon-left" title="@Teleopti.Ccc.UserTexts.Resources.UserName" id="username">@User.Identity.Name</span></dt>
+						<dd>
+							<ul class="ui-widget-content">
+								<li><a href="#">Settings</a></li>
+								<li>@Html.ActionLink("Log out", "SignOut", "Authentication", new { area = "Start" }, new { title = @Teleopti.Ccc.UserTexts.Resources.LogOut, id = "signout" })</li>
+							</ul>
+						</dd>
+				</dl>
 			</div>
-		</section>
-				
+		</section>				
 	 </nav>

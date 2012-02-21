@@ -310,7 +310,7 @@ sup { vertical-align: super; font-size: smaller; }
 .col-1{ width: 975px; }
 .col-2{ width: 480px; }
 .col-3{ width: 320px; }
-.col-2-3{width: 640px;}
+.col-2-3{width: 708px;}
 .col-4{ width: 240px; }
 .col-5{ width: 192px; }
 .col-6{ width: 160px; }
@@ -617,7 +617,7 @@ header {
 	 height: 35px; 
 	 padding-left: 3px; 
 }
-#toolbar-right{width: 321px;}
+#toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
 .date-range-selector{padding-right: 19px;}
@@ -1164,3 +1164,48 @@ footer p
 {
 	display: none;
 }
+
+/*
+Personal drop down menu
+*/
+		.dropdown a, .dropdown a:visited
+		{
+			text-decoration: none;
+			outline: none;
+		}
+		.dropdown dd, .dropdown dt, .dropdown ul
+		{
+			margin: 0px;
+			padding: 0px;
+		}
+		.dropdown dd
+		{
+			position: relative;
+		}
+		.dropdown dt span
+		{
+			cursor: pointer;
+		}
+		.dropdown dd ul
+		{
+			background: #f2f2f2 none repeat scroll 0 0;
+			border: 1px solid #d4ca9a;
+			color: #C5C0B0;
+			display: none;
+			left: 0px;
+			padding: 5px 0px;
+			position: absolute;
+			top: 2px;
+			width: 232px;
+			list-style: none;
+		}
+		.dropdown dd ul li a
+		{
+			padding: 5px;
+			display: block;
+			text-align: left;
+		}
+		.dropdown dd ul li a:hover
+		{
+			background-color: #dddddd;
+		}
