@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 
 	using Teleopti.Ccc.Domain.Common;
 	using Teleopti.Ccc.Domain.WebReport;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 	using Teleopti.Interfaces.Domain;

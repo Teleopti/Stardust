@@ -14,6 +14,8 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+
 	[TestFixture]
 	public class ReportViewModelMappingTest
 	{

@@ -6,6 +6,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+
 	public class ReportDataFetcher : IReportRequestValidator
 	{
 		private readonly IReportDataService _dataService;

@@ -120,16 +120,17 @@
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
     <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\IDateBoxGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\IoC\DefinedReports.cs" />
     <Compile Include="Areas\MobileReports\Core\IReportRequestValidator.cs" />
     <Compile Include="Areas\MobileReports\Core\IWebReportUserInfoProvider.cs" />
-    <Compile Include="Areas\MobileReports\Core\DefinedReportProvider.cs" />
-    <Compile Include="Areas\MobileReports\Core\IDefinedReportProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\IoC\MobileReportsAreaModule.cs" />
     <Compile Include="Areas\MobileReports\Core\IReportViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\ISkillProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingProfile.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingProfile.cs" />
     <Compile Include="Areas\MobileReports\Core\Matrix\TestDataWebReportRepository.cs" />
+    <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProvider.cs" />
+    <Compile Include="Areas\MobileReports\Core\Providers\IDefinedReportProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\ReportDataFetcher.cs" />
     <Compile Include="Areas\MobileReports\Core\ReportViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\Matrix\IReportDataService.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Areas\MobileReports\Core\SkillProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\WebReportUserInfoProvider.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistration.cs" />
+    <Compile Include="Areas\MobileReports\Models\Domain\WebReportUserInformation.cs" />
     <Compile Include="Areas\MobileReports\Models\Layout\DateBoxGlobalizationViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportChartInfo.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportDataPeriodEntry.cs" />
@@ -151,7 +153,6 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponse.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
-    <Compile Include="Areas\MobileReports\Models\WebReportUserInformation.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\WorkTimeMinMaxDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />

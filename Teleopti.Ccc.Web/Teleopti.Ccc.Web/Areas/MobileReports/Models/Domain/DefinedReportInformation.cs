@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain
 		string FunctionCode { get; set; }
 	}
 
-	public class DefinedReportInformation : IDefinedReport
+	public sealed class DefinedReportInformation : IDefinedReport
 	{
 		#region IDefinedReport Members
 

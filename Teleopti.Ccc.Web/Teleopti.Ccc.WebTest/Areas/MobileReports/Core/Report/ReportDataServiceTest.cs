@@ -13,6 +13,8 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+
 	[TestFixture]
 	public class ReportDataServiceTest
 	{

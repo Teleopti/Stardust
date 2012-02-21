@@ -6,6 +6,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+
 	public class WebReportUserInfoProvider : IWebReportUserInfoProvider
 	{
 		private readonly ICurrentPrincipalProvider _currentPrincipalProvider;

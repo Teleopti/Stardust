@@ -133,6 +133,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+
 		[Test]
 		public void ShouldRegisterDataSourcesProvider()
 		{
