@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
 {
@@ -80,8 +81,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
             _format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 8f;
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, fontSize, PdfFontStyle.Bold);
-            DateTime dt = DateTime.MinValue.Add(contractTime);
-            Graphics.DrawString(dt.ToShortTimeString(), font, Brush, new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2), _format);
+			Graphics.DrawString(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentCulture), font, Brush, new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2), _format);
             return top + fontSize + 2 + RowSpace;
         }
 

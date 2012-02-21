@@ -11,14 +11,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public abstract class ShiftForDate : IUserDataSetup
 	{
-		private readonly TimeSpan _startTime;
-		private readonly TimeSpan _endTime;
+		public DateTime Date;
+		public readonly TimeSpan StartTime;
+		public readonly TimeSpan EndTime;
+
 		private readonly bool _withLunch;
 
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime)
 		{
-			_startTime = startTime;
-			_endTime = endTime;
+			StartTime = startTime;
+			EndTime = endTime;
 			_withLunch = true;
 		}
 
@@ -27,20 +29,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime, bool withLunch)
 		{
-			_startTime = startTime;
-			_endTime = endTime;
+			StartTime = startTime;
+			EndTime = endTime;
 			_withLunch = withLunch;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = ApplyDate(cultureInfo);
-			var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(date);
+			Date = ApplyDate(cultureInfo);
+			var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(Date);
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
-			var layerPeriod = new DateTimePeriod(dateUtc.Add(_startTime), dateUtc.Add(_endTime));
+			var layerPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, TestData.Scenario);
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));
 

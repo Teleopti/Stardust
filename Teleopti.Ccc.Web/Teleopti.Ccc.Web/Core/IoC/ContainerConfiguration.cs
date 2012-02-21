@@ -14,16 +14,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-		private static string AssemblyDirectory
-		{
-			get
-			{
-				var uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-				return Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
-			}
-		}
-
-		#region IContainerConfiguration Members
 
 		public IContainer Configure()
 		{
@@ -56,9 +46,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			return builder.Build();
 		}
 
-		#endregion
-
-		// 
 		private static void registerTestDataOverrides(ContainerBuilder builder)
 		{
 			const string configurationFileName = "testdata.autofac.config";
@@ -67,6 +54,15 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			if (File.Exists(configurationFilePath))
 			{
 				builder.RegisterModule(new ConfigurationSettingsReader("testdata", configurationFilePath));
+			}
+		}
+
+		private static string AssemblyDirectory
+		{
+			get
+			{
+				var uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
+				return Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
 			}
 		}
 	}

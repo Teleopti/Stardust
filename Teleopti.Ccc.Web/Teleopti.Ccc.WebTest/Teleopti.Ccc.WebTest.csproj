@@ -99,11 +99,13 @@
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
+    <Compile Include="Core\Mapping\FuncResolver.cs" />
     <Compile Include="Core\Portal\FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryStudentAvailabilityTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryTeamScheduleTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryRequestsTest.cs" />
+    <Compile Include="Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentPrincipalProviderTest.cs" />
@@ -171,7 +173,6 @@
     <Compile Include="Core\Preference\Mapping\PreferenceDomainDataMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceViewModelMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceInputMappingTest.cs" />
-    <Compile Include="Core\Preference\PreferenceHtmlExtensionTest.cs" />
     <Compile Include="Core\Preference\ViewModelFactory\PreferenceViewModelFactoryTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PersonRequestProviderTest.cs" />
     <Compile Include="Core\UserTimeZoneTest.cs" />

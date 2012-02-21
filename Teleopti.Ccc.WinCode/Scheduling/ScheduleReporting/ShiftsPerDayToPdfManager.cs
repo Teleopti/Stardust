@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                     // draw breaks too
                     foreach (IVisualLayer visualLayer in projection)
                     {
-                        IActivity activity = visualLayer.Payload as Activity;
+                        var activity = visualLayer.Payload as IActivity;
                         if (activity != null)
                         {
                             DateTimePeriod layerPeriod = visualLayer.Period;
