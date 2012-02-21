@@ -18,8 +18,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
 			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
+			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), UserFactory.User().Culture);
+
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.ShiftCategory.Description.Name));
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(from));
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(to));
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(contractTime));
 		}
 	}
 }
