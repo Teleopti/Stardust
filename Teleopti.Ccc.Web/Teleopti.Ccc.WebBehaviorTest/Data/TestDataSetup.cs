@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var agentRoleWithoutAgentRoleWithoutResReportServiceLevelAndAgentsReadyMatrixFunction =
 				from r in agentRoleApplicationFunctions
 				where
-					!(r.FunctionPath == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
+					!(r.FunctionCode == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
 				select r;
 			
 			
