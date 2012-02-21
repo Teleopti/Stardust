@@ -1,13 +1,12 @@
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
     public interface IRequestFactory
     {
-        IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, ISchedulingResultStateHolder schedulingResultStateHolder, IScenario scenario);
+        IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario);
         IPersonAccountProjectionService GetPersonAccountProjectionService(IAccount account, IScheduleRange range);
-        ILoadSchedulingStateHolderForResourceCalculation GetSchedulingLoader(ISchedulingResultStateHolder schedulingResultStateHolder);
-        IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+		IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker();
     }
 }

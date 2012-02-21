@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod dayPeriod = period.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dayPeriod);
             IScenario scenario = new Scenario("Scenario");
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
+            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
             IScheduleParameters parameters = new ScheduleParameters(scenario, person, dayPeriod);
             IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters);
-            ((ScheduleDictionaryForTest)scheduleDictionary).AddTestItem(person, range);
+            scheduleDictionary.AddTestItem(person, range);
             stateHolder.Schedules = scheduleDictionary;
 
             return Create(period, stateHolder, person, null);
