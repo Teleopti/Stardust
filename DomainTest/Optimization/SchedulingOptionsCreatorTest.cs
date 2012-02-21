@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class SchedulingOptionsCreatorTest
     {
-        private SchedulingOptionsSyncronizer _target;
+        private SchedulingOptionsSynchronizer _target;
         private IOptimizationPreferences _optimizationPreferences;
         private ISchedulingOptions _schedulingOptions;
 
@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _optimizationPreferences = new OptimizationPreferences();
             _schedulingOptions = new SchedulingOptions();
-            _target = new SchedulingOptionsSyncronizer();
+            _target = new SchedulingOptionsSynchronizer();
         }
 
         [Test]
         public void ShouldCreateNewSchedulingOption()
         {
-            _target.SyncronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
         }
     }
 }

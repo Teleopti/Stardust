@@ -3,7 +3,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class DayOffPlannerRuleSetCreator
+    public interface IDayOffPlannerRuleSetCreator
+    {
+        IDayOffPlannerSessionRuleSet CreateDayOffPlannerSessionRuleSet(IDaysOffPreferences daysOffPreferences);
+    }
+
+    public class DayOffPlannerRuleSetCreator : IDayOffPlannerRuleSetCreator
     {
         public IDayOffPlannerSessionRuleSet CreateDayOffPlannerSessionRuleSet(IDaysOffPreferences daysOffPreferences)
         {

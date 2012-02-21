@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
-        private readonly ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
+        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
         private readonly ILogWriter _log;
 
         public MoveTimeOptimizer(
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
             IOptimizationOverLimitDecider optimizationOverLimitDecider, 
-            ISchedulingOptionsSyncronizer schedulingOptionsSyncronizer)
+            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
         {
             _periodValueCalculator = periodValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -64,14 +64,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             _decider = decider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
-            _schedulingOptionsSyncronizer = schedulingOptionsSyncronizer;
+            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
 
             _log = new LogWriter<MoveTimeOptimizer>();
         }
 
         public bool Execute()
         {
-            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
 
             if (MovedDaysOverMaxDaysLimit())
                 return false;

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPersonAssignment _personAssignment;
         private IEffectiveRestriction _effectiveRestriction;
         private DateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
-        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
+        private ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
         private ISchedulingOptions _schedulingOptions;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayOffTemplate = _mocks.StrictMock<IDayOffTemplate>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
-            _schedulingOptionsSyncronizer = _mocks.StrictMock<ISchedulingOptionsSyncronizer>();
+            _schedulingOptionsSynchronizer = _mocks.StrictMock<ISchedulingOptionsSynchronizer>();
             _schedulingOptions = new SchedulingOptions();
 
             _target = new ExtendReduceDaysOffOptimizer(_personalSkillPeriodValueCalculator,
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                        _nightRestWhiteSpotSolverService, _validatorList,
                                                        _dayOffsInPeriodCalculator, _dayOffTemplate,
                                                        _dayOffOptimizerConflictHandler, _dayOffOptimizerValidator, 
-                                                       _schedulingOptionsSyncronizer);
+                                                       _schedulingOptionsSynchronizer);
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
             Expect.Call(_scheduleServiceForFlexibleAgents.SchedulingOptions)
                 .Return(_schedulingOptions).Repeat.Any();
-            Expect.Call(() => _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).Repeat.AtLeastOnce();
             Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToLengthen.Value))
                 .Return(_scheduleDayPro).Repeat.Any();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay)

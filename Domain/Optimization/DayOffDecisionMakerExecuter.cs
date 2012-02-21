@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private readonly IOptimizationOverLimitDecider _overLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
-        private readonly ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
+        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
 
         public DayOffDecisionMakerExecuter(
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainer,
             IOptimizationOverLimitDecider overLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
-            ISchedulingOptionsSyncronizer schedulingOptionsSyncronizer
+            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _originalStateContainer = originalStateContainer;
             _overLimitDecider = overLimitDecider;
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
-            _schedulingOptionsSyncronizer = schedulingOptionsSyncronizer;
+            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
         }
 
         public bool Execute(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
 
-            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             var changesTracker = new LockableBitArrayChangesTracker();
 

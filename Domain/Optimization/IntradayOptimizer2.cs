@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private readonly ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
+        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
         private readonly ILogWriter _log;
 
         public IntradayOptimizer2(
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IOptimizationOverLimitDecider optimizationOverLimitDecider, 
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
-            ISchedulingOptionsSyncronizer schedulingOptionsSyncronizer)
+            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _decider = decider;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
-            _schedulingOptionsSyncronizer = schedulingOptionsSyncronizer;
+            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
             _log = new LogWriter<IntradayOptimizer2>();
         }
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!oldPeriodValue.HasValue)
                 return false;
 
-            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
 
             _rollbackService.ClearModificationCollection();
 

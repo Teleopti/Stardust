@@ -3,16 +3,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public interface ISchedulingOptionsSyncronizer
+    public interface ISchedulingOptionsSynchronizer
     {
-        void SyncronizeSchedulingOption(
+        void SynchronizeSchedulingOption(
             IOptimizationPreferences optimizationPreferences,
             ISchedulingOptions schedulingOptions);
     }
 
-    public class SchedulingOptionsSyncronizer : ISchedulingOptionsSyncronizer
+    public class SchedulingOptionsSynchronizer : ISchedulingOptionsSynchronizer
     {
-        public void SyncronizeSchedulingOption(
+        public void SynchronizeSchedulingOption(
             IOptimizationPreferences optimizationPreferences, 
             ISchedulingOptions schedulingOptions)
         {

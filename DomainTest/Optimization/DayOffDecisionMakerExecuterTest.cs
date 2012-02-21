@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
-        private ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
+        private ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
 
         [SetUp]
         public void Setup()
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
             _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
             _nightRestWhiteSpotSolverService = _mocks.StrictMock<INightRestWhiteSpotSolverService>();
-            _schedulingOptionsSyncronizer = _mocks.StrictMock<ISchedulingOptionsSyncronizer>();
+            _schedulingOptionsSynchronizer = _mocks.StrictMock<ISchedulingOptionsSynchronizer>();
         }
 
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
-                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                  _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
-                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
-                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.AtLeastOnce();
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleService.SchedulingOptions).Return(schedulingOptions);
-                _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
                 Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(
@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _originalStateContainer, 
                                       _optimizationOverLimitDecider,
                                       _nightRestWhiteSpotSolverService,
-                                      _schedulingOptionsSyncronizer
+                                      _schedulingOptionsSynchronizer
                                       );
         }
     }

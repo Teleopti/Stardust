@@ -265,8 +265,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             // schedule those are the white spots after back to legal state
             // ??? check if all white spots could be scheduled ??????
+<<<<<<< local
             // bug 18271 this one does not know about blocks and we don't need it because the white spots will be scheduled later, i hope
             //OptimizerHelperHelper.ScheduleBlankSpots(optimizerPreferences.SchedulingOptions, matrixContainerList, scheduleService, _container);
+=======
+            OptimizerHelperHelper.ScheduleBlankSpots(optimizerPreferences, matrixContainerList, scheduleService, _container);
+>>>>>>> other
 
             ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
             bool found = false;
@@ -391,7 +395,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var restrictionChecker = new RestrictionChecker();
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizerPreferences);
 
-            var schedulingOptionsSyncronizer = new SchedulingOptionsSynchronizer();
+            var schedulingOptionsSyncronizer = new SchedulingOptionsSyncronizer();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
