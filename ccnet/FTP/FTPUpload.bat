@@ -11,7 +11,7 @@ echo cd msi>> "%temp%\tfp.txt"
 echo mkdir %1>> "%temp%\tfp.txt"
 echo cd %1>> "%temp%\tfp.txt"
 echo lcd %2>> "%temp%\tfp.txt"
-echo put "Teleopti CCC 7.1.*.zip">> "%temp%\tfp.txt"
+echo put "*.zip">> "%temp%\tfp.txt"
 echo put "ContextHelpEN.exe">> "%temp%\tfp.txt"
 
 echo bye>> "%temp%\tfp.txt"

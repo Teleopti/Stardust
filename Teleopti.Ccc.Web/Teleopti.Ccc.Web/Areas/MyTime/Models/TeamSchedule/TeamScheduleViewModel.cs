@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 
 	public class AgentScheduleViewModel
 	{
+		public bool HasDayOffUnder { get; set; }
 		public string AgentName { get; set; }
 		public IEnumerable<LayerViewModel> Layers { get; set; }
 		public string DayOffText { get; set; }
