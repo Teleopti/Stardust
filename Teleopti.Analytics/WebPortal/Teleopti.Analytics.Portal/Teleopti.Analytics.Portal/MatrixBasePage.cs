@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Portal
             }
             if (!string.IsNullOrEmpty(Request.QueryString.Get("REPORTID")))
             {
-                if (!tryParseGuid(Request.QueryString["REPORTID"], out _reportId))
+                if (!TryParseGuid(Request.QueryString["REPORTID"], out _reportId))
                 return; 
 
                 var commonReports = new CommonReports(ConnectionString, _reportId);
@@ -64,7 +64,8 @@ namespace Teleopti.Analytics.Portal
             setCulture();
         }
 
-        private bool tryParseGuid(string reportId, out Guid guid)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        private static bool TryParseGuid(string reportId, out Guid guid)
         {
             try
             {

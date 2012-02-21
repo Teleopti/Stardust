@@ -23,7 +23,8 @@ namespace Teleopti.Analytics.Parameters
 			_connection.ConnectionString = connectionString;
 		}
 
-		public DataSet LoadReportControls(Guid reportId, Guid groupPageIndex)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1306:SetLocaleForDataTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public DataSet LoadReportControls(Guid reportId, Guid groupPageIndex)
 		{
 //			if (Disposed == true)
 //			{
@@ -51,6 +52,7 @@ namespace Teleopti.Analytics.Parameters
 			return ret;		
 		}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1306:SetLocaleForDataTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public DataTable ReportProperties(Guid reportId, int savedId)
         {
             var ret = new DataSet();
@@ -80,6 +82,7 @@ namespace Teleopti.Analytics.Parameters
 
 
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1306:SetLocaleForDataTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "params"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "bu"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public DataSet LoadControlData(string proc, IList<SqlParameter> @params, Guid componentId, Guid personCode, Guid buCode)
 		{
 //			SqlParameter param;
@@ -90,32 +93,38 @@ namespace Teleopti.Analytics.Parameters
 
 			var ret = new DataSet();
 			var adap = new SqlDataAdapter();
-			var cmdType = new SqlCommand {CommandText = proc, CommandType = CommandType.StoredProcedure};
+            using (var cmdType = new SqlCommand())
+            {
+                cmdType.CommandText = proc;
+                cmdType.CommandType = CommandType.StoredProcedure;
+                foreach (SqlParameter param in @params)
+                {
+                    cmdType.Parameters.Add(param);
+                }
 
-            foreach (SqlParameter param in @params)
-			{
-				cmdType.Parameters.Add(param);
-			}
+                cmdType.Parameters.AddWithValue("@report_id", componentId);
+                cmdType.Parameters.AddWithValue("@person_code", personCode);
+                cmdType.Parameters.AddWithValue("@language_id", _langId);
+                cmdType.Parameters.AddWithValue("@bu_id", buCode);
 
-            cmdType.Parameters.AddWithValue("@report_id", componentId);
-            cmdType.Parameters.AddWithValue("@person_code", personCode);
-            cmdType.Parameters.AddWithValue("@language_id", _langId);
-            cmdType.Parameters.AddWithValue("@bu_id", buCode);
+                cmdType.CommandType = CommandType.StoredProcedure;
+                cmdType.Connection = _connection;
+                if (_connection.State != ConnectionState.Open)
+                {
+                    _connection.Open();
+                }
 
-			cmdType.CommandType = CommandType.StoredProcedure;
-			cmdType.Connection = _connection;
-			if (_connection.State != ConnectionState.Open)
-			{
-				_connection.Open();
-			}
-			
-			adap.SelectCommand = cmdType;
+                adap.SelectCommand = cmdType;
+            }
+
 			adap.Fill(ret,"Controls");
 			_connection.Close();
+            adap.Dispose();
 			return ret;
 		}
 
-		public string LoadUserSetting(Guid componentId, Guid personCode, string parameter, int savedId)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public string LoadUserSetting(Guid componentId, Guid personCode, string parameter, int savedId)
 		{
 //			SqlParameter param;
 //			if (Disposed == true)
@@ -175,7 +184,8 @@ namespace Teleopti.Analytics.Parameters
 			_connection.Close();
 		}
 
-		public void SaveUserSetting(Guid componentId, Guid personCode, string parameter, int savedId, string setting)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public void SaveUserSetting(Guid componentId, Guid personCode, string parameter, int savedId, string setting)
 		{
 			//			SqlParameter param;
 //			if (Disposed == true)
@@ -201,28 +211,28 @@ namespace Teleopti.Analytics.Parameters
         public bool IsReportPermissionsGranted(Guid reportId, Guid userId)
         {
             bool returnValue = false;
-            var cmd = new SqlCommand
-                          {
-                              CommandText = "mart.report_permission_get",
-                              CommandType = CommandType.StoredProcedure
-                          };
-
-            cmd.Parameters.AddWithValue("@report_id", reportId);
-            cmd.Parameters.AddWithValue("@person_code", userId);
-
-            cmd.Connection = _connection;
-            if (_connection.State != ConnectionState.Open)
+            using (var cmd = new SqlCommand())
             {
-                _connection.Open();
-            }
-            object scalarValue = cmd.ExecuteScalar();
-            if (scalarValue != null)
-            {
-                if ((int)scalarValue > 0)
-                    returnValue = true;
-            }
+                cmd.CommandText = "mart.report_permission_get";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@report_id", reportId);
+                cmd.Parameters.AddWithValue("@person_code", userId);
+
+                cmd.Connection = _connection;
+                if (_connection.State != ConnectionState.Open)
+                {
+                    _connection.Open();
+                }
+                object scalarValue = cmd.ExecuteScalar();
+                if (scalarValue != null)
+                {
+                    if ((int)scalarValue > 0)
+                        returnValue = true;
+                }
+            } 
+
             _connection.Close();
-
+            
             return returnValue;
         }
 
