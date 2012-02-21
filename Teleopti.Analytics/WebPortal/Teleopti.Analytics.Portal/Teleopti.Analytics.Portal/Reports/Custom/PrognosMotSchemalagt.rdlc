@@ -1139,7 +1139,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResWeekColon.Value + " " + Fields!year_week.Value</Value>
+                              <Value>="Vecka: " + Fields!year_week.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
