@@ -1,0 +1,10 @@
+﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
+@model SettingsViewModel
+@{
+    Layout = null;
+}
+
+Culture...<select>@foreach(var c in Model.Cultures){<option value="@c.LCID">@c.DisplayName</option>}</select>
+UiCulture...<br/>
+Language...
+
