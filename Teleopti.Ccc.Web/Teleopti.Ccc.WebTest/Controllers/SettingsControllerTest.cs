@@ -36,5 +36,15 @@ namespace Teleopti.Ccc.WebTest.Controllers
 				res.Model.Should().Be.SameInstanceAs(viewModel);				
 			}
 		}
+
+		[Test]
+		public void PassWordShouldReturnCorrectView()
+		{
+			using (var target = new SettingsController(mappingEngine, loggedOnUser))
+			{
+				var res = target.Password();
+				res.ViewName.Should().Be.EqualTo("PasswordPartial");
+			}
+		}
 	}
 }

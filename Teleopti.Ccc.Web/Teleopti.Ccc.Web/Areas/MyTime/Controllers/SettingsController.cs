@@ -19,10 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
+		[HttpGet]
 		public ViewResult Index()
 		{
 			var viewModel = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
 			return View("RegionalSettingsPartial", viewModel);
+		}
+
+		[HttpGet]
+		public ViewResult Password()
+		{
+			return View("PasswordPartial");
 		}
 	}
 }
