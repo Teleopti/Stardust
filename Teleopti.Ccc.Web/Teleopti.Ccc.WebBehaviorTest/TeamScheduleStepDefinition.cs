@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"The layer's start time attibute value should be (.*)")]
-		public void ThenTheLayerSStartTimeAttibuteValueShouldBe(String startTime)
+		public void ThenTheLayerSStartTimeAttibuteValueShouldBe(string startTime)
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"The layer's end time attibute value should be (.*)")]
-		public void ThenTheLayerSEndTimeAttibuteValueShouldBe(String endTime)
+		public void ThenTheLayerSEndTimeAttibuteValueShouldBe(string endTime)
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 

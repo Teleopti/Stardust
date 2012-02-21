@@ -14,10 +14,6 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Preference = (function ($) {
 
-	function _layout() {
-		Teleopti.MyTimeWeb.Preference.Layout.SetClassesFromDayState();
-	}
-
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
 		var periodData = $('#Preference-body').data('mytime-periodselection');
@@ -137,13 +133,11 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	return {
 		Init: function () {
-			_layout();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Preference/Index', Teleopti.MyTimeWeb.Preference.PreferencePartialInit);
 			_initSplitButton();
 			_initDeleteButton();
 		},
 		PreferencePartialInit: function () {
-			_layout();
 			_initPeriodSelection();
 			_activateSelectable();
 		}
@@ -153,28 +147,3 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 $(function () { Teleopti.MyTimeWeb.Preference.Init(); });
 
-Teleopti.MyTimeWeb.Preference.Layout = (function ($) {
-
-	function _setDayState(week) {
-		$('li[data-mytime-date]', week).each(function () {
-			var curDay = $(this);
-			var state = parseInt(curDay.data('mytime-state'));
-			if (!state) {
-				curDay.addClass('non-editable');
-				return;
-			}
-			if (state & 1) {
-				curDay.addClass('editable');
-			}
-		});
-	}
-	
-	return {		
-		SetClassesFromDayState: function () {
-			var weeks = $('.calendarview-week');
-			weeks.each(function () {
-				_setDayState($(this));
-			});
-		}
-	};
-})(jQuery);
