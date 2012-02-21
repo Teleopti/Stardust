@@ -10,30 +10,20 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     [TestFixture]
 	public class AlreadyAbsentValidatorTest
     {
-        private IAbsenceRequestValidator target;
+		private AlreadyAbsentValidator target;
         private MockRepository mocks;
     	private IScenario scenario;
     	private IPerson person;
+    	private ISchedulingResultStateHolder stateHolder;
 
     	[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
         	scenario = ScenarioFactory.CreateScenarioAggregate();
-    		person = PersonFactory.CreatePerson();
-			target = new AlreadyAbsentValidator();
-        }
-
-        [Test]
-        public void ShouldExplainInvalidReason()
-        {
-            Assert.AreEqual("AlreadyAbsent", target.InvalidReason);
-        }
-
-        [Test]
-        public void ShouldHaveDisplayText()
-        {
-			Assert.AreEqual("AlreadyAbsent", target.DisplayText);
+			person = PersonFactory.CreatePerson();
+			stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
+			target = new AlreadyAbsentValidator(stateHolder);
         }
 
         [Test]
@@ -42,9 +32,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         	var schedulePart =
         		new SchedulePartFactoryForDomain(person, scenario, new DateTimePeriod(2012, 2, 20, 2012, 2, 21),
 												 SkillFactory.CreateSkill("test")).CreatePartWithMainShift();
-        			
-        	var stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
-
+        	
 			var personRequest = new PersonRequest(person);
 			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("Sick leave"), schedulePart.Period);
 			personRequest.Request = absenceRequest;
@@ -58,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (mocks.Playback())
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person, range);
-				target.SchedulingResultStateHolder = stateHolder;
-
+				
 				Assert.True(target.Validate(absenceRequest));
 			}
         }
@@ -70,8 +57,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var schedulePart =
 				new SchedulePartFactoryForDomain(person, scenario, new DateTimePeriod(2012, 2, 20, 2012, 2, 22),
 				                                 SkillFactory.CreateSkill("test")).CreateSchedulePartWithMainShiftAndAbsence();
-
-			var stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
 
 			var personRequest = new PersonRequest(person);
 			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("Sick leave"), schedulePart.Period);
@@ -86,32 +71,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (mocks.Playback())
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person,range);
-				target.SchedulingResultStateHolder = stateHolder;
-
+				
 				Assert.IsFalse(target.Validate(absenceRequest));
 			}
 		}
-
-    	[Test]
-        public void ShouldCreateNewInstance()
-        {
-            var newInstance = target.CreateInstance();
-            Assert.AreNotSame(target, newInstance);
-            Assert.IsTrue(typeof(AlreadyAbsentValidator).IsInstanceOfType(newInstance));
-        }
-
-        [Test]
-        public void ShouldAllInstancesBeEqual()
-        {
-            var otherValidatorOfSameKind = new AlreadyAbsentValidator();
-            Assert.IsTrue(otherValidatorOfSameKind.Equals(target));
-        }
-
-        [Test]
-        public void ShouldNotEqualIfTheyAreInstancesOfDifferentType()
-        {
-            var otherValidator = new AbsenceRequestNoneValidator();
-            Assert.IsFalse(target.Equals(otherValidator));
-        }
     }
 }

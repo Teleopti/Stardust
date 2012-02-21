@@ -2,17 +2,18 @@
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class AlreadyAbsentValidator : IAbsenceRequestValidator
+	public class AlreadyAbsentValidator
 	{
-		public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
-		public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; set; }
-		public string InvalidReason { get { return "AlreadyAbsent"; } }
-		public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
-		public string DisplayText { get { return "AlreadyAbsent"; } }
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Validate(IAbsenceRequest absenceRequest)
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+
+		public AlreadyAbsentValidator(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var scheduleDays = SchedulingResultStateHolder.Schedules[absenceRequest.Person]
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+		}
+
+		public virtual bool Validate(IAbsenceRequest absenceRequest)
+		{
+			var scheduleDays = _schedulingResultStateHolder.Schedules[absenceRequest.Person]
 				.ScheduledDayCollection(
 					absenceRequest.Period.ToDateOnlyPeriod(absenceRequest.Person.PermissionInformation.DefaultTimeZone()));
 			foreach (var scheduleDay in scheduleDays)
@@ -26,32 +27,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 
 			return true;
-		}
-
-		public IAbsenceRequestValidator CreateInstance()
-		{
-			return new AlreadyAbsentValidator();
-		}
-
-		public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
-
-		public override bool Equals(object obj)
-		{
-			var validator = obj as AlreadyAbsentValidator;
-			return validator != null;
-		}
-
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int result = (SchedulingResultStateHolder != null ? SchedulingResultStateHolder.GetHashCode() : 0);
-				result = (result * 397) ^ (PersonAccountBalanceCalculator != null ? PersonAccountBalanceCalculator.GetHashCode() : 0);
-				result = (result * 397) ^ (ResourceOptimizationHelper != null ? ResourceOptimizationHelper.GetHashCode() : 0);
-				result = (result * 397) ^ (BudgetGroupAllowanceSpecification != null ? BudgetGroupAllowanceSpecification.GetHashCode() : 0);
-				result = (result * 397) ^ (GetType().GetHashCode());
-				return result;
-			}
 		}
 	}
 }
