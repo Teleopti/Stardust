@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class ConsecutiveDaysOffSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly DayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDayOffPlannerSessionRuleSet _sessionRuleSet;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
 
-        public ConsecutiveDaysOffSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public ConsecutiveDaysOffSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;

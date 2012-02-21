@@ -264,6 +264,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
+    <Compile Include="Optimization\DayOffPlannerRuleSetCreator.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizerService.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizer.cs" />
@@ -281,12 +282,15 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsChecker.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateChecker.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodChecker.cs" />
+    <Compile Include="Optimization\IOptimizationOverLimitDecider.cs" />
     <Compile Include="Optimization\IPersonExtractor.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\IWorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\IRuleSetBagCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDecider.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\OptimizationPreferences.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProvider.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolver.cs" />
@@ -295,6 +299,7 @@
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProvider.cs" />
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsSyncronizer.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />

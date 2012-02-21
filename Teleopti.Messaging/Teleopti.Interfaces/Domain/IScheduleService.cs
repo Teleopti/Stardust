@@ -50,5 +50,11 @@ namespace Teleopti.Interfaces.Domain
         bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
             bool useOccupancyAdjustment);
+
+        /// <summary>
+        /// Gets the scheduling options.
+        /// </summary>
+        /// <value>The scheduling options.</value>
+	    ISchedulingOptions SchedulingOptions { get; }
 	}
 }

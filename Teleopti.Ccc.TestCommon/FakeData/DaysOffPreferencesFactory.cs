@@ -1,18 +1,18 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    public static class DayOffPlannerRulesFactory
+    public static class DaysOffPreferencesFactory
     {
-        public static IDayOffPlannerRules Create()
+        public static IDaysOffPreferences Create()
         {
-            return new DayOffPlannerRules();
+            return new DaysOffPreferences();
         }
 
-        public static IDayOffPlannerRules CreateWithFalseDefaultValues()
+        public static IDaysOffPreferences CreateWithFalseDefaultValues()
         {
-            IDayOffPlannerRules rules = Create();
+            IDaysOffPreferences rules = Create();
             rules.UseConsecutiveDaysOff = false;
             rules.UseConsecutiveWorkdays = false;
             rules.UseDaysOffPerWeek = false;

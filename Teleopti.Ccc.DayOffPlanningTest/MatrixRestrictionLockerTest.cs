@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     {
         private IMatrixRestrictionLocker _target;
         private MockRepository _mocks;
-        private IOptimizerOriginalPreferences _optimizerPreferences;
+        private ISchedulingOptions _schedulingOptions;
         private IRestrictionExtractor _extractor;
         private IScheduleMatrixPro _matrix;
         private DateOnly _dayToCheck;
@@ -28,16 +28,16 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         {
             _mocks = new MockRepository();
             _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _optimizerPreferences = new OptimizerOriginalPreferences();
-            _optimizerPreferences.SchedulingOptions.UseAvailability = false;
-            _optimizerPreferences.SchedulingOptions.UseRotations = false;
-            _optimizerPreferences.SchedulingOptions.UseAvailability = false;
-            _optimizerPreferences.SchedulingOptions.UseStudentAvailability = false;
-            _optimizerPreferences.SchedulingOptions.UsePreferencesMustHaveOnly = false;
-            _optimizerPreferences.SchedulingOptions.UsePreferences = false;
+            _schedulingOptions = new SchedulingOptions();
+            _schedulingOptions.UseAvailability = false;
+            _schedulingOptions.UseRotations = false;
+            _schedulingOptions.UseAvailability = false;
+            _schedulingOptions.UseStudentAvailability = false;
+            _schedulingOptions.UsePreferencesMustHaveOnly = false;
+            _schedulingOptions.UsePreferences = false;
 			_extractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _target = new MatrixRestrictionLocker(_optimizerPreferences, _extractor);
+            _target = new MatrixRestrictionLocker(_schedulingOptions, _extractor);
             _dayToCheck = new DateOnly(2010, 1, 1);
 			_schedulePart = _mocks.StrictMock<IScheduleDay>();
         }
@@ -276,8 +276,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             IAvailabilityRestriction notAvailable = _mocks.StrictMock<IAvailabilityRestriction>();
             IAvailabilityRestriction available = _mocks.StrictMock<IAvailabilityRestriction>();
 
-            _optimizerPreferences.SchedulingOptions.UseAvailability = true;
-            _target = new MatrixRestrictionLocker(_optimizerPreferences, _extractor);
+            _schedulingOptions.UseAvailability = true;
+            _target = new MatrixRestrictionLocker(_schedulingOptions, _extractor);
 
             DateOnly expectedDateOnly = new DateOnly(2001, 01, 01);
 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
         private void rotationExpectationsForAll()
         {
-            _optimizerPreferences.SchedulingOptions.UseRotations = true;
+            _schedulingOptions.UseRotations = true;
 			_rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
             Expect.Call(_extractor.RotationList).Return(new List<IRotationRestriction> { _rotationRestriction }).Repeat.Any();
             Expect.Call(_rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
         private void availabilityExpectationsForAll()
         {
-            _optimizerPreferences.SchedulingOptions.UseAvailability = true;
+            _schedulingOptions.UseAvailability = true;
             _availabilityRestriction = _mocks.StrictMock<IAvailabilityRestriction>();
             Expect.Call(_extractor.AvailabilityList).Return(new List<IAvailabilityRestriction> { _availabilityRestriction }).Repeat.Any();
             Expect.Call(_availabilityRestriction.IsRestriction()).Return(true).Repeat.Once();
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 
         private void preferenceExpectationsForAll()
         {
-            _optimizerPreferences.SchedulingOptions.UsePreferences = true;
+            _schedulingOptions.UsePreferences = true;
 			_preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
             Expect.Call(_extractor.PreferenceList).Return(new List<IPreferenceRestriction> { _preferenceRestriction }).Repeat.Any();
             Expect.Call(_preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();

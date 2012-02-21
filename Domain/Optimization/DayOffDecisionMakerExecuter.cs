@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -15,38 +16,38 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
         private readonly IDayOffTemplate _dayOffTemplate;
         private readonly IScheduleService _scheduleService;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private readonly int _moveMaxDaysOff;
-        private readonly int _moveMaxWorkShift;
+        private readonly IOptimizationOverLimitDecider _overLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
+        private readonly ISchedulingOptionsSyncronizer _schedulingOptionsSyncronizer;
 
         public DayOffDecisionMakerExecuter(
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
             ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
             IDayOffTemplate dayOffTemplate,
             IScheduleService scheduleService,
-            IOptimizerOriginalPreferences optimizerPreferences,
+            IOptimizationPreferences optimizerPreferences,
             IPeriodValueCalculator periodValueCalculator,
             IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDayOffPlannerSessionRuleSet ruleSet,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceOptimizationHelper resourceOptimizationHelper,
             IResourceCalculateDaysDecider decider,
             IDayOffOptimizerValidator dayOffOptimizerValidator,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
-            IScheduleMatrixOriginalStateContainer originalStateContainer, 
-            int moveMaxDaysOff, 
-            int moveMaxWorkShift,
-            INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService
+            IScheduleMatrixOriginalStateContainer originalStateContainer,
+            IOptimizationOverLimitDecider overLimitDecider,
+            INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
+            ISchedulingOptionsSyncronizer schedulingOptionsSyncronizer
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -63,21 +64,25 @@ namespace Teleopti.Ccc.Domain.Optimization
             _dayOffOptimizerValidator = dayOffOptimizerValidator;
             _dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
             _originalStateContainer = originalStateContainer;
-            _moveMaxDaysOff = moveMaxDaysOff;
-            _moveMaxWorkShift = moveMaxWorkShift;
+            _overLimitDecider = overLimitDecider;
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
+            _schedulingOptionsSyncronizer = schedulingOptionsSyncronizer;
         }
 
         public bool Execute(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, 
             IScheduleMatrixOriginalStateContainer originalStateContainer, bool doReschedule, bool handleDayOffConflict)
         {
+            if (workingBitArray == null)
+                throw new ArgumentNullException("workingBitArray");
+
             ILogWriter logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
 
             if (movesOverMaxDaysLimit(logWriter))
                 return false;
 
-            if(workingBitArray == null)
-                throw new ArgumentNullException("workingBitArray");
+            ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
+
+            _schedulingOptionsSyncronizer.SyncronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             var changesTracker = new LockableBitArrayChangesTracker();
 
@@ -101,17 +106,17 @@ namespace Teleopti.Ccc.Domain.Optimization
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays, logWriter);
             }
 
-            if(doReschedule)
+            if (doReschedule)
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
             IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
-            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, matrix, handleDayOffConflict);
+            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, matrix, schedulingOptions, handleDayOffConflict);
             IEnumerable<changedDay> movedDates = result.MovedDays;
 
             if (!result.Result)
             {
-                if(doReschedule)
+                if (doReschedule)
                     rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
                 return false;
             }
@@ -151,28 +156,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private bool movesOverMaxDaysLimit(ILogWriter log)
+        private bool movesOverMaxDaysLimit(ILogWriter logWriter)
         {
-            if (_moveMaxDaysOff > -1)
-            {
-                if (_originalStateContainer.CountChangedDayOffs() > _moveMaxDaysOff)
-                {
-                    string name = _originalStateContainer.ScheduleMatrix.Person.Name.ToString();
-                    log.LogInfo("Maximum " + _moveMaxDaysOff + " day off have already been moved for " + name);
-                    return true;
-                }
-            }
-            if (_moveMaxWorkShift > -1)
-            {
-                int changedWorkShifts = _originalStateContainer.CountChangedWorkShifts();
-                if (changedWorkShifts > _moveMaxWorkShift)
-                {
-                    string name = _originalStateContainer.ScheduleMatrix.Person.Name.ToString();
-                    log.LogInfo("Maximum " + _moveMaxWorkShift + " workshift have already been moved for " + name);
-                    return true;
-                }
-            }
-            return false;
+            return _overLimitDecider.OverLimit(logWriter);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
@@ -223,7 +209,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             return _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray), 100);
         }
 
-        private dayOffOptimizerMoveDaysResult executeDayOffMovesInMatrix(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool handleConflict)
+        private dayOffOptimizerMoveDaysResult executeDayOffMovesInMatrix(
+            ILockableBitArray workingBitArray, 
+            ILockableBitArray originalBitArray, 
+            IScheduleMatrixPro matrix,
+            ISchedulingOptions schedulingOptions,
+            bool handleConflict)
         {
             IList<changedDay> movedDays = new List<changedDay>();
             bool result = true;
@@ -258,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         if (handleConflict && !_dayOffOptimizerValidator.Validate(part.DateOnlyAsPeriod.DateOnly, matrix))
                         {
                             //if day off rule validation fails, try to reschedule day before and day after
-                            result = _dayOffOptimizerConflictHandler.HandleConflict(part.DateOnlyAsPeriod.DateOnly);
+                            result = _dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, part.DateOnlyAsPeriod.DateOnly);
                             if (!result)
                                 break;
                         }
@@ -336,7 +327,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
 
                 IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
-                ISchedulingOptions options = _optimizerPreferences.SchedulingOptions;
+
+                // ***** create SchedulingOptions
+
+                ISchedulingOptions options = new SchedulingOptions();
 
                 // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
                 //SetTheOriginalShiftCategoryInSchedulingOptions(dateOnly, matrix, originalStateContainer, options);
@@ -380,7 +374,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     _schedulePartModifyAndRollbackService.Rollback();
                     foreach (DateOnly dateOnly1 in toResourceCalculate)
                     {
-                        bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                        bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
                         _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1, true, considerShortBreaks);
                         _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1.AddDays(1), true, considerShortBreaks);
                     }
@@ -398,7 +392,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
                 foreach (var dateOnly in days)
                 {
-                    bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                    bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
                     _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 }
             }
@@ -411,7 +405,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //resource calculate removed days
             foreach (DateOnly dateOnly in removedIllegalDates)
             {
-                bool considerShortBreaks = _optimizerPreferences.SchedulingOptions.ConsiderShortBreaks;
+                bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, considerShortBreaks);
             }

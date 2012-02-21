@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly IBlockSchedulingService _blockSchedulingService;
         private readonly IBlockOptimizerBlockCleaner _blockOptimizerBlockCleaner;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public BlockDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDayOffPlannerSessionRuleSet ruleSet,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IBlockSchedulingService blockSchedulingService,
             IBlockOptimizerBlockCleaner blockOptimizerBlockCleaner,

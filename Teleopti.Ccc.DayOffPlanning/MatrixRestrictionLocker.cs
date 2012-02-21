@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.DayOffPlanning
 
     public class MatrixRestrictionLocker : IMatrixRestrictionLocker
     {
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IRestrictionExtractor _extractor;
 
-        public MatrixRestrictionLocker(IOptimizerOriginalPreferences optimizerPreferences, 
+        public MatrixRestrictionLocker(ISchedulingOptions schedulingOptions, 
             IRestrictionExtractor extractor)
         {
-            _optimizerPreferences = optimizerPreferences;
+            _schedulingOptions = schedulingOptions;
             _extractor = extractor;
         }
 
@@ -49,19 +49,19 @@ namespace Teleopti.Ccc.DayOffPlanning
                 _extractor.Extract(daySchedulePart);
                 SchedulePartView significantPart = daySchedulePart.SignificantPart();
 
-                if (_optimizerPreferences.SchedulingOptions.UseRotations)
+                if (_schedulingOptions.UseRotations)
                 {
                     if(lockRotations(significantPart))
                         ret.Add(scheduleDayPro.Day);
                 }
 
-                if (_optimizerPreferences.SchedulingOptions.UseAvailability)
+                if (_schedulingOptions.UseAvailability)
                 {
                     if (lockAvailability(significantPart))
                         ret.Add(scheduleDayPro.Day);
                 }
 
-                if (_optimizerPreferences.SchedulingOptions.UsePreferencesMustHaveOnly)
+                if (_schedulingOptions.UsePreferencesMustHaveOnly)
                 {
                     if (lockPreferences(significantPart, true))
                         ret.Add(scheduleDayPro.Day);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DayOffPlanning
                 }
                 else
                 {
-                    if (_optimizerPreferences.SchedulingOptions.UsePreferences)
+                    if (_schedulingOptions.UsePreferences)
                     {
                         if (lockPreferences(significantPart, false))
                             ret.Add(scheduleDayPro.Day);

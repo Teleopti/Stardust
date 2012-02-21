@@ -12,19 +12,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     public class DayOffBackToLegalStateValidatorListCreatorTest
     {
 
-        #region Variables
-
         private DayOffBackToLegalStateValidatorListCreator _target;
-        private IDayOffPlannerRules _dayOffPlannerRules;
+        private IDaysOffPreferences _daysOffPreferences;
         private IOfficialWeekendDays _officialWeekendDays;
         private MinMax<int> _periodIndexRange;
 
-        #endregion
 
         [SetUp]
         public void Setup()
         {
-            _dayOffPlannerRules = new DayOffPlannerRules();
             _officialWeekendDays = new OfficialWeekendDays(new CultureInfo("se-SE"));
             _periodIndexRange = new MinMax<int>(13, 19);
         }
@@ -34,12 +30,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyConsecutiveDaysOffValidatorCreation()
         {
-            _dayOffPlannerRules = DayOffPlannerRulesFactory.CreateWithFalseDefaultValues();
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             Assert.AreEqual(0, _target.BuildActiveValidatorList().Count);
 
-            _dayOffPlannerRules.UseConsecutiveDaysOff = true;
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences.UseConsecutiveDaysOff = true;
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof (ConsecutiveDayOffValidator), _target.BuildActiveValidatorList()[0]);
         }
@@ -47,12 +43,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyConsecutiveWorkdaysValidatorCreation()
         {
-            _dayOffPlannerRules = DayOffPlannerRulesFactory.CreateWithFalseDefaultValues();
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             Assert.AreEqual(0, _target.BuildActiveValidatorList().Count);
 
-            _dayOffPlannerRules.UseConsecutiveWorkdays = true;
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences.UseConsecutiveWorkdays = true;
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof(ConsecutiveWorkdayValidator), _target.BuildActiveValidatorList()[0]);
         }
@@ -60,13 +56,13 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyDaysOffPerWeekValidatorCreation()
         {
-            _dayOffPlannerRules = DayOffPlannerRulesFactory.CreateWithFalseDefaultValues();
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(0, _target.BuildActiveValidatorList().Count);
 
-            _dayOffPlannerRules.UseDaysOffPerWeek = true;
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences.UseDaysOffPerWeek = true;
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof(WeeklyDayOffValidator), _target.BuildActiveValidatorList()[0]);
@@ -75,13 +71,13 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyFreeWeekendDayValidatorCreation()
         {
-            _dayOffPlannerRules = DayOffPlannerRulesFactory.CreateWithFalseDefaultValues();
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(0, _target.BuildActiveValidatorList().Count);
 
-            _dayOffPlannerRules.UseFreeWeekendDays = true;
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences.UseWeekEndDaysOff = true;
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof(FreeWeekendDayValidator), _target.BuildActiveValidatorList()[0]);
@@ -90,13 +86,13 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyFreeWeekendsValidatorCreation()
         {
-            _dayOffPlannerRules = DayOffPlannerRulesFactory.CreateWithFalseDefaultValues();
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences = DaysOffPreferencesFactory.CreateWithFalseDefaultValues();
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(0, _target.BuildActiveValidatorList().Count);
 
-            _dayOffPlannerRules.UseFreeWeekends = true;
-            _target = new DayOffBackToLegalStateValidatorListCreator(_dayOffPlannerRules, _officialWeekendDays, _periodIndexRange);
+            _daysOffPreferences.UseFullWeekendsOff = true;
+            _target = new DayOffBackToLegalStateValidatorListCreator(_daysOffPreferences, _officialWeekendDays, _periodIndexRange);
             _target.BuildActiveValidatorList();
             Assert.AreEqual(1, _target.BuildActiveValidatorList().Count);
             Assert.IsInstanceOf(typeof(FreeWeekendValidator), _target.BuildActiveValidatorList()[0]);

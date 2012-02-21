@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly IList<IScheduleMatrixOriginalStateContainer> _workShiftStateContainerList;
         private readonly IIntradayDecisionMaker _decisionMaker;
     	private readonly IScheduleService _scheduleService;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
     	private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
             IIntradayDecisionMaker decisionMaker,
             IScheduleService scheduleService,
-            IOptimizerOriginalPreferences optimizerPreferences,
+            IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
         {
@@ -57,11 +57,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
 
                 IScheduleResultDailyValueCalculator dailyValueCalculator =
-                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix,
-                                                                            _optimizerPreferences.SchedulingOptions);
+                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
                 IScheduleResultDataExtractor personalSkillsDataExtractor =
-                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix,
-                                                                                 _optimizerPreferences.SchedulingOptions);
+                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
 				INonBlendSkillCalculator nonBlendSkillCalculator =
 					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
 
@@ -77,6 +75,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                 IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];
 
+                var restrictionChecker = new RestrictionChecker();
+                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, _optimizerPreferences);
+
+                ISchedulingOptionsSyncronizer schedulingOptionsSyncronizer = new SchedulingOptionsSyncronizer();
+
                 IIntradayOptimizer2 optimizer =
                     new IntradayOptimizer2(
                         dailyValueCalculator,
@@ -89,9 +92,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         deleteSchedulePartService,
 						resourceOptimizationHelper,
                         effectiveRestrictionCreator,
-                        new ResourceCalculateDaysDecider(), 
-                        originalStateContainer, 
-                        workShiftStateContainer);
+                        new ResourceCalculateDaysDecider(),  
+                        optimizerOverLimitDecider,
+                        workShiftStateContainer,
+                        schedulingOptionsSyncronizer);
 
                 result.Add(optimizer);
             }

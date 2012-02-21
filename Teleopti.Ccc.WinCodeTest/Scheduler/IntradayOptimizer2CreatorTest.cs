@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _workShiftContainerList = new List<IScheduleMatrixOriginalStateContainer> { _workShiftContainer1, _workShiftContainer2 };
             _decisionMaker = _mocks.StrictMock<IIntradayDecisionMaker>();
             _scheduleService = _mocks.StrictMock<IScheduleService>();
-            IOptimizerOriginalPreferences optimizerOriginalPreferences = new OptimizerOriginalPreferences();
+            IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 _workShiftContainerList,
                                                    _decisionMaker,
                                                    _scheduleService,
-                                                   optimizerOriginalPreferences,
+                                                   optimizerPreferences,
                                                    _rollbackService,
 												   _schedulingResultStateHolder);
         }

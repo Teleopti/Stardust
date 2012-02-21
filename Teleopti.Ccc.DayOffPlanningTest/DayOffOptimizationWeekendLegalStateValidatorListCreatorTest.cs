@@ -3,7 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [SetUp]
         public void Setup()
         {
-            IDayOffPlannerRules rules = new DayOffPlannerRules();
-            rules.UseFreeWeekends = true;
+            IDaysOffPreferences rules = new DaysOffPreferences();
+            rules.UseFullWeekendsOff = true;
             IOfficialWeekendDays weekendDays = new OfficialWeekendDays(new CultureInfo(1053));
             _target = new DayOffOptimizationWeekendLegalStateValidatorListCreator(rules, weekendDays,
                                                                                   new MinMax<int>(7, 21));

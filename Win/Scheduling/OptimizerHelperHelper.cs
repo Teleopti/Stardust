@@ -19,9 +19,12 @@ namespace Teleopti.Ccc.Win.Scheduling
     public static class OptimizerHelperHelper
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public static void ScheduleBlankSpots(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+        public static void ScheduleBlankSpots(IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
             IScheduleService scheduleService, IComponentContext container)
         {
+            // ***** create SchedulingOptions here
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
 
             foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
@@ -48,11 +51,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static void LockDaysForDayOffOptimization(IOptimizerOriginalPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
+        public static void LockDaysForDayOffOptimization(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
         {
+            // ***** create SchedulingOptions here
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
             //the bloody optimizerPreferences must be in autofac soon
-            IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(optimizerPreferences, restrictionExtractor);
+            IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
             foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
                 lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
             IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
@@ -76,29 +82,29 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static IPeriodValueCalculator CreatePeriodValueCalculator(IOptimizerOriginalPreferences optimizerPreferences, 
+        public static IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,
             IScheduleResultDataExtractor dataExtractor)
         {
             IPeriodValueCalculatorProvider calculatorProvider = new PeriodValueCalculatorProvider();
-            return calculatorProvider.CreatePeriodValueCalculator(optimizerPreferences, dataExtractor);
+            return calculatorProvider.CreatePeriodValueCalculator(advancedPreferences, dataExtractor);
         }
 
         public static IScheduleResultDataExtractor CreateAllSkillsDataExtractor(
-            IOptimizerOriginalPreferences optimizerPreferences,
-            DateOnlyPeriod selectedPeriod, 
+            IAdvancedPreferences advancedPreferences,
+            DateOnlyPeriod selectedPeriod,
             ISchedulingResultStateHolder stateHolder)
         {
-        IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences);
-        IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
+            IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder);
             return allSkillsDataExtractor;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
-            IOptimizerOriginalPreferences optimizerPreferences, 
+            IAdvancedPreferences advancedPreferences,
             IScheduleMatrixPro scheduleMatrix)
         {
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
             return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix);
         }
 
@@ -125,7 +131,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetStartDateInSelectedDays(selectedParts, personTimeZone);
         }
-        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts,ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Min(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }
@@ -136,10 +142,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetEndDateInSelectedDays(selectedParts, personTimeZone);
         }
-         public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts,ICccTimeZoneInfo personTimeZone)
-         {
-             return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
-         }
+        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
+        {
+            return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
+        }
         /// <summary>
         /// Get the ISchedulePart list contained in the clips. This method creates a list of the ISchedulePart objects
         /// that are contained in the grid. Filters out those that are null, or if does not have the ISchedulePart type.
@@ -176,7 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IScheduleMatrixPro> CreateMatrixList(IEnumerable<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
-            
+
             IList<IScheduleMatrixPro> matrixes =
                 new ScheduleMatrixListCreator(resultStateHolder).CreateMatrixListFromScheduleParts(scheduleDays);
 
@@ -201,8 +207,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
            IPerson person,
            ILockableBitArray bitArray,
-           DayOffPlannerSessionRuleSet ruleSet,
-           IOptimizerOriginalPreferences optimizerPreferences)
+           IDayOffPlannerSessionRuleSet ruleSet,
+           IOptimizationPreferences optimizerPreferences)
         {
             MinMax<int> periodArea = bitArray.PeriodArea;
             if (!ruleSet.ConsiderWeekBefore)
@@ -210,7 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IOfficialWeekendDays weekendDays = new OfficialWeekendDays(person.PermissionInformation.Culture());
             IDayOffLegalStateValidatorListCreator validatorListCreator =
                 new DayOffOptimizationLegalStateValidatorListCreator
-                    (optimizerPreferences.DayOffPlannerRules,
+                    (optimizerPreferences.DaysOff,
                      weekendDays,
                      bitArray.ToLongBitArray(),
                      periodArea);
@@ -222,15 +228,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidatorsToKeepWeekendNumbers(
             IPerson person,
             ILockableBitArray bitArray,
-            DayOffPlannerSessionRuleSet ruleSet,
-            IOptimizerOriginalPreferences optimizerPreferences)
+            IOptimizationPreferences optimizerPreferences)
         {
             MinMax<int> periodArea = bitArray.PeriodArea;
-            if (!ruleSet.ConsiderWeekBefore)
+            if (!optimizerPreferences.DaysOff.ConsiderWeekBefore)
                 periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
             IOfficialWeekendDays weekendDays = new OfficialWeekendDays(person.PermissionInformation.Culture());
             IDayOffLegalStateValidatorListCreator validatorListCreator =
-                new DayOffOptimizationWeekendLegalStateValidatorListCreator(optimizerPreferences.DayOffPlannerRules,
+                new DayOffOptimizationWeekendLegalStateValidatorListCreator(optimizerPreferences.DaysOff,
                      weekendDays,
                      periodArea);
 
@@ -241,14 +246,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             CultureInfo culture,
             IPerson person,
             ILockableBitArray scheduleMatrixArray,
-            DayOffPlannerSessionRuleSet ruleSet,
-            IOptimizerOriginalPreferences optimizerPreferences)
+            IDayOffPlannerSessionRuleSet ruleSet,
+            IOptimizationPreferences optimizerPreferences)
         {
             IList<IDayOffLegalStateValidator> legalStateValidators =
                  CreateLegalStateValidators(person, scheduleMatrixArray, ruleSet, optimizerPreferences);
 
             IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
-                CreateLegalStateValidatorsToKeepWeekendNumbers(person, scheduleMatrixArray, ruleSet, optimizerPreferences);
+                CreateLegalStateValidatorsToKeepWeekendNumbers(person, scheduleMatrixArray, optimizerPreferences);
 
             IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays(culture);
             ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
@@ -260,10 +265,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new List<IDayOffDecisionMaker> { moveDayOffDecisionMaker, moveTwoWeekEndDaysDecisionMaker, moveWeekEndDecisionMaker };
         }
 
-        public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, ISchedulingOptions options, IComponentContext container)
+        public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
         {
             IEnumerable<IPerson> persons = CreatePersonsList(clipHandler);
             SetConsiderShortBreaks(persons, period, options, container);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+        public static void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
+        {
+            var ruleSetBagsOfGroupOfPeopleCanHaveShortBreak =
+                container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>();
+            options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -275,36 +288,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DayOffPlannerSessionRuleSet DayOffPlannerRuleSetFromOptimizerPreferences(IOptimizerOriginalPreferences optimizerPreferences)
+        public static IDayOffPlannerSessionRuleSet DayOffPlannerRuleSetFromOptimizerPreferences(IDaysOffPreferences daysOffPreferences)
         {
-            var dayOffPlannerSessionRuleSet = new DayOffPlannerSessionRuleSet();
-            IDayOffPlannerRules dayOffPlannerRules = optimizerPreferences.DayOffPlannerRules;
-
-            dayOffPlannerSessionRuleSet.UseDaysOffPerWeek = dayOffPlannerRules.UseDaysOffPerWeek;
-            dayOffPlannerSessionRuleSet.DaysOffPerWeek = dayOffPlannerRules.DaysOffPerWeek;
-
-            dayOffPlannerSessionRuleSet.UseConsecutiveDaysOff = dayOffPlannerRules.UseConsecutiveDaysOff;
-            dayOffPlannerSessionRuleSet.ConsecutiveDaysOff = dayOffPlannerRules.ConsecutiveDaysOff;
-
-            dayOffPlannerSessionRuleSet.UseConsecutiveWorkdays = dayOffPlannerRules.UseConsecutiveWorkdays;
-            dayOffPlannerSessionRuleSet.ConsecutiveWorkdays = dayOffPlannerRules.ConsecutiveWorkdays;
-
-            dayOffPlannerSessionRuleSet.UseFreeWeekendDays = dayOffPlannerRules.UseFreeWeekendDays;
-            dayOffPlannerSessionRuleSet.FreeWeekendDays = dayOffPlannerRules.FreeWeekendDays;
-
-            dayOffPlannerSessionRuleSet.UseFreeWeekends = dayOffPlannerRules.UseFreeWeekends;
-            dayOffPlannerSessionRuleSet.FreeWeekends = dayOffPlannerRules.FreeWeekends;
-
-            dayOffPlannerSessionRuleSet.ConsiderWeekBefore = dayOffPlannerRules.UsePreWeek;
-            dayOffPlannerSessionRuleSet.ConsiderWeekAfter = dayOffPlannerRules.UsePostWeek;
-
-            return dayOffPlannerSessionRuleSet;
+            var creator = new DayOffPlannerRuleSetCreator();
+            return creator.CreateDayOffPlannerSessionRuleSet(daysOffPreferences);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IList<ISmartDayOffBackToLegalStateSolverContainer> CreateSmartDayOffSolverContainers(
             IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-            DayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet)
+            IDayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet)
         {
             IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers = new List<ISmartDayOffBackToLegalStateSolverContainer>();
             foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
@@ -326,7 +319,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public static void SyncSmartDayOffContainerWithMatrix(ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer,
-            IDayOffTemplate dayOffTemplate, DayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, IScheduleDayChangeCallback scheduleDayChangeCallback,
+            IDayOffTemplate dayOffTemplate, IDayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, IScheduleDayChangeCallback scheduleDayChangeCallback,
             IScheduleTagSetter scheduleTagSetter)
         {
             if (backToLegalStateSolverContainer.Result)

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private readonly IList<IDayOffLegalStateValidator> _validators
             = new List<IDayOffLegalStateValidator>();
-        private readonly IDayOffPlannerRules _dayOffPlannerRules;
+        private readonly IDaysOffPreferences _dayOffPreferences;
         private readonly IOfficialWeekendDays _officialWeekendDays;
         private readonly MinMax<int> _periodIndexRange;
 
@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.DayOffPlanning
         #region Constructor
 
         public DayOffOptimizationWeekendLegalStateValidatorListCreator(
-            IDayOffPlannerRules dayOffPlannerRules,
+            IDaysOffPreferences dayOffPreferences,
             IOfficialWeekendDays officialWeekendDays,
             MinMax<int> periodIndexRange)
         {
-            _dayOffPlannerRules = dayOffPlannerRules;
+            _dayOffPreferences = dayOffPreferences;
             _officialWeekendDays = officialWeekendDays;
             _periodIndexRange = periodIndexRange;
             if (_periodIndexRange.Minimum < 7)
@@ -53,11 +53,11 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private void CreateFreeWeekendsValidatorConditionally()
         {
-            if (_dayOffPlannerRules.UseFreeWeekends)
+            if (_dayOffPreferences.UseFullWeekendsOff)
             {
                 IDayOffLegalStateValidator validator =
                     new FreeWeekendValidator(
-                        _dayOffPlannerRules.FreeWeekends,
+                        _dayOffPreferences.FullWeekendsOffValue,
                         _officialWeekendDays,
                         _periodIndexRange);
                 _validators.Add(validator);

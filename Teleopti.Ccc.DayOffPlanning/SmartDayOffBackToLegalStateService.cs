@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.DayOffPlanning
 {
     public class SmartDayOffBackToLegalStateService : ISmartDayOffBackToLegalStateService
     {
-        private readonly DayOffPlannerSessionRuleSet _dayOffPlannerSessionRuleSet;
+        private readonly IDayOffPlannerSessionRuleSet _dayOffPlannerSessionRuleSet;
         private readonly IDayOffBackToLegalStateFunctions _backToLegalStateFunctions;
         private readonly int _maxIterations;
         private readonly IList<string> _failedSolverDescriptionKeys = new List<string>();
 
-        public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, DayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, int maxIterations)
+        public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, IDayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, int maxIterations)
         {
             _maxIterations = maxIterations;
             _backToLegalStateFunctions = backToLegalStateFunctions;

@@ -55,50 +55,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         #endregion
 
-        #region Interface
-
-        /// <summary>
-        /// Gets the day off planner rules.
-        /// </summary>
-        /// <value>The day off planner rules.</value>
-        public IDayOffPlannerRules DayOffPlannerRules
-        {
-            get { return _dayOffPlannerRules; }
-        }
-
-        /// <summary>
-        /// Gets the resource re optimizer preferences.
-        /// </summary>
-        /// <value>The resource re optimizer preferences.</value>
-        public IOptimizerAdvancedPreferences OptimizerAdvancedPreferences
-        {
-            get { return _optimizerAdvancedPreferences; }
-        }
-
-        /// <summary>
-        /// Gets the scheduling options.
-        /// </summary>
-        /// <value>The scheduling options.</value>
-        public ISchedulingOptions SchedulingOptions
-        {
-            get { return _schedulingOptions; }
-        }
-
-        #endregion
 
         #region Handle events
 
         private void Form_Load(object sender, EventArgs e)
         {
-            dayOffPreferencesPanel1.Initialize(DayOffPlannerRules);
-            resourceOptimizerUserPreferencesPanel1.Initialize(OptimizerAdvancedPreferences);
-            resourceOptimizerPerformancePreferencesPanel1.Initialize(OptimizerAdvancedPreferences);
-            schedulingSessionPreferencesPanel1.Initialize(SchedulingOptions, _shiftCategories, true, false, _groupPages,
+            dayOffPreferencesPanel1.Initialize(_dayOffPlannerRules);
+            resourceOptimizerUserPreferencesPanel1.Initialize(_optimizerAdvancedPreferences);
+            resourceOptimizerPerformancePreferencesPanel1.Initialize(_optimizerAdvancedPreferences);
+            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, true, false, _groupPages,
                 _currentSchedulingScreenSettings, true, _scheduleTags);
             schedulingSessionPreferencesPanel1.RefreshScreenVisible = true;
-            //schedulingSessionPreferencesPanel1.UseBlockSchedulingVisible = false;
-            //schedulingSessionPreferencesPanel1.BetweenDayOffVisible = false;
-            //schedulingSessionPreferencesPanel1.SchedulePeriodVisible = false;
             AddToHelpContext();
             SetColor();
         }
