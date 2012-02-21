@@ -448,14 +448,6 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapScheduledShiftCategory()
 		{
-			//var contractTime = TimeSpan.FromHours(8);
-			//var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
-			//projection.Stub(x => x.ContractTime()).Return(contractTime);
-
-			//var stubs = new StubFactory();
-			//var personAssignment =
-			//    stubs.PersonAssignmentStub(data.Period.ToDateTimePeriod() new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
-			//                                                  new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
@@ -471,6 +463,29 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				 .Cast<ScheduledDayViewModel>()
 				 .Single();
 			dayViewModel.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapScheduledTimeSpan()
+		{
+			data.SelectedDate = new DateOnly(2012, 2, 21);
+			data.Period = new DateOnlyPeriod(data.SelectedDate, data.SelectedDate);
+			var stubs = new StubFactory();
+			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc),
+			                                                                     new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc)));
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
+
+			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, ScheduleDay = scheduleDay}};
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			var dayViewModel = (from w in result.Weeks
+			                    from d in w.Days
+			                    where d.Date == data.SelectedDate
+			                    select d)
+				.Cast<ScheduledDayViewModel>()
+				.Single();
+			dayViewModel.TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
 		}
 
 		[Test]
