@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if(success)
             {
+                // todo ***** change it to if period value better form
                 var currentPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
                 if (currentPeriodValue > oldPeriodValue)
                 {
