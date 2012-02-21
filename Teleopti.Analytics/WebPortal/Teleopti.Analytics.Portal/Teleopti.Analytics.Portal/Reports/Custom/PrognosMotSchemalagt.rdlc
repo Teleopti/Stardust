@@ -60,37 +60,7 @@
       </Fields>
       <Query>
         <DataSourceName>DataSource2</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>report_data_forecast_vs_scheduled_hours</CommandText>
-        <QueryParameters>
-          <QueryParameter Name="@scenario_id">
-            <Value>=Parameters!scenario_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@skill_set">
-            <Value>=Parameters!skill_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_from">
-            <Value>=Parameters!date_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_to">
-            <Value>=Parameters!date_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@interval_from">
-            <Value>=Parameters!interval_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@interval_to">
-            <Value>=Parameters!interval_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@person_code">
-            <Value>=Parameters!person_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@report_id">
-            <Value>=Parameters!report_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@language_id">
-            <Value>=Parameters!language_id.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
+        <CommandText>report_data_forecast_vs_scheduled_hours</CommandText>       
       </Query>
     </DataSet>
   </DataSets>
@@ -2422,16 +2392,6 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>time_zone_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="person_code">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1E574132-B74C-44BE-8662-9A8A003C7617</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>person_code</Prompt>
     </ReportParameter>
     <ReportParameter Name="report_id">
       <DataType>String</DataType>
