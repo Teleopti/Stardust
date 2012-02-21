@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     [TestFixture]
 	public class AlreadyAbsentValidatorTest
     {
-		private AlreadyAbsentValidator target;
+		private AlreadyAbsentSpecification target;
         private MockRepository mocks;
     	private IScenario scenario;
     	private IPerson person;
@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         	scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
-			target = new AlreadyAbsentValidator(stateHolder);
+			target = new AlreadyAbsentSpecification(stateHolder);
         }
 
         [Test]
-        public void ShouldBeValidIfNoPreviousAbsence()
+        public void ShouldNotBeSatisfiedIfNoPreviousAbsence()
         {
         	var schedulePart =
         		new SchedulePartFactoryForDomain(person, scenario, new DateTimePeriod(2012, 2, 20, 2012, 2, 21),
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person, range);
 				
-				Assert.True(target.Validate(absenceRequest));
+				Assert.False(target.IsSatisfiedBy(absenceRequest));
 			}
         }
 
 		[Test]
-		public void ShouldBeInvalidIfAbsenceExistsOnShift()
+		public void ShouldBeSatisfiedIfAbsenceExistsOnShift()
 		{
 			var schedulePart =
 				new SchedulePartFactoryForDomain(person, scenario, new DateTimePeriod(2012, 2, 20, 2012, 2, 22),
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person,range);
 				
-				Assert.IsFalse(target.Validate(absenceRequest));
+				Assert.True(target.IsSatisfiedBy(absenceRequest));
 			}
 		}
     }

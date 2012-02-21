@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
-    	private readonly AlreadyAbsentValidator _alreadyAbsentValidator;
+    	private readonly AlreadyAbsentSpecification _alreadyAbsentSpecification;
     	private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
     	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioProvider scenarioProvider, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
-                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, AlreadyAbsentValidator alreadyAbsentValidator)
+                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, AlreadyAbsentSpecification alreadyAbsentSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
     		_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
     		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
-    		_alreadyAbsentValidator = alreadyAbsentValidator;
+    		_alreadyAbsentSpecification = alreadyAbsentSpecification;
     		_loadDataActions = new List<LoadDataAction>
                                    {
                                        LoadAndCheckPersonRequest,
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
     	private bool personAlreadyAbsentDuringRequestPeriod()
     	{
-    		return _alreadyAbsentValidator.Validate(_absenceRequest);
+    		return _alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest);
     	}
 
     	private void denyAbsenceRequest(UndoRedoContainer undoRedoContainer, string reasonResourceKey)

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<RequestFactory>().As<IRequestFactory>().InstancePerDependency();
 			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
-			builder.RegisterType<AlreadyAbsentValidator>().As<AlreadyAbsentValidator>();
+			builder.RegisterType<AlreadyAbsentSpecification>().As<AlreadyAbsentSpecification>();
 		}
     }
 }

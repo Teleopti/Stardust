@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IScenarioProvider _scenarioProvider;
         private IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
         private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
-        private AlreadyAbsentValidator _alreadyAbsentValidator;
+        private AlreadyAbsentSpecification _alreadyAbsentSpecification;
         private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
         private IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private ILoadSchedulingStateHolderForResourceCalculation _loader;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _scheduleIsInvalidSpecification = _mockRepository.StrictMock<IScheduleIsInvalidSpecification>();
             _scheduleDictionaryModifiedCallback = _mockRepository.DynamicMock<IScheduleDictionaryModifiedCallback>();
             
-            _alreadyAbsentValidator = _mockRepository.Stub<AlreadyAbsentValidator>(_schedulingResultStateHolder);
+            _alreadyAbsentSpecification = _mockRepository.Stub<AlreadyAbsentSpecification>(_schedulingResultStateHolder);
             _loader = _mockRepository.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
             _budgetGroupAllowanceSpecification = _mockRepository.StrictMock<IBudgetGroupAllowanceSpecification>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                     _schedulingResultStateHolder, _merger,
                                                     _factory, _scheduleDictionarySaver,
                                                     _scheduleIsInvalidSpecification, _authorization,
-													_scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _alreadyAbsentValidator
+													_scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _alreadyAbsentSpecification
                                                     );
         }
 
