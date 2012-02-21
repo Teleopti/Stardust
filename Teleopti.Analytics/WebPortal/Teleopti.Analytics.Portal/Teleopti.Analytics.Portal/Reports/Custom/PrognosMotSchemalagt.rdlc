@@ -60,7 +60,7 @@
       </Fields>
       <Query>
         <DataSourceName>DataSource2</DataSourceName>
-        <CommandText>report_data_forecast_vs_scheduled_hours</CommandText>       
+        <CommandText>report_data_forecast_vs_scheduled_hours</CommandText>
       </Query>
     </DataSet>
   </DataSets>
@@ -2393,31 +2393,6 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>time_zone_id</Prompt>
     </ReportParameter>
-    <ReportParameter Name="report_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>8</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>report_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="language_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1053</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>language_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="culture">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Report_Parameter_10</Prompt>
-    </ReportParameter>
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
@@ -2594,7 +2569,6 @@ End function</Code>
     <ColumnSpacing>1cm</ColumnSpacing>
     <Style />
   </Page>
-  <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
