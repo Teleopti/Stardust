@@ -555,7 +555,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResDate.Value</Value>
+                              <Value>Datum</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -588,7 +588,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResWeekdayAndSkill.Value</Value>
+                              <Value>Veckodag och kompetens</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -621,7 +621,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResForecastedHoursH.Value</Value>
+                              <Value>Prognos (timmar)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -654,7 +654,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResForecastedHoursIncludingShrinkageH.Value</Value>
+                              <Value>Med krympning</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -687,7 +687,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResScheduledHoursH.Value</Value>
+                              <Value>Schemalagt (timmar)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -720,7 +720,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResRelativeDifferencePercent.Value</Value>
+                              <Value>Skillnad i procent</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -753,7 +753,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResRelativeDifferenceInclShrinkagePercent.Value</Value>
+                              <Value>Skillnad i procent inklusive krympning</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -785,7 +785,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResStandardDeviation.Value</Value>
+                              <Value>Standardavvilkelse</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -823,7 +823,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResTotalsColon.Value</Value>
+                              <Value>Totalimente:</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1939,7 +1939,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResTotalsColon.Value</Value>
+                              <Value>Totti:</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -2457,91 +2457,6 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>Report_Parameter_10</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResSkillColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResSkillColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDatePeriodColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDatePeriodColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResIntervalColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResIntervalColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTotalsColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTotalsColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResReportForecastvsScheduledHours">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResReportForecastvsScheduledHours</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResForecastedHoursH">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResForecastedHoursH</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResScheduledHoursH">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResScheduledHoursH</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResWeekdayAndSkill">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResWeekdayAndSkill</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResScenarioColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResScenarioColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDate">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDate</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDateColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDateColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTimeZoneColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTimeZoneColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResForecastedHoursIncludingShrinkageH">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResForecastedHoursIncludingShrinkageH</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResRelativeDifferencePercent">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResRelativeDifferencePercent</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResStandardDeviation">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResStandardDeviation</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResWeekColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResWeekColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResRelativeDifferenceInclShrinkagePercent">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResRelativeDifferenceInclShrinkagePercent</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
