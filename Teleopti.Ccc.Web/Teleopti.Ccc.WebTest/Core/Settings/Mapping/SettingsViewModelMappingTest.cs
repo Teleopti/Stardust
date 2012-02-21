@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,10 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 		public void Setup()
 		{
 			Mapper.Reset();
-			Mapper.Initialize(c =>
-			                  	{
-			                  		c.AddProfile<SettingsMappingProfile>();
-			                  	});
+			Mapper.Initialize(c => c.AddProfile<SettingsMappingProfile>());
 		}
 
 		[Test]
@@ -55,6 +53,14 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(3082));
 			var result = Mapper.Map<IPerson, SettingsViewModel>(person);
 			result.ChoosenUiCulture.LCID.Should().Be.EqualTo(3082);
+		}
+
+		[Test]
+		public void CulturesShouldBeSorted()
+		{
+			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
+			var sortedCultures = result.Cultures.OrderBy(c => c.DisplayName);
+			result.Cultures.Should().Have.SameSequenceAs(sortedCultures);
 		}
 	}
 }
