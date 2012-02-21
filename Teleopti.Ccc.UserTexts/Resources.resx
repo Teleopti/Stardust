@@ -10387,4 +10387,8 @@ These options are activated:
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>Minimum is {0} hours.</value>
   </data>
+  <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
+    <value>There is already absence in the schedule for given period.</value>
+    <comment>There is already absence in the schedule for given period.</comment>
+  </data>
 </root>
