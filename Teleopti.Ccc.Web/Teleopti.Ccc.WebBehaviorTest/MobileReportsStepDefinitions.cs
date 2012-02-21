@@ -114,7 +114,7 @@
 		{
 			var count = this._page.Reports.Count;
 			EventualAssert.That(
-				() => 2.Equals(count),
+				() => 2 == count,
 				Is.True.After(1000, 100),
 				string.Format("Restricted access user should only see two reports by saw: {0}", count));
 		}
