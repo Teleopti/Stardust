@@ -1164,3 +1164,32 @@ footer p
 {
 	display: none;
 }
+
+.on-day-off 
+{
+	-webkit-background-size: 6px 6px;
+	background-image: -webkit-linear-gradient(-45deg, 
+			rgba(0, 0, 0, .5) 0%, 
+			rgba(0, 0, 0, .5) 10%, 
+			transparent 10%, 
+			transparent 50%, 
+			rgba(0, 0, 0, .5) 50%, 
+			rgba(0, 0, 0, .5) 60%, 
+			transparent 60%, 
+			transparent 100%)
+}
+
+.ie7 .on-day-off
+{
+	background-color: lightgray;	
+}
+
+.ie8 .on-day-off
+{
+	background-color: lightgray;	
+}
+
+.ie9 .on-day-off
+{
+	background-color: lightgray;	
+}
