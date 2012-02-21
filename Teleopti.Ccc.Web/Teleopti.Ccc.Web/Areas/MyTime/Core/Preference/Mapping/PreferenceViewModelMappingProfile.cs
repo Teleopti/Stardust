@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public DateOnlyPeriod Period { get; set; }
 			public IEnumerable<PreferenceDayDomainData> Days { get; set; }
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
-			public IEnumerable<WorkTimeMinMaxDomainData> WorkTimeMinMax { get; set; }
 		}
 
 		public class PreferenceDayMappingData
@@ -75,7 +74,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																			        			Period = s.Period,
 																			        			Days = s.Days,
 																			        			WorkflowControlSet = s.WorkflowControlSet,
-																			        			WorkTimeMinMax = s.WorkTimeMinMax
 																			        		}).ToArray();
 																		}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
@@ -109,45 +107,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<PreferenceWeekMappingData, WeekViewModel>()
 				.ForMember(d => d.Days, o => o.MapFrom(s =>
 				                                       	{
-
-				                                       		var preferenceDays = (from d in s.Days
-				                                       		                      where d.PreferenceDay != null
-				                                       		                      select d.PreferenceDay);
-				                                       		var workTimeMinMaxCollection = s.WorkTimeMinMax ?? new WorkTimeMinMaxDomainData[] {};
-				                                       		var days = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
+				                                       		var days = s.Days ?? new PreferenceDayDomainData[] {};
+				                                       		var datesThisWeek = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
 				                                       		return (
-				                                       		       	from d in days
-				                                       		       	let preferenceDaysForDate = from pd in preferenceDays
-				                                       		       	                            where
-				                                       		       	                            	pd.Restriction != null &&
-				                                       		       	                            	pd.RestrictionDate == d
-				                                       		       	                            select pd
-				                                       		       	let shiftCategory = (
-				                                       		       	                    	from pd in preferenceDaysForDate
-				                                       		       	                    	where pd.Restriction.ShiftCategory != null
-				                                       		       	                    	select pd.Restriction.ShiftCategory
-				                                       		       	                    ).SingleOrDefault()
-				                                       		       	let dayOffTemplate = (
-				                                       		       	                     	from pd in preferenceDaysForDate
-				                                       		       	                     	where pd.Restriction.DayOffTemplate != null
-				                                       		       	                     	select pd.Restriction.DayOffTemplate
-				                                       		       	                     ).SingleOrDefault()
-				                                       		       	let absence = (
-				                                       		       	              	from pd in preferenceDaysForDate
-				                                       		       	              	where pd.Restriction.Absence != null
-				                                       		       	              	select pd.Restriction.Absence
-				                                       		       	              ).SingleOrDefault()
-				                                       		       	let workTimeMinMax = (
-				                                       		       	                     	from w in workTimeMinMaxCollection
-				                                       		       	                     	where w.Date == d
-				                                       		       	                     	select w.WorkTimeMinMax
-				                                       		       	                     ).SingleOrDefault()
+				                                       		       	from d in datesThisWeek
+				                                       		       	let day = (from day in days where day.Date == d select day).SingleOrDefault()
+																	let preferenceDay = day == null ? null : day.PreferenceDay
+																	let restriction = preferenceDay == null ? null : preferenceDay.Restriction
+																	let shiftCategory = restriction == null ? null : restriction.ShiftCategory
+																	let dayOffTemplate = restriction == null ? null : restriction.DayOffTemplate
+																	let absence = restriction == null ? null : restriction.Absence
+																	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
 				                                       		       	select new PreferenceDayMappingData(
 				                                       		       		d, s.Period,
 				                                       		       		shiftCategory,
 				                                       		       		dayOffTemplate,
 				                                       		       		absence,
-				                                       		       		s.WorkflowControlSet, workTimeMinMax)
+				                                       		       		s.WorkflowControlSet,
+				                                       		       		workTimeMinMax)
 				                                       		       ).ToArray();
 				                                       	}))
 				;

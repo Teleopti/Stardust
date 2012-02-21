@@ -105,6 +105,7 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryStudentAvailabilityTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryTeamScheduleTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryRequestsTest.cs" />
+    <Compile Include="Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentPrincipalProviderTest.cs" />

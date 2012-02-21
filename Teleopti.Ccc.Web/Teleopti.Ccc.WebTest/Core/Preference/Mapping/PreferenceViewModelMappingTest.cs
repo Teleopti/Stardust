@@ -388,8 +388,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var earliest = new TimeSpan(8, 0, 0);
 			var latest = new TimeSpan(10, 0, 0);
 			var workTimeMinMax = new WorkTimeMinMax { StartTimeLimitation = new StartTimeLimitation(earliest, latest) };
-
-			data.WorkTimeMinMax = new List<WorkTimeMinMaxDomainData> { new WorkTimeMinMaxDomainData(workTimeMinMax, data.SelectedDate) };
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -413,8 +412,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var earliest = new TimeSpan(16, 0, 0);
 			var latest = new TimeSpan(19, 0, 0);
 			var workTimeMinMax = new WorkTimeMinMax { EndTimeLimitation = new EndTimeLimitation(earliest, latest) };
-
-			data.WorkTimeMinMax = new List<WorkTimeMinMaxDomainData> { new WorkTimeMinMaxDomainData(workTimeMinMax, data.SelectedDate) };
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -438,8 +436,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var earliest = new TimeSpan(6, 0, 0);
 			var latest = new TimeSpan(9, 0, 0);
 			var workTimeMinMax = new WorkTimeMinMax { WorkTimeLimitation = new WorkTimeLimitation(earliest, latest) };
-
-			data.WorkTimeMinMax = new List<WorkTimeMinMaxDomainData> { new WorkTimeMinMaxDomainData(workTimeMinMax, data.SelectedDate) };
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 

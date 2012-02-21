@@ -1,5 +1,7 @@
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -13,19 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IResolve<IVirtualSchedulePeriodProvider> _virtualSchedulePeriodProvider;
 		private readonly IResolve<IPreferenceProvider> _preferenceProvider;
 		private readonly IResolve<ILoggedOnUser> _loggedOnUser;
-		private readonly IResolve<IWorkTimeMinMaxCalculator> _workTimeMinMaxCalculator;
+		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
 
 		public PreferenceDomainDataMappingProfile(
 			IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider,
 			IResolve<IPreferenceProvider> preferenceProvider,
 			IResolve<ILoggedOnUser> loggedOnUser,
-			IResolve<IWorkTimeMinMaxCalculator> workTimeMinMaxCalculator
+			IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider
 			)
 		{
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferenceProvider = preferenceProvider;
 			_loggedOnUser = loggedOnUser;
-			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
+			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 		}
 
 		protected override void Configure()
@@ -41,29 +43,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 									var dates = period.DayCollection();
 				              		var days = (from d in dates
 				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).SingleOrDefault()
+												let workTimeMinMax = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(d)
 				              		            select new PreferenceDayDomainData
 				              		                   	{
 				              		                   		Date = d,
-				              		                   		PreferenceDay = preferenceDay
+				              		                   		PreferenceDay = preferenceDay,
+															WorkTimeMinMax = workTimeMinMax
 				              		                   	}).ToArray();
-
-									var workTimeMinMax = from d in dates
-				              		                            let personPeriod = _loggedOnUser.Invoke().CurrentUser().PersonPeriods(new DateOnlyPeriod(d, d)).
-				              		                            	FirstOrDefault()
-				              		                            where personPeriod != null
-				              		                            let ruleSetBag =
-				              		                            	personPeriod.RuleSetBag
-				              		                            where ruleSetBag != null
-				              		                            select
-				              		                            	new WorkTimeMinMaxDomainData(_workTimeMinMaxCalculator.Invoke().WorkTimeMinMax(ruleSetBag, d), d);
-
+									
 				              		return new PreferenceDomainData
 				              		       	{
 				              		       		SelectedDate = s,
 				              		       		Period = period,
 				              		       		WorkflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet,
-				              		       		WorkTimeMinMax = workTimeMinMax,
-
 				              		       		Days = days
 				              		       	};
 				              	});
