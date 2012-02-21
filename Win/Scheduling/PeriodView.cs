@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
         	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(scheduleRange);
 
-            //if(scheduleRange.SignificantPart() ==SchedulePartView.ContractDayOff)
 			if (hasDayOffUnderFullDayAbsence.HasDayOff())
             {
                 using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
