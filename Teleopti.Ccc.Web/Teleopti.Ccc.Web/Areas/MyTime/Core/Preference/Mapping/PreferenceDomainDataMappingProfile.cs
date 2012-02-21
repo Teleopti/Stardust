@@ -16,18 +16,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IResolve<IPreferenceProvider> _preferenceProvider;
 		private readonly IResolve<ILoggedOnUser> _loggedOnUser;
 		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
+		private readonly IResolve<IScheduleProvider> _scheduleProvider;
+		private readonly IResolve<IProjectionProvider> _projectionProvider;
 
-		public PreferenceDomainDataMappingProfile(
-			IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider,
-			IResolve<IPreferenceProvider> preferenceProvider,
-			IResolve<ILoggedOnUser> loggedOnUser,
-			IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider
-			)
+		public PreferenceDomainDataMappingProfile(IResolve<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider, IResolve<IPreferenceProvider> preferenceProvider, IResolve<ILoggedOnUser> loggedOnUser, IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider, IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider)
 		{
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferenceProvider = preferenceProvider;
 			_loggedOnUser = loggedOnUser;
 			_preferenceFeedbackProvider = preferenceFeedbackProvider;
+			_scheduleProvider = scheduleProvider;
+			_projectionProvider = projectionProvider;
 		}
 
 		protected override void Configure()
@@ -39,16 +38,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              	{
 				              		var period = _virtualSchedulePeriodProvider.Invoke().GetCurrentOrNextVirtualPeriodForDate(s);
 				              		var preferenceDays = _preferenceProvider.Invoke().GetPreferencesForPeriod(period);
+									var scheduleDays = _scheduleProvider.Invoke().GetScheduleForPeriod(period) ?? new IScheduleDay[] { };
 				              		preferenceDays = preferenceDays ?? new IPreferenceDay[] {};
 									var dates = period.DayCollection();
 				              		var days = (from d in dates
 				              		            let preferenceDay = (from pd in preferenceDays where pd.RestrictionDate == d select pd).SingleOrDefault()
+												let providedScheduleDay = (from sd in scheduleDays where sd.DateOnlyAsPeriod.DateOnly == d select sd).SingleOrDefault()
+												let scheduleDay = providedScheduleDay != null && providedScheduleDay.IsScheduled() ? providedScheduleDay : null
+												let projection = scheduleDay != null ? _projectionProvider.Invoke().Projection(scheduleDay) : null
 												let workTimeMinMax = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(d)
 				              		            select new PreferenceDayDomainData
 				              		                   	{
 				              		                   		Date = d,
 				              		                   		PreferenceDay = preferenceDay,
-															WorkTimeMinMax = workTimeMinMax
+															WorkTimeMinMax = workTimeMinMax,
+															ScheduleDay = scheduleDay,
+															Projection = projection
 				              		                   	}).ToArray();
 									
 				              		return new PreferenceDomainData

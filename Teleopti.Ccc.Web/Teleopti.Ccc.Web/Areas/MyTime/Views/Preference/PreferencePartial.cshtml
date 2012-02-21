@@ -37,6 +37,7 @@
 				@foreach (var day in week.Days)
 				{
 					var preference = day as PreferenceDayViewModel;
+					var scheduled = day as ScheduledDayViewModel;
 					<li class="@(day.Editable ? "editable" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
 						<div>
 							<div class="day-header">
@@ -44,9 +45,16 @@
 							</div>
 							<div class="day-content pdt10">
 								<span class="fullwidth displayblock"></span>
-								<span class="preference fullwidth displayblock clearrightfloat">
-									@preference.Preference
-								</span>
+								@if (preference != null)
+								{
+									<span class="preference fullwidth displayblock clearrightfloat">
+										@preference.Preference
+									</span>
+								}
+								@if (scheduled != null)
+								{
+									
+								}
 							</div>
 						</div>
 					</li>
