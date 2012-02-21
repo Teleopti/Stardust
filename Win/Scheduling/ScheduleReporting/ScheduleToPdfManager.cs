@@ -251,7 +251,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             try
             {
-                //Launching the PDF file using the default Application.[Acrobat Reader]
                 Process.Start(fullPath);
             }
             catch (System.ComponentModel.Win32Exception ex)
@@ -259,12 +258,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                 MessageDialogs.ShowError(owner, ex.Message, Resources.Scheduling);
             }
         }
-
-        //private static void openDocument(PdfDocument doc, Control owner, string path)
-        //{
-        //    string fileName = "16887";
-        //    openDocument(doc, owner, fileName);
-        //}
 
         private static float getHeight(IEnumerable<IPdfScheduleTemplate> templateList)
         {
@@ -286,12 +279,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             {
                 DateOnly date = fullWeekPeriod.DayCollection()[i + offset];
                 IScheduleDay part = stateHolder.Schedules[person].ScheduledDay(date);
-                //SchedulePartView significantPart = part.SignificantPart();
                 SchedulePartView significantPart = part.SignificantPartForDisplay();
-                //IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-                //if (!virtualSchedulePeriod.IsValid)
-                //    significantPart = SchedulePartView.None;
-
+                
                 var personPeriod = person.Period(date);
                 if (personPeriod == null)
                     significantPart = SchedulePartView.None;
@@ -444,24 +433,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                              };
             footer.Graphics.DrawString(footerText, font, brush, rect, format);
 
-            //format = new PdfStringFormat();
-            //format.Alignment = PdfTextAlignment.Right;
-            //format.LineAlignment = PdfVerticalAlignment.Bottom;
-
-            ////Create page number field
-            //PdfPageNumberField pageNumber = new PdfPageNumberField(font, brush);
-
-            ////Create page count field
-            //PdfPageCountField count = new PdfPageCountField(font, brush);
-
-            //PdfCompositeField compositeField = new PdfCompositeField(font, brush, "Page {0} of {1}", pageNumber, count);
-            //compositeField.Bounds = footer.Bounds;
-            //compositeField.StringFormat = format;
-            //compositeField.Draw(footer.Graphics); // new PointF(doc.Pages[0].GetClientSize().Width - 100, 40));
-
-            //Add the footer template at the bottom
             doc.Template.Bottom = footer;
-
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -469,7 +441,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         {
             var rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
-            //Create page template
             var header = new PdfPageTemplateElement(rect);
             var brush = new PdfSolidBrush(Color.Gray);
 
@@ -481,14 +452,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                                  LineAlignment = PdfVerticalAlignment.Top,
                                  Alignment = PdfTextAlignment.Right
                              };
-            //format.Alignment = PdfTextAlignment.Left;
-            //header.Graphics.DrawString("hej", font, brush,rect, format);
+            
+			var pageNumber = new PdfPageNumberField(font, brush);
 
-            //Create page number field
-            var pageNumber = new PdfPageNumberField(font, brush);
-
-            //Create page count field
-            var count = new PdfPageCountField(font, brush);
+			var count = new PdfPageCountField(font, brush);
 
             var createdDate = new PdfCreationDateField(font, brush);
             createdDate.DateFormatString = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
@@ -498,10 +465,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                                          StringFormat = format,
                                          Bounds = header.Bounds
                                      };
-            compositeField.Draw(header.Graphics); //, new PointF(doc.Pages[0].GetClientSize().Width - 200, 40));
-            //Add header template at the top.
+            compositeField.Draw(header.Graphics);
             doc.Template.Top = header;
-
         }
     }
 }
