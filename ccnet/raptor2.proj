@@ -14,6 +14,7 @@
 		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
+		<NCoverAssembliesBasic>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssembliesBasic>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -57,7 +58,7 @@
 			BuildMSI*	= Represents MSI builds on Main, RC and Released
 			-->
 			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
+				<NCoverAssemblies>$(NCoverAssembliesBasic);Teleopti.Ccc.Web</NCoverAssemblies>
 				<DoCodeAnalysis>true</DoCodeAnalysis>
 				<UseDBManager>true</UseDBManager>
 				<RunWebBehaviorTests>true</RunWebBehaviorTests>
@@ -66,8 +67,7 @@
 		<Otherwise>
 			<!-- else -->
 			<PropertyGroup>
-<!--			<ExcludedTestCategories>/Exclude=LongRunning</ExcludedTestCategories> -->
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
+				<NCoverAssemblies>$(NCoverAssembliesBasic)</NCoverAssemblies>
 				<DoCodeAnalysis>true</DoCodeAnalysis>
 				<UseDBManager>true</UseDBManager>
 				<RunWebBehaviorTests>false</RunWebBehaviorTests>
