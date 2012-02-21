@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WebTest.Controllers
 	[TestFixture]
 	public class SettingsControllerTest
 	{
-		private SettingsController target;
 		private IMappingEngine mappingEngine;
 		private ILoggedOnUser loggedOnUser;
 
@@ -22,18 +21,20 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		{
 			mappingEngine = MockRepository.GenerateStrictMock<IMappingEngine>();
 			loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
-			target = new SettingsController(mappingEngine, loggedOnUser);
 		}
 
 		[Test]
 		public void IndexShouldReturnViewModel()
 		{
-			var viewModel = new SettingsViewModel();
-			var person = new Person();
-			loggedOnUser.Expect(obj => obj.CurrentUser()).Return(person);
-			mappingEngine.Expect(obj => obj.Map<IPerson, SettingsViewModel>(person)).Return(viewModel);
-			var res = target.Index();
-			res.Model.Should().Be.SameInstanceAs(viewModel);
+			using (var target = new SettingsController(mappingEngine, loggedOnUser))
+			{
+				var viewModel = new SettingsViewModel();
+				var person = new Person();
+				loggedOnUser.Expect(obj => obj.CurrentUser()).Return(person);
+				mappingEngine.Expect(obj => obj.Map<IPerson, SettingsViewModel>(person)).Return(viewModel);
+				var res = target.Index();
+				res.Model.Should().Be.SameInstanceAs(viewModel);				
+			}
 		}
 	}
 }
