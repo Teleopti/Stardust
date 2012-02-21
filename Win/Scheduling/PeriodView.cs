@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
 //using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -97,8 +98,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
             SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
             Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
+        	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(scheduleRange);
 
-            if(scheduleRange.SignificantPart() ==SchedulePartView.ContractDayOff)
+			if (hasDayOffUnderFullDayAbsence.HasDayOff())
             {
                 using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
                 {

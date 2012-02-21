@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 	public class TeamScheduleDayDomainData
 	{
+		public bool HasDayOffUnder { get; set; }
 		public DateTimePeriod DisplayTimePeriod { get; set; }
 		public IPerson Person { get; set; }
 		public ITeamScheduleProjection Projection { get; set; }
