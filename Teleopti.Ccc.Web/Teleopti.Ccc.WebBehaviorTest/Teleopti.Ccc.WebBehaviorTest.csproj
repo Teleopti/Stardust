@@ -120,10 +120,16 @@
     <Compile Include="MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
+    <Compile Include="PreferencesScheduleStepDefinition.cs" />
     <Compile Include="PreferencesFeedback2.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedback.feature</DependentUpon>
+    </Compile>
+    <Compile Include="PreferencesSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Routing.feature.cs">
       <AutoGen>True</AutoGen>
@@ -311,6 +317,10 @@
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PreferencesSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
+    </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Routing.feature.cs</LastGenOutput>

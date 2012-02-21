@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
+			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>();
 		}
 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

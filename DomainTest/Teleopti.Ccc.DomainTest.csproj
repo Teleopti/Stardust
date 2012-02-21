@@ -351,6 +351,7 @@
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
+    <Compile Include="Scheduling\Assignment\HasDayOffUnderFullDayAbsenceTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactoryTest.cs" />
