@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 		public class ScheduledDayMappingData : BaseDayMappingData
 		{
+			public IScheduleDay ScheduleDay { get; set; }
 			public IVisualLayerCollection Projection { get; set; }
 		}
 
@@ -117,9 +118,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       	let absence = restriction == null ? null : restriction.Absence
 				                                       		       	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
 				                                       		       	let projection = day == null ? null : day.Projection
+				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
 				                                       		       	select
-				                                       		       		projection == null
-				                                       		       			? new PreferenceDayMappingData
+				                                       		       		projection != null || scheduleDay != null
+				                                       		       			? new ScheduledDayMappingData
+				                                       		       			  	{
+				                                       		       			  		Date = d,
+				                                       		       			  		Period = s.Period,
+				                                       		       			  		Projection = projection,
+				                                       		       			  		ScheduleDay = scheduleDay
+				                                       		       			  	} as BaseDayMappingData
+				                                       		       			: new PreferenceDayMappingData
 				                                       		       			  	{
 				                                       		       			  		Date = d,
 				                                       		       			  		Period = s.Period,
@@ -128,12 +137,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       			  		Absence = absence,
 				                                       		       			  		WorkflowControlSet = s.WorkflowControlSet,
 				                                       		       			  		WorkTimeMinMax = workTimeMinMax
-				                                       		       			  	} as BaseDayMappingData
-				                                       		       			: new ScheduledDayMappingData
-				                                       		       			  	{
-				                                       		       			  		Date = d,
-																					Period = s.Period,
-				                                       		       			  		Projection = projection
 				                                       		       			  	} as BaseDayMappingData
 				                                       		       ).ToArray();
 				                                       	}))
@@ -155,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
-				.ForMember(d => d.ShiftCategory, o => o.Ignore())
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
 				.ForMember(d => d.TimeSpan, o => o.Ignore())
 				;
 

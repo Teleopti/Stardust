@@ -7,7 +7,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -424,7 +426,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldMapScheduleContractTime()
+		public void ShouldMapScheduledContractTime()
 		{
 			var contractTime = TimeSpan.FromHours(8);
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
@@ -441,6 +443,34 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				 .Cast<ScheduledDayViewModel>()
 				 .Single();
 			dayViewModel.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
+		}
+
+		[Test]
+		public void ShouldMapScheduledShiftCategory()
+		{
+			//var contractTime = TimeSpan.FromHours(8);
+			//var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			//projection.Stub(x => x.ContractTime()).Return(contractTime);
+
+			//var stubs = new StubFactory();
+			//var personAssignment =
+			//    stubs.PersonAssignmentStub(data.Period.ToDateTimePeriod() new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+			//                                                  new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
+
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay} };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			var dayViewModel = (from w in result.Weeks
+								from d in w.Days
+								where d.Date == data.SelectedDate
+								select d)
+				 .Cast<ScheduledDayViewModel>()
+				 .Single();
+			dayViewModel.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
 		}
 
 		[Test]
