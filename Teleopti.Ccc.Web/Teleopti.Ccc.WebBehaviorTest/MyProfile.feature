@@ -1,5 +1,5 @@
 ﻿Feature: My Profile
-	In order to change my profile
+	In order to view and change my profile
 	As an agent
 	I want to 
 		be able to view my language

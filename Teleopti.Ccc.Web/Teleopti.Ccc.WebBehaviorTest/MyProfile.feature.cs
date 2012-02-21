@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "My Profile", "In order to change my profile\r\nAs an agent\r\nI want to \r\nbe able to view my langua" +
-                    "ge\r\nbe able to change culture\r\nbe able to change language\r\nbe able to change my " +
-                    "password", GenerationTargetLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "My Profile", "In order to view and change my profile\r\nAs an agent\r\nI want to \r\nbe able to view " +
+                    "my language\r\nbe able to change culture\r\nbe able to change language\r\nbe able to c" +
+                    "hange my password", GenerationTargetLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
