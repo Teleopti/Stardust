@@ -3,22 +3,17 @@
 @{
 	 Layout = null;
 }
-Culture...<select>@foreach(var c in Model.Cultures)
-						{
-							<option value="@c.LCID" @if(c.LCID == Model.ChoosenCulture.LCID)
-															{
-<text>selected='selected'</text>
-															}>@c.DisplayName</option>
-						}</select>
-<br/>
-UiCulture...<select>@foreach(var c in Model.Cultures)
-						  {
-						  	<option value="@c.LCID" @if(c.LCID == Model.ChoosenUiCulture.LCID)
-															{
-																<text>selected='selected'</text>
-															}>@c.DisplayName</option>
-						  }</select>
-<br/><br/>
 
-nytt passowre<textarea></textarea><br/>
-confirm passowre<textarea></textarea><br/>
+<div id ="selectors">
+	Culture...@Html.DropDownListFor(x=>x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new {@id="cultureSelect"})<br />
+	UiCulture...@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+</div>
+
+<script>
+	$(function () {
+		$("#selectors select").change(function() {
+			alert("lcid choosen" + $(this).val());
+		});
+	})
+
+</script>
