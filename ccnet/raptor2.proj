@@ -14,7 +14,7 @@
 		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
-		<NCoverAssembliesBasic>;Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssembliesBasic>
+		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
