@@ -28,8 +28,21 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string Route()
 		{
+			var emptyId = Guid.Empty.ToString();
 			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
-			return String.Join("/", stringArray);
+			var basicRoute = String.Join("/", stringArray);
+			
+			if (!DomainId.Equals(emptyId))
+			{
+				return String.Join("/", new[] {basicRoute, "id", DomainId});
+			}
+
+			if (!DomainReferenceId.Equals(emptyId))
+			{
+				return String.Join("/", new[] { basicRoute, "ref", DomainReferenceId});
+			}
+
+			return basicRoute;
 		}
 
 		/// <summary>
