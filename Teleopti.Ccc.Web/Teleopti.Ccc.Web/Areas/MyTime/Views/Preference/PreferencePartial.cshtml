@@ -44,16 +44,19 @@
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10">
-								<span class="fullwidth displayblock"></span>
 								@if (preference != null)
 								{
-									<span class="preference fullwidth displayblock clearrightfloat">
+									<div class="preference">
 										@preference.Preference
-									</span>
+									</div>
 								}
 								@if (scheduled != null)
 								{
-									
+									<div class="scheduled">
+										<span class="displayblock fullwidth">@scheduled.ShiftCategory</span>
+										<strong class="displayblock fullwidth">@scheduled.TimeSpan</strong>
+										<span class="displayblock fullwidth">@scheduled.ContractTime</span>
+									</div>
 								}
 							</div>
 						</div>

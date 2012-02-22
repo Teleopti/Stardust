@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my shift")]
 		public void ThenIShouldSeeMyShift()
 		{
-			ScenarioContext.Current.Pending();
 			var data = UserFactory.User().UserData<ShiftToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
