@@ -10081,4 +10081,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Det här är standardscenariot</value>
     <comment>Det här är standardscenariot</comment>
   </data>
+  <data name="UpdatedExMark" xml:space="preserve">
+    <value>Uppdaterad!</value>
+  </data>
 </root>

@@ -10387,4 +10387,7 @@ These options are activated:
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>Minimum is {0} hours.</value>
   </data>
+  <data name="UpdatedExMark" xml:space="preserve">
+    <value>Updated!</value>
+  </data>
 </root>

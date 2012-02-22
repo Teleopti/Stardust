@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 @model SettingsViewModel
 @{
 	 Layout = null;
@@ -7,13 +8,13 @@
 
 <div id ="selectors" class="ui-corner-all">
 	<p style="height: 70px">
-		xxCulture<br/>
+		@Resources.CultureText<br/>
 		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
-		<label id="cultureSaved" class="displaynone">xxSaved!</label>
+		<label id="cultureSaved" class="displaynone">@Resources.UpdatedExMark</label>
 	</p>
 	<p style="height: 50px">
-		xxUiCulture<br/>
+		@Resources.Language<br/>
 		@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
-		<label id="cultureUiSaved" class="displaynone">xxSaved!</label>
+		<label id="cultureUiSaved" class="displaynone">@Resources.UpdatedExMark</label>
 	</p>
 </div>
