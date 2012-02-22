@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -40,6 +41,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.Extra.BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
             _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
             Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.BetweenDayOff);
+        }
+
+        [Test]
+        public void ShouldUseGroupingChangesSetInSchedulingOptions()
+        {
+            Assert.IsFalse(_schedulingOptions.UseGroupOptimizing);
+            _optimizationPreferences.Extra.UseTeams = true;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.IsTrue(_schedulingOptions.UseGroupOptimizing);
+        }
+
+        [Test]
+        public void ShouldGroupOnGroupPageChangesSetInSchedulingOptions()
+        {
+            IGroupPage groupPage = new GroupPage("Test"); 
+            Assert.AreNotEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
+            _optimizationPreferences.Extra.GroupPageOnTeam = groupPage;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.AreEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
         }
     }
 }

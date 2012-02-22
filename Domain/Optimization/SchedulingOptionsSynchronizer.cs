@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 ? optimizationPreferences.Extra.BlockFinderTypeValue 
                 : BlockFinderType.None;
 
-            schedulingOptions.UseGroupScheduling = optimizationPreferences.Extra.UseTeams;
+            schedulingOptions.UseGroupOptimizing = optimizationPreferences.Extra.UseTeams;
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
 
             schedulingOptions.UseRotations = optimizationPreferences.General.UseRotations;
@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UsePreferencesMustHaveOnly = false;  //???
             schedulingOptions.UseShiftCategoryLimitations = optimizationPreferences.General.UseShiftCategoryLimitations;
 
-            // schedulingOptions.ShiftCategory 
-           
+            // schedulingOptions.ShiftCategory
 
             schedulingOptions.RefreshRate = optimizationPreferences.Advanced.RefreshScreenInterval;
 
@@ -51,8 +50,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
             else
                 schedulingOptions.RescheduleOptions = OptimizationRestriction.None;
-                
-            
+
+            schedulingOptions.UseMinimumPersons = optimizationPreferences.Advanced.UseMinimumStaffing;
+            schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
+            schedulingOptions.UseMaxSeats = optimizationPreferences.Advanced.UseMaximumSeats;
+            schedulingOptions.DoNotBreakMaxSeats = optimizationPreferences.Advanced.DoNotBreakMaximumSeats;
         }
     }
 }
