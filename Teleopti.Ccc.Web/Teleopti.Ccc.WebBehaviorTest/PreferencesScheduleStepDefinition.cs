@@ -24,5 +24,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(to));
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(contractTime));
 		}
+
+		[Then(@"I should not see my existing preference")]
+		public void ThenIShouldNotSeeMyExistingPreference()
+		{
+			var data = UserFactory.User().UserData<ExistingPreferenceToday>();
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
+
+			EventualAssert.That(() => cell.InnerHtml, Is.Not.StringContaining(data.Preference));
+		}
+
 	}
 }
