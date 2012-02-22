@@ -103,9 +103,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
+    <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />

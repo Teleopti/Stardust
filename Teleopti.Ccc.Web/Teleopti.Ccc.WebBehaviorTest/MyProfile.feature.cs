@@ -65,7 +65,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 11
  testRunner.Given("I am an agent");
 #line 12
- testRunner.When("I view my profile");
+ testRunner.When("I view my regional settings");
 #line 13
  testRunner.Then("I should see my culture");
 #line 14

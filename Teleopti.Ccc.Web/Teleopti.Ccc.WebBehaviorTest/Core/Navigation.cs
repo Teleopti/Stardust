@@ -108,6 +108,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.Current = Browser.Current.Page<PreferencePage>();
 		}
 
+		public static void GotoRegionalSettings()
+		{
+			GoTo("MyTime#Settings/Index");
+			Pages.Pages.Current = Browser.Current.Page<RegionalSettingsPage>();
+		}
+
 		public static void GotoPreference(DateTime date)
 		{
 			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}", date.Year.ToString("0000"), date.Month.ToString("00"),
