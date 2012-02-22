@@ -11,12 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceViewModelMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mappingEngine;
-
-		public PreferenceViewModelMappingProfile(Func<IMappingEngine> mappingEngine)
-		{
-			_mappingEngine = mappingEngine;
-		}
 
 		public class PreferenceWeekMappingData
 		{
@@ -26,14 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
 		}
 
-		public class BaseDayMappingData
+		public abstract class BaseDayMappingData
 		{
 			public DateOnly Date { get; set; }
 			public DateOnlyPeriod Period { get; set; }
-			public IWorkflowControlSet WorkflowControlSet { get; set; }
 		}
 
-		public class ScheduledDayMappingData : BaseDayMappingData
+		private class ScheduledDayMappingData : BaseDayMappingData
 		{
 			public IScheduleDay ScheduleDay { get; set; }
 			public IVisualLayerCollection Projection { get; set; }
@@ -41,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 		public class PreferenceDayMappingData : BaseDayMappingData
 		{
+			public IWorkflowControlSet WorkflowControlSet { get; set; }
 			public IShiftCategory ShiftCategory { get; set; }
 			public IDayOffTemplate DayOffTemplate { get; set; }
 			public IAbsence Absence { get; set; }
@@ -146,7 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.Include<ScheduledDayMappingData, ScheduledDayViewModel>()
 				.Include<PreferenceDayMappingData, PreferenceDayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.Editable, o => o.MapFrom(IsDayEditable))
+				.ForMember(d => d.Editable, o => o.UseValue(false))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())
 				;
@@ -154,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			// duplication in child mapping will not be required in automapper 2.0
 			CreateMap<ScheduledDayMappingData, ScheduledDayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.Editable, o => o.MapFrom(IsDayEditable))
+				.ForMember(d => d.Editable, o => o.UseValue(false))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
@@ -218,7 +212,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 		}
 
-		private static bool IsDayEditable(BaseDayMappingData s)
+		private static bool IsDayEditable(PreferenceDayMappingData s)
 		{
 			if (s.WorkflowControlSet != null)
 			{

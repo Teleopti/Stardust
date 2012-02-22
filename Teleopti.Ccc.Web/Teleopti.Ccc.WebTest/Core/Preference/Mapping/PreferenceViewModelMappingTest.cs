@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 {
+
 	[TestFixture]
 	public class PreferenceViewModelMappingTest
 	{
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			       	};
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceViewModelMappingProfile(() => Mapper.Engine)));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceViewModelMappingProfile()));
 		}
 
 		[Test]
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 							Period = data.Period
 			           	};
 
-			var result = Mapper.Map<PreferenceViewModelMappingProfile.PreferenceDayMappingData, DayViewModelBase>(dayData);
+			var result = Mapper.Map<PreferenceViewModelMappingProfile.PreferenceDayMappingData, PreferenceDayViewModel>(dayData);
 
 			result.Date.Should().Be(data.SelectedDate);
 		}
@@ -223,16 +224,27 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		[Test]
 		public void ShouldSetEditable()
 		{
-			var dayData = new PreferenceViewModelMappingProfile.BaseDayMappingData
-			{
-				Date = data.SelectedDate,
-				Period = data.Period,
-				WorkflowControlSet = data.WorkflowControlSet
-			};
+			var dayData = new PreferenceViewModelMappingProfile.PreferenceDayMappingData
+			              	{
+			              		Date = data.SelectedDate,
+			              		Period = data.Period,
+			              		WorkflowControlSet = data.WorkflowControlSet
+			              	};
 
-			var result = Mapper.Map<PreferenceViewModelMappingProfile.BaseDayMappingData, DayViewModelBase>(dayData);
+			var result = Mapper.Map<PreferenceViewModelMappingProfile.PreferenceDayMappingData, DayViewModelBase>(dayData);
 
 			result.Editable.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotSetEditableWhenScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, ScheduleDay = scheduleDay}};
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel<ScheduledDayViewModel>(data.SelectedDate).Editable.Should().Be.False();
 		}
 
 		[Test]
@@ -257,14 +269,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.Editable.Should().Be.False();
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Editable.Should().Be.False();
 		}
 
 		[Test]
@@ -276,14 +281,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.Editable.Should().Be.False();
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Editable.Should().Be.False();
 		}
 
 		[Test]
@@ -295,14 +293,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.Editable.Should().Be.False();
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Editable.Should().Be.False();
 		}
 
 		[Test]
@@ -331,13 +322,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-			dayViewModel.Preference.Should().Be(shiftCategory.Description.Name);
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Preference.Should().Be(shiftCategory.Description.Name);
 		}
 
 		[Test]
@@ -381,13 +366,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-			dayViewModel.Preference.Should().Be(dayOffTemplate.Description.Name);
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Preference.Should().Be(dayOffTemplate.Description.Name);
 		}
 
 		[Test]
@@ -416,13 +395,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				 .Cast<PreferenceDayViewModel>()
-				 .Single();
-			dayViewModel.Preference.Should().Be(absence.Description.Name);
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).Preference.Should().Be(absence.Description.Name);
 		}
 
 		[Test]
@@ -436,13 +409,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				 .Cast<ScheduledDayViewModel>()
-				 .Single();
-			dayViewModel.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
+			result.DayViewModel<ScheduledDayViewModel>(data.SelectedDate).ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
 
 		[Test]
@@ -456,13 +423,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				 .Cast<ScheduledDayViewModel>()
-				 .Single();
-			dayViewModel.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
+			result.DayViewModel<ScheduledDayViewModel>(data.SelectedDate).ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
 		}
 
 		[Test]
@@ -479,13 +440,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-			                    from d in w.Days
-			                    where d.Date == data.SelectedDate
-			                    select d)
-				.Cast<ScheduledDayViewModel>()
-				.Single();
-			dayViewModel.TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
+			result.DayViewModel<ScheduledDayViewModel>(data.SelectedDate).TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
 		}
 
 		[Test]
@@ -519,23 +474,14 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var earliest = new TimeSpan(8, 0, 0);
 			var latest = new TimeSpan(10, 0, 0);
-			var workTimeMinMax = new WorkTimeMinMax { StartTimeLimitation = new StartTimeLimitation(earliest, latest) };
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
+			var workTimeMinMax = new WorkTimeMinMax {StartTimeLimitation = new StartTimeLimitation(earliest, latest)};
+			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax}};
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.PossibleStartTimes.Should().Be.EqualTo(workTimeMinMax.StartTimeLimitation.
-			                                                    	StartTimeString +
-			                                                    "-" +
-			                                                    workTimeMinMax.StartTimeLimitation.
-			                                                    	EndTimeString);
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).PossibleStartTimes
+				.Should().Be.EqualTo(
+					workTimeMinMax.StartTimeLimitation.StartTimeString + "-" + workTimeMinMax.StartTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -543,23 +489,14 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var earliest = new TimeSpan(16, 0, 0);
 			var latest = new TimeSpan(19, 0, 0);
-			var workTimeMinMax = new WorkTimeMinMax { EndTimeLimitation = new EndTimeLimitation(earliest, latest) };
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
+			var workTimeMinMax = new WorkTimeMinMax {EndTimeLimitation = new EndTimeLimitation(earliest, latest)};
+			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax}};
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.PossibleEndTimes.Should().Be.EqualTo(workTimeMinMax.EndTimeLimitation.
-																	StartTimeString +
-																"-" +
-																workTimeMinMax.EndTimeLimitation.
-																	EndTimeString);
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).PossibleEndTimes
+				.Should().Be.EqualTo(
+					workTimeMinMax.EndTimeLimitation.StartTimeString + "-" + workTimeMinMax.EndTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -572,16 +509,24 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			var dayViewModel = (from w in result.Weeks
-								from d in w.Days
-								where d.Date == data.SelectedDate
-								select d)
-				.Cast<PreferenceDayViewModel>()
-				.Single();
-
-			dayViewModel.PossibleContractTimes
+			result.DayViewModel<PreferenceDayViewModel>(data.SelectedDate).PossibleContractTimes
 				.Should().Be.EqualTo(
 					workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString);
 		}
 	}
+
+	public static class Extensions
+	{
+		public static T DayViewModel<T>(this PreferenceViewModel viewModel, DateOnly date)
+		{
+			return (from w in viewModel.Weeks
+					from d in w.Days
+					where d.Date == date
+					select d)
+				.Cast<T>()
+				.Single();
+		}
+
+	}
+
 }

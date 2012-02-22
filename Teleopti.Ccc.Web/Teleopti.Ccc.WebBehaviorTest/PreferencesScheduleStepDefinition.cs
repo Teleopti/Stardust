@@ -1,5 +1,7 @@
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
@@ -32,6 +34,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 
 			EventualAssert.That(() => cell.InnerHtml, Is.Not.StringContaining(data.Preference));
+		}
+
+		[Then(@"I should not be able to add preference today")]
+		public void ThenIShouldNotBeAbleToAddPreferenceToday()
+		{
+			var data = UserFactory.User().UserData<ShiftToday>();
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
+
+			cell.ClassName.Should().Not.Contain("ui-selectee");
+			Pages.Pages.PreferencePage.SelectCalendarCellByClick(cell);
+			cell.ClassName.Should().Not.Contain("ui-selected");
 		}
 
 	}
