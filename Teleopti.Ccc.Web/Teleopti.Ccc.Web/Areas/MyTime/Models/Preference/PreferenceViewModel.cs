@@ -26,15 +26,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 
 	public class WeekViewModel
 	{
-		public IEnumerable<DayViewModelBase> Days { get; set; }
+		public IEnumerable<DayViewModel> Days { get; set; }
 	}
 
-	public class DayViewModelBase
+	public class DayViewModel
 	{
 		public DateOnly Date { get; set; }
 		public bool Editable { get; set; }
 		public HeaderViewModel Header { get; set; }
 		public string StyleClassName { get; set; }
+		public PreferenceDayViewModel Preference { get; set; }
+		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
+		public DayOffDayViewModel DayOff { get; set; }
 	}
 
 	public class HeaderViewModel
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string DayNumber { get; set; }
 	}
 
-	public class PreferenceDayViewModel : DayViewModelBase
+	public class PreferenceDayViewModel
 	{
 		public string Preference { get; set; }
 		public string PossibleStartTimes { get; set; }
@@ -51,10 +54,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string PossibleContractTimes { get; set; }
 	}
 
-	public class ScheduledDayViewModel : DayViewModelBase
+	public class PersonAssignmentDayViewModel
 	{
 		public string ShiftCategory { get; set; }
 		public string TimeSpan { get; set; }
 		public string ContractTime { get; set; }
 	}
+
+	public class DayOffDayViewModel
+	{
+		public string DayOff { get; set; }
+	}
+
 }

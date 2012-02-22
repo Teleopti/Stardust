@@ -36,8 +36,9 @@
 				</li>
 				@foreach (var day in week.Days)
 				{
-					var preference = day as PreferenceDayViewModel;
-					var scheduled = day as ScheduledDayViewModel;
+					var preference = day.Preference;
+					var personAssignment = day.PersonAssignment;
+					var dayOff = day.DayOff;
 					<li class="@(day.Editable ? "editable" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
 						<div>
 							<div class="day-header">
@@ -50,12 +51,18 @@
 										@preference.Preference
 									</div>
 								}
-								@if (scheduled != null)
+								@if (personAssignment != null)
 								{
 									<div class="scheduled">
-										<span class="displayblock fullwidth">@scheduled.ShiftCategory</span>
-										<strong class="displayblock fullwidth">@scheduled.TimeSpan</strong>
-										<span class="displayblock fullwidth">@scheduled.ContractTime</span>
+										<span class="displayblock fullwidth">@personAssignment.ShiftCategory</span>
+										<strong class="displayblock fullwidth">@personAssignment.TimeSpan</strong>
+										<span class="displayblock fullwidth">@personAssignment.ContractTime</span>
+									</div>
+								}
+								@if (dayOff != null)
+								{
+									<div class="dayoff">
+										@dayOff.DayOff
 									</div>
 								}
 							</div>

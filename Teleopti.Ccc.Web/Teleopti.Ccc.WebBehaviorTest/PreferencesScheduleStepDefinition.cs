@@ -27,6 +27,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(contractTime));
 		}
 
+		[Then(@"I should see the dayoff")]
+		public void ThenIShouldSeeTheDayoff()
+		{
+			ScenarioContext.Current.Pending();
+
+			var data = UserFactory.User().UserData<DayOffToday>();
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
+
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.DayOff.Description.Name));
+		}
+
 		[Then(@"I should not see my existing preference")]
 		public void ThenIShouldNotSeeMyExistingPreference()
 		{
