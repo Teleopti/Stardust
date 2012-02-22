@@ -53,7 +53,7 @@
 		</MinimumCoverage>
 	</PropertyGroup>
 	
-	<Target Name="CheckWebBehaviorTests" Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject.Substring(0, 8))' == 'BuildMSI'">
+	<Target Name="CheckWebBehaviorTests" Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild' or '$(CCNetProject.Substring(0, 8))' == 'BuildMSI'">
 		<Message Importance="high" Text="Project is: $(CCNetProject) and Im setting RunWebBehaviorTests to True" />
 		<PropertyGroup>
 			<RunWebBehaviorTests>true</RunWebBehaviorTests>
