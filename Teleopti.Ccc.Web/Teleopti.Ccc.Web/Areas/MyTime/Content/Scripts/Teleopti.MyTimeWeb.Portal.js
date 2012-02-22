@@ -25,14 +25,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateToolbarButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateDateButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
+		Teleopti.MyTimeWeb.Portal.Layout.ActivateSettingsMenu();
 	}
 
 	function _registerPartialCallback(viewId, callBack) {
 		_partialViewInitCallback[viewId] = callBack;
 	}
-
-
-
 
 
 	//disable navigation controls on ajax-begin
@@ -91,12 +89,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				$('.toolbar-inner button.icon.ajax-disabled').removeAttr('disabled').removeClass('ajax-disabled');
 			});
 	}
-
-
-
-
-
-
 
 	function _initNavigation() {
 
@@ -304,28 +296,26 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 				});
 			});
 		},
-		ActivateHorizontalScroll: function() {
+		ActivateHorizontalScroll: function () {
 			$(window).scroll(function () {
 				$('header').css("left", -$(window).scrollLeft() + "px");
+			});
+		},
+		ActivateSettingsMenu: function () {
+			$(".dropdown dt span").live("click", function () {
+				$(".dropdown dd ul").toggle();
+			});
+
+			$(".dropdown dd ul").live("click", function () {
+				$(".dropdown dd ul").hide();
+			});
+
+
+			$(document).bind('click', function(e) {
+				var $clicked = $(e.target);
+				if (!$clicked.parents().hasClass("dropdown"))
+					$(".dropdown dd ul").hide();
 			});
 		}
 	};
 })(jQuery);
-
-/*
-personal menu js
-*/
-$(".dropdown dt span").live("click", function () {
-	$(".dropdown dd ul").toggle();
-});
-
-$(".dropdown dd ul").live("click", function () {
-	$(".dropdown dd ul").hide();
-});
-
-
-$(document).bind('click', function (e) {
-	var $clicked = $(e.target);
-	if (!$clicked.parents().hasClass("dropdown"))
-		$(".dropdown dd ul").hide();
-});
