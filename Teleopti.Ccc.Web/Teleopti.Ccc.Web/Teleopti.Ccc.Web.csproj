@@ -380,6 +380,7 @@
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -464,6 +465,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.js" />
     <Content Include="Areas\MyTime\Content\Css\Site.css" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
+    <Content Include="Content\Scripts\jquery.qtip.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -477,6 +479,7 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery.qtip.css" />
     <Content Include="Content\themes\base\jquery.ui.accordion.css" />
     <Content Include="Content\themes\base\jquery.ui.all.css" />
     <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
