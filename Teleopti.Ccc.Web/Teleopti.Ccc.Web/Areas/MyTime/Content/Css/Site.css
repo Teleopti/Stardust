@@ -469,20 +469,20 @@ button.icon-left{padding-left: 35px;}
 	word-wrap: break-word;
 }
 
-	.ui-tooltip-custom .ui-tooltip-titlebar{
-		background-color: rgba(241,241,241,0.9);
-	}
+.ui-tooltip-custom .ui-tooltip-titlebar{
+	background-color: rgba(241,241,241,0.9);
+}
 
-	.ui-tooltip-custom .ui-tooltip-icon{
-		border-color: #CCC;
-		background: #F1F1F1;
-		color: #777;
-	}
+.ui-tooltip-custom .ui-tooltip-icon{
+	border-color: #CCC;
+	background: #F1F1F1;
+	color: #777;
+}
 	
-	.ui-tooltip-custom .ui-tooltip-titlebar .ui-state-hover{
-		border-color: #AAA;
-		color: #111;
-	}
+.ui-tooltip-custom .ui-tooltip-titlebar .ui-state-hover{
+	border-color: #AAA;
+	color: #111;
+}
 	
 .ui-tooltip-custom dl dt{
 	clear: left;
@@ -1192,19 +1192,4 @@ footer p
 			rgba(0, 0, 0, .5) 60%, 
 			transparent 60%, 
 			transparent 100%)*/
-}
-
-.ie7 .striped
-{
-	background-image: url(../Images/stripe.png);	
-}
-
-.ie8 .striped
-{
-	background-image: url(../Images/stripe.png);	
-}
-
-.ie9 .striped
-{
-	background-image: url(../Images/stripe.png);
 }
