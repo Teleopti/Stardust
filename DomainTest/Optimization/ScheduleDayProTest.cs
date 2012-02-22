@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
             IScenario scenario = new Scenario("Scenario");
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
+            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
             IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters);
 
-            ((ScheduleDictionaryForTest)scheduleDictionary).AddTestItem(_person, range);
+            scheduleDictionary.AddTestItem(_person, range);
 
             _stateHolder.Schedules = scheduleDictionary;
 
@@ -65,13 +65,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
             IScenario scenario = new Scenario("Scenario");
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
+            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
             IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters);
 
-            ((ScheduleDictionaryForTest)scheduleDictionary).AddTestItem(_person, range);
+            scheduleDictionary.AddTestItem(_person, range);
 
             _stateHolder.Schedules = scheduleDictionary;
 
@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
             IScenario scenario = new Scenario("Scenario");
 
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
+            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
 
             DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
             IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
             IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters);
 
-            ((ScheduleDictionaryForTest)scheduleDictionary).AddTestItem(_person, range);
+            scheduleDictionary.AddTestItem(_person, range);
 
             _stateHolder.Schedules = scheduleDictionary;
 

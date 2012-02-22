@@ -14,6 +14,10 @@
 		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
+		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
+		<DoCodeAnalysis>true</DoCodeAnalysis>
+		<UseDBManager>true</UseDBManager>
+		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -48,55 +52,13 @@
 			</Threshold>
 		</MinimumCoverage>
 	</PropertyGroup>
-
-	<Choose>
-		<When Condition="'$(Computername)' == 'INTEGRATION'">
-			<!-- integration, vmintegration, gena -->
-			<PropertyGroup>
-				<DBServer>INTEGRATION\SQLEXPRESS</DBServer>
-			</PropertyGroup>
-		</When>
-	</Choose>
-
-	<Choose>
-		<When Condition="'$(CCNetProject)' == 'BuildMSI-root' or '$(CCNetProject)' == 'BuildMSI-RCbranch' or '$(CCNetProject)' == 'BuildMSI-ReleaseBranch'">
-			<!-- root; rc; Release-->
-			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>true</UseDBManager>
-				<RunWebBehaviorTests>true</RunWebBehaviorTests>
-			</PropertyGroup>
-		</When>
-		<When Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'RaptorHg'">
-			<!-- special -->
-			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>true</UseDBManager>
-				<RunWebBehaviorTests>true</RunWebBehaviorTests>
-			</PropertyGroup>
-		</When>
-		<When Condition="'$(CCNetProject)' == 'Raptor' or '$(CCNetProject)' == 'RaptorRoger' or '$(CCNetProject)' == 'Root-DJ' or '$(CCNetProject)' == 'TeamRedPBIbranch4' or  '$(CCNetProject)' == 'TeamYellow' or '$(CCNetProject)' == 'TeamYellow-PBI-branch-2'">
-			<!-- special -->
-			<PropertyGroup>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>true</UseDBManager>
-				<RunWebBehaviorTests>false</RunWebBehaviorTests>
-			</PropertyGroup>
-		</When>
-		<Otherwise>
-			<!-- else -->
-			<PropertyGroup>
-				<ExcludedTestCategories>/Exclude=LongRunning</ExcludedTestCategories>
-				<NCoverAssemblies>Teleopti.Analytics.Etl.ConfigToolCodeTest;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Web;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;</NCoverAssemblies>
-				<DoCodeAnalysis>true</DoCodeAnalysis>
-				<UseDBManager>false</UseDBManager>
-				<RunWebBehaviorTests>false</RunWebBehaviorTests>
-			</PropertyGroup>
-		</Otherwise>
-	</Choose>
+	
+	<Target Name="CheckWebBehaviorTests" Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild' or '$(CCNetProject.Substring(0, 8))' == 'BuildMSI'">
+		<Message Importance="high" Text="Project is: $(CCNetProject) and Im setting RunWebBehaviorTests to True" />
+		<PropertyGroup>
+			<RunWebBehaviorTests>true</RunWebBehaviorTests>
+		</PropertyGroup>
+	</Target>
 
 	<ItemGroup>
 		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
@@ -105,7 +67,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="CheckWebBehaviorTests;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
