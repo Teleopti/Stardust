@@ -248,8 +248,6 @@
     <Compile Include="NHibernateConfiguration\XmlTypeTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper\DatabaseTest.cs" />
-    <Compile Include="Licensing\CheckLicenseAtPersistTest.cs" />
-    <Compile Include="Licensing\CheckLicenseForPersonTest.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsExceptionTest.cs" />
     <Compile Include="Licensing\LicenseExpiredExceptionTest.cs" />
     <Compile Include="Licensing\LicenseMissingExceptionTest.cs" />
