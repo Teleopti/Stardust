@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public void AddSubscription(Subscription subscription)
 		{
-			AddToGroup(subscription.Route());
+				AddToGroup(subscription.Route());
 		}
 
 		public void RemoveSubscription(string route)
@@ -18,7 +18,11 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			Clients[notification.Route()].onEventMessage(notification);
+			var routes = notification.Routes();
+			foreach (var route in routes)
+			{
+				Clients[route].onEventMessage(notification);
+			}
 		}
 	}
 }

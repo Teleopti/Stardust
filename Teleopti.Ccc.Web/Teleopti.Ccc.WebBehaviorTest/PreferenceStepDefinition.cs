@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var data = UserFactory.User().UserData<StandardPreference>();
 			var cell = _page.CalendarCellForDate(data.Date);
-			EventualAssert.That(() => cell.Text, Is.Not.StringContaining(data.DayOffTemplate.Description.Name));
+			EventualAssert.That(() => cell.Text, Is.Not.StringContaining(data.Preference));
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
@@ -169,8 +169,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var data2 = UserFactory.User().UserData<AnotherStandardPreference>();
 			var cell1 = _page.CalendarCellForDate(data1.Date);
 			var cell2 = _page.CalendarCellForDate(data2.Date);
-			EventualAssert.That(() => cell1.Text, Is.Not.StringContaining(data1.DayOffTemplate.Description.Name));
-			EventualAssert.That(() => cell2.Text, Is.Not.StringContaining(data2.Absence.Description.Name));
+			EventualAssert.That(() => cell1.Text, Is.Not.StringContaining(data1.Preference));
+			EventualAssert.That(() => cell2.Text, Is.Not.StringContaining(data2.Preference));
 		}
 
 		[Then(@"the preference calendar should not be editable")]

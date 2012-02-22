@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
@@ -250,20 +251,14 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
 
                 int widthToReduce = e.Bounds.X;
                 TimeSpan startTime = new TimeSpan(Presenter.Explorer.Model.ShiftStartTime.Hours, 0, 0);
-                if (Presenter.Explorer.Model.IsRightToLeft)
-                    startTime = new TimeSpan(Presenter.Explorer.Model.ShiftStartTime.Hours, 0, 0);
 
                 for (int i = 0; i <= (payLoadInfoList.Count - 1); i++)
                 {
                     VisualPayloadInfo payLoadInfo = payLoadInfoList[i];
                     float width;
-                    TimeSpan timeDiff;
-                    if (startTime > payLoadInfo.StartTime.TimeOfDay)
-                        timeDiff = payLoadInfo.StartTime.Subtract(startTime).TimeOfDay;
-                    else
-                        timeDiff = startTime.Subtract(payLoadInfo.StartTime.TimeOfDay);
+                    TimeSpan timeDiff = startTime.Subtract(payLoadInfo.StartTime.Subtract(WorkShift.BaseDate));
 
-                    float layerLength = (timeDiff.Hours * Presenter.Explorer.Model.WidthPerHour) + timeDiff.Minutes * Presenter.Explorer.Model.WidthPerPixel;
+                    float layerLength = ((int)timeDiff.TotalHours * Presenter.Explorer.Model.WidthPerHour) + timeDiff.Minutes * Presenter.Explorer.Model.WidthPerPixel;
                     if (layerLength < 0)
                         layerLength *= (-1);
 

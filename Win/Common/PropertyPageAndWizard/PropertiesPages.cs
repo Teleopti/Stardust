@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 
         public PropertiesPages(IAbstractPropertyPages propertyPages) : this()
         {
+			Name = Name + "." + propertyPages.GetType().Name; // For TestComplete
             _propertyPages = propertyPages;
             _propertyPages.Owner = this;
             if (!_propertyPages.ModeCreateNew)

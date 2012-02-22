@@ -12,11 +12,15 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
         <Bindings>
           <Binding name="HttpIn" endpointName="HttpIn" />
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
         </Bindings>
       </Site>
     </Sites>
-  
+    <Certificates>
+      <Certificate name="SSL" storeLocation="LocalMachine" storeName="My"/>
+    </Certificates>
     <Endpoints>
+  		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="SSL" />
   		<InputEndpoint name="HttpIn" protocol="http" port="80" />
       <InputEndpoint name="MessageBroker" protocol="tcp" port="10000" localPort="10000" ignoreRoleInstanceStatus="true" />
     </Endpoints>
