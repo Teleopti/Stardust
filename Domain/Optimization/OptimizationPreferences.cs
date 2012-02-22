@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         public GeneralPreferences()
         {
+            ScheduleTag = NullScheduleTag.Instance;
             OptimizationStepDaysOff = true;
             OptimizationStepTimeBetweenDays = true;
             OptimizationStepShiftsWithinDay = true;
@@ -113,13 +115,13 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         public ExtraPreferences()
         {
-            BlockFinderOptionsValue = BlockFinderType.BetweenDayOff;
+            BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
             KeepShiftsValue = 0.8d;
         }
 
         public bool UseBlockScheduling { get; set; }
 
-        public BlockFinderType BlockFinderOptionsValue { get; set; }
+        public BlockFinderType BlockFinderTypeValue { get; set; }
 
         public bool UseTeams { get; set; }
         public IGroupPage GroupPageOnTeam { get; set; }

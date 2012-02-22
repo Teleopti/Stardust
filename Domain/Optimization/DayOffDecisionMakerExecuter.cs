@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
-        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IResourceCalculateDaysDecider _decider;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             IOptimizationPreferences optimizerPreferences,
             IPeriodValueCalculator periodValueCalculator,
             IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
-            IDayOffPlannerSessionRuleSet ruleSet,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceOptimizationHelper resourceOptimizationHelper,
             IResourceCalculateDaysDecider decider,
@@ -57,7 +55,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizerPreferences = optimizerPreferences;
             _periodValueCalculator = periodValueCalculator;
             _workTimeBackToLegalStateService = workTimeBackToLegalStateService;
-            _ruleSet = ruleSet;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _decider = decider;
@@ -81,12 +78,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
+            IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
 
             _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             var changesTracker = new LockableBitArrayChangesTracker();
 
-            IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, _ruleSet.ConsiderWeekBefore);
+            IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 
             writeToLogMovedDays(movedDays, logWriter);
 
@@ -100,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, _ruleSet.ConsiderWeekBefore);
+            movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
             {
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays, logWriter);
@@ -111,7 +109,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
-            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, handleDayOffConflict);
+            var result = 
+                executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, daysOffPreferences, handleDayOffConflict);
             IEnumerable<changedDay> movedDates = result.MovedDays;
 
             if (!result.Result)
@@ -214,6 +213,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ILockableBitArray originalBitArray, 
             IScheduleMatrixPro matrix,
             ISchedulingOptions schedulingOptions,
+            IDaysOffPreferences daysOffPreferences, 
             bool handleConflict)
         {
             IList<changedDay> movedDays = new List<changedDay>();
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             //ok so what have changed
             int bitArrayToMatrixOffset = 0;
-            if (!_ruleSet.ConsiderWeekBefore)
+            if (!daysOffPreferences.ConsiderWeekBefore)
                 bitArrayToMatrixOffset = 7;
 
             for (int i = 0; i < workingBitArray.Count; i++)
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         part.DeleteMainShift(part);
                         part.CreateAndAddDayOff(_dayOffTemplate);
 
-                        removeDayOffFromMatrix(workingBitArray, originalBitArray, matrix, movedDays);
+                        removeDayOffFromMatrix(workingBitArray, originalBitArray, matrix, daysOffPreferences, movedDays);
                         _schedulePartModifyAndRollbackService.Modify(part);
 
                         changed.CurrentSchedule = scheduleDayPro.DaySchedulePart();
@@ -261,10 +261,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             return moveResult;
         }
 
-        private void removeDayOffFromMatrix(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, IList<changedDay> movedDays)
+        private void removeDayOffFromMatrix(
+            ILockableBitArray workingBitArray, 
+            ILockableBitArray originalBitArray, 
+            IScheduleMatrixPro matrix,
+            IDaysOffPreferences daysOffPreferences,
+            IList<changedDay> movedDays)
         {
             int bitArrayToMatrixOffset = 0;
-            if (!_ruleSet.ConsiderWeekBefore)
+            if (!daysOffPreferences.ConsiderWeekBefore)
                 bitArrayToMatrixOffset = 7;
 
             for (int i = 0; i < workingBitArray.Count; i++)

@@ -16,18 +16,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixLockableBitArrayConverter _converter;
         private IDayOffDecisionMaker _decisionMaker;
         private IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        //private readonly DayOffPlannerSessionRuleSet _ruleSet;
         private IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private IBlockSchedulingService _blockSchedulingService;
         private IScheduleMatrixPro _matrix;
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private DayOffPlannerSessionRuleSet _ruleSet;
+        private IDaysOffPreferences _daysOffPreferences;
         private ILockableBitArray _originalArray;
         private ILockableBitArray _workingArray;
         private List<double?> _values;
         private IBlockOptimizerBlockCleaner _blockCleaner;
         private ILockableBitArrayChangesTracker _changesTracker;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
+
 
         [SetUp]
         public void Setup()
@@ -38,16 +38,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _dayOffDecisionMakerExecuter = _mocks.StrictMock<IDayOffDecisionMakerExecuter>();
             _blockSchedulingService = _mocks.StrictMock<IBlockSchedulingService>();
-            _ruleSet = new DayOffPlannerSessionRuleSet();
+            _daysOffPreferences = new DaysOffPreferences();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _changesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
             _blockCleaner = _mocks.StrictMock<IBlockOptimizerBlockCleaner>();
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-            _target = new BlockDayOffOptimizer(_converter, _scheduleResultDataExtractor, _ruleSet, _dayOffDecisionMakerExecuter, _blockSchedulingService, _blockCleaner, _changesTracker, _resourceOptimizationHelper);
+            _target = new BlockDayOffOptimizer(_converter, _scheduleResultDataExtractor, _daysOffPreferences, _dayOffDecisionMakerExecuter, _blockSchedulingService, _blockCleaner, _changesTracker, _resourceOptimizationHelper);
             
             _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _originalArray = new LockableBitArray(14, _ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter, null);
-            _workingArray = new LockableBitArray(14, _ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter, null);
+            _originalArray = new LockableBitArray(14, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, null);
+            _workingArray = new LockableBitArray(14, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, null);
             _values = new List<double?>();
         }
 
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson());
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _originalArray);
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _workingArray);
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(false);
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson());
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _originalArray);
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _workingArray);
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
@@ -100,9 +100,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson());
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _originalArray);
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _workingArray);
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                  _originalStateContainer, false, false)).Return(true);
                 Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {_matrix})).Return(false);
                 Expect.Call(_changesTracker.DaysOffRemoved(_workingArray, _originalArray, _matrix,
-                                                           _ruleSet.ConsiderWeekBefore)).Return(dates);
+                                                           _daysOffPreferences.ConsiderWeekBefore)).Return(dates);
                 Expect.Call(_blockCleaner.ClearSchedules(_matrix, dates)).Return(dates);
                 Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(dates[0], true, true));
                 Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix })).Return(false);
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson());
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _originalArray);
-                Expect.Call(_converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter)).Return(
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
                     _workingArray);
                 Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);

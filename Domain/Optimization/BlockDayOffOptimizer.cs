@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly IBlockSchedulingService _blockSchedulingService;
         private readonly IBlockOptimizerBlockCleaner _blockOptimizerBlockCleaner;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public BlockDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            IDayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IBlockSchedulingService blockSchedulingService,
             IBlockOptimizerBlockCleaner blockOptimizerBlockCleaner,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             _converter = converter;
             _scheduleResultDataExtractor = scheduleResultDataExtractor;
-            _ruleSet = ruleSet;
+            _daysOffPreferences = daysOffPreferences;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
             _blockSchedulingService = blockSchedulingService;
             _blockOptimizerBlockCleaner = blockOptimizerBlockCleaner;
@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             writeToLogDayOffOptimizationInProgressOnCurrentAgent(matrix);
 
-            ILockableBitArray originalArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            _workingBitArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            _workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
             if (!decisionMaker.Execute(_workingBitArray, _scheduleResultDataExtractor.Values()))
                 return false;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 //rensa block med hål i
                 IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(_workingBitArray, originalArray, matrix,
-                                                                             _ruleSet.ConsiderWeekBefore);
+                                                                             _daysOffPreferences.ConsiderWeekBefore);
                 var datesRemoved = _blockOptimizerBlockCleaner.ClearSchedules(matrix, daysOffToRemove);
                 foreach (var dateOnly in datesRemoved)
                 {

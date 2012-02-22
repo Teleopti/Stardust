@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyExtraSettingsDefaultValues()
         {
-            Assert.AreEqual(_target.Extra.BlockFinderOptionsValue, BlockFinderType.BetweenDayOff);
+            Assert.AreEqual(_target.Extra.BlockFinderTypeValue, BlockFinderType.BetweenDayOff);
         }
 
         [Test]

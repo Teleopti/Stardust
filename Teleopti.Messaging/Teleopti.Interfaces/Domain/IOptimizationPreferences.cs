@@ -288,7 +288,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the block finder type.
         /// </summary>
         /// <value>The block finder type.</value>
-        BlockFinderType BlockFinderOptionsValue { get; set; }
+        BlockFinderType BlockFinderTypeValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use team scheduling.

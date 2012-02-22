@@ -422,18 +422,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-            var optimizerPreferences = _container.Resolve<IOptimizerOriginalPreferences>();
+            var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
             foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-                    new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.SchedulingOptions.TagToUseOnOptimize));
+                    new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
                 IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, schedulePartModifyAndRollbackService, _container);
                 workShiftBackToLegalStateServicePro.Execute(scheduleMatrix);
 
                 backgroundWorker.ReportProgress(1);
             }
 
-            if (optimizerPreferences.SchedulingOptions.UseShiftCategoryLimitations)
+            if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
                 RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker);
             }
@@ -1145,7 +1145,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerPreferences,
                                                   periodValueCalculatorForAllSkills,
                                                   workShiftBackToLegalStateService,
-                                                  ruleSet,
                                                   effectiveRestrictionCreator,
                                                   _resourceOptimizationHelper,
                                                   new ResourceCalculateDaysDecider(),

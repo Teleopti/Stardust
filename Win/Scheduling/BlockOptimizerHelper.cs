@@ -401,7 +401,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerPreferences,
                                                   periodValueCalculatorForAllSkills,
                                                   workShiftBackToLegalStateService,
-                                                  ruleSet,
                                                   effectiveRestrictionCreator,
                                                   _resourceOptimizationHelper,
                                                   new ResourceCalculateDaysDecider(),
@@ -416,7 +415,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
             var blockCleaner = _container.Resolve<IBlockOptimizerBlockCleaner>();
             var blockDayOffOptimizer = new BlockDayOffOptimizer(scheduleMatrixArrayConverter,
-                                                                scheduleResultDataExtractor, ruleSet,
+                                                                scheduleResultDataExtractor,
+                                                                optimizerPreferences.DaysOff,
                                                                 dayOffDecisionMakerExecuter, blockSchedulingService,
                                                                 blockCleaner, new LockableBitArrayChangesTracker(),
                                                                 resourceOptimizationHelper);

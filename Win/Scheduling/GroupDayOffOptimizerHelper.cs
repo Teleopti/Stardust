@@ -336,7 +336,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerPreferences,
                                                   periodValueCalculatorForAllSkills,
                                                   workShiftBackToLegalStateService,
-                                                  ruleSet,
                                                   effectiveRestrictionCreator,
                                                   _resourceOptimizationHelper,
                                                   resourceCalculateDaysDecider,

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             Preferences.UseBlockScheduling = checkBoxBlock.Checked;
 
-            Preferences.BlockFinderOptionsValue = 
+            Preferences.BlockFinderTypeValue = 
                 radioButtonBetweenDayOff.Checked 
                 ? BlockFinderType.BetweenDayOff 
                 : BlockFinderType.SchedulePeriod;
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             checkBoxBlock.Checked = Preferences.UseBlockScheduling;
 
-            switch(Preferences.BlockFinderOptionsValue)
+            switch(Preferences.BlockFinderTypeValue)
             {
                 case BlockFinderType.BetweenDayOff:
                     radioButtonBetweenDayOff.Checked = true;

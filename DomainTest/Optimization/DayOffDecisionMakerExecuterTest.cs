@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private DayOffDecisionMakerExecuter _target;
         private MockRepository _mocks;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-        private DayOffPlannerSessionRuleSet _ruleSet;
         private IPeriodValueCalculator _periodValueCalculator;
         private IWorkShiftBackToLegalStateServicePro _workShiftBackToLegalStateService;
         private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _ruleSet = new DayOffPlannerSessionRuleSet();
             _periodValueCalculator = _mocks.StrictMock<IPeriodValueCalculator>();
             _workShiftBackToLegalStateService = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
             _smartDayOffBackToLegalStateService = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
@@ -54,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
             _optimizerPreferences = new OptimizationPreferences();
+            _optimizerPreferences.DaysOff.ConsiderWeekBefore = false;
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
             _dayOffOptimizerConflictHandler = _mocks.StrictMock<IDayOffOptimizerConflictHandler>();
@@ -442,7 +441,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _optimizerPreferences,
                                       _periodValueCalculator,
                                       _workShiftBackToLegalStateService,
-                                      _ruleSet, 
                                       _effectiveRestrictionCreator, 
                                       _resourceOptimizationHelper,
                                       _decider,
