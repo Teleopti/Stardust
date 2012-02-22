@@ -289,6 +289,25 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             testRunner.CollectScenarioErrors();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Tabledata shows sunday as first day of week for US culture")]
+        public virtual void TabledataShowsSundayAsFirstDayOfWeekForUSCulture()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Tabledata shows sunday as first day of week for US culture", ((string[])(null)));
+#line 84
+this.ScenarioSetup(scenarioInfo);
+#line 85
+ testRunner.Given("I am a supervisor");
+#line 86
+ testRunner.And("I am american");
+#line 87
+ testRunner.When("I am view a Report with week data");
+#line 88
+ testRunner.Then("I should see sunday as the first day of week in tabledata");
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
     }
 }
 #endregion

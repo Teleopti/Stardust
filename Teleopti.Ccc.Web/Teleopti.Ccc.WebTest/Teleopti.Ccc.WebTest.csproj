@@ -94,6 +94,7 @@
     <Compile Include="Areas\MobileReports\Core\Report\ReportRequestValidatorResultTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportRequestValidatorTest.cs" />
     <Compile Include="Areas\MobileReports\DateBoxGlobalizationViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MobileReports\TestData\CurrentThreadCultureProvider.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
     <Compile Include="Areas\MobileReports\TestData\PrincipalProviderForTest.cs" />

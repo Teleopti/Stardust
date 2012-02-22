@@ -10,9 +10,14 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
+	using Teleopti.Ccc.Web.Core.RequestContext;
+
 	public class ReportGenerationViewModelMappingProfile : Profile
 	{
 		private readonly Func<IReportDataService> _dataService;
+
+		private readonly Func<ICultureProvider> _cultureProvider;
+
 		private readonly NumberFormatInfo _fixedFormatInfo;
 		private readonly Func<IMappingEngine> _mappingEngine;
 		private readonly Func<ISkillProvider> _skillProvider;
@@ -21,13 +26,14 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		public ReportGenerationViewModelMappingProfile(Func<IMappingEngine> mappingEngine,
 		                                               Func<IUserTextTranslator> userTextTranslator,
 		                                               Func<ISkillProvider> skillProvider,
-		                                               Func<IReportDataService> dataService)
+		                                               Func<IReportDataService> dataService,
+													   Func<ICultureProvider> cultureProvider )
 		{
 			_mappingEngine = mappingEngine;
 			_userTextTranslator = userTextTranslator;
 			_skillProvider = skillProvider;
 			_dataService = dataService;
-
+			_cultureProvider = cultureProvider;
 
 			_fixedFormatInfo = new NumberFormatInfo {NumberDecimalSeparator = "."};
 		}
@@ -85,16 +91,22 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.Y1DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[0]))
 				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));
 
+			/*
+			CreateMap<IEnumerable<ReportDataPeriodEntry>, IEnumerable<ReportTableRowViewModel>>()
+				.ConvertUsing(s => { return new List<ReportTableRowViewModel>( );  });
+*/				
+				
 			
 			CreateMap<ReportDataPeriodEntry, ReportTableRowViewModel>()
 				.ForMember(d => d.Period, o => o.ResolveUsing(new PeriodValueResolver(_userTextTranslator)))
 				.ForMember(d => d.DataColumn1, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y1)))
 				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y2)));
 
-			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>()
-				.ConvertUsing(
-					s =>
-					_mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(s.ReportData));
+			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>().ConvertUsing(
+				s => this._mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(
+					s.ReportInput.IntervalType == 1 ? s.ReportData :
+						ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, _cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek)));
+					
 
 
 			CreateMap<ReportGenerationResult, ReportResponseModel>()
@@ -104,6 +116,18 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.ReportInfo, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportData, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportChart, o => o.UseValue(null));
+		}
+		public static IEnumerable<ReportDataPeriodEntry> ShiftEntriesToMatchFirstDayOfWeek(IEnumerable<ReportDataPeriodEntry> orig, DayOfWeek firstDayOfWeek)
+		{
+			// Analytics always returns order Monday..Sunday with 1..7 but there may be gaps...
+			return orig.OrderBy(
+				o =>
+					{
+						return ((o.PeriodNumber - (int)firstDayOfWeek) + 7) % 7;
+					}
+		
+
+	);
 		}
 	}
 

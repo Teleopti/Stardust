@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                                            	{
 			                                                                                            		Period = r.Period,
 			                                                                                            		Y1 = r.CallsAnswered,
-			                                                                                            		Y2 = r.CallsAbandoned
+			                                                                                            		Y2 = r.CallsAbandoned,
+																												PeriodNumber = r.PeriodNumber
 			                                                                                            	});
 		}
 
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                   	     	{
 			                                                                   	     		Period = r.Period,
 			                                                                   	     		Y1 = r.ForecastedCalls,
-			                                                                   	     		Y2 = r.OfferedCalls
+			                                                                   	     		Y2 = r.OfferedCalls,
+																							PeriodNumber = r.PeriodNumber
 			                                                                   	     	});
 		}
 
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                              	     	{
 			                                                              	     		Period = r.Period,
 			                                                              	     		Y1 = r.ScheduledAgentsReady,
-			                                                              	     		Y2 = r.AgentsReady
+			                                                              	     		Y2 = r.AgentsReady,
+																						PeriodNumber = r.PeriodNumber
 			                                                              	     	});
 		}
 
@@ -114,7 +117,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                              	     	{
 			                                                              	     		Period = r.Period,
 			                                                              	     		Y1 = r.ServiceLevel*100M,
-			                                                              	     		Y2 = 0M
+			                                                              	     		Y2 = 0M,
+																						PeriodNumber = r.PeriodNumber
 			                                                              	     	});
 		}
 

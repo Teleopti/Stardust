@@ -81,3 +81,8 @@ Scenario: Enter Application with partial access to reports
 	When I view ReportSettings
 	Then I should only see reports i have access to
 
+Scenario: Tabledata shows sunday as first day of week for US culture
+	Given I am a supervisor
+	And I am american
+	When I am view a Report with week data
+	Then I should see sunday as the first day of week in tabledata

@@ -28,7 +28,7 @@
 		[Given(@"I click Signout button")]
 		public void GivenIClickSignoutButton()
 		{
-			this._page.SignoutButton.Click();
+			_page.SignoutButton.Click();
 		}
 
 		[Then(@"I should be signed out")]
@@ -40,14 +40,14 @@
 		[Then(@"I should se a report")]
 		public void ThenIShouldSeAReport()
 		{
-			Assert.That(() => this._page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(5000, 100));
+			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(5000, 100));
 		}
 
 		[Then(@"I should see a graph")]
 		public void ThenIShouldSeeAGraph()
 		{
-			Assert.That(() => this._page.ReportGraphContainer.DisplayVisible(), Is.True.After(5000, 100));
-			Assert.That(() => this._page.ReportGraph.DisplayVisible(), Is.True.After(5000, 100));
+			Assert.That(() => _page.ReportGraphContainer.DisplayVisible(), Is.True.After(5000, 100));
+			Assert.That(() => _page.ReportGraph.DisplayVisible(), Is.True.After(5000, 100));
 		}
 
 		[Then(@"I should see a report for next date")]
@@ -56,9 +56,9 @@
 			var date = StartDateForNextPrevNavigation;
 			var expexted = date.AddDays(1).ToShortDateString(UserFactory.User().Culture);
 			Assert.That(
-				() => expexted.Equals(this._page.ReportCurrentDate),
+				() => expexted.Equals(_page.ReportCurrentDate),
 				Is.True.After(1000, 100),
-				string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, this._page.ReportCurrentDate));
+				string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
 		}
 
 		[Then(@"I should see a report for previous date")]
@@ -67,15 +67,15 @@
 			var date = StartDateForNextPrevNavigation;
 			var expexted = date.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
 			Assert.That(
-				() => expexted.Equals(this._page.ReportCurrentDate),
+				() => expexted.Equals(_page.ReportCurrentDate),
 				Is.True.After(1000, 100),
-				string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, this._page.ReportCurrentDate));
+				string.Format("ReportCurrentDate should be \"{0}\" but was \"{1}\"!", expexted, _page.ReportCurrentDate));
 		}
 
 		[Then(@"I should see a table")]
 		public void ThenIShouldSeeATable()
 		{
-			var table = this._page.ReportTableContainer.ElementOfType<Table>(table1 => true);
+			var table = _page.ReportTableContainer.ElementOfType<Table>(table1 => true);
 			var count = table.TableCells.Count;
 
 			/*  3 + (96 * 3) */
@@ -86,33 +86,33 @@
 		[Then(@"I should see friendly error message")]
 		public void ThenIShouldSeeFriendlyErrorMessage()
 		{
-			this._page.Document.ContainsText("No access");
+			_page.Document.ContainsText("No access");
 		}
 
 		[Then(@"I should see the Home")]
 		public void ThenIShouldSeeTheHome()
 		{
-			EventualAssert.That(() => this._page.HomeViewContainer.Exists, Is.True);
-			EventualAssert.That(() => this._page.HomeViewContainer.DisplayVisible(), Is.True);
+			EventualAssert.That(() => _page.HomeViewContainer.Exists, Is.True);
+			EventualAssert.That(() => _page.HomeViewContainer.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"I should see the selected date")]
 		public void ThenIShouldSeeTheSelectedDate()
 		{
-			EventualAssert.That(() => this._page.ReportSelectionDateValue, Is.Not.Empty);
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty);
 		}
 
 		[Then(@"I should see the selected skill")]
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
-			string text = this._page.ReportSkillSelectionOpener.Text;
-			EventualAssert.That(() => text.Contains(this._page.ThirdSkillName), Is.True);
+			string text = _page.ReportSkillSelectionOpener.Text;
+			EventualAssert.That(() => text.Contains(_page.ThirdSkillName), Is.True);
 		}
 
 		[Then(@"I should only see reports i have access to")]
 		public void ThenIShouldonlySeeReportsIHaveAccessTo()
 		{
-			var count = this._page.Reports.Count;
+			var count = _page.Reports.Count;
 			EventualAssert.That(
 				() => 2 == count,
 				Is.True.After(1000, 100),
@@ -122,79 +122,87 @@
 		[Then(@"the date-picker should close")]
 		public void ThenTheDatePickerShouldClose()
 		{
-			EventualAssert.That(() => this._page.ReportSelectionDatePickerContainer.DisplayHidden(), Is.True);
+			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayHidden(), Is.True);
 		}
 
-		[When(@"I am view a Report")]
-		public void WhenIAmViewAReport()
+		[When(@"I am view a Report( with week data|)")]
+		public void WhenIAmViewAReport(string typeHint)
 		{
 			createAndSignIn();
 			Navigation.GotoMobileReportsSettings();
-			this._page = Browser.Current.Page<MobileReportsPage>();
-			Assert.That(() => this._page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
+			_page = Browser.Current.Page<MobileReportsPage>();
+			Assert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
 
-			this._page.SetReportSettingsDate(StartDateForNextPrevNavigation);
-			EventualAssert.That(() => this._page.ReportSelectionDateValue, Is.Not.Empty, "Date should be set");
-			this._page.ReportGetAnsweredAndAbandoned.Click();
-			if (!this._page.ReportTypeTableInput.Checked)
+			_page.SetReportSettingsDate(StartDateForNextPrevNavigation);
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty, "Date should be set");
+			_page.ReportGetAnsweredAndAbandoned.Click();
+
+			if (!string.IsNullOrEmpty(typeHint) && typeHint.Contains("week"))
 			{
-				this._page.ReportTypeTableInput.Click();
+				_page.ReportIntervalWeekInput.Click();
 			}
-			this._page.ReportViewShowButton.Click();
 
-			Assert.That(() => this._page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
+			if (!_page.ReportTypeTableInput.Checked)
+			{
+				_page.ReportTypeTableInput.Click();
+			}
+
+
+			_page.ReportViewShowButton.Click();
+
+			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
 		}
 
 		[When(@"I check type Graph")]
 		public void WhenICheckTypeGraph()
 		{
-			if (!this._page.ReportTypeGraphInput.Checked)
+			if (!_page.ReportTypeGraphInput.Checked)
 			{
-				this._page.ReportTypeGraphInput.Click();
+				_page.ReportTypeGraphInput.Click();
 			}
-			Assert.That(() => this._page.ReportTypeGraphInput.Checked, Is.True);
+			Assert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
 		}
 
 		[When(@"I check type Table")]
 		public void WhenICheckTypeTable()
 		{
-			if (!this._page.ReportTypeTableInput.Checked)
+			if (!_page.ReportTypeTableInput.Checked)
 			{
-				this._page.ReportTypeTableInput.Click();
+				_page.ReportTypeTableInput.Click();
 			}
-			Assert.That(() => this._page.ReportTypeTableInput.Checked, Is.True);
+			Assert.That(() => _page.ReportTypeTableInput.Checked, Is.True);
 		}
 
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
-			this._page.ReportViewNextDateNavigation.Click();
+			_page.ReportViewNextDateNavigation.Click();
 		}
 
 		[When(@"I click on any date")]
 		public void WhenIClickOnAnyDate()
 		{
-			var pickerDayDiv = this._page.AnyDatePickerDay;
+			var pickerDayDiv = _page.AnyDatePickerDay;
 			pickerDayDiv.Click();
 		}
 
 		[When(@"I click previous date")]
 		public void WhenIClickPreviousDate()
 		{
-			this._page.ReportViewPrevDateNavigation.Click();
+			_page.ReportViewPrevDateNavigation.Click();
 		}
 
 		[When(@"I click View Report Button")]
 		public void WhenIClickViewReportButton()
 		{
-			this._page.ReportViewShowButton.Click();
+			_page.ReportViewShowButton.Click();
 		}
 
 		[When(@"I close the skill-picker")]
 		public void WhenICloseTheSkillPicker()
 		{
-			this._page.ReportSkillSelectionCloseButton.Click();
-			EventualAssert.That(() => this._page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.False);
+			_page.ReportSkillSelectionCloseButton.Click();
+			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.False);
 		}
 
 		[Given(@"I view MobileReports")]
@@ -203,35 +211,35 @@
 		{
 			createAndSignIn();
 			Navigation.GotoMobileReports();
-			this._page = Browser.Current.Page<MobileReportsPage>();
+			_page = Browser.Current.Page<MobileReportsPage>();
 		}
 
 		[When(@"I open the date-picker")]
 		public void WhenIOpenTheDatePicker()
 		{
-			this._page.ReportSelectionDateOpener.Click();
-			EventualAssert.That(() => this._page.ReportSelectionDatePickerContainer.DisplayVisible(), Is.True);
+			_page.ReportSelectionDateOpener.Click();
+			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			this._page.ReportSkillSelectionOpener.Click();
-			EventualAssert.That(() => this._page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.True);
-			EventualAssert.That(() => this._page.ReportSkillSelectionContainer.DisplayVisible(), Is.True);
+			_page.ReportSkillSelectionOpener.Click();
+			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.True);
+			EventualAssert.That(() => _page.ReportSkillSelectionContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I select a report")]
 		public void WhenISelectAReport()
 		{
-			this._page.ReportGetAnsweredAndAbandoned.Click();
-			Assert.That(() => this._page.ReportGetAnsweredAndAbandonedInput.Checked, Is.True);
+			_page.ReportGetAnsweredAndAbandoned.Click();
+			Assert.That(() => _page.ReportGetAnsweredAndAbandonedInput.Checked, Is.True);
 		}
 
 		[When(@"I select a skill")]
 		public void WhenISelectASkill()
 		{
-			foreach (var skillListItem in this._page.ReportSkillSelectionList.ListItems)
+			foreach (var skillListItem in _page.ReportSkillSelectionList.ListItems)
 			{
 				if (skillListItem.GetAttributeValue("aria-selected").Equals("true"))
 				{
@@ -239,10 +247,10 @@
 				}
 			}
 
-			var third = this._page.ThirdSkillInSkillList;
+			var third = _page.ThirdSkillInSkillList;
 			third.Click();
 
-			this._page.ThirdSkillName = third.Text.Trim();
+			_page.ThirdSkillName = third.Text.Trim();
 		}
 
 		[When(@"I view ReportSettings")]
@@ -250,7 +258,14 @@
 		{
 			createAndSignIn();
 			Navigation.GotoMobileReportsSettings();
-			this._page = Browser.Current.Page<MobileReportsPage>();
+			_page = Browser.Current.Page<MobileReportsPage>();
+		}
+
+		[Then(@"I should see sunday as the first day of week in tabledata")]
+		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
+		{
+			var value = _page.ReportTableFirstDataCell.Text.Trim();
+			EventualAssert.That(() => "Sunday".Equals(value), Is.True, string.Format("Value Should By Sunday but was: {0}", value));
 		}
 
 		private static void createAndSignIn()

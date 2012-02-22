@@ -13,6 +13,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 {
+	using System.Linq;
+
+	using Teleopti.Ccc.Web.Core.RequestContext;
+	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
+
 	[TestFixture]
 	public class ReportGenerationViewModelMappingTest
 	{
@@ -23,18 +28,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		{
 			_skillProvider = new TestSkillProvider();
 			_userTextTranslator = new TestUserTextTranslator();
+			_cultureProvider = new CurrentThreadCultureProvider();
 
 			Mapper.Reset();
 			Mapper.Initialize(
 				c =>
 				c.AddProfile(new ReportGenerationViewModelMappingProfile(() => Mapper.Engine, () => _userTextTranslator,
-				                                                         () => _skillProvider, () => null)));
+																		 () => _skillProvider, () => null, () => _cultureProvider)));
 		}
 
 		#endregion
 
 		private IUserTextTranslator _userTextTranslator;
 		private ISkillProvider _skillProvider;
+
+		private CurrentThreadCultureProvider _cultureProvider;
 
 		protected class TestUserTextTranslator : IUserTextTranslator
 		{
@@ -208,6 +216,74 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			var result = Mapper.Map<ReportGenerationResult, ReportTableRowViewModel[]>(source);
 
 			result.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test, SetCulture("en-US"), SetUICulture("en-US")]
+		public void ShouldReArrangeEntriesToMatchFirstdayOfWeekForUsCulture()
+		{
+			var source = new ReportGenerationResult
+			{
+				Report = null,
+				ReportInput = new ReportDataParam
+				{
+					IntervalType = 7,
+					Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 30),
+					SkillSet = "1,2,3"
+				},
+				ReportData = new[] { new ReportDataPeriodEntry { Period = "Monday", PeriodNumber = 1 },	
+									new ReportDataPeriodEntry { Period = "Tuesday", PeriodNumber = 2 }, 
+									new ReportDataPeriodEntry() { Period = "Saturday", PeriodNumber = 6 }, 
+									new ReportDataPeriodEntry() { Period = "Sunday", PeriodNumber = 7 }  }
+			};
+			var result = Mapper.Map<ReportGenerationResult, ReportTableRowViewModel[]>(source);
+
+			result.Should().Have.Count.EqualTo(4);
+			result.First().Period.Should().Be.EqualTo("Sunday");
+		}
+
+		[Test, SetCulture("en-US"), SetUICulture("en-US")]
+		public void ShouldReArrangeEntriesToMatchFirstdayOfWeekForUsCultureEvenWhenSundayEntryIsMissing()
+		{
+			var source = new ReportGenerationResult
+			{
+				Report = null,
+				ReportInput = new ReportDataParam
+				{
+					IntervalType = 7,
+					Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 30),
+					SkillSet = "1,2,3"
+				},
+				ReportData = new[] { new ReportDataPeriodEntry { Period = "Monday", PeriodNumber = 1 },	
+									new ReportDataPeriodEntry { Period = "Tuesday", PeriodNumber = 2 }, 
+									new ReportDataPeriodEntry() { Period = "Friday", PeriodNumber = 5 }, 
+									new ReportDataPeriodEntry() { Period = "Saturday", PeriodNumber = 6 }  }
+			};
+			var result = Mapper.Map<ReportGenerationResult, ReportTableRowViewModel[]>(source);
+
+			result.Should().Have.Count.EqualTo(4);
+			result.First().Period.Should().Be.EqualTo("Monday");
+		}
+		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		public void ShouldReArrangeEntriesToMatchFirstdayOfWeekForSvCulture()
+		{
+			var source = new ReportGenerationResult
+			{
+				Report = null,
+				ReportInput = new ReportDataParam
+				{
+					IntervalType = 7,
+					Period = new DateOnlyPeriod(2012, 01, 23, 2012, 01, 30),
+				},
+				ReportData = new[] { new ReportDataPeriodEntry { Period = "Monday", PeriodNumber = 1 },	
+									new ReportDataPeriodEntry { Period = "Tuesday", PeriodNumber = 2 }, 
+									new ReportDataPeriodEntry() { Period = "Friday", PeriodNumber = 5 }, 
+									new ReportDataPeriodEntry() { Period = "Saturday", PeriodNumber = 6 },
+									new ReportDataPeriodEntry() { Period = "Sunday", PeriodNumber = 7 } }
+			};
+			var result = Mapper.Map<ReportGenerationResult, ReportTableRowViewModel[]>(source);
+
+			result.Should().Have.Count.EqualTo(5);
+			result.First().Period.Should().Be.EqualTo("Monday");
 		}
 
 		[Test]
