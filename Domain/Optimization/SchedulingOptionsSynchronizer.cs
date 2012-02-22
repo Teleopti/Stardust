@@ -55,6 +55,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
             schedulingOptions.UseMaxSeats = optimizationPreferences.Advanced.UseMaximumSeats;
             schedulingOptions.DoNotBreakMaxSeats = optimizationPreferences.Advanced.DoNotBreakMaximumSeats;
+
+            // extra properties
+            schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
+            schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
         }
     }
 }

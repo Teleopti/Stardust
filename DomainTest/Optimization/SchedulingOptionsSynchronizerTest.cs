@@ -61,5 +61,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
             Assert.AreEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
         }
+
+        [Test]
+        public void ShouldConsiderShortBreaksChangesSetInSchedulingOptions()
+        {
+            Assert.IsFalse(_schedulingOptions.ConsiderShortBreaks);
+            _optimizationPreferences.Rescheduling.ConsiderShortBreaks = true;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.IsTrue(_schedulingOptions.ConsiderShortBreaks);
+        }
+
+        [Test]
+        public void ShouldOnlyShiftsWhenUnderstaffedChangesSetInSchedulingOptions()
+        {
+            Assert.IsTrue(_schedulingOptions.ConsiderShortBreaks);
+            _optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.IsFalse(_schedulingOptions.OnlyShiftsWhenUnderstaffed);
+        }
     }
 }
