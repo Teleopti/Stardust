@@ -10391,4 +10391,7 @@ These options are activated:
     <value>There is already absence in the schedule for given period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
   </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>&lt;Browser Default&gt;</value>
+  </data>
 </root>

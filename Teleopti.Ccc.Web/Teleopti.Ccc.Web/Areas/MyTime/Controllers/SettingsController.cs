@@ -37,14 +37,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPut]
 		public void UpdateCulture(int lcid)
 		{
-			_loggedOnUser.CurrentUser().PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(lcid));
+			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
+			_loggedOnUser.CurrentUser().PermissionInformation.SetCulture(culture);
 		}
 
 		[UnitOfWorkAction]
 		[HttpPut]
 		public void UpdateUiCulture(int lcid)
 		{
-			_loggedOnUser.CurrentUser().PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(lcid));
+			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
+			_loggedOnUser.CurrentUser().PermissionInformation.SetUICulture(culture);
 		}
 	}
 }

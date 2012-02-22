@@ -1,8 +1,10 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
+﻿using System.Collections.Generic;
+
+namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 {
 	public class SettingsViewModel
 	{
-		public CultureViewModel[] Cultures { get; set; }
+		public IList<CultureViewModel> Cultures { get; set; }
 		public CultureViewModel ChoosenUiCulture { get; set; }
 		public CultureViewModel ChoosenCulture { get; set; }
 	}

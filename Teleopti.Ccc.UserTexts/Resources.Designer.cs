@@ -2811,6 +2811,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;Browser Default&gt;.
+        /// </summary>
+        public static string BrowserDefault {
+            get {
+                return ResourceManager.GetString("BrowserDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgeted leave.
         /// </summary>
         public static string BudgetedLeave {

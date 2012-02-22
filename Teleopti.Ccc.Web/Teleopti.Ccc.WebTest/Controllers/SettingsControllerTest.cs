@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -60,6 +61,18 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		}
 
 		[Test]
+		public void ShouldUpdateCultureRepresentingNull()
+		{
+			var person = new Person();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			using (var target = new SettingsController(null, loggedOnUser))
+			{
+				target.UpdateCulture(-1);
+			}
+			person.PermissionInformation.Culture().Should().Be.EqualTo(Thread.CurrentThread.CurrentCulture);
+		}
+
+		[Test]
 		public void ShouldUpdateUiCulture()
 		{
 			var person = new Person();
@@ -69,6 +82,18 @@ namespace Teleopti.Ccc.WebTest.Controllers
 				target.UpdateUiCulture(1034);
 			}
 			person.PermissionInformation.UICulture().LCID.Should().Be.EqualTo(1034);
+		}
+
+		[Test]
+		public void ShouldUpdateUiCultureRepresentingNull()
+		{
+			var person = new Person();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			using (var target = new SettingsController(null, loggedOnUser))
+			{
+				target.UpdateUiCulture(-1);
+			}
+			person.PermissionInformation.Culture().Should().Be.EqualTo(Thread.CurrentThread.CurrentCulture);
 		}
 	}
 }

@@ -20,15 +20,11 @@ Scenario: Change my culture
 	And I change culture to US
 	Then I should see US date format
 
-Scenario: Browser's default culture
-	Given I am an agent without culture
-	When I sign in
-	Then I should see the browser's language's date format
-
-Scenario: Change my culture to computer's default
+Scenario: Change my culture to browser's default
 	Given I am an agent
 	And I am swedish
-	When I change culture to browser's default
+	When I view my regional settings
+	And I change culture to browser's default
 	Then I should see the browser's language's date format
 
 Scenario: Change my language
@@ -38,12 +34,7 @@ Scenario: Change my language
 	When I change language to english
 	Then I should see english text
 
-Scenario: Browser's default language
-	Given I am an agent without language
-	When I sign in
-	Then I should see text in the the browser's language 
-
-Scenario: Change my language to computer's default
+Scenario: Change my language to browser's default
 	Given I am an agent
 	And I am swedish
 	When I change language to browser's default
