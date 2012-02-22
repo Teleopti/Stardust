@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.DayOff.Should().Be.Null();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapPersonAssignmentShiftCategory()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
@@ -349,13 +349,15 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapPersonAssignmentContractTime()
 		{
 			var contractTime = TimeSpan.FromHours(8);
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, Projection = projection } };
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay, Projection = projection } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -363,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapPersonAssignmentTimeSpan()
 		{
 			data.SelectedDate = new DateOnly(2012, 2, 21);
@@ -380,7 +382,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldOnlyMapPersonAssignmentWhenPersonAssignment()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
@@ -398,19 +400,36 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.DayOff.Should().Be.Null();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapDayOff()
 		{
 			var stubs = new StubFactory();
 			var dayOff = stubs.PersonDayOffStub();
 			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
-
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
 				.DayOff.DayOff.Should().Be(dayOff.DayOff.Description.Name);
+		}
+
+		[Test]
+		public void ShouldOnlyMapDayOffWhenDayOff()
+		{
+			var stubs = new StubFactory();
+			var dayOff = stubs.PersonDayOffStub();
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.DayOff.Should().Not.Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.PersonAssignment.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Should().Be.Null();
 		}
 
 		[Test]

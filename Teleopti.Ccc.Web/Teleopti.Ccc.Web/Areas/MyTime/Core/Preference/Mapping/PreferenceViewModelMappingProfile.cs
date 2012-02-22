@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public DateOnlyPeriod Period { get; set; }
 
 			public IScheduleDay ScheduleDay { get; set; }
+			public SchedulePartView SignificantPart { get; set; }
 			public IVisualLayerCollection Projection { get; set; }
 
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
@@ -107,21 +108,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
 				                                       		       	let projection = day == null ? null : day.Projection
 				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
+				                                       		       	let significantPart = scheduleDay == null ? SchedulePartView.None : scheduleDay.SignificantPartForDisplay()
 				                                       		       	select
-																	new DayMappingData
-																		{
-																		            Date = d,
-																		            Period = s.Period,
+				                                       		       		new DayMappingData
+				                                       		       			{
+				                                       		       				Date = d,
+				                                       		       				Period = s.Period,
 
-																		            Projection = projection,
-																		            ScheduleDay = scheduleDay,
+				                                       		       				Projection = projection,
+				                                       		       				ScheduleDay = scheduleDay,
+																				SignificantPart = significantPart,
 
-																		            ShiftCategory = shiftCategory,
-																		            DayOffTemplate = dayOffTemplate,
-																		            Absence = absence,
-																		            WorkflowControlSet = s.WorkflowControlSet,
-																		            WorkTimeMinMax = workTimeMinMax
-																		}
+				                                       		       				ShiftCategory = shiftCategory,
+				                                       		       				DayOffTemplate = dayOffTemplate,
+				                                       		       				Absence = absence,
+				                                       		       				WorkflowControlSet = s.WorkflowControlSet,
+				                                       		       				WorkTimeMinMax = workTimeMinMax
+				                                       		       			}
 				                                       		       ).ToArray();
 				                                       	}))
 				;
@@ -143,23 +146,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           	}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())
-				//.ForMember(d => d.Preference, o => o.MapFrom(s =>
-				//                                                {
-				//                                                    if (s.ScheduleDay != null || s.Projection != null)
-				//                                                        return null;
-				//                                                    return s;
-				//                                                }))
-				//.ForMember(d => d.PersonAssignment, o => o.MapFrom(s =>
-				//                                                    {
-				//                                                        if (s.ScheduleDay != null || s.Projection != null)
-				//                                                            return s;
-				//                                                        return null;
-				//                                                    }))
-				.ForMember(d => d.Preference, o => o.MapFrom(s => s))
-				.ForMember(d => d.PersonAssignment, o => o.UseValue(null))
-				.ForMember(d => d.DayOff, o => o.Ignore())
+				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
+				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
 				;
-
+			
 			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
