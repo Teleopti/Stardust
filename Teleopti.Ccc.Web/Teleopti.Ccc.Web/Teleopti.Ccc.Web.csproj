@@ -577,7 +577,6 @@
     <Content Include="Content\Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Web.config" />
     <Content Include="WiseIISConfig\adsutil.vbs" />
   </ItemGroup>
   <ItemGroup>
@@ -696,10 +695,13 @@
     <Content Include="Areas\MobileReports\Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\MobileLayoutBase.cshtml" />
+    <Content Include="Areas\MobileReports\Views\Shared\MobileLayoutBase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Start\Views\Authentication\MobileSignIn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Start\Views\Shared\MobileLayoutBase.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
