@@ -10,6 +10,9 @@
 	using Teleopti.Ccc.WebBehaviorTest.Pages;
 	using Teleopti.Interfaces.Domain;
 
+	using WatiN.Core;
+
+	using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 	using Table = WatiN.Core.Table;
 
 	[Binding]
@@ -86,7 +89,7 @@
 		[Then(@"I should see friendly error message")]
 		public void ThenIShouldSeeFriendlyErrorMessage()
 		{
-			_page.Document.ContainsText("No access");
+			_page.Document.Divs.Filter(Find.ById("error-view")).First().DomContainer.ContainsText("No access");
 		}
 
 		[Then(@"I should see the Home")]
