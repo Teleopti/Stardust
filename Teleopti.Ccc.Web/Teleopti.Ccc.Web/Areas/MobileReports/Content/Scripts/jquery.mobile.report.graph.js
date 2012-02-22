@@ -16,7 +16,8 @@
 						var g = new RGraph.Line(id, gd.Y1, gd.Y2 || undefined);
 						g.Set('chart.shadow', true);
 						g.Set('chart.color', ['red', 'green']);
-						g.Set('chart.chart.numxticks', 1);
+						g.Set('chart.numxticks', 1);
+						g.Set('chart.linewidth', 2);
 						g.Set('chart.colors', ['green', 'red']);
 						return g;
 					} ],
