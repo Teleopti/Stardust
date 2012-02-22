@@ -47,3 +47,4 @@ packages/
 *.esent
 *.chk
 *.nhib.xml
+*.ncov
