@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my shift")]
 		public void ThenIShouldSeeMyShift()
 		{
+			ScenarioContext.Current.Pending();
+
 			var data = UserFactory.User().UserData<ShiftToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
@@ -41,6 +43,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see my existing preference")]
 		public void ThenIShouldNotSeeMyExistingPreference()
 		{
+			ScenarioContext.Current.Pending();
+
 			var data = UserFactory.User().UserData<ExistingPreferenceToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 
@@ -50,6 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to add preference today")]
 		public void ThenIShouldNotBeAbleToAddPreferenceToday()
 		{
+			ScenarioContext.Current.Pending();
+
 			var data = UserFactory.User().UserData<ShiftToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 

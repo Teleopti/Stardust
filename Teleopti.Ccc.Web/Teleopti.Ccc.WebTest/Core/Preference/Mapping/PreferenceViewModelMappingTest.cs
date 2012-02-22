@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.DayOff.Should().Be.Null();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldMapPersonAssignmentShiftCategory()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldMapPersonAssignmentContractTime()
 		{
 			var contractTime = TimeSpan.FromHours(8);
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldMapPersonAssignmentTimeSpan()
 		{
 			data.SelectedDate = new DateOnly(2012, 2, 21);
@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldOnlyMapPersonAssignmentWhenPersonAssignment()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));

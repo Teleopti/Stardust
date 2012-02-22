@@ -126,7 +126,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       	}))
 				;
 
-			// duplication in child mapping will not be required in automapper 2.0
 			CreateMap<DayMappingData, DayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
 				.ForMember(d => d.Editable, o => o.MapFrom(s =>
@@ -144,18 +143,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           	}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
 				.ForMember(d => d.StyleClassName, o => o.Ignore())
-				.ForMember(d => d.Preference, o => o.MapFrom(s =>
-				                                             	{
-				                                             		if (s.ScheduleDay != null || s.Projection != null)
-				                                             			return null;
-				                                             		return s;
-				                                             	}))
-				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s =>
-				                                                   	{
-				                                                   		if (s.ScheduleDay != null || s.Projection != null)
-				                                                   			return s;
-				                                                   		return null;
-				                                                   	}))
+				//.ForMember(d => d.Preference, o => o.MapFrom(s =>
+				//                                                {
+				//                                                    if (s.ScheduleDay != null || s.Projection != null)
+				//                                                        return null;
+				//                                                    return s;
+				//                                                }))
+				//.ForMember(d => d.PersonAssignment, o => o.MapFrom(s =>
+				//                                                    {
+				//                                                        if (s.ScheduleDay != null || s.Projection != null)
+				//                                                            return s;
+				//                                                        return null;
+				//                                                    }))
+				.ForMember(d => d.Preference, o => o.MapFrom(s => s))
+				.ForMember(d => d.PersonAssignment, o => o.UseValue(null))
 				.ForMember(d => d.DayOff, o => o.Ignore())
 				;
 
