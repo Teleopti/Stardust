@@ -1094,7 +1094,7 @@
     <comment>Snitt Samtalstid (s)</comment>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agent - Köresultat</value>
+    <value>Agent - Mätvärden per kö</value>
     <comment>Agent - Köresultat</comment>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">

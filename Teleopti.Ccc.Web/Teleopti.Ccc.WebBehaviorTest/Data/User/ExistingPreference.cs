@@ -5,11 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
-	public class StandardPreference : BasePreference
+	public class ExistingPreference : BasePreference
 	{
-		public string Preference = TestData.DayOffTemplate.Description.Name;
+		public string Preference = TestData.Absence.Description.Name;
 
-		protected override PreferenceRestriction ApplyRestriction() { return new PreferenceRestriction { DayOffTemplate = TestData.DayOffTemplate }; }
+		protected override PreferenceRestriction ApplyRestriction() { return new PreferenceRestriction { Absence = TestData.Absence }; }
 		protected override DateTime ApplyDate(CultureInfo cultureInfo) { return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo); }
 	}
 }

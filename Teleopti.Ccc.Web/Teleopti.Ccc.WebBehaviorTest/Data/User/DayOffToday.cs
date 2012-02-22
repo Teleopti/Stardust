@@ -9,9 +9,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class DayOffToday : IUserDataSetup
 	{
+		public DateOnly Date = DateOnly.Today;
+		public IDayOffTemplate DayOff = TestData.DayOffTemplate;
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var dayOff = new PersonDayOff(user, TestData.Scenario, TestData.DayOffTemplate, DateOnly.Today);
+			var dayOff = new PersonDayOff(user, TestData.Scenario, DayOff, Date);
 			var dayOffRepository = new DayOffRepository(uow);
 			dayOffRepository.Add(dayOff);
 		}

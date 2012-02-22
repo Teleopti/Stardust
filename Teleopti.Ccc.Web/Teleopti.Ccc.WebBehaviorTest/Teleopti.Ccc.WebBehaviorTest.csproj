@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\ExistingPreference.cs" />
+    <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Content Include="Data\TestData.autofac.config">
       <SubType>Designer</SubType>

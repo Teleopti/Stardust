@@ -41,7 +41,7 @@
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
 									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? "striped" : "gradient")" data-mytime-activity="@layer.ActivityName" data-mytime-start-time="@layer.StartTime" data-mytime-end-time="@layer.EndTime"
+									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? "striped" : "gradient")" tooltip-title="@layer.ActivityName" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 											style="width: @(widthPixel)px;
 												left: @(leftPixel)px;
 												background-color: @layer.Color;
