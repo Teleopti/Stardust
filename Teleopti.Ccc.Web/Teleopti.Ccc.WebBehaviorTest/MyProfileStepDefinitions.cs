@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -34,6 +36,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var user = UserFactory.User();
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			EventualAssert.That(() => page.CultureUiSelect.SelectedItem, Is.EqualTo(user.Person.PermissionInformation.UICulture().DisplayName));
+		}
+
+		[When(@"I change culture to US")]
+		public void WhenIChangeCultureToUS()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			page.CultureSelect.SelectByValue("1033");
+			Browser.Current.Eval("$('#cultureSelect').change();"); 
+			//not nice - but somehow I need to wait for a portal refresh here
+			Thread.Sleep(500);
+		}
+
+		[Then(@"I should see US date format")]
+		public void ThenIShouldSeeUSDateFormat()
+		{
+			Navigation.GotoTeamSchedule();
+			EventualAssert.That(() => Browser.Current.Page<TeamSchedulePage>().DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
 		}
 	}
 }
