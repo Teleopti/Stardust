@@ -139,7 +139,7 @@ Teleopti.MobileReports.Index = (function ($) {
 					if (typeof reportInfo != 'undefined' && reportInfo) {
 						$('.ui-btn-text', '#report-view-date-nav-current').html(reportInfo.ReportDate);
 						$('#report-name').html(reportInfo.ReportName);
-						$('#report-skillset').html(reportInfo.SkillNames);
+						//$('#report-skillset').html(reportInfo.SkillNames);
 
 						var reportData = data.Report.ReportData;
 						graphEnabled = (reportData != null) && settings.graph;
