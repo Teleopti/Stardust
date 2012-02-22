@@ -1,7 +1,8 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.min.js" />
+/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/jquery.qtip.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -130,31 +131,24 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		//Activating tooltip where available
 		ActivateTooltip: function () {
-			var _toolTip = '';
-			$('.tooltip').hover(function (e) {
-				_self = $(this);
-				_tooltip = $('<div></div>').addClass('tooltip-container').appendTo(_self);
-				_tooltipTop = $('<div></div>').addClass('tooltip-top').appendTo(_tooltip);
-				if (($(_self).data('mytime-subject') !== "" && $(_self).data('mytime-subject') !== undefined) && ($(_self).data('mytime-location') !== undefined)) {
-					_tooltipContent = $('<div><dl><dt>Subject: </dt><dd>' + $(_self).attr('data-mytime-subject') + '</dd><dt>Location: </dt><dd>' + $(_self).attr('data-mytime-location') + '</dd></dl></div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				else if (($(_self).data('mytime-activity') !== "" && $(_self).data('mytime-activity') !== undefined) && ($(_self).data('mytime-start-time') !== "" && $(_self).data('mytime-start-time') !== undefined) && ($(_self).data('mytime-end-time') !== "" && $(_self).data('mytime-end-time') !== undefined)) {
-					_tooltipContent = $('<div>' + $(_self).attr('data-mytime-activity') + '<br/>' + $(_self).attr('data-mytime-start-time') + ' - ' + $(_self).attr('data-mytime-end-time') + '</div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				else if ($(_self).data('mytime-tooltip') !== "" && $(_self).data('mytime-tooltip') !== undefined) {
-					_tooltipContent = $('<div>' + $(_self).attr('data-mytime-tooltip') + '</div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				_tooltipBottom = $('<div></div>').addClass('tooltip-bottom').appendTo(_tooltip);
-				e.preventDefault();
 
-			}, function () {
-				$(_tooltip).fadeOut(100).remove();
+			$('.tooltip').each(function () {
+				$(this).qtip({
+					content: {
+						title: $(this).attr('tooltip-title'),
+						text: $(this).attr('tooltip-text')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',  // Position my top left...
+						at: 'top right', // at the bottom right of...
+						target: 'mouse'
+					}
+				});
 			});
 		}
 
