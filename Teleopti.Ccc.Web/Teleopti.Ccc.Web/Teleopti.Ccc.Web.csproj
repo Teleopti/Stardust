@@ -380,6 +380,7 @@
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
+    <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
