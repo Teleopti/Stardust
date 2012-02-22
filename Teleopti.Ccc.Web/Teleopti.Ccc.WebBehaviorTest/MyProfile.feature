@@ -34,8 +34,7 @@ Scenario: Change my culture to computer's default
 Scenario: Change my language
 	Given I am an agent
 	And I am swedish
-	When I sign in
-	Then I should see swedish text
+	When I view my regional settings
 	When I change language to english
 	Then I should see english text
 

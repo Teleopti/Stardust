@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -45,7 +46,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.CultureSelect.SelectByValue("1033");
 			Browser.Current.Eval("$('#cultureSelect').change();"); 
 			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(500);
+			Thread.Sleep(300);
+		}
+
+		[When(@"I change language to english")]
+		public void WhenIChangeLanguageToEnglish()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			page.CultureUiSelect.SelectByValue("1033");
+			Browser.Current.Eval("$('#cultureUiSelect').change();");
+			//not nice - but somehow I need to wait for a portal refresh here
+			Thread.Sleep(300);
 		}
 
 		[Then(@"I should see US date format")]
@@ -53,6 +64,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Navigation.GotoTeamSchedule();
 			EventualAssert.That(() => Browser.Current.Page<TeamSchedulePage>().DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
+		}
+
+		[Then(@"I should see english text")]
+		public void ThenIShouldSeeEnglishText()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			page.RequestsLink.Text.Should().Be.EqualTo("Requests");
 		}
 	}
 }
