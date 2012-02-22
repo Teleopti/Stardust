@@ -25,15 +25,19 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPreferenceProvider preferenceProvider;
 		private IPerson person;
-		private IPreferenceFeedbackProvider _preferenceFeedbackProvider;
+		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
+		private IScheduleProvider scheduleProvider;
+		private IProjectionProvider projectionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			_preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
-
+			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
+			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
+ 
 			person = new Person
 			         	{
 			         		WorkflowControlSet = new WorkflowControlSet(null)
@@ -51,7 +55,9 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 					Resolver.Of(() => virtualScheduleProvider),
 					Resolver.Of(() => preferenceProvider),
 					Resolver.Of(() => loggedOnUser),
-					Resolver.Of(() => _preferenceFeedbackProvider)
+					Resolver.Of(() => preferenceFeedbackProvider),
+					Resolver.Of(() => scheduleProvider),
+					Resolver.Of(() => projectionProvider)
 					)));
 		}
 
@@ -123,11 +129,62 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var workTimeMinMax = new WorkTimeMinMax();
 
 			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			_preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
 
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.Days.Single().WorkTimeMinMax.Should().Be(workTimeMinMax);
 		}
+
+		[Test]
+		public void ShouldMapScheduleDay()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] {scheduleDay});
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().ScheduleDay.Should().Be(scheduleDay);
+		}
+
+		[Test]
+		public void ShouldMapProjection()
+		{
+			var stubs = new StubFactory();
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			var projection = stubs.ProjectionStub();
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().Projection.Should().Be.SameInstanceAs(projection);
+		}
+
+		[Test]
+		public void ShouldNotMapScheduleDayAndProjectionIfNotScheduled()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().ScheduleDay.Should().Be.Null();
+			result.Days.Single().Projection.Should().Be.Null();
+		}
+
+
 	}
 }

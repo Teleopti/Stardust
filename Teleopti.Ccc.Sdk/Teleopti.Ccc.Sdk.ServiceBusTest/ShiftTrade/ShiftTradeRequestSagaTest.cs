@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -44,8 +42,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private IRequestFactory requestFactory;
         private IScheduleDictionarySaver scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
+    	private ILoadSchedulingStateHolderForResourceCalculation loader;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             CreatePersonAndScenario();
@@ -59,8 +58,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             schedulingResultState = new SchedulingResultStateHolder();
             schedulingResultState.Schedules = mocker.DynamicMock<IScheduleDictionary>();
             unitOfWork = mocker.StrictMock<IUnitOfWork>();
+            loader = mocker.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
             
-            target = new ShiftTradeRequestSaga(schedulingResultState, validator, requestFactory, scenarioProvider, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver);
+            target = new ShiftTradeRequestSaga(schedulingResultState, validator, requestFactory, scenarioProvider, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver, loader);
         }
 
         private void CreateRepositories()
@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             var created = getNewShiftTradeRequestCreated();
             setupDataSource();
             prepareUnitOfWork(1, true);
-            var loader = mocker.StrictMock<ILoadSchedulingStateHolderForResourceCalculation>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
 
             using (mocker.Record())
@@ -106,9 +105,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
                 Expect.Call(personRequestRepository.Get(created.PersonRequestId)).Return(personRequest);
                 Expect.Call(scenarioProvider.DefaultScenario()).Return(scenario).Repeat.AtLeastOnce();
-                Expect.Call(requestFactory.GetSchedulingLoader(schedulingResultState)).Return(loader);
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(
+                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                           statusChecker);
                 Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
             }
@@ -127,7 +125,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             var created = getNewShiftTradeRequestCreated();
             setupDataSource();
             prepareUnitOfWork(1, true);
-            var loader = mocker.StrictMock<ILoadSchedulingStateHolderForResourceCalculation>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
 
             using (mocker.Record())
@@ -135,8 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 ExpectCreationOfCommonRepositories(created.PersonRequestId);
                 Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(false));
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetSchedulingLoader(schedulingResultState)).Return(loader);
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(
+                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
             }
@@ -160,7 +156,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             var accept = getAcceptShiftTrade();
             setupDataSource();
 
-            var loader = mocker.StrictMock<ILoadSchedulingStateHolderForResourceCalculation>();
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
             var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
@@ -175,18 +170,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
                 
                 ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(requestFactory.GetSchedulingLoader(schedulingResultState)).Return(loader);
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, null, null)).Constraints(new[]{Is.Matching<NewBusinessRuleCollection>(
+                Expect.Call(requestFactory.GetRequestApprovalService(null, null)).Constraints(new[]{Is.Matching<NewBusinessRuleCollection>(
                     b =>
                         { ruleCollection = b;
                             return true;
-                        })
-                        ,Is.Equal(schedulingResultState),Is.Equal(scenario)}).Return(approvalService);
+                        }),Is.Equal(scenario)}).Return(approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>());
 				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(
+                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();
             }
@@ -209,7 +202,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             var accept = getAcceptShiftTrade();
             setupDataSource();
 
-            var loader = mocker.StrictMock<ILoadSchedulingStateHolderForResourceCalculation>();
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
             var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
@@ -222,14 +214,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(validator.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
 
-                Expect.Call(requestFactory.GetSchedulingLoader(schedulingResultState)).Return(loader);
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, schedulingResultState, scenario)).IgnoreArguments().Return(
+                Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>());
 				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Throw(new ValidationException());
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(
+                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest));
             }
@@ -251,7 +242,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             var accept = getAcceptShiftTrade();
             setupDataSource();
 
-            var loader = mocker.StrictMock<ILoadSchedulingStateHolderForResourceCalculation>();
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
             var rule = mocker.StrictMock<IBusinessRuleResponse>();
@@ -266,14 +256,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
                 
                 ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(requestFactory.GetSchedulingLoader(schedulingResultState)).Return(loader);
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, schedulingResultState, scenario)).IgnoreArguments().Return(
+                Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>{rule});
 				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(
+                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();
                 Expect.Call(rule.Message).Return("aja baja!").Repeat.AtLeastOnce();

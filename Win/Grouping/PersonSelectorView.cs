@@ -302,6 +302,13 @@ namespace Teleopti.Ccc.Win.Grouping
             _eventAggregator.GetEvent<OpenModuleClicked>().Publish("");
         }
 
+        private void openModule(object sender, MouseEventArgs e)
+        {
+            var selectedNode = ((TreeViewAdv) sender).GetNodeAtPoint(e.X, e.Y);
+            if (selectedNode != null && selectedNode.TextBounds.Contains(e.X, e.Y))
+            _eventAggregator.GetEvent<OpenModuleClicked>().Publish("");
+        }
+
         private void toolStripMenuItemSearchClick(object sender, EventArgs e)
         {
             _eventAggregator.GetEvent<FindPeopleClicked>().Publish("");

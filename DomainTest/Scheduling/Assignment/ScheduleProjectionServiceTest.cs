@@ -590,34 +590,57 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyNoFakeLayerIfDayOff()
+		public void FakeLayerShouldBeCreatedIfDayOffAndAbsenceAndContract()
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
+			abs.Layer.Payload.InContractTime = true;
 			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
 			scheduleDay.Add(abs);
 			scheduleDay.Add(dayOff);
 			addPeriodAndContractToPerson(true);
 			var proj = target.CreateProjection();
-			Assert.AreEqual(0, proj.Count());
+			proj.Should().Have.Count.EqualTo(1);
 		}
 
-		//[Test]
-		//public void ShouldNotUseAbsencesInProjection()
-		//{
-		//    IPersonAssignment ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario);
-		//    IMainShift shift = new MainShift(new ShiftCategory("sdf"));
-		//    shift.LayerCollection.Add(new MainShiftActivityLayer(new Activity("2"), createPeriod(1, 10)));
-		//    ass.SetMainShift(shift);
-		//    var abs = createPersonAbsence(100, createPeriod(1, 10));
+		[Test]
+		public void FakeLayerShouldBeCreatedIfDayOffAndAbsenceAndNoContract()
+		{
+			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
+			abs.Layer.Payload.InContractTime = true;
+			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			scheduleDay.Add(abs);
+			scheduleDay.Add(dayOff);
+			addPeriodAndContractToPerson(false);
+			var proj = target.CreateProjection();
+			proj.Should().Have.Count.EqualTo(1);
+		}
 
-		//    scheduleDay.Add(ass);
-		//    scheduleDay.Add(abs);
+		[Test]
+		public void NoContractTimeIfFakeLayerIsCreatedDueToDayOffAndAbsenceAndContract()
+		{
+			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
+			abs.Layer.Payload.InContractTime = true;
+			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			scheduleDay.Add(abs);
+			scheduleDay.Add(dayOff);
+			addPeriodAndContractToPerson(true);
+			var proj = target.CreateProjection();
+			proj.ContractTime().TotalMinutes.Should().Be.EqualTo(0);
+		}
 
-		//    target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger(), true);
-		//    var res = new List<IVisualLayer>(target.CreateProjection());
-		//    Assert.AreEqual(1, res.Count);
-		//    Assert.IsTrue(res[0].Payload is IActivity);
-		//}
+		[Test]
+		public void NoContractTimeIfFakeLayerIsCreatedDueToDayOffAndAbsenceAndNoContract()
+		{
+			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
+			abs.Layer.Payload.InContractTime = true;
+			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			scheduleDay.Add(abs);
+			scheduleDay.Add(dayOff);
+			addPeriodAndContractToPerson(false);
+			var proj = target.CreateProjection();
+			proj.ContractTime().TotalMinutes.Should().Be.EqualTo(0);
+		}
+
 
 		private static DateTimePeriod createPeriod(int startHour, int endHour)
 		{

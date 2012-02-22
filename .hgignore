@@ -35,8 +35,8 @@ _ReSharper*/
 TeleOpti.Messaging.Bin/
 
 # teleopti things
-.orig
-.rej
+*.orig
+*.rej
 packages/
 *.stub
 *.vssscc
@@ -46,3 +46,4 @@ packages/
 *.jrs
 *.esent
 *.chk
+*.nhib.xml

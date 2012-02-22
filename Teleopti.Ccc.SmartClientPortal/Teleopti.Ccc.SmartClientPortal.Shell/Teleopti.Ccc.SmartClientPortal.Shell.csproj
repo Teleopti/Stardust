@@ -441,6 +441,6 @@ xcopy "$(ProjectDir)..\..\mbcache\linfu\*" "$(TargetDir)" /y /r</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\..\BuildArtifacts\app.config" "$(ProjectDir)app.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)app.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppRaptor.config" "$(ProjectDir)app.config"</PreBuildEvent>
   </PropertyGroup>
 </Project>

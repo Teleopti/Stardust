@@ -378,6 +378,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
+    <Compile Include="Scheduling\Assignment\HasDayOffUnderFullDayAbsence.cs" />
     <Compile Include="Scheduling\Assignment\PeriodOffsetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMerger.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMerger.cs" />
@@ -1141,6 +1142,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
+    <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculator.cs" />

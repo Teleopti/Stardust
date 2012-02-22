@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AbsenceRequestOpenPeriodMerger>().As<IAbsenceRequestOpenPeriodMerger>().SingleInstance();
-			builder.RegisterType<RequestFactory>().As<IRequestFactory>().SingleInstance();
+			builder.RegisterType<RequestFactory>().As<IRequestFactory>().InstancePerDependency();
 			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
+			builder.RegisterType<AlreadyAbsentSpecification>().As<AlreadyAbsentSpecification>();
 		}
     }
 }

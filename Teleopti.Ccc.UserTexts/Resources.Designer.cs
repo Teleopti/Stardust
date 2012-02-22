@@ -16383,6 +16383,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is already absence in the schedule for given period..
+        /// </summary>
+        public static string RequestDenyReasonAlreadyAbsent {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your absence request has been denied automatically, due to a rule set up by the administrator..
         /// </summary>
         public static string RequestDenyReasonAutodeny {

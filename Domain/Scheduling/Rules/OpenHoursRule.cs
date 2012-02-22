@@ -56,15 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
             oldResponses.Remove(CreateResponse(person, dateToCheck, "remove"));
             //on delete this should be empty and never runned
-            foreach (IPersonAssignment assignment in scheduleDay.PersonAssignmentCollection())
+            
+            IBusinessRuleResponse response = checkScheduleDay(scheduleDay, person, dateToCheck);
+            if(response != null)
             {
-                IBusinessRuleResponse response = checkAssignmentIsOnOpenHours(assignment, person, dateToCheck);
-                if(response != null)
-                {
-                    responseList.Add(response);
-                    oldResponses.Add(response);
-                }
+                responseList.Add(response);
+                oldResponses.Add(response);
             }
+            
             return responseList;
         }
         
@@ -77,35 +76,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return response;
         }
 
-        private IBusinessRuleResponse checkAssignmentIsOnOpenHours(IPersonAssignment assignment, IPerson person, DateOnly dateOnly)
+        private IBusinessRuleResponse checkScheduleDay(IScheduleDay scheduleDay, IPerson person, DateOnly dateOnly)
         {
-            if (assignment.HasProjection)
+            if (scheduleDay.HasProjection)
             {
-                IVisualLayerCollection layerCollection = assignment.ProjectionService().CreateProjection();
+                IVisualLayerCollection layerCollection = scheduleDay.ProjectionService().CreateProjection();
                 if (layerCollection == null || !layerCollection.HasLayers)
                     return null;
                 DateTimePeriod period = layerCollection.Period().Value;
                 IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period.StartDateTime, person);
 
-                foreach (DateTimePeriod dateTimePeriod in openHours)
+                if (openHours.Any(dateTimePeriod => dateTimePeriod.Contains(period)))
                 {
-                    if(dateTimePeriod.Contains(period))
-                        return null;
+                    return null;
                 }
 
                 foreach (IVisualLayer layer in layerCollection.FilterLayers<IActivity>())
                 {
-                    if(((IActivity)layer.Payload).RequiresSkill)
+                    if (((IActivity)layer.Payload).RequiresSkill)
                     {
-                        bool found = false;
-                        foreach (DateTimePeriod dateTimePeriod in openHours)
-                        {
-                            if (dateTimePeriod.Contains(layer.Period))
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
+                        bool found = openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period));
                         if (!found)
                         {
                             string errorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,

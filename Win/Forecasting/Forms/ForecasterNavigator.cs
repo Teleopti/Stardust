@@ -991,36 +991,38 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						var skillPropertyPages = (AbstractPropertyPages<ISkill>) sender;
 						skillPropertyPages.Owner.Visible = false;
 
+						int numberOfSkillsAdded = 0;
 						DialogResult result;
 						do
 						{
+							numberOfSkillsAdded++;
 							IChildSkill childSkill = new ChildSkill(
 								Resources.LessThanSkillNameGreaterThan,
 								string.Format(CultureInfo.CurrentUICulture,
-											  Resources.SkillCreatedDotParameter0, DateTime.Now),
+								              Resources.SkillCreatedDotParameter0, DateTime.Now),
 								skill.DisplayColor,
 								skill.DefaultResolution,
 								skill.SkillType)
-														{
-															MidnightBreakOffset = skill.MidnightBreakOffset
-														};
+							                         	{
+							                         		MidnightBreakOffset = skill.MidnightBreakOffset
+							                         	};
 
-							//TODO! Fix so default settings will be fetched from parent skill...
 							SkillWizardPages.SetSkillDefaultSettings(childSkill);
 							childSkill.TimeZone = skill.TimeZone;
 							childSkill.Activity = skill.Activity;
 							childSkill.SetParentSkill(skill);
-							using (var swp = new SkillWizardPages(childSkill,_repositoryFactory,_unitOfWorkFactory))
+							using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory))
 							{
 								swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
 								using (var wizard = new Wizard(swp))
 								{
-									result = wizard.ShowDialog(this);                                }
+									result = wizard.ShowDialog(this);
+								}
 							}
 
 							if (result == DialogResult.Cancel)
 							{
-								//TODO! Remove child skill?
+								numberOfSkillsAdded--;
 							}
 						} while (
 							result != DialogResult.Cancel &&
@@ -1035,13 +1037,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 									: 0)
 							== DialogResult.Yes);
 
-						//Show wizard page for default distributions
-						using (var spp = new MultisiteSkillPropertiesPages(skill,_repositoryFactory,_unitOfWorkFactory))
+						if (numberOfSkillsAdded > 0)
 						{
-							spp.Initialize(PropertyPagesHelper.GetMultisiteSkillDistributionPages(), new LazyLoadingManagerWrapper());
-							using (var properties = new PropertiesPages(spp))
+							//Show wizard page for default distributions
+							using (var spp = new MultisiteSkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory))
 							{
-								properties.ShowDialog(this);
+								spp.Initialize(PropertyPagesHelper.GetMultisiteSkillDistributionPages(), new LazyLoadingManagerWrapper());
+								using (var properties = new PropertiesPages(spp))
+								{
+									properties.ShowDialog(this);
+								}
 							}
 						}
 					}
