@@ -27,6 +27,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _selectorChanged(value, url, savedLabel) {
+		$("#selectors label").hide();
 		var data = { LCID: value };
 		$.ajax({
 			url: url,
@@ -40,6 +41,9 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 					$(savedLabel).show();
 				else
 					$(savedLabel).show();
+				setInterval(function () {
+					$(savedLabel).hide();
+				}, 1000)
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);

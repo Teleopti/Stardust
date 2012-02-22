@@ -6,12 +6,12 @@
 
 
 <div id ="selectors" class="ui-corner-all">
-	<p style="height: 80px">
+	<p style="height: 70px">
 		xxCulture<br/>
 		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
 		<label id="cultureSaved" class="displaynone">xxSaved!</label>
 	</p>
-	<p style="height: 80px">
+	<p style="height: 50px">
 		xxUiCulture<br/>
 		@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
 		<label id="cultureUiSaved" class="displaynone">xxSaved!</label>
