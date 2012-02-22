@@ -138,6 +138,7 @@
     <Compile Include="Areas\MobileReports\Core\SkillProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\WebReportUserInfoProvider.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistration.cs" />
+    <Compile Include="Areas\MobileReports\Models\Domain\ReportIntervalType.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\WebReportUserInformation.cs" />
     <Compile Include="Areas\MobileReports\Models\Layout\DateBoxGlobalizationViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportChartInfo.cs" />

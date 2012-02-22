@@ -8,6 +8,7 @@
 
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 	using Teleopti.Interfaces.Domain;
@@ -21,7 +22,7 @@
 		public void Setup()
 		{
 			_dataService = MockRepository.GenerateMock<IReportDataService>();
-			_target = new ReportDataFetcher(new DefinedReportProviderForTest(), _dataService);
+			_target = new ReportDataFetcher(new DefinedReportProviderForTest(), _dataService, new CurrentThreadCultureProvider());
 		}
 
 		#endregion

@@ -13,22 +13,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 	using Teleopti.Ccc.Domain.Security.Principal;
 	using Teleopti.Ccc.TestCommon;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
 	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 
 	[TestFixture]
 	public class DefinedReportProviderTest
 	{
-		private MockRepository _mock;
-
-		private IPrincipalAuthorization _principalAuthorization;
+		#region Setup/Teardown
 
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_principalAuthorization = _mock.DynamicMock<IPrincipalAuthorization>();
+		}
+
+		#endregion
+
+		private MockRepository _mock;
+
+		private IPrincipalAuthorization _principalAuthorization;
+
+		private PrincipalProviderForTest CreatePrincipalProvider()
+		{
+			var teleoptiPrincipalForTest = new TeleoptiPrincipalForTest(new FakeIdentity("MeFaky"), null);
+			teleoptiPrincipalForTest.SetPrincipalAuthorization(this._principalAuthorization);
+			return new PrincipalProviderForTest(teleoptiPrincipalForTest);
 		}
 
 		[Test]
@@ -135,13 +145,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 
 				report.Should().Be.Null();
 			}
-		}
-
-		private PrincipalProviderForTest CreatePrincipalProvider()
-		{
-			var teleoptiPrincipalForTest = new TeleoptiPrincipalForTest(new FakeIdentity("MeFaky"), null);
-			teleoptiPrincipalForTest.SetPrincipalAuthorization(this._principalAuthorization);
-			return new PrincipalProviderForTest(teleoptiPrincipalForTest);
 		}
 	}
 }

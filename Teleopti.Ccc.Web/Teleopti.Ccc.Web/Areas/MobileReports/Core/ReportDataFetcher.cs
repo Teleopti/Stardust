@@ -1,30 +1,35 @@
-using System.Globalization;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
+	using Teleopti.Ccc.UserTexts;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
+	using Teleopti.Ccc.Web.Core.RequestContext;
+	using Teleopti.Interfaces.Domain;
 
 	public class ReportDataFetcher : IReportRequestValidator
 	{
+		private readonly ICultureProvider _cultureProvider;
+
 		private readonly IReportDataService _dataService;
+
 		private readonly IDefinedReportProvider _definedReportProvider;
 
-		public ReportDataFetcher(IDefinedReportProvider definedReportProvider, IReportDataService dataService)
+		public ReportDataFetcher(
+			IDefinedReportProvider definedReportProvider, IReportDataService dataService, ICultureProvider _cultureProvider)
 		{
 			_definedReportProvider = definedReportProvider;
 			_dataService = dataService;
+			this._cultureProvider = _cultureProvider;
 		}
 
 		#region IReportRequestValidator Members
 
 		public ReportDataFetchResult FetchData(ReportRequestModel request)
 		{
-			int interval = request.ReportIntervalType;
-			if (!(interval == 1 || interval == 7))
+			var interval = (ReportIntervalType)request.ReportIntervalType;
+			if (!(interval == ReportIntervalType.Day || interval == ReportIntervalType.Week))
 			{
 				// TODO PW Check This
 				return Error(Resources.InputError);
@@ -42,27 +47,29 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			var reportData = report.GenerateReport(_dataService, reportDataParam);
 
 			return new ReportDataFetchResult
-			       	{
-			       		GenerationRequest =
-			       			new ReportGenerationResult {ReportInput = reportDataParam, Report = report, ReportData = reportData}
-			       	};
+				{
+					GenerationRequest =
+						new ReportGenerationResult { ReportInput = reportDataParam, Report = report, ReportData = reportData }
+				};
 		}
 
 		#endregion
 
-		private static ReportDataParam getReportDataParameters(ReportRequestModel request, int interval)
+		private ReportDataParam getReportDataParameters(ReportRequestModel request, ReportIntervalType interval)
 		{
-			DateOnly firstDay = interval == 7
-			                    	? new DateOnly(DateHelper.GetFirstDateInWeek(request.ReportDate, CultureInfo.CurrentCulture))
+			
+			DateOnly firstDay = interval.IsTypeWeek()
+			                    	? new DateOnly(DateHelper.GetFirstDateInWeek(request.ReportDate, _cultureProvider.GetCulture()))
 			                    	: request.ReportDate;
-			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(interval - 1));
+			var addDays = interval.IsTypeWeek() ? 6 : 0;
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(addDays));
 
-			return new ReportDataParam {IntervalType = interval, Period = period, SkillSet = request.SkillSet};
+			return new ReportDataParam { IntervalType = interval, Period = period, SkillSet = request.SkillSet };
 		}
 
 		private ReportDataFetchResult Error(string message)
 		{
-			return new ReportDataFetchResult {Errors = new[] {message}};
+			return new ReportDataFetchResult { Errors = new[] { message } };
 		}
 	}
 }

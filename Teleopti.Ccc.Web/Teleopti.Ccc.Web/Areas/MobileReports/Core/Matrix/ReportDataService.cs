@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                             user.BusinessUnitCode, param.SkillSet,
 			                                                                             user.TimeZoneCode);
 			return webReportRepository.ReportDataQueueStatAbandoned(init.Scenario, init.SkillSet, init.WorkloadSet,
-			                                                         param.IntervalType,
+																	 (int)param.IntervalType,
 			                                                         param.Period.StartDate, param.Period.EndDate,
 			                                                         init.IntervalFrom,
 			                                                         init.IntervalTo,
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                             user.BusinessUnitCode, param.SkillSet,
 			                                                                             user.TimeZoneCode);
 			return webReportRepository.ReportDataForecastVersusActualWorkload(init.Scenario, init.SkillSet, init.WorkloadSet,
-			                                                                   param.IntervalType,
+			                                                                   (int)param.IntervalType,
 			                                                                   param.Period.StartDate, param.Period.EndDate,
 			                                                                   init.IntervalFrom,
 			                                                                   init.IntervalTo,
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                             user.BusinessUnitCode, param.SkillSet,
 			                                                                             user.TimeZoneCode);
 			return webReportRepository.ReportDataServiceLevelAgentsReady(init.SkillSet, init.WorkloadSet,
-			                                                              param.IntervalType,
+																		  (int)param.IntervalType,
 			                                                              param.Period.StartDate, param.Period.EndDate,
 			                                                              init.IntervalFrom,
 			                                                              init.IntervalTo, init.ServiceLevelCalculationId,
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                             user.BusinessUnitCode, param.SkillSet,
 			                                                                             user.TimeZoneCode);
 			return webReportRepository.ReportDataServiceLevelAgentsReady(init.SkillSet, init.WorkloadSet,
-			                                                              param.IntervalType,
+																		  (int)param.IntervalType,
 			                                                              param.Period.StartDate, param.Period.EndDate,
 			                                                              init.IntervalFrom,
 			                                                              init.IntervalTo, init.ServiceLevelCalculationId,

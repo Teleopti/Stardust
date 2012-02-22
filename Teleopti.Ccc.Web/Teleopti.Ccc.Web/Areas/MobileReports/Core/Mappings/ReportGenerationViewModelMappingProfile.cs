@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 	using Teleopti.Ccc.Web.Core.RequestContext;
 
 	public class ReportGenerationViewModelMappingProfile : Profile
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.ReportName,
 				           o => o.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.Report.ReportNameResourceKey)))
 				.ForMember(d => d.PeriodLegend,
-				           o => o.MapFrom(s => s.ReportInput.IntervalType == 1 ? Resources.Time : Resources.Day))
+				o => o.MapFrom(s => s.ReportInput.IntervalType.IsTypeWeek() ? Resources.Day : Resources.Time))
 				.ForMember(d => d.ReportDate,
 				           o =>
 				           o.MapFrom(
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				           		: _userTextTranslator.Invoke().TranslateText(s.Report.ReportInfo.SeriesResourceKeys[1])))
 				.ForMember(d => d.ChartTypeHint,
 				           o =>
-				           o.MapFrom(s => s.Report.ReportInfo.ChartTypeHint[s.ReportInput.IntervalType == 1 ? 0 : 1]))
+						   o.MapFrom(s => s.Report.ReportInfo.ChartTypeHint[s.ReportInput.IntervalType.IsTypeWeek() ? 1 : 0]))
 				.ForMember(d => d.Y1DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[0]))
 				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));
 
@@ -104,8 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 
 			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>().ConvertUsing(
 				s => this._mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(
-					s.ReportInput.IntervalType == 1 ? s.ReportData :
-						ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, _cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek)));
+					s.ReportInput.IntervalType == ReportIntervalType.Week ? ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, this._cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek) :
+						s.ReportData));
 					
 
 
