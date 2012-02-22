@@ -8,11 +8,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public void AddSubscription(Subscription subscription)
 		{
-			var routes = subscription.Routes();
-			foreach (var route in routes)
-			{
-				AddToGroup(route);
-			}
+				AddToGroup(subscription.Route());
 		}
 
 		public void RemoveSubscription(string route)
