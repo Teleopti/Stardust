@@ -19,7 +19,22 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _onSelectorChanged() {
 		$("#selectors select").change(function () {
-			alert("lcid choosen" + $(this).val());
+			var data = { LCID: $(this).val() };
+
+			$.ajax({
+				url: "Settings/UpdateCulture",
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: "POST",
+				cache: false,
+				data: JSON.stringify(data),
+				success: function (data, textStatus, jqXHR) {
+					alert("ok");
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				}
+			});
 		});
 	}
 
