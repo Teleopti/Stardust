@@ -272,14 +272,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateContractStuff(IUnitOfWork uow)
 		{
-			TestData.ContractOne = ContractFactory.CreateContract("Contract One");
+			TestData.CommonContract = ContractFactory.CreateContract("Common contract");
 			TestData.PartTimePercentageOne = PartTimePercentageFactory.CreatePartTimePercentage("PartTimePercentage One");
-			TestData.ContractScheduleOne = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			TestData.ContractScheduleOne.Description = new Description("ContractSchedule One");
+
+			TestData.WorkingWeekContractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			TestData.WorkingWeekContractSchedule.Description = new Description("Working week schedule");
+
+			TestData.DayOffTodayContractSchedule = new ContractSchedule("Day off today schedule");
+			TestData.DayOffTodayContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
 
 			var repository = new Repository(uow);
-			repository.Add(TestData.ContractOne);
-			repository.Add(TestData.ContractScheduleOne);
+			repository.Add(TestData.CommonContract);
+			repository.Add(TestData.WorkingWeekContractSchedule);
+			repository.Add(TestData.DayOffTodayContractSchedule);
 			repository.Add(TestData.PartTimePercentageOne);
 		}
 
