@@ -473,6 +473,25 @@ button.icon-left{padding-left: 35px;}
 	background-color: rgba(241,241,241,0.9);
 }
 
+.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie7 .ui-tooltip-custom .ui-tooltip-content,
+.ie8 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie8 .ui-tooltip-custom .ui-tooltip-content{
+	border-color: rgb(241,241,241);
+	background-color: rgb(241,241,241);
+	color: #010101;
+	font-size: 10px;
+	line-height: 12px;
+	padding: 1px 4px;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie8 .ui-tooltip-custom .ui-tooltip-titlebar{
+	background-color: rgb(241,241,241);
+}
+
 .ui-tooltip-custom .ui-tooltip-icon{
 	border-color: #CCC;
 	background: #F1F1F1;
