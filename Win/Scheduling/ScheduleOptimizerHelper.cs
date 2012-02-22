@@ -194,6 +194,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, BackgroundWorker backgroundWorker)
         {
             if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
