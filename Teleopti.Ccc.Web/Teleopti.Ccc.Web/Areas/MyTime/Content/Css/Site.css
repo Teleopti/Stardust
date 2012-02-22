@@ -456,37 +456,7 @@ button.icon-left{padding-left: 35px;}
 
 /*** ToolTip ***/
 .tooltip{position: relative;}
-/*.tooltip-container{
-	position: absolute;
-	bottom: 4px;
-	left: -37px;
-	z-index: 1000 !important;
-}
-.tooltip-top, .tooltip-content, .tooltip-bottom{background-image: url(../Images/tooltip_bg_sprite.png); background-color: transparent; background-repeat: no-repeat; width: 198px; }
-.tooltip-top{ background-position: 0 0; height: 3px;}
-.tooltip-content{
-	background-position: -198px 0; 
-	background-repeat: repeat-y;
-	font-size: 10px;
-	line-height: 12px;
-	padding: 0 5px;
-	text-align: left;
-	word-wrap: break-word;
-}
-.tooltip-bottom{background-position: 0 -3px; height: 51px;}
 
-.tooltip-container dl dt{
-	clear: left;
-	color: #010101;
-	font-weight: bold;
-	float:left;
-	margin-bottom: 5px;
-	width: 50px;	
-}
-.tooltip-container dl dd{float: left; margin-bottom: 5px; width: 140px;}*/
-
-
-/*! Tooltip style */
 .ui-tooltip-custom .ui-tooltip-titlebar,
 .ui-tooltip-custom .ui-tooltip-content{
 	border-color: rgb(241,241,241);
@@ -513,7 +483,20 @@ button.icon-left{padding-left: 35px;}
 		border-color: #AAA;
 		color: #111;
 	}
+	
+.ui-tooltip-custom dl dt{
+	clear: left;
+	color: #010101;
+	font-weight: bold;
+	float:left;
+	margin-bottom: 5px;	
+}
 
+.ui-tooltip-custom dl dd {
+	float: left;
+	margin-bottom: 5px;
+	margin-left: 4px;
+}
 
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}

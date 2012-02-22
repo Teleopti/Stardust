@@ -144,8 +144,26 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 						tip: true
 					},
 					position: {
-						my: 'bottom left',  // Position my top left...
-						at: 'top right', // at the bottom right of...
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse'
+					}
+				});
+			});
+
+			$('[title]').each(function () {
+				$(this).qtip({
+					content: {
+						text: $(this).attr('title')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
 						target: 'mouse'
 					}
 				});
