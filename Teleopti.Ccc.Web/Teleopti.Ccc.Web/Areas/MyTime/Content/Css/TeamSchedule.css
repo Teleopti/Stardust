@@ -59,7 +59,6 @@
 .teamschedule-agents {
 	width: 100%;
 	position: relative;
-	z-index: 499;
 }
 .teamschedule-agent 
 {
@@ -69,6 +68,7 @@
 	width: 100%;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 	vertical-align: bottom;
+	z-index: 99;
 }
 .teamschedule-agent-name 
 {
