@@ -27,18 +27,13 @@
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<FullBuild>Yes</FullBuild>
-		<ProductsToBuild>0</ProductsToBuild>
+		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
 		<FullBuild>No</FullBuild>
-		<ProductsToBuild>1</ProductsToBuild> 
+		<ProductsToBuild>1</ProductsToBuild> <!-- only Server MSI -->
 		<MSIShare>D:\Installation\PBImsi</MSIShare>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(COMPUTERNAME)' == 'INTEGRATION'" >
-		<TfsLibraryLocation>C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
-		<SDKDocProj>$(CCNetWorkingDirectory)\docSdk.shfbproj</SDKDocProj>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(CCNetProject)' == 'BuildMSI-root'" >
@@ -46,7 +41,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;BuildAndTest;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
