@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence ? s : null))
 				;
 			
 			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
@@ -159,6 +160,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<DayMappingData, DayOffDayViewModel>()
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
+				;
+
+			CreateMap<DayMappingData, AbsenceDayViewModel>()
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().Single().Layer.Payload.Description.Name))
 				;
 
 			CreateMap<DayMappingData, PreferenceDayViewModel>()
@@ -198,12 +203,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DayMappingData, HeaderViewModel>()
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))
 				.ForMember(d => d.DayDescription, o => o.MapFrom(s =>
-																					{
-																						var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-																						if (s.Date.Day == 1 || s.Date == firstDisplayDate)
-																							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
-																						return string.Empty;
-																					}))
+				                                                 	{
+				                                                 		var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
+				                                                 		if (s.Date.Day == 1 || s.Date == firstDisplayDate)
+				                                                 			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
+				                                                 		return string.Empty;
+				                                                 	}))
 				;
 
 			CreateMap<IWorkflowControlSet, PreferencePeriodViewModel>()

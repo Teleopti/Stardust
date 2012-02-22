@@ -56,6 +56,11 @@ namespace Teleopti.Ccc.WebTest.Core
 			return ScheduleDayStub(date, significantPartToDisplay, null, personAssignment, null, null);
 		}
 
+		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
+		{
+			return ScheduleDayStub(date, significantPartToDisplay, new[] {personAbsence});
+		}
+
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
 		{
 			return ScheduleDayStub(date, significantPartToDisplay, null, null, personAbsences, null);

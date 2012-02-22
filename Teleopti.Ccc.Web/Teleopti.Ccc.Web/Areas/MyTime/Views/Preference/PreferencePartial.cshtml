@@ -39,6 +39,7 @@
 					var preference = day.Preference;
 					var personAssignment = day.PersonAssignment;
 					var dayOff = day.DayOff;
+					var absence = day.Absence;
 					<li class="@(day.Editable ? "editable" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
 						<div>
 							<div class="day-header">
@@ -65,6 +66,13 @@
 										@dayOff.DayOff
 									</div>
 								}
+								@if (absence != null)
+								{
+									<div class="absence">
+										@absence.Absence
+									</div>
+								}
+
 							</div>
 						</div>
 					</li>

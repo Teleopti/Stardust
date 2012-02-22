@@ -333,6 +333,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.DayOff.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.Absence.Should().Be.Null();
 		}
 
 		[Test]
@@ -398,6 +400,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.Preference.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.DayOff.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.Absence.Should().Be.Null();
 		}
 
 		[Test]
@@ -405,7 +409,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var dayOff = stubs.PersonDayOffStub();
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
@@ -419,7 +423,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var dayOff = stubs.PersonDayOffStub();
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
@@ -430,7 +434,47 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 				.PersonAssignment.Should().Be.Null();
 			result.DayViewModel(data.SelectedDate)
 				.Preference.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.Absence.Should().Be.Null();
 		}
+
+
+
+		[Test]
+		public void ShouldMapAbsence()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub();
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] {absence});
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Absence.Absence.Should().Be(absence.Layer.Payload.Description.Name);
+		}
+
+		[Test]
+		public void ShouldOnlyMapAbsenceWhenAbsence()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub();
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] { absence });
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Absence.Should().Not.Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.DayOff.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.PersonAssignment.Should().Be.Null();
+			result.DayViewModel(data.SelectedDate)
+				.Preference.Should().Be.Null();
+		}
+
+
 
 		[Test]
 		public void ShouldMapPreferencePeriod()
