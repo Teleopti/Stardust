@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Globalization;
+using System.Web.Mvc;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -30,6 +31,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Password()
 		{
 			return View("PasswordPartial");
+		}
+
+		[UnitOfWorkAction]
+		[HttpPut]
+		public void UpdateCulture(int lcid)
+		{
+			_loggedOnUser.CurrentUser().PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(lcid));
+		}
+
+		[UnitOfWorkAction]
+		[HttpPut]
+		public void UpdateUiCulture(int lcid)
+		{
+			_loggedOnUser.CurrentUser().PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(lcid));
 		}
 	}
 }

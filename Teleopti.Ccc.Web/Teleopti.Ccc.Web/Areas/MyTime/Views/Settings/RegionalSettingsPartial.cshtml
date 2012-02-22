@@ -5,6 +5,6 @@
 }
 
 <div id ="selectors">
-	Culture...@Html.DropDownListFor(x=>x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new {@id="cultureSelect"})<br />
-	UiCulture...@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+	Culture...@Html.DropDownListFor(x=>x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new {@id="cultureSelect"})<br />
+	UiCulture...@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
 </div>

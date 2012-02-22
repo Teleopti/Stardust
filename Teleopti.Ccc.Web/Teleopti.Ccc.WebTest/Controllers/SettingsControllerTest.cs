@@ -46,5 +46,29 @@ namespace Teleopti.Ccc.WebTest.Controllers
 				res.ViewName.Should().Be.EqualTo("PasswordPartial");
 			}
 		}
+
+		[Test]
+		public void ShouldUpdateCulture()
+		{
+			var person = new Person();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			using (var target = new SettingsController(null, loggedOnUser))
+			{
+				target.UpdateCulture(1034);
+			}
+			person.PermissionInformation.Culture().LCID.Should().Be.EqualTo(1034);
+		}
+
+		[Test]
+		public void ShouldUpdateUiCulture()
+		{
+			var person = new Person();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			using (var target = new SettingsController(null, loggedOnUser))
+			{
+				target.UpdateUiCulture(1034);
+			}
+			person.PermissionInformation.UICulture().LCID.Should().Be.EqualTo(1034);
+		}
 	}
 }

@@ -20,12 +20,17 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _onSelectorChanged() {
 		$("#selectors select").change(function () {
 			var data = { LCID: $(this).val() };
+			var url;
+			if (this.id == "cultureSetting")
+				url = "Settings/UpdateCulture";
+			else
+				url = "Settings/UpdateUiCulture";
 
 			$.ajax({
-				url: "Settings/UpdateCulture",
+				url: url,
 				dataType: "json",
 				contentType: 'application/json; charset=utf-8',
-				type: "POST",
+				type: "PUT",
 				cache: false,
 				data: JSON.stringify(data),
 				success: function (data, textStatus, jqXHR) {
