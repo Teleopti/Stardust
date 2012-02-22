@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IScheduleMatrixPro> matrixList =
                matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(optimizerPreferences, matrixList, _container);
+            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container);
 
             var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
             resourceOptimizer_PersonOptimized(this, e);

@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private BackgroundWorker _backgroundWorker;
         private readonly ISchedulerStateHolder _schedulerState;
 
-
         public GroupDayOffOptimizerHelper(ILifetimeScope container, ScheduleOptimizerHelper scheduleOptimizerHelper)
         {
             _container = container;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleDayChangeCallback = _container.Resolve<IScheduleDayChangeCallback>();
         }
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
@@ -149,7 +147,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IScheduleMatrixPro> matrixList =
                 matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(optimizerPreferences, matrixList, _container);
+            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container);
 
             IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
                                                   where ((IDeleteTag)item).IsDeleted == false
@@ -172,7 +170,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             // schedule those are the white spots after back to legal state
             // ??? check if all white spots could be scheduled ??????
-            OptimizerHelperHelper.ScheduleBlankSpots(optimizerPreferences, matrixContainerList, scheduleService, _container);
+            OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
 
             ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
             bool found = false;

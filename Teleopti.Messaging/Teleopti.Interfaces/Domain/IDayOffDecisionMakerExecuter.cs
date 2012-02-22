@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="workingBitArray">The working bit array.</param>
         /// <param name="originalBitArray">The original bit array.</param>
-        /// <param name="matrix">The matrix.</param>
+        /// <param name="currentScheduleMatrix">The currentScheduleMatrix.</param>
         /// <param name="originalStateContainer">The original state container.</param>
         /// <param name="doReschedule">if set to <c>true</c> [re schedule].</param>
         /// <param name="handleDayOffConflict">if set to <c>true</c> [handle day off conflict].</param>
@@ -18,8 +18,9 @@
         bool Execute(
             ILockableBitArray workingBitArray, 
             ILockableBitArray originalBitArray, 
-            IScheduleMatrixPro matrix,
+            IScheduleMatrixPro currentScheduleMatrix,
             IScheduleMatrixOriginalStateContainer originalStateContainer,
-            bool doReschedule, bool handleDayOffConflict);
+            bool doReschedule, 
+            bool handleDayOffConflict);
     }
 }

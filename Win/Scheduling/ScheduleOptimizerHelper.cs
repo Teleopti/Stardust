@@ -723,7 +723,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(optimizerPreferences, matrixList, _container);
+            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container);
 
             var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
@@ -743,13 +743,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             var scheduleService = _container.Resolve<IScheduleService>();
 
             // schedule those are the white spots after back to legal state
-            // ??? check if all white spots could be scheduled ??????
-            OptimizerHelperHelper.ScheduleBlankSpots(optimizerPreferences, matrixContainerList, scheduleService, _container);
-
+            OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
             ISchedulePartModifyAndRollbackService rollbackService = 
                 new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-               
             bool notFullyScheduledMatrixFound = false;
             IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
             foreach (IScheduleMatrixOriginalStateContainer matrixContainer in matrixContainerList)

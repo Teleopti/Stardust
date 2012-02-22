@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
         }
 
-        public bool Execute(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, 
+        public bool Execute(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro currentScheduleMatrix, 
             IScheduleMatrixOriginalStateContainer originalStateContainer, bool doReschedule, bool handleDayOffConflict)
         {
             if (workingBitArray == null)
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var changesTracker = new LockableBitArrayChangesTracker();
 
-            IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, matrix, _ruleSet.ConsiderWeekBefore);
+            IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, _ruleSet.ConsiderWeekBefore);
 
             writeToLogMovedDays(movedDays, logWriter);
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, matrix, _ruleSet.ConsiderWeekBefore);
+            movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, _ruleSet.ConsiderWeekBefore);
             if (movedDays.Count > 0)
             {
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays, logWriter);
@@ -111,19 +111,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             IList<DateOnly> removedIllegalWorkTimeDays = new List<DateOnly>();
 
-            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, matrix, schedulingOptions, handleDayOffConflict);
+            var result = executeDayOffMovesInMatrix(workingBitArray, originalBitArray, currentScheduleMatrix, schedulingOptions, handleDayOffConflict);
             IEnumerable<changedDay> movedDates = result.MovedDays;
 
             if (!result.Result)
             {
                 if (doReschedule)
-                    rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
+                    rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
 
             resourceCalculateMovedDays(movedDates);
 
-            removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(matrix);
+            removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix);
             if (removedIllegalWorkTimeDays.Count > 0)
             {
                 writeToLogWorkShiftBackToLegalStateRemovedDays(logWriter, removedIllegalWorkTimeDays);
@@ -132,16 +132,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!doReschedule)
                 return true;
 
-            if (!rescheduleWhiteSpots(movedDates, removedIllegalWorkTimeDays, matrix, originalStateContainer))
+            if (!rescheduleWhiteSpots(movedDates, removedIllegalWorkTimeDays, schedulingOptions, currentScheduleMatrix, originalStateContainer))
             {
                 writeToLogReschedulingFailed(logWriter);
-                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
+                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
 
             if (movesOverMaxDaysLimit(logWriter))
             {
-                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
+                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (newValue >= oldValue)
             {
                 writeToLogValueNotBetter(logWriter);
-                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, matrix);
+                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
 
@@ -318,7 +318,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         }
 
-        private bool rescheduleWhiteSpots(IEnumerable<changedDay> movedDates, IEnumerable<DateOnly> removedIllegalWorkTimeDays, IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer)
+        private bool rescheduleWhiteSpots(
+            IEnumerable<changedDay> movedDates, 
+            IEnumerable<DateOnly> removedIllegalWorkTimeDays, 
+            ISchedulingOptions schedulingOptions,
+            IScheduleMatrixPro matrix, 
+            IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             var toSchedule = movedDates.Select(changedDay => changedDay.DateChanged).ToList();
             toSchedule.AddRange(removedIllegalWorkTimeDays);
@@ -328,13 +333,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-                // ***** create SchedulingOptions
-
-                ISchedulingOptions options = new SchedulingOptions();
-
-                // <-- new and temporary commented code to task 15791 (tamasb 2011-09-06)
-                //SetTheOriginalShiftCategoryInSchedulingOptions(dateOnly, matrix, originalStateContainer, options);
-                // -->
 
                 // reviewed and fixed version
                 IShiftCategory originalShiftCategory = null;
@@ -347,7 +345,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         originalShiftCategory = originalMainShift.ShiftCategory;
                 }
 
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, options);
+                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)

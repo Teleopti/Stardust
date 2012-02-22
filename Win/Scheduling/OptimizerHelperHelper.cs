@@ -18,14 +18,17 @@ namespace Teleopti.Ccc.Win.Scheduling
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public static class OptimizerHelperHelper
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizationPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public static void ScheduleBlankSpots(IOptimizationPreferences optimizationPreferences, IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-            IScheduleService scheduleService, IComponentContext container)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "schedulingOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public static void ScheduleBlankSpots(
+            IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+            IScheduleService scheduleService, 
+            IComponentContext container)
         {
-            // ***** create SchedulingOptions here
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
 
             var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
+            var optimizerPreferences = container.Resolve<IOptimizationPreferences>();
+            var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
+            schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizerPreferences, scheduleService.SchedulingOptions);
 
             foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
             {
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (!scheduleDayPro.DaySchedulePart().IsScheduled())
                     {
                         var effectiveRestriction =
-                            effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
+                            effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), scheduleService.SchedulingOptions);
                         result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), false, effectiveRestriction);
                     }
                     if (!result)
@@ -51,13 +54,15 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizerPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static void LockDaysForDayOffOptimization(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
+        public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
         {
-            // ***** create SchedulingOptions here
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
-
             var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
-            //the bloody optimizerPreferences must be in autofac soon
+            var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
+            var schedulingOptions = new SchedulingOptions();
+
+            var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
+            schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizationPreferences, schedulingOptions);
+
             IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
             foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
                 lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
