@@ -21710,15 +21710,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated!.
-        /// </summary>
-        public static string UpdatedExMark {
-            get {
-                return ResourceManager.GetString("UpdatedExMark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Updated on.
         /// </summary>
         public static string UpdatedOn {

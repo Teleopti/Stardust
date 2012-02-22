@@ -16,9 +16,8 @@ Scenario: See my profile
 Scenario: Change my culture
 	Given I am an agent
 	And I am swedish
-	When I sign in
-	Then I should see swedish date format
-	When I change culture to US
+	When I view my regional settings
+	And I change culture to US
 	Then I should see US date format
 
 Scenario: Browser's default culture

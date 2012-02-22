@@ -16,17 +16,18 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _partialInit() {
 		_onSelectorChanged();
 	}
+	
 
 	function _onSelectorChanged() {
 		$("#selectors #cultureSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateCulture", "#cultureSaved");
+			_selectorChanged($(this).val(), "Settings/UpdateCulture");
 		});
 		$("#selectors #cultureUiSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateUiCulture", "#cultureUiSaved");
+			_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
 		});
 	}
 
-	function _selectorChanged(value, url, savedLabel) {
+	function _selectorChanged(value, url) {
 		$("#selectors label").hide();
 		var data = { LCID: value };
 		$.ajax({
@@ -37,13 +38,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			cache: false,
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
-				if (url == "Settings/UpdateCulture")
-					$(savedLabel).show();
-				else
-					$(savedLabel).show();
-				setInterval(function () {
-					$(savedLabel).hide();
-				}, 1000)
+				location.reload();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
