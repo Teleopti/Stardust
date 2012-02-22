@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC
+namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
 	using System.Collections.Generic;
 
@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC
 					{
 						ReportId = "GetServiceLevelAgent",
 						ReportName = "GetServiceLevelAgent",
-						ReportNameResourceKey = "GetSlaNotLoc",
+						ReportNameResourceKey = "ServiceLevelParenthesisPercentSign",
 						FunctionCode = "ResReportServiceLevelAndAgentsReady",
 						GenerateReport = (service, input) => service.GetServiceLevelAgent(input),
 						ReportInfo =
 							new ReportMetaInfo
 								{
-									SeriesResourceKeys = new[] { "ServiceLevelPercentSignColon", null },
+									SeriesResourceKeys = new[] { "ServiceLevelParenthesisPercentSign", null },
 									SeriesFixedDecimalHint = new[] { 0, 0 },
 									ChartTypeHint = new[] { "line", "line" }
 								}

@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 	using Teleopti.Ccc.Domain.Security.AuthorizationData;
 	using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 	using Teleopti.Ccc.TestCommon.FakeData;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 	using Teleopti.Interfaces.Domain;
 
 	internal class DefinedReportsApplicationFunctionsFactory
 	{
 		private readonly IList<IApplicationFunction> _applicationFunctions;
 
-		public DefinedReportsApplicationFunctionsFactory(string remove )
+		public DefinedReportsApplicationFunctionsFactory(string remove)
 		{
 			this._applicationFunctions = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
 			this.AddAllDefinedReports();
@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 			{
 				this._applicationFunctions.Remove(this._applicationFunctions.First(x => remove.Equals(x.FunctionCode)));
 			}
-
 		}
 
 		public IList<IApplicationFunction> ApplicationFunctions
@@ -39,8 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 			DefinedReports.ReportInformations.Select(f => f.FunctionCode).Distinct().ForEach(
 				df =>
 				this._applicationFunctions.Add(
-					ApplicationFunctionFactory.CreateApplicationFunction(
-						df, martix, DefinedForeignSourceNames.SourceMatrix, "20")));
+					ApplicationFunctionFactory.CreateApplicationFunction(df, martix, DefinedForeignSourceNames.SourceMatrix, "20")));
 		}
 
 		private IApplicationFunction GetMatrix()
