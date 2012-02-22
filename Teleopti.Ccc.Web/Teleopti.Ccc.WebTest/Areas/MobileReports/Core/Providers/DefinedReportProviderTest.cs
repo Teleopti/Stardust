@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 
 	using Teleopti.Ccc.Domain.Security.Principal;
 	using Teleopti.Ccc.TestCommon;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
 	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;

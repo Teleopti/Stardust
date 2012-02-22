@@ -119,8 +119,8 @@
   <ItemGroup>
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
     <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
+    <Compile Include="Areas\MobileReports\Core\DefinedReports.cs" />
     <Compile Include="Areas\MobileReports\Core\IDateBoxGlobalizationViewModelFactory.cs" />
-    <Compile Include="Areas\MobileReports\Core\IoC\DefinedReports.cs" />
     <Compile Include="Areas\MobileReports\Core\IReportRequestValidator.cs" />
     <Compile Include="Areas\MobileReports\Core\IWebReportUserInfoProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\IoC\MobileReportsAreaModule.cs" />

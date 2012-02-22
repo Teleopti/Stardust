@@ -3,12 +3,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 
 	public class DefinedReportProviderForTest : IDefinedReportProvider
 	{
+		#region IDefinedReportProvider Members
+
 		public IEnumerable<DefinedReportInformation> GetDefinedReports()
 		{
 			return DefinedReports.ReportInformations;
@@ -18,5 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 		{
 			return this.GetDefinedReports().FirstOrDefault(x => reportId.Equals(x.ReportId));
 		}
+
+		#endregion
 	}
 }
