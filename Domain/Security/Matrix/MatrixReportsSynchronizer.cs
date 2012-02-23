@@ -148,13 +148,14 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
         /// <param name="applicationFunctions">The application functions.</param>
         /// <param name="info">The info.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper")]
         protected virtual IApplicationFunction CreateMatrixReportApplicationFunction(IEnumerable<IApplicationFunction> applicationFunctions, MatrixReportInfo info)
         {
             IApplicationFunction newFunction = new ApplicationFunction();
             newFunction.Parent = ApplicationFunction.FindByPath(applicationFunctions, DefinedRaptorApplicationFunctionPaths.AccessToReports);
             newFunction.FunctionCode = RemoveLeadingXFromDescription(info.ReportName);
             newFunction.FunctionDescription = info.ReportName;
-            newFunction.ForeignId = info.ReportId.ToString(CultureInfo.InvariantCulture);
+            newFunction.ForeignId = info.ReportId.ToString().ToUpper();
             newFunction.ForeignSource = DefinedForeignSourceNames.SourceMatrix;
             return newFunction;
         }
@@ -199,9 +200,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
                     IApplicationFunction foundFunction = ApplicationFunction.FindByForeignId(functions,
                                                                                              DefinedForeignSourceNames.
                                                                                                  SourceMatrix,
-                                                                                             info.ReportId.ToString(
-                                                                                                 CultureInfo.
-                                                                                                     InvariantCulture));
+                                                                                             info.ReportId.ToString().ToUpper());
                     if (foundFunction == null)
                     {
                         yield return info;
@@ -224,10 +223,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             {
                 foreach (IApplicationFunction function in reportFunctions)
                 {
-                    if (!string.IsNullOrEmpty(function.ForeignId))
+                    if (!string.IsNullOrEmpty(function.ForeignId) && isGuid(function.ForeignId))
                     {
                         MatrixReportInfo foundReport =
-                            MatrixReportInfo.FindByReportId(matrixReports, int.Parse(function.ForeignId));
+                            MatrixReportInfo.FindByReportId(matrixReports, new Guid(function.ForeignId.ToUpper()));
                         if (foundReport == null)
                         {
                             yield return function;
@@ -242,6 +241,19 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+        private static bool isGuid(string hopefullyGuid)
+        {
+            try
+            {
+                var guid = new Guid(hopefullyGuid);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
         /// <summary>
         /// Filters to the existing matrix application functions.
         /// </summary>
@@ -296,8 +308,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
         {
             foreach (IApplicationFunction function in functions)
             {
+                if(!isGuid(function.ForeignId)) continue;
+
                 MatrixReportInfo report =
-                    MatrixReportInfo.FindByReportId(matrixReports, int.Parse(function.ForeignId, CultureInfo.InvariantCulture));
+                    MatrixReportInfo.FindByReportId(matrixReports, new Guid(function.ForeignId));
                 if (report != null)
                 {
                     function.FunctionCode = RemoveLeadingXFromDescription(report.ReportName);

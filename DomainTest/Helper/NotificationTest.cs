@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 	public class SubscriptionTest
 	{
 		private Subscription target;
-		private Guid subscriptionId;
 		private Guid domainId;
 		private Guid domainReferenceId;
 		private DateTime startDate;
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			domainId = Guid.NewGuid();
 			domainReferenceId = Guid.NewGuid();
-			subscriptionId = Guid.NewGuid();
 			businessUnitId = Guid.NewGuid();
 			startDate = DateTime.Today;
 			endDate = startDate.AddDays(1);
@@ -118,10 +116,10 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type/id/" + domainId);
 
-			target.DomainId = Guid.Empty.ToString();
+			target.DomainId = null;
 			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type/ref/" + domainReferenceId);
 
-			target.DomainReferenceId = Guid.Empty.ToString();
+			target.DomainReferenceId = null;
 			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
 		}
 	}

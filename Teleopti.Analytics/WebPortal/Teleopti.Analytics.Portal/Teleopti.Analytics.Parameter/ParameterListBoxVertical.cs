@@ -414,16 +414,16 @@ namespace Teleopti.Analytics.Parameters
 				
 				function changepic(button,pic) 
 				{
-					var theform = document.aspnetForm.all(button);
+					var theform = document.getElementById(button);
 					theform.src=pic;
 				}
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal)
 				{
-					var lstFrom = document.aspnetForm.all(ListFrom);
-					var lstTo = document.aspnetForm.all(ListTo);
-					var lstVal = document.aspnetForm.all(ListVal);
-					var txtVal = document.aspnetForm.all(TextVal);
+					var lstFrom = document.getElementById(ListFrom);
+					var lstTo = document.getElementById(ListTo);
+					var lstVal = document.getElementById(ListVal);
+					var txtVal = document.getElementById(TextVal);
 
 					for (i=0;i<lstFrom.length;i++)
 					{

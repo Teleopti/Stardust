@@ -14,20 +14,22 @@ CREATE   PROCEDURE [mart].[report_description_get]
 20090211 Added new mart schema KJ
 Ola 2008-03-20
 tillfälligt utan koll mot sparat
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+exec mart.report_description_get @report_id='19233876-05A6-4198-9B56-30E25EFEC0F3',@saved_name_id=-1
 */
-@report_id int,
+@report_id uniqueidentifier,
 @saved_name_id int
 AS
 
 SET NOCOUNT ON
 
 DECLARE @name varchar(200)
-CREATE TABLE #out (report_name_resource_key nvarchar(50), saved_name nvarchar(200), create_time datetime, modified_time datetime, help_key nvarchar(500))
+CREATE TABLE #out (report_name_resource_key nvarchar(50), name varchar(500), saved_name nvarchar(200), create_time datetime, modified_time datetime, help_key nvarchar(500))
 
 INSERT into #out
-SELECT report_name_resource_key, '', null, null, help_key
-FROM mart.report
-WHERE report_id = @report_id
+SELECT report_name_resource_key, report_name, '', null, null, help_key
+FROM mart.v_report
+WHERE Id = @report_id
 --
 --INSERT INTO @out
 --SELECT '', name, create_time, modified_time

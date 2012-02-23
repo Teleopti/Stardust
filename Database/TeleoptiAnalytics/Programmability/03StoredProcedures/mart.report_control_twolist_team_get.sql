@@ -13,6 +13,7 @@ CREATED:	20080915 KJ
 -- 2009-04-27	DaJo	maxdate format (default input)
 -- 2011-10-19	JoNo	Since this sp is not in use as far as I can see i recycle this one to the new control for twolist team.
 -- 2012-01-03	JoNo	Added parameter @group_page_code for dynamic loading purposes. Not in use in SP.
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 CREATE PROC [mart].[report_control_twolist_team_get]
@@ -21,7 +22,7 @@ CREATE PROC [mart].[report_control_twolist_team_get]
 @date_to			datetime = @date_from,
 @group_page_code	uniqueidentifier,
 @site_id			int,
-@report_id			int,
+@report_id			uniqueidentifier,
 @person_code		uniqueidentifier,
 @language_id		int,
 @bu_id				uniqueidentifier

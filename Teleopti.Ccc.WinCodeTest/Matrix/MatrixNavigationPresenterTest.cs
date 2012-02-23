@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 
             var orphanMatrixFunction = _mocks.Stub<IApplicationFunction>();
             SetupResult.For(orphanMatrixFunction.LocalizedFunctionDescription).Return("Orphan Report Name");
-            var orphanMatrixFunctions = new List<IApplicationFunction> {orphanMatrixFunction};
+            var orphanMatrixFunctions = new List<IApplicationFunction> { orphanMatrixFunction };
 
             var tree = _target.CreateTree(groupedMatrixFunctions, orphanMatrixFunctions);
 
-            Assert.That(tree.Count(), Is.EqualTo(1));
+            Assert.That(tree.Count(), Is.EqualTo(2));
             var rootNode = tree.First();
             Assert.That(rootNode.DisplayName, Is.EqualTo(Resources.HistoricalReports));
             Assert.That(rootNode.ImageIndex, Is.EqualTo(0));
@@ -90,9 +90,9 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             Assert.That(groupNode.DisplayName, Is.EqualTo(matrixFunctionGroup.LocalizedDescription));
             var matrixFunctionNode = groupNode.Nodes.Single();
             Assert.That(matrixFunctionNode.DisplayName, Is.EqualTo(groupedMatrixFunction.LocalizedFunctionDescription));
-            var orphanMatrixFunctionNode = rootNode.Nodes.ElementAt(1);
+            var orphanMatrixFunctionNode = tree.ElementAt(1);
             Assert.That(orphanMatrixFunctionNode.DisplayName,
-                        Is.EqualTo(orphanMatrixFunction.LocalizedFunctionDescription));
+                        Is.EqualTo(Resources.CustomReports));
         }
 
         [Test]

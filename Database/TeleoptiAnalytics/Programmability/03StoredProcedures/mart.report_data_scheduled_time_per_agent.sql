@@ -15,6 +15,7 @@ GO
 --					2011-06-22 Azure fix DJ
 --					2011-10-27 #16704 - (re?)-Adding Activity and Abscens as selection
 --					2012-01-09 Pass BU to ReportAgents ME
+--					2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Scheduled Time per Agent
 -- =============================================
 --exec mart.report_data_scheduled_time_per_agent @scenario_id=N'0',@date_from='2011-10-27 00:00:00',@date_to='2011-10-27 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'-2',@agent_code=N'00000000-0000-0000-0000-000000000002',@activity_set=N'12,15,14,11,5,13,16,4,0,8,3,9,6,7,2',@absence_set=N'1,4,2,3,0',@time_zone_id=N'2',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id=17,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
@@ -35,7 +36,7 @@ CREATE PROCEDURE [mart].[report_data_scheduled_time_per_agent]
 @absence_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS
