@@ -16,7 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};
-	var tabs;
+	var tabs = null;
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
@@ -92,21 +92,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _initNavigation() {
 
-		tabs = $('#tabs');
-
-		// Enable tabs on all tab widgets. The `event` property must be overridden so
-		// that the tabs aren't changed on click, and any custom event name can be
-		// specified. Note that if you define a callback for the 'select' event, it
-		// will be executed for the selected tab whenever the hash changes.
-		tabs.tabs({ event: 'change' });
-
-		// Define our own click handler for the top nav.
-		tabs
-			.find('[data-mytime-action]')
-			.click(function () {
-				_navigateTo($(this).data('mytime-action'));
+		tabs = $('#tabs')
+			.tabberiet({
+				click: function () {
+					_navigateTo($(this).data('mytime-action'));
+				}
 			})
 			;
+
 		if (location.hash.length <= 1) {
 			location.hash = '#' + _settings.defaultNavigation;
 		} else {
@@ -167,50 +160,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _adjustTabs(hashInfo) {
 
-		var toolbarId = '#' + hashInfo.controller + 'Tab';
-		var tabHash = '#' + hashInfo.controller + 'Tab';
-		var actionHash = hashInfo.actionHash;
+		var tabId = '#' + hashInfo.controller + 'Tab';
+		tabs.tabberiet('selectById', tabId);
 
-		var tab = tabs
-			.find('ul.ui-tabs-nav a')
-			.filter((function () { return this.hash == tabHash; }))
-			;
-
-		// initializes action for next/previous buttons in the period picker. refactor please.
-		var toolbar = $(toolbarId);
+		// initializes action for next/previous buttons in the period picker.
+		// should be set from whoever initializes the period picker instead.
+		var toolbar = $(tabId);
 		toolbar
 			.find('.date-range-selector')
-			.data('mytime-action', actionHash)
+			.data('mytime-action', hashInfo.actionHash)
 			;
-		
-		// I wonder what this does..?
-		//		navSection
-		//			.find('input[data-mytime-action]')
-		//			.each(function (i, inp) {
-		//				var b = $(inp);
-		//				b.attr('checked', (b.data('mytime-action') == navSectionAction) ? 'checked' : '');
-		//			})
-		//			;
-		//		navSection
-		//			.find('.buttonset-nav')
-		//			.buttonset("refresh")
-		//			;
-
-		// if no toolbar was found, show empty toolbar
-		if (toolbar.length == 0) {
-			$('.ui-tabs-panel').addClass('ui-tabs-hide');
-			$('#EmptyTabTest').removeClass('ui-tabs-hide');
-		} else {
-			$('#EmptyTabTest').addClass('ui-tabs-hide');
-		}
-		
-		// if no tab was found, select no tab
-		if (tab.length == 0) {
-			$('#tabs').tabs("select", -1);
-			$(".ui-tabs-selected").removeClass("ui-state-active").removeClass("ui-tabs-selected");
-		} else {
-			tab.triggerHandler('change');
-		}
 	}
 
 	function _loadContent(hashInfo) {
@@ -279,8 +238,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				var urlPrevPeriod = common.FixedDateToPartsUrl(prevPeriod);
 
 				range.find('span').html(periodData.Display);
-				range.find('button:first').data('mytime-action', actionPrefix + urlPrevPeriod + actionSuffix);
-				range.find('button:last').data('mytime-action', actionPrefix + urlNextPeriod + actionSuffix);
+				range.find('button:first')
+					.click(function () {
+						_navigateTo(actionPrefix + urlPrevPeriod + actionSuffix);
+					})
+					;
+				range.find('button:last')
+					.click(function () {
+						_navigateTo(actionPrefix + urlNextPeriod + actionSuffix);
+					})
+					;
 
 				_enablePortalControls(rangeSelectorId);
 			}
@@ -329,7 +296,7 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 			});
 
 
-			$(document).bind('click', function(e) {
+			$(document).bind('click', function (e) {
 				var $clicked = $(e.target);
 				if (!$clicked.parents().hasClass("dropdown"))
 					$(".dropdown dd ul").hide();
@@ -337,3 +304,8 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 		}
 	};
 })(jQuery);
+
+
+
+
+ 
