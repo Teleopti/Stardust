@@ -145,31 +145,32 @@ namespace Teleopti.Messaging.SignalR
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, domainObjectType);
+			registerEventSubscription(eventMessageHandler, Guid.Empty, null, null, domainObjectType,Consts.MinDate,Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, domainObjectId, null, domainObjectType);
+			registerEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, Consts.MinDate,
+			                          Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, Guid.Empty, domainObjectType);
+			registerEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, Guid.Empty, null, null, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		private void registerEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
 			if (!domainObjectType.IsInterface)
@@ -177,9 +178,9 @@ namespace Teleopti.Messaging.SignalR
 
 			var subscription = new Subscription
 			{
-				DomainId = Subscription.IdToString(domainObjectId),
+				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
 				DomainType = domainObjectType.AssemblyQualifiedName,
-				DomainReferenceId = Subscription.IdToString(referenceObjectId),
+				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
 				DomainReferenceType =
 					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
@@ -190,32 +191,17 @@ namespace Teleopti.Messaging.SignalR
 
 			EventSignal<object> result = _proxy.Invoke("AddSubscription", subscription);
 			result.Finished += (sender, e) =>
-			                   	{
-			                   		var route = subscription.Route();
+			{
+				var route = subscription.Route();
 
-									IList<SubscriptionWithHandler> handlers;
-									if (!_subscriptionHandlers.TryGetValue(route, out handlers))
-									{
-										handlers = new List<SubscriptionWithHandler>();
-										_subscriptionHandlers.Add(route, handlers);
-									}
-									handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription});
-			                   	};
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType)
-		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, null, Guid.Empty, domainObjectType);
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType)
-		{
-			RegisterEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, Consts.MinDate, Consts.MaxDate);
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, referenceObjectType, Guid.Empty, domainObjectType, startDate, endDate);
+				IList<SubscriptionWithHandler> handlers;
+				if (!_subscriptionHandlers.TryGetValue(route, out handlers))
+				{
+					handlers = new List<SubscriptionWithHandler>();
+					_subscriptionHandlers.Add(route, handlers);
+				}
+				handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
+			};
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -559,16 +545,8 @@ namespace Teleopti.Messaging.SignalR
 				{
 					foreach (var subscriptionWithHandler in reference)
 					{
-						if ((subscriptionWithHandler.Subscription.DomainIdAsGuid() == Guid.Empty ||
-						 subscriptionWithHandler.Subscription.DomainIdAsGuid() == eventMessage.DomainObjectId) &&
-						(subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == Guid.Empty ||
-						 subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == eventMessage.DomainObjectId) &&
-						(string.IsNullOrEmpty(subscriptionWithHandler.Subscription.DomainReferenceType) ||
-						 (eventMessage.ReferenceObjectTypeCache != null &&
-						  Type.GetType(subscriptionWithHandler.Subscription.DomainReferenceType, false, true).IsAssignableFrom(
-							eventMessage.ReferenceObjectTypeCache))) &&
-						((subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)))
+						if (subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
+						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)
 						{
 							subscriptionWithHandler.Handler.Invoke(this, new EventMessageArgs(eventMessage));
 						}
