@@ -324,4 +324,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			result.Summary.StyleClassName.Should().Contain("striped");
 		}
 	}
+
+
+
+
+	}
 }

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
+namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 {
 	public class StyleClassViewModel
 	{

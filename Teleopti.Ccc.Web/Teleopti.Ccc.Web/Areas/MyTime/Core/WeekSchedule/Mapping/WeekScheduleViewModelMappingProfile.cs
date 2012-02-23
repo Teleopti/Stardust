@@ -7,7 +7,6 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
