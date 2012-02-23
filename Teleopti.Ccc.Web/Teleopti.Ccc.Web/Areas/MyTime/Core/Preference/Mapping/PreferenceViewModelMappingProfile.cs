@@ -6,6 +6,7 @@ using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -153,7 +154,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
 				                                           	}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.Ignore())
+				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+				                                                 	{
+																		if (s.SignificantPart == SchedulePartView.MainShift)
+																			return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass();
+																		if (s.SignificantPart == SchedulePartView.DayOff)
+																			return StyleClasses.DayOff + " " + StyleClasses.Striped;
+				                                                 		return null;
+				                                                 	}))
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))

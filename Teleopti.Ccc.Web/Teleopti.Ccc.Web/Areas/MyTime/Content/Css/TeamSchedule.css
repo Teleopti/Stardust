@@ -117,10 +117,6 @@
 	text-align: center;
 	height: 18px;
 	border-radius: 2px;
-	
-	background-image: url(../Images/stripe.png);
-	
-	background-color: beige;
 }
 
 #TeamScheduleDateRangeSelector.date-range-selector .datepicker{

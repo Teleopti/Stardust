@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -184,6 +185,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.Summary.Title.Should().Be.EqualTo(domainData.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name);
+			result.Summary.StyleClassName.Should().Contain(StyleClasses.DayOff);
+			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
 		[Test]
@@ -254,7 +257,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Summary.StyleClassName.Should().Contain("striped");
+			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
 		[Test]
@@ -282,7 +285,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Summary.StyleClassName.Should().Contain("striped");
+			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 	}
 }

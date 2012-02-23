@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -396,6 +397,20 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapPersonAssignmentsStyleClassNameFromDisplayColor()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Coral)));
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Be(Color.Coral.ToStyleClass());
+		}
+
+		[Test]
 		public void ShouldOnlyMapPersonAssignmentWhenPersonAssignment()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
@@ -430,6 +445,21 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapDayOffStyleClassName()
+		{
+			var stubs = new StubFactory();
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, stubs.PersonDayOffStub());
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Contain(StyleClasses.DayOff);
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Contain(StyleClasses.Striped);
+		}
+
+		[Test]
 		public void ShouldOnlyMapDayOffWhenDayOff()
 		{
 			var stubs = new StubFactory();
@@ -448,8 +478,6 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.Absence.Should().Be.Null();
 		}
-
-
 
 		[Test]
 		public void ShouldMapAbsence()

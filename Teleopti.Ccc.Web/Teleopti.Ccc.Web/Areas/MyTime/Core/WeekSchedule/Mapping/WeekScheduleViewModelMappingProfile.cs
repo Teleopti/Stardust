@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 							if (hasDayOffUnderFullDayAbsence.HasDayOff())
 							{
 								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-								periodViewModel.StyleClassName += " striped";
+								periodViewModel.StyleClassName += " " + StyleClasses.Striped;
 								return periodViewModel;
 							}
 							if (significantPart == SchedulePartView.DayOff)
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Summary, c => c.Ignore())
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
-				.ForMember(d => d.StyleClassName, c => c.Ignore())
+				.ForMember(d => d.StyleClassName, c => c.UseValue(StyleClasses.DayOff + " " + StyleClasses.Striped))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()

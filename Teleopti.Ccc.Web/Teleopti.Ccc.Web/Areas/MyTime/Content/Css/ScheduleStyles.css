@@ -1,0 +1,36 @@
+﻿
+
+.weekview-day li.dayoff div,
+.calendarview-week li.dayoff .day-content {
+	border-left-color: beige;
+	border-right-color: beige;
+}
+.calendarview-week li.dayoff {
+	background-image: none;
+}
+.calendarview-week li.dayoff .day-content {
+	background-image: url(../Images/stripe.png);
+}
+
+.striped 
+{
+	background-image: url(../Images/stripe.png);
+	
+	/* Until IE supports gradites for real
+
+	-webkit-background-size: 6px 6px;
+	background-image: -webkit-linear-gradient(-45deg, 
+			rgba(0, 0, 0, .5) 0%, 
+			rgba(0, 0, 0, .5) 10%, 
+			transparent 10%, 
+			transparent 50%, 
+			rgba(0, 0, 0, .5) 50%, 
+			rgba(0, 0, 0, .5) 60%, 
+			transparent 60%, 
+			transparent 100%)*/
+}
+
+.teamschedule .dayoff 
+{
+	background-color: beige;
+}
