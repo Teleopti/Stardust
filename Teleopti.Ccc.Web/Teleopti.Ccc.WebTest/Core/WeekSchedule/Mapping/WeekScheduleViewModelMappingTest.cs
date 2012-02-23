@@ -328,5 +328,81 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 
 
-	}
+
+	//public class ColorProvider
+	//{
+		
+	//}
+
+	//[TestFixture]
+	//public class ColorProviderTest
+	//{
+
+	//    [Test]
+	//    public void ShouldMapStyleClassViewModelsFromUniqueProjectionsVisualLayerColors()
+	//    {
+	//        var stubs = new StubFactory();
+	//        var domainData = new WeekScheduleDomainData
+	//        {
+	//            Days = new[]
+	//                                        {
+	//                                            new WeekScheduleDayDomainData {Projection = stubs.ProjectionStub(new[] {stubs.VisualLayerStub(Color.Red)})},
+	//                                            new WeekScheduleDayDomainData {Projection = stubs.ProjectionStub(new[] {stubs.VisualLayerStub(Color.Red), stubs.VisualLayerStub(Color.Blue)})}
+	//                                        }
+	//        };
+
+	//        var target = new ColorProvider();
+
+	//        var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+	//        result.Styles.Select(s => s.Name)
+	//            .Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
+	//        result.Styles.Select(s => s.ColorHex)
+	//            .Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
+	//    }
+
+	//    [Test]
+	//    public void ShouldMapStyleClassViewModelsFromUniqueScheduleDayAssignmentMainShiftCategoryColor()
+	//    {
+	//        var stubs = new StubFactory();
+	//        var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, stubs.PersonAssignmentStub(new DateTimePeriod()));
+	//        var domainData = new WeekScheduleDomainData
+	//        {
+	//            Days = new[]
+	//                                        {
+	//                                            new WeekScheduleDayDomainData {ScheduleDay = scheduleDay}
+	//                                        }
+	//        };
+
+	//        var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+	//        var color = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor;
+	//        result.Styles.Select(s => s.Name)
+	//            .Should().Have.SameValuesAs(new[] { color.ToStyleClass() });
+	//        result.Styles.Select(s => s.ColorHex)
+	//            .Should().Have.SameValuesAs(new[] { color.ToHtml() });
+	//    }
+
+	//    [Test]
+	//    public void ShouldMapStyleClassViewModelsFromUniqueScheduleDayPersonAbsenceLayerColor()
+	//    {
+	//        var stubs = new StubFactory();
+	//        var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.FullDayAbsence, new[] { stubs.PersonAbsenceStub() });
+	//        var domainData = new WeekScheduleDomainData
+	//        {
+	//            Days = new[]
+	//                                        {
+	//                                            new WeekScheduleDayDomainData {ScheduleDay = scheduleDay}
+	//                                        }
+	//        };
+
+	//        var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+	//        var color = scheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor;
+	//        result.Styles.Select(s => s.Name)
+	//            .Should().Have.SameValuesAs(new[] { color.ToStyleClass() });
+	//        result.Styles.Select(s => s.ColorHex)
+	//            .Should().Have.SameValuesAs(new[] { color.ToHtml() });
+	//    }
+	//}
 }
