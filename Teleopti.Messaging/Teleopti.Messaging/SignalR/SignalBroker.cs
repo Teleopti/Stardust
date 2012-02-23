@@ -389,11 +389,6 @@ namespace Teleopti.Messaging.SignalR
 			get { return _proxy != null; }
 		}
 
-		public string ServicePath
-		{
-			get { return string.Empty; }
-		}
-
 		public event EventHandler<EventMessageArgs> EventMessageHandler;
 
 		public void InvokeEventMessageHandler(EventMessageArgs e)

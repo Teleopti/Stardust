@@ -361,10 +361,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// </remarks>
         bool IsInitialized { get; }
 
-        ///<summary>
-        ///</summary>
-        string ServicePath { get; }
-
         /// <summary>
         /// Occurs when [event message handler].
         /// </summary>
