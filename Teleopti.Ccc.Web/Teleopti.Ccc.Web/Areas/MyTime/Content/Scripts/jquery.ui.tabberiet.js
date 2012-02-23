@@ -34,9 +34,9 @@
 
 			// if no tab was found, select no tab
 			if (tab.length == 0) {
-				$('#tabs').tabs("select", -1);
+				this._element.tabs("select", -1);
 				// seems to be the only way to "unselect" the selected tab
-				$(".ui-tabs-selected")
+				this._element.find(".ui-tabs-selected")
 					.removeClass("ui-state-active")
 					.removeClass("ui-tabs-selected")
 					;
