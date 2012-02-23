@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
+			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 		}
 	}
 }
