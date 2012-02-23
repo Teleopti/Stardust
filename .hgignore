@@ -51,3 +51,4 @@ packages/
 *Test.xml
 symbolmodule.xml
 Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.Config
+*[Tt]est.dll.[Cc]onfig
