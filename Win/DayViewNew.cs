@@ -81,14 +81,14 @@ namespace Teleopti.Ccc.Win
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
                 var scheduleDay = e.Style.CellValue as IScheduleDay;
-            	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(scheduleDay);
+            	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence();
                 if (scheduleDay != null)
                 {
                     var significantPart = scheduleDay.SignificantPart();
 
                     if (significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.FullDayAbsence)
                     {
-						if (hasDayOffUnderFullDayAbsence.HasDayOff())
+						if (hasDayOffUnderFullDayAbsence.HasDayOff(scheduleDay))
 							drawCoveredDayOffFromSchedule(e, scheduleDay);
 						else
 							drawAssignmentFromSchedule(e, scheduleDay);	

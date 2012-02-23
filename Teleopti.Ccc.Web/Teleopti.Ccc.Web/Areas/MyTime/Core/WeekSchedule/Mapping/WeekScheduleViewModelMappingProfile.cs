@@ -20,14 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IPeriodViewModelFactory> _periodViewModelFactory;
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
+		private readonly Func<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
 			_headerViewModelFactory = headerViewModelFactory;
 			_scheduleColorProvider = scheduleColorProvider;
+			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
 		protected override void Configure()
@@ -57,8 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						{
 							var mappingEngine = _mapper();
 							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-							var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(s.ScheduleDay);
-							if (hasDayOffUnderFullDayAbsence.HasDayOff())
+							if (_hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(s.ScheduleDay))
 							{
 								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
 								periodViewModel.StyleClassName += " " + StyleClasses.Striped;

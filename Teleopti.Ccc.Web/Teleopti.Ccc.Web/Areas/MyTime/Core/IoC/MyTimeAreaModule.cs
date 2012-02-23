@@ -137,6 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
+			builder.RegisterType<HasDayOffUnderFullDayAbsence>().As<IHasDayOffUnderFullDayAbsence>();
 		}
 	}
 }

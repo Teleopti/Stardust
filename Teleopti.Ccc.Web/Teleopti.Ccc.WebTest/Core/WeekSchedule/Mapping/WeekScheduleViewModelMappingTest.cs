@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPeriodViewModelFactory periodViewModelFactory;
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
+		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 
 		[SetUp]
 		public void Setup()
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			periodViewModelFactory = MockRepository.GenerateMock<IPeriodViewModelFactory>();
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
+			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodSelectionViewModelFactory,
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
-			                  		             	() => scheduleColorProvider
+			                  		             	() => scheduleColorProvider,
+													() => hasDayOffUnderFullDayAbsence
 			                  		             	));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
@@ -249,43 +253,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapStyleClassForAbsenceOnPersonDayOff()
 		{
 			var stubs = new StubFactory();
-			var absence = stubs.PersonAbsenceStub();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence,
-																new StubFactory().PersonDayOffStub(), null, new[] { absence }, null);
-			var projection = stubs.ProjectionStub();
-			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection };
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, stubs.PersonAbsenceStub());
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay };
+			hasDayOffUnderFullDayAbsence.Stub(x => x.HasDayOff(scheduleDay)).Return(true);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
 
-		[Test]
-		public void ShouldMapStylClassForAbsenceOnContractDayOff()
-		{
-			var stubs = new StubFactory();
-			var absence = stubs.PersonAbsenceStub();
-			var person = MockRepository.GenerateMock<IPerson>();
-			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
-			var personContract = MockRepository.GenerateMock<IPersonContract>();
-			var contract = MockRepository.GenerateMock<IContract>();
-			var contractSchedule = MockRepository.GenerateMock<IContractSchedule>();
-
-			person.Stub(x => x.Period(DateOnly.Today)).Return(personPeriod);
-			personPeriod.Stub(x => x.PersonContract).Return(personContract);
-			personContract.Stub(x => x.Contract).Return(contract);
-			contract.Stub(x => x.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-			personContract.Stub(x => x.ContractSchedule).Return(contractSchedule);
-			contractSchedule.Stub(x => x.IsWorkday(Arg<DateOnly>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(false);
-
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, person, SchedulePartView.FullDayAbsence, null,
-																null, new[] { absence }, null);
-			var projection = stubs.ProjectionStub();
-			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, ScheduleDay = scheduleDay, Projection = projection };
-
-			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
-
-			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
-		}
 	}
 }
