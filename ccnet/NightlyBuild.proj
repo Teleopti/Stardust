@@ -53,7 +53,7 @@
 	<Target Name="Run" DependsOnTargets="BuildAndTest;AzureDeploy;AzureAnalyticsReportTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
-	<Target Name="RunETL"
+	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
