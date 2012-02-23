@@ -14,10 +14,9 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public Subscription()
 		{
-			DomainId = Guid.Empty.ToString();
-			DomainReferenceId = DomainId;
-			SubscriptionId = DomainId;
-			BusinessUnitId = DomainId;
+			DomainId = null;
+			DomainReferenceId = null;
+			BusinessUnitId = Guid.Empty.ToString();
 			LowerBoundary = DateToString(DateTime.MinValue);
 			UpperBoundary = DateToString(DateTime.MinValue);
 		}
@@ -28,16 +27,15 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string Route()
 		{
-			var emptyId = Guid.Empty.ToString();
 			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
 			var basicRoute = String.Join("/", stringArray);
 			
-			if (!DomainId.Equals(emptyId))
+			if (!string.IsNullOrEmpty(DomainId))
 			{
 				return String.Join("/", new[] {basicRoute, "id", DomainId});
 			}
 
-			if (!DomainReferenceId.Equals(emptyId))
+			if (!string.IsNullOrEmpty(DomainReferenceId))
 			{
 				return String.Join("/", new[] { basicRoute, "ref", DomainReferenceId});
 			}
@@ -75,11 +73,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public string UpperBoundary { get; set; }
 
-		/// <summary>
-		/// Gets or sets the subscription id.
-		/// </summary>
-		public string SubscriptionId { get; set; }
-
 		///<summary>
 		/// Gets or sets the data source.
 		///</summary>
@@ -89,30 +82,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// Gets or sets the business unit id.
 		/// </summary>
 		public string BusinessUnitId { get; set; }
-
-		/// <summary>
-		/// Gets the domain id as guid.
-		/// </summary>
-		public Guid DomainIdAsGuid()
-		{
-			return XmlConvert.ToGuid(DomainId);
-		}
-
-		/// <summary>
-		/// Gets the domain reference id as guid.
-		/// </summary>
-		public Guid DomainReferenceIdAsGuid()
-		{
-			return XmlConvert.ToGuid(DomainReferenceId);
-		}
-
-		/// <summary>
-		/// Gets the subscription id as guid.
-		/// </summary>
-		public Guid SubscriptionIdAsGuid()
-		{
-			return XmlConvert.ToGuid(SubscriptionId);
-		}
 
 		/// <summary>
 		/// Gets the business unit id as guid.

@@ -94,7 +94,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 				DomainReferenceId = Subscription.IdToString(domainReferenceId),
 				DomainReferenceType = "ref",
 				DomainType = "type",
-				SubscriptionId = Subscription.IdToString(subscriptionId),
 				LowerBoundary = Subscription.DateToString(startDate),
 				UpperBoundary = Subscription.DateToString(endDate),
 				DataSource = "datasource",
@@ -105,9 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void PropertiesShouldWork()
 		{
-			target.DomainIdAsGuid().Should().Be.EqualTo(domainId);
-			target.DomainReferenceIdAsGuid().Should().Be.EqualTo(domainReferenceId);
-			target.SubscriptionIdAsGuid().Should().Be.EqualTo(subscriptionId);
+			target.DomainId.Should().Be.EqualTo(domainId.ToString());
+			target.DomainReferenceId.Should().Be.EqualTo(domainReferenceId.ToString());
 			target.BusinessUnitIdAsGuid().Should().Be.EqualTo(businessUnitId);
 			target.DomainReferenceType.Should().Be.EqualTo("ref");
 			target.DomainType.Should().Be.EqualTo("type");

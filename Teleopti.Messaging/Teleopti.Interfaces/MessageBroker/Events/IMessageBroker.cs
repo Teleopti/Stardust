@@ -258,67 +258,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
 
         /// <summary>
-        /// Method for Raptor Developers to Register Event Subscriptions,
-        /// a delegate and filter criterias including dates is taken as arguments.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(  EventHandler<EventMessageArgs> eventMessageHandler,
-                                         Guid referenceObjectId,
-                                         Type referenceObjectType,
-                                         Guid domainObjectId,
-                                         Type domainObjectType);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler,
-                                       Type referenceObjectType,
-                                       Type domainObjectType,
-                                       DateTime startDate,
-                                       DateTime endDate);
-
-        /// <summary>
         /// Unregister a delegate and all filters associated will be unregistered as well.
         /// </summary>
         /// <param name="eventMessageHandler"></param>
