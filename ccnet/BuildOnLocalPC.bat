@@ -27,8 +27,8 @@ ECHO extended test scenarios (To run standard tests leave blank)
 SET /P CCNetProject=CCNetProject: 
 
 ::Run Build
-ECHO "%MSBUILD%" /nologo /m /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
-"%MSBUILD%" /nologo /m /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
+ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
+"%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
 ECHO.
 ECHO Done!
 PAUSE
