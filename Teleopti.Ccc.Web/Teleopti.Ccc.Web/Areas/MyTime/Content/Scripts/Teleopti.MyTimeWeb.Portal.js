@@ -14,9 +14,9 @@ if (typeof (Teleopti) === 'undefined') {
 
 
 Teleopti.MyTimeWeb.Portal = (function ($) {
-	var top_nav_selector = 'ul.ui-tabs-nav a';
 	var _settings = {};
 	var _partialViewInitCallback = {};
+	var tabs;
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
@@ -92,16 +92,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _initNavigation() {
 
-		topNavTabs = $('#tabs');
+		tabs = $('#tabs');
 
 		// Enable tabs on all tab widgets. The `event` property must be overridden so
 		// that the tabs aren't changed on click, and any custom event name can be
 		// specified. Note that if you define a callback for the 'select' event, it
 		// will be executed for the selected tab whenever the hash changes.
-		topNavTabs.tabs({ event: 'change' });
+		tabs.tabs({ event: 'change' });
 
 		// Define our own click handler for the top nav.
-		topNavTabs
+		tabs
 			.find('[data-mytime-action]')
 			.click(function () {
 				_navigateTo($(this).data('mytime-action'));
@@ -167,32 +167,50 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _adjustTabs(hashInfo) {
 
-		var navSectionHash = '#' + hashInfo.controller + 'Tab';
-		var navSectionAction = hashInfo.actionHash;
+		var toolbarId = '#' + hashInfo.controller + 'Tab';
+		var tabHash = '#' + hashInfo.controller + 'Tab';
+		var actionHash = hashInfo.actionHash;
 
-		var tab = topNavTabs
-			.find(top_nav_selector)
-			.filter((function () { return this.hash == navSectionHash; }))
-			;
-		var navSection = $(navSectionHash);
-		navSection
-			.find('input[data-mytime-action]')
-			.each(function (i, inp) {
-				var b = $(inp);
-				b.attr('checked', (b.data('mytime-action') == navSectionAction) ? 'checked' : '');
-			})
-			;
-		navSection
-			.find('.buttonset-nav')
-			.buttonset("refresh")
+		var tab = tabs
+			.find('ul.ui-tabs-nav a')
+			.filter((function () { return this.hash == tabHash; }))
 			;
 
-		navSection
+		// initializes action for next/previous buttons in the period picker. refactor please.
+		var toolbar = $(toolbarId);
+		toolbar
 			.find('.date-range-selector')
-			.data('mytime-action', navSectionAction)
+			.data('mytime-action', actionHash)
 			;
+		
+		// I wonder what this does..?
+		//		navSection
+		//			.find('input[data-mytime-action]')
+		//			.each(function (i, inp) {
+		//				var b = $(inp);
+		//				b.attr('checked', (b.data('mytime-action') == navSectionAction) ? 'checked' : '');
+		//			})
+		//			;
+		//		navSection
+		//			.find('.buttonset-nav')
+		//			.buttonset("refresh")
+		//			;
 
-		tab.triggerHandler('change');
+		// if no toolbar was found, show empty toolbar
+		if (toolbar.length == 0) {
+			$('.ui-tabs-panel').addClass('ui-tabs-hide');
+			$('#EmptyTabTest').removeClass('ui-tabs-hide');
+		} else {
+			$('#EmptyTabTest').addClass('ui-tabs-hide');
+		}
+		
+		// if no tab was found, select no tab
+		if (tab.length == 0) {
+			$('#tabs').tabs("select", -1);
+			$(".ui-tabs-selected").removeClass("ui-state-active").removeClass("ui-tabs-selected");
+		} else {
+			tab.triggerHandler('change');
+		}
 	}
 
 	function _loadContent(hashInfo) {

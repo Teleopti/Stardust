@@ -2,16 +2,20 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 <nav id="tabs" class="main-nav">
-<div class="floatright mr70 extraextrasmall">
-	<span id="licensed-to-label" class="floatleft">@Teleopti.Ccc.UserTexts.Resources.LicensedToColon</span><br />
-	<span id="licensed-to-text">@Model.CustomerName</span>
-</div>
+	<div class="floatright mr70 extraextrasmall">
+		<span id="licensed-to-label" class="floatleft">@Teleopti.Ccc.UserTexts.Resources.LicensedToColon</span><br />
+		<span id="licensed-to-text">@Model.CustomerName</span>
+	</div>
 		<ul>
 			@foreach (var navSection in Model.NavigationItems)
 	{
 			<li><a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a></li>
 	}
 		</ul>
+		<section id="EmptyTabTest" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div class="toolbar-inner">
+			</div>
+		</section>
 		@foreach (var navSection in Model.NavigationItems)
   {
 			<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
