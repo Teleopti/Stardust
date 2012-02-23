@@ -19,6 +19,12 @@ Teleopti.MobileReports.Index = (function ($) {
 		});
 		_initReportView(cNs);
 		_initReportSettingsView(cNs);
+		_initHomeView(cNs);
+	}
+	function _initHomeView(cNs) {
+		$("#home-view").live("pageinit", function() {
+			$.mobile.changePage($("#report-settings-view"));
+		});
 	}
 
 	function _initReportSettingsView(cNs) {

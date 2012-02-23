@@ -75,7 +75,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 11
  testRunner.When("I view MobileReports");
 #line 12
- testRunner.Then("I should see the Home");
+ testRunner.Then("I should see ReportSettings");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

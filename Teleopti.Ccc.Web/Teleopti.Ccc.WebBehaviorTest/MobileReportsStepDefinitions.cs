@@ -92,11 +92,11 @@
 			_page.Document.Divs.Filter(Find.ById("error-view")).First().DomContainer.ContainsText("No access");
 		}
 
-		[Then(@"I should see the Home")]
-		public void ThenIShouldSeeTheHome()
+		[Then(@"I should see ReportSettings")]
+		public void ThenIShouldSeeReportSettings()
 		{
-			EventualAssert.That(() => _page.HomeViewContainer.Exists, Is.True);
-			EventualAssert.That(() => _page.HomeViewContainer.DisplayVisible(), Is.True);
+			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.Exists, Is.True);
+			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"I should see the selected date")]

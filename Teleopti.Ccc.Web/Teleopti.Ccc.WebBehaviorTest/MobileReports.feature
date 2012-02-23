@@ -9,7 +9,7 @@ Background:
 Scenario: Enter Application 
 	Given I am a supervisor
 	When I view MobileReports
-	Then I should see the Home 
+	Then I should see ReportSettings
 
 Scenario: Enter Application without permission
 	Given I am user without permission to MobileReports

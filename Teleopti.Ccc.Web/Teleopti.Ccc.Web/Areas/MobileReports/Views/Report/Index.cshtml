@@ -52,7 +52,7 @@
 <div data-role="page" id="report-settings-view">
 	<div data-role="header">
 		<h1>@Resources.Settings</h1>
-		<a href="#" data-rel="back" data-icon="home" data-direction="reverse" title="@Html.AttributeEncode(Resources.Back)"
+		<a href="#home-view" data-icon="home" data-direction="reverse" title="@Html.AttributeEncode(Resources.Home)"
 		   data-theme="b">@Resources.Home</a>
 	</div>
 	<div data-role="content">
@@ -117,8 +117,8 @@
 </div>
 <div data-role="page" id="report-view">
 	<div data-role="header">
-		<a href="#" data-rel="back" data-icon="gear" data-direction="reverse" data-theme="b"
-			title="Back">@Resources.Settings</a><h1>@Resources.ShowResult</h1>
+		<a href="#report-settings-view" data-icon="gear" data-direction="reverse" data-theme="b"
+			title="@Html.AttributeEncode(Resources.Settings)">@Resources.Settings</a><h1>@Resources.ShowResult</h1>
 	</div>
 	<div data-role="content">
 		<div data-role="controlgroup" data-type="horizontal" class="center-wrapper mt0">
