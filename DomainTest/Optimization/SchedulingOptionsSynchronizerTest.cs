@@ -65,19 +65,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldConsiderShortBreaksChangesSetInSchedulingOptions()
         {
-            Assert.IsFalse(_schedulingOptions.ConsiderShortBreaks);
-            _optimizationPreferences.Rescheduling.ConsiderShortBreaks = true;
-            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
             Assert.IsTrue(_schedulingOptions.ConsiderShortBreaks);
+            _optimizationPreferences.Rescheduling.ConsiderShortBreaks = false;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.IsFalse(_schedulingOptions.ConsiderShortBreaks);
         }
 
         [Test]
         public void ShouldOnlyShiftsWhenUnderstaffedChangesSetInSchedulingOptions()
         {
-            Assert.IsTrue(_schedulingOptions.ConsiderShortBreaks);
-            _optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
-            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
             Assert.IsFalse(_schedulingOptions.OnlyShiftsWhenUnderstaffed);
+            _optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = true;
+            _target.SynchronizeSchedulingOption(_optimizationPreferences, _schedulingOptions);
+            Assert.IsTrue(_schedulingOptions.OnlyShiftsWhenUnderstaffed);
         }
     }
 }
