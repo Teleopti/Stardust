@@ -118,6 +118,7 @@
     <Compile Include="Areas\MobileReports\DefinedReportProviderTest.cs" />
     <Compile Include="Areas\MobileReports\ReportViewModelFactoryTest.cs" />
     <Compile Include="Areas\MobileReports\SkillProviderTest.cs" />
+    <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
