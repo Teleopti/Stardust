@@ -120,7 +120,7 @@ ALTER TABLE mart.report_control_collection ADD CONSTRAINT
 	PK_report_control_collection PRIMARY KEY CLUSTERED 
 	(
 	Id
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
+	)
 
 GO
 CREATE TABLE #collections(id int not null, collId uniqueidentifier not null)
@@ -283,7 +283,7 @@ ALTER TABLE mart.permission_report ADD CONSTRAINT
 	my_own,
 	business_unit_id,
 	ReportId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
+	)
 
 GO
 ALTER TABLE mart.permission_report
@@ -296,7 +296,7 @@ ALTER TABLE mart.report ADD CONSTRAINT
 	PK_report PRIMARY KEY CLUSTERED 
 	(
 	Id
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
+	)
 
 GO
 
@@ -333,13 +333,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg
 DROP TABLE [stage].[stg_permission_report]
 GO
 
-/****** Object:  Table [stage].[stg_permission_report]    Script Date: 02/17/2012 11:12:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 CREATE TABLE [stage].[stg_permission_report](
 	[person_code] [uniqueidentifier] NULL,
 	[ReportId] [uniqueidentifier] NULL,
@@ -352,7 +345,7 @@ CREATE TABLE [stage].[stg_permission_report](
 	[update_date] [smalldatetime] NULL,
 	[datasource_update_date] [smalldatetime] NULL
 	
-) ON [STAGE]
+)
 
 GO
 
@@ -371,7 +364,7 @@ GO
 CREATE CLUSTERED INDEX [CIX_stg_permisssion_report] ON [stage].[stg_permission_report] 
 (
 	[person_code] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [STAGE]
+)
 GO
 
 
@@ -402,17 +395,12 @@ ALTER TABLE mart.report_user_setting ADD CONSTRAINT
 	param_name,
 	saved_name_id,
 	ReportId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
+	)
 
-GO
-ALTER TABLE mart.report_user_setting SET (LOCK_ESCALATION = TABLE)
 GO
 ALTER TABLE mart.report_user_setting
 	DROP COLUMN report_id
-	
-
 GO
-	
 	ALTER TABLE mart.report_control_collection
 	DROP CONSTRAINT FK_report_control_collection_control
 GO
@@ -424,8 +412,7 @@ ALTER TABLE mart.report_control ADD CONSTRAINT
 	PK_report_control PRIMARY KEY CLUSTERED 
 	(
 	Id
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON MART
-
+	)
 GO
 ALTER TABLE mart.report_control_collection ADD CONSTRAINT
 	FK_report_control_collection_report_control FOREIGN KEY
@@ -446,8 +433,8 @@ CREATE TABLE [mart].[custom_report_control](
  CONSTRAINT [PK_custom_report_control] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
-) ON [MART]
+)
+)
 
 GO
 
@@ -467,8 +454,8 @@ CREATE TABLE [mart].[custom_report_control_collection](
  CONSTRAINT [PK_custom_report_control_collection] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
-) ON [MART]
+)
+)
 
 GO
 
@@ -497,8 +484,8 @@ CREATE TABLE [mart].[custom_report](
  CONSTRAINT [PK_custom_report] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [MART]
-) ON [MART]
+)
+)
 
 GO
 
