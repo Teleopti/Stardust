@@ -94,10 +94,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		tabs = $('#tabs')
 			.tabberiet({
-				click: function () {
-					_navigateTo($(this).data('mytime-action'));
-				}
-			})
+					click: function() {
+						_navigateTo($(this).data('mytime-action'));
+					},
+					emptyContentSelector: '#EmptyTab'
+				})
 			;
 
 		if (location.hash.length <= 1) {

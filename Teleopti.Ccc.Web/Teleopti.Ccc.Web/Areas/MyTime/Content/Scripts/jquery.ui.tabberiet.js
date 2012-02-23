@@ -2,7 +2,8 @@
 	$.widget("ui.tabberiet", {
 
 		options: {
-			click: null
+			click: null,
+			emptyContentSelector: null
 		},
 
 		_create: function () {
@@ -17,6 +18,11 @@
 
 			var tabs = element.find('ul.ui-tabs-nav a');
 			tabs.click(self.options.click);
+
+			this._emptyContent = this._element
+				.find(self.options.emptyContentSelector)
+				;
+
 		},
 
 		_selectById: function (id) {
@@ -24,29 +30,29 @@
 				.find('ul.ui-tabs-nav a')
 				.filter((function () { return this.hash == id; }))
 				;
-
 			var tabContent = $(id);
 
 			// if no tab was found, select no tab
 			if (tab.length == 0) {
 				$('#tabs').tabs("select", -1);
-				$(".ui-tabs-selected").removeClass("ui-state-active").removeClass("ui-tabs-selected");
+				// seems to be the only way to "unselect" the selected tab
+				$(".ui-tabs-selected")
+					.removeClass("ui-state-active")
+					.removeClass("ui-tabs-selected")
+					;
 			} else {
 				tab.triggerHandler('change');
 			}
 
 			// if no content was found, show empty content
-			var emptyContent = this._element
-				.find('#EmptyTabTest')
-				;
 			if (tabContent.length == 0) {
 				this._element
 					.find('.ui-tabs-panel')
 					.addClass('ui-tabs-hide')
 					;
-				emptyContent.removeClass('ui-tabs-hide');
+				this._emptyContent.removeClass('ui-tabs-hide');
 			} else {
-				emptyContent.addClass('ui-tabs-hide');
+				this._emptyContent.addClass('ui-tabs-hide');
 			}
 
 		},
