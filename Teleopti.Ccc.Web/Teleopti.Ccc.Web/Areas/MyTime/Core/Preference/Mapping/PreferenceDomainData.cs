@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public IEnumerable<PreferenceDayDomainData> Days { get; set; }
 	}
 
-	public class PreferenceDayDomainData
+	public class PreferenceDayDomainData : IScheduleColorSource
 	{
 		public DateOnly Date { get; set; }
 		public IPreferenceDay PreferenceDay { get; set; }

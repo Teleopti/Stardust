@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
@@ -35,13 +36,17 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new WeekScheduleViewModelMappingProfile(
-			                                    	() => Mapper.Engine,
-			                                    	() => periodSelectionViewModelFactory,
-			                                    	() => periodViewModelFactory,
-			                                    	() => headerViewModelFactory,
-													() => scheduleColorProvider
-			                                    	)));
+			Mapper.Initialize(c =>
+			                  	{
+			                  		c.AddProfile(new WeekScheduleViewModelMappingProfile(
+			                  		             	() => Mapper.Engine,
+			                  		             	() => periodSelectionViewModelFactory,
+			                  		             	() => periodViewModelFactory,
+			                  		             	() => headerViewModelFactory,
+			                  		             	() => scheduleColorProvider
+			                  		             	));
+									c.AddProfile(new CommonViewModelMappingProfile());
+			                  	});
 		}
 
 		[Test]

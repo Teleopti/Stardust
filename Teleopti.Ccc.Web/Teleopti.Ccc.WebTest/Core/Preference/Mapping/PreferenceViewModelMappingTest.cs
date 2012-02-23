@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -13,8 +13,11 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
@@ -24,10 +27,12 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 	public class PreferenceViewModelMappingTest
 	{
 		private PreferenceDomainData data;
+		private IScheduleColorProvider scheduleColorProvider;
 
 		[SetUp]
 		public void Setup()
 		{
+			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 
 			data = new PreferenceDomainData
 			       	{
@@ -43,7 +48,13 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			       	};
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceViewModelMappingProfile()));
+			Mapper.Initialize(c =>
+			                  	{
+			                  		c.AddProfile(new PreferenceViewModelMappingProfile(
+			                  		             	Depend.On(scheduleColorProvider)
+			                  		             	));
+									c.AddProfile(new CommonViewModelMappingProfile());
+			                  	});
 		}
 
 		[Test]
@@ -136,10 +147,10 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			result.Weeks.ForEach(
 				week =>
-				{
-					week.Days.Should().Have.Count.EqualTo(7);
-					week.Days.ElementAt(0).Date.DayOfWeek.Should().Be(CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
-				}
+					{
+						week.Days.Should().Have.Count.EqualTo(7);
+						week.Days.ElementAt(0).Date.DayOfWeek.Should().Be(CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+					}
 				);
 		}
 
@@ -545,6 +556,22 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.Preference.PossibleContractTimes.Should().Be.EqualTo(
 					workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString);
+		}
+
+
+		[Test]
+		public void ShouldMapStyleClassViewModelsFromScheduleColors()
+		{
+			var colors = new[] { Color.Red, Color.Blue };
+
+			scheduleColorProvider.Stub(x => x.GetColors(data.Days)).Return(colors);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.Styles.Select(s => s.Name)
+				.Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
+			result.Styles.Select(s => s.ColorHex)
+				.Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
 		}
 
 	}

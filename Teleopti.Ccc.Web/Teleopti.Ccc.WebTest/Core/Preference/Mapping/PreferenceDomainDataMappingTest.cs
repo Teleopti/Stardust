@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new PreferenceDomainDataMappingProfile(
-					Resolver.Of(() => virtualScheduleProvider),
-					Resolver.Of(() => preferenceProvider),
-					Resolver.Of(() => loggedOnUser),
-					Resolver.Of(() => preferenceFeedbackProvider),
-					Resolver.Of(() => scheduleProvider),
-					Resolver.Of(() => projectionProvider)
+					Depend.On(virtualScheduleProvider),
+					Depend.On(preferenceProvider),
+					Depend.On(loggedOnUser),
+					Depend.On(preferenceFeedbackProvider),
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider)
 					)));
 		}
 

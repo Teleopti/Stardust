@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new WeekScheduleDomainDataMappingProfile(
-					Resolver.Of(() => scheduleProvider),
-					Resolver.Of(() => projectionProvider),
-					Resolver.Of(() => personRequestProvider),
-					Resolver.Of(() => userTimeZone)
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider),
+					Depend.On(personRequestProvider),
+					Depend.On(userTimeZone)
 					)));
 		}
 
