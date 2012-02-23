@@ -10,6 +10,7 @@ GO
 -- Date			Author	Description
 ------------------------------------------------
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --Static dimension table
 --------------------------------------------------------
@@ -33,7 +34,7 @@ CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 @agent_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @request_type_id int,
 @business_unit_code uniqueidentifier

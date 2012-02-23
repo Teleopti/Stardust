@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// </summary>
     public class MatrixReportInfo
     {
-        private int _reportId;
+        private Guid _reportId;
         private string _reportName;
         private string _reportUrl;
         private string _targetFrame;
@@ -20,12 +21,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             //to satisfy  Hibernate
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MatrixReportInfo"/> class.
-        /// </summary>
-        /// <param name="reportId">The report id.</param>
-        /// <param name="reportName">Name of the report.</param>
-        public MatrixReportInfo(int reportId, string reportName)
+        public MatrixReportInfo(Guid reportId, string reportName)
         {
             _reportId = reportId;
             _reportName = reportName;
@@ -37,11 +33,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="list">The list.</param>
         /// <param name="id">The id.</param>
         /// <returns></returns>
-        public static MatrixReportInfo FindByReportId(IEnumerable<MatrixReportInfo> list, int id)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public static MatrixReportInfo FindByReportId(IEnumerable<MatrixReportInfo> list, Guid id)
         {
             foreach (MatrixReportInfo info in list)
             {
-                if (info.ReportId == id)
+                if (info.ReportId.Equals(id))
                     return info;
             }
             return null;
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Gets or sets the report id.
         /// </summary>
         /// <value>The report id.</value>
-        public int ReportId
+        public Guid ReportId
         {
             get { return _reportId; }
             set { _reportId = value; }
