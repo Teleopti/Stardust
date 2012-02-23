@@ -36,9 +36,7 @@
 	
 </PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
-	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<ItemGroup>
 		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
