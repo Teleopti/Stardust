@@ -494,6 +494,20 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapAbsenceStyleClassNameFromDisplayColor()
+		{
+			var stubs = new StubFactory();
+			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.DarkMagenta)));
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, personAbsence);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Be(Color.DarkMagenta.ToStyleClass());
+		}
+
+		[Test]
 		public void ShouldOnlyMapAbsenceWhenAbsence()
 		{
 			var stubs = new StubFactory();

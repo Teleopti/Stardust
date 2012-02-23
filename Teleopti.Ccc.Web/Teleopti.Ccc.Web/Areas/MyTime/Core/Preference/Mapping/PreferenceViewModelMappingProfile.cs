@@ -160,6 +160,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																			return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass();
 																		if (s.SignificantPart == SchedulePartView.DayOff)
 																			return StyleClasses.DayOff + " " + StyleClasses.Striped;
+																		if (s.SignificantPart == SchedulePartView.FullDayAbsence)
+																			return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass();
 				                                                 		return null;
 				                                                 	}))
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
