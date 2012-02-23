@@ -82,31 +82,6 @@ namespace Teleopti.Messaging.SignalR
 			_proxy.Invoke("NotifyClients", (Notification)state);
 		}
 
-		public void SendEventMessage(Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, Guid.Empty, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, DomainUpdateType.NotApplicable, null);
-		}
-
-		public void SendEventMessage(Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, Guid.Empty, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
-		}
-
-		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, null);
-		}
-
 		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
 			SendEventMessage(eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
@@ -123,34 +98,14 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public void SendEventMessage(Guid domainObjectId, Type domainObjectType)
-		{
-			SendEventMessage(domainObjectId, domainObjectType, DomainUpdateType.NotApplicable);
-		}
-
-		public void SendEventMessage(Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Guid.Empty, domainObjectId, domainObjectType, updateType);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(moduleId, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
-		}
-
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			registerEventSubscription(eventMessageHandler, Guid.Empty, null, null, domainObjectType,Consts.MinDate,Consts.MaxDate);
+			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType,Consts.MinDate,Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
 		{
-			registerEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, Consts.MinDate,
+			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, Consts.MinDate,
 			                          Consts.MaxDate);
 		}
 
@@ -161,12 +116,12 @@ namespace Teleopti.Messaging.SignalR
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(eventMessageHandler, Guid.Empty, null, null, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
@@ -269,21 +224,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				DomainObject = domainObject,
-				EventStartDate = Consts.MinDate,
-				EventEndDate = Consts.MaxDate
-			};
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
@@ -311,38 +251,6 @@ namespace Teleopti.Messaging.SignalR
 				EventEndDate = eventEndDate,
 				ReferenceObjectId = referenceObjectId,
 				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
-			};
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				EventStartDate = eventStartDate,
-				EventEndDate = eventEndDate,
-				DomainObject = domainObject
-			};
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
-		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				EventStartDate = eventStartDate,
-				EventEndDate = eventEndDate,
-				ReferenceObjectId = referenceObjectId,
-				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
-				DomainObject = domainObject
 			};
 		}
 

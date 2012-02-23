@@ -452,33 +452,6 @@ namespace Teleopti.Messaging.Client
         /// <param name="domainObjectId">The domain object id.</param>
         /// <param name="domainObjectType">Type of the domain object.</param>
         /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(DateTime eventStartDate,
-                                    DateTime eventEndDate,
-                                    Guid moduleId,
-                                    Guid referenceObjectId,
-                                    Type referenceObjectType,
-                                    Guid domainObjectId,
-                                    Type domainObjectType,
-                                    DomainUpdateType updateType)
-        {
-            Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
         /// <param name="domainObject">The domain object.</param>
         /// <remarks>
         /// Created by: ankarlp
@@ -495,109 +468,6 @@ namespace Teleopti.Messaging.Client
                                     byte[] domainObject)
         {
             Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(Guid referenceObjectId, 
-                                     Type referenceObjectType, 
-                                     Guid domainObjectId, 
-                                     Type domainObjectType)
-        {
-            Dispatcher.SendEventMessage(referenceObjectId, referenceObjectType, domainObjectId, domainObjectType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(Guid referenceObjectId,
-                                    Type referenceObjectType,
-                                    Guid domainObjectId,
-                                    Type domainObjectType,
-                                    DomainUpdateType updateType)
-        {
-            Dispatcher.SendEventMessage(referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(Guid moduleId,
-                                    Guid referenceObjectId,
-                                    Type referenceObjectType,
-                                    Guid domainObjectId,
-                                    Type domainObjectType,
-                                    DomainUpdateType updateType)
-        {
-            Dispatcher.SendEventMessage(moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(Guid moduleId,
-                                     Guid referenceObjectId,
-                                     Type referenceObjectType,
-                                     Guid domainObjectId,
-                                     Type domainObjectType,
-                                     DomainUpdateType updateType,
-                                     byte[] domainObject)
-        {
-            Dispatcher.SendEventMessage(moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-        {
-            if (Dispatcher != null)
-                Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType);
         }
 
         /// <summary>
@@ -623,52 +493,6 @@ namespace Teleopti.Messaging.Client
         {
             if(Dispatcher != null)
                 Dispatcher.SendEventMessages(eventMessages);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        public void SendEventMessage(Guid domainObjectId, Type domainObjectType)
-        {
-            Dispatcher.SendEventMessage(domainObjectId, domainObjectType, domainObjectId, domainObjectType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        public void SendEventMessage(Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-        {
-            Dispatcher.SendEventMessage(domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-        {
-            Dispatcher.SendEventMessage(moduleId, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-        {
-            Dispatcher.SendEventMessage(moduleId, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType, domainObject);
         }
 
         /// <summary>
@@ -788,22 +612,6 @@ namespace Teleopti.Messaging.Client
         }
 
         /// <summary>
-        /// Create event message, ignoring dates but with payload.
-        /// </summary>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <param name="domainObject"></param>
-        /// <returns></returns>
-        public IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-        {
-            IDomainObjectFactory processor = new DomainObjectFactory();
-            IEventMessage message = processor.CreateEventMessage(Consts.MinDate, Consts.MaxDate, UserId, Process.GetCurrentProcess().Id, moduleId, 0, false, domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), updateType, domainObject, _userName);
-            return message;
-        }
-
-        /// <summary>
         /// Create Event Message, consider event range dates but not payload.
         /// </summary>
         /// <param name="eventStartDate"></param>
@@ -836,58 +644,6 @@ namespace Teleopti.Messaging.Client
         {
             IDomainObjectFactory processor = new DomainObjectFactory();
             IEventMessage message = processor.CreateEventMessage(eventStartDate, eventEndDate, UserId, Process.GetCurrentProcess().Id, moduleId, 0, false, referenceObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(referenceObjectType) : referenceObjectType.AssemblyQualifiedName), domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), updateType, _userName);
-            return message;
-        }
-
-        /// <summary>
-        /// Creates Event Message, considers dates and takes a payload.
-        /// </summary>
-        /// <param name="eventStartDate"></param>
-        /// <param name="eventEndDate"></param>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <param name="domainObject"></param>
-        /// <returns></returns>
-        public IEventMessage CreateEventMessage(DateTime eventStartDate, 
-                                                DateTime eventEndDate, 
-                                                Guid moduleId, 
-                                                Guid domainObjectId, 
-                                                Type domainObjectType, 
-                                                DomainUpdateType updateType, 
-                                                byte[] domainObject)
-        {
-            IDomainObjectFactory processor = new DomainObjectFactory();
-            IEventMessage message = processor.CreateEventMessage(eventStartDate, eventEndDate, UserId, Process.GetCurrentProcess().Id, moduleId, 0, false, domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), updateType, domainObject, _userName);
-            return message;
-        }
-
-        /// <summary>
-        /// Creates Event Message, considers dates and takes a payload.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <returns></returns>
-        public IEventMessage CreateEventMessage(DateTime eventStartDate,
-                                                DateTime eventEndDate,
-                                                Guid moduleId,
-                                                Guid referenceObjectId,
-                                                Type referenceObjectType,
-                                                Guid domainObjectId,
-                                                Type domainObjectType,
-                                                DomainUpdateType updateType,
-                                                byte[] domainObject)
-        {
-            IDomainObjectFactory processor = new DomainObjectFactory();
-            IEventMessage message = processor.CreateEventMessage(eventStartDate, eventEndDate, UserId, Process.GetCurrentProcess().Id, moduleId, 0, false, referenceObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(referenceObjectType) : referenceObjectType.AssemblyQualifiedName), domainObjectId, (IsTypeFilterApplied ? FilterManager.LookupType(domainObjectType) : domainObjectType.AssemblyQualifiedName), updateType, domainObject, _userName);
             return message;
         }
 
