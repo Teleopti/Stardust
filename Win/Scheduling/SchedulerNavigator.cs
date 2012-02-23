@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    loadBusinessUnitIntoUnitOfWork(uow);
+                    loadNeededStuffIntoUnitOfWork(uow);
 
                     if (SelectorPresenter.IsOnOrganizationTab)
                     {
@@ -193,11 +193,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-		private static void loadBusinessUnitIntoUnitOfWork(IUnitOfWork uow)
+		private static void loadNeededStuffIntoUnitOfWork(IUnitOfWork uow)
 		{
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			businessUnitRepository.Get(
 				((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
+            using (uow.DisableFilter(QueryFilter.Deleted))
+            {
+                new SiteRepository(uow).LoadAll();
+                new TeamRepository(uow).LoadAll();
+            }
+            
 		}
 
         private void tsAddGroupPageClick(object sender, EventArgs e)
