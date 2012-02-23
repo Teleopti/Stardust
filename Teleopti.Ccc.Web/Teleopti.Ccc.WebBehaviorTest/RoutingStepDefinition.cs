@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I navigate to Mobile Reports")]
 		public void WhenINavigateToMobileReposrts()
 		{
-			Navigation.GotoMobileReportsSignInPage();
+			Navigation.GotoMobileReportsSignInPage(string.Empty);
 		}
 
 		[Then(@"I should see the global sign in page")]

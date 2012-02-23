@@ -274,7 +274,7 @@
 		private static void createAndSignIn()
 		{
 			var userName = UserFactory.User().MakeUser();
-			Navigation.GotoMobileReportsSignInPage();
+			Navigation.GotoMobileReportsSignInPage(string.Empty);
 			var page = Browser.Current.Page<MobileSignInPage>();
 			page.SignInApplication(userName, TestData.CommonPassword);
 		}
