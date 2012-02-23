@@ -12,9 +12,10 @@ GO
 --				20090302 Excluded UTC-timezone from load KJ
 --				2012-01-24 Trying to hide the time zone for ReportId=27 (request per Agent)
 -- Description:	Loads time zones to report control cboTimeZone
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_control_time_zone] 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
@@ -22,7 +23,7 @@ AS
 
 
 --hide time zone in this report(s)
-IF @report_id in (27)
+IF @report_id in ('8DE1AB0F-32C2-4619-A2B2-97385BE4C49C')
 	SELECT 1 as id ,'DontDisplayMe' as name  --because im the only time zone
 ELSE
 	SELECT 

@@ -10390,5 +10390,8 @@ These options are activated:
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>There is already absence in the schedule for given period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Custom reports</value>
+    <comment>Custom reports</comment>
   </data>
 </root>

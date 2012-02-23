@@ -6,7 +6,7 @@ BEGIN TRY
 	DECLARE @schema nvarchar(100)
 	DECLARE @dataTypeSpec TABLE ([Name] sysname, [DataType] sysname, [Length] smallint, [NumericPrecision] smallint, [NumericScale] smallint)
 	DECLARE @parameter_id int
-	DECLARE @report_id int
+	DECLARE @report_id uniqueidentifier
 	DECLARE @paramString nvarchar(2000)
 	DECLARE @SQLString nvarchar(2000)
 	SET @schema  = N'mart'
@@ -64,11 +64,12 @@ BEGIN TRY
 
 	--All stored procedures used(?)
 		DECLARE ReportSPs CURSOR FOR
-		SELECT report_id, replace(proc_name,'mart.','') FROM mart.report where proc_name <> ''
+		SELECT Id, replace(proc_name,'mart.','') FROM mart.report where proc_name <> ''
 		UNION ALL
-		select control_id,replace(fill_proc_name,'mart.','') from mart.report_control where fill_proc_name<>'1'
-		UNION ALL
-		SELECT 1,name FROM sys.procedures WHERE name like '%raptor%'
+		select Id,replace(fill_proc_name,'mart.','') from mart.report_control where fill_proc_name<>'1'
+		--UNION ALL
+		-- if we want to this it must be done separately
+		--SELECT 1,name FROM sys.procedures WHERE name like '%raptor%'
 
 		OPEN ReportSPs;
 				FETCH NEXT FROM ReportSPs INTO @report_id, @SPname;

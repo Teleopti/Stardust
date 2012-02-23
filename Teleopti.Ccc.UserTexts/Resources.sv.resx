@@ -10084,5 +10084,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>Det finns redan frånvaro registrerad under angiven period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Kundanpassade rapporter</value>
+    <comment>CustomReports</comment>
   </data>
 </root>

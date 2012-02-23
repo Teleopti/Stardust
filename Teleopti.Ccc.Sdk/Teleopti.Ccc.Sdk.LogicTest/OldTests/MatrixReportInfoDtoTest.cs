@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
@@ -17,8 +18,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         [Test]
         public void VerifyCanSetProperties()
         {
-            _target.ReportId = 1;
-            Assert.AreEqual(1,_target.ReportId);
+            var id = new Guid("F1A2966C-E241-4DAC-88CF-83ECA0DEA0EB");
+            _target.Id = id;
+            Assert.AreEqual(id,_target.Id);
             _target.ReportName = "Agent KPI";
             Assert.AreEqual("Agent KPI", _target.ReportName);
             _target.ReportUrl = "http://matrixhost/agentKPI.aspx";

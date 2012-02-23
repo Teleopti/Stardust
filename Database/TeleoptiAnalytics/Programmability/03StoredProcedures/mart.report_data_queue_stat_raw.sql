@@ -17,6 +17,7 @@ GO
 --				2009-01-26 Added isnull check on values KJ
 --				2008-10-13 Fixed bug with duplicate rows KJ
 --				2008-08-27 Removed transferred_calls, added columns overflow_out_calls,overflow_in_calls KJ
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Queue Statistics
 -- =============================================
 --EXEC report_data_queue_stat_raw @skill_set='1,2,3,4',@workload_set='0,4,5,1', @queue_set='0,1,2,3,4',@date_from='2006-01-01',@date_to='2006-01-10',@interval_from=0,@interval_to=287,@time_zone_id=81,@report_id=11,@language_id=1053
@@ -35,7 +36,7 @@ CREATE PROCEDURE [mart].[report_data_queue_stat_raw]
 @interval_to int,
 @time_zone_id int,
 @person_code uniqueidentifier ,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS
