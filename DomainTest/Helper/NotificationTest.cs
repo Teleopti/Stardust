@@ -61,7 +61,10 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void ShouldHaveCorrectRoute()
 		{
-			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
+			var routes = target.Routes();
+			routes.Should().Contain("datasource/" + target.BusinessUnitId + "/type");
+			routes.Should().Contain("datasource/" + target.BusinessUnitId + "/type/ref/"+target.DomainReferenceId);
+			routes.Should().Contain("datasource/" + target.BusinessUnitId + "/type/id/"+target.DomainId);
 		}
 	}
 
@@ -115,6 +118,12 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void ShouldHaveCorrectRoute()
 		{
+			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type/id/" + domainId);
+
+			target.DomainId = Guid.Empty.ToString();
+			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type/ref/" + domainReferenceId);
+
+			target.DomainReferenceId = Guid.Empty.ToString();
 			target.Route().Should().Be.EqualTo("datasource/" + target.BusinessUnitId + "/type");
 		}
 	}

@@ -453,7 +453,7 @@ namespace Teleopti.Messaging.SignalR
 				message.DomainObject = Encoding.UTF8.GetBytes(domainObject);
 			}
 
-			InvokeEventHandlers(message, d.Route());
+			InvokeEventHandlers(message, d.Routes());
 		}
 
 		public void StopMessageBroker()
@@ -549,26 +549,29 @@ namespace Teleopti.Messaging.SignalR
 		{
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void InvokeEventHandlers(EventMessage eventMessage, string route)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public void InvokeEventHandlers(EventMessage eventMessage, string[] routes)
 		{
-			IList<SubscriptionWithHandler> reference;
-			if (_subscriptionHandlers.TryGetValue(route, out reference))
+			foreach (var route in routes)
 			{
-				foreach (var subscriptionWithHandler in reference)
+				IList<SubscriptionWithHandler> reference;
+				if (_subscriptionHandlers.TryGetValue(route, out reference))
 				{
-					if ((subscriptionWithHandler.Subscription.DomainIdAsGuid() == Guid.Empty ||
-					 subscriptionWithHandler.Subscription.DomainIdAsGuid() == eventMessage.DomainObjectId) &&
-					(subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == Guid.Empty ||
-					 subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == eventMessage.DomainObjectId) &&
-					(string.IsNullOrEmpty(subscriptionWithHandler.Subscription.DomainReferenceType) ||
-					 (eventMessage.ReferenceObjectTypeCache != null &&
-					  Type.GetType(subscriptionWithHandler.Subscription.DomainReferenceType, false, true).IsAssignableFrom(
-						eventMessage.ReferenceObjectTypeCache))) &&
-					((subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-					  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)))
+					foreach (var subscriptionWithHandler in reference)
 					{
-						subscriptionWithHandler.Handler.Invoke(this,new EventMessageArgs(eventMessage));
+						if ((subscriptionWithHandler.Subscription.DomainIdAsGuid() == Guid.Empty ||
+						 subscriptionWithHandler.Subscription.DomainIdAsGuid() == eventMessage.DomainObjectId) &&
+						(subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == Guid.Empty ||
+						 subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == eventMessage.DomainObjectId) &&
+						(string.IsNullOrEmpty(subscriptionWithHandler.Subscription.DomainReferenceType) ||
+						 (eventMessage.ReferenceObjectTypeCache != null &&
+						  Type.GetType(subscriptionWithHandler.Subscription.DomainReferenceType, false, true).IsAssignableFrom(
+							eventMessage.ReferenceObjectTypeCache))) &&
+						((subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
+						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)))
+						{
+							subscriptionWithHandler.Handler.Invoke(this, new EventMessageArgs(eventMessage));
+						}
 					}
 				}
 			}
