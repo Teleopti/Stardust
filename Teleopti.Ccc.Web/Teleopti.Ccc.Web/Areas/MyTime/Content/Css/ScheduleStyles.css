@@ -1,18 +1,32 @@
 ﻿
-
-.weekview-day li.dayoff div,
-.calendarview-week li.dayoff .day-content {
+.weekview-day li.striped div 
+{
+	background-image: url(../Images/stripe.png);
+}
+.weekview-day li.dayoff div
+{
 	border-left-color: beige;
 	border-right-color: beige;
 }
-.calendarview-week li.dayoff {
-	background-image: none;
+
+
+.calendarview-week li.dayoff .day-content
+{
+	border-left-color: beige;
+	border-right-color: beige;
 }
-.calendarview-week li.dayoff .day-content {
+.calendarview-week li.striped .day-content
+{
 	background-image: url(../Images/stripe.png);
 }
 
-.striped 
+
+
+.teamschedule .dayoff 
+{
+	background-color: beige;
+}
+.teamschedule .striped
 {
 	background-image: url(../Images/stripe.png);
 	
@@ -28,9 +42,4 @@
 			rgba(0, 0, 0, .5) 60%, 
 			transparent 60%, 
 			transparent 100%)*/
-}
-
-.teamschedule .dayoff 
-{
-	background-color: beige;
 }

@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
+
  
 			person = new Person
 			         	{
