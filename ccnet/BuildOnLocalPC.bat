@@ -2,7 +2,7 @@
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-7%
 SET Raptor2=ccnet\Raptor2.proj
-SET CCNetProject=
+SET CCNetProject=none
 SET NightlyBuild=ccnet\NightlyBuild.proj
 SET CCNetWorkingDirectory=%ROOTDIR%
 SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
@@ -23,12 +23,13 @@ SET MsbuildProj=%NightlyBuild%
 SET CCNetProject=NightlyBuild
 )
 ECHO.
-
+ECHO 
 ::Apply special project name?
-IF "CCNetProject"=="" (
-ECHO Some special CCNET projects names ^(NightlyBuild,RaptorMain^) will provide
-ECHO extended test scenarios ^(To run standard tests leave blank^)
-SET /P CCNetProject=CCNetProject: 
+IF "%CCNetProject%"=="" (
+ECHO Some special CCNET projects names will provide extended test scenarios.
+ECHO PBI15494, NightlyBuild and BuildMSIxxxxxx
+ECHO To run standard tests leave blank
+SET /P CCNetProject=CCNetProject:
 )
 
 ::Run Build
