@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay2 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
 				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Pink)))
 				);
-			var source = new FakeScheduleColorSource
+			var source = new ScheduleColorSource
 			             	{
 			             		ScheduleDays = new[] {scheduleDay1, scheduleDay2},
 			             		Projections = new[] {projection1, projection2, projection3}
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			var stubs = new StubFactory();
 			var projection = stubs.ProjectionStub(new[] {stubs.VisualLayerStub(Color.Red)});
-			var source = new FakeScheduleColorSource {Projections = new[] {projection}};
+			var source = new ScheduleColorSource { Projections = new[] { projection } };
 
 			var target = new ScheduleColorProvider();
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var stubs = new StubFactory();
 			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Blue)));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, personAssignment);
-			var source = new FakeScheduleColorSource { ScheduleDays = new[] { scheduleDay} };
+			var source = new ScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var stubs = new StubFactory();
 			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.Olive)));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.FullDayAbsence, personAbsence);
-			var source = new FakeScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
+			var source = new ScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      		                		DisplayColor = Color.Plum
 			                                      		                	}
 			                                      	});
-			var source = new FakeScheduleColorSource {PreferenceDays = new[] {preferenceDay}};
+			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 														  DisplayColor = Color.DarkOliveGreen
 													  }
 												  });
-			var source = new FakeScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
+			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      		                 		DisplayColor = Color.BlanchedAlmond
 			                                      		                 	}
 			                                      	});
-			var source = new FakeScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
+			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -157,11 +158,55 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			result.Single().Should().Be(Color.BlanchedAlmond);
 		}
 
-		private class FakeScheduleColorSource : IScheduleColorSource
+		[Test]
+		public void ShouldGetDisplayColorFromWorkflowControlSetShiftCategory()
 		{
-			public IEnumerable<IScheduleDay> ScheduleDays { get; set; }
-			public IEnumerable<IVisualLayerCollection> Projections { get; set; }
-			public IEnumerable<IPreferenceDay> PreferenceDays { get; set; }
+			var shiftCategory = new ShiftCategory(" ") {DisplayColor = Color.Violet};
+			var workflowControlSet = new WorkflowControlSet
+			                         	{
+			                         		AllowedPreferenceShiftCategories = new[] { shiftCategory }
+			                         	};
+			var source = new ScheduleColorSource {WorkflowControlSet = workflowControlSet};
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.Violet);
+		}
+
+		[Test]
+		public void ShouldGetDisplayColorFromWorkflowControlSetAbsence()
+		{
+			var absence = new Absence { DisplayColor = Color.Magenta };
+			var workflowControlSet = new WorkflowControlSet
+			                         	{
+			                         		AllowedPreferenceAbsences = new[] {absence}
+			                         	};
+			var source = new ScheduleColorSource { WorkflowControlSet = workflowControlSet };
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.Magenta);
+		}
+
+		[Test]
+		public void ShouldGetDisplayColorFromWorkflowControlSetDayOffTemplates()
+		{
+			var dayOffTemplate = new DayOffTemplate(new Description()) { DisplayColor = Color.MediumSeaGreen};
+			var workflowControlSet = new WorkflowControlSet
+			                         	{
+			                         		AllowedPreferenceDayOffs = new[] {dayOffTemplate}
+			                         	};
+			var source = new ScheduleColorSource { WorkflowControlSet = workflowControlSet };
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.MediumSeaGreen);
 		}
 
 	}

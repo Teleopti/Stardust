@@ -177,6 +177,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\CommonViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorSource.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\LayoutBaseViewModel.cs" />

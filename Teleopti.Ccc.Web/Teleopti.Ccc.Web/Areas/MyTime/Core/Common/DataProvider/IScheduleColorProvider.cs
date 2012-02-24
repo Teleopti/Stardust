@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 	public interface IScheduleColorSource
 	{
-		IEnumerable<IScheduleDay> ScheduleDays { get; set; }
-		IEnumerable<IVisualLayerCollection> Projections { get; set; }
-		IEnumerable<IPreferenceDay> PreferenceDays { get; set; }
+		IEnumerable<IScheduleDay> ScheduleDays { get; }
+		IEnumerable<IVisualLayerCollection> Projections { get; }
+		IEnumerable<IPreferenceDay> PreferenceDays { get; }
+		IWorkflowControlSet WorkflowControlSet { get; }
 	}
 
 }

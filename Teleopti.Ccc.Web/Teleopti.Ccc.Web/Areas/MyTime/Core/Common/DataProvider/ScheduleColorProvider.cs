@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var scheduleDays = source.ScheduleDays ?? new IScheduleDay[] {};
 			var projections = source.Projections ?? new IVisualLayerCollection[] { };
 			var preferenceDays = source.PreferenceDays ?? new IPreferenceDay[] { };
+			var allowedShiftCategories = source.WorkflowControlSet == null ? new IShiftCategory[] { } : source.WorkflowControlSet.AllowedPreferenceShiftCategories;
+			var allowedAbsence = source.WorkflowControlSet == null ? new IAbsence[] { } : source.WorkflowControlSet.AllowedPreferenceAbsences;
+			var allowedDayOffTemplates = source.WorkflowControlSet == null ? new IDayOffTemplate[] {} : source.WorkflowControlSet.AllowedPreferenceDayOffs;
 
 			var layerColors = from p in projections
 							  let layers = p as IEnumerable<IVisualLayer>
@@ -46,11 +49,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			                       from c in colors
 			                       select c;
 
+			var allowedShiftCategoryColors = from s in allowedShiftCategories select s.DisplayColor;
+			var allowedAbsenceColors = from a in allowedAbsence select a.DisplayColor;
+			var allowedDayOffTemplatesColors = from d in allowedDayOffTemplates select d.DisplayColor;
+
 			return
 				layerColors
 					.Union(personAssignmentColors)
 					.Union(absenceColors)
 					.Union(preferenceColors)
+					.Union(allowedShiftCategoryColors)
+					.Union(allowedAbsenceColors)
+					.Union(allowedDayOffTemplatesColors)
 					.ToArray();
 		}
 	}
