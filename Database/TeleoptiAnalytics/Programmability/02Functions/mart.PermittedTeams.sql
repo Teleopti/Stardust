@@ -12,6 +12,7 @@ GO
 -- Description:	
 -- Revisions:	2011-01-24 ME: Removed parameter
 --				@agent_id since it is not used
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 ------------------------------------------------
 
 -- =============================================
@@ -20,7 +21,7 @@ GO
 CREATE FUNCTION [mart].[PermittedTeams]
 (
 	@person_code uniqueidentifier,
-	@report_id int,
+	@report_id uniqueidentifier,
 	@site_id int,
 	@team_id int
 )

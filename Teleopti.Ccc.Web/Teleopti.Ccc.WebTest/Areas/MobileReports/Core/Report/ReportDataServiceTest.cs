@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			{
 				expectUserPreparation();
 				Expect.Call(_webReportRepository.ReportDataQueueStatAbandoned(0, string.Empty, string.Empty, 0, DateTime.Now,
-				                                                              DateTime.Now, 0, 0, 0, Guid.NewGuid(), 0, 0,
+																			  DateTime.Now, 0, 0, 0, Guid.NewGuid(), Guid.Empty, 0,
 				                                                              Guid.NewGuid()))
 					.IgnoreArguments().Return(
 						new List<ReportDataQueueStatAbandoned>(new List<ReportDataQueueStatAbandoned>
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 
 				Expect.Call(_webReportRepository.ReportDataForecastVersusActualWorkload(0, string.Empty, string.Empty, 0,
 				                                                                        DateTime.Now,
-				                                                                        DateTime.Now, 0, 0, 0, Guid.NewGuid(), 0, 0,
+																						DateTime.Now, 0, 0, 0, Guid.NewGuid(), Guid.Empty, 0,
 				                                                                        Guid.NewGuid()))
 					.IgnoreArguments().Return(
 						new List<ReportDataForecastVersusActualWorkload>(new List<ReportDataForecastVersusActualWorkload>
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 
 				Expect.Call(_webReportRepository.ReportDataServiceLevelAgentsReady(string.Empty, string.Empty, 0,
 				                                                                   DateTime.Now,
-				                                                                   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), 0, 0,
+																				   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04"), 0,
 				                                                                   Guid.NewGuid()))
 					.IgnoreArguments().Return(
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 
 				Expect.Call(_webReportRepository.ReportDataServiceLevelAgentsReady(string.Empty, string.Empty, 0,
 				                                                                   DateTime.Now,
-				                                                                   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), 0, 0,
+				                                                                   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04"), 0,
 				                                                                   Guid.NewGuid()))
 					.IgnoreArguments().Return(
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>

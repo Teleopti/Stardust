@@ -9,7 +9,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         public static void AddColumnsToDataTable(DataTable table)
         {
             table.Columns.Add("person_code", typeof(Guid));
-            table.Columns.Add("report_id", typeof(int));
+            table.Columns.Add("ReportId", typeof(Guid));
             table.Columns.Add("team_id", typeof(Guid));
             table.Columns.Add("my_own", typeof(bool));
             table.Columns.Add("business_unit_code", typeof(Guid));

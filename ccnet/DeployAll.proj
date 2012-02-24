@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
 		<CCCMajorMinor>7.1</CCCMajorMinor>
@@ -123,6 +123,7 @@
   </Target>
   
   <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
 
