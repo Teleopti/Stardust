@@ -7,7 +7,10 @@
 @section jsBeforeMobile {
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Mobile.Common.js")"> </script>
 	<script>
-		window.location.hash = '';
+		try {
+			window.location.hash = '';
+			history.pushState('', document.title, window.location.pathname);
+		} catch (e) { } 
 		var cNs = Teleopti.Start.Mobile.Common;
 		$('#application-signin').live('pageinit', function () {
 			function setRadioGrpValue(sel, name) {

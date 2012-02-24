@@ -1,5 +1,7 @@
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
+	using System;
+
 	using Teleopti.Ccc.UserTexts;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
@@ -35,14 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 				return Error(Resources.InputError);
 			}
 
-			var reportDataParam = getReportDataParameters(request, interval);
-
 			var report = _definedReportProvider.Get(request.ReportId);
 			if (report == null)
 			{
 				// TODO PW Check This
 				return Error(Resources.InputError);
 			}
+
+			var reportDataParam = getReportDataParameters(request, interval, report.ForeignId);
 
 			var reportData = report.GenerateReport(_dataService, reportDataParam);
 
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 		#endregion
 
-		private ReportDataParam getReportDataParameters(ReportRequestModel request, ReportIntervalType interval)
+		private ReportDataParam getReportDataParameters(ReportRequestModel request, ReportIntervalType interval, Guid foreignId)
 		{
 			
 			DateOnly firstDay = interval.IsTypeWeek()
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			var addDays = interval.IsTypeWeek() ? 6 : 0;
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(addDays));
 
-			return new ReportDataParam { IntervalType = interval, Period = period, SkillSet = request.SkillSet };
+			return new ReportDataParam { IntervalType = interval, Period = period, SkillSet = request.SkillSet, ReportId = foreignId };
 		}
 
 		private ReportDataFetchResult Error(string message)

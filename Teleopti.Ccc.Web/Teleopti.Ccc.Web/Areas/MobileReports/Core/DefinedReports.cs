@@ -1,19 +1,30 @@
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 
 	public static class DefinedReports
 	{
+		public static string FunctionCodeResReportAbandonmentAndSpeedOfAnswer = "ResReportAbandonmentAndSpeedOfAnswer"; 
+		public static Guid ReportForeignIdResReportAbandonmentAndSpeedOfAnswer = new Guid("C232D751-AEC5-4FD7-A274-7C56B99E8DEC"); 
+
+		public static string FunctionCodeResReportForecastvsActualWorkload = "ResReportForecastvsActualWorkload";
+		public static Guid ReportForeignIdResReportForecastvsActualWorkload = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0"); 
+
+		public static string FunctionCodeResReportServiceLevelAndAgentsReady = "ResReportServiceLevelAndAgentsReady";
+		public static Guid ReportForeignIdResReportServiceLevelAndAgentsReady = new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04"); 
+		
+
 		public static readonly IList<DefinedReportInformation> ReportInformations = new[]
 			{
 				new DefinedReportInformation
 					{
 						ReportId = "GetAnsweredAndAbandoned",
-						ReportName = "GetAnsweredAndAbandoned",
+						ForeignId = ReportForeignIdResReportAbandonmentAndSpeedOfAnswer,
 						ReportNameResourceKey = "ResReportAbandonmentAndSpeedOfAnswer",
-						FunctionCode = "ResReportAbandonmentAndSpeedOfAnswer",
+						FunctionCode = FunctionCodeResReportAbandonmentAndSpeedOfAnswer,
 						GenerateReport = (service, input) => service.GetAnsweredAndAbandoned(input),
 						ReportInfo =
 							new ReportMetaInfo
@@ -26,9 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 				new DefinedReportInformation
 					{
 						ReportId = "GetForeCastVsActualWorkload",
-						ReportName = "GetForeCastVsActualWorkload",
+						ForeignId = ReportForeignIdResReportForecastvsActualWorkload,
 						ReportNameResourceKey = "ResReportForecastvsActualWorkload",
-						FunctionCode = "ResReportForecastvsActualWorkload",
+						FunctionCode = FunctionCodeResReportForecastvsActualWorkload,
 						GenerateReport = (service, input) => service.GetForecastVersusActualWorkload(input),
 						ReportInfo =
 							new ReportMetaInfo
@@ -41,9 +52,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 				new DefinedReportInformation
 					{
 						ReportId = "GetScheduledAndActual",
-						ReportName = "GetScheduledAndActual",
+						ForeignId = ReportForeignIdResReportServiceLevelAndAgentsReady,
 						ReportNameResourceKey = "ResReportServiceLevelAndAgentsReady",
-						FunctionCode = "ResReportServiceLevelAndAgentsReady",
+						FunctionCode = FunctionCodeResReportServiceLevelAndAgentsReady,
 						GenerateReport = (service, input) => service.GetScheduledAndActual(input),
 						ReportInfo =
 							new ReportMetaInfo
@@ -56,9 +67,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 				new DefinedReportInformation
 					{
 						ReportId = "GetServiceLevelAgent",
-						ReportName = "GetServiceLevelAgent",
+						ForeignId = ReportForeignIdResReportServiceLevelAndAgentsReady,
 						ReportNameResourceKey = "ServiceLevelParenthesisPercentSign",
-						FunctionCode = "ResReportServiceLevelAndAgentsReady",
+						FunctionCode = FunctionCodeResReportServiceLevelAndAgentsReady,
 						GenerateReport = (service, input) => service.GetServiceLevelAgent(input),
 						ReportInfo =
 							new ReportMetaInfo

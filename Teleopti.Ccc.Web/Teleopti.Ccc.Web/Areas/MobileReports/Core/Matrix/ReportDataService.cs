@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WebReport;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
@@ -25,10 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 
 		public IEnumerable<ReportDataPeriodEntry> GetAnsweredAndAbandoned(ReportDataParam param)
 		{
-			// TODO: Extract this id from IExternalFunctionsProvider? PW
-			//can't set Const to guid?! DJ
-			const string reportId = "8D8544E4-6B24-4C1C-8083-CBE7522DD0E0";
-
 			WebReportUserInformation user = _webReportUserInfo.GetUserInformation();
 			IWebReportRepository webReportRepository = _webReportRepository.Invoke();
 			ReportMobileReportInit init = webReportRepository.ReportMobileReportInit(user.PersonCode, user.LanguageId,
@@ -39,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                         param.Period.StartDate, param.Period.EndDate,
 			                                                         init.IntervalFrom,
 			                                                         init.IntervalTo,
-			                                                         init.TimeZone, user.PersonCode, new Guid (reportId), user.LanguageId,
+																	 init.TimeZone, user.PersonCode, param.ReportId, user.LanguageId,
 			                                                         user.BusinessUnitCode).Select(r => new ReportDataPeriodEntry
 			                                                                                            	{
 			                                                                                            		Period = r.Period,
@@ -51,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 
 		public IEnumerable<ReportDataPeriodEntry> GetForecastVersusActualWorkload(ReportDataParam param)
 		{
-			const string reportId = "8D8544E4-6B24-4C1C-8083-CBE7522DD0E0";
+			
 			WebReportUserInformation user = _webReportUserInfo.GetUserInformation();
 			IWebReportRepository webReportRepository = _webReportRepository.Invoke();
 			ReportMobileReportInit init = webReportRepository.ReportMobileReportInit(user.PersonCode, user.LanguageId,
@@ -62,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                                   param.Period.StartDate, param.Period.EndDate,
 			                                                                   init.IntervalFrom,
 			                                                                   init.IntervalTo,
-			                                                                   init.TimeZone, user.PersonCode, new Guid (reportId),
+																			   init.TimeZone, user.PersonCode, param.ReportId,
 			                                                                   user.LanguageId,
 			                                                                   user.BusinessUnitCode).Select(
 			                                                                   	r => new ReportDataPeriodEntry
@@ -76,7 +71,6 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 
 		public IEnumerable<ReportDataPeriodEntry> GetScheduledAndActual(ReportDataParam param)
 		{
-			const string reportId = "8D8544E4-6B24-4C1C-8083-CBE7522DD0E0";
 			WebReportUserInformation user = _webReportUserInfo.GetUserInformation();
 			IWebReportRepository webReportRepository = _webReportRepository.Invoke();
 			ReportMobileReportInit init = webReportRepository.ReportMobileReportInit(user.PersonCode, user.LanguageId,
@@ -87,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                              param.Period.StartDate, param.Period.EndDate,
 			                                                              init.IntervalFrom,
 			                                                              init.IntervalTo, init.ServiceLevelCalculationId,
-			                                                              init.TimeZone, user.PersonCode, new Guid (reportId),
+																		  init.TimeZone, user.PersonCode, param.ReportId,
 			                                                              user.LanguageId,
 			                                                              user.BusinessUnitCode).Select(
 			                                                              	r => new ReportDataPeriodEntry
@@ -101,7 +95,6 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 
 		public IEnumerable<ReportDataPeriodEntry> GetServiceLevelAgent(ReportDataParam param)
 		{
-			const string reportId = "8D8544E4-6B24-4C1C-8083-CBE7522DD0E0";
 			WebReportUserInformation user = _webReportUserInfo.GetUserInformation();
 			IWebReportRepository webReportRepository = _webReportRepository.Invoke();
 			ReportMobileReportInit init = webReportRepository.ReportMobileReportInit(user.PersonCode, user.LanguageId,
@@ -112,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 			                                                              param.Period.StartDate, param.Period.EndDate,
 			                                                              init.IntervalFrom,
 			                                                              init.IntervalTo, init.ServiceLevelCalculationId,
-			                                                              init.TimeZone, user.PersonCode, new Guid (reportId),
+																		  init.TimeZone, user.PersonCode, param.ReportId,
 			                                                              user.LanguageId,
 			                                                              user.BusinessUnitCode).Select(
 			                                                              	r => new ReportDataPeriodEntry

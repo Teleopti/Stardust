@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.MobileSignInPage.ApplicationSignIn.Exists, Is.True);
-			Browser.Current.Url.Should().EndWith("/MobileReports/Authentication/SignIn");
+			Browser.Current.Url.Should().Contain("/MobileReports/Authentication/SignIn");
 		}
 
 		[Then(@"I should see the global menu")]
@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see Mobile Reports")]
 		public void ThenIShouldSeeMobileReports()
 		{
-			EventualAssert.That(() => Pages.Pages.MobileReportsPage.HomeViewContainer.DisplayVisible(), Is.True);
+			// Settings is Now preferred "home"
+			EventualAssert.That(() => Pages.Pages.MobileReportsPage.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
 	}
 }

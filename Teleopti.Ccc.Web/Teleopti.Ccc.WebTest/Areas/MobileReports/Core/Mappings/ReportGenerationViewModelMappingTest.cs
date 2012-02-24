@@ -77,17 +77,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		}
 
 		[Test]
-		public void ShouldCallTextTranslationWhenMappingDefinedReportsToReportsSelectionViewModel()
-		{
-			/*
-			var reportSelectionViewModel = Mapper.Map<Def, ReportSelectionViewModel>(source);
-
-			reportSelectionViewModel.ReportId.Should().Be.EqualTo(source.ReportId);
-			reportSelectionViewModel.ReportName.Should().Be.EqualTo(nameLookup);
-			 * */
-		}
-
-		[Test]
 		public void ShouldConfigureCorrectly()
 		{
 			Mapper.AssertConfigurationIsValid();

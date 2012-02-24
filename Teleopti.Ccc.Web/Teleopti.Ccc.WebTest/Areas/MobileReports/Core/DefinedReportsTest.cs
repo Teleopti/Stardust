@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core
 	using SharpTestsEx;
 
 	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 
 	[TestFixture]
 	public class DefinedReportsTest
@@ -13,7 +12,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core
 		[Test]
 		public void VerifyAllReportsHasDefinedRequiredAttributes()
 		{
-
 			var definedReportInformations = DefinedReports.ReportInformations;
 
 			foreach (var definedReportInformation in definedReportInformations)

@@ -5,6 +5,8 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain
 {
+	using System;
+
 	public delegate IEnumerable<ReportDataPeriodEntry> GenerateReportData(
 		IReportDataService dataService, ReportDataParam dataServiceParams);
 
@@ -19,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain
 	public interface IDefinedReport
 	{
 		GenerateReportData GenerateReport { get; set; }
-		string ReportName { get; set; }
+		Guid ForeignId { get; set; }
 		string ReportId { get; set; }
 		ReportMetaInfo ReportInfo { get; set; }
 		string ReportNameResourceKey { get; set; }
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain
 	{
 		#region IDefinedReport Members
 
-		public string ReportName { get; set; }
+		public Guid ForeignId { get; set; }
 		public string ReportId { get; set; }
 		public string ReportNameResourceKey { get; set; }
 
