@@ -414,6 +414,7 @@
     <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
+    <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -472,6 +473,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Portal.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.js" />
     <Content Include="Areas\MyTime\Content\Css\Site.css" />
+    <Content Include="Content\Scripts\detectmobilebrowser.js" />
     <Content Include="Content\Scripts\excanvas.compressed.js" />
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
