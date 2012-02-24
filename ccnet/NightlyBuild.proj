@@ -50,7 +50,7 @@
 		
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="BuildAndTest;AzureDeploy;AzureAnalyticsReportTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Target Name="Run" DependsOnTargets="AzureDeploy;AzureAnalyticsReportTest;BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
