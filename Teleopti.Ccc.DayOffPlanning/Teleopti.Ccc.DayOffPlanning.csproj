@@ -222,7 +222,6 @@
     <Compile Include="MoveOneDayOffDecisionMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartDayOffBackToLegalStateService.cs" />
-    <Compile Include="DayOffPlannerSessionRuleSet.cs" />
     <Compile Include="WeeklyDayOffValidator.cs" />
     <Compile Include="WorkShiftLegalStateDayIndexCalculator.cs" />
   </ItemGroup>
