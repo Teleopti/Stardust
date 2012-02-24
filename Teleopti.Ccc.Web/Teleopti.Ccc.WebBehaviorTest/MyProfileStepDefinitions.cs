@@ -100,5 +100,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			// don't know a good way to read http header from browser to server
 			ScenarioContext.Current.Pending();
 		}
+
+		[When(@"I change my password")]
+		public void WhenIChangeMyPassword()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+		}
 	}
 }
