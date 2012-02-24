@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="daysOffToRemove">The days off to remove.</param>
         /// <param name="daysOffToAdd">The days off to add.</param>
         /// <param name="groupPerson">The group person.</param>
-        /// <param name="ruleSet">The rule set.</param>
+        /// <param name="daysOffPreferences">The rule set.</param>
         /// <returns>
         /// Returns the created list of matrix container.
         /// Returns null if no matrix for a groupperson found or some problem turn up with the creation of matrix container
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IGroupPerson groupPerson,
-            IDayOffPlannerSessionRuleSet ruleSet);
+            IDaysOffPreferences daysOffPreferences);
     }
 
     public class GroupMatrixHelper : IGroupMatrixHelper
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="daysOffToRemove">The days off to remove.</param>
         /// <param name="daysOffToAdd">The days off to add.</param>
         /// <param name="groupPerson">The group person.</param>
-        /// <param name="ruleSet">The rule set.</param>
+        /// <param name="daysOffPreferences">The rule set.</param>
         /// <returns>
         /// Returns the created list of matrix container.
         /// Returns null if no matrix for a groupperson found or some problem turn up with the creation of matrix container
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove, 
             IList<DateOnly> daysOffToAdd, 
             IGroupPerson groupPerson, 
-            IDayOffPlannerSessionRuleSet ruleSet
+            IDaysOffPreferences daysOffPreferences
             )
         {
             IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>();
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     return null;
 
                 GroupMatrixContainer matrixContainer =
-                    _groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix, ruleSet);
+                    _groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix, daysOffPreferences);
                 if (matrixContainer == null)
                     return null;
                 containers.Add(matrixContainer);

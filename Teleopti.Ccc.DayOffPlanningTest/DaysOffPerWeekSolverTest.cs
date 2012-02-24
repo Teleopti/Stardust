@@ -1,6 +1,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private LockableBitArray _bitArray;
-        private DayOffPlannerSessionRuleSet _sessionRuleSet;
+        private IDaysOffPreferences _daysOffPreferences;
 
         [SetUp]
         public void Setup()
@@ -20,8 +21,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _bitArray = array1();
             _culture = CultureInfo.CreateSpecificCulture("en-GB");
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
-            _sessionRuleSet = new DayOffPlannerSessionRuleSet();
-            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _sessionRuleSet, 20);
+            _daysOffPreferences = new DaysOffPreferences();
+            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _daysOffPreferences, 20);
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifySwapBits()
         {
-            DaysOffPerWeekSolver target = new DaysOffPerWeekSolver(_bitArray, _functions, _sessionRuleSet, 20);
+            DaysOffPerWeekSolver target = new DaysOffPerWeekSolver(_bitArray, _functions, _daysOffPreferences, 20);
             Assert.IsTrue(target.SwapBits(0, 1));
             Assert.IsFalse(target.SwapBits(-1, 1));
             Assert.IsFalse(target.SwapBits(0, -1));
@@ -42,18 +43,18 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifyIsInLegalState()
         {
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(0, 4);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(0, 4);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(2, 4);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(2, 4);
             Assert.AreEqual(MinMaxNumberOfResult.ToFew, _target.ResolvableState());
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(1, 3);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 3);
             Assert.AreEqual(MinMaxNumberOfResult.ToMany, _target.ResolvableState());
         }
 
         [Test]
         public void VerifySetToManyBackToLegalState()
         {
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(0, 3);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(0, 3);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
@@ -62,15 +63,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToManyBackToLegalStateImpossible()
         {
             _bitArray.SetAll(false);
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(-1, -1);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(-1, -1);
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
         [Test]
         public void VerifySetToManyBackToLegalStateImpossible2()
         {
-            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _sessionRuleSet, 0);
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(0, 1);
+            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _daysOffPreferences, 0);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(0, 1);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
         }
 
@@ -81,14 +82,14 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             {
                 _bitArray.Lock(i, true);
             }
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(0, 3);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(0, 3);
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
         [Test]
         public void VerifySetToFewBackToLegalState()
         {
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(1, 4);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 4);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
@@ -97,15 +98,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifySetToFewBackToLegalStateImpossible()
         {
             _bitArray.SetAll(false);
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(3, 4);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(3, 4);
             Assert.IsFalse(_target.SetToFewBackToLegalState());
         }
 
         [Test]
         public void VerifySetToFewBackToLegalStateImpossible2()
         {
-            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _sessionRuleSet, 0);
-            _sessionRuleSet.DaysOffPerWeek = new MinMax<int>(3, 4);
+            _target = new DaysOffPerWeekSolver(_bitArray, _functions, _daysOffPreferences, 0);
+            _daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(3, 4);
             Assert.IsTrue(_target.SetToFewBackToLegalState());
         }
 

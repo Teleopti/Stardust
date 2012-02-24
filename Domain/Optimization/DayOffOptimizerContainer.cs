@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IList<IDayOffDecisionMaker> _decisionMakers;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IScheduleMatrixPro _matrix;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public DayOffOptimizerContainer(IScheduleMatrixLockableBitArrayConverter converter,
             IEnumerable<IDayOffDecisionMaker> decisionMakers,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            IDayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IScheduleMatrixPro matrix,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IScheduleMatrixOriginalStateContainer originalStateContainer)
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _converter = converter;
             _decisionMakers = new List<IDayOffDecisionMaker>(decisionMakers);
             _scheduleResultDataExtractor = scheduleResultDataExtractor;
-            _ruleSet = ruleSet;
+            _daysOffPreferences = daysOffPreferences;
             _matrix = matrix;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
             _originalStateContainer = originalStateContainer;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 new DayOffOptimizer(_converter, 
                                     decisionMaker, 
                                     _scheduleResultDataExtractor,
-                                    _ruleSet,
+                                    _daysOffPreferences,
                                     _dayOffDecisionMakerExecuter);
 
             bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _originalStateContainer);

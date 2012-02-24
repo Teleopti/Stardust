@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixLockableBitArrayConverter converter, 
             IDayOffDecisionMaker decisionMaker, 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
-            IDayOffPlannerSessionRuleSet ruleSet, 
+            IDaysOffPreferences daysOffPreferences, 
             IList<IDayOffLegalStateValidator> validatorList, 
             IList<IPerson> allSelectedPersons);
     }
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixLockableBitArrayConverter converter, 
             IDayOffDecisionMaker decisionMaker,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, 
-            IDayOffPlannerSessionRuleSet ruleSet, 
+            IDaysOffPreferences daysOffPreferences, 
             IList<IDayOffLegalStateValidator> validatorList, 
             IList<IPerson> allSelectedPersons)
         {
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return new GroupDayOffOptimizer(converter,
                                     decisionMaker,
                                     _scheduleResultDataExtractorProvider,
-                                    ruleSet,
+                                    daysOffPreferences,
                                     dayOffDecisionMakerExecuter,
                                     _changesTracker,
                                     _schedulePartModifyAndRollbackService,
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return new GroupDayOffSingleOptimizer(converter,
                                     decisionMaker,
                                     _scheduleResultDataExtractorProvider,
-                                    ruleSet,
+                                    daysOffPreferences,
                                     dayOffDecisionMakerExecuter,
                                     _changesTracker,
                                     _schedulePartModifyAndRollbackService,

@@ -62,8 +62,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
             IPeriodValueCalculator allSkillsPeriodValueCalculator =
                 periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
-
-            //IExtendReduceTimeOptimizerService extendReduceTimeOptimizerService = new ExtendReduceTimeOptimizerService(allSkillsPeriodValueCalculator);
             IExtendReduceDaysOffOptimizerService extendReduceDaysOffOptimizerService = new ExtendReduceDaysOffOptimizerService(allSkillsPeriodValueCalculator);
             
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
@@ -81,7 +79,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
                 _container.Resolve<ISchedulePartModifyAndRollbackService>();
-            //IDeleteSchedulePartService deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
             IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             IEffectiveRestrictionCreator effectiveRestrictionCreator =
                 _container.Resolve<IEffectiveRestrictionCreator>();
@@ -112,10 +109,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ILockableBitArray bitArray =
                     bitArrayConverter.Convert(optimizerPreferences.DaysOff.ConsiderWeekBefore,
                                               optimizerPreferences.DaysOff.ConsiderWeekAfter);
-                IDayOffPlannerSessionRuleSet dayOffPlannerRuleSet = OptimizerHelperHelper.DayOffPlannerRuleSetFromOptimizerPreferences(optimizerPreferences.DaysOff);
                 IList<IDayOffLegalStateValidator> validators =
                     OptimizerHelperHelper.CreateLegalStateValidators(scheduleMatrixPro.Person, bitArray,
-                                                                     dayOffPlannerRuleSet, optimizerPreferences);
+                                                                     optimizerPreferences.DaysOff, optimizerPreferences);
 
                 INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),

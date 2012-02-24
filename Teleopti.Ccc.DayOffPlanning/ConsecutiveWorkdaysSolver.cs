@@ -7,18 +7,18 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class ConsecutiveWorkdaysSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly IDayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
         private int _setConsecutiveWorkDaysToFewBackToLegalStateFrom = -1;
         private int _setConsecutiveWorkDaysToFewBackToLegalStateTo = -1;
 
-        public ConsecutiveWorkdaysSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public ConsecutiveWorkdaysSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;
             _bitArray = bitArray;
-            _sessionRuleSet = sessionRuleSet;
+            _daysOffPreferences = daysOffPreferences;
         }
 
         public MinMaxNumberOfResult ResolvableState()
@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.DayOffPlanning
             Point block = _functions.FindShortestConsecutiveWorkdayBlockWithAtLeastOneMovableBitBeforeOrAfter();
             if(block.Y == -1 && block.X == -1)
                 return MinMaxNumberOfResult.Ok;
-            if (block.Y - block.X + 1 < _sessionRuleSet.ConsecutiveWorkdays.Minimum)
+            if (block.Y - block.X + 1 < _daysOffPreferences.ConsecutiveWorkdaysValue.Minimum)
                 return MinMaxNumberOfResult.ToFew;
             block = _functions.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
-            if (block.Y - block.X + 1 > _sessionRuleSet.ConsecutiveWorkdays.Maximum)
+            if (block.Y - block.X + 1 > _daysOffPreferences.ConsecutiveWorkdaysValue.Maximum)
                 return MinMaxNumberOfResult.ToMany;
 
             return MinMaxNumberOfResult.Ok;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             int iterationCounter = 0;
             while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
-                IDictionary<int, int> weeklyList = _functions.CreateWeeklyDaysOffsDictionary(_sessionRuleSet.ConsiderWeekBefore, _sessionRuleSet.ConsiderWeekAfter);
+                IDictionary<int, int> weeklyList = _functions.CreateWeeklyDaysOffsDictionary(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
                 IList<Point> weekEndList = _functions.WeekendList();
 
                 int indexToMoveFrom = _functions.FindFirstBestIndexToMoveDaysOffFromLocksConsidered(weeklyList, weekEndList);

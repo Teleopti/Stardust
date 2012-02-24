@@ -212,11 +212,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
            IPerson person,
            ILockableBitArray bitArray,
-           IDayOffPlannerSessionRuleSet ruleSet,
+           IDaysOffPreferences dayOffPreferences,
            IOptimizationPreferences optimizerPreferences)
         {
             MinMax<int> periodArea = bitArray.PeriodArea;
-            if (!ruleSet.ConsiderWeekBefore)
+            if (!dayOffPreferences.ConsiderWeekBefore)
                 periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
             IOfficialWeekendDays weekendDays = new OfficialWeekendDays(person.PermissionInformation.Culture());
             IDayOffLegalStateValidatorListCreator validatorListCreator =
@@ -251,11 +251,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             CultureInfo culture,
             IPerson person,
             ILockableBitArray scheduleMatrixArray,
-            IDayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IOptimizationPreferences optimizerPreferences)
         {
             IList<IDayOffLegalStateValidator> legalStateValidators =
-                 CreateLegalStateValidators(person, scheduleMatrixArray, ruleSet, optimizerPreferences);
+                 CreateLegalStateValidators(person, scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
 
             IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
                 CreateLegalStateValidatorsToKeepWeekendNumbers(person, scheduleMatrixArray, optimizerPreferences);
@@ -292,17 +292,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static IDayOffPlannerSessionRuleSet DayOffPlannerRuleSetFromOptimizerPreferences(IDaysOffPreferences daysOffPreferences)
-        {
-            var creator = new DayOffPlannerRuleSetCreator();
-            return creator.CreateDayOffPlannerSessionRuleSet(daysOffPreferences);
-        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IList<ISmartDayOffBackToLegalStateSolverContainer> CreateSmartDayOffSolverContainers(
             IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-            IDayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet)
+            IDaysOffPreferences daysOffPreferences)
         {
             IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers = new List<ISmartDayOffBackToLegalStateSolverContainer>();
             foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
@@ -310,11 +304,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
                     new ScheduleMatrixLockableBitArrayConverter(matrixOriginalStateContainer.ScheduleMatrix);
 
-                ILockableBitArray bitArray = bitArrayConverter.Convert(dayOffPlannerSessionRuleSet.ConsiderWeekBefore,
-                                                                      dayOffPlannerSessionRuleSet.ConsiderWeekAfter);
+                ILockableBitArray bitArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
+                                                                      daysOffPreferences.ConsiderWeekAfter);
 
                 IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray, matrixOriginalStateContainer.ScheduleMatrix.Person.PermissionInformation.Culture());
-                ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, dayOffPlannerSessionRuleSet, 20);
+                ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, daysOffPreferences, 20);
                 ISmartDayOffBackToLegalStateSolverContainer solverContainer = new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, solverService);
                 solverContainers.Add(solverContainer);
             }
@@ -323,8 +317,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public static void SyncSmartDayOffContainerWithMatrix(ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer,
-            IDayOffTemplate dayOffTemplate, IDayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, IScheduleDayChangeCallback scheduleDayChangeCallback,
+        public static void SyncSmartDayOffContainerWithMatrix(
+            ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer,
+            IDayOffTemplate dayOffTemplate, 
+            IDaysOffPreferences daysOffPreferences, 
+            IScheduleDayChangeCallback scheduleDayChangeCallback,
             IScheduleTagSetter scheduleTagSetter)
         {
             if (backToLegalStateSolverContainer.Result)
@@ -333,11 +330,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
                     new ScheduleMatrixLockableBitArrayConverter(matrix);
 
-                ILockableBitArray doArray = bitArrayConverter.Convert(dayOffPlannerSessionRuleSet.ConsiderWeekBefore,
-                                                                      dayOffPlannerSessionRuleSet.ConsiderWeekAfter);
+                ILockableBitArray doArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
+                                                                      daysOffPreferences.ConsiderWeekAfter);
 
                 int bitArrayToMatrixOffset = 0;
-                if (!dayOffPlannerSessionRuleSet.ConsiderWeekBefore)
+                if (!daysOffPreferences.ConsiderWeekBefore)
                     bitArrayToMatrixOffset = 7;
 
                 for (int i = 0; i < doArray.Count; i++)

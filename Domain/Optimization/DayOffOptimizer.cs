@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IDayOffDecisionMaker _decisionMaker;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
-        private readonly IDayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private ILockableBitArray _workingBitArray;
 
@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         public DayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
-            IDayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter)
         {
             _converter = converter;
             _decisionMaker = decisionMaker;
             _scheduleResultDataExtractor = scheduleResultDataExtractor;
-            _ruleSet = ruleSet;
+            _daysOffPreferences = daysOffPreferences;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
         }
 
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             writeToLogDayOffOptimizationInProgressOnCurrentAgent(matrix);
 
-            ILockableBitArray originalArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            _workingBitArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            _workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
             bool decisionMakerFoundDays = _decisionMaker.Execute(_workingBitArray, _scheduleResultDataExtractor.Values());
             if (!decisionMakerFoundDays)

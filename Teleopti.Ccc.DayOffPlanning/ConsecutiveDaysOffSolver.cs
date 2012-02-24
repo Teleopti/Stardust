@@ -6,25 +6,25 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class ConsecutiveDaysOffSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly IDayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
 
-        public ConsecutiveDaysOffSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public ConsecutiveDaysOffSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;
             _bitArray = bitArray;
-            _sessionRuleSet = sessionRuleSet;
+            _daysOffPreferences = daysOffPreferences;
         }
 
         public MinMaxNumberOfResult ResolvableState()
         {
-            Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(int.MinValue, _sessionRuleSet.ConsecutiveDaysOff.Minimum - 1);
+            Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(int.MinValue, _daysOffPreferences.ConsecutiveDaysOffValue.Minimum - 1);
             if (block.X != -1)
                 return MinMaxNumberOfResult.ToFew;
 
-            block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(_sessionRuleSet.ConsecutiveDaysOff.Maximum + 1, int.MaxValue);
+            block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(_daysOffPreferences.ConsecutiveDaysOffValue.Maximum + 1, int.MaxValue);
             if (block.X != -1)
                 return MinMaxNumberOfResult.ToMany;
 
@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.DayOffPlanning
             while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
                 //find it
-                Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(_sessionRuleSet.ConsecutiveDaysOff.Maximum + 1, int.MaxValue);
+                Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(_daysOffPreferences.ConsecutiveDaysOffValue.Maximum + 1, int.MaxValue);
                 if(block.X == -1)
                     return false;
                 int indexToMoveFrom = _functions.FindFirstUnlockedIndex(block.X, block.Y);
 
                 //find next free
-                int indexToMoveTo = _functions.FindNextIndexWithNoDayOff(block.Y + _sessionRuleSet.ConsecutiveWorkdays.Minimum, true);
+                int indexToMoveTo = _functions.FindNextIndexWithNoDayOff(block.Y + _daysOffPreferences.ConsecutiveWorkdaysValue.Minimum, true);
 
                 if (!SwapBits(indexToMoveFrom, indexToMoveTo))
                     return false;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             while (ResolvableState() == MinMaxNumberOfResult.ToFew)
             {
                 //find it
-                Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(int.MinValue, _sessionRuleSet.ConsecutiveDaysOff.Minimum - 1);
+                Point block = _functions.FindFirstDayOffBlockWithUnlockedDayOff(int.MinValue, _daysOffPreferences.ConsecutiveDaysOffValue.Minimum - 1);
                 if (block.X == -1)
                     return false;
                 int indexToMoveFrom = _functions.FindFirstUnlockedIndex(block.X, block.Y);

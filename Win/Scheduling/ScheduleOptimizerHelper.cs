@@ -158,10 +158,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _scheduleDayChangeCallback, 
                     new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-            // varför i h-vete skapar man om en likadan klass som finns i
-            // optimizerPreferences.DayOffPlannerRules
-            IDayOffPlannerSessionRuleSet dayOffPlannerRuleSet =
-                OptimizerHelperHelper.DayOffPlannerRuleSetFromOptimizerPreferences(optimizerPreferences.DaysOff);
 
             IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
 
@@ -175,7 +171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IPeriodValueCalculator localPeriodValueCalculator = 
                     OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
                 IDayOffOptimizerContainer optimizerContainer =
-                    createOptimizer(matrix, dayOffPlannerRuleSet, optimizerPreferences,
+                    createOptimizer(matrix, optimizerPreferences.DaysOff, optimizerPreferences,
                     rollbackService, dayOffTemplate, scheduleService, localPeriodValueCalculator,
                     rollbackServiceDayOffConflict, matrixOriginalStateContainer);
                 optimizerContainers.Add(optimizerContainer);
@@ -497,10 +493,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
-            IDayOffPlannerSessionRuleSet dayOffPlannerRuleSet = 
-                OptimizerHelperHelper.DayOffPlannerRuleSetFromOptimizerPreferences(optimizerPreferences.DaysOff);
-
-            IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers = OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, dayOffPlannerRuleSet);
+            IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers =
+                OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, optimizerPreferences.DaysOff);
 
             using (PerformanceOutput.ForOperation("SmartSolver for " + solverContainers.Count + " containers"))
             {
@@ -533,7 +527,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         OptimizerHelperHelper.SyncSmartDayOffContainerWithMatrix(
                             backToLegalStateSolverContainer, 
                             dayOffTemplate, 
-                            dayOffPlannerRuleSet, 
+                            optimizerPreferences.DaysOff, 
                             _scheduleDayChangeCallback, 
                             new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
                 }
@@ -1091,7 +1085,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private IDayOffOptimizerContainer createOptimizer(
             IScheduleMatrixPro scheduleMatrix,
-            IDayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
             IDayOffTemplate dayOffTemplate,
@@ -1106,18 +1100,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
                 new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
             ILockableBitArray scheduleMatrixArray =
-                scheduleMatrixArrayConverter.Convert(ruleSet.ConsiderWeekBefore, ruleSet.ConsiderWeekAfter);
+                scheduleMatrixArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 
             IPerson person = scheduleMatrix.Person;
             // create decisionmakers
             CultureInfo culture = person.PermissionInformation.Culture();
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(culture, person, scheduleMatrixArray, ruleSet, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(culture, person, scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
             IScheduleResultDataExtractor scheduleResultDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
 
             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray, culture);
-            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, ruleSet, 25);
+            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
 
             var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
             var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
@@ -1159,7 +1153,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new DayOffOptimizerContainer(scheduleMatrixArrayConverter,
                                              decisionMakers,
                                              scheduleResultDataExtractor,
-                                             ruleSet,
+                                             daysOffPreferences,
                                              scheduleMatrix,
                                              dayOffDecisionMakerExecuter,
                                              originalStateContainer);

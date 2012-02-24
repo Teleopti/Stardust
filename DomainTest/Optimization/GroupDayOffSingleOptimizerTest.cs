@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixLockableBitArrayConverter _converter;
         private IDayOffDecisionMaker _decisionMaker;
         private IScheduleResultDataExtractorProvider _dataExtractorProvider;
-        private DayOffPlannerSessionRuleSet _ruleSet;
+        private IDaysOffPreferences _daysOffPreferences;
         private IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
             _dataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
-            _ruleSet = new DayOffPlannerSessionRuleSet();
+            _daysOffPreferences = new DaysOffPreferences();
             _dayOffDecisionMakerExecuter = _mocks.StrictMock<IDayOffDecisionMakerExecuter>();
             _lockableBitArrayChangesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new GroupDayOffSingleOptimizer(_converter,
                                       _decisionMaker,
                                       _dataExtractorProvider,
-                                      _ruleSet,
+                                      _daysOffPreferences,
                                       _dayOffDecisionMakerExecuter,
                                       _lockableBitArrayChangesTracker,
                                       _schedulePartModifyAndRollbackService,
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
                 .Return(_daysOffToAdd);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            groupMatrixContainer);
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(null);
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
                 .Return(_daysOffToAdd);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            null);
             _mocks.ReplayAll();
             Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(new List<IGroupPerson> { _groupPerson });
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            groupMatrixContainer);
             Expect.Call(_groupMatrixHelper.ValidateDayOffMoves(groupMatrixContainers, _dayOffLegalStateValidators)).
                 Return(false);
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(new List<IGroupPerson> { _groupPerson });
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            groupMatrixContainer);
             Expect.Call(_groupMatrixHelper.ValidateDayOffMoves(groupMatrixContainers, _dayOffLegalStateValidators)).
                 Return(true);
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(new List<IGroupPerson> { _groupPerson });
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer( _daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer( _daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            groupMatrixContainer);
             Expect.Call(_groupMatrixHelper.ValidateDayOffMoves(groupMatrixContainers, _dayOffLegalStateValidators)).
                 Return(true);
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(new List<IGroupPerson> { _groupPerson });
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
             Expect.Call(_groupMatrixHelper.GroupMatrixContainerCreator).Return(_groupMatrixContainerCreator);
-            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _ruleSet)).Return(
+            Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            groupMatrixContainer);
             Expect.Call(_groupMatrixHelper.ValidateDayOffMoves(groupMatrixContainers, _dayOffLegalStateValidators)).
                 Return(true);

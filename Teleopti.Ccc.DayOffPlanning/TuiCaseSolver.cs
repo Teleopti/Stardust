@@ -8,24 +8,24 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class TuiCaseSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly IDayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
         private Random _random;
 
-        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;
             _bitArray = bitArray;
-            _sessionRuleSet = sessionRuleSet;
+            _daysOffPreferences = daysOffPreferences;
             _random = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
         }
 
         public MinMaxNumberOfResult ResolvableState()
         {
             Point block = _functions.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
-            if (block.Y - block.X + 1 > _sessionRuleSet.ConsecutiveWorkdays.Maximum)
+            if (block.Y - block.X + 1 > _daysOffPreferences.ConsecutiveWorkdaysValue.Maximum)
                 return MinMaxNumberOfResult.ToMany;
 
             return MinMaxNumberOfResult.Ok;

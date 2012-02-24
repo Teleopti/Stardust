@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private GroupMatrixHelper _target;
         private MockRepository _mocks;
-        private DayOffPlannerSessionRuleSet _ruleSet;
+        private DaysOffPreferences _daysOffPreferences;
         private IScheduleMatrixPro _activeScheduleMatrix;
         private IList<IScheduleMatrixPro> _allScheduleMatrixes;
         private IGroupMatrixContainerCreator _groupMatrixContainerCreator;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mocks = new MockRepository();
-            _ruleSet = new DayOffPlannerSessionRuleSet();
+            _daysOffPreferences = new DaysOffPreferences();
 
             _allScheduleMatrixes = new List<IScheduleMatrixPro>();
             _activeScheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_activeScheduleMatrix.Person).Return(activePerson);
                 Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriodActivePerson);
                 Expect.Call(schedulePeriodActivePerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
-                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _ruleSet))
+                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences))
                     .Return(new GroupMatrixContainer()).Repeat.Times(1);
             }
             using(_mocks.Playback())
             {
                 IList<GroupMatrixContainer> result =
-                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _ruleSet);
+                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
                 Assert.AreEqual(1, result.Count());
             }
             
@@ -100,13 +100,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriodAnotherPerson);
                 Expect.Call(schedulePeriodActivePerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
                 Expect.Call(schedulePeriodAnotherPerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
-                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _ruleSet))
+                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences))
                     .Return(new GroupMatrixContainer()).Repeat.Times(2);
             }
             using (_mocks.Playback())
             {
                 IList<GroupMatrixContainer> result =
-                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _ruleSet);
+                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
                 Assert.AreEqual(2, result.Count());
             }
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 IList<GroupMatrixContainer> result =
-                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _ruleSet);
+                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
                 Assert.IsNull(result);
             }
 
@@ -166,13 +166,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_activeScheduleMatrix.Person).Return(activePerson);
                 Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriodActivePerson);
                 Expect.Call(schedulePeriodActivePerson.DateOnlyPeriod).Return(new DateOnlyPeriod(2001, 01, 01, 2001, 12, 31));
-                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _ruleSet))
+                Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences))
                     .Return(null);
             }
             using(_mocks.Playback())
             {
                 IList<GroupMatrixContainer> result =
-                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _ruleSet);
+                    _target.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
                 Assert.IsNull(result);
             }
         }
