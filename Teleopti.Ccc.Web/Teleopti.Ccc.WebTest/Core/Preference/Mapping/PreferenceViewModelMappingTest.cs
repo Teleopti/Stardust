@@ -329,6 +329,25 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapPreferenceDayOffStyleClassNameFromDisplayColor()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+												  new PreferenceRestriction
+												  {
+													  DayOffTemplate = new DayOffTemplate(new Description())
+													  {
+														  DisplayColor = Color.SpringGreen
+													  }
+												  });
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Be(Color.SpringGreen.ToStyleClass());
+		}
+
+		[Test]
 		public void ShouldMapPreferenceAbsence()
 		{
 			var absence = new Absence { Description = new Description("Ill") };
@@ -340,6 +359,25 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			result.DayViewModel(data.SelectedDate)
 				.Preference.Preference.Should().Be(absence.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapPreferenceAbsenceStyleClassNameFromDisplayColor()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+			                                      new PreferenceRestriction
+			                                      	{
+			                                      		Absence = new Absence
+			                                      		          	{
+			                                      		          		DisplayColor = Color.SaddleBrown
+			                                      		          	}
+			                                      	});
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, PreferenceDay = preferenceDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Be(Color.SaddleBrown.ToStyleClass());
 		}
 
 		[Test]

@@ -177,6 +177,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																		}
 																		if (s.ShiftCategory != null)
 																			return s.ShiftCategory.DisplayColor.ToStyleClass();
+																		if (s.Absence != null)
+																			return s.Absence.DisplayColor.ToStyleClass();
+																		if (s.DayOffTemplate != null)
+																			return s.DayOffTemplate.DisplayColor.ToStyleClass();
 				                                                 		return null;
 				                                                 	}))
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
