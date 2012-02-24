@@ -1,4 +1,5 @@
 ﻿@model PortalViewModel
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 <nav id="tabs" class="main-nav">
@@ -83,10 +84,10 @@
 						<dt><span class="icon employee icon-left" title="@Teleopti.Ccc.UserTexts.Resources.UserName" id="username">@User.Identity.Name</span></dt>
 						<dd>
 							<ul class="ui-widget-content">
-								<li><a href="#Settings/Index">xxRegional Settings</a></li>
+								<li><a href="#Settings/Index">@Resources.Settings</a></li>
 								<li><a href="#Settings/Password">xxChange Password</a></li>
 								<li>&nbsp;</li>
-								<li>@Html.ActionLink(@Teleopti.Ccc.UserTexts.Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+								<li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
 							</ul>
 						</dd>
 				</dl>
