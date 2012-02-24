@@ -11,12 +11,51 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _init() {
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
+		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Settings.PartialInit);
 	}
 
 	function _partialInit() {
 		_onSelectorChanged();
+		_passwordEvents();
 	}
-	
+
+	function _passwordEvents() {
+		$("input#password, input#passwordValidation, input#oldPassword").keyup(function () {
+			var incorrectLabel = $("label#nonMatchingPassword");
+			var passwordButton = $("input#passwordButton");
+			var pw = $("input#password").val();
+			var pw2 = $("input#passwordValidation").val();
+			if (pw != pw2) {
+				incorrectLabel.show();
+				passwordButton.attr("disabled", "disabled");
+			} else {
+				incorrectLabel.hide();
+				passwordButton.removeAttr("disabled");
+			}
+		});
+
+		$("input#passwordButton").click(function () {
+			_updatePassword($("input#oldPassword").val(), $("input#password").val());
+		});
+	}
+
+	function _updatePassword(oldPassword, newPassword) {
+		var data = { OldPassword: oldPassword, NewPassword: newPassword };
+		$.ajax({
+			url: "Settings/ChangePassword",
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: "PUT",
+			cache: false,
+			data: JSON.stringify(data),
+			success: function (data, textStatus, jqXHR) {
+
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
 
 	function _onSelectorChanged() {
 		$("#selectors #cultureSelect").change(function () {
