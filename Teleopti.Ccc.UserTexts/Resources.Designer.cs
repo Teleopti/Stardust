@@ -4879,6 +4879,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom reports.
+        /// </summary>
+        public static string CustomReports {
+            get {
+                return ResourceManager.GetString("CustomReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom shrinkage.
         /// </summary>
         public static string CustomShrinkage {

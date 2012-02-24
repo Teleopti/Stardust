@@ -16,6 +16,7 @@ GO
 ------------------------------------------------
 -- 2011-03-17	DJ		#14092
 -- 2011-04-12	DJ		#14477
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_schedule_result_subSP] 
 @date_from datetime,
@@ -25,7 +26,7 @@ CREATE PROCEDURE [mart].[report_data_schedule_result_subSP]
 @adherence_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @scenario_id int,
 @language_id int
 

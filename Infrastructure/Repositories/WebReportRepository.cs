@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		#region IWebReportRepository Members
 
-		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(int reportId, Guid personCode, int languageId,
+		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(Guid reportId, Guid personCode, int languageId,
 		                                                                   Guid businessUnitCode)
 		{
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("Id", NHibernateUtil.Int32)
 						.AddScalar("Name", NHibernateUtil.String)
 						.SetReadOnly(true)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetGuid("person_code", personCode)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_id", businessUnitCode)
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                                                  int intervalTo,
 		                                                                                                  int timeZoneId,
 		                                                                                                  Guid personCode,
-		                                                                                                  int reportId,
+		                                                                                                  Guid reportId,
 		                                                                                                  int languageId,
 		                                                                                                  Guid
 		                                                                                                  	businessUnitCode)
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("interval_to", intervalTo)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                              int intervalTo,
 		                                                                              int timeZoneId,
 		                                                                              Guid personCode,
-		                                                                              int reportId,
+																					  Guid reportId,
 		                                                                              int languageId,
 		                                                                              Guid businessUnitCode)
 		{
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("interval_to", intervalTo)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                                        int serviceLevelCalculationId,
 		                                                                                        int timeZoneId,
 		                                                                                        Guid personCode,
-		                                                                                        int reportId,
+		                                                                                        Guid reportId,
 		                                                                                        int languageId,
 		                                                                                        Guid businessUnitCode)
 		{
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("sl_calc_id", serviceLevelCalculationId)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))

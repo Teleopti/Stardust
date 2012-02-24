@@ -8,6 +8,7 @@ GO
 -- Last Updated:
 --				2011-09-21 Implement as wrapper to the shared SP: [mart].[report_data_shift_cat_and_day_abs_per_agent] 
 --				2011-10-24 Change paramaters @group_page_group_id and @teamd_id to 
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				@group_page_group_set and @team_set
 -- Description:	Used by reports:
 -- 1) select * from mart.report where report_id = 26
@@ -30,7 +31,7 @@ CREATE PROCEDURE [mart].[report_data_shift_cat_and_day_abs_per_day]
 @absence_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

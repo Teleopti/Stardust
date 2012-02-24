@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 			using (this._mock.Record())
 			{
 				Expect.Call(this._webReportUserInfoProvider.GetUserInformation()).Return(reportUserSetting);
-				Expect.Call(
-					this._webReportRepository.ReportControlSkillGet(
-						10, reportUserSetting.PersonCode, reportUserSetting.LanguageId, reportUserSetting.BusinessUnitCode)).Return(
-							skills);
+				Expect.Call(_webReportRepository.ReportControlSkillGet(new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0"), reportUserSetting.PersonCode,
+				                                                       reportUserSetting.LanguageId, reportUserSetting.BusinessUnitCode)).
+					Return(skills);
 			}
 			using (this._mock.Playback())
 			{

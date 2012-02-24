@@ -36,9 +36,7 @@
 	
 </PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
-	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<ItemGroup>
 		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
@@ -52,7 +50,10 @@
 		
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="BuildAndTest;AzureDeploy;AzureAnalyticsReportTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
+	<Target Name="Run" DependsOnTargets="AzureDeploy;AzureAnalyticsReportTest;BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Message Text="All target executed!" Importance="high" />
+	</Target>
+	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->

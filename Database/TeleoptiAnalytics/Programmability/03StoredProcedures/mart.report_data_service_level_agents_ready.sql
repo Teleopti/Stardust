@@ -12,6 +12,7 @@ GO
 -- 20090115 Added @interval_type 7 weekday KJ
 -- 200811231 Added fields
 -- 20081009 Bug fix Date, Week and Month Formats changed KJ
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Service level and Agents Ready
 -- =============================================
 --exec report_data_service_level_agents_ready @skill_set=N'2',@workload_set=N'1',@interval_type=N'1',@date_from='2006-01-04 00:00:00:000',@date_to='2006-01-04 00:00:00:000',@interval_from=N'0',@interval_to=N'287',@sl_calc_id=3,@time_zone_id=81, @person_code='7EB3E1AE-3DF5-4558-81CF-9AB100258670',@report_id=9,@language_id=1053
@@ -27,7 +28,7 @@ CREATE PROCEDURE [mart].[report_data_service_level_agents_ready]
 @sl_calc_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

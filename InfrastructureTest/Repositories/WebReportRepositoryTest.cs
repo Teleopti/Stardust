@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new WebReportRepository(SetupFixtureForAssembly.DataSource);
 			ReportCommonInput = new WebReportInput
 			                    	{
-			                    		ReportId = 10,
+										ReportId = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0"),
 			                    		PersonCode = new Guid("EFE16A67-E352-4817-BDA8-9A7200410E30"),
 			                    		LanguageId = 1053,
 										BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			public Guid PersonCode { get; set; }
 			public int LanguageId { get; set; }
 			public Guid BusinessUnitCode { get; set; }
-			public int ReportId { get; set; }
+			public Guid ReportId { get; set; }
 			public string SkillSet { get; set; }
 			public string WorkloadSet { get; set; }
 			public int TimeZoneId { get; set; }

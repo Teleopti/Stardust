@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 	{
 		#region IWebReportRepository Members
 
-		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(int reportId, Guid personCode, int languageId,
+		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(Guid reportId, Guid personCode, int languageId,
 		                                                                   Guid businessUnitCode)
 		{
 			return new List<ReportControlSkillGet>
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 		                                                                                                  int intervalTo,
 		                                                                                                  int timeZoneId,
 		                                                                                                  Guid personCode,
-		                                                                                                  int reportId,
+		                                                                                                  Guid reportId,
 		                                                                                                  int languageId,
 		                                                                                                  Guid
 		                                                                                                  	businessUnitCode)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 		                                                                              DateTime dateFrom, DateTime dateTo,
 		                                                                              int intervalFrom, int intervalTo,
 		                                                                              int timeZoneId,
-		                                                                              Guid personCode, int reportId,
+		                                                                              Guid personCode, Guid reportId,
 		                                                                              int languageId,
 		                                                                              Guid businessUnitCode)
 		{
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix
 		                                                                                        int intervalTo,
 		                                                                                        int serviceLevelCalculationId,
 		                                                                                        int timeZoneId,
-		                                                                                        Guid personCode, int reportId,
+		                                                                                        Guid personCode, Guid reportId,
 		                                                                                        int languageId,
 		                                                                                        Guid businessUnitCode)
 		{

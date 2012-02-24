@@ -59,12 +59,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			using (_mock.Record())
 			{
 				expectUserPreparation();
-				Expect.Call(
-					_webReportRepository.ReportDataQueueStatAbandoned(
-						0, string.Empty, string.Empty, 0, DateTime.Now, DateTime.Now, 0, 0, 0, Guid.NewGuid(), 0, 0, Guid.NewGuid())).
-					IgnoreArguments().Return(
-						new List<ReportDataQueueStatAbandoned>(
-							new List<ReportDataQueueStatAbandoned> { new ReportDataQueueStatAbandoned("00:00", 100M, 10M, 1) }));
+				Expect.Call(_webReportRepository.ReportDataQueueStatAbandoned(0, string.Empty, string.Empty, 0, DateTime.Now,
+																			  DateTime.Now, 0, 0, 0, Guid.NewGuid(), Guid.Empty, 0,
+				                                                              Guid.NewGuid()))
+					.IgnoreArguments().Return(
+						new List<ReportDataQueueStatAbandoned>(new List<ReportDataQueueStatAbandoned>
+						                                       	{
+						                                       		new ReportDataQueueStatAbandoned("00:00", 100M, 10M)
+						                                       	}));
 			}
 
 			using (_mock.Playback())
@@ -88,13 +90,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			{
 				expectUserPreparation();
 
-				Expect.Call(
-					_webReportRepository.ReportDataForecastVersusActualWorkload(
-						0, string.Empty, string.Empty, 0, DateTime.Now, DateTime.Now, 0, 0, 0, Guid.NewGuid(), 0, 0, Guid.NewGuid())).
-					IgnoreArguments().Return(
-						new List<ReportDataForecastVersusActualWorkload>(
-							new List<ReportDataForecastVersusActualWorkload>
-								{ new ReportDataForecastVersusActualWorkload("00:00", 100M, 10M, 2) }));
+				Expect.Call(_webReportRepository.ReportDataForecastVersusActualWorkload(0, string.Empty, string.Empty, 0,
+				                                                                        DateTime.Now,
+																						DateTime.Now, 0, 0, 0, Guid.NewGuid(), Guid.Empty, 0,
+				                                                                        Guid.NewGuid()))
+					.IgnoreArguments().Return(
+						new List<ReportDataForecastVersusActualWorkload>(new List<ReportDataForecastVersusActualWorkload>
+						                                                 	{
+						                                                 		new ReportDataForecastVersusActualWorkload("00:00", 100M,
+						                                                 		                                           10M)
+						                                                 	}));
 			}
 
 			using (_mock.Playback())
@@ -118,12 +123,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			{
 				expectUserPreparation();
 
-				Expect.Call(
-					_webReportRepository.ReportDataServiceLevelAgentsReady(
-						string.Empty, string.Empty, 0, DateTime.Now, DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), 0, 0, Guid.NewGuid())).
-					IgnoreArguments().Return(
-						new List<ReportDataServiceLevelAgentsReady>(
-							new List<ReportDataServiceLevelAgentsReady> { new ReportDataServiceLevelAgentsReady("00:00", 110M, 11M, 0.12M, 2) }));
+				Expect.Call(_webReportRepository.ReportDataServiceLevelAgentsReady(string.Empty, string.Empty, 0,
+				                                                                   DateTime.Now,
+																				   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04"), 0,
+				                                                                   Guid.NewGuid()))
+					.IgnoreArguments().Return(
+						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
+						                                            	{
+						                                            		new ReportDataServiceLevelAgentsReady("00:00", 110M,
+						                                            		                                      11M, 0.12M)
+						                                            	}));
 			}
 
 			using (_mock.Playback())
@@ -147,12 +156,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			{
 				expectUserPreparation();
 
-				Expect.Call(
-					_webReportRepository.ReportDataServiceLevelAgentsReady(
-						string.Empty, string.Empty, 0, DateTime.Now, DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), 0, 0, Guid.NewGuid())).
-					IgnoreArguments().Return(
-						new List<ReportDataServiceLevelAgentsReady>(
-							new List<ReportDataServiceLevelAgentsReady> { new ReportDataServiceLevelAgentsReady("00:00", 100M, 10M, 0.12M, 3) }));
+				Expect.Call(_webReportRepository.ReportDataServiceLevelAgentsReady(string.Empty, string.Empty, 0,
+				                                                                   DateTime.Now,
+				                                                                   DateTime.Now, 0, 0, 0, 0, Guid.NewGuid(), new Guid("AE758403-C16B-40B0-B6B2-E8F6043B6E04"), 0,
+				                                                                   Guid.NewGuid()))
+					.IgnoreArguments().Return(
+						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
+						                                            	{
+						                                            		new ReportDataServiceLevelAgentsReady("00:00", 100M,
+						                                            		                                      10M, 0.12M)
+						                                            	}));
 			}
 
 			using (_mock.Playback())
