@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.Password.TypeText(newPassword);
 			page.PasswordValidation.TypeText(newPassword);
 			page.OldPassword.TypeText(TestData.CommonPassword);
+			Browser.Current.Eval("$('input#password').keyup();");
 			page.ConfirmButton.Click();
 		}
 
