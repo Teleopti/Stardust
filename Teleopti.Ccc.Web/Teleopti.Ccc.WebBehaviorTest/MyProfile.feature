@@ -31,13 +31,14 @@ Scenario: Change my language
 	Given I am an agent
 	And I am swedish
 	When I view my regional settings
-	When I change language to english
+	And I change language to english
 	Then I should see english text
 
 Scenario: Change my language to browser's default
 	Given I am an agent
 	And I am swedish
-	When I change language to browser's default
+	When I view my regional settings
+	And I change language to browser's default
 	Then I should see text in the the browser's language 
 
 Scenario: Change my password

@@ -43,8 +43,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			page.CultureSelect.SelectByValue("1033");
 			Browser.Current.Eval("$('#cultureSelect').change();"); 
-			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(300);
 		}
 
 		[When(@"I change culture to browser's default")]
@@ -53,8 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			page.CultureSelect.SelectByValue("-1");
 			Browser.Current.Eval("$('#cultureSelect').change();");
-			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(300);
 		}
 
 		[When(@"I change language to english")]
@@ -63,13 +59,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			page.CultureUiSelect.SelectByValue("1033");
 			Browser.Current.Eval("$('#cultureUiSelect').change();");
-			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(300);
+		}
+
+		[When(@"I change language to browser's default")]
+		public void WhenIChangeLanguageToBrowserSDefault()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			page.CultureUiSelect.SelectByValue("-1");
+			Browser.Current.Eval("$('#cultureUiSelect').change();");
 		}
 
 		[Then(@"I should see US date format")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
+			//not nice - but somehow I need to wait for a portal refresh here
+			Thread.Sleep(300);
 			Navigation.GotoTeamSchedule();
 			EventualAssert.That(() => Browser.Current.Page<TeamSchedulePage>().DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
 		}
@@ -77,16 +81,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the browser's language's date format")]
 		public void ThenIShouldSeeTheBrowserSLanguageSDateFormat()
 		{
-			Navigation.GotoTeamSchedule();
-			var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern; //wrong here!
-			EventualAssert.That(() => Browser.Current.Page<TeamSchedulePage>().DatePicker.DateFormat, Is.EqualTo(dateFormat));
+			// don't know a good way to read http header from browser to server
+			ScenarioContext.Current.Pending();
 		}
 
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
+			//not nice - but somehow I need to wait for a portal refresh here
+			Thread.Sleep(300);
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			page.RequestsLink.Text.Should().Be.EqualTo("Requests");
+		}
+
+		[Then(@"I should see text in the the browser's language")]
+		public void ThenIShouldSeeTextInTheTheBrowserSLanguage()
+		{
+			// don't know a good way to read http header from browser to server
+			ScenarioContext.Current.Pending();
 		}
 	}
 }
