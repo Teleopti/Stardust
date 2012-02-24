@@ -185,6 +185,7 @@
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
+    <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
+    <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepository.cs" />

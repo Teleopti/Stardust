@@ -6,18 +6,21 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -599,7 +602,45 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return 1;
 		}
 
-		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
+	    public int NumberOfActiveAgents()
+	    {
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var rep = new PersonRepository(UnitOfWorkFactory.Current);
+                return rep.NumberOfActiveAgents();
+            }
+	    }
+
+	    public ILicenseStatusXml LicenseStatus
+	    {
+            get
+            {
+                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
+                    var status = rep.LoadAll().First();
+                    return new LicenseStatusXml(XDocument.Parse(status.XmlString));
+                }
+            }
+	    }
+
+	    public void SaveLicensStatus(string xmlString)
+	    {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var rep = new LicenseStatusRepository(uow);
+                var status = new LicenseStatus() {XmlString = xmlString};
+                rep.Add(status);
+                uow.PersistAll();
+            }
+	    }
+
+	    public ILicenseService XmlLicenseService(int numberOfActiveAgents)
+	    {
+            return new XmlLicenseService(new LicenseRepository(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork()), numberOfActiveAgents);
+	    }
+
+	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
 			foreach (IPerson person in dictionary.Keys)

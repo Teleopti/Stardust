@@ -336,6 +336,7 @@
     <Compile Include="Optimization\WorkShiftRuleSetCanHaveShortBreak.cs" />
     <Compile Include="Payroll\PayrollResultDetail.cs" />
     <Compile Include="Payroll\XmlResult.cs" />
+    <Compile Include="Repositories\ILicenseStatusRepository.cs" />
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPersonSelectorReadOnlyRepository.cs" />
@@ -776,6 +777,7 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />
     <Compile Include="Security\InsufficientPrivilegeException.cs" />
     <Compile Include="Security\IOneWayEncryption.cs">
@@ -1620,6 +1622,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Security\LicenseStatus.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
