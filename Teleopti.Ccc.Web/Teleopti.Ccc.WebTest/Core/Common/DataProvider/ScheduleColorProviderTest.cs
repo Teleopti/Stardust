@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -11,6 +14,35 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	[TestFixture]
 	public class ScheduleColorProviderTest
 	{
+
+		[Test]
+		public void ShouldOnlyGetUniqueColors()
+		{
+			var stubs = new StubFactory();
+			var projection1 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.Pink) });
+			var projection2 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
+			var projection3 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
+			var scheduleDay1 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
+				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.RoyalBlue)))
+				);
+			var scheduleDay2 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
+				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Pink)))
+				);
+			var source = new[]
+			             	{
+			             		new FakeScheduleColorSource {Projection = projection1, ScheduleDay = scheduleDay1},
+			             		new FakeScheduleColorSource {Projection = projection2, ScheduleDay = scheduleDay2},
+			             		new FakeScheduleColorSource {Projection = projection3}
+			             	};
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Should().Have.Count.EqualTo(3);
+			result.Should().Have.SameValuesAs(new[] { Color.Pink, Color.BlueViolet, Color.RoyalBlue});
+		}
+
 		[Test]
 		public void ShouldGetDisplayColorFromProjectionsVisualLayer()
 		{
@@ -56,31 +88,70 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void ShouldOnlyGetUniqueColors()
+		public void ShouldGetDisplayColorFromPreferenceShiftCategory()
 		{
-			var stubs = new StubFactory();
-			var projection1 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.Pink) });
-			var projection2 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
-			var projection3 = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.BlueViolet) });
-			var source = new[]
-			             	{
-			             		new FakeScheduleColorSource {Projection = projection1},
-			             		new FakeScheduleColorSource {Projection = projection2},
-			             		new FakeScheduleColorSource {Projection = projection3}
-			             	};
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+			                                      new PreferenceRestriction
+			                                      	{
+			                                      		ShiftCategory = new ShiftCategory(" ")
+			                                      		                	{
+			                                      		                		DisplayColor = Color.Plum
+			                                      		                	}
+			                                      	});
+			var source = new[] {new FakeScheduleColorSource {PreferenceDay = preferenceDay}};
 
 			var target = new ScheduleColorProvider();
 
 			var result = target.GetColors(source);
 
-			result.Should().Have.Count.EqualTo(2);
-			result.Should().Have.SameValuesAs(new[] {Color.Pink, Color.BlueViolet});
+			result.Single().Should().Be(Color.Plum);
+		}
+
+		[Test]
+		public void ShouldGetDisplayColorFromPreferenceAbsence()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+												  new PreferenceRestriction
+												  {
+													  Absence = new Absence
+													  {
+														  DisplayColor = Color.DarkOliveGreen
+													  }
+												  });
+			var source = new[] { new FakeScheduleColorSource { PreferenceDay = preferenceDay } };
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.DarkOliveGreen);
+		}
+
+		[Test]
+		public void ShouldGetDisplayColorFromPreferenceDayOff()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+			                                      new PreferenceRestriction
+			                                      	{
+			                                      		DayOffTemplate = new DayOffTemplate(new Description())
+			                                      		                 	{
+			                                      		                 		DisplayColor = Color.BlanchedAlmond
+			                                      		                 	}
+			                                      	});
+			var source = new[] { new FakeScheduleColorSource { PreferenceDay = preferenceDay } };
+
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(source);
+
+			result.Single().Should().Be(Color.BlanchedAlmond);
 		}
 
 		private class FakeScheduleColorSource : IScheduleColorSource
 		{
 			public IScheduleDay ScheduleDay { get; set; }
 			public IVisualLayerCollection Projection { get; set; }
+			public IPreferenceDay PreferenceDay { get; set; }
 		}
 
 	}

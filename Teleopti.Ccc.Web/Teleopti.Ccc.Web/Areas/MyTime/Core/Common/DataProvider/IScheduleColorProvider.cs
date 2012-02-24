@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		IScheduleDay ScheduleDay { get; }
 		IVisualLayerCollection Projection { get; }
+		IPreferenceDay PreferenceDay { get; }
 	}
 
 }

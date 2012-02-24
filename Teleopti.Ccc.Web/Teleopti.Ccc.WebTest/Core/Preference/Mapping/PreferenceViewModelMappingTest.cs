@@ -296,6 +296,25 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapPreferenceShiftCategoryStyleClassNameFromDisplayColor()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
+			                                      new PreferenceRestriction
+			                                      	{
+			                                      		ShiftCategory = new ShiftCategory(" ")
+			                                      		                	{
+			                                      		                		DisplayColor = Color.PapayaWhip
+			                                      		                	}
+			                                      	});
+			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, PreferenceDay = preferenceDay}};
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.StyleClassName.Should().Be(Color.PapayaWhip.ToStyleClass());
+		}
+
+		[Test]
 		public void ShouldMapPreferenceDayOff()
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description("Day off", "DO"));
