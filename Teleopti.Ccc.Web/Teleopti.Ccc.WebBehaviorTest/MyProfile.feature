@@ -56,12 +56,14 @@ Scenario: Continue browsing after changing password
 
 Scenario: Incorrect current password when changing password
 	Given I am an agent
-	When I am changing password
-	And I give incorrect current password
+	When I view my password
+	And I change my password using incorrect current password
 	Then I should see a message saying the password is incorrect
+	And Confirm button should be disabled
 	
 Scenario: Incorrect confirming password when changing password
 	Given I am an agent
-	When I am changing password
-	And I give incorrect confirming password
+	When I view my password
+	And I am changing password using incorrect confirm password
 	Then I should see a message saying the password is not confirmed correctly
+	And Confirm button should be disabled

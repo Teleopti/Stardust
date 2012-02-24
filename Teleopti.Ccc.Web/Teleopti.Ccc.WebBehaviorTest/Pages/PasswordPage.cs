@@ -15,5 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "passwordButton")]
 		public Button ConfirmButton;
+
+		[FindBy(Id = "nonMatchingPassword")]
+		public Label NonMatchingNewPassword;
 	}
 }

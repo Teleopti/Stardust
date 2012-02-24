@@ -208,11 +208,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 58
  testRunner.Given("I am an agent");
 #line 59
- testRunner.When("I am changing password");
+ testRunner.When("I view my password");
 #line 60
- testRunner.And("I give incorrect current password");
+ testRunner.And("I change my password using incorrect current password");
 #line 61
  testRunner.Then("I should see a message saying the password is incorrect");
+#line 62
+ testRunner.And("Confirm button should be disabled");
 #line hidden
             testRunner.CollectScenarioErrors();
         }
@@ -222,16 +224,18 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void IncorrectConfirmingPasswordWhenChangingPassword()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Incorrect confirming password when changing password", ((string[])(null)));
-#line 63
-this.ScenarioSetup(scenarioInfo);
 #line 64
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 65
- testRunner.When("I am changing password");
+ testRunner.Given("I am an agent");
 #line 66
- testRunner.And("I give incorrect confirming password");
+ testRunner.When("I view my password");
 #line 67
+ testRunner.And("I am changing password using incorrect confirm password");
+#line 68
  testRunner.Then("I should see a message saying the password is not confirmed correctly");
+#line 69
+ testRunner.And("Confirm button should be disabled");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

@@ -43,6 +43,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.ConfirmButton.Click();
 		}
 
+		[When(@"I change my password using incorrect current password")]
+		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.Password.TypeText(newPassword);
+			page.PasswordValidation.TypeText(newPassword);
+			page.OldPassword.TypeText(TestData.CommonPassword + "fel");
+			Browser.Current.Eval("$('input#password').keyup();");
+		}
+
+		[When(@"I am changing password using incorrect confirm password")]
+		public void WhenIAmChangingPasswordUsingIncorrectConfirmPassword()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.Password.TypeText(newPassword);
+			page.PasswordValidation.TypeText(newPassword + "fel");
+			page.OldPassword.TypeText(TestData.CommonPassword);
+			Browser.Current.Eval("$('input#password').keyup();");
+		}
+
 		[When(@"I sign in using my new password")]
 		public void WhenISignInUsingMyNewPassword()
 		{
@@ -130,6 +150,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			// don't know a good way to read http header from browser to server
 			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see a message saying the password is not confirmed correctly")]
+		public void ThenIShouldSeeAMessageSayingThePasswordIsNotConfirmedCorrectly()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.NonMatchingNewPassword.Style.Display
+				.Should().Not.Contain("none");
+		}
+
+		[Then(@"Confirm button should be disabled")]
+		public void ThenConfirmButtonShouldBeDisabled()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.ConfirmButton.Enabled.Should().Be.False();
 		}
 	}
 }
