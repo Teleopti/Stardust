@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 		Days = new WeekScheduleDayDomainData[] {}
 			                 	};
 			var colors = new[] {Color.Red, Color.Blue};
-			scheduleColorProvider.Stub(x => x.GetColors(domainData.Days)).Return(colors);
+			scheduleColorProvider.Stub(x => x.GetColors(domainData.ColorSource)).Return(colors);
 
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 

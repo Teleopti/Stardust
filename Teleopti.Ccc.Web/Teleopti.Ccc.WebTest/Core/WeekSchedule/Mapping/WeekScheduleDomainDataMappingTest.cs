@@ -156,5 +156,17 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
 		}
+
+		[Test]
+		public void ShouldMapColorSource()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(DateOnly.Today);
+
+			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
+		}
 	}
 }

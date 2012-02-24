@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        		        		}).ToArray();
 				                                        	}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
-				.ForMember(d => d.Styles, c => c.MapFrom(s => _scheduleColorProvider.Invoke().GetColors(s.Days)))
+				.ForMember(d => d.Styles, c => c.MapFrom(s => _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				;
 
 			CreateMap<string, WeekDayHeader>()

@@ -7,34 +7,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class ScheduleColorProvider : IScheduleColorProvider
 	{
-		public IEnumerable<Color> GetColors(IEnumerable<IScheduleColorSource> source)
+		public IEnumerable<Color> GetColors(IScheduleColorSource source)
 		{
-			var layerColors = from s in source
-			                  where s.Projection != null
-			                  let layers = s.Projection as IEnumerable<IVisualLayer>
-			                  from l in layers
-			                  select l.DisplayColor();
+			if (source == null)
+				return new Color[] {};
 
-			var personAssignmentColors = from s in source
-			                          where s.ScheduleDay != null
-			                          let personAssignment = s.ScheduleDay.AssignmentHighZOrder()
-			                          where personAssignment != null
-			                          select personAssignment.MainShift.ShiftCategory.DisplayColor;
+			var scheduleDays = source.ScheduleDays ?? new IScheduleDay[] {};
+			var projections = source.Projections ?? new IVisualLayerCollection[] { };
+			var preferenceDays = source.PreferenceDays ?? new IPreferenceDay[] { };
 
-			var absenceColors = from s in source
-			                    where s.ScheduleDay != null
-			                    let personAbsences = s.ScheduleDay.PersonAbsenceCollection()
+			var layerColors = from p in projections
+							  let layers = p as IEnumerable<IVisualLayer>
+							  from l in layers
+							  select l.DisplayColor();
+
+			var personAssignmentColors = from d in scheduleDays
+										 let personAssignment = d.AssignmentHighZOrder()
+										 where personAssignment != null
+										 select personAssignment.MainShift.ShiftCategory.DisplayColor;
+
+			var absenceColors = from d in scheduleDays
+			                    let personAbsences = d.PersonAbsenceCollection()
 			                    where personAbsences != null
 			                    from pa in personAbsences
 			                    select pa.Layer.Payload.DisplayColor;
 
-			var preferenceColors = from s in source
-			                       where
-			                       	s.PreferenceDay != null &&
-			                       	s.PreferenceDay.Restriction != null
-			                       let shiftCategory = s.PreferenceDay.Restriction.ShiftCategory
-			                       let absence = s.PreferenceDay.Restriction.Absence
-								   let dayOff = s.PreferenceDay.Restriction.DayOffTemplate
+			var preferenceColors = from d in preferenceDays
+			                       where d.Restriction != null
+			                       let shiftCategory = d.Restriction.ShiftCategory
+			                       let absence = d.Restriction.Absence
+								   let dayOff = d.Restriction.DayOffTemplate
 			                       let colors = new[]
 			                                    	{
 			                                    		shiftCategory == null ? Color.Transparent : shiftCategory.DisplayColor,

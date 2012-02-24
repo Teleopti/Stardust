@@ -680,7 +680,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var colors = new[] { Color.Red, Color.Blue };
 
-			scheduleColorProvider.Stub(x => x.GetColors(data.Days)).Return(colors);
+			scheduleColorProvider.Stub(x => x.GetColors(data.ColorSource)).Return(colors);
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 

@@ -6,14 +6,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public interface IScheduleColorProvider
 	{
-		IEnumerable<Color> GetColors(IEnumerable<IScheduleColorSource> source);
+		IEnumerable<Color> GetColors(IScheduleColorSource source);
 	}
 
 	public interface IScheduleColorSource
 	{
-		IScheduleDay ScheduleDay { get; }
-		IVisualLayerCollection Projection { get; }
-		IPreferenceDay PreferenceDay { get; }
+		IEnumerable<IScheduleDay> ScheduleDays { get; set; }
+		IEnumerable<IVisualLayerCollection> Projections { get; set; }
+		IEnumerable<IPreferenceDay> PreferenceDays { get; set; }
 	}
 
 }

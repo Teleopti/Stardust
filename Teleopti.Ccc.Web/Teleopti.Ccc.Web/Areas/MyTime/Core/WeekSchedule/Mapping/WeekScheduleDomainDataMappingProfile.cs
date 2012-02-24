@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -51,13 +52,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															}
 											   ).ToArray();
 
+									var colorSource = new ScheduleColorSource
+									                  	{
+									                  		ScheduleDays = (from d in days where d.ScheduleDay != null select d.ScheduleDay).ToArray(),
+									                  	};
 									return new WeekScheduleDomainData
 											{
 												Date = date,
 												Days = days,
+												ColorSource = colorSource
 											};
 								});
 
 		}
+	}
+
+	public class ScheduleColorSource : IScheduleColorSource
+	{
+		public IEnumerable<IScheduleDay> ScheduleDays { get; set; }
+		public IEnumerable<IVisualLayerCollection> Projections { get; set; }
+		public IEnumerable<IPreferenceDay> PreferenceDays { get; set; }
 	}
 }

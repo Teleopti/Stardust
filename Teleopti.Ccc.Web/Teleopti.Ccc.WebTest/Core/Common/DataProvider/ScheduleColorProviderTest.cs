@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -16,6 +17,16 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	{
 
 		[Test]
+		public void ShouldReturnEmptyEnumerableOnNullSource()
+		{
+			var target = new ScheduleColorProvider();
+
+			var result = target.GetColors(null);
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldOnlyGetUniqueColors()
 		{
 			var stubs = new StubFactory();
@@ -28,11 +39,10 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay2 = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, 
 				stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Pink)))
 				);
-			var source = new[]
+			var source = new FakeScheduleColorSource
 			             	{
-			             		new FakeScheduleColorSource {Projection = projection1, ScheduleDay = scheduleDay1},
-			             		new FakeScheduleColorSource {Projection = projection2, ScheduleDay = scheduleDay2},
-			             		new FakeScheduleColorSource {Projection = projection3}
+			             		ScheduleDays = new[] {scheduleDay1, scheduleDay2},
+			             		Projections = new[] {projection1, projection2, projection3}
 			             	};
 
 			var target = new ScheduleColorProvider();
@@ -48,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		{
 			var stubs = new StubFactory();
 			var projection = stubs.ProjectionStub(new[] {stubs.VisualLayerStub(Color.Red)});
-			var source = new[] {new FakeScheduleColorSource {Projection = projection}};
+			var source = new FakeScheduleColorSource {Projections = new[] {projection}};
 
 			var target = new ScheduleColorProvider();
 
@@ -63,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var stubs = new StubFactory();
 			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Blue)));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, personAssignment);
-			var source = new[] { new FakeScheduleColorSource { ScheduleDay = scheduleDay } };
+			var source = new FakeScheduleColorSource { ScheduleDays = new[] { scheduleDay} };
 
 			var target = new ScheduleColorProvider();
 
@@ -78,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var stubs = new StubFactory();
 			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.Olive)));
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.FullDayAbsence, personAbsence);
-			var source = new[] { new FakeScheduleColorSource { ScheduleDay = scheduleDay } };
+			var source = new FakeScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -98,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      		                		DisplayColor = Color.Plum
 			                                      		                	}
 			                                      	});
-			var source = new[] {new FakeScheduleColorSource {PreferenceDay = preferenceDay}};
+			var source = new FakeScheduleColorSource {PreferenceDays = new[] {preferenceDay}};
 
 			var target = new ScheduleColorProvider();
 
@@ -118,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 														  DisplayColor = Color.DarkOliveGreen
 													  }
 												  });
-			var source = new[] { new FakeScheduleColorSource { PreferenceDay = preferenceDay } };
+			var source = new FakeScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -138,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      		                 		DisplayColor = Color.BlanchedAlmond
 			                                      		                 	}
 			                                      	});
-			var source = new[] { new FakeScheduleColorSource { PreferenceDay = preferenceDay } };
+			var source = new FakeScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
 			var target = new ScheduleColorProvider();
 
@@ -149,9 +159,9 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 		private class FakeScheduleColorSource : IScheduleColorSource
 		{
-			public IScheduleDay ScheduleDay { get; set; }
-			public IVisualLayerCollection Projection { get; set; }
-			public IPreferenceDay PreferenceDay { get; set; }
+			public IEnumerable<IScheduleDay> ScheduleDays { get; set; }
+			public IEnumerable<IVisualLayerCollection> Projections { get; set; }
+			public IEnumerable<IPreferenceDay> PreferenceDays { get; set; }
 		}
 
 	}
