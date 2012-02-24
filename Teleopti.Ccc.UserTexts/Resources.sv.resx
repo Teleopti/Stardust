@@ -10088,4 +10088,13 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="BrowserDefault" xml:space="preserve">
     <value>&lt;Webbläsarens default&gt;</value>
   </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Gammalt lösenord</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Fel lösenord!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Uppdaterad</value>
+  </data>
 </root>

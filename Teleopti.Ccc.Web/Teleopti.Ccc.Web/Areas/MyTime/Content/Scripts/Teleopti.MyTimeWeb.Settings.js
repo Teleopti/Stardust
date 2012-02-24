@@ -53,6 +53,9 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			cache: false,
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
+				var updatedLabel = $("label#updated");
+				updatedLabel.show();
+				setTimeout(function() { updatedLabel.hide() }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 401) {

@@ -14466,6 +14466,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string PasswordOld {
+            get {
+                return ResourceManager.GetString("PasswordOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The new password does not follow the password policy..
         /// </summary>
         public static string PasswordPolicyWarning {
@@ -14498,6 +14507,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PasswordSettings {
             get {
                 return ResourceManager.GetString("PasswordSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong password!.
+        /// </summary>
+        public static string PasswordWrong {
+            get {
+                return ResourceManager.GetString("PasswordWrong", resourceCulture);
             }
         }
         
@@ -21697,6 +21715,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
         

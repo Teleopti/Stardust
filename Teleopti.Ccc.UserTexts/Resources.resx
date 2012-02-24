@@ -10394,4 +10394,13 @@ These options are activated:
   <data name="BrowserDefault" xml:space="preserve">
     <value>&lt;Browser Default&gt;</value>
   </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Wrong password!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
 </root>
