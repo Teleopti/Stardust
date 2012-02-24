@@ -16,6 +16,7 @@
 	<script src="@Url.Content("~/Content/Scripts/RGraph.bar.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/RGraph.line.js")"></script>
 	<!--[if lt IE 9]><script src="@Url.Content("~/Content/Scripts/excanvas.compressed.js")"></script><![endif]-->
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.setting.skillpicker.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.graph.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.table.js")"></script>
 	<script src="@Url.Content("~/Content/MobileDateBox/jquery.mobile.datebox-1.0.1.js")"></script>
@@ -89,12 +90,12 @@
 			</li>
 			<li data-role="fieldcontain">
 				<label for="sel-skill">@Resources.Skill</label>
-				<select name="sel-skill" id="sel-skill" data-native-menu="false" multiple="multiple">
+				<select name="sel-skill" id="sel-skill" data-role="none" data-native-menu="false" multiple="multiple">
 					@foreach (var skill in Model.Skills)
-	 {
-		 var encodedId = Html.AttributeEncode(string.Format("{0}", skill.SkillId));
-						<option value="@encodedId" @(skill.AllSkills ? "selected=\"selected\"" : string.Empty)>@skill.SkillName</option>
-	 }
+					{
+						var encodedId = Html.AttributeEncode(string.Format("{0}", skill.SkillId));
+						<option value="@encodedId" selected="selected">@skill.SkillName</option>
+					}
 				</select>
 			</li>
 			<li data-role="fieldcontain">

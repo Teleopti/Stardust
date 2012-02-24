@@ -382,6 +382,7 @@
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
+    <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.setting.skillpicker.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.graph.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
@@ -445,22 +446,6 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
-    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.0.min.css" />
-    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.0.min.js" />
-    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.1.css" />
-    <Content Include="Content\MobileContent\DateBox\jquery.mobile.datebox-1.0.1.js" />
-    <Content Include="Content\MobileContent\jquery-1.6.4.min.js" />
-    <Content Include="Content\MobileContent\Mobile\images\ajax-loader.png" />
-    <Content Include="Content\MobileContent\Mobile\images\icons-18-black.png" />
-    <Content Include="Content\MobileContent\Mobile\images\icons-18-white.png" />
-    <Content Include="Content\MobileContent\Mobile\images\icons-36-black.png" />
-    <Content Include="Content\MobileContent\Mobile\images\icons-36-white.png" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.css" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.js" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.min.css" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile-1.0.1.min.js" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.css" />
-    <Content Include="Content\MobileContent\Mobile\jquery.mobile.structure-1.0.1.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
@@ -556,16 +541,8 @@
     <Content Include="Content\Scripts\jquery.validate.min.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.css" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\CCCanywhere.min.css" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\ajax-loader.png" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\custom\logo.png" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-18-black.png" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-18-white.png" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-36-black.png" />
-    <Content Include="Content\MobileContent\themes\cccanywhere_theme\images\icons-36-white.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

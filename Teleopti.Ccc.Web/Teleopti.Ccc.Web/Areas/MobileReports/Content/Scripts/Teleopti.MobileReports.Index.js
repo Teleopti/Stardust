@@ -7,6 +7,9 @@ if (typeof(Teleopti) === 'undefined') {
 	}
 }
 
+
+
+
 Teleopti.MobileReports.Index = (function ($) {
 
 	function _init(msgs) {
@@ -22,7 +25,7 @@ Teleopti.MobileReports.Index = (function ($) {
 		_initHomeView(cNs);
 	}
 	function _initHomeView(cNs) {
-		$("#home-view").live("pageinit", function() {
+		$("#home-view").live("pageinit", function () {
 			$.mobile.changePage($("#report-settings-view"));
 		});
 	}
@@ -30,6 +33,7 @@ Teleopti.MobileReports.Index = (function ($) {
 	function _initReportSettingsView(cNs) {
 		$("#report-settings-view").live("pageinit", function () {
 			$('#sel-date').datebox();
+			$('#sel-skill').skillpicker();
 
 			(function setDefaultSettings() {
 				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'y', 'amount': -3 }).trigger('datebox', { 'method': 'doset' });
@@ -56,7 +60,7 @@ Teleopti.MobileReports.Index = (function ($) {
 					"ReportId": $('input[name="sel-report"]:checked', parent).val(),
 					"ReportDate": cNs.DateToFixedDate($('#sel-date').data('datebox').theDate),
 					"ReportIntervalType": $('input[name="sel-interval"]:checked', parent).val(),
-					"SkillSet": $('#sel-skill').val().join(','),
+					"SkillSet": ($('#sel-skill').val() || []).join(','),
 					"table": $('#report-settings-type-table').is(':checked'),
 					"graph": $('#report-settings-type-graph').is(':checked')
 				};
