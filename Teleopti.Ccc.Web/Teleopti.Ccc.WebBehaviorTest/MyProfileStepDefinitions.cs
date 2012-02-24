@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.PasswordValidation.TypeText(newPassword);
 			page.OldPassword.TypeText(TestData.CommonPassword + "fel");
 			Browser.Current.Eval("$('input#password').keyup();");
+			page.ConfirmButton.Click();
 		}
 
 		[When(@"I am changing password using incorrect confirm password")]
@@ -166,6 +167,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var page = Browser.Current.Page<PasswordPage>();
 			page.ConfirmButton.Enabled.Should().Be.False();
+		}
+
+		[Then(@"I should see a message saying the password is incorrect")]
+		public void ThenIShouldSeeAMessageSayingThePasswordIsIncorrect()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.IncorrectPassword.Style.Display
+				.Should().Not.Contain("none");
 		}
 	}
 }

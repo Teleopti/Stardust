@@ -54,7 +54,6 @@ Scenario: Incorrect current password when changing password
 	When I view my password
 	And I change my password using incorrect current password
 	Then I should see a message saying the password is incorrect
-	And Confirm button should be disabled
 	
 Scenario: Incorrect confirming password when changing password
 	Given I am an agent

@@ -18,5 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "nonMatchingPassword")]
 		public Label NonMatchingNewPassword;
+
+		[FindBy(Id = "incorrectOldPassword")]
+		public Label IncorrectPassword;
 	}
 }
