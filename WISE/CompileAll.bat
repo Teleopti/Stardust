@@ -6,6 +6,7 @@ SET WISEDIR=%~dp0
 ::Get CCNet input
 SET Version=%1
 SET ProductId=%2
+SET OUTDIR=%3
 
 ::Re-set errorlevel
 SET errorlevel=0
