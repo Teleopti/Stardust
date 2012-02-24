@@ -128,6 +128,7 @@
   </Target>
   
   <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
 
