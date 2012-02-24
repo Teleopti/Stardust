@@ -100,75 +100,96 @@ UPDATE mart.report_control
 SET id = 'EFE140D0-904A-4326-BEC2-D45945F7EC6E'
 WHERE control_id = 38
 
+CREATE TABLE [mart].[report_control_collection_new](
+	[control_collection_id] [int] NOT NULL,
+	[collection_id] [int] NOT NULL,
+	[print_order] [int] NOT NULL,
+	[control_id] [int] NOT NULL,
+	[default_value] [nvarchar](4000) NOT NULL,
+	[control_name_resource_key] [nvarchar](50) NOT NULL,
+	[fill_proc_param] [varchar](100) NULL,
+	[param_name] [varchar](50) NULL,
+	[depend_of1] [int] NULL,
+	[depend_of2] [int] NULL,
+	[depend_of3] [int] NULL,
+	[depend_of4] [int] NULL,
+	[Id] [uniqueidentifier] NOT NULL,
+	[DependOf1] [uniqueidentifier] NULL,
+	[DependOf2] [uniqueidentifier] NULL,
+	[DependOf3] [uniqueidentifier] NULL,
+	[DependOf4] [uniqueidentifier] NULL,
+	[CollectionId] [uniqueidentifier] NULL,
+	[ControlId] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_report_control_collection_new] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
 
-ALTER TABLE mart.report_control_collection
-ADD Id uniqueidentifier null,
-	DependOf1 uniqueidentifier NULL,
-	DependOf2 uniqueidentifier NULL,
-	DependOf3 uniqueidentifier NULL,
-	DependOf4 uniqueidentifier NULL
-GO
-UPDATE mart.report_control_collection SET Id = NEWID()
-GO
-ALTER TABLE mart.report_control_collection
-ALTER COLUMN Id uniqueidentifier not null
-GO
-ALTER TABLE mart.report_control_collection
-	DROP CONSTRAINT PK_report_control_collection
-GO
-ALTER TABLE mart.report_control_collection ADD CONSTRAINT
-	PK_report_control_collection PRIMARY KEY CLUSTERED 
-	(
-	Id
-	)
+INSERT INTO [mart].[report_control_collection_new]
+SELECT
+[control_collection_id]= [control_collection_id],
+[collection_id]= [collection_id],
+[print_order]=[print_order],
+[control_id]=[control_id],
+[default_value]=[default_value],
+[control_name_resource_key]=[control_name_resource_key],
+[fill_proc_param]=[fill_proc_param],
+[param_name]=[param_name],
+[depend_of1]=[depend_of1],
+[depend_of2]=[depend_of2],
+[depend_of3]=[depend_of3],
+[depend_of4]=[depend_of4],
+[Id] = NEWID(),
+[DependOf1] = NULL,
+[DependOf2] = NULL,
+[DependOf3] = NULL,
+[DependOf4] = NULL,
+[CollectionId] = NULL,
+[ControlId] = NULL
+FROM [mart].[report_control_collection]
 
-GO
 CREATE TABLE #collections(id int not null, collId uniqueidentifier not null)
 INSERT INTO #collections SELECT DISTINCT collection_id, NEWID() FROM mart.report_control_collection
 
-GO
-ALTER TABLE mart.report_control_collection
-ADD CollectionId uniqueidentifier null
-GO
-UPDATE mart.report_control_collection SET CollectionId = collID
-FROM mart.report_control_collection c INNER JOIN #collections
+UPDATE mart.report_control_collection_new SET CollectionId = collID
+FROM mart.report_control_collection_new c INNER JOIN #collections
 ON c.collection_id = #collections.id
 GO 
-ALTER TABLE mart.report_control_collection
+ALTER TABLE mart.report_control_collection_new
 ALTER COLUMN CollectionId uniqueidentifier not null
 
-GO
-
-ALTER TABLE mart.report_control_collection
-ADD ControlId uniqueidentifier null
-GO
-UPDATE mart.report_control_collection SET ControlId = c.Id
-FROM mart.report_control_collection cc INNER JOIN mart.report_control c
+UPDATE mart.report_control_collection_new
+SET ControlId = c.Id
+FROM mart.report_control_collection_new cc INNER JOIN mart.report_control c
 ON cc.control_id = c.control_id
 GO 
-ALTER TABLE mart.report_control_collection
+ALTER TABLE mart.report_control_collection_new
 ALTER COLUMN ControlId uniqueidentifier not null
 GO
 
-SELECT control_collection_id as control, Id INTO #ids FROM mart.report_control_collection
+CREATE TABLE #ids (control int ,Id uniqueidentifier)
+INSERT INTO  #ids 
+SELECT control_collection_id as control, Id
+FROM mart.report_control_collection_new
  
-UPDATE mart.report_control_collection SET DependOf1 = #ids.Id
-FROM mart.report_control_collection  
+UPDATE mart.report_control_collection_new SET DependOf1 = #ids.Id
+FROM mart.report_control_collection_new  
 INNER JOIN #ids
 ON #ids.control = depend_of1
 	
-UPDATE mart.report_control_collection SET DependOf2 = #ids.Id
-FROM mart.report_control_collection  
+UPDATE mart.report_control_collection_new SET DependOf2 = #ids.Id
+FROM mart.report_control_collection_new  
 INNER JOIN #ids
 ON #ids.control = depend_of2
 	
-UPDATE mart.report_control_collection SET DependOf3 = #ids.Id
-FROM mart.report_control_collection  
+UPDATE mart.report_control_collection_new SET DependOf3 = #ids.Id
+FROM mart.report_control_collection_new  
 INNER JOIN #ids
 ON #ids.control = depend_of3
 	
-UPDATE mart.report_control_collection SET DependOf4 = #ids.Id
-FROM mart.report_control_collection  
+UPDATE mart.report_control_collection_new SET DependOf4 = #ids.Id
+FROM mart.report_control_collection_new
 INNER JOIN #ids
 ON #ids.control = depend_of4
 GO
@@ -244,7 +265,7 @@ ALTER TABLE mart.report
 ADD ControlCollectionId uniqueidentifier null
 GO
 UPDATE mart.report SET ControlCollectionId = CollectionId
-FROM mart.report INNER JOIN mart.report_control_collection c
+FROM mart.report INNER JOIN mart.report_control_collection_new c
 ON mart.report.control_collection_id = c.collection_id
 GO
 ALTER TABLE mart.report
@@ -421,9 +442,7 @@ ALTER TABLE mart.report_control_collection ADD CONSTRAINT
 	) REFERENCES mart.report_control
 	(
 	Id
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION 
-	
+	)
 GO
 
 CREATE TABLE [mart].[custom_report_control](
