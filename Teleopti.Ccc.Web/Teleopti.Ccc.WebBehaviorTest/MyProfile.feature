@@ -43,7 +43,8 @@ Scenario: Change my language to browser's default
 
 Scenario: Change my password
 	Given I am an agent
-	When I change my password
+	When I view my password
+	And I change my password
 	And I sign out
 	And I sign in using my new password
 	Then I should be signed in

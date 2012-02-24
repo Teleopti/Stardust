@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.WebTest.Controllers
 	{
 		private IMappingEngine mappingEngine;
 		private ILoggedOnUser loggedOnUser;
+		private IModifyPassword modifyPassword;
 
 		[SetUp]
 		public void Setup()
 		{
 			mappingEngine = MockRepository.GenerateStrictMock<IMappingEngine>();
 			loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
+			modifyPassword = MockRepository.GenerateStrictMock<IModifyPassword>();
 		}
 
 		[Test]
 		public void IndexShouldReturnViewModel()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null))
 			{
 				var viewModel = new SettingsViewModel();
 				var person = new Person();
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		[Test]
 		public void PassWordShouldReturnCorrectView()
 		{
-			using (var target = new SettingsController(mappingEngine, loggedOnUser))
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null))
 			{
 				var res = target.Password();
 				res.ViewName.Should().Be.EqualTo("PasswordPartial");
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser))
+			using (var target = new SettingsController(null, loggedOnUser, null))
 			{
 				target.UpdateCulture(1034);
 			}
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser))
+			using (var target = new SettingsController(null, loggedOnUser, null))
 			{
 				target.UpdateCulture(-1);
 			}
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser))
+			using (var target = new SettingsController(null, loggedOnUser, null))
 			{
 				target.UpdateUiCulture(1034);
 			}
@@ -89,11 +91,24 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			using (var target = new SettingsController(null, loggedOnUser))
+			using (var target = new SettingsController(null, loggedOnUser, null))
 			{
 				target.UpdateUiCulture(-1);
 			}
 			person.PermissionInformation.Culture().Should().Be.EqualTo(Thread.CurrentThread.CurrentCulture);
+		}
+
+
+		[Test]
+		public void ShouldChangePassword()
+		{
+			var person = new Person();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(true);
+			using (var target = new SettingsController(null, loggedOnUser, modifyPassword))
+			{
+				target.ChangePassword(new ChangePasswordViewModel{NewPassword = "new", OldPassword = "old"});
+			}
 		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Filters;
@@ -12,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IModifyPassword _modifyPassword;
 
-		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser)
+		public SettingsController(IMappingEngine mapper, ILoggedOnUser loggedOnUser, IModifyPassword modifyPassword)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
+			_modifyPassword = modifyPassword;
 		}
 
 		[UnitOfWorkAction]
@@ -47,6 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var culture = lcid > 0 ? CultureInfo.GetCultureInfo(lcid) : null;
 			_loggedOnUser.CurrentUser().PermissionInformation.SetUICulture(culture);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPut]
+		public void ChangePassword(ChangePasswordViewModel model)
+		{
+			_modifyPassword.Change(_loggedOnUser.CurrentUser(), model.OldPassword, model.NewPassword);
 		}
 	}
 }

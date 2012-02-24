@@ -179,6 +179,7 @@
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\LayoutBaseViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Redirector.cs" />

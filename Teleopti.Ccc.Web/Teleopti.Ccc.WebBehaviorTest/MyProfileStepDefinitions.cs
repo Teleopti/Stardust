@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
+		private static readonly string newPassword = TestData.CommonPassword + "new";
+
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
@@ -20,6 +22,35 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.SignInApplication(userName, TestData.CommonPassword);
 			Navigation.GotoRegionalSettings();
 		}
+
+		[When(@"I view my password")]
+		public void WhenIViewMyPassword()
+		{
+			var userName = UserFactory.User().MakeUser();
+			Navigation.GotoGlobalSignInPage();
+			var signInpage = Browser.Current.Page<SignInPage>();
+			signInpage.SignInApplication(userName, TestData.CommonPassword);
+			Navigation.GotoPasswordPage();
+		}
+
+		[When(@"I change my password")]
+		public void WhenIChangeMyPassword()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			page.Password.TypeText(newPassword);
+			page.PasswordValidation.TypeText(newPassword);
+			page.OldPassword.TypeText(TestData.CommonPassword);
+			page.ConfirmButton.Click();
+		}
+
+		[When(@"I sign in using my new password")]
+		public void WhenISignInUsingMyNewPassword()
+		{
+			var userName = UserFactory.User().Person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var signInpage = Browser.Current.Page<SignInPage>();
+			signInpage.SignInApplication(userName, newPassword);
+		}
+
 
 		[Then(@"I should see my culture")]
 		public void ThenIShouldSeeMyCulture()
@@ -99,12 +130,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			// don't know a good way to read http header from browser to server
 			ScenarioContext.Current.Pending();
-		}
-
-		[When(@"I change my password")]
-		public void WhenIChangeMyPassword()
-		{
-			var page = Browser.Current.Page<PasswordPage>();
 		}
 	}
 }
