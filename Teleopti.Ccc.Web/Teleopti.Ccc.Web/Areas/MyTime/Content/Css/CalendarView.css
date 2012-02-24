@@ -2,11 +2,13 @@
 .body-calendarview{background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;}
 .body-calendarview-inner{background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;}
 
-.weekdays li, .calendarview-week li{
+.weekdays li,
+.calendarview-week li{
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
 }
-.rgba .weekdays li, .rgba .calendarview-week li{
+.rgba .weekdays li, 
+.rgba .calendarview-week li{
 	border-left: 1px solid rgba(255, 255, 255, 0.7);
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -33,7 +35,12 @@
 }
 .ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
 
-.calendarview-week li div.day-content{padding: 10px 5px; border-left-style: solid; border-left-width: 8px; border-left-color: transparent;}
+.calendarview-week li div.day-content {
+	padding: 10px 5px; 
+	border-left-style: solid; 
+	border-left-width: 8px; 
+	border-left-color: transparent;
+}
 
 .calendarview-week .today{background-position: 0 -1600px; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
 .calendarview-week .ui-selected{background-position: 0 -2019px;}

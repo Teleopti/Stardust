@@ -170,10 +170,10 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryTest.cs" />
     <Compile Include="Core\Preference\DataProvider\PreferenceOptionsProviderTest.cs" />
     <Compile Include="Core\Preference\DataProvider\PreferencePersisterTest.cs" />
-    <Compile Include="Core\Preference\Mapping\PreferenceDayResultMappingTest.cs" />
+    <Compile Include="Core\Preference\Mapping\PreferenceDayInputResultMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceDomainDataMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceViewModelMappingTest.cs" />
-    <Compile Include="Core\Preference\Mapping\PreferenceInputMappingTest.cs" />
+    <Compile Include="Core\Preference\Mapping\PreferenceDayInputMappingTest.cs" />
     <Compile Include="Core\Preference\ViewModelFactory\PreferenceViewModelFactoryTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PersonRequestProviderTest.cs" />
     <Compile Include="Core\UserTimeZoneTest.cs" />
