@@ -37,6 +37,7 @@ PAUSE
 ::Run Build
 ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
 "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
+
 ECHO.
 ECHO reverting updated checked in config files ...
 hg revert -C "%ROOTDIR%\ccnet\Infratest.ini"
@@ -47,4 +48,6 @@ hg revert -C "%ROOTDIR%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config
 hg revert -C "%ROOTDIR%\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config"
 
 ECHO Done!
+PAUSE
+PAUSE
 PAUSE

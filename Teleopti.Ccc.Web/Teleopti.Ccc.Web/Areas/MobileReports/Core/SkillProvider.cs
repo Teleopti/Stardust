@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 		public IEnumerable<ReportControlSkillGet> GetAvailableSkills()
 		{
 			WebReportUserInformation webReportUserInformation = _webReportUserInfoProvider.GetUserInformation();
-
+			Guid reportid = new Guid("8D8544E4-6B24-4C1C-8083-CBE7522DD0E0");
 			IOrderedEnumerable<ReportControlSkillGet> orderedSkills =
-				_webReportRepository.ReportControlSkillGet(10, webReportUserInformation.PersonCode,
+				_webReportRepository.ReportControlSkillGet(reportid, webReportUserInformation.PersonCode,
 				                                           webReportUserInformation.LanguageId,
 				                                           webReportUserInformation.BusinessUnitCode).OrderBy(s => s.Name);
 
