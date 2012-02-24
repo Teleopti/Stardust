@@ -58,11 +58,11 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             comboBoxGroupPageOnTeams.DataSource = _groupPageOnTeams;
             comboBoxGroupPageOnTeams.DisplayMember = "Description";
-            comboBoxGroupPageOnTeams.SelectedIndex = 0;
+            comboBoxGroupPageOnTeams.ValueMember = "Key";
 
             comboBoxGroupPageOnCompareWith.DataSource = _groupPageOnCompareWith;
             comboBoxGroupPageOnCompareWith.DisplayMember = "Description";
-            comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
+            comboBoxGroupPageOnCompareWith.ValueMember = "Key";
         }
     
         private void getDataFromControls()
@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.UseTeams = checkBoxTeams.Checked;
 
-            Preferences.GroupPageOnTeam = (IGroupPage)comboBoxGroupPageOnTeams.SelectedValue;
+            Preferences.GroupPageOnTeam = (IGroupPage)comboBoxGroupPageOnTeams.SelectedItem;
 
             Preferences.FairnessValue = (double)trackBar1.Value / 100;
 
-            Preferences.GroupPageOnCompareWith = (IGroupPage)comboBoxGroupPageOnCompareWith.SelectedValue;
+            Preferences.GroupPageOnCompareWith = (IGroupPage)comboBoxGroupPageOnCompareWith.SelectedItem;
 
             Preferences.KeepShiftCategories = checkBoxKeepShiftCategories.Checked;
             Preferences.KeepStartAndEndTimes = checkBoxKeepStartEndTimes.Checked;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxTeams.Checked = Preferences.UseTeams;
 
             if (Preferences.GroupPageOnTeam != null)
-                comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam;
+                comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.ToString();
             if (comboBoxGroupPageOnTeams.SelectedValue == null)
                 comboBoxGroupPageOnTeams.SelectedIndex = 0;
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 
             if (Preferences.GroupPageOnCompareWith != null)
-                comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith;
+                comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.ToString();
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 

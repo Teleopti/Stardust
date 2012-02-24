@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
             ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
 
-            ConsiderWeekBefore = true;
-
-            KeepFreeWeekends = true;
-            KeepFreeWeekendDays = true;
+            // ***** note: those 3 values are different in the old version
+            //ConsiderWeekBefore = true;
+            //KeepFreeWeekends = true;
+            //KeepFreeWeekendDays = true;
         }
 
         public bool UseKeepExistingDaysOff { get; set; }

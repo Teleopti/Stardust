@@ -4509,11 +4509,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (optimizerPreferences.Extra.UseBlockScheduling)
 				groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
+		    IGroupPage selectedGroupPage = null;
+            // ***** temporary cope
+            if(options.OptimizationMethod == OptimizationMethod.BackToLegalState)
+            {
+                selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
+            }
+            else
+            {
+                selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnCompareWith;
+            }
+
 		    _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate =
 		        ScheduleOptimizerHelper.CreateGroupPagePerDate(
 		            groupPagePeriod.DayCollection(),
 		            _container.Resolve<GroupScheduleGroupPageDataProvider>(),
-		            _optimizationPreferences.Extra.GroupPageOnCompareWith);
+                    selectedGroupPage);
 
 			switch (options.OptimizationMethod)
 			{
@@ -4526,9 +4537,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 																	 _backgroundWorkerOptimization,
 																	 displayList[0], false);
 
-					_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, optimizerPreferences.Rescheduling.ConsiderShortBreaks, true);
+                    _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
+					//_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, optimizerPreferences.Rescheduling.ConsiderShortBreaks, true);
 
-					IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
+					IList<IScheduleMatrixPro> matrixList =
+                        OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
 
 					_scheduleOptimizerHelper.GetBackToLegalState(matrixList,
 																 _schedulerState,

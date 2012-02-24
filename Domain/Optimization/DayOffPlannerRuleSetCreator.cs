@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     UseFreeWeekends = daysOffPreferences.UseFullWeekendsOff,
                     FreeWeekends = daysOffPreferences.FullWeekendsOffValue,
                     ConsiderWeekBefore = daysOffPreferences.ConsiderWeekBefore,
-                    ConsiderWeekAfter = daysOffPreferences.ConsiderWeekAfter
+                    ConsiderWeekAfter = false
                 };
 
             return dayOffPlannerSessionRuleSet;
