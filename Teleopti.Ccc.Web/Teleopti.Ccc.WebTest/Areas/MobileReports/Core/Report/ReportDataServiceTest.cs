@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 					.IgnoreArguments().Return(
 						new List<ReportDataQueueStatAbandoned>(new List<ReportDataQueueStatAbandoned>
 						                                       	{
-						                                       		new ReportDataQueueStatAbandoned("00:00", 100M, 10M)
+						                                       		new ReportDataQueueStatAbandoned("00:00", 100M, 10M, 1)
 						                                       	}));
 			}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataForecastVersusActualWorkload>(new List<ReportDataForecastVersusActualWorkload>
 						                                                 	{
 						                                                 		new ReportDataForecastVersusActualWorkload("00:00", 100M,
-						                                                 		                                           10M)
+						                                                 		                                           10M, 2)
 						                                                 	}));
 			}
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
 						                                            	{
 						                                            		new ReportDataServiceLevelAgentsReady("00:00", 110M,
-						                                            		                                      11M, 0.12M)
+						                                            		                                      11M, 0.12M, 2)
 						                                            	}));
 			}
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
 						                                            	{
 						                                            		new ReportDataServiceLevelAgentsReady("00:00", 100M,
-						                                            		                                      10M, 0.12M)
+						                                            		                                      10M, 0.12M, 3)
 						                                            	}));
 			}
 
