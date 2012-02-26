@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 										IUnitOfWorkFactory unitOfWorkFactory)  
 		{
 			return new LicenseVerifier(licenseFeedback, unitOfWorkFactory,
-																  new PersonRepository(unitOfWorkFactory),
 																  new LicenseRepository(unitOfWorkFactory));
 		}
 	}

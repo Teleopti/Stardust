@@ -138,8 +138,7 @@ namespace Teleopti.Ccc.Win.Main
         private bool InitializeLicense()
         {
             var unitOfWorkFactory = _choosenDataSource.DataSource.Application;
-            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new PersonRepository(unitOfWorkFactory),
-                                               new LicenseRepository(unitOfWorkFactory));
+            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));
             ILicenseService licenseService = verifier.LoadAndVerifyLicense();
             if (licenseService == null)
             {

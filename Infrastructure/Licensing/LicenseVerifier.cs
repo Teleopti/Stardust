@@ -12,38 +12,29 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	{
 		private readonly ILicenseFeedback _licenseFeedback;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IPersonRepository _personRepository;
-		private readonly ILicenseRepository _licenseRepository;
+	    private readonly ILicenseRepository _licenseRepository;
 
-		public LicenseVerifier(ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, ILicenseRepository licenseRepository)
+		public LicenseVerifier(ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, ILicenseRepository licenseRepository)
 		{
 			
 			_licenseFeedback = licenseFeedback;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_personRepository = personRepository;
-			_licenseRepository = licenseRepository;
+		    _licenseRepository = licenseRepository;
 		}
 
 		public ILicenseService LoadAndVerifyLicense()
 		{
 			using (PerformanceOutput.ForOperation("Verifying license"))
 			{
-				ILicenseService licenseService = null;
+				ILicenseService licenseService;
 				try
 				{
-					int numberOfActiveAgents;
 					using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 					{
-						numberOfActiveAgents = _personRepository.NumberOfActiveAgents();
-						licenseService = XmlLicenseService(numberOfActiveAgents);
+						
+						licenseService = XmlLicenseService();
 					} 
 					
-					if (licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents))
-					{
-						string warningMessage = getAlmostTooManyAgentsWarning(numberOfActiveAgents, licenseService);
-						_licenseFeedback.Warning(warningMessage);
-					}
-
 					if (licenseService.ExpirationDate.Subtract(licenseService.ExpirationGracePeriod) < DateTime.Now)
 					{
 						string warningMessage =
@@ -69,6 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				}
 				catch (TooManyActiveAgentsException e)
 				{
+                    // shouldn't happen now
 					string explanation = getTooManyAgentsExplanation(e);
 					_licenseFeedback.Error(explanation);
 					licenseService = null;
@@ -87,23 +79,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			}
 		}
 
-		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
-		{
-			string warningMessage;
-			if(licenseService.LicenseType.Equals(LicenseType.Agent))
-			{
-				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
-								  numberOfActiveAgents, licenseService.MaxActiveAgents);
-			}
-			else
-			{
-				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
-											   licenseService.MaxSeats);
-							
-			}
-			return warningMessage;
-		}
-
 		private string getTooManyAgentsExplanation(TooManyActiveAgentsException e)
 		{
 			var datasourceName = _unitOfWorkFactory.Name;
@@ -114,9 +89,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 								 e.NumberOfLicensed);
 		}
 
-		protected virtual ILicenseService XmlLicenseService(int numberOfActiveAgents)
+		protected virtual ILicenseService XmlLicenseService()
 		{
-			return new XmlLicenseService(_licenseRepository, numberOfActiveAgents);
+			return new XmlLicenseService(_licenseRepository, int.MaxValue);
 		}
 	}
 }
