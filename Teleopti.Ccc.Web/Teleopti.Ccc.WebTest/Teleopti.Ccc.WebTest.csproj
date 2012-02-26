@@ -84,13 +84,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingTest.cs" />
+    <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProviderTest.cs" />
+    <Compile Include="Areas\MobileReports\Core\Providers\SkillProviderTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\TestDataWebReportRepositoryTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\DefinedReportTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportDataServiceTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportRequestValidatorResultTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportRequestValidatorTest.cs" />
     <Compile Include="Areas\MobileReports\DateBoxGlobalizationViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MobileReports\TestData\CurrentThreadCultureProvider.cs" />
+    <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
+    <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
+    <Compile Include="Areas\MobileReports\TestData\PrincipalProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\UserSettingServiceTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
@@ -115,9 +122,7 @@
     <Compile Include="Areas\MobileReports\Controllers\ReportControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\IoC\MobileReportsAreaModuleTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingTest.cs" />
-    <Compile Include="Areas\MobileReports\DefinedReportProviderTest.cs" />
     <Compile Include="Areas\MobileReports\ReportViewModelFactoryTest.cs" />
-    <Compile Include="Areas\MobileReports\SkillProviderTest.cs" />
     <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />

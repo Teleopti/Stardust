@@ -1,13 +1,18 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
-using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
+﻿namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 {
+	using NUnit.Framework;
+
+	using Rhino.Mocks;
+
+	using SharpTestsEx;
+
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
+	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
+	using Teleopti.Interfaces.Domain;
+
 	[TestFixture]
 	public class ReportDataFetcherTest
 	{
@@ -17,19 +22,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		public void Setup()
 		{
 			_dataService = MockRepository.GenerateMock<IReportDataService>();
-			_target = new ReportDataFetcher(new DefinedReportProvider(), _dataService);
+			_target = new ReportDataFetcher(new DefinedReportProviderForTest(), _dataService, new CurrentThreadCultureProvider());
 		}
 
 		#endregion
 
-		private IReportRequestValidator _target;
 		private IReportDataService _dataService;
+
+		private IReportRequestValidator _target;
 
 		[Test]
 		public void ShouldAdjustDateToCorrectDatePeriodForWeekInterval()
 		{
 			var request = new ReportRequestModel
-			              	{ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 7, ReportId = "GetScheduledAndActual"};
+				{
+       ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 7, ReportId = "GetScheduledAndActual" 
+    };
 			_dataService.Stub(m => m.GetScheduledAndActual(null)).IgnoreArguments().Return(null);
 
 			var validationResult = _target.FetchData(request);
@@ -40,10 +48,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		}
 
 		[Test]
-		public void ShouldPopulateErrorsWhenReportNotFound()
+		public void ShouldPopulateErrorsWhenReportIntervalNotValid()
 		{
 			var request = new ReportRequestModel
-			              	{ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 1, ReportId = "NonExistent"};
+				{
+       ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 0, ReportId = "GetScheduledAndActual" 
+    };
 
 			var validationResult = _target.FetchData(request);
 
@@ -51,11 +61,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 			validationResult.Errors.Should().Not.Be.Empty();
 		}
 
-
 		[Test]
-		public void ShouldPopulateErrorsWhenReportIntervalNotValid()
+		public void ShouldPopulateErrorsWhenReportNotFound()
 		{
-			var request = new ReportRequestModel { ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 0, ReportId = "GetScheduledAndActual" };
+			var request = new ReportRequestModel
+				{
+       ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 1, ReportId = "NonExistent" 
+    };
 
 			var validationResult = _target.FetchData(request);
 
@@ -67,7 +79,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		public void ShouldResolveValidDefinedReport()
 		{
 			var request = new ReportRequestModel
-			              	{ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 7, ReportId = "GetScheduledAndActual"};
+				{
+       ReportDate = new DateOnly(2012, 01, 20), ReportIntervalType = 7, ReportId = "GetScheduledAndActual" 
+    };
 			_dataService.Stub(m => m.GetScheduledAndActual(null)).IgnoreArguments().Return(null);
 
 			var validationResult = _target.FetchData(request);

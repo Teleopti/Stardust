@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.Current = Browser.Current.Page<SignInPage>();
 		}
 
-		public static void GotoMobileReportsSignInPage()
+		public static void GotoMobileReportsSignInPage(string hash)
 		{
-			GoToWithPossibleLongApplicationStartTime("MobileReports/Authentication/SignIn");
+			GoToWithPossibleLongApplicationStartTime("MobileReports/Authentication/SignIn" + hash);
 			Pages.Pages.Current = Browser.Current.Page<MobileSignInPage>();
 		}
 

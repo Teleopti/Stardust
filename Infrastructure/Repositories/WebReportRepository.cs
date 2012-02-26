@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				                                                               CallingConventions.HasThis,
 				                                                               new[]
 				                                                               	{
-				                                                               		typeof (string), typeof (decimal), typeof (decimal)
+				                                                               		typeof (string), typeof (decimal), typeof (decimal), typeof(int)
 				                                                               	},
 				                                                               null);
 
@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("period", NHibernateUtil.String)
 						.AddScalar("forecasted_calls", NHibernateUtil.Decimal)
 						.AddScalar("offered_calls", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true).SetInt32("scenario_id", scenarioId)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
@@ -140,7 +141,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			ConstructorInfo constructorInfo =
 				typeof (ReportDataQueueStatAbandoned).GetConstructor(BindingFlags.Instance | BindingFlags.Public, null,
 				                                                     CallingConventions.HasThis,
-				                                                     new[] {typeof (string), typeof (decimal), typeof (decimal)},
+				                                                     new[] {typeof (string), typeof (decimal), typeof (decimal), typeof(int)},
 				                                                     null);
 
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -154,6 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("period", NHibernateUtil.String)
 						.AddScalar("calls_answ", NHibernateUtil.Decimal)
 						.AddScalar("calls_abnd", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
@@ -189,7 +191,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			ConstructorInfo constructorInfo =
 				typeof (ReportDataServiceLevelAgentsReady).GetConstructor(BindingFlags.Instance | BindingFlags.Public, null,
 				                                                          CallingConventions.HasThis,
-				                                                          new[] { typeof(string), typeof(decimal), typeof(decimal), typeof(decimal) },
+				                                                          new[] { typeof(string), typeof(decimal), typeof(decimal), typeof(decimal), typeof(int) },
 				                                                          null);
 
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -204,6 +206,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("scheduled_agents_ready", NHibernateUtil.Decimal)
 						.AddScalar("agents_ready", NHibernateUtil.Decimal)
 						.AddScalar("service_level", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
