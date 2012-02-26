@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             rootNode.AppendChild(_xdoc.CreateElement("CheckDate")).AppendChild(_xdoc.CreateTextNode(CheckDate.ToString("s", invariant)));
             rootNode.AppendChild(_xdoc.CreateElement("StatusOk")).AppendChild(_xdoc.CreateTextNode(StatusOk.ToString(invariant)));
             rootNode.AppendChild(_xdoc.CreateElement("LastValidDate")).AppendChild(_xdoc.CreateTextNode(LastValidDate.AddDays(1).ToString("s", invariant)));
+            rootNode.AppendChild(_xdoc.CreateElement("AlmostTooMany")).AppendChild(_xdoc.CreateTextNode(AlmostTooMany.ToString(invariant)));
             SignStatus(_xdoc);
         }
 
@@ -41,11 +42,14 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             CheckDate = (DateTime)root.Element("CheckDate");
             LastValidDate = (DateTime)root.Element("LastValidDate");
             StatusOk = (bool)root.Element("StatusOk");
+            if(root.Element("AlmostTooMany") != null)
+                AlmostTooMany = (bool)root.Element("AlmostTooMany");
         }
 
         public DateTime CheckDate { get; set; }
         public bool StatusOk { get; set; }
         public DateTime LastValidDate { get; set; }
+        public bool AlmostTooMany { get; set; }
 
         public XmlDocument XmlDocument
         {

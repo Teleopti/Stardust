@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
@@ -34,17 +30,19 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
                 status = JobParameters.Helper.Repository.LicenseStatus;
                 //throws an error if toomanyagents
-                JobParameters.Helper.Repository.XmlLicenseService(numberOfActiveAgents);
+                var licenseService = JobParameters.Helper.Repository.XmlLicenseService(numberOfActiveAgents);
                 
                 //Ok
                 status.CheckDate = DateTime.Today;
                 status.LastValidDate = DateTime.Today.AddDays(1);
                 status.StatusOk = true;
+                status.AlmostTooMany = licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents);
                 JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
                 return 1;  
             }
             catch (TooManyActiveAgentsException)
             {
+                
                 if (status != null)
                 {
                     //Ok before and but not now
@@ -53,6 +51,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                         status.CheckDate = DateTime.Today;
                         status.LastValidDate = DateTime.Today.AddDays(30);
                         status.StatusOk = false;
+                        status.AlmostTooMany = false;
                         JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
                         return 1;
                     }
