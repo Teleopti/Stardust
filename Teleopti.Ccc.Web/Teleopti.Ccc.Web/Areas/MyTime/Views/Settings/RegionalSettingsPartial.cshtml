@@ -12,7 +12,7 @@
 		@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
 	</p>
 	<p style="height: 50px">
-		@Resources.CultureText<br/>
+		@Resources.DateFormat<br/>
 		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
 	</p>
 </div>
