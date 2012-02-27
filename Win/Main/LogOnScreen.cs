@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Main
             using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
-                // if something goes wrong here the document is corrupt, handle that in some way
+                // if something goes wrong here the document is corrupt, handle that in some way ??
                 var status = rep.LoadAll().First();
                 var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
                 if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
@@ -163,9 +163,7 @@ namespace Teleopti.Ccc.Win.Main
                 }
                 if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
                 {
-
                     Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
-
                 }
                 if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
                 {
@@ -176,10 +174,18 @@ namespace Teleopti.Ccc.Win.Main
             return true;
         }
 
+        private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
         {
-                                 "xxYou are using more agents ({0}) than your licens allow ({1}). You now have {2} days left to reduce the agents or apply a licens that covers so many agents.",
+            int maxLicensed;
+            if (licenseService.LicenseType.Equals(LicenseType.Agent))
+                maxLicensed = licenseService.MaxActiveAgents;
+            else
+                maxLicensed = licenseService.MaxSeats;
+            
+                        return String.Format(Resources.TooManyAgentsIsUsedWarning,
                                  licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
         }
+
         private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
 		{
 			string warningMessage;
