@@ -8,11 +8,11 @@
 
 <div id ="selectors" class="ui-corner-all">
 	<p style="height: 50px">
-		@Resources.CultureText<br/>
-		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
-	</p>
-	<p style="height: 50px">
 		@Resources.Language<br/>
 		@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+	</p>
+	<p style="height: 50px">
+		@Resources.CultureText<br/>
+		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
 	</p>
 </div>
