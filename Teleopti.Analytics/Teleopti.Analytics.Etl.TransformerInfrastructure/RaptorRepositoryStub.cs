@@ -650,7 +650,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public void SaveLicenseStatus(string xmlString)
+        public void SaveLicenseStatus(string value)
         {
             throw new NotImplementedException();
         }

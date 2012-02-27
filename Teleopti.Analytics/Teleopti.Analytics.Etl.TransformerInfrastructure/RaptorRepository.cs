@@ -624,12 +624,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             }
 	    }
 
-	    public void SaveLicenseStatus(string xmlString)
+	    public void SaveLicenseStatus(string value)
 	    {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var rep = new LicenseStatusRepository(uow);
-                var status = new LicenseStatus() {XmlString = xmlString};
+                var status = new LicenseStatus() { XmlString = value };
                 rep.Add(status);
                 uow.PersistAll();
             }
