@@ -6,7 +6,7 @@
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
-		<DBNamePrefix>ccnet_$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
 		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
 		<AgentPortalWebSitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</AgentPortalWebSitePath>
 		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>
@@ -18,6 +18,13 @@
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
+		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
+		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
+		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
+		<AzureDbLogin>ccnet</AzureDbLogin>
+		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
+		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
+		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbLogin)</DBManagerAzure>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -67,7 +74,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="CheckWebBehaviorTests;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="AzureAnalyticsReportTest;CheckWebBehaviorTests;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
@@ -83,6 +90,33 @@
 		<Message Importance="high" Text="Compile finished." />
 	</Target>
 
+		<Target Name="AzureDeploy">
+		<!-- try to hide away the potential error message by using SQLCMD-->
+		<Message Text="Drop Azure databases ..." Importance="high" />
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
+		<Message Text="Drop Azure databases. Done!" Importance="high" />
+
+		<Message Text="Create Azure database ..." Importance="high" />
+		<Message Text="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" Importance="high" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		
+		<Message Text ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Importance="high" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		
+		<Message Text="Create Azure database. Done!" Importance="high" />
+	</Target>
+
+	<Target Name="AzureAnalyticsReportTest" DependsOnTargets="AzureDeploy" Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">
+		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(DBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+		<Message Importance="high" Text="Analytics report controls. Finished"/>
+	</Target>
+	
 	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'">
 		<!-- create web site/app/VirDir + Copy content-->
 		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSitepath)" />
@@ -90,7 +124,7 @@
 	</Target>
 
 	<Target Name="CreateAnalyticsDb">
-		<Message Importance="high" Text="Dropping Analytics DB" />
+		<Message Importance="high" Text="Dropping Analytics DB on local instance" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_analytics') BEGIN ALTER DATABASE [$(DBNamePrefix)_analytics] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_analytics] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
 		<Message Importance="high" Text="Dropping Analytics DB finished" />
@@ -114,16 +148,16 @@
 
 		<Message Importance="high" Text="Creation of dbs finished." />
 
-		<Message Importance="high" Text="Check Naming Standard ..."/>
+		<Message Importance="high" Text="Check Naming Standard on local instance..."/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
 		<Message Importance="high" Text="Check Naming Standard. Finished"/>
 
-		<Message Importance="high" Text="Deploy Cross Db views ..."/>
+		<Message Importance="high" Text="Deploy Cross Db views  on local instance ..."/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '$(DBNamePrefix)_agg'" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossDatabaseView_load" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
 		<Message Importance="high" Text="Deploy Cross Db views. Finished"/>
 
-		<Message Importance="high" Text="Check all Analytics report controls and reports are working ..."/>
+		<Message Importance="high" Text="Check all Analytics report controls and reports are working on local instance..."/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
 
@@ -157,7 +191,7 @@
 	</Target>
 
 	<Target Name="MessageErrorHandler">
-		<Message Text="An error has occurred while executing target: CreateTrunkDb. Please review DBManager logfile: $(DbManagerExe)"/>
+		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: $(DbManagerExe)"/>
 	</Target>
 
 
