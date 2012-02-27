@@ -273,7 +273,7 @@
 	 />
 	</ItemGroup>
 	<Target Name="ProjectsToNCover" Inputs="@(ProjectsToTest)" Outputs="%(Identity).Dummy">
-		<Message Text="@(ProjectsToTest)" />
+		<Message Text="@(ProjectsToTest) and RunWebBehaviorTests is: $(RunWebBehaviorTests)" />
 
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
