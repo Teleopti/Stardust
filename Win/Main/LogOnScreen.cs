@@ -139,15 +139,14 @@ namespace Teleopti.Ccc.Win.Main
         private bool InitializeLicense()
         {
             var unitOfWorkFactory = _choosenDataSource.DataSource.Application;
-            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new PersonRepository(unitOfWorkFactory),
-                                               new LicenseRepository(unitOfWorkFactory));
+            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));
             ILicenseService licenseService = verifier.LoadAndVerifyLicense();
             if (licenseService == null)
             {
                 return false;
             }
             LicenseProvider.ProvideLicenseActivator(licenseService);
-            return true;
+            return CheckStatusOfLicense(licenseService);
         }
 
         private bool CheckStatusOfLicense(ILicenseService licenseService)
@@ -177,15 +176,7 @@ namespace Teleopti.Ccc.Win.Main
             return true;
         }
 
-        private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
         {
-            int maxLicensed;
-            if(licenseService.LicenseType.Equals(LicenseType.Agent))
-                maxLicensed = licenseService.MaxActiveAgents;
-            else
-                maxLicensed = licenseService.MaxSeats;
-
-            return String.Format(CultureInfo.CurrentCulture,
                                  "xxYou are using more agents ({0}) than your licens allow ({1}). You now have {2} days left to reduce the agents or apply a licens that covers so many agents.",
                                  licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
         }

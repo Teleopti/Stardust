@@ -58,31 +58,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 }
             }
         }
-
-        [Test]
-        public void VerifyLicenseCheckerIsCalled()
-        {
-            var p = PersonFactory.CreatePerson();
-            try
-            {
-                SkipRollback();
-            	var lic = Mocks.StrictMock<ICheckLicenseAtPersist>();
-                
-                new Repository(UnitOfWork).Add(p);
-                UnitOfWork.PersistAll(null,lic);
-            	Expect.Call(() => lic.Verify(UnitOfWork, null));
-                
-            }
-            finally
-            {
-                UnitOfWork.Dispose();
-                using (var uowTemp = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-                {
-                    IRepository rep = new Repository(uowTemp);
-                    rep.Remove(p);
-                    uowTemp.PersistAll();
-                }
-            }
-        }
     }
 }
