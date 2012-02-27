@@ -9,7 +9,7 @@ Background:
 Scenario: Enter Application 
 	Given I am a supervisor
 	When I view MobileReports
-	Then I should see the Home 
+	Then I should see ReportSettings
 
 Scenario: Enter Application without permission
 	Given I am user without permission to MobileReports
@@ -75,3 +75,14 @@ Scenario: Navigate within report view to next day
 	When I am view a Report
 	And I click next date
 	Then I should see a report for next date
+
+Scenario: Enter Application with partial access to reports
+	Given I am user with partial access to reports
+	When I view ReportSettings
+	Then I should only see reports i have access to
+
+Scenario: Tabledata shows sunday as first day of week for US culture
+	Given I am a supervisor
+	And I am american
+	When I am view a Report with week data
+	Then I should see sunday as the first day of week in tabledata

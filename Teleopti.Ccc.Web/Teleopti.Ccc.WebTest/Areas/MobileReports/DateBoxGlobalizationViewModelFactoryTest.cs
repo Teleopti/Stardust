@@ -1,27 +1,15 @@
-﻿using System.Globalization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 {
+	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
+
 	[TestFixture]
 	public class DateBoxGlobalizationViewModelFactoryTest
 	{
-		public class CurrentThreadCultureProvider : ICultureProvider
-		{
-			#region ICultureProvider Members
-
-			public CultureInfo GetCulture()
-			{
-				return CultureInfo.CurrentCulture;
-			}
-
-			#endregion
-		}
-
 		[Test, SetCulture("ar-SA"), SetUICulture("ar-SA")]
 		public void ShouldCreateModelFromProvidedArSaCulture()
 		{

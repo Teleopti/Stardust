@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		}
 
 		[Test]
-		public void DefaultActionShouldRedirectToSignIn()
+		public void DefaultActionShouldRenderDefaultView()
 		{
-			var result = _target.Index() as RedirectToRouteResult;
-			result.RouteValues["action"].Should().Be.EqualTo("SignIn");
+			var result = _target.Index() as ViewResult;
+			result.ViewName.Should().Be.EqualTo(string.Empty);
 		}
 	}
 }
