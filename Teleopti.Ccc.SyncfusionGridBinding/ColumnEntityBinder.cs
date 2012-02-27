@@ -82,7 +82,10 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		}
 		private static bool WeekendOrWeekday(object date)
 		{
-			return DateHelper.IsWeekend(date, CultureInfo.CurrentCulture);
+			var dateSupplier = date as IDateSupplier;
+			if (dateSupplier == null) return false;
+
+			return DateHelper.IsWeekend(dateSupplier.Date, CultureInfo.CurrentCulture);
 		}
 
 		public void SetColumnHeaderMember(IModelProperty<T> property)

@@ -16,6 +16,7 @@ GO
 -- Description:	Returns the agents relevant for reporting,
 --				based on chosen filters and permissions.
 --				Teams and groups parameters are sets of items.
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =======================================================
 CREATE FUNCTION [mart].[ReportAgentsMultipleTeams]
 (
@@ -28,7 +29,7 @@ CREATE FUNCTION [mart].[ReportAgentsMultipleTeams]
 	@team_set nvarchar(max),
 	@agent_code uniqueidentifier,
 	@person_code uniqueidentifier,
-	@report_id int,
+	@report_id uniqueidentifier,
 	@business_unit_code uniqueidentifier
 )
 RETURNS

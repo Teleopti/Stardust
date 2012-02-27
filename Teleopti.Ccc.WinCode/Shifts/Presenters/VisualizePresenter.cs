@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             {
                 _amountList = new List<int>();
                 _contractList = new List<TimeSpan>();
-                TimeSpan startTime = TimeSpan.Zero, endTime = TimeSpan.Zero;
+                TimeSpan startTime = TimeSpan.MaxValue, endTime = TimeSpan.Zero;
                 var layerCollection = new List<ReadOnlyCollection<VisualPayloadInfo>>();
                 foreach (var ruleSet in filteredRuleSetCollection)
                 {
-						 if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime) || (startTime.Ticks == 0))
+						 if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime))
 							 startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
-						 if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime) || (endTime.Ticks == 0))
+						 if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
 							 endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
 						 var layers = getVisualLayers(_ruleSetProjectionService.ProjectionCollection(ruleSet));
 						 layerCollection.AddRange(layers);

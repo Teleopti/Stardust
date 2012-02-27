@@ -7,7 +7,7 @@ GO
 
 CREATE Proc [mart].[report_control_interval_get]
 @param int ,
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier
@@ -18,6 +18,7 @@ Last modfied:20080528
 20080404 KJ Added parameter @param, 1= startinterval 2=endinterval
 20080528 KJ Added parameter 6,7,8
 20080910 Added parameter @bu_id KJ
+2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 /*
 IF @interval_type IN(3,6,7,8)--'Hour' + 'Day', 'Week', 'Month'

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
@@ -132,6 +133,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<ICurrentPrincipalProvider>()
 				.Should().Not.Be.Null();
 		}
+
 
 		[Test]
 		public void ShouldRegisterDataSourcesProvider()
@@ -314,6 +316,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			result.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldResolvePreferenceFeedbackProvider()
+		{
+			var result = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result.Should().Not.Be.Null();
+		}
 
 		[Test]
 		public void ShouldResolveWebTypes()

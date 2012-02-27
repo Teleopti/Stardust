@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
@@ -48,6 +49,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 
+		[Given(@"I am user with partial access to reports")]
+		public void GivenIAmUserWithPartialAccessToReports()
+		{
+			UserFactory.User().Setup(new UserWithoutResReportServiceLevelAndAgentsReadyAccess());
+		}
+		
 		[Given(@"I am an agent in a team with access to the whole site")]
 		public void GivenIAmAnAgentInATeamWithAccessToTheWholeSite()
 		{
@@ -166,6 +173,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIHaveExistingAbsencePreference(string aOrExisting)
 		{
 			UserFactory.User().Setup(new AbsencePreference());
+		}
+
+		[Given(@"I have (existing|a) preference")]
+		[Given(@"I have (existing|a) preference today")]
+		public void GivenIHaveExistingPreference(string aOrExisting)
+		{
+			UserFactory.User().Setup(new ExistingPreferenceToday());
 		}
 
 		[Given(@"My schedule is published")]

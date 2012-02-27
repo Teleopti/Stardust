@@ -41,8 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CassiniDev4-lib">
-      <HintPath>..\..\packages\CassiniDev.4.0\lib\net40\CassiniDev4-lib.dll</HintPath>
+    <Reference Include="CassiniDev4-lib, Version=4.0.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CassiniDev\AnyCPU build\CassiniDev4-lib.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
@@ -62,18 +63,21 @@
     <Reference Include="TechTalk.SpecFlow">
       <HintPath>..\..\packages\SpecFlow.1.6.1\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
-    <Reference Include="WatiN.Core">
+    <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\ExistingPreference.cs" />
+    <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Content Include="Data\TestData.autofac.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />
     <Compile Include="Data\User\UserWithoutMobileReportsAccess.cs" />
@@ -102,9 +106,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
+    <Compile Include="Pages\PasswordPage.cs" />
+    <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
@@ -118,10 +125,16 @@
     <Compile Include="MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditTextRequestPage.cs" />
     <Compile Include="Pages\MobileReportsPage.cs" />
+    <Compile Include="PreferencesScheduleStepDefinition.cs" />
     <Compile Include="PreferencesFeedback2.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedback.feature</DependentUpon>
+    </Compile>
+    <Compile Include="PreferencesSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Routing.feature.cs">
       <AutoGen>True</AutoGen>
@@ -309,6 +322,10 @@
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PreferencesSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
+    </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Routing.feature.cs</LastGenOutput>

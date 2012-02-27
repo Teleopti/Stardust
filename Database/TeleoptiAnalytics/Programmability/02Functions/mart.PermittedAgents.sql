@@ -12,14 +12,14 @@ GO
 --				2012-01-09 Pass DEFAULT BU to AllOwnedAgents
 -- Description:	
 ------------------------------------------------
-
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 
 
 CREATE FUNCTION [mart].[PermittedAgents]
 (
 	@person_code uniqueidentifier,
-	@report_id int,
+	@report_id uniqueidentifier,
 	@site_id int,
 	@team_id int,
 	@agent_id int,

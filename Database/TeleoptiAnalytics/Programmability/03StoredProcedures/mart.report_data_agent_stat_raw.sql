@@ -14,6 +14,7 @@ GO
 --					2011-01-24 Use agent_code instead of agent_id ME
 --					2012-01-09 Passed BU to ReportAgents ME
 --					2012-01-26 Change parameters @group_page_group_id and @team_id to sets and nvarchar(max)
+--					2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Agent Statistics -  Raw
 -- =============================================
 --exec report_data_agent_stat_raw @date_from='2006-01-01 00:00:00:000',@date_to='2006-01-03 00:00:00:000',@interval_from=N'0',@interval_to=N'203',@site_id=N'-2',@team_set=N'-2',@agent_set=N'-1',@time_zone_id=N'37',@person_code='F376CA48-27D2-467F-940E-9AF600171D0F',@report_id=16,@language_id=1053
@@ -31,7 +32,7 @@ CREATE PROCEDURE [mart].[report_data_agent_stat_raw]
 @interval_to int,
 @time_zone_id int,
 @person_code uniqueidentifier ,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

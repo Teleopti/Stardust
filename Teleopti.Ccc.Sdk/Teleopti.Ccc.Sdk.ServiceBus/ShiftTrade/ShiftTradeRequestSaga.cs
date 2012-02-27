@@ -7,6 +7,7 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
+    	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
+    	private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
         private IPersonRequest _personRequest;
         private ShiftTradeRequestValidationResult _validationResult;
         private IShiftTradeRequest _shiftTradeRequest;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, IScenarioProvider scenarioProvider, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver)
+    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, IScenarioProvider scenarioProvider, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _validator = validator;
@@ -52,8 +54,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
+    		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 
-            Logger.Info("New instance of Shift Trade saga was created");
+    		Logger.Info("New instance of Shift Trade saga was created");
         }
 
         public void Consume(NewShiftTradeRequestCreated message)
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 }
                 loadDefaultScenario();
                 loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
-                var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
+                var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker();
                 getShiftTradeStatus(shiftTradeRequestStatusChecker);
                 validateRequest();
                 setPersonRequestState();
@@ -109,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 loadDefaultScenario();
                 Logger.Debug("Loading Schedules");
                 loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
-                var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
+                var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker();
 
                 Logger.Debug("Checking MF ShiftTrade status");
                 ShiftTradeStatus shiftTradeStatus = getShiftTradeStatus(shiftTradeRequestStatusChecker);
@@ -132,7 +135,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
                         INewBusinessRuleCollection allNewRules = getAllNewBusinessRules();
                         var approvalService = _requestFactory.GetRequestApprovalService( allNewRules,
-                                                                                        _schedulingResultStateHolder,
                                                                                         _defaultScenario);
 
                         _personRequest.Pending();
@@ -287,8 +289,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons)
         {
-            var loader = _requestFactory.GetSchedulingLoader(_schedulingResultStateHolder);
-            loader.Execute(_defaultScenario, period, persons);
+            _loadSchedulingStateHolderForResourceCalculation.Execute(_defaultScenario, period, persons);
         }
 
         private class IsRequestReadyForProcessingSpecification : Specification<IPersonRequest>

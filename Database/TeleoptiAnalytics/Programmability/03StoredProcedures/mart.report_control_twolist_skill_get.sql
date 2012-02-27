@@ -5,7 +5,7 @@ GO
 --EXEC report_control_twolist_skill_get 12,'C04803E2-8D6F-4936-9A90-9B2000148778',1053,'4AD43E49-B233-4D03-A813-9B2000102EBE'
 
 CREATE Proc [mart].[report_control_twolist_skill_get]
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
@@ -16,6 +16,7 @@ Last Modified:20090211
 	20080910 Added parameter @bu_id KJ
 	2090211 Added new mart schema KJ
 	20091113 PBI 8456 DJ
+	-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 CREATE TABLE #skills (counter int identity(1,1),id int, name nvarchar(50)) 

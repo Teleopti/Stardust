@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
 	/// Creates a projection
@@ -15,5 +12,4 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns>The projection</returns>
 		IVisualLayerCollection Projection(IScheduleDay scheduleDay);
 	}
-
 }

@@ -253,6 +253,7 @@
     <Compile Include="Budgeting\Models\BudgetGroupMonthModel.cs" />
     <Compile Include="Budgeting\Models\BudgetGroupWeekDetailModel.cs" />
     <Compile Include="Budgeting\Models\BudgetGroupWeekModel.cs" />
+    <Compile Include="Budgeting\Models\DateDayModel.cs" />
     <Compile Include="Budgeting\Models\EditShrinkageModel.cs" />
     <Compile Include="Budgeting\Models\IBudgetGroupDayDetailModel.cs" />
     <Compile Include="Budgeting\Models\IBudgetGroupMonthDetailModel.cs" />

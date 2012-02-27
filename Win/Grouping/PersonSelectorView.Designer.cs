@@ -103,7 +103,7 @@
             this.treeViewAdvMainTabTree.ToolTipControl.Text = "toolTip";
             this.treeViewAdvMainTabTree.AfterSelect += new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
             this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
-            this.treeViewAdvMainTabTree.DoubleClick += new System.EventHandler(this.openModule);
+            this.treeViewAdvMainTabTree.MouseDoubleClick +=new System.Windows.Forms.MouseEventHandler(this.openModule);
             this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
             // 
             // contextMenuStrip

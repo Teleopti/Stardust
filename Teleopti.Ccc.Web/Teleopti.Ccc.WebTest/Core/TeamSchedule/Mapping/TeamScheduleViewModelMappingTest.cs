@@ -349,5 +349,20 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			result.TimeLine.Single(t => t.ShortTime == "10").PositionPercent.Should().Be(timePosition / timeRange);
 		}
 
+		[Test]
+		public void ShouldMapHasDayOffUnder()
+		{
+			data.Days = new[]
+			            	{
+			            		new TeamScheduleDayDomainData
+			            			{
+			            				HasDayOffUnder = true
+			            			}
+			            	};
+
+			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
+
+			result.AgentSchedules.First().HasDayOffUnder.Should().Be.True();
+		}
 	}
 }

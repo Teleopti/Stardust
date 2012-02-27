@@ -433,23 +433,5 @@ namespace Teleopti.Interfaces.Domain
             splittedDateTimePeriods.Add(lastDateTimePeriod);
             return splittedDateTimePeriods;
         }
-
-        /// <summary>
-        /// Determines whether the specified date is weekend.
-        /// </summary>
-        /// <param name="date">The date.</param>
-        /// <param name="currentCulture">The current culture.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified date is weekend; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 10/27/2010
-        /// </remarks>
-        public static bool IsWeekend(object date, CultureInfo currentCulture)
-        {
-            var dateDayModel = date as DateDayModel;
-            return dateDayModel != null && IsWeekend(dateDayModel.Date.Date, currentCulture);
-        }
     }
 }

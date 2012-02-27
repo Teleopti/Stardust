@@ -351,6 +351,7 @@
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
+    <Compile Include="Scheduling\Assignment\HasDayOffUnderFullDayAbsenceTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactoryTest.cs" />
@@ -886,6 +887,7 @@
     <Compile Include="Security\Matrix\MatrixPermissionHolderTest.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolverTest.cs" />
     <Compile Include="Security\Matrix\TeamResolverTest.cs" />
+    <Compile Include="Security\ModifyPasswordTest.cs" />
     <Compile Include="Security\PasswordPolicyTest.cs" />
     <Compile Include="Security\PasswordStrengthRuleTest.cs" />
     <Compile Include="Security\Principal\AbsenceAllowancePermissionSpecificationTest.cs" />
@@ -990,6 +992,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMergerTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriodTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorTest.cs" />
+    <Compile Include="WorkflowControl\AlreadyAbsentValidatorTest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequestTest.cs" />
     <Compile Include="WorkflowControl\GrantAbsenceRequestTest.cs" />

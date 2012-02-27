@@ -5,6 +5,7 @@ using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using WatiN.Core.Constraints;
+using WatiN.Core.Native;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -15,8 +16,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "sel-report-GetAnsweredAndAbandoned")] public RadioButton ReportGetAnsweredAndAbandonedInput;
 		[FindBy(Id = "report-graph-holder")] public Div ReportGraphContainer;
+		[FindBy(Id = "report-graph-canvas")] public Element ReportGraph;
 		[FindBy(Id = "sel-skill-button")] public Link ReportSkillSelectionOpener;
 		[FindBy(Id = "report-table-holder")] public Div ReportTableContainer;
+		[FindBy(Id = "report-settings-interval-week")] public RadioButton ReportIntervalWeekInput;
 		[FindBy(Id = "report-settings-type-graph")] public CheckBox ReportTypeGraphInput;
 		[FindBy(Id = "report-settings-type-table")] public CheckBox ReportTypeTableInput;
 		[FindBy(Id = "report-view-date-nav-current")] public Link ReportViewNavDate;
@@ -24,6 +27,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "report-view-date-nav-prev")] public Link ReportViewPrevDateNavigation;
 		[FindBy(Id = "report-view-show-button")] public Link ReportViewShowButton;
+
+		public TableCell ReportTableFirstDataCell 
+		{
+			get
+			{
+				//((WatiN.Core.ElementContainer<WatiN.Core.Div>)(ReportTableContainer)).Tables.First().OwnTableBodies.First().TableRowsDirectChildren.First().Text
+				var tb = ReportTableContainer.TableBodies.First();
+				return tb.TableCells.First();
+			}
+		}
+
+	
+
+		public RadioButtonCollection Reports
+		{
+			get { return Document.RadioButtons.Filter(Find.ByName("sel-report")); }
+		}
 
 		private DivCollection DatePickerContenainerDayDivs
 		{

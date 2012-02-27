@@ -33,7 +33,10 @@ namespace Teleopti.Analytics.Portal
 				{
 					DataRow r = tableProps.Rows[0];
 					string resKey = r["report_name_resource_key"].ToString();
-					labelRepCaption.Text = ReportTexts.Resources.ResourceManager.GetString(resKey);
+                    var caption = ReportTexts.Resources.ResourceManager.GetString(resKey);
+                    if(string.IsNullOrEmpty(caption))
+                        caption = r["name"].ToString();
+                    labelRepCaption.Text = caption;
 					ImageButtonHelp.ToolTip = ReportTexts.Resources.ResHelp;
 
 					string url = HelpLinkBuilder.GetStandardReportHelpLink((string) r["help_key"]);
@@ -63,7 +66,7 @@ namespace Teleopti.Analytics.Portal
 				Response.Redirect(PerformanceManagerUrl, true);
 
 			if (ReportId != 0)
-				HiddenID.Value = ReportId.ToString(CultureInfo.CurrentCulture);
+				HiddenID.Value = ReportId.ToString();
 			else
 				Response.End();
 		}

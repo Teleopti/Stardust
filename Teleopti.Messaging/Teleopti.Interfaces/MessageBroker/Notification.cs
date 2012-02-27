@@ -17,9 +17,24 @@ namespace Teleopti.Interfaces.MessageBroker
 		{
 			DomainId = Guid.Empty.ToString();
 			DomainReferenceId = DomainId;
+			BusinessUnitId = DomainId;
 			ModuleId = DomainId;
 			StartDate = Subscription.DateToString(DateTime.MinValue);
 			EndDate = Subscription.DateToString(DateTime.MinValue);
+		}
+
+		/// <summary>
+		/// Gets the route for this subscription.
+		/// </summary>
+		/// <returns></returns>
+		public string[] Routes()
+		{
+			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
+			var basicRoute = String.Join("/", stringArray);
+			var idRoute = String.Join("/", new []{basicRoute, "id", DomainId});
+			var referenceRoute = String.Join("/", new []{basicRoute, "ref", DomainReferenceId});
+
+			return new[] { basicRoute, idRoute, referenceRoute};
 		}
 
 		/// <summary>
@@ -67,6 +82,16 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public string BinaryData { get; set; }
 
+		///<summary>
+		/// Gets or sets the data source.
+		///</summary>
+		public string DataSource { get; set; }
+
+		/// <summary>
+		/// Gets or sets the business unit id.
+		/// </summary>
+		public string BusinessUnitId { get; set; }
+
 		/// <summary>
 		/// Returns the domain id as guid.
 		/// </summary>
@@ -95,6 +120,14 @@ namespace Teleopti.Interfaces.MessageBroker
 		}
 
 		/// <summary>
+		/// Gets the business unit id as guid.
+		/// </summary>
+		public Guid BusinessUnitIdAsGuid()
+		{
+			return XmlConvert.ToGuid(BusinessUnitId);
+		}
+
+		/// <summary>
 		/// Returns the start date as date time.
 		/// </summary>
 		/// <returns></returns>
@@ -118,7 +151,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public DomainUpdateType DomainUpdateTypeAsDomainUpdateType()
 		{
-			return (DomainUpdateType) DomainUpdateType;
+			return (DomainUpdateType)DomainUpdateType;
 		}
 	}
 }

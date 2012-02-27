@@ -11,11 +11,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceViewModelMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mappingEngine;
 
-		public PreferenceViewModelMappingProfile(Func<IMappingEngine> mappingEngine)
+		private class PreferenceWeekMappingData
 		{
-			_mappingEngine = mappingEngine;
+			public DateOnly FirstDayOfWeek { get; set; }
+			public DateOnlyPeriod Period { get; set; }
+			public IEnumerable<PreferenceDayDomainData> Days { get; set; }
+			public IWorkflowControlSet WorkflowControlSet { get; set; }
+		}
+
+		private class DayMappingData
+		{
+			public DateOnly Date { get; set; }
+			public DateOnlyPeriod Period { get; set; }
+
+			public IScheduleDay ScheduleDay { get; set; }
+			public IVisualLayerCollection Projection { get; set; }
+
+			public IWorkflowControlSet WorkflowControlSet { get; set; }
+			public IShiftCategory ShiftCategory { get; set; }
+			public IDayOffTemplate DayOffTemplate { get; set; }
+			public IAbsence Absence { get; set; }
+			public IWorkTimeMinMax WorkTimeMinMax { get; set; }
 		}
 
 		protected override void Configure()
@@ -36,7 +53,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																				firstDateOfWeek = firstDateOfWeek.AddDays(7);
 																			}
 
-																			return (from d in firstDatesOfWeeks select new PreferenceWeekDomainData { FirstDayOfWeek = d, Period = s.Period, PreferenceDays = s.PreferenceDays, WorkflowControlSet = s.WorkflowControlSet, WorkTimeMinMax = s.WorkTimeMinMax }).ToArray();
+																			return (from d in firstDatesOfWeeks
+																			        select
+																			        	new PreferenceWeekMappingData
+																			        		{
+																			        			FirstDayOfWeek = d,
+																			        			Period = s.Period,
+																			        			Days = s.Days,
+																			        			WorkflowControlSet = s.WorkflowControlSet,
+																			        		}).ToArray();
 																		}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
 				;
@@ -66,52 +91,86 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.MinDate, o => o.MapFrom(s => s.StartDate.ToFixedClientDateOnlyFormat()))
 				;
 
-			CreateMap<PreferenceWeekDomainData, WeekViewModel>()
+			CreateMap<PreferenceWeekMappingData, WeekViewModel>()
 				.ForMember(d => d.Days, o => o.MapFrom(s =>
+				                                       	{
+				                                       		var days = s.Days ?? new PreferenceDayDomainData[] {};
+				                                       		var datesThisWeek = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
+				                                       		return (
+				                                       		       	from d in datesThisWeek
+				                                       		       	let day = (from day in days where day.Date == d select day).SingleOrDefault()
+				                                       		       	let preferenceDay = day == null ? null : day.PreferenceDay
+				                                       		       	let restriction = preferenceDay == null ? null : preferenceDay.Restriction
+				                                       		       	let shiftCategory = restriction == null ? null : restriction.ShiftCategory
+				                                       		       	let dayOffTemplate = restriction == null ? null : restriction.DayOffTemplate
+				                                       		       	let absence = restriction == null ? null : restriction.Absence
+				                                       		       	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
+				                                       		       	let projection = day == null ? null : day.Projection
+				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
+				                                       		       	select
+																	new DayMappingData
 																		{
-																			var preferenceDays = s.PreferenceDays ?? new IPreferenceDay[] { };
-																			var workTimeMinMaxCollection = s.WorkTimeMinMax ?? new WorkTimeMinMaxDomainData[] {};
-																			var days = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
-																			return (
-																						from d in days
-																						let shiftCategory = (
-																													from pd in preferenceDays
-																													where
-																														pd.Restriction != null &&
-																														pd.Restriction.ShiftCategory != null &&
-																														pd.RestrictionDate == d
-																													select pd.Restriction.ShiftCategory
-																												  ).SingleOrDefault()
-																						let dayOffTemplate = (
-																												from pd in preferenceDays
-																												where
-																													pd.Restriction != null &&
-																													pd.Restriction.DayOffTemplate != null &&
-																													pd.RestrictionDate == d
-																												select pd.Restriction.DayOffTemplate
-																											).SingleOrDefault()
-																						let absence = (
-																											from pd in preferenceDays
-																											where
-																												pd.Restriction != null &&
-																												pd.Restriction.Absence != null &&
-																												pd.RestrictionDate == d
-																											select pd.Restriction.Absence
-																										).SingleOrDefault()
-																						let workTimeMinMax = (
-																											from w in workTimeMinMaxCollection
-																											where w.Date == d
-																											select w.WorkTimeMinMax
-																											).SingleOrDefault()
-																						select new PreferenceDayDomainData(d, s.Period, shiftCategory, dayOffTemplate, absence, s.WorkflowControlSet, workTimeMinMax)).ToArray();
-																		}))
+																		            Date = d,
+																		            Period = s.Period,
+
+																		            Projection = projection,
+																		            ScheduleDay = scheduleDay,
+
+																		            ShiftCategory = shiftCategory,
+																		            DayOffTemplate = dayOffTemplate,
+																		            Absence = absence,
+																		            WorkflowControlSet = s.WorkflowControlSet,
+																		            WorkTimeMinMax = workTimeMinMax
+																		}
+				                                       		       ).ToArray();
+				                                       	}))
 				;
 
-			CreateMap<PreferenceDayDomainData, DayViewModelBase>()
-				.ConvertUsing(s => _mappingEngine().Map<PreferenceDayDomainData, PreferenceDayViewModel>(s))
+			CreateMap<DayMappingData, DayViewModel>()
+				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
+				.ForMember(d => d.Editable, o => o.MapFrom(s =>
+				                                           	{
+				                                           		if (s.ScheduleDay != null)
+				                                           			return false;
+				                                           		if (s.WorkflowControlSet == null)
+				                                           			return false;
+
+				                                           		var isInsideSchedulePeriod = s.Period.Contains(s.Date);
+				                                           		var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
+				                                           		var isInsidePreferenceInputPeriod = s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
+
+				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
+				                                           	}))
+				.ForMember(d => d.Header, o => o.MapFrom(s => s))
+				.ForMember(d => d.StyleClassName, o => o.Ignore())
+				//.ForMember(d => d.Preference, o => o.MapFrom(s =>
+				//                                                {
+				//                                                    if (s.ScheduleDay != null || s.Projection != null)
+				//                                                        return null;
+				//                                                    return s;
+				//                                                }))
+				//.ForMember(d => d.PersonAssignment, o => o.MapFrom(s =>
+				//                                                    {
+				//                                                        if (s.ScheduleDay != null || s.Projection != null)
+				//                                                            return s;
+				//                                                        return null;
+				//                                                    }))
+				.ForMember(d => d.Preference, o => o.MapFrom(s => s))
+				.ForMember(d => d.PersonAssignment, o => o.UseValue(null))
+				.ForMember(d => d.DayOff, o => o.Ignore())
 				;
 
-			CreateMap<PreferenceDayDomainData, PreferenceDayViewModel>()
+			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
+				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
+				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
+				;
+
+			CreateMap<DayMappingData, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
+				;
+
+			CreateMap<DayMappingData, PreferenceDayViewModel>()
 				.ForMember(d => d.Preference, o => o.MapFrom(s =>
 																				{
 																					if (s.DayOffTemplate != null)
@@ -122,31 +181,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																						return s.ShiftCategory.Description.Name;
 																					return null;
 																				}))
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.State, o => o.MapFrom(s =>
-																		{
-																			if (s.WorkflowControlSet != null)
-																			{
-																				var isInsideSchedulePeriod = s.Period.Contains(s.Date);
-																				var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
-																				var isInsidePreferenceInputPeriod =
-																					s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
-
-																				if (isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod)
-																					return DayState.Editable;
-																			}
-
-																			return DayState.None;
-																		}))
-				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.Ignore())
 				.ForMember(d => d.PossibleStartTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-																			? ""
-																			: s.WorkTimeMinMax.StartTimeLimitation.
-																				StartTimeString +
-																			  "-" +
-																			  s.WorkTimeMinMax.StartTimeLimitation.
-																				EndTimeString))
+				                                                          	? ""
+				                                                          	: s.WorkTimeMinMax.StartTimeLimitation.
+				                                                          	  	StartTimeString +
+				                                                          	  "-" +
+				                                                          	  s.WorkTimeMinMax.StartTimeLimitation.
+				                                                          	  	EndTimeString))
 				.ForMember(d => d.PossibleEndTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
 																			? ""
 																			: s.WorkTimeMinMax.EndTimeLimitation.
@@ -163,7 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																				EndTimeString))
 				;
 
-			CreateMap<PreferenceDayDomainData, HeaderViewModel>()
+			CreateMap<DayMappingData, HeaderViewModel>()
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))
 				.ForMember(d => d.DayDescription, o => o.MapFrom(s =>
 																					{
@@ -179,5 +220,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.OpenPeriod, c => c.MapFrom(s => s.PreferenceInputPeriod))
 				;
 		}
+
+		private static bool IsDayEditable(DayMappingData s)
+		{
+			if (s.WorkflowControlSet != null)
+			{
+				var isInsideSchedulePeriod = s.Period.Contains(s.Date);
+				var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
+				var isInsidePreferenceInputPeriod =
+					s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
+
+				if (isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod)
+					return true;
+			}
+
+			return false;
+		}
 	}
+
 }

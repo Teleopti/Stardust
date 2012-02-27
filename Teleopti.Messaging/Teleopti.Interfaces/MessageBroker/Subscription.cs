@@ -14,11 +14,33 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public Subscription()
 		{
-			DomainId = Guid.Empty.ToString();
-			DomainReferenceId = DomainId;
-			SubscriptionId = DomainId;
+			DomainId = null;
+			DomainReferenceId = null;
+			BusinessUnitId = Guid.Empty.ToString();
 			LowerBoundary = DateToString(DateTime.MinValue);
 			UpperBoundary = DateToString(DateTime.MinValue);
+		}
+
+		/// <summary>
+		/// Gets the route for this subscription.
+		/// </summary>
+		/// <returns></returns>
+		public string Route()
+		{
+			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
+			var basicRoute = String.Join("/", stringArray);
+			
+			if (!string.IsNullOrEmpty(DomainId))
+			{
+				return String.Join("/", new[] {basicRoute, "id", DomainId});
+			}
+
+			if (!string.IsNullOrEmpty(DomainReferenceId))
+			{
+				return String.Join("/", new[] { basicRoute, "ref", DomainReferenceId});
+			}
+
+			return basicRoute;
 		}
 
 		/// <summary>
@@ -51,33 +73,22 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public string UpperBoundary { get; set; }
 
-		/// <summary>
-		/// Gets or sets the subscription id.
-		/// </summary>
-		public string SubscriptionId { get; set; }
+		///<summary>
+		/// Gets or sets the data source.
+		///</summary>
+		public string DataSource { get; set; }
 
 		/// <summary>
-		/// Gets the domain id as guid.
+		/// Gets or sets the business unit id.
 		/// </summary>
-		public Guid DomainIdAsGuid()
-		{
-			return XmlConvert.ToGuid(DomainId);
-		}
+		public string BusinessUnitId { get; set; }
 
 		/// <summary>
-		/// Gets the domain reference id as guid.
+		/// Gets the business unit id as guid.
 		/// </summary>
-		public Guid DomainReferenceIdAsGuid()
+		public Guid BusinessUnitIdAsGuid()
 		{
-			return XmlConvert.ToGuid(DomainReferenceId);
-		}
-
-		/// <summary>
-		/// Gets the subscription id as guid.
-		/// </summary>
-		public Guid SubscriptionIdAsGuid()
-		{
-			return XmlConvert.ToGuid(SubscriptionId);
+			return XmlConvert.ToGuid(BusinessUnitId);
 		}
 
 		/// <summary>
@@ -109,7 +120,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public static string DateToString(DateTime date)
 		{
-			return XmlConvert.ToString(date,XmlDateTimeSerializationMode.Unspecified);
+			return XmlConvert.ToString(date, XmlDateTimeSerializationMode.Unspecified);
 		}
 	}
 }

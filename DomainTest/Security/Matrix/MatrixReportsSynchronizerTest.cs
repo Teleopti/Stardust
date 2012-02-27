@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -39,14 +40,18 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
         public void Setup()
         {
             _matrixReports = new List<MatrixReportInfo>();
-
+            
             _applicationRoles = ApplicationRoleFactory.CreateShippedRoles(out _adminRole, out _agentRole, out _unitRole, out _siteRole, out _teamRole);
 
             _availableDataList = CreateAvailableDatas(out _adminAvailableData, out _agentAvailableData, out _siteAvailableData);
 
-            _matrixReports.Add(new MatrixReportInfo(1, "Agent List"));
-            _matrixReports.Add(new MatrixReportInfo(3, "Site List"));
-            _matrixReports.Add(new MatrixReportInfo(4, "Team List"));
+            var idOne = "09DB7510-ED3C-49CE-B49C-D43D94EC7263";
+            var idTwo = "1C2BDC8C-BFED-4BB3-AD13-6614488310BE";
+            var idFour = "78AD4AF8-41E8-416F-8AE2-FCAC2D98B81F";
+
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idOne), "Agent List"));
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idTwo), "Site List"));
+            _matrixReports.Add(new MatrixReportInfo(new Guid(idFour), "Team List"));
 
             _applicationFunctions = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
 
@@ -144,15 +149,15 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
 
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
         public void VerifyCreateMatrixReportApplicationFunction()
         {
             string reportDescription = "xxViewAgents";
-            MatrixReportInfo info = new MatrixReportInfo(3, reportDescription);
+            MatrixReportInfo info = new MatrixReportInfo(Guid.NewGuid(), reportDescription);
             IApplicationFunction app = _target.CreateMatrixReportApplicationFunction(_applicationFunctions,  info);
             Assert.AreEqual(app.FunctionDescription, reportDescription);
             Assert.AreEqual(DefinedForeignSourceNames.SourceMatrix, app.ForeignSource);
-            Assert.AreEqual(info.ReportId.ToString(CultureInfo.InvariantCulture), app.ForeignId);
+            Assert.AreEqual(info.ReportId.ToString().ToUpper(), app.ForeignId);
         }
 
         [Test]
@@ -196,16 +201,16 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             IList<IApplicationFunction> resultList = new List<IApplicationFunction>(result);
 
             Assert.AreEqual(1, resultList.Count);
-            Assert.AreSame(resultList[0], _applicationFunctions[5]);
+            Assert.AreSame(resultList[0], _applicationFunctions[6]);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
         public void VerifyUpdateMatrixReports()
         {
             IList<IApplicationFunction> matrixApplicationFunctionList = _target.FilterExistingMatrixReportApplicationFunctions(_applicationFunctions);
             matrixApplicationFunctionList[0].FunctionDescription = "Agent";
 
-            Assert.AreEqual(_matrixReports[0].ReportId, int.Parse(matrixApplicationFunctionList[0].ForeignId, CultureInfo.InvariantCulture));
+            Assert.AreEqual(_matrixReports[0].ReportId.ToString().ToUpper(), matrixApplicationFunctionList[0].ForeignId);
             Assert.AreNotEqual(_matrixReports[0].ReportName, matrixApplicationFunctionList[0].FunctionDescription);
 
             _target.UpdateMatrixApplicationFunctions(matrixApplicationFunctionList, _matrixReports);
@@ -309,5 +314,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             availableDatas.Add(siteAvailableData);
             return availableDatas;
         }
+
     }
 }

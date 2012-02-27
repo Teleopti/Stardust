@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -34,6 +35,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
+			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
+			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)

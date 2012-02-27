@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Filter
             l3 = new ListViewItem("Jultomte");
             l3.Name = "Jultomte";
             l3.SubItems.Add("Polisen");
+            l3.SubItems.Add("Thief");
             _allItems.Add(l3);
 
             l4 = new ListViewItem("Anders item");
@@ -92,6 +93,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Filter
             filtered.Should().Contain(l1);
             filtered.Should().Contain(l3);
             filtered.Should().Have.Count.EqualTo(2);
+        }
+        
+        [Test]
+        public void ShouldFilterOnMoreSubitems()
+        {
+            var filter = new FilterListViewItems(_allItems);
+            var filtered = filter.Filter("Thief");
+
+            filtered.Should().Contain(l3);
+            filtered.Should().Have.Count.EqualTo(1);
         }
 
         [Test]
