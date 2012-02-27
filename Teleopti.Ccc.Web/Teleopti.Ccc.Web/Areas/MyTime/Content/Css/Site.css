@@ -1216,44 +1216,48 @@ footer p
 /*
 Personal drop down menu
 */
-		.dropdown a, .dropdown a:visited
-		{
-			text-decoration: none;
-			outline: none;
-		}
-		.dropdown dd, .dropdown dt, .dropdown ul
-		{
-			margin: 0px;
-			padding: 0px;
-		}
-		.dropdown dd
-		{
-			position: relative;
-		}
-		.dropdown dt span
-		{
-			cursor: pointer;
-		}
-		.dropdown dd ul
-		{
-			background: #f2f2f2 none repeat scroll 0 0;
-			border: 1px solid #d4ca9a;
-			color: #C5C0B0;
-			display: none;
-			left: 0px;
-			padding: 5px 0px;
-			position: absolute;
-			top: 2px;
-			width: 232px;
-			list-style: none;
-		}
-		.dropdown dd ul li a
-		{
-			padding: 5px;
-			display: block;
-			text-align: left;
-		}
-		.dropdown dd ul li a:hover
-		{
-			background-color: #dddddd;
-		}
+.dropdown a, .dropdown a:visited
+{
+	text-decoration: none;
+	outline: none;
+	font-size: 11px;
+}
+.dropdown dd, .dropdown dt, .dropdown ul
+{
+	margin: 0px;
+	padding: 0px;
+}
+.dropdown dd
+{
+	position: relative;
+}
+.dropdown dt span
+{
+	cursor: pointer;
+}
+.dropdown dd ul
+{
+	background: #f2f2f2 none repeat scroll 0 0;
+	border: 1px solid #d4ca9a;
+	color: #C5C0B0;
+	display: none;
+	left: 0px;
+	padding: 5px 0px;
+	position: absolute;
+	top: 2px;
+	width: 232px;
+	list-style: none;
+}
+.dropdown dd ul li a
+{
+	padding: 5px;
+	display: block;
+	text-align: left;
+}
+.dropdown dd ul li a:hover
+{
+	background-color: #dddddd;
+}
+/*
+End personal drop down menu
+*/
