@@ -120,22 +120,17 @@ _activeDenormalizers = activeDenormalizers;
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
 		{
-			return PersistAll(null, new CheckLicenseAtPersist());
+			return PersistAll(null);
 		}
 
-		public IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
-		{
-			return PersistAll(moduleUsedForPersist, new CheckLicenseAtPersist());
-		}
 
-		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist, ICheckLicenseAtPersist licenseChecker)
+		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
 		{
 			ICollection<IRootChangeInfo> modifiedRoots;
 			try
 			{
 				Flush();
-				if(licenseChecker != null)
-					licenseChecker.Verify(this, Interceptor.ModifiedRoots);
+
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
 				callDenormalizers(modifiedRoots);
 				if (Transaction.Current == null)

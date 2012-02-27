@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -138,15 +139,78 @@ namespace Teleopti.Ccc.Win.Main
         private bool InitializeLicense()
         {
             var unitOfWorkFactory = _choosenDataSource.DataSource.Application;
-            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new PersonRepository(unitOfWorkFactory),
-                                               new LicenseRepository(unitOfWorkFactory));
+            var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));
             ILicenseService licenseService = verifier.LoadAndVerifyLicense();
             if (licenseService == null)
             {
                 return false;
             }
             LicenseProvider.ProvideLicenseActivator(licenseService);
+            return CheckStatusOfLicense(licenseService);
+        }
+
+        private bool CheckStatusOfLicense(ILicenseService licenseService)
+        {
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
+                // if something goes wrong here the document is corrupt, handle that in some way ??
+                var status = rep.LoadAll().First();
+                var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
+                if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
+                {
+                    Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
+                }
+                if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
+                {
+                    Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
+                }
+                if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
+                {
+                    Error(getTooManyAgentsExplanation(licenseService, UnitOfWorkFactory.Current.Name, licenseStatus.NumberOfActiveAgents));
+                    return false;
+                }
+            }
             return true;
+        }
+
+        private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
+        {
+            int maxLicensed;
+            if (licenseService.LicenseType.Equals(LicenseType.Agent))
+                maxLicensed = licenseService.MaxActiveAgents;
+            else
+                maxLicensed = licenseService.MaxSeats;
+            
+                        return String.Format(Resources.TooManyAgentsIsUsedWarning,
+                                 licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
+        }
+
+        private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
+		{
+			string warningMessage;
+			if(licenseService.LicenseType.Equals(LicenseType.Agent))
+			{
+				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
+								  numberOfActiveAgents, licenseService.MaxActiveAgents);
+			}
+			else
+			{
+				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
+											   licenseService.MaxSeats);
+							
+			}
+			return warningMessage;
+		}
+
+        private static string getTooManyAgentsExplanation(ILicenseService licenseService, string dataSourceName, int numberOfActiveAgents)
+        {
+            if (licenseService.LicenseType == LicenseType.Agent)
+                return dataSourceName + "\r\n" +
+                       String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
+                                     numberOfActiveAgents, licenseService.MaxActiveAgents);
+            return dataSourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
+                                                           licenseService.MaxSeats);
         }
 
         private static bool SetCultureInformation()
