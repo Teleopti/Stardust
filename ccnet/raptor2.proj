@@ -47,7 +47,7 @@
 			<Threshold>
 				<CoverageMetric>SymbolCoverage</CoverageMetric>
 				<Type>Assembly</Type>
-				<Value>95</Value>
+				<Value>94</Value>
 				<Pattern>.*</Pattern>
 			</Threshold>
 		</MinimumCoverage>
