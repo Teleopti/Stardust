@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
-        private Random _random;
+        private readonly Random _random;
 
         public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.DayOffPlanning
                 iterationCounter++;
                 if (iterationCounter > _maxIterations)
                     return true;
-
             }
 
             return true;
@@ -94,12 +93,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         public bool SetToFewBackToLegalState()
         {
-            if (ResolvableState() == MinMaxNumberOfResult.Ok)
-            {
-                return false;
-            }
-
-            return true;
+            return ResolvableState() != MinMaxNumberOfResult.Ok;
         }
 
         public string ResolverDescriptionKey

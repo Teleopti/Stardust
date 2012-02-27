@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Tui"), TestFixture]
     public class TuiCaseSolverTest
     {
-        private IDayOffBackToLegalStateSolver _target;
+        private TuiCaseSolver _target;
         private CultureInfo _culture;
         private IDayOffBackToLegalStateFunctions _functions;
         private ILockableBitArray _bitArray;
@@ -139,7 +139,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             ret.Set(9, true);
             ret.Set(10, true);
             ret.Set(27, true);//su
-
             return ret;
         }
 
@@ -149,7 +148,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             ret.SetAll(false);
             ret.Set(4, true);//fr
             ret.Set(5, true);//sa
-
             return ret;
         }
     }
