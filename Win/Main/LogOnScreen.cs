@@ -181,8 +181,8 @@ namespace Teleopti.Ccc.Win.Main
                 maxLicensed = licenseService.MaxActiveAgents;
             else
                 maxLicensed = licenseService.MaxSeats;
-            
-                        return String.Format(Resources.TooManyAgentsIsUsedWarning,
+
+            return String.Format(CultureInfo.CurrentCulture, Resources.TooManyAgentsIsUsedWarning,
                                  licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
         }
 
