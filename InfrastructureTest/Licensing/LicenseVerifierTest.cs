@@ -215,12 +215,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             private readonly Func<ILicenseService> _licenseServiceFunction;
 
-            public licenseVerifierForTest(Func<ILicenseService> licenseServiceFunction, ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, ILicenseRepository licenseRepository) : base(licenseFeedback, unitOfWorkFactory, personRepository, licenseRepository)
+            public licenseVerifierForTest(Func<ILicenseService> licenseServiceFunction, ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, ILicenseRepository licenseRepository) : base(licenseFeedback, unitOfWorkFactory, licenseRepository)
             {
                 _licenseServiceFunction = licenseServiceFunction;
             }
 
-            protected override ILicenseService XmlLicenseService(int numberOfActiveAgents)
+            protected override ILicenseService XmlLicenseService()
             {
                 return _licenseServiceFunction();
             }
