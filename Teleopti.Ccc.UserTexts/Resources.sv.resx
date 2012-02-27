@@ -10089,6 +10089,9 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Kundanpassade rapporter</value>
     <comment>CustomReports</comment>
   </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Fler agenter ({0}) än din licens tillåter ({1}) är aktiva. Du har nu {2} dagar på dig att minska antalet agenter eller lägga på en licens som täcker tillräckligt många.</value>
+  </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>&lt;Webbläsarens default&gt;</value>
   </data>
