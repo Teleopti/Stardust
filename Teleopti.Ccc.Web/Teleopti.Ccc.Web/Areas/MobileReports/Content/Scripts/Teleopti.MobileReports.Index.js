@@ -32,7 +32,7 @@ Teleopti.MobileReports.Index = (function ($) {
 
 	function _initReportSettingsView(cNs) {
 		$("#report-settings-view").live("pageinit", function () {
-			$('#sel-date').datebox();
+			$('#sel-date').datebox({ "calStartDay": $.mobile.datebox.prototype.options.lang.loc.calStartDay }); // Issue with datebox calStartDay in globalization. remove when issue resolved.
 			$('#sel-skill').skillpicker();
 
 			(function setDefaultSettings() {

@@ -447,8 +447,8 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.css" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.0.min.js" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\Mobile\images\ajax-loader.png" />
