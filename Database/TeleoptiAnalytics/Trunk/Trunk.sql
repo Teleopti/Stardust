@@ -571,11 +571,3 @@ GO
 
 ALTER TABLE [mart].[custom_report] ADD  CONSTRAINT [DF_custom_report_visible]  DEFAULT ((1)) FOR [visible]
 GO
-
---Test, should fail on build server
-PRINT 'next statement should fail in Azure:'
-ALTER TABLE [mart].[report] DROP CONSTRAINT [PK_report]
-PRINT 'Failde?!'
-GO
-
-
