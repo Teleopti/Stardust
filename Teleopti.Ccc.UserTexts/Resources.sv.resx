@@ -10104,4 +10104,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="Updated" xml:space="preserve">
     <value>Uppdaterad</value>
   </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Datumformat</value>
+  </data>
 </root>

@@ -16,23 +16,12 @@ NCover.Registration.exe //License NC3CMPLIC.lic
 CD %CCNetWorkingDirectory%
 ECHO %CCNetWorkingDirectory%
 
-::Select build type
-CHOICE /C rn /M "Do you want to run (r)aptor2 or (n)ightlyBuild"
-IF ERRORLEVEL 1 SET MsbuildProj=%Raptor2%
-IF ERRORLEVEL 2 (
-SET MsbuildProj=%NightlyBuild%
-SET CCNetProject=NightlyBuild
-)
-ECHO.
+::Standard build
+SET MsbuildProj=%Raptor2%
 
-::Apply special project name?
-IF "%CCNetProject%"=="%DefaultCCNetProject%" (
-ECHO Some special CCNET projects names will provide extended test scenarios.
-ECHO PBI15494, NightlyBuild
-ECHO To run standard tests leave blank
-SET /P CCNetProject=CCNetProject:
-)
-ECHO %CCNetProject%
+::include WebBehaviour test and Azure deployment
+SET CCNetProject=NightlyBuild
+
 PAUSE
 ::Run Build
 ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
