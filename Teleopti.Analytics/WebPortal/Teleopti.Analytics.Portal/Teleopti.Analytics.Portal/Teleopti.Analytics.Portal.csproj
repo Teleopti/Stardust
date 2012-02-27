@@ -87,6 +87,9 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
     <Content Include="App_Themes\Theme1\images\loading.gif" />
     <Content Include="PerformanceManager\test_login.aspx" />
     <Content Include="PmContainer.aspx" />
