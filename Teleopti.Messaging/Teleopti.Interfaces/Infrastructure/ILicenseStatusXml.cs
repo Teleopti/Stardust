@@ -24,5 +24,13 @@ namespace Teleopti.Interfaces.Infrastructure
         ///<summary>
         ///</summary>
         bool AlmostTooMany { get; set; }
+
+        ///<summary>
+        ///</summary>
+        int NumberOfActiveAgents { get; set; }
+
+        ///<summary>
+        ///</summary>
+        int DaysLeft { get; set; }
     }
 }

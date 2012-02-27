@@ -91,7 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		protected virtual ILicenseService XmlLicenseService()
 		{
-			return new XmlLicenseService(_licenseRepository, int.MaxValue);
+            //dont' check the use of agent here now
+			return new XmlLicenseService(_licenseRepository, 0);
 		}
 	}
 }

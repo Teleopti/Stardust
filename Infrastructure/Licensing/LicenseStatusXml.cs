@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             rootNode.AppendChild(_xdoc.CreateElement("StatusOk")).AppendChild(_xdoc.CreateTextNode(StatusOk.ToString(invariant)));
             rootNode.AppendChild(_xdoc.CreateElement("LastValidDate")).AppendChild(_xdoc.CreateTextNode(LastValidDate.AddDays(1).ToString("s", invariant)));
             rootNode.AppendChild(_xdoc.CreateElement("AlmostTooMany")).AppendChild(_xdoc.CreateTextNode(AlmostTooMany.ToString(invariant)));
+            rootNode.AppendChild(_xdoc.CreateElement("NumberOfActiveAgents")).AppendChild(_xdoc.CreateTextNode(NumberOfActiveAgents.ToString(invariant)));
+            rootNode.AppendChild(_xdoc.CreateElement("DaysLeft")).AppendChild(_xdoc.CreateTextNode(DaysLeft.ToString(invariant)));
             SignStatus(_xdoc);
         }
 
@@ -44,12 +46,18 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             StatusOk = (bool)root.Element("StatusOk");
             if(root.Element("AlmostTooMany") != null)
                 AlmostTooMany = (bool)root.Element("AlmostTooMany");
+            if (root.Element("NumberOfActiveAgents") != null)
+                NumberOfActiveAgents = (int)root.Element("NumberOfActiveAgents");
+            if (root.Element("DaysLeft") != null)
+                DaysLeft = (int)root.Element("DaysLeft");
         }
 
         public DateTime CheckDate { get; set; }
         public bool StatusOk { get; set; }
         public DateTime LastValidDate { get; set; }
         public bool AlmostTooMany { get; set; }
+        public int NumberOfActiveAgents { get; set; }
+        public int DaysLeft { get; set; }
 
         public XmlDocument XmlDocument
         {
@@ -59,6 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 return _xdoc;
             }
         }
+
+       
 
         private static void SignStatus(XmlDocument xdoc)
         {

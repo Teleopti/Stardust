@@ -12,16 +12,18 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         public LicenseCheckJobStep(IJobParameters jobParameters)
             : base(jobParameters)
         {
+            // another more discreate name??????
             Name = "Licenseuse";
             JobCategory = JobCategoryType.Initial;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
+            var numberOfActiveAgents = 0;
             ILicenseStatusXml status = null;
             try
             {
-                var numberOfActiveAgents = JobParameters.Helper.Repository.NumberOfActiveAgents();
+                numberOfActiveAgents = JobParameters.Helper.Repository.NumberOfActiveAgents();
 
                 // to get one in the database
                 //var target = new LicenseStatusXml() { CheckDate = new DateTime(2012, 2, 24), LastValidDate = new DateTime(2012, 2, 25), StatusOk = true };
@@ -33,10 +35,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                 var licenseService = JobParameters.Helper.Repository.XmlLicenseService(numberOfActiveAgents);
                 
                 //Ok
-                status.CheckDate = DateTime.Today;
-                status.LastValidDate = DateTime.Today.AddDays(1);
+                status.CheckDate = DateTime.Today.Date;
+                status.LastValidDate = DateTime.Today.AddDays(1).Date;
                 status.StatusOk = true;
                 status.AlmostTooMany = licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents);
+                status.NumberOfActiveAgents = numberOfActiveAgents;
                 JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
                 return 1;  
             }
@@ -45,13 +48,15 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                 
                 if (status != null)
                 {
-                    //Ok before and but not now
+                    //Ok before  but not now
                     if (status.StatusOk)
                     {
-                        status.CheckDate = DateTime.Today;
-                        status.LastValidDate = DateTime.Today.AddDays(30);
+                        status.CheckDate = DateTime.Today.Date;
+                        status.LastValidDate = DateTime.Today.AddDays(30).Date;
+                        status.DaysLeft = 30;
                         status.StatusOk = false;
                         status.AlmostTooMany = false;
+                        status.NumberOfActiveAgents = numberOfActiveAgents;
                         JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
                         return 1;
                     }
@@ -59,7 +64,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                     //Not Ok before and not now either
                     if (!status.StatusOk)
                     {
-                        status.CheckDate = DateTime.Today;
+                        status.NumberOfActiveAgents = numberOfActiveAgents;
+                        status.CheckDate = DateTime.Today.Date;
+                        status.DaysLeft = (int)(status.LastValidDate.Date - DateTime.Today.Date).TotalDays -1; 
                         JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
                         return 1;
                     }
