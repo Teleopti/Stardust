@@ -650,7 +650,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public void SaveLicensStatus(string xmlString)
+        public void SaveLicenseStatus(string xmlString)
         {
             throw new NotImplementedException();
         }
@@ -660,6 +660,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             throw new NotImplementedException();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public ILicenseStatus LicenseStatus
         {
             get { throw new NotImplementedException(); }

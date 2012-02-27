@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                 // to get one in the database
                 //var target = new LicenseStatusXml() { CheckDate = new DateTime(2012, 2, 24), LastValidDate = new DateTime(2012, 2, 25), StatusOk = true };
                 //var xml = target.XmlDocument;
-                //JobParameters.Helper.Repository.SaveLicensStatus(xml.InnerXml);
+                //JobParameters.Helper.Repository.SaveLicenseStatus(xml.InnerXml);
 
                 status = JobParameters.Helper.Repository.LicenseStatus;
                 //throws an error if toomanyagents
@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                 status.StatusOk = true;
                 status.AlmostTooMany = licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents);
                 status.NumberOfActiveAgents = numberOfActiveAgents;
-                JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
+                JobParameters.Helper.Repository.SaveLicenseStatus(status.XmlDocument.OuterXml);
                 return 1;  
             }
             catch (TooManyActiveAgentsException)
@@ -57,7 +57,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                         status.StatusOk = false;
                         status.AlmostTooMany = false;
                         status.NumberOfActiveAgents = numberOfActiveAgents;
-                        JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
+                        JobParameters.Helper.Repository.SaveLicenseStatus(status.XmlDocument.OuterXml);
                         return 1;
                     }
 
@@ -67,7 +67,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                         status.NumberOfActiveAgents = numberOfActiveAgents;
                         status.CheckDate = DateTime.Today.Date;
                         status.DaysLeft = (int)(status.LastValidDate.Date - DateTime.Today.Date).TotalDays -1; 
-                        JobParameters.Helper.Repository.SaveLicensStatus(status.XmlDocument.OuterXml);
+                        JobParameters.Helper.Repository.SaveLicenseStatus(status.XmlDocument.OuterXml);
                         return 1;
                     }
                 }

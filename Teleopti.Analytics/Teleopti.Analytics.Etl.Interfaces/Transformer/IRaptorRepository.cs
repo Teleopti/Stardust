@@ -202,7 +202,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
     	int PerformPurge();
         int NumberOfActiveAgents();
         ILicenseStatusXml LicenseStatus { get; }
-        void SaveLicensStatus(string xmlString);
+        void SaveLicenseStatus(string xmlString);
         ILicenseService XmlLicenseService(int numberOfActiveAgents);
     }
 }

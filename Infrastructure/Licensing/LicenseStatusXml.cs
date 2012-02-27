@@ -108,31 +108,33 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 KeyContainerName = XmlLicense.ContainerName,
                 KeyNumber = 2
             };
-            var cryptoServiceProvider = new RSACryptoServiceProvider(parms);
-            //cryptoServiceProvider.FromXmlString(publicKeyXmlContent);
-
-            // Load the signed XML license file.
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(licenseStatus.CreateReader());
-
-            // Create the signed XML object.
-            var signedXml = new SignedXml(xmlDocument);
-
-            // Get the XML Signature node and load it into the signed XML object.
-            XmlNode signature = xmlDocument.GetElementsByTagName("Signature",
-                                                                 SignedXml.XmlDsigNamespaceUrl)[0];
-
-            if (signature == null)
-                throw new SignatureValidationException("Signature may be missing from license");
-
-            signedXml.LoadXml((XmlElement)signature);
-
-            // Verify the signature.
-            if (!signedXml.CheckSignature(cryptoServiceProvider))
+            using (var cryptoServiceProvider = new RSACryptoServiceProvider(parms))
             {
-                throw new SignatureValidationException();
+
+                // Load the signed XML license file.
+                var xmlDocument = new XmlDocument();
+                xmlDocument.Load(licenseStatus.CreateReader());
+
+                // Create the signed XML object.
+                var signedXml = new SignedXml(xmlDocument);
+
+                // Get the XML Signature node and load it into the signed XML object.
+                XmlNode signature = xmlDocument.GetElementsByTagName("Signature",
+                                                                     SignedXml.XmlDsigNamespaceUrl)[0];
+
+                if (signature == null)
+                    throw new SignatureValidationException("Signature may be missing from license");
+
+                signedXml.LoadXml((XmlElement)signature);
+
+                // Verify the signature.
+                if (!signedXml.CheckSignature(cryptoServiceProvider))
+                {
+                    throw new SignatureValidationException();
+                }
+                cryptoServiceProvider.Clear();
             }
-            cryptoServiceProvider.Clear();
+            
         }
     }
 }

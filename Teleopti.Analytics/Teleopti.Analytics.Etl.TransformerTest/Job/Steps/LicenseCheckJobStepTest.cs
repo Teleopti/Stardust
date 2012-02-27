@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             Expect.Call(_licenseService.IsThisAlmostTooManyActiveAgents(500)).Return(true);
             Expect.Call(_licenseStatus.AlmostTooMany = true);
             Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
-            Expect.Call(() =>_raptorRepository.SaveLicensStatus(""));
+            Expect.Call(() =>_raptorRepository.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.Run(new List<IJobStep>(),null, null, false);
             _mocks.VerifyAll();   
@@ -69,7 +69,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             Expect.Call(_licenseStatus.DaysLeft = 30);
             Expect.Call(_licenseStatus.AlmostTooMany = false);
             Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
-            Expect.Call(() => _raptorRepository.SaveLicensStatus(""));
+            Expect.Call(() => _raptorRepository.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.Run(new List<IJobStep>(), null, null, false);
             _mocks.VerifyAll();
@@ -88,7 +88,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             Expect.Call(_licenseStatus.LastValidDate).Return(DateTime.Today.AddDays(21).Date);
             Expect.Call(_licenseStatus.DaysLeft = 20);
             Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
-            Expect.Call(() => _raptorRepository.SaveLicensStatus(""));
+            Expect.Call(() => _raptorRepository.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.Run(new List<IJobStep>(), null, null, false);
             _mocks.VerifyAll();
