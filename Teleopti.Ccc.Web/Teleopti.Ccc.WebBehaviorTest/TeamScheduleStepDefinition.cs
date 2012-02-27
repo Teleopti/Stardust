@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-start-time").Should().Be(startTime);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(startTime);
 		}
 
 		[Then(@"The layer's end time attibute value should be (.*)")]
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-end-time").Should().Be(endTime);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(endTime);
 		}
 
 		[Then(@"The layer's activity name attibute value should be (.*)")]
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-activity").Should().Be(activityName);
+			layer.GetAttributeValue("tooltip-title").Should().Contain(activityName);
 		}
 
 		[Then(@"I should see a tooltip with the activty start time (.*)")]
