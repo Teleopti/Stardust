@@ -103,6 +103,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
+    <Compile Include="Controllers\SettingsControllerTest.cs" />
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentPrincipalProviderTest.cs" />
+    <Compile Include="Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
