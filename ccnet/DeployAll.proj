@@ -97,7 +97,7 @@
 						$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\**\RtaStates.xml"/>
 		</ItemGroup>
 		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
-		<Delete Files="@(DeleteFilesCollection)" />
+		<Exec Command="del /Q &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
 	</Target>
 	
 	
