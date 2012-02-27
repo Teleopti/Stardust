@@ -300,8 +300,7 @@
 					$(CCNetWorkingDirectory)\WcfTest\WcfTest.csproj;
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.ObfuscatedTest\Teleopti.Ccc.ObfuscatedTest.csproj;
 					$(CCNetWorkingDirectory)\Teleopti.Messaging\Teleopti.Messaging.Tests\Teleopti.Messaging.Tests.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj;
-		"/>
+					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"/>
 		<ProjectsToTest Condition="'$(RunWebBehaviorTests)' == 'true'"
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"
 	 />
