@@ -185,6 +185,7 @@
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
+    <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
@@ -243,9 +244,6 @@
     <Compile Include="NHibernateConfiguration\VersionStateRollbackInterceptor.cs" />
     <Compile Include="NHibernateConfiguration\XmlType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Licensing\CheckLicenseForPerson.cs" />
-    <Compile Include="Licensing\CheckLicenseAtPersist.cs" />
-    <Compile Include="Licensing\ICheckLicenseForRootType.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsException.cs" />
     <Compile Include="Licensing\InvalidLicenseException.cs" />
     <Compile Include="Licensing\IXmlLicense.cs" />
@@ -287,6 +285,7 @@
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
+    <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepository.cs" />

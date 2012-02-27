@@ -125,6 +125,7 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
     <Compile Include="Job\Steps\FactRequestJobStep.cs" />
     <Compile Include="Job\Jobs\RequestJobCollection.cs" />

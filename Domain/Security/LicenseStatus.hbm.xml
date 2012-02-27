@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Security"
+                   default-access="field.camelcase-underscore">
+
+  <class name="LicenseStatus">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="CreatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 update="false" 
+                 foreign-key="FK_LicenseStatus_Person_CreatedBy"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_LicenseStatus_Person_UpdatedBy"/>
+    <property name="CreatedOn"
+              type="UtcDateTime"
+              not-null="true"
+              update="false" />
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+    <property name="XmlString"
+              length="4000"
+              not-null="true"/>
+  </class>
+</hibernate-mapping>
