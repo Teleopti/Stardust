@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
+    <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />

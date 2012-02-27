@@ -27,6 +27,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoMobileReportsSignInPage(string.Empty);
 		}
 
+		[When(@"I navigate to the site's root mobile signin page")]
+		public void WhenINavigateToTheSiteSRootMobileSigninPage()
+		{
+			Navigation.GotoGlobalMobileSignInPage();
+		}
+
+		[Then(@"I should see the mobile global menu")]
+		public void ThenIShouldSeeTheMobileGlobalMenu()
+		{
+			EventualAssert.That(() => Pages.Pages.MobileGlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
+		}
+
 		[Then(@"I should see the global sign in page")]
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{

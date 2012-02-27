@@ -1,0 +1,23 @@
+﻿@using Teleopti.Ccc.UserTexts
+@model dynamic
+@{ Layout = "~/Areas/Start/Views/Shared/MobileLayoutBase.cshtml"; }
+@section csshead {
+	<link rel="stylesheet" href="@Url.Content("~/Areas/Start/Content/Css/mobile.custom.css")" />
+}
+<div data-role="page">
+	<div data-role="header">
+		<h1>
+			Global Menu (loc)
+		</h1>
+		@Html.ActionLink(Resources.LogOut, "SignOut", "Authentication", new 
+																			{
+																				area = "Start"
+																			}, new { id = "signout-button", data_icon = "delete", data_iconpos = "left", @class = "ui-btn-right", data_theme = "b", rel = "external" })
+	</div>
+	<div data-role="content">
+		<ul data-role="listview" data-inset="true" data-theme="b" id="global-menu-list">
+			<li>@Html.ActionLink("Anytime", string.Empty, string.Empty, new{ area = "mobilereports"}, new { id = "global-menu-mobilereports", @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
+			<li>@Html.ActionLink("MyTime", string.Empty, string.Empty, new{ area = "mytime"}, new { id = "global-menu-mytime", @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
+		</ul>
+	</div>
+</div>

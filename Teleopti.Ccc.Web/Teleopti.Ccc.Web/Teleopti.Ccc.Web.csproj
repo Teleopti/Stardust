@@ -561,6 +561,7 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="WiseIISConfig\adsutil.vbs" />
+    <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

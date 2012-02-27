@@ -10,5 +10,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
         	return RedirectToRoute(new RouteValueDictionary(new {area = "MyTime", controller = "", action = ""}));
         }
 
+    	public ViewResult MobileMenu()
+    	{
+    		return View();
+    	}
     }
 }

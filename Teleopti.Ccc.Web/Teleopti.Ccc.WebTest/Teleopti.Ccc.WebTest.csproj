@@ -103,6 +103,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
+    <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />

@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.Current = Browser.Current.Page<SignInPage>();
 		}
 
+		public static void GotoGlobalMobileSignInPage()
+		{
+			GoToWithPossibleLongApplicationStartTime("Start/Authentication/MobileSignIn");
+			Pages.Pages.Current = Browser.Current.Page<MobileSignInPage>();
+		}
+
 		public static void GotoMyTimeSignInPage()
 		{
 			GoToWithPossibleLongApplicationStartTime("MyTime/Authentication/SignIn");

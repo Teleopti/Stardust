@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<WeekSchedulePage>(() => Browser.Current.Page<WeekSchedulePage>());
 		public static WeekSchedulePage WeekSchedulePage { get { return _weekSchedulePage.Value; } }
 
+
 		private static readonly ScenarioContextLazy<SignInPage> _signInPage =
 			new ScenarioContextLazy<SignInPage>(() => Browser.Current.Page<SignInPage>());
 		public static SignInPage SignInPage { get { return _signInPage.Value; } }
@@ -23,6 +24,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		new ScenarioContextLazy<MobileReportsPage>(() => Browser.Current.Page<MobileReportsPage>());
 		public static MobileReportsPage MobileReportsPage { get { return _mobileReportsPage.Value; } }
 
+		private static readonly ScenarioContextLazy<MobileGlobalMenuPage> _mobileGlobalMenuPage =
+		new ScenarioContextLazy<MobileGlobalMenuPage>(() => Browser.Current.Page<MobileGlobalMenuPage>());
+		public static MobileGlobalMenuPage MobileGlobalMenuPage { get { return _mobileGlobalMenuPage.Value; } }
+		
 		private static readonly ScenarioContextLazy<RequestsPage> _requestsPage =
 			new ScenarioContextLazy<RequestsPage>(() => Browser.Current.Page<RequestsPage>());
 		public static RequestsPage RequestsPage { get { return _requestsPage.Value; } }
