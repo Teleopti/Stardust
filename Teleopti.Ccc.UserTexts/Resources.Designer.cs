@@ -21270,7 +21270,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a licens that covers so many agents..
+        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents..
         /// </summary>
         public static string TooManyAgentsIsUsedWarning {
             get {
