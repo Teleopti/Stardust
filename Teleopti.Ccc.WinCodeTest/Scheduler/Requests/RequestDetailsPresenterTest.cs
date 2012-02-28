@@ -31,17 +31,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 		[Test]
 		public void ShouldInitialize()
 		{
-			using(_mocks.Record())
-			{
-				Expect.Call(_model.Name).Return(string.Empty);
-				Expect.Call(_model.GetSubject(new NoFormatting())).Return(string.Empty);
-				Expect.Call(_model.GetMessage(new NoFormatting())).Return(string.Empty);
-				Expect.Call(_model.StatusText).Return(string.Empty);
-			}
-			using (_mocks.Playback())
-			{
-				_target.Initialize();
-			}
+			var target = new RequestDetailsPresenter(MockRepository.GenerateMock<IRequestDetailsView>(),
+			                                         MockRepository.GenerateMock<IPersonRequestViewModel>());
+
+			target.Initialize();
 		}
 
 		[Test]

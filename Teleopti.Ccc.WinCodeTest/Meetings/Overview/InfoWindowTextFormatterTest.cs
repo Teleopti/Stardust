@@ -57,7 +57,29 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         [Test]
         public void ShouldReassociateEveryPersonToUnitOfWork()
         {
-            _mocks.BackToRecordAll();
+        	var meeting = MockRepository.GenerateMock<IMeeting>();
+        	var meetingPerson = MockRepository.GenerateMock<IMeetingPerson>();
+			var person = new Person { Name = new Name("goran", "person") };
+        	var uow = MockRepository.GenerateMock<IUnitOfWork>();
+        	var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var commonNameDescription = new CommonNameDescriptionSetting();
+        	var settingDataRepository = MockRepository.GenerateMock<ISettingDataRepository>();
+
+        	settingDataRepository.Stub(x => x.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).
+        		Return(commonNameDescription).IgnoreArguments();
+			meetingPerson.Stub(x => x.Person).Return(person);
+        	meeting.Stub(x => x.Organizer).Return(person);
+        	meeting.Stub(x => x.MeetingPersons).Return(
+        		new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson> {meetingPerson}));
+        	uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+
+			var target = new InfoWindowTextFormatter(settingDataRepository, uowFactory);
+			
+			target.GetInfoText(meeting);
+			uow.AssertWasCalled(x => x.Reassociate(person), options => options.Repeat.Times(2));
+
+
+			/*_mocks.BackToRecordAll();
             var meeting = _mocks.StrictMock<IMeeting>();
             var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
             var person = new Person {Name = new Name("goran", "person")};
@@ -76,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.GetInfoText(meeting);
-            _mocks.VerifyAll();
+            _mocks.VerifyAll();*/
         }   
     }
 
