@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             double brokenLimit = calculateBrokenLimit(limit);
             double currentValue = calculateBrokenRotationPercentage();
-            return currentValue > limit;
+            return currentValue > brokenLimit;
         }
 
         private double calculateBrokenRotationPercentage()
