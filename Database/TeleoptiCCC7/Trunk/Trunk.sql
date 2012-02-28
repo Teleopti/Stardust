@@ -145,12 +145,7 @@ CREATE TABLE [dbo].[LicenseStatus](
 	[CreatedOn] [datetime] NOT NULL,
 	[UpdatedOn] [datetime] NOT NULL,
 	[XmlString] [nvarchar](4000) NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+	CONSTRAINT PK_LicenseStatus PRIMARY KEY CLUSTERED (Id))
 GO
 
 ALTER TABLE [dbo].[LicenseStatus]  WITH CHECK ADD  CONSTRAINT [FK_LicenseStatus_Person1] FOREIGN KEY([CreatedBy])
