@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.PasswordValidation.TypeText(newPassword);
 			page.OldPassword.TypeText(TestData.CommonPassword);
 			Browser.Current.Eval("$('input#password').keyup();");
+			page.ConfirmButton.WaitUntilEnabled();
 			page.ConfirmButton.Click();
 		}
 
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.PasswordValidation.TypeText(newPassword);
 			page.OldPassword.TypeText(TestData.CommonPassword + "fel");
 			Browser.Current.Eval("$('input#password').keyup();");
+			page.ConfirmButton.WaitUntilEnabled();
 			page.ConfirmButton.Click();
 		}
 
