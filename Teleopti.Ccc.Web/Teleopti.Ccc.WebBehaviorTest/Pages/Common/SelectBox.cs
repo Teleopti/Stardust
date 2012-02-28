@@ -35,5 +35,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 				.EvalIn(Element.DomContainer);
 			EventualAssert.That(() => Button.InnerHtml, Contains.Substring(text));
 		}
+
+		public void Open()
+		{
+			Menu.WaitUntilExists();
+			Button.WaitUntilExists();
+
+			Button.EventualClick();
+			Menu.WaitUntilDisplayed();
+		}
 	}
 }
