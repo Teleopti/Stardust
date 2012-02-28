@@ -8,78 +8,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link rel="Stylesheet" href="Styles/PMStyles.css" type="text/css" />
-    <script type="text/javascript" src="Scripts/NewPopup.js"></script>
-    <script type="text/javascript" src="Scripts/AnalyzerDelegation.js"></script>
-    <title></title>
-    <asp:ContentPlaceHolder ID="head" runat="server">
-    </asp:ContentPlaceHolder>
+	<link rel="Stylesheet" href="Styles/PMStyles.css" type="text/css" />
+	<script type="text/javascript" src="Scripts/NewPopup.js"></script>
+	<script type="text/javascript" src="Scripts/AnalyzerDelegation.js"></script>
+	<title></title>
+	<asp:ContentPlaceHolder ID="head" runat="server">
+	</asp:ContentPlaceHolder>
+	<script type="text/javascript">
+		function onClose() {
+			if (typeof (window_onunload) != 'undefined') {
+				return window_onunload();
+			}
+			return null;
+		}
+		
+	</script>
 </head>
-<body onunload="return window_onunload();" >
-    <form id="form1" runat="server">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <!-- Begin Banner -->
-        <tr>
-            <td height="54">
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
-                    <tr>
-                        <td width="141" align="left">
-                            <a href="http://www.teleopti.com" target="_new"><img src="images/top_menu_logo.png" border="0" alt="Teleopti" /></a>
-                        </td>
-                        <td class="banneri1" width="150" align="left">
-                            <img src="images/1x1.png" width="150" height="1"/>
-                        </td>
-                        <td class="banneri2" align="left" valign="bottom">
-                            <asp:ContentPlaceHolder ID="ReportTitle" runat="server">
-                            </asp:ContentPlaceHolder>
-                        </td>
-                        <td class="banneri2" align="right" valign="top">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <asp:LinkButton ID="linkButtonLogOut" runat="server" Text="Log out" 
-                                            onclick="linkButtonLogOut_Click" CssClass="actionLink"></asp:LinkButton>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top:10px">
-                                        <asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="Help" OnClientClick="javascript:return false;" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    
-    <table style="width: 100%; height: 100%" border="0">
-        <tr style="height: 99%">
-            <td valign="top" style="height: 100%; border-right: solid 1px #000066">
-                <table border="0">
-                    <tr>
-                        <td style="height: 1px">
-                            <uc3:ActionBarView ID="ActionBarView1" runat="server" Visible="false" />
-                            <div id="divNewPopup"> 
-                                <uc4:NewView ID="NewView1" runat="server" />
-                            </div> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" align="left" style="width: 10px">
-                            <uc1:ReportTreeView ID="ReportTreeView1" runat="server" Visible="false" />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td rowspan="4" style="width: 100%; height: 99%" valign="top" align="left">
-                <asp:ContentPlaceHolder ID="ContentPlaceHolder3" runat="server">
-                </asp:ContentPlaceHolder>
-                <asp:Label ID="LabelMessage" runat="server" Text="" CssClass="systemMessage"></asp:Label>
-            </td>
-        </tr>
-    </table>
-    </form>
+<body onunload="onClose();" >
+	<form id="form1" runat="server">
+	<table width="100%" cellpadding="0" cellspacing="0" border="0">
+		<!-- Begin Banner -->
+		<tr>
+			<td height="54">
+				<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+					<tr>
+						<td width="141" align="left">
+							<a href="http://www.teleopti.com" target="_new"><img src="images/top_menu_logo.png" border="0" alt="Teleopti" /></a>
+						</td>
+						<td class="banneri1" width="150" align="left">
+							<img src="images/1x1.png" width="150" height="1"/>
+						</td>
+						<td class="banneri2" align="left" valign="bottom">
+							<asp:ContentPlaceHolder ID="ReportTitle" runat="server">
+							</asp:ContentPlaceHolder>
+						</td>
+						<td class="banneri2" align="right" valign="top">
+							<table>
+								<tr>
+									<td>
+										<asp:LinkButton ID="linkButtonLogOut" runat="server" Text="Log out" 
+											onclick="linkButtonLogOut_Click" CssClass="actionLink"></asp:LinkButton>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-top:10px">
+										<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="Help" OnClientClick="javascript:return false;" />
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	<table style="width: 100%; height: 100%" border="0">
+		<tr style="height: 99%">
+			<td valign="top" style="height: 100%; border-right: solid 1px #000066">
+				<table border="0">
+					<tr>
+						<td style="height: 1px">
+							<uc3:ActionBarView ID="ActionBarView1" runat="server" Visible="false" />
+							<div id="divNewPopup"> 
+								<uc4:NewView ID="NewView1" runat="server" />
+							</div> 
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" align="left" style="width: 10px">
+							<uc1:ReportTreeView ID="ReportTreeView1" runat="server" Visible="false" />
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td rowspan="4" style="width: 100%; height: 99%" valign="top" align="left">
+				<asp:ContentPlaceHolder ID="ContentPlaceHolder3" runat="server">
+				</asp:ContentPlaceHolder>
+				<asp:Label ID="LabelMessage" runat="server" Text="" CssClass="systemMessage"></asp:Label>
+			</td>
+		</tr>
+	</table>
+	</form>
 </body>
 </html>

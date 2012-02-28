@@ -307,6 +307,10 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
                                 break;
                             }
                         }
+						if (_analyzerDataSource == null)
+						{
+							_log.Debug("Datasources in Analyzer could not be mapped. Maybe the servername in weg.config is incorrect.");
+						}
                     }
                     else
                     {

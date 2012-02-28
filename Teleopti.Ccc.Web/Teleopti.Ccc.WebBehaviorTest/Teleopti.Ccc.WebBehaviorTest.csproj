@@ -109,6 +109,7 @@
     <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
+    <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />

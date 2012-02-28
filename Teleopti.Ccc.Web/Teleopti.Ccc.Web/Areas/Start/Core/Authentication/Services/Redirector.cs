@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
+﻿namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
+	using System.Web.Mvc;
+
 	public class Redirector : IRedirector
 	{
 		private readonly UrlHelper _helper;
@@ -15,8 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public RedirectResult SignInRedirect()
 		{
-			var originArea = _helper.RequestContext.RouteData.Values["origin"] ?? string.Empty;
-			var routeUrl = _helper.RouteUrl(new {action = string.Empty, controller = string.Empty, area = originArea});
+			var originArea = _helper.RequestContext.RouteData.Values["origin"];
+			var routeUrl = originArea != null
+			               	? _helper.RouteUrl(new { action = string.Empty, controller = string.Empty, area = originArea })
+			               	: _helper.RouteUrl(new { action = string.Empty, controller = string.Empty });
+
 			return new RedirectResult(routeUrl, false);
 		}
 
@@ -27,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				return new RedirectResult(returnUrl, false);
 			}
 
-			var routeUrl = _helper.RouteUrl(new {controller = string.Empty, action = string.Empty, area = string.Empty});
+			var routeUrl = _helper.RouteUrl(new { controller = string.Empty, action = string.Empty });
 			return new RedirectResult(routeUrl, false);
 		}
 
@@ -35,8 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		private bool SafeLocalUrl(string returnUrl)
 		{
-			return !string.IsNullOrEmpty(returnUrl) && _helper.IsLocalUrl(returnUrl) && returnUrl.StartsWith("/")
-			       && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\");
+			return !string.IsNullOrEmpty(returnUrl) && _helper.IsLocalUrl(returnUrl) && returnUrl.StartsWith("/") &&
+			       !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\");
 		}
 	}
 }
