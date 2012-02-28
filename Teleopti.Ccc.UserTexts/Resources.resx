@@ -10390,9 +10390,27 @@ These options are activated:
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>There is already absence in the schedule for given period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
-    </data>
+  </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Custom reports</value>
     <comment>Custom reports</comment>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>&lt;Browser Default&gt;</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Wrong password!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Date Format</value>
   </data>
 </root>

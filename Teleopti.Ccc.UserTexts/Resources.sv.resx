@@ -10084,9 +10084,27 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>Det finns redan frånvaro registrerad under angiven period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
-    </data>
+  </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Kundanpassade rapporter</value>
     <comment>CustomReports</comment>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Fler agenter ({0}) än din licens tillåter ({1}) är aktiva. Du har nu {2} dagar på dig att minska antalet agenter eller lägga på en licens som täcker tillräckligt många.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>&lt;Webbläsarens default&gt;</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Gammalt lösenord</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Fel lösenord!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Uppdaterad</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Datumformat</value>
   </data>
 </root>

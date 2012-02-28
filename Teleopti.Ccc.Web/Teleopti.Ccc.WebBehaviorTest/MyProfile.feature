@@ -9,68 +9,55 @@
 
 Scenario: See my profile
 	Given I am an agent
-	When I view my profile
+	When I view my regional settings
 	Then I should see my culture
 	And I should see my language
 
 Scenario: Change my culture
 	Given I am an agent
 	And I am swedish
-	When I sign in
-	Then I should see swedish date format
-	When I change culture to US
+	When I view my regional settings
+	And I change culture to US
 	Then I should see US date format
 
-Scenario: Browser's default culture
-	Given I am an agent without culture
-	When I sign in
-	Then I should see the browser's language's date format
-
-Scenario: Change my culture to computer's default
+Scenario: Change my culture to browser's default
 	Given I am an agent
 	And I am swedish
-	When I change culture to browser's default
+	When I view my regional settings
+	And I change culture to browser's default
 	Then I should see the browser's language's date format
 
 Scenario: Change my language
 	Given I am an agent
 	And I am swedish
-	When I sign in
-	Then I should see swedish text
-	When I change language to english
+	When I view my regional settings
+	And I change language to english
 	Then I should see english text
 
-Scenario: Browser's default language
-	Given I am an agent without language
-	When I sign in
-	Then I should see text in the the browser's language 
-
-Scenario: Change my language to computer's default
+Scenario: Change my language to browser's default
 	Given I am an agent
 	And I am swedish
-	When I change language to browser's default
+	When I view my regional settings
+	And I change language to browser's default
 	Then I should see text in the the browser's language 
 
 Scenario: Change my password
 	Given I am an agent
-	When I change my password
+	When I view my password
+	And I change my password
 	And I sign out
 	And I sign in using my new password
 	Then I should be signed in
-	
-Scenario: Continue browsing after changing password
-	Given I am an agent
-	When I change my password
-	Then I should be able to continue browsing the site
 
 Scenario: Incorrect current password when changing password
 	Given I am an agent
-	When I am changing password
-	And I give incorrect current password
+	When I view my password
+	And I change my password using incorrect current password
 	Then I should see a message saying the password is incorrect
 	
 Scenario: Incorrect confirming password when changing password
 	Given I am an agent
-	When I am changing password
-	And I give incorrect confirming password
+	When I view my password
+	And I am changing password using incorrect confirm password
 	Then I should see a message saying the password is not confirmed correctly
+	And Confirm button should be disabled
