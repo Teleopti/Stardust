@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             _mocks = new MockRepository();
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
 
             _date = new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc);
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZone);
@@ -157,9 +158,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Expect.Call(skillStaffPeriodDictionary.SkillOpenHoursCollection).Return(skillOpenHoursCollection).Repeat.Twice();
 
             _mocks.ReplayAll();
-                
-             _target = new OpenHoursRule(_state);
-             Assert.AreNotEqual(0, _target.Validate(_dic, _days).Count());
+
+            _target = new OpenHoursRule(_state);
+            var response = _target.Validate(_dic, _days);
+
+            Assert.AreNotEqual(0, response.Count());
+
+            var expectedErrorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                                           UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
+                                           layer.DisplayDescription(),
+                                           TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),
+                                           TimeZoneHelper.ConvertFromUtc(layer.Period.EndDateTime, _timeZone));
+
+            Assert.AreEqual(expectedErrorMessage, response.First().Message);
             _mocks.VerifyAll();
 
         }
