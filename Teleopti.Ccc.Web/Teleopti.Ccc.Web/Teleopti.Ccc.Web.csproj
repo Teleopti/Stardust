@@ -182,6 +182,11 @@
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Redirector.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IRedirector.cs" />
+    <Compile Include="Areas\Start\Core\Menu\DefinedApplicationAreas.cs" />
+    <Compile Include="Areas\Start\Core\Menu\IMenuViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
+    <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
     <Compile Include="Core\RequestContext\CultureProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -215,7 +220,7 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\AuthenticationViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IAuthenticationViewModelFactory.cs" />
-    <Compile Include="Areas\Start\Core\IoC\AuthenticationAreaModule.cs" />
+    <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\DatePatternConverter.cs" />
     <Compile Include="Core\IoC\AutofacWebTypesModuleFromRepository20111123.cs" />
     <Compile Include="Core\IoC\CommonModule.cs">
@@ -562,6 +567,7 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="WiseIISConfig\adsutil.vbs" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
+    <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

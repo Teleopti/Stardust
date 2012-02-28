@@ -3,16 +3,40 @@ using System.Web.Routing;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-    public class MenuController : Controller
+	using System.Linq;
+
+	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+
+	public class MenuController : Controller
     {
-        public ActionResult Index()
+		private readonly IMenuViewModelFactory _menuViewModelFactory;
+
+		public MenuController(IMenuViewModelFactory menuViewModelFactory)
+    	{
+    		_menuViewModelFactory = menuViewModelFactory;
+    	}
+
+		public ActionResult Index()
         {
-        	return RedirectToRoute(new RouteValueDictionary(new {area = "MyTime", controller = "", action = ""}));
+			var menuViewModels = _menuViewModelFactory.CreateMenyViewModel();
+			
+			if (menuViewModels.Count() == 1)
+			{
+				return RedirectToRoute(new RouteValueDictionary(new { area = menuViewModels.First().Area, controller = string.Empty, action = string.Empty }));
+			}
+
+			return View(menuViewModels);
         }
 
     	public ViewResult MobileMenu()
     	{
-    		return View();
+			return View(_menuViewModelFactory.CreateMenyViewModel());
+    	}
+
+		public ActionResult Menu()
+    	{
+			// until 
+			return RedirectToRoute(new RouteValueDictionary(new { area = "MyTime", controller = "", action = "" }));
     	}
     }
 }

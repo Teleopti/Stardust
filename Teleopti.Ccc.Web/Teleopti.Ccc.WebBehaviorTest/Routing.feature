@@ -27,9 +27,9 @@ Scenario: Browse to root and sign in to menu
 Scenario: Browse to root and sign in to mobile menu
 	Given I am a user with access to all areas
 	When I navigate to the site's root mobile signin page
-	And I sign in
+	And I sign in 
 	Then I should see the mobile global menu
-
+ 
 Scenario: Browse to root and sign in to MyTime
 	Given I am a user with access only to MyTime
 	When I navigate to the site's root

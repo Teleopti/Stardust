@@ -1,6 +1,7 @@
 ﻿@{
 	Layout = null;
 }
+/
 <!DOCTYPE html>
 <html>
 	<head>
@@ -11,10 +12,17 @@
 		</script>
 		<script src="@Url.Content("~/Content/scripts/detectmobilebrowser.js")"> </script>
 		<script>
-			var orig = '@HttpUtility.JavaScriptStringEncode((string)Html.ViewContext.RequestContext.RouteData.Values["origin"])';
-			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
-			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
-			window.location = jQuery.browser.mobile && !orig.length ? mobile : desktop;
+			@{
+				var origin = Html.ViewContext.RequestContext.RouteData.Values["origin"];
+			}
+			
+			var orig = '@HttpUtility.JavaScriptStringEncode((string)origin)';
+			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = origin ?? "Start" }))';
+			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = origin ?? "Start" }))';
+			var location = jQuery.browser.mobile && !orig.length ? mobile : desktop;
+			if(location && location.length) {
+				window.location.replace(location);
+			}
 		</script>
 	</head>
 	<body>

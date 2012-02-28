@@ -1,5 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
-@model dynamic
+@model System.Collections.Generic.IEnumerable<Teleopti.Ccc.Web.Areas.Start.Models.Menu.MenuViewModel>
 @{ Layout = "~/Areas/Start/Views/Shared/MobileLayoutBase.cshtml"; }
 @section csshead {
 	<link rel="stylesheet" href="@Url.Content("~/Areas/Start/Content/Css/mobile.custom.css")" />
@@ -16,8 +16,10 @@
 	</div>
 	<div data-role="content">
 		<ul data-role="listview" data-inset="true" data-theme="b" id="global-menu-list">
-			<li>@Html.ActionLink("Anytime", string.Empty, string.Empty, new{ area = "mobilereports"}, new { id = "global-menu-mobilereports", @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
-			<li>@Html.ActionLink("MyTime", string.Empty, string.Empty, new{ area = "mytime"}, new { id = "global-menu-mytime", @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
+			@foreach(var m in Model)
+			{
+				<li>@Html.ActionLink(m.Name, string.Empty, string.Empty, new{ area = m.Area}, new { id = "global-menu-"+ @Html.AttributeEncode(m.Area), @class = "ui-btn-right", data_theme = "b", rel = "external" })</li>
+			}
 		</ul>
 	</div>
 </div>

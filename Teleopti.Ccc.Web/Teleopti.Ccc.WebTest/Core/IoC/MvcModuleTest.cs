@@ -35,6 +35,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
+	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+
 	[TestFixture]
 	public class MvcModuleTest
 	{
@@ -226,7 +228,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
-
+		
+		[Test]
+		public void ShouldResolveMenuViewModelFactory()
+		{
+			requestContainer.Resolve<IMenuViewModelFactory>()
+				.Should().Not.Be.Null();
+		}
+		
 		[Test]
 		public void ShouldResolvePreferenceController()
 		{

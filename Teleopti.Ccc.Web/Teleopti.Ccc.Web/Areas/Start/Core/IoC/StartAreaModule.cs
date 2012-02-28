@@ -8,7 +8,9 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 {
-	public class AuthenticationAreaModule : Module
+	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+
+	public class StartAreaModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();
 			builder.RegisterType<AvailableWindowsDataSources>().As<IAvailableWindowsDataSources>();
 			builder.RegisterType<Redirector>().As<IRedirector>();
+			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
 		}
 	}
 }

@@ -36,6 +36,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the mobile global menu")]
 		public void ThenIShouldSeeTheMobileGlobalMenu()
 		{
+			// The user should endup if mobile device detected. Mark this as pending..?
+			// ScenarioContext.Current.Pending();
+			Navigation.GotoGlobalMobileMenuPage();
+
 			EventualAssert.That(() => Pages.Pages.MobileGlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
 		}
 
