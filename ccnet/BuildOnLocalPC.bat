@@ -20,7 +20,7 @@ ECHO %CCNetWorkingDirectory%
 SET MsbuildProj=%Raptor2%
 
 ::include WebBehaviour test and Azure deployment
-SET CCNetProject=NightlyBuild
+SET CCNetProject=RaptorMain
 
 PAUSE
 ::Run Build
