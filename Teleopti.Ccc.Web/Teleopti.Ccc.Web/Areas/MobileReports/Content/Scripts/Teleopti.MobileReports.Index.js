@@ -32,11 +32,11 @@ Teleopti.MobileReports.Index = (function ($) {
 
 	function _initReportSettingsView(cNs) {
 		$("#report-settings-view").live("pageinit", function () {
-			$('#sel-date').datebox({ "calStartDay": $.mobile.datebox.prototype.options.lang.loc.calStartDay }); // Issue with datebox calStartDay in globalization. remove when issue resolved.
+			$('#sel-date').datebox();
 			$('#sel-skill').skillpicker();
 
 			(function setDefaultSettings() {
-				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'y', 'amount': -3 }).trigger('datebox', { 'method': 'doset' });
+				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'd', 'amount': -1 }).trigger('datebox', { 'method': 'doset' });
 				setRadioGrpValue('#report-settings-view', 'sel-report');
 				$('#report-settings-type-graph').attr('checked', true).checkboxradio("refresh");
 			})();

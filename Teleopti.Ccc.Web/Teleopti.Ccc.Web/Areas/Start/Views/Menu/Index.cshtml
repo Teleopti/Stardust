@@ -11,13 +11,17 @@
 			jQuery.browser = jQuery.browser || {};
 		</script>
 		<script src="@Url.Content("~/Content/scripts/detectmobilebrowser.js")"> </script>
-		<script>
-			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "Menu"}))';
-			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "MobileMenu"}))';
-			var location = jQuery.browser.mobile ? mobile : desktop;
-			if(location && location.length) {
-				window.location.replace(location);
+		<script type="text/javascript">
+			var locUrls = {
+				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "Menu" }))',
+				mobile: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "MobileMenu" }))',
+				target: ''
+			};
+			locUrls.target = jQuery.browser.mobile ? locUrls.mobile : locUrls.desktop;
+			if (locUrls.target && locUrls.target.length) {
+				window.location.replace(locUrls.target);
 			}
+			
 		</script>
 	</head>
 	<body>

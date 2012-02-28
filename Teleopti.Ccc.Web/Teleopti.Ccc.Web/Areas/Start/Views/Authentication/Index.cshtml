@@ -14,13 +14,15 @@
 			@{
 				var origin = Html.ViewContext.RequestContext.RouteData.Values["origin"];
 			}
-			
-			var orig = '@HttpUtility.JavaScriptStringEncode((string)origin)';
-			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = origin ?? "Start" }))';
-			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = origin ?? "Start" }))';
-			var location = jQuery.browser.mobile && !orig.length ? mobile : desktop;
-			if(location && location.length) {
-				window.location.replace(location);
+			var locUrls = {
+				orig: '@HttpUtility.JavaScriptStringEncode((string)origin)',
+				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = origin ?? "Start" }))',
+				mobile: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = origin ?? "Start" }))',
+				target: ''
+			};
+			locUrls.target = jQuery.browser.mobile && !locUrls.orig.length ? locUrls.mobile : locUrls.desktop;
+			if(locUrls.target && locUrls.target.length) {
+				window.location.replace(locUrls.target);
 			}
 		</script>
 	</head>
