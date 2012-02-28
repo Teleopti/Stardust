@@ -7,9 +7,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class OptimizationOverLimitByRestrictionDecider : IOptimizationOverLimitDecider
     {
-        private readonly IScheduleMatrixOriginalStateContainer _matrixOriginalStateContainer;
-        private readonly ICheckerRestriction _restrictionChecker;
         private readonly IOptimizationPreferences _optimizationPreferences;
+        private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider; 
 
         public OptimizationOverLimitByRestrictionDecider(
             IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer,
@@ -17,12 +16,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             IOptimizationPreferences optimizationPreferences
             )
         {
-            _matrixOriginalStateContainer = matrixOriginalStateContainer;
-            _restrictionChecker = restrictionChecker;
             _optimizationPreferences = optimizationPreferences;
+            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(matrixOriginalStateContainer, restrictionChecker);
         }
 
-        public bool OverLimit(ILogWriter logWriter)
+        public bool OverLimit()
         {
             bool overallResult = preferencesOverLimit();
             if (overallResult)
@@ -51,90 +49,35 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (!_optimizationPreferences.General.UsePreferences)
                 return false;
-            double limit = _optimizationPreferences.General.PreferencesValue;
-            double currentValue = calculateBrokenPreferencesPercentage();
-            return currentValue > limit;
-        }
-
-        private double calculateBrokenPreferencesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckPreference));
+            return _restrictionOverLimitDecider.PreferencesOverLimit(_optimizationPreferences.General.PreferencesValue);
         }
 
         private bool mustHavesOverLimit()
         {
             if (!_optimizationPreferences.General.UseMustHaves)
                 return false;
-            double limit = _optimizationPreferences.General.MustHavesValue;
-            double currentValue = calculateBrokenMustHavesPercentage();
-            return currentValue > limit;
-        }
-
-        private double calculateBrokenMustHavesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckPreferenceMustHave));
+            return _restrictionOverLimitDecider.MustHavesOverLimit(_optimizationPreferences.General.MustHavesValue);
         }
 
         private bool rotationOverLimit()
         {
             if (!_optimizationPreferences.General.UseRotations)
                 return false;
-            double limit = _optimizationPreferences.General.RotationsValue;
-            double currentValue = calculateBrokenRotationPercentage();
-            return currentValue > limit;
-        }
-
-        private double calculateBrokenRotationPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckRotations));
+            return _restrictionOverLimitDecider.RotationOverLimit(_optimizationPreferences.General.RotationsValue);
         }
 
         private bool availabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseAvailabilities)
                 return false;
-            double limit = _optimizationPreferences.General.AvailabilitiesValue;
-            double currentValue = calculateBrokenAvailabilitiesPercentage();
-            return currentValue > limit;
-        }
-
-        private double calculateBrokenAvailabilitiesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckAvailability));
+            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(_optimizationPreferences.General.AvailabilitiesValue);
         }
 
         private bool studentAvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseStudentAvailabilities)
                 return false;
-            double limit = _optimizationPreferences.General.StudentAvailabilitiesValue;
-            double currentValue = calculateBrokenStudentAvailabilitiesPercentage();
-            return currentValue > limit;
-        }
-
-        private double calculateBrokenStudentAvailabilitiesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckStudentAvailability));
-        }
-
-        private double calculateBrokenPercentage(Func<PermissionState> checkMethod)
-        {
-            int brokenDays = 0;
-            int allDays = 0;
-            IDictionary<DateOnly, IScheduleDay> originalState
-                = _matrixOriginalStateContainer.OldPeriodDaysState;
-            foreach (IScheduleDay scheduleDay in originalState.Values)
-            {
-                _restrictionChecker.ScheduleDay = scheduleDay;
-                PermissionState permissionState = checkMethod();
-                if (permissionState != PermissionState.None)
-                    allDays++;
-                if (permissionState == PermissionState.Broken)
-                    brokenDays++;
-            }
-            if (allDays == 0d)
-                return 0d;
-            return (double)brokenDays / (double)allDays;
+            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(_optimizationPreferences.General.StudentAvailabilitiesValue);
         }
     }
 }

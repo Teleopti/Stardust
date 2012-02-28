@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleService.SchedulingOptions)
                 .Return(_schedulingOptions).Repeat.AtLeastOnce();
             Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
-            Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+            Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                  .Return(false).Repeat.AtLeastOnce();
             Expect.Call(_optimizerPreferences.Rescheduling)
                 .Return(_reschedulingPreferences).Repeat.AtLeastOnce();
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void makeDecisionMakerFailure()
         {
-            Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+            Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                  .Return(false).Repeat.AtLeastOnce();
             Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                 .IgnoreArguments()
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleService.SchedulingOptions)
                     .Return(_schedulingOptions).Repeat.AtLeastOnce();
                 Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_optimizerPreferences.Rescheduling)
                     .Return(_reschedulingPreferences).Repeat.AtLeastOnce();
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_scheduleService.SchedulingOptions).Return(_schedulingOptions).Repeat.AtLeastOnce();
                 Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_optimizerPreferences.Rescheduling)
                     .Return(_reschedulingPreferences).Repeat.AtLeastOnce();
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.SchedulingOptions).Return(_schedulingOptions).Repeat.AtLeastOnce();
                 Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_reschedulingPreferences.ConsiderShortBreaks).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free).Repeat.Once();
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mockRepository.Record())
             {
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                     .Return(_removedDate);
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mockRepository.Record())
             {
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(false).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())
@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mockRepository.Record())
             {
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(true).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())

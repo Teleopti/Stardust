@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ILogWriter logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
 
-            if (movesOverMaxDaysLimit(logWriter))
+            if (movesOverMaxDaysLimit())
                 return false;
 
             ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            if (movesOverMaxDaysLimit(logWriter))
+            if (movesOverMaxDaysLimit())
             {
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private bool movesOverMaxDaysLimit(ILogWriter logWriter)
+        private bool movesOverMaxDaysLimit()
         {
-            return _overLimitDecider.OverLimit(logWriter);
+            return _overLimitDecider.OverLimit();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]

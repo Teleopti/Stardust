@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <param name="logWriter">The log writer.</param>
         /// <returns></returns>
-        bool OverLimit(ILogWriter logWriter);
+        bool OverLimit();
     }
 }

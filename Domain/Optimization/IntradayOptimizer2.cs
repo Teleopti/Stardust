@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
-        private readonly ILogWriter _log;
 
         public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
-            _log = new LogWriter<IntradayOptimizer2>();
         }
 
         public bool Execute()
@@ -160,7 +158,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool MovedDaysOverMaxDaysLimit()
         {
-            return _optimizationOverLimitDecider.OverLimit(_log);
+            return _optimizationOverLimitDecider.OverLimit();
         }
 
         public IPerson ContainerOwner

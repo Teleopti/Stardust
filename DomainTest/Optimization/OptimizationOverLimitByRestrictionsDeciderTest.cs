@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private OptimizationOverLimitByRestrictionDecider _target;
         private MockRepository _mocks;
-        private ILogWriter _logWriter;
 
         private IScheduleMatrixOriginalStateContainer _matrixOriginalStateContainer;
         private ICheckerRestriction _restrictionChecker;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mocks = new MockRepository();
-            _logWriter = new LogWriter<OptimizationOverLimitByRestrictionsDeciderTest>();
 
             _matrixOriginalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _restrictionChecker = _mocks.StrictMock<ICheckerRestriction>();
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyPreferencesUnderLimit()
         {
             _optimizationPreferences.General.UsePreferences = true;
-            _optimizationPreferences.General.PreferencesValue = 1;
+            _optimizationPreferences.General.PreferencesValue = 0;
 
             using (_mocks.Record())
             {
@@ -89,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -110,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyPreferencesOverLimit()
         {
             _optimizationPreferences.General.UsePreferences = true;
-            _optimizationPreferences.General.PreferencesValue = 0.4d;
+            _optimizationPreferences.General.PreferencesValue = 0.6d;
 
             using (_mocks.Record())
             {
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -146,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _matrixOriginalStateContainer,
                 _restrictionChecker,
                 _optimizationPreferences);
-            bool result = _target.OverLimit(_logWriter);
+            bool result = _target.OverLimit();
             Assert.IsFalse(result);
         }
 
@@ -176,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyMustHavesUnderLimit()
         {
             _optimizationPreferences.General.UseMustHaves = true;
-            _optimizationPreferences.General.MustHavesValue = 1;
+            _optimizationPreferences.General.MustHavesValue = 0;
 
             using (_mocks.Record())
             {
@@ -207,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -228,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -237,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyMustHavesOverLimit()
         {
             _optimizationPreferences.General.UseMustHaves = true;
-            _optimizationPreferences.General.MustHavesValue = 0.4d;
+            _optimizationPreferences.General.MustHavesValue = 0.6d;
 
             using (_mocks.Record())
             {
@@ -249,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -264,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _matrixOriginalStateContainer,
                 _restrictionChecker,
                 _optimizationPreferences);
-            bool result = _target.OverLimit(_logWriter);
+            bool result = _target.OverLimit();
             Assert.IsFalse(result);
         }
 
@@ -294,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -325,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -346,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -367,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -387,7 +385,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -418,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -436,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyAvailabilitiesUnderLimit()
         {
             _optimizationPreferences.General.UseAvailabilities = true;
-            _optimizationPreferences.General.AvailabilitiesValue = 1;
+            _optimizationPreferences.General.AvailabilitiesValue = 0;
 
             using (_mocks.Record())
             {
@@ -448,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -469,7 +467,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -478,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyAvailabilitiesOverLimit()
         {
             _optimizationPreferences.General.UseAvailabilities = true;
-            _optimizationPreferences.General.AvailabilitiesValue = 0.4d;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.6d;
 
             using (_mocks.Record())
             {
@@ -490,7 +488,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -510,7 +508,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -541,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -559,7 +557,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyStudentAvailabilitiesUnderLimit()
         {
             _optimizationPreferences.General.UseStudentAvailabilities = true;
-            _optimizationPreferences.General.StudentAvailabilitiesValue = 1;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0;
 
             using (_mocks.Record())
             {
@@ -571,7 +569,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -592,7 +590,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -601,7 +599,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyStudentAvailabilitiesOverLimit()
         {
             _optimizationPreferences.General.UseStudentAvailabilities = true;
-            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.4d;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.6d;
 
             using (_mocks.Record())
             {
@@ -613,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -633,7 +631,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -664,7 +662,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrixOriginalStateContainer,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }

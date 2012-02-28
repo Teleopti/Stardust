@@ -56,24 +56,24 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizerPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
         {
-            var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
-            var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
-            var schedulingOptions = new SchedulingOptions();
+            //var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
+            //var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
+            //var schedulingOptions = new SchedulingOptions();
 
-            var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
-            schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizationPreferences, schedulingOptions);
+            //var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
+            //schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizationPreferences, schedulingOptions);
 
-            IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
-            foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
-                lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
-            IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
-            meetingDayLocker.Execute();
-            IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
-            personalShiftLocker.Execute();
-            IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
-            matrixOvertimeLocker.Execute();
-            IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
-            noMainShiftLocker.Execute();
+            //IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
+            //foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
+            //    lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
+            //IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
+            //meetingDayLocker.Execute();
+            //IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
+            //personalShiftLocker.Execute();
+            //IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
+            //matrixOvertimeLocker.Execute();
+            //IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
+            //noMainShiftLocker.Execute();
         }
 
         private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)

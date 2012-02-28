@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
         private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
-        private readonly ILogWriter _log;
 
         public ExtendReduceTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _originalStateContainerForTagChange = originalStateContainerForTagChange;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
-            _log = new LogWriter<ExtendReduceTimeOptimizer>();
         }
 
         public bool Execute()
@@ -186,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool movedDaysOverOrAtMaxDaysLimit()
         {
-            return _optimizationOverLimitDecider.OverLimit(_log);
+            return _optimizationOverLimitDecider.OverLimit();
         }
     }
 }

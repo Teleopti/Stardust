@@ -15,14 +15,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private int _moveMaxDayOff;
         int _moveMaxWorkShift;
-        private ILogWriter _logWriter;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _logWriter = new LogWriter<OptimizationOverLimitByMovedDaysDeciderTest>();
         }
 
         [Test]
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByMovedDaysDecider(_originalStateContainer, _moveMaxDayOff, _moveMaxWorkShift);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByMovedDaysDecider(_originalStateContainer, _moveMaxDayOff, _moveMaxWorkShift);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsFalse(result);
             }
         }
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByMovedDaysDecider(_originalStateContainer, _moveMaxDayOff, _moveMaxWorkShift);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -128,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByMovedDaysDecider(_originalStateContainer, _moveMaxDayOff, _moveMaxWorkShift);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }
@@ -156,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByMovedDaysDecider(_originalStateContainer, _moveMaxDayOff, _moveMaxWorkShift);
-                bool result = _target.OverLimit(_logWriter);
+                bool result = _target.OverLimit();
                 Assert.IsTrue(result);
             }
         }

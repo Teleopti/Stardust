@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                     .Return(false)
                     .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
                 Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly())).Return(false);
                 Expect.Call(() => _rollbackService.Rollback());
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                     .Return(false);
             }
 
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(5).Repeat.AtLeastOnce();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).
                     IgnoreArguments().Return(_effectiveRestriction).Repeat.AtLeastOnce();
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
             .Return(false)
             .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly);
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
-                Expect.Call(_optimizationOverLimitDecider.OverLimit(null)).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                     .Return(false)
                     .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
