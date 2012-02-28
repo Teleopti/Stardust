@@ -37,32 +37,30 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChangeMyPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.TypeText(newPassword);
-			page.PasswordValidation.TypeText(newPassword);
-			page.OldPassword.TypeText(TestData.CommonPassword);
+			page.Password.Value = newPassword;
+			page.PasswordValidation.Value = newPassword;
+			page.OldPassword.Value = TestData.CommonPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
-			page.ConfirmButton.WaitUntilEnabled();
-			page.ConfirmButton.Click();
+			page.ConfirmButton.EventualClick();
 		}
 
 		[When(@"I change my password using incorrect current password")]
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.TypeText(newPassword);
-			page.PasswordValidation.TypeText(newPassword);
-			page.OldPassword.TypeText(TestData.CommonPassword + "fel");
+			page.Password.Value = newPassword;
+			page.PasswordValidation.Value = newPassword;
+			page.OldPassword.Value = TestData.CommonPassword + "fel";
 			Browser.Current.Eval("$('input#password').keyup();");
-			page.ConfirmButton.WaitUntilEnabled();
-			page.ConfirmButton.Click();
+			page.ConfirmButton.EventualClick();
 		}
 
 		[When(@"I am changing password using incorrect confirm password")]
 		public void WhenIAmChangingPasswordUsingIncorrectConfirmPassword()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.TypeText(newPassword);
-			page.PasswordValidation.TypeText(newPassword + "fel");
+			page.Password.Value = newPassword;
+			page.PasswordValidation.Value = newPassword + "fel";
 			page.OldPassword.TypeText(TestData.CommonPassword);
 			Browser.Current.Eval("$('input#password').keyup();");
 		}
