@@ -6,8 +6,8 @@
 		<Message Text="CCCVersion is: $(CCCVersion)" Importance="high" />
 
 		<Message Text="Building Azure packages ..." Importance="high" />
-		<Message Text="&quot;$(CallingCCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
-		<Exec Command="&quot;$(CallingCCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
+		<Message Text="&quot;D:\Installation\PreviousBuilds\$(CCCVersion)\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
+		<Exec Command="&quot;D:\Installation\PreviousBuilds\$(CCCVersion)\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
 		<Message Text="Building Azure packages . Done!" Importance="high" />
 	</Target>
 
