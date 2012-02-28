@@ -2811,6 +2811,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;Browser Default&gt;.
+        /// </summary>
+        public static string BrowserDefault {
+            get {
+                return ResourceManager.GetString("BrowserDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgeted leave.
         /// </summary>
         public static string BudgetedLeave {
@@ -4879,6 +4888,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom reports.
+        /// </summary>
+        public static string CustomReports {
+            get {
+                return ResourceManager.GetString("CustomReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom shrinkage.
         /// </summary>
         public static string CustomShrinkage {
@@ -5130,6 +5148,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DateExclusion {
             get {
                 return ResourceManager.GetString("DateExclusion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        public static string DateFormat {
+            get {
+                return ResourceManager.GetString("DateFormat", resourceCulture);
             }
         }
         
@@ -14457,6 +14484,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string PasswordOld {
+            get {
+                return ResourceManager.GetString("PasswordOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The new password does not follow the password policy..
         /// </summary>
         public static string PasswordPolicyWarning {
@@ -14489,6 +14525,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PasswordSettings {
             get {
                 return ResourceManager.GetString("PasswordSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong password!.
+        /// </summary>
+        public static string PasswordWrong {
+            get {
+                return ResourceManager.GetString("PasswordWrong", resourceCulture);
             }
         }
         
@@ -21225,6 +21270,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents..
+        /// </summary>
+        public static string TooManyAgentsIsUsedWarning {
+            get {
+                return ResourceManager.GetString("TooManyAgentsIsUsedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
         public static string Total {
@@ -21688,6 +21742,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
         

@@ -1,0 +1,25 @@
+﻿@{
+	Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Browser Detection</title>
+		<script type="text/javascript">
+			var jQuery = jQuery || {};
+			jQuery.browser = jQuery.browser || {};
+		</script>
+		<script src="@Url.Content("~/Content/scripts/detectmobilebrowser.js")"> </script>
+		<script>
+			var orig = '@HttpUtility.JavaScriptStringEncode((string)Html.ViewContext.RequestContext.RouteData.Values["origin"])';
+			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
+			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
+			window.location = jQuery.browser.mobile && !orig.length ? mobile : desktop;
+		</script>
+	</head>
+	<body>
+		Goto @Html.ActionLink("Desktop","SignIn", "Authentication") or @Html.ActionLink("Mobile","MobileSignIn", "Authentication")
+	</body>
+</html>
+
+

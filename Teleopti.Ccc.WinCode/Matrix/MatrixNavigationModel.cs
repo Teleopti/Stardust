@@ -68,6 +68,118 @@ namespace Teleopti.Ccc.WinCode.Matrix
                 return _onlineReportForeignIdList.Contains(obj.ForeignId);
             }
         }
+// "0E3F340F-C05D-4A98-AD23-A019607745C9"
+//1
+//"5C133E8F-DF3E-48FC-BDEF-C6586B009481"
+//2
+//"7F918C26-4044-4F6B-B0AE-7D27625D052E"
+//3
+//"C5B88862-F7BE-431B-A63F-3DD5FF8ACE54"
+//4
+//"61548D4F-7D2C-4865-AB76-8A4D01800F1C"
+//6
+//"720A5D88-D2B5-49E1-83EE-8D05239094BF"
+//7
+//"C232D751-AEC5-4FD7-A274-7C56B99E8DEC"
+//8
+//"AE758403-C16B-40B0-B6B2-E8F6043B6E04"
+//9
+//"8D8544E4-6B24-4C1C-8083-CBE7522DD0E0"
+//10
+//"71BDB56D-C12F-489B-8275-04873A668D90"
+//11
+//"0065AA84-FD47-4022-ABE3-DD1B54FD096C"
+//12
+//"D1ADE4AC-284C-4925-AEDD-A193676DBD2F"
+//13
+//"F7937D02-FA54-4679-AF70-D9798E1690D5"
+//14
+//"4F5DDE81-C264-4756-B1F1-F65BFE54B16B"
+//15
+//"80D31D84-68DB-45A7-977F-75C3250BB37C"
+//16
+//"132E3AF2-3557-4EA7-813E-05CD4869D5DB"
+//17
+//"63243F7F-016E-41D1-9432-0787D26F9ED5"
+//18
+//"009BCDD2-3561-4B59-A719-142CD9216727"
+//19
+//"35649814-4DE8-4CB3-A51C-DDBA2A073E09"
+//20
+//"BAA446C2-C060-4F39-83EA-B836B1669331"
+//21
+//"D45A8874-57E1-4EB9-826D-E216A4CBC45B"
+//22
+//"EB977F5B-86C6-4D98-BEDF-B79DC562987B"
+//23
+//"479809D8-4DAE-4852-BF67-C98C3744918D"
+//24
+//"E15400E7-892A-4EDE-9377-AE693AA56829"
+//25
+//"2F222F0A-4571-4462-8FBE-0C747035994A"
+//26
+//"8DE1AB0F-32C2-4619-A2B2-97385BE4C49C"
+//27
+        private static IEnumerable<string> analysisReports()
+        {
+            // old "21", "18", "17", "19", "26"
+            return    new []{
+                "132E3AF2-3557-4EA7-813E-05CD4869D5DB",
+                "63243F7F-016E-41D1-9432-0787D26F9ED5",
+                "009BCDD2-3561-4B59-A719-142CD9216727",
+                "BAA446C2-C060-4F39-83EA-B836B1669331",
+                "2F222F0A-4571-4462-8FBE-0C747035994A"};
+        }
+
+        private static IEnumerable<string> preferencesReports()
+        {
+            // old "2", "1" 
+            return new[]{
+                "0E3F340F-C05D-4A98-AD23-A019607745C9",
+                "5C133E8F-DF3E-48FC-BDEF-C6586B009481"};
+        }
+
+        private static IEnumerable<string> EmployeeReports()
+        {
+            // old "4", "20", "22","23", "25", "27"
+            return new[]{
+                "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54",
+                "35649814-4DE8-4CB3-A51C-DDBA2A073E09",
+                "D45A8874-57E1-4EB9-826D-E216A4CBC45B",
+                "EB977F5B-86C6-4D98-BEDF-B79DC562987B",
+                "E15400E7-892A-4EDE-9377-AE693AA56829",
+                "8DE1AB0F-32C2-4619-A2B2-97385BE4C49C"};
+        }
+
+        private static IEnumerable<string> agentReports()
+        {
+            // old "15", "13", "12", "16", "11", "24" 
+            return new[]{
+                "71BDB56D-C12F-489B-8275-04873A668D90",
+                "0065AA84-FD47-4022-ABE3-DD1B54FD096C",
+                "D1ADE4AC-284C-4925-AEDD-A193676DBD2F",
+                "F7937D02-FA54-4679-AF70-D9798E1690D5",
+                "4F5DDE81-C264-4756-B1F1-F65BFE54B16B",
+                "80D31D84-68DB-45A7-977F-75C3250BB37C",
+                "479809D8-4DAE-4852-BF67-C98C3744918D"};
+        }
+
+        private static IEnumerable<string> forecastReports()
+        {
+            // old "7", "10" 
+            return new[]{
+                "720A5D88-D2B5-49E1-83EE-8D05239094BF",
+                "8D8544E4-6B24-4C1C-8083-CBE7522DD0E0"};
+        }
+
+        private static IEnumerable<string> serviceLevelReports()
+        {
+            // old "8", "9", "14" 
+            return new[]{
+                "C232D751-AEC5-4FD7-A274-7C56B99E8DEC",
+                "AE758403-C16B-40B0-B6B2-E8F6043B6E04",
+                "F7937D02-FA54-4679-AF70-D9798E1690D5"};
+        }
 
         public IEnumerable<IMatrixFunctionGroup> GroupedPermittedMatrixFunctions
         {
@@ -83,7 +195,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.ScheduleAnalysis,
                                         ApplicationFunctions =
                                             (from a in PermittedMatrixFunctions
-                                             where new[] {"21", "18", "17", "19", "26"}.Contains(a.ForeignId)
+                                             where analysisReports().Contains(a.ForeignId)
                                              select a).ToList()
                                     },
                                 new MatrixFunctionGroup
@@ -91,7 +203,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.Preferences,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"2", "1"}.Contains(a.ForeignId)
+                                            where preferencesReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
@@ -99,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.EmployeeInformation,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"4", "20", "22","23", "25", "27"}.Contains(a.ForeignId)
+                                            where EmployeeReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
@@ -107,7 +219,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.AgentPerformance,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"15", "13", "12", "16", "11", "24"}.Contains(a.ForeignId)
+                                            where agentReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
@@ -115,7 +227,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.ForecastingPerformance,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"10", "7"}.Contains(a.ForeignId)
+                                            where forecastReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
@@ -123,7 +235,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.ServiceLevelAnalysis,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"8", "14", "9"}.Contains(a.ForeignId)
+                                            where serviceLevelReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
@@ -131,7 +243,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         LocalizedDescription = Resources.Improve,
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
-                                            where new[] {"3"}.Contains(a.ForeignId)
+                                            where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId)
                                             select a
                                     }
                             };

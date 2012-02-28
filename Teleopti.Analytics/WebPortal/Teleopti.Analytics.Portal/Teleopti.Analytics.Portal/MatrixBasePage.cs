@@ -13,33 +13,35 @@ namespace Teleopti.Analytics.Portal
 {
     public class MatrixBasePage : Page
     {
+        private Guid _reportId;
 
-        private int _reportId;
-        private Guid _groupPageCode;
+    	public MatrixBasePage()
+		{
+			IsBrowseTargetPerformanceManager = false;
+		}
 
         void Page_Init(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(Request.QueryString["PM"]))
             {
-                Response.Redirect("~/PerformanceManager/default.aspx", true);
-                return;
+				if (Request.QueryString["PM"] == "1")
+				{
+					IsBrowseTargetPerformanceManager = true;
+				}
             }
             if (!string.IsNullOrEmpty(Request.QueryString.Get("REPORTID")))
             {
-                _reportId = int.Parse(Request.QueryString["REPORTID"], CultureInfo.CurrentCulture);
+                if (!TryParseGuid(Request.QueryString["REPORTID"], out _reportId))
+                return; 
 
-                CommonReports commonReports = new CommonReports(ConnectionString, _reportId);
-                int groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
+                var commonReports = new CommonReports(ConnectionString, _reportId);
+                Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
                 string groupPageComboBoxControlCollectionIdName = string.Format("Parameter$Drop{0}", groupPageComboBoxControlCollectionId);
-                if (string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName)))
-                {
-                    _groupPageCode = Selector.BusinessHierarchyCode;
-                }
-                else
-                {
-                    _groupPageCode = new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
-                }
-                Context.Session["GroupPageCode"] = _groupPageCode;
+            	
+				GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
+            	                	? Selector.BusinessHierarchyCode
+            	                	: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
+                Context.Session["GroupPageCode"] = GroupPageCode;
             }
 
 
@@ -50,19 +52,36 @@ namespace Teleopti.Analytics.Portal
 
             if (string.IsNullOrEmpty(Request.QueryString["FORCEFORMSLOGIN"]) == false)
             {
-                if (Request.QueryString["FORCEFORMSLOGIN"] == "true" && Context.Session["USERNAME"] == null)
-                {
-                    var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
-                    if (sec.Mode == AuthenticationMode.Windows)
-                    {
-                        Response.Redirect(LoginUrl());
-                    }
-                }
+				Context.Session["FORCEFORMSLOGIN"] = false;
+				if (Request.QueryString["FORCEFORMSLOGIN"] == "true")
+				{
+					Context.Session["FORCEFORMSLOGIN"] = true;
+					if (Context.Session["USERNAME"] == null)
+					{
+						var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
+						if (sec.Mode == AuthenticationMode.Windows)
+							Response.Redirect(LoginUrl());
+					}
+				}
             }
 
             setCulture();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        private static bool TryParseGuid(string reportId, out Guid guid)
+        {
+            try
+            {
+                guid = new Guid(reportId);
+            }
+            catch (Exception)
+            {
+                guid = new Guid();
+                return false;
+            }
+            return true;
+        }
         private void setCulture()
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(TheUser.LangId, false);
@@ -80,24 +99,21 @@ namespace Teleopti.Analytics.Portal
             {
                 if (Context.Session["USER"] == null)
                 {
-                    if (HttpContext.Current.User == null && Context.Session["USERNAME"] == null)
-                    {
-                        Response.Redirect(LoginUrl());
-                    }
-                    if (HttpContext.Current.User != null && Context.Session["USERNAME"] == null)
-                    {
-                        Context.Session["USERNAME"] = HttpContext.Current.User.Identity.Name;
-                    }
-                    LogOnUtilities loginUtil = new LogOnUtilities(ConnectionString);
+                	if (HttpContext.Current.User == null && Context.Session["USERNAME"] == null)
+                		Response.Redirect(LoginUrl());
+                	
+					if (HttpContext.Current.User != null && Context.Session["USERNAME"] == null)
+                		Context.Session["USERNAME"] = HttpContext.Current.User.Identity.Name;
+                	
+					var loginUtil = new LogOnUtilities(ConnectionString);
                     DataTable t = loginUtil.GetUserInfo((string)Context.Session["USERNAME"]);
                     if (t.Rows.Count > 0)
                     {
-                        DataRow r = t.Rows[0];
+                        DataRow row = t.Rows[0];
 
-                        //UserInfo inf = new UserInfo(r.Field<string>("UserName"), r.Field<int>("LangID"), r.Field<int>("CultureID"), r.Field<Guid>("UserID"), r.Field<string>("PersonName"));
-                        UserInfo inf = new UserInfo(r.Field<string>("UserName"), r.Field<int>("LangID"),
-                                                    r.Field<int>("CultureID"), r.Field<Guid>("UserID"),
-                                                    r.Field<string>("PersonName"));
+                        var inf = new UserInfo(row.Field<string>("UserName"), row.Field<int>("LangID"),
+                                                    row.Field<int>("CultureID"), row.Field<Guid>("UserID"),
+                                                    row.Field<string>("PersonName"));
                         Context.Session["USER"] = inf;
                     }
                     else
@@ -142,24 +158,25 @@ namespace Teleopti.Analytics.Portal
             }
         }
 
-        protected int ReportId
+        protected Guid ReportId
         {
             get { return _reportId; }
         }
 
         protected Guid BusinessUnitCode { get; private set; }
 
-        /// <summary>
-        /// Gets the id (code) of the group page.
-        /// </summary>
-        /// <value>The id of the group page.</value>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2010-09-02
-        /// </remarks>
-        protected Guid GroupPageCode
-        {
-            get { return _groupPageCode; }
-        }
+    	/// <summary>
+    	/// Gets the id (code) of the group page.
+    	/// </summary>
+    	/// <value>The id of the group page.</value>
+    	/// <remarks>
+    	/// Created by: henryg
+    	/// Created date: 2010-09-02
+    	/// </remarks>
+    	protected Guid GroupPageCode { get; private set; }
+
+		protected bool IsBrowseTargetPerformanceManager { get; private set; }
+
+		protected static string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
     }
 }

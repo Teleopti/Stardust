@@ -23,30 +23,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="domainObjectId">The domain object id.</param>
         /// <param name="domainObjectType">Type of the domain object.</param>
         /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(DateTime eventStartDate,
-                              DateTime eventEndDate,
-                              Guid moduleId,
-                              Guid referenceObjectId,
-                              Type referenceObjectType,
-                              Guid domainObjectId,
-                              Type domainObjectType,
-                              DomainUpdateType updateType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
         /// <param name="domainObject">The domain object.</param>
         /// <remarks>
         /// Created by: ankarlp
@@ -61,93 +37,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
                               Type domainObjectType,
                               DomainUpdateType updateType,
                               byte[] domainObject);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(Guid referenceObjectId, 
-                              Type referenceObjectType, 
-                              Guid domainObjectId, 
-                              Type domainObjectType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(Guid referenceObjectId,
-                              Type referenceObjectType,
-                              Guid domainObjectId,
-                              Type domainObjectType,
-                              DomainUpdateType updateType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(Guid moduleId,
-                              Guid referenceObjectId,
-                              Type referenceObjectType,
-                              Guid domainObjectId,
-                              Type domainObjectType,
-                              DomainUpdateType updateType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(Guid moduleId,
-                              Guid referenceObjectId,
-                              Type referenceObjectType,
-                              Guid domainObjectId,
-                              Type domainObjectType,
-                              DomainUpdateType updateType,
-                              byte[] domainObject);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
 
         /// <summary>
         /// Sends the event message.
@@ -166,41 +55,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// </summary>
         /// <param name="eventMessages">The event messages.</param>
         void SendEventMessages(IEventMessage[] eventMessages);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        void SendEventMessage(Guid domainObjectId, Type domainObjectType);
-
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        void SendEventMessage(Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject);
 
         /// <summary>
         /// Registers the event subscription.
@@ -258,67 +112,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
 
         /// <summary>
-        /// Method for Raptor Developers to Register Event Subscriptions,
-        /// a delegate and filter criterias including dates is taken as arguments.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(  EventHandler<EventMessageArgs> eventMessageHandler,
-                                         Guid referenceObjectId,
-                                         Type referenceObjectType,
-                                         Guid domainObjectId,
-                                         Type domainObjectType);
-
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler,
-                                       Type referenceObjectType,
-                                       Type domainObjectType,
-                                       DateTime startDate,
-                                       DateTime endDate);
-
-        /// <summary>
         /// Unregister a delegate and all filters associated will be unregistered as well.
         /// </summary>
         /// <param name="eventMessageHandler"></param>
@@ -347,17 +140,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         IEventMessage CreateEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
 
         /// <summary>
-        /// Create event message, ignoring dates but with payload.
-        /// </summary>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <param name="domainObject"></param>
-        /// <returns></returns>
-        IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject);
-
-        /// <summary>
         /// Create Event Message, consider event range dates but not payload.
         /// </summary>
         /// <param name="eventStartDate"></param>
@@ -382,48 +164,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="updateType">Type of the update.</param>
         /// <returns></returns>
         IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
-
-        /// <summary>
-        /// Creates Event Message, considers dates and takes a payload.
-        /// </summary>
-        /// <param name="eventStartDate"></param>
-        /// <param name="eventEndDate"></param>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <param name="domainObject"></param>
-        /// <returns></returns>
-        IEventMessage CreateEventMessage(DateTime eventStartDate, 
-                                         DateTime eventEndDate, 
-                                         Guid moduleId, 
-                                         Guid domainObjectId, 
-                                         Type domainObjectType, 
-                                         DomainUpdateType updateType, 
-                                         byte[] domainObject);
-
-        /// <summary>
-        /// Creates Event Message, considers dates and takes a payload.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <returns></returns>
-        IEventMessage CreateEventMessage(DateTime eventStartDate,
-                                         DateTime eventEndDate,
-                                         Guid moduleId,
-                                         Guid referenceObjectId,
-                                         Type referenceObjectType,
-                                         Guid domainObjectId,
-                                         Type domainObjectType,
-                                         DomainUpdateType updateType,
-                                         byte[] domainObject);
 
         /// <summary>
         /// The configuration settings of this instance of the message broker, which is received from the server.
@@ -620,10 +360,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// Created date: 16/04/2009
         /// </remarks>
         bool IsInitialized { get; }
-
-        ///<summary>
-        ///</summary>
-        string ServicePath { get; }
 
         /// <summary>
         /// Occurs when [event message handler].

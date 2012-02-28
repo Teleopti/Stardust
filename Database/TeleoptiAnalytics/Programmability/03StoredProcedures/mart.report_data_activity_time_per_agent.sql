@@ -11,6 +11,7 @@ GO
 ---		2011-06-22	DavidJ	Azure fix
 --		2012-01-09	xxx		Passed BU to ReportAgents
 --		2012-01-26	JN		Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Activity per Agent
 -- =============================================
 
@@ -31,7 +32,7 @@ CREATE PROCEDURE [mart].[report_data_activity_time_per_agent]
 @activity_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

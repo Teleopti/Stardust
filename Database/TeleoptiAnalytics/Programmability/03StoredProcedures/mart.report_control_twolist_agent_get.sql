@@ -10,7 +10,7 @@ CREATE PROC [mart].[report_control_twolist_agent_get]
 @date_to		datetime,
 @site_id		int,
 @team_id		int,
-@report_id		int,
+@report_id		uniqueidentifier,
 @person_code	uniqueidentifier,
 @language_id	int,
 @bu_id uniqueidentifier
@@ -28,6 +28,7 @@ Last modified:20090330
 20101108 Bug #12320 DJ - Putting local date stuff in a function
 20110117 PBI #12344 ME - Use person code instead of person id
 2012-01-09 Pass BU to AllOwnedAgents
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 /*

@@ -6,7 +6,7 @@ GO
 CREATE Proc [mart].[report_control_twolist_queue_get]
 @skill_set nvarchar(max),
 @workload_set nvarchar(max),
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
@@ -17,6 +17,7 @@ Create Date: 2008-08-07
 Last modified:20080910
 20080910 Added parameter @bu_id KJ
 20090211 Added new mart schema KJ 
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 CREATE TABLE #skills(id int)
 INSERT INTO #skills

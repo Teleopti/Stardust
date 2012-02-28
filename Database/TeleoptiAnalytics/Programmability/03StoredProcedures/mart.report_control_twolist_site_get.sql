@@ -11,13 +11,14 @@ CREATED:	20080915 KJ
 -- =============================================
 -- 2009-02-11	KaJe	Added new mart schema 
 -- 2009-04-27	DaJo	maxdate format (default input)
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 */
 
 CREATE Proc [mart].[report_control_twolist_site_get]
 
 @date_from datetime,
 @date_to datetime = '20591231',
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier,
 @language_id int,
 @bu_id uniqueidentifier

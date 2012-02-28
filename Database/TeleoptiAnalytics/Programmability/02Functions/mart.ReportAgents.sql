@@ -8,6 +8,7 @@ GO
 --				2012-01-09 Mattias E: Added BU
 -- Description:	Returns the agents relevant for reporting,
 --				based on chosen filters and permissions
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =======================================================
 CREATE FUNCTION [mart].[ReportAgents]
 (
@@ -20,7 +21,7 @@ CREATE FUNCTION [mart].[ReportAgents]
 	@team_id int,
 	@agent_code uniqueidentifier,
 	@person_code uniqueidentifier,
-	@report_id int,
+	@report_id uniqueidentifier,
 	@business_unit_code uniqueidentifier
 )
 RETURNS

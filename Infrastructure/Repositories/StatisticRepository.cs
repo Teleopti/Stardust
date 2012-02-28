@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private static IQuery createReportQuery(IStatelessUnitOfWork uow)
         {
             return session(uow).CreateSQLQuery("exec mart.raptor_reports_load")
-                .AddScalar("ReportId", NHibernateUtil.Int32)
+                .AddScalar("ReportId", NHibernateUtil.Guid)
                 .AddScalar("ReportName", NHibernateUtil.String)
                 .AddScalar("ReportUrl", NHibernateUtil.String)
                 .AddScalar("TargetFrame", NHibernateUtil.String)

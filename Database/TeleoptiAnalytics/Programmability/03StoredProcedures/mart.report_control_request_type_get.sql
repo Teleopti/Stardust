@@ -11,11 +11,12 @@ GO
 -- Date			Author	Description
 ------------------------------------------------
 -- yyyy-mm-dd	AB		some change
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --exec [mart].[report_control_request_type_get] @report_id=1,@person_code='8024B280-4698-4DE1-8E7C-EE162E6A1A75',@language_id=1033,@bu_id='8024B280-4698-4DE1-8E7C-EE162E6A1A75'
 
 CREATE PROCEDURE [mart].[report_control_request_type_get] 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
