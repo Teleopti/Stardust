@@ -19,6 +19,7 @@
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI30000'">true</RunWebBehaviorTests>
 		<AzureDeploy>false</AzureDeploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">true</AzureDeploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
