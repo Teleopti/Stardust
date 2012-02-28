@@ -174,8 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the team-picker")]
 		public void IOpenTheTeamPicker()
 		{
-			Pages.Pages.TeamSchedulePage.TeamPicker.Button.EventualClick();
-			Pages.Pages.TeamSchedulePage.TeamPicker.Menu.WaitUntilDisplayed();
+			Pages.Pages.TeamSchedulePage.TeamPicker.Open();
 		}
 
 		[Then(@"I should see the team-picker with both teams")]
