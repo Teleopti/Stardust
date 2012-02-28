@@ -191,6 +191,7 @@
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
+    <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />

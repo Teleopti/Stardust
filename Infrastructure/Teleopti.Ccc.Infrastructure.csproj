@@ -185,6 +185,8 @@
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
+    <Compile Include="Licensing\LicenseStatusRepositories.cs" />
+    <Compile Include="Licensing\LicenseStatusUpdater.cs" />
     <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />

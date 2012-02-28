@@ -640,24 +640,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
 
-        public int NumberOfActiveAgents()
-        {
-            throw new NotImplementedException();
-        }
-
-        ILicenseStatusXml IRaptorRepository.LicenseStatus
+        public ILicenseStatusUpdater LicenseStatusUpdater
         {
             get { throw new NotImplementedException(); }
-        }
-
-        public void SaveLicenseStatus(string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILicenseService XmlLicenseService(int numberOfActiveAgents)
-        {
-            throw new NotImplementedException();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

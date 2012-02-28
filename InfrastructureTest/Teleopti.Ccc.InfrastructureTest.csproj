@@ -216,6 +216,8 @@
     </Compile>
     <Compile Include="Foundation\SystemUserSpecificationTest.cs" />
     <Compile Include="Licensing\AgreementProviderTest.cs" />
+    <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />
+    <Compile Include="Licensing\LicenseStatusUpdaterTest.cs" />
     <Compile Include="Licensing\LicenseStatusXmlTest.cs" />
     <Compile Include="Licensing\LicenseVerifierFactoryTest.cs" />
     <Compile Include="Licensing\LicenseVerifierTest.cs" />

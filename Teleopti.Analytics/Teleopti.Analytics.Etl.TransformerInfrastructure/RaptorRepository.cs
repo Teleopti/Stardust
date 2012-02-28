@@ -32,6 +32,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	{
 		private readonly string _dataMartConnectionString;
 		private IsolationLevel _isolationLevel;
+	    private ILicenseStatusUpdater _licenseStatusUpdater;
 
 		public RaptorRepository(string dataMartConnectionString, string isolationLevel)
 		{
@@ -602,44 +603,19 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return 1;
 		}
 
-	    public int NumberOfActiveAgents()
+	    public ILicenseStatusUpdater LicenseStatusUpdater
 	    {
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var rep = new PersonRepository(UnitOfWorkFactory.Current);
-                return rep.NumberOfActiveAgents();
-            }
-	    }
-
-	    public ILicenseStatusXml LicenseStatus
-	    {
-            get
-            {
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        get {
+                if (_licenseStatusUpdater == null)
                 {
-                    var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
-                    var status = rep.LoadAll().First();
-                    return new LicenseStatusXml(XDocument.Parse(status.XmlString));
+                    _licenseStatusUpdater =
+                        new LicenseStatusUpdater(new LicenseStatusRepositories(UnitOfWorkFactory.Current,
+                                                                               new RepositoryFactory()));
                 }
-            }
+	            return _licenseStatusUpdater;
+	        }
 	    }
-
-	    public void SaveLicenseStatus(string value)
-	    {
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var rep = new LicenseStatusRepository(uow);
-                var status = new LicenseStatus() { XmlString = value };
-                rep.Add(status);
-                uow.PersistAll();
-            }
-	    }
-
-	    public ILicenseService XmlLicenseService(int numberOfActiveAgents)
-	    {
-            return new XmlLicenseService(new LicenseRepository(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork()), numberOfActiveAgents);
-	    }
-
+        
 	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();

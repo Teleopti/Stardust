@@ -200,9 +200,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		int PersistRequest(DataTable dataTable);
     	int FillFactRequestMart(DateTimePeriod period);
     	int PerformPurge();
-        int NumberOfActiveAgents();
-        ILicenseStatusXml LicenseStatus { get; }
-        void SaveLicenseStatus(string value);
-        ILicenseService XmlLicenseService(int numberOfActiveAgents);
+        ILicenseStatusUpdater LicenseStatusUpdater { get; }
     }
 }
