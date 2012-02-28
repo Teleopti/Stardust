@@ -166,6 +166,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private void SetComparisonFromOutlier(ITaskOwner day, TaskOwnerPeriod statisticsForOutlier, TotalDayItem totalDayItem, double trendFactor)
         {
             double totalTaskIndex = totalDayItem.TaskIndex == 0 ? 1 * trendFactor : totalDayItem.TaskIndex;
