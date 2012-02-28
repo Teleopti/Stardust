@@ -131,3 +131,40 @@ UPDATE ApplicationFunction SET ForeignId = '2F222F0A-4571-4462-8FBE-0C747035994A
 WHERE ForeignId = '26' AND ForeignSource = 'Matrix'
 UPDATE ApplicationFunction SET ForeignId = '8DE1AB0F-32C2-4619-A2B2-97385BE4C49C'
 WHERE ForeignId = '27' AND ForeignSource = 'Matrix'
+
+-- =============================================
+-- Author:		Ola
+-- Create date: 2012-02-28
+-- Description:	New LicenseStatus table
+-- =============================================
+CREATE TABLE [dbo].[LicenseStatus](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Version] [int] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedBy] [uniqueidentifier] NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[UpdatedOn] [datetime] NOT NULL,
+	[XmlString] [nvarchar](4000) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LicenseStatus]  WITH CHECK ADD  CONSTRAINT [FK_LicenseStatus_Person1] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[Person] ([Id])
+GO
+
+ALTER TABLE [dbo].[LicenseStatus] CHECK CONSTRAINT [FK_LicenseStatus_Person1]
+GO
+
+ALTER TABLE [dbo].[LicenseStatus]  WITH CHECK ADD  CONSTRAINT [FK_LicenseStatus_Person2] FOREIGN KEY([UpdatedBy])
+REFERENCES [dbo].[Person] ([Id])
+GO
+
+ALTER TABLE [dbo].[LicenseStatus] CHECK CONSTRAINT [FK_LicenseStatus_Person2]
+GO
+
+
