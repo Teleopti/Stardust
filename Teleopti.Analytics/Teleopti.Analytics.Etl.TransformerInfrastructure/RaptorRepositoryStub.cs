@@ -640,13 +640,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public ILicenseStatusUpdater LicenseStatusUpdater
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public ILicenseStatus LicenseStatus
         {
             get { throw new NotImplementedException(); }
         }
