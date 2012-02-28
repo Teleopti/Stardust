@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         }
 
         [Test]
-        public void ShouldAddStatusTorepository()
+        public void ShouldAddStatusToRepository()
         {
             var uow = _mocks.StrictMock<IUnitOfWork>();
             var licenseStatusRep = _mocks.StrictMock<ILicenseStatusRepository>();

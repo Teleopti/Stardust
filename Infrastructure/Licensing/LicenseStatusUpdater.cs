@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 numberOfActiveAgents = _licenseStatusRepositories.NumberOfActiveAgents();
 
                 // to get one in the database
-                //var target = new LicenseStatusXml() { CheckDate = new DateTime(2012, 2, 24), LastValidDate = new DateTime(2012, 2, 25), StatusOk = true };
+                //var target = new LicenseStatusXml() { CheckDate = new DateTime(2012, 2, 24), LastValidDate = new DateTime(2012, 2, 25), StatusOk = false, DaysLeft = 0, NumberOfActiveAgents = 8000};
                 //var xml = target.XmlDocument;
-                //JobParameters.Helper.Repository.SaveLicenseStatus(xml.InnerXml);
+                //_licenseStatusRepositories.SaveLicenseStatus(xml.InnerXml);
+                //return 1;
 
                 status = _licenseStatusRepositories.LicenseStatus;
                 //throws an error if toomanyagents
