@@ -1,4 +1,7 @@
-﻿using SignalR.Hubs;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -8,7 +11,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public void AddSubscription(Subscription subscription)
 		{
-				AddToGroup(subscription.Route());
+			AddToGroup(subscription.Route());
 		}
 
 		public void RemoveSubscription(string route)

@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Rta.Server
             }
 
 		    bool sendWithBroker = true;
-		    IEnumerable<Guid> personIdList;
-		    if (!_personResolver.TryResolveId(dataSourceId,logOn,out personIdList))
+			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
+		    if (!_personResolver.TryResolveId(dataSourceId,logOn,out personWithBusinessUnits))
 		    {
                 _loggingSvc.WarnFormat("No person available for datasource id = {0} and log on {1}. Event will not be sent through message broker before person is set up.", dataSourceId, logOn);
 		        sendWithBroker = false;
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Rta.Server
                 _loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
                 try
                 {
-                    foreach (var personId in personIdList)
+                    foreach (var personWithBusinessUnit in personWithBusinessUnits)
                     {
-                        _messageSender.SendRtaData(personId, agentState);
+                        _messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
                     }
                 }
                 catch (SocketException exception)
