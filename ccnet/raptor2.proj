@@ -18,6 +18,11 @@
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
+		<AzureDeploy>false</AzureDeploy>
+		<AzureDeploy Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">true</AzureDeploy>
+		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
+		<AzureAnalyticsReportTest Condition="'$(CCNetProject)' == 'NightlyBuild'">true</AzureAnalyticsReportTest>
 		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
 		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
 		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
@@ -59,13 +64,6 @@
 			</Threshold>
 		</MinimumCoverage>
 	</PropertyGroup>
-	
-	<Target Name="CheckWebBehaviorTests" Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild'">
-		<Message Importance="high" Text="Project is: $(CCNetProject) and Im setting RunWebBehaviorTests to True" />
-		<PropertyGroup>
-			<RunWebBehaviorTests>true</RunWebBehaviorTests>
-		</PropertyGroup>
-	</Target>
 
 	<ItemGroup>
 		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
@@ -74,7 +72,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="AzureDeploy;CheckWebBehaviorTests;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="AzureDeploy;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 
@@ -83,7 +81,7 @@
 
 		<MSBuild Projects="@(SolutionFile)"
 				Properties="Configuration=$(Configuration);Platform=Any CPU;TreatWarningsAsErrors=true;RunCodeAnalysis=$(DoCodeAnalysis);"
-			BuildInParallel = "true"
+				BuildInParallel = "true"
 				Targets="Build">
 		</MSBuild>
 
@@ -98,7 +96,7 @@
 		<Message Text="Drop Azure databases. Done!" Importance="high" />
 	</Target>
 		
-		<Target Name="AzureDeploy" Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">
+	<Target Name="AzureDeploy" Condition="'$(AzureDeploy)' == 'true'">
 		
 		<CallTarget Targets="AzureDropDatabase" />
 
@@ -119,7 +117,7 @@
 		<CallTarget Targets="AzureDropDatabase" />
 	</Target>
 
-	<Target Name="AzureAnalyticsReportTest" Condition="'$(CCNetProject)' == 'NightlyBuild'">
+	<Target Name="AzureAnalyticsReportTest" Condition="'$(AzureAnalyticsReportTest)' == 'true'">
 		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(DBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
@@ -172,7 +170,6 @@
 		<OnError ExecuteTargets="MessageErrorHandler"/>
 	</Target>
 
-
 	<Target Name="CreateTrunkDb" Condition="'$(UseDBManager)' == 'true'">
 		<Message Importance="high" Text="Dropping database" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
@@ -201,7 +198,6 @@
 	<Target Name="MessageErrorHandler">
 		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: $(DbManagerExe)"/>
 	</Target>
-
 
 	<Target Name="CreateNHibDb" Condition="'$(UseDBManager)' == 'false'">
 		<Message Importance="high" Text="Dropping database" />
@@ -281,11 +277,14 @@
 
 	</Target>
 
-	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb">
-		<Message Importance="high" Text="Running NCover..." />
-		
-		<ItemGroup>
-		<ProjectsToTest
+	<!--This is how we "går över ån och runt sjön för att hämta vatten"
+		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
+		So instead, try to run tests One By One to mimimize numbers of Mocks included.
+		Collection = $(CCNetWorkingDirectory)\**\*Test.csproj
+		But _exclude_ projects that we don't build as part of CruiseControl.sln
+	-->
+	<ItemGroup>
+		<ProjectsToNCover
 				Include="$(CCNetWorkingDirectory)\**\*Test.csproj"
 				Exclude="
 					$(CCNetWorkingDirectory)\MasterActivityPresenterTest\MasterActivityPresenterTest.csproj;
@@ -298,44 +297,38 @@
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.ObfuscatedTest\Teleopti.Ccc.ObfuscatedTest.csproj;
 					$(CCNetWorkingDirectory)\Teleopti.Messaging\Teleopti.Messaging.Tests\Teleopti.Messaging.Tests.csproj;
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"/>
-		<ProjectsToTest Condition="'$(RunWebBehaviorTests)' == 'true'"
+		<ProjectsToNCover Condition="'$(RunWebBehaviorTests)' == 'true'"
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"
 		 />
-		</ItemGroup>
-
-		<!--  run tests-->
-		<CallTarget Targets="ProjectsToNCover" />
-		<Message Importance="high" Text="Running NCover finished." />
-	</Target>
-
-	<!--This is how we "går över ån och runt sjön för att hämta vatten"
-		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
-		So instead, try to run tests One By One to mimimize numbers of Mocks included.
-		Collection = $(CCNetWorkingDirectory)\**\*Test.csproj
-		But _exclude_ projects that we don't build as part of CruiseControl.sln
-	-->
-
-	<Target Name="ProjectsToNCover" Inputs="@(ProjectsToTest)" Outputs="%(Identity).Dummy">
-		<Message Text="@(ProjectsToTest)" />
-
+	</ItemGroup>
+	
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb">
+		
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\CoverageResult"/>
-
-		<NCover
-						ProjectName="$(CCNetProject)"
-						ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
-						TestRunnerExe="$(NUnitEXE)"
-						TestRunnerArgs="&quot;@(ProjectsToTest)&quot; $(ExcludedTestCategories) $(NUnitArgs) /xml=&quot;$(CCNetWorkingDirectory)\nunit%(filename).xml&quot;"
-						CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
-						WorkingDirectory="$(CCNetWorkingDirectory)"
-						RegisterProfiler="true"
-						ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
-						IncludeAssemblies="$(NCoverAssemblies)">
-		</NCover>
-
+		
+		<Message Importance="high" Text="Running NCover..." />
+		<Message Importance="high" Text="RunWebBehaviorTests: $(RunWebBehaviorTests)." />
+		<CallTarget Targets="NCoverLoop" />
+		<Message Importance="high" Text="Running NCover finished." />
 	</Target>
 
+	<Target Name="NCoverLoop" Inputs="@(ProjectsToNCover)" Outputs="%(Identity).Dummy">
+		<Message Text="Running NCover for @(ProjectsToNCover)" />
+		<NCover
+			ProjectName="$(CCNetProject)"
+			ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
+			TestRunnerExe="$(NUnitEXE)"
+			TestRunnerArgs="&quot;@(ProjectsToNCover)&quot; $(ExcludedTestCategories) $(NUnitArgs) /xml=&quot;$(CCNetWorkingDirectory)\nunit%(filename).xml&quot;"
+			CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
+			WorkingDirectory="$(CCNetWorkingDirectory)"
+			RegisterProfiler="true"
+			ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
+			IncludeAssemblies="$(NCoverAssemblies)"
+			/>
+	</Target>
+	
 	<!-- ToolPath="$(CCNetWorkingDirectory)\ccnet\ncover64"-->
 	<Target Name="NCoverReporting" DependsOnTargets="NCover">
 		<Message Importance="high" Text="Running NCoverReporting..." />
@@ -351,7 +344,7 @@
 
 		<Message Importance="high" Text="NCoverReporting finished." />
 	</Target>
-
+	
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
 		<Message Importance="high" Text="Running FxCop target..." />
 		<CreateItem Include="$(CCNetWorkingDirectory)\**\*.codeanalysislog.xml">
