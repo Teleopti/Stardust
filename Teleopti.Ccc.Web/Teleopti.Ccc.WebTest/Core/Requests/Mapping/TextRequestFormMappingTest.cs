@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
 
-			result.Subject.Should().Be("Test");
+			result.GetSubject(new NoFormatting()).Should().Be("Test");
 		}
 
 		[Test]
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
 
-			result.Message.Should().Be("Message");
+			result.GetMessage(new NoFormatting()).Should().Be("Message");
 		}
 
 		[Test]
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form, destination);
 
-			result.Message.Should().Be.EqualTo(form.Message);
+			result.GetMessage(new NoFormatting()).Should().Be.EqualTo(form.Message);
 		}
 
 		[Test]
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form, destination);
 
-			result.Subject.Should().Be.EqualTo(form.Subject);
+			result.GetSubject(new NoFormatting()).Should().Be.EqualTo(form.Subject);
 		}
 	}
 }

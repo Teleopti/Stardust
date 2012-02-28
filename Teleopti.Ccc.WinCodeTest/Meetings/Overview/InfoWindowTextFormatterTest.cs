@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
@@ -65,12 +66,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(() => uow.Reassociate(person)).Repeat.Twice();
             Expect.Call(meeting.Organizer).Return(person);
-            Expect.Call(meeting.Subject).Return("subject");
-            Expect.Call(meeting.Location).Return("lokalen");
+			Expect.Call(meeting.GetSubject(new NoFormatting())).Return("subject");
+			Expect.Call(meeting.GetLocation(new NoFormatting())).Return("lokalen");
             Expect.Call(meeting.MeetingPersons).Return(
                 new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson> {meetingPerson}));
             Expect.Call(meetingPerson.Person).Return(person);
-            Expect.Call(meeting.Description).Return("we'll meet again, don't know where, don't know when");
+			Expect.Call(meeting.GetDescription(new NoFormatting())).Return("we'll meet again, don't know where, don't know when");
             Expect.Call( meeting.UpdatedOn).Return(new DateTime(2011, 3, 25, 14, 45, 0)).Repeat.Twice();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();

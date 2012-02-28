@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Time;
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void VerifyAggregateGraphProperties(IMeeting loadedAggregateFromDatabase)
         {
             IMeeting org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Description, loadedAggregateFromDatabase.Description);
+            Assert.AreEqual(org.GetDescription(new NoFormatting()), loadedAggregateFromDatabase.GetDescription(new NoFormatting()));
             Assert.AreEqual(org.Scenario, loadedAggregateFromDatabase.Scenario);
             Assert.AreEqual(org.MeetingPersons.Count(), loadedAggregateFromDatabase.MeetingPersons.Count());
             Assert.AreEqual(org.Activity, loadedAggregateFromDatabase.Activity);

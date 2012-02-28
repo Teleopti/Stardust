@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -19,12 +20,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         public override PersonMeetingDto DomainEntityToDto(IPersonMeeting entity)
         {
             PersonMeetingDto personMeetingDto = new PersonMeetingDto();
+        	var normalizeText = new NormalizeText();
             personMeetingDto.Id = entity.Id;
             personMeetingDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
             personMeetingDto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
-            personMeetingDto.Subject = entity.BelongsToMeeting.Subject;
-            personMeetingDto.Location = entity.BelongsToMeeting.Location;
-            personMeetingDto.Description = entity.BelongsToMeeting.Description;
+            personMeetingDto.Subject = entity.BelongsToMeeting.GetSubject(normalizeText);
+            personMeetingDto.Location = entity.BelongsToMeeting.GetLocation(normalizeText);
+            personMeetingDto.Description = entity.BelongsToMeeting.GetDescription(normalizeText);
             personMeetingDto.MeetingId = entity.BelongsToMeeting.Id.GetValueOrDefault(Guid.Empty);
             return personMeetingDto;
         }

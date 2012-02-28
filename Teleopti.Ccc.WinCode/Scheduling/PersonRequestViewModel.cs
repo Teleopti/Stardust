@@ -134,14 +134,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        public string Subject
+        public string GetSubject(ITextFormatter formatter)
         {
-            get { return _personRequest.Subject; }
+           return _personRequest.GetSubject(formatter);
         }
 
-        public string Message
+        public string GetMessage(ITextFormatter formatter)
         {
-            get { return _personRequest.Message; }
+        	return _personRequest.GetMessage(formatter);
         }
 
         public DateTime LastUpdated

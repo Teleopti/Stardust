@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Requests
@@ -17,8 +18,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void Initialize()
 		{
-			_view.Subject = _model.Subject;
-			_view.Message = _model.Message;
+			_view.Subject = _model.GetSubject(new NoFormatting());
+			_view.Message = _model.GetMessage(new NoFormatting());
 			_view.LabelName = _model.Name;
 			_view.Status = _model.StatusText;
             _personRequestAuthorization = new PersonRequestAuthorization(TeleoptiPrincipal.Current.PrincipalAuthorization);

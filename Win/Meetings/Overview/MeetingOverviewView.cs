@@ -8,6 +8,7 @@ using Syncfusion.Schedule;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         {
             if (theMeeting == null)
                 return false;
-            DialogResult answer = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Resources.MeetingDeleteConfirmationQuestion, theMeeting.Subject), Resources.ConfirmDelete, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+            DialogResult answer = MessageBox.Show(string.Format(CultureInfo.InvariantCulture, Resources.MeetingDeleteConfirmationQuestion, theMeeting.GetSubject(new NoFormatting())), Resources.ConfirmDelete, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
            if(answer == DialogResult.No)
                 return false;
 

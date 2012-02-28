@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					s =>
 						{
 							var publicNote = s.FirstOrDefault();
-							return publicNote != null ? publicNote.ScheduleNote : string.Empty;
+							return publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
 						}))
 				;
 

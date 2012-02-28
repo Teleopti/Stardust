@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			using(_mocks.Record())
 			{
 				Expect.Call(_model.Name).Return(string.Empty);
-				Expect.Call(_model.Subject).Return(string.Empty);
-				Expect.Call(_model.Message).Return(string.Empty);
+				Expect.Call(_model.GetSubject(new NoFormatting())).Return(string.Empty);
+				Expect.Call(_model.GetMessage(new NoFormatting())).Return(string.Empty);
 				Expect.Call(_model.StatusText).Return(string.Empty);
 			}
 			using (_mocks.Playback())

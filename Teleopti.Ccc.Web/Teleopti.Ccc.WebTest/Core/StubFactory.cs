@@ -5,6 +5,7 @@ using System.Drawing;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		public IPublicNote PublicNoteStub()
 		{
 			var publicNote = MockRepository.GenerateStub<IPublicNote>();
-			publicNote.Stub(x => x.ScheduleNote).Return("a note");
+			publicNote.Stub(x => x.GetScheduleNote(new NoFormatting())).Return("a note");
 			return publicNote;
 		}
 	}

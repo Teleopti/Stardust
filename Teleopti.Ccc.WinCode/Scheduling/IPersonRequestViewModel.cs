@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool IsDenied { get; }
         bool IsNew { get; }
         string Details { get; }
-        string Subject { get; }
-        string Message { get; }
+    	string GetSubject(ITextFormatter formatter);
+    	string GetMessage(ITextFormatter formatter);
         DateTime LastUpdated { get; }
         bool CausesBrokenBusinessRule { get; set; }
         string RequestTypeOfToString { get; }
