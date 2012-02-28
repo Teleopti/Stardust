@@ -18,7 +18,7 @@
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494' or '$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
 		<AzureDeploy>false</AzureDeploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'RaptorMain' or '$(CCNetProject)' == 'NightlyBuild'">true</AzureDeploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
