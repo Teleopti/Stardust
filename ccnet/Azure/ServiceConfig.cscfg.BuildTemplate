@@ -12,7 +12,7 @@
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="D5517A7DDBF4FAAA4A428596E4D3B1C9" thumbprintAlgorithm="sha1" />
-	  <Certificate name="teleopticcc-demo.cloudapp.net" thumbprint="1D4A14053603B993A0BF4773BC36D5DCACDA8E06" thumbprintAlgorithm="sha1"/>
+	  <Certificate name="$(SSLCERTNAME)" thumbprint="$(SSLTHUMBPRINT)" thumbprintAlgorithm="$(SSLTHUMBPRINTALGORITHM)"/>
     </Certificates>
   </Role>
 </ServiceConfiguration>
