@@ -601,13 +601,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ITaskOwner taskOwnerMock = mocks.StrictMock<ITaskOwner>();
 
             bool value = false;
-            Expect.Call(taskOwnerMock.IsClosed).Return(value).Repeat.Once();
+            //Expect.Call(taskOwnerMock.IsClosed).Return(value).Repeat.Once();
+            Expect.Call(taskOwnerMock.OpenForWork).Return(new OpenForWork(){IsOpen = false , IsOpenForIncomingWork = false}).Repeat.Twice();
 
             mocks.ReplayAll();
 
             target.TaskOwner = taskOwnerMock;
 
-            Assert.AreEqual(value, target.IsClosed);
+            //Assert.AreEqual(value, target.IsClosed);
+            Assert.AreEqual(value, target.OpenForWork.IsOpen);
         }
 
         /// <summary>

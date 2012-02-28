@@ -199,7 +199,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.SetTemplateAt((int)DayOfWeek.Monday,workloadDayTemplate);
 
             Assert.AreEqual(workloadDayTemplate, _target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Monday));
-            Assert.IsTrue(((IWorkloadDayTemplate) _target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Tuesday)).IsClosed);
+            //Assert.IsTrue(((IWorkloadDayTemplate) _target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Tuesday)).IsClosed);
+            Assert.IsFalse(((IWorkloadDayTemplate)_target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Tuesday)).OpenForWork.IsOpen);
             Assert.IsNotNull(_target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Wednesday));
         }
 
