@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
     	}
 		public string GetReply(ITextFormatter formatter)
 		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
 			return formatter.Format(_reply);
 		}
         public bool AllowDialogueReply { get; set; }
