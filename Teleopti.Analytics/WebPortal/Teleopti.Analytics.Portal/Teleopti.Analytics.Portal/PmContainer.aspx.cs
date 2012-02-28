@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Portal
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			iframePmContainer.Attributes.Add("src", "PerformanceManager/Default.aspx");
+			ContainerControl.Attributes.Add("src", "PerformanceManager/Default.aspx");
 		}
 	}
 }

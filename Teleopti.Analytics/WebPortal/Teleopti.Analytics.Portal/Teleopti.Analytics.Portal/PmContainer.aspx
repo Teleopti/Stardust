@@ -15,6 +15,6 @@
 	<title></title>
 </head>
 <body>
-	<iframe runat="server" ID="iframePmContainer" width="100%" height="100%" frameborder="0"></iframe>
+	<iframe runat="server" ID="ContainerControl" width="100%" height="100%" frameborder="0"></iframe>
 </body>
 </html>

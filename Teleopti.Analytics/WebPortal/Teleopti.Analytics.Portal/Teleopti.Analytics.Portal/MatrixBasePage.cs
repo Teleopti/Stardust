@@ -177,6 +177,6 @@ namespace Teleopti.Analytics.Portal
 
 		protected bool IsBrowseTargetPerformanceManager { get; private set; }
 
-		protected string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
+		protected static string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
     }
 }
