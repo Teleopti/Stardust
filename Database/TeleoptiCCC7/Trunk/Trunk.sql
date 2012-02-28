@@ -139,27 +139,8 @@ WHERE ForeignId = '27' AND ForeignSource = 'Matrix'
 -- =============================================
 CREATE TABLE [dbo].[LicenseStatus](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Version] [int] NOT NULL,
-	[CreatedBy] [uniqueidentifier] NOT NULL,
-	[UpdatedBy] [uniqueidentifier] NOT NULL,
-	[CreatedOn] [datetime] NOT NULL,
-	[UpdatedOn] [datetime] NOT NULL,
 	[XmlString] [nvarchar](4000) NOT NULL,
 	CONSTRAINT PK_LicenseStatus PRIMARY KEY CLUSTERED (Id))
-GO
-
-ALTER TABLE [dbo].[LicenseStatus]  WITH CHECK ADD  CONSTRAINT [FK_LicenseStatus_Person1] FOREIGN KEY([CreatedBy])
-REFERENCES [dbo].[Person] ([Id])
-GO
-
-ALTER TABLE [dbo].[LicenseStatus] CHECK CONSTRAINT [FK_LicenseStatus_Person1]
-GO
-
-ALTER TABLE [dbo].[LicenseStatus]  WITH CHECK ADD  CONSTRAINT [FK_LicenseStatus_Person2] FOREIGN KEY([UpdatedBy])
-REFERENCES [dbo].[Person] ([Id])
-GO
-
-ALTER TABLE [dbo].[LicenseStatus] CHECK CONSTRAINT [FK_LicenseStatus_Person2]
 GO
 
 

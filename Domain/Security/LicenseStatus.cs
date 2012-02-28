@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security
 {
-    public class LicenseStatus : AggregateRoot, ILicenseStatus 
+    public class LicenseStatus : SimpleAggregateRoot, ILicenseStatus 
     {
         private string _xmlString;
 
