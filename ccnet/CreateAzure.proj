@@ -2,16 +2,12 @@
 
 <Project DefaultTargets="CreateAzure" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<PropertyGroup>
-		<myCCCVersion>$(CCCVersion)</myCCCVersion>
-	</PropertyGroup>
-	
 	<Target Name="CreateAzure">
-		<Message Text="myCCCVersion is: $(myCCCVersion)" Importance="high" />
+		<Message Text="CCCVersion is: $(CCCVersion)" Importance="high" />
 
 		<Message Text="Building Azure packages ..." Importance="high" />
-		<Message Text="&quot;D:\Installation\PreviousBuilds\$(myCCCVersion)\Azure\BuildAzurePackages.bat&quot; $(myCCCVersion)"/>
-		<Exec Command="&quot;D:\Installation\PreviousBuilds\$(myCCCVersion)\Azure\BuildAzurePackages.bat&quot; $(myCCCVersion)"/>
+		<Message Text="&quot;D:\Installation\PreviousBuilds\$(CCCVersion)\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
+		<Exec Command="&quot;D:\Installation\PreviousBuilds\$(CCCVersion)\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
 		<Message Text="Building Azure packages . Done!" Importance="high" />
 	</Target>
 
