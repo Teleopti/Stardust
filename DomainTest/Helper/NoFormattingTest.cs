@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 namespace Teleopti.Ccc.DomainTest.Helper
 {
 	[TestFixture]
-	class NoFormattingTest
+	public class NoFormattingTest
 	{
 		[Test]
 		public void ShouldReturnTextUnformatted()

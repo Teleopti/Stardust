@@ -92,7 +92,10 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
         public virtual string GetReply(ITextFormatter formatter)
         {
-        	return formatter.Format(_reply);
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_reply);
         }
 
         public virtual void SetReply(string reply)

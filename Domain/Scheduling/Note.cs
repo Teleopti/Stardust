@@ -55,7 +55,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public virtual string GetScheduleNote(ITextFormatter formatter)
         {
-        	return formatter.Format(_scheduleNote);
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_scheduleNote);
         }
 
 		private string ScheduleNote { get { return _scheduleNote; } }

@@ -152,7 +152,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     	/// <value>The message.</value>
     	public virtual string GetMessage(ITextFormatter formatter)
     	{
-    		return formatter.Format(_message);
+    		if(formatter == null)
+				throw new ArgumentNullException("formatter");
+
+			return formatter.Format(_message);
     	}
 
     	/// <summary>
@@ -202,6 +205,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual string GetSubject(ITextFormatter formatter)
 		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
 			return formatter.Format(_subject);
 		}
 

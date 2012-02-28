@@ -101,6 +101,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual string GetSubject(ITextFormatter formatter)
 		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
 			return formatter.Format(_subject);
 		}
 
@@ -115,6 +118,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual string GetLocation(ITextFormatter formatter)
 		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
 			return formatter.Format(_location);
 		}
 
@@ -129,6 +135,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual string GetDescription(ITextFormatter formatter)
 		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
 			return formatter.Format(_description);
 		}
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +32,10 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
     	public virtual string GetTitle(ITextFormatter formatter)
     	{
-    		return formatter.Format(_title);
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_title);
     	}
 
     	public virtual string Message
@@ -41,7 +45,10 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
     	public virtual string GetMessage(ITextFormatter formatter)
     	{
-    		return formatter.Format(_message);
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_message);
     	}
 
     	public virtual bool AllowDialogueReply

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Helper;
 namespace Teleopti.Ccc.DomainTest.Helper
 {
 	[TestFixture]
-	class NormalizeTextTest
+	public class NormalizeTextTest
 	{
 		[Test]
 		public void ShouldReturnTextNormalized()
