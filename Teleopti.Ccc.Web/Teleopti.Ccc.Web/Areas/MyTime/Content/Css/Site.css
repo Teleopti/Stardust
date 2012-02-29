@@ -708,6 +708,11 @@ header {
 	padding-left: 10px;
 	padding-bottom: 10px;
 }
+.edit-module-element label {
+	margin-bottom: 5px;
+	display: block;
+}
+
 .edit-button-bar
 {
 	padding: 10px;
