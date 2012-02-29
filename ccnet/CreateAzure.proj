@@ -4,6 +4,7 @@
 
 	<Target Name="CreateAzure">
 		<Message Text="CCCVersion is: $(CCCVersion)" Importance="high" />
+		<Message Text="CCCVersion is: $[CCCVersion]" Importance="high" />
 
 		<Message Text="Building Azure packages ..." Importance="high" />
 		<Message Text="&quot;D:\Installation\PreviousBuilds\$(CCCVersion)\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
