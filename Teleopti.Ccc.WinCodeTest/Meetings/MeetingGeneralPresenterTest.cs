@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IPerson _person;
         private IPerson _requiredPerson;
         private IPerson _optionalPerson;
-        private IActivity _activity;
+        private IActivity _firstActivity;
+        private IActivity _secondActivity;
         private IScenario _scenario;
         private IMeeting _meeting;
         private IList<IActivity> _activityList;
@@ -43,8 +44,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _person = PersonFactory.CreatePerson("organizer", "1");
             _requiredPerson = PersonFactory.CreatePerson("required", "2");
             _optionalPerson = PersonFactory.CreatePerson("optional", "3");
-            _activity = ActivityFactory.CreateActivity("Meeting");
-            _activityList = new List<IActivity> {ActivityFactory.CreateActivity("Training"), _activity};
+            _firstActivity = ActivityFactory.CreateActivity("Meeting");
+			_secondActivity = ActivityFactory.CreateActivity("Training");
+			_activityList = new List<IActivity> { _firstActivity, _secondActivity };
             _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
             
             _scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                            new MeetingPerson(_requiredPerson, false),
                                            new MeetingPerson(_optionalPerson, true)
                                        }, "my subject", "my location",
-                                   "my description", _activity, _scenario);
+                                   "my description", _secondActivity, _scenario);
             _meeting.StartDate = new DateOnly(2009, 10, 14);
             _meeting.EndDate = new DateOnly(2009, 10, 16);
             _meeting.StartTime = TimeSpan.FromHours(19);
@@ -81,10 +83,10 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(activityRepository.LoadAllSortByName()).Return(_activityList);
             unitOfWork.Dispose();
 
-            _view.SetOrganizer(_model.Organizer);
+			_view.SetActivityList(_activityList);
+			_view.SetOrganizer(_model.Organizer);
             _view.SetParticipants(_model.Participants);
-            _view.SetActivityList(_activityList);
-            _view.SetSelectedActivity(_model.Activity);
+            _view.SetSelectedActivity(_firstActivity);
             _view.SetTimeZoneList(null);
             LastCall.IgnoreArguments();
             _view.SetSelectedTimeZone(_model.TimeZone);
@@ -98,8 +100,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.SetDescription(_model.Description);
 
             _mocks.ReplayAll();
-            Assert.AreEqual(_model,_target.Model);
             _target.Initialize();
+			Assert.AreEqual(_model, _target.Model);
+			Assert.AreEqual(_firstActivity, _target.Model.Activity);
             _mocks.VerifyAll();
         }
 
@@ -107,8 +110,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void VerifyCanSetActivity()
         {
             _mocks.ReplayAll();
-            _target.SetActivity(_activityList[0]);
-            Assert.AreEqual(_activityList[0],_model.Activity);
+            _target.SetActivity(_secondActivity);
+            Assert.AreEqual(_secondActivity, _model.Activity);
             _mocks.VerifyAll();
         }
 
