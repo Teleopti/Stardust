@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Threading;
 using SignalR.Client._20.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -33,7 +32,7 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void SendRtaData(Guid personId, IExternalAgentState externalAgentState)
+		public void SendRtaData(Guid personId, Guid businessUnitId, IExternalAgentState externalAgentState)
 		{
 			int sendAttempt = 0;
 			while (sendAttempt < 3)
@@ -44,16 +43,20 @@ namespace Teleopti.Messaging.SignalR
 					ExternalAgentStateEncoder encoder = new ExternalAgentStateEncoder();
 					byte[] domainObject = encoder.Encode(externalAgentState);
 
-					ThreadPool.QueueUserWorkItem(callProxy, new Notification
-					                                        	{
-					                                        		StartDate = Subscription.DateToString(externalAgentState.Timestamp.Add(externalAgentState.TimeInState.Negate())),
-					                                        		EndDate = Subscription.DateToString(externalAgentState.Timestamp),
-					                                        		DomainId = Subscription.IdToString(personId),
-					                                        		DomainType = typeof(IExternalAgentState).AssemblyQualifiedName,
-					                                        		ModuleId = Subscription.IdToString(Guid.Empty),
-					                                        		DomainUpdateType = (int) DomainUpdateType.Insert,
-					                                        		BinaryData = Encoding.UTF8.GetString(domainObject)
-					                                        	});
+					var type = typeof (IExternalAgentState);
+					callProxy(new Notification
+					          	{
+					          		StartDate =
+					          			Subscription.DateToString(externalAgentState.Timestamp.Add(externalAgentState.TimeInState.Negate())),
+					          		EndDate = Subscription.DateToString(externalAgentState.Timestamp),
+					          		DomainId = Subscription.IdToString(personId),
+					          		DomainType = type.Name,
+					          		DomainQualifiedType = type.AssemblyQualifiedName,
+					          		ModuleId = Subscription.IdToString(Guid.Empty),
+					          		DomainUpdateType = (int) DomainUpdateType.Insert,
+					          		BinaryData = Encoding.UTF8.GetString(domainObject),
+					          		BusinessUnitId = Subscription.IdToString(businessUnitId)
+					          	});
 					break;
 				}
 				catch (Exception)
@@ -64,7 +67,7 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType)
+		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId)
 		{
 			int sendAttempt = 0;
 			while (sendAttempt < 3)
@@ -72,16 +75,18 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					ThreadPool.QueueUserWorkItem(callProxy, new Notification
-					                                        	{
-					                                        		StartDate = Subscription.DateToString(floor),
-					                                        		EndDate = Subscription.DateToString(ceiling),
-					                                        		DomainId = Subscription.IdToString(domainObjectId),
-					                                        		DomainType = domainInterfaceType.AssemblyQualifiedName,
-					                                        		ModuleId = Subscription.IdToString(moduleId),
-					                                        		DomainUpdateType = (int) DomainUpdateType.Insert,
-					                                        		BinaryData = null
-					                                        	});
+					callProxy(new Notification
+					          	{
+					          		StartDate = Subscription.DateToString(floor),
+					          		EndDate = Subscription.DateToString(ceiling),
+					          		DomainId = Subscription.IdToString(domainObjectId),
+					          		DomainType = domainInterfaceType.Name,
+					          		ModuleId = Subscription.IdToString(moduleId),
+					          		DomainUpdateType = (int) DomainUpdateType.Insert,
+					          		DataSource = dataSource,
+					          		BusinessUnitId = Subscription.IdToString(businessUnitId),
+					          		BinaryData = null
+					          	});
 					break;
 				}
 				catch (Exception)
@@ -91,11 +96,11 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void callProxy(object state)
+		private void callProxy(Notification notification)
 		{
 			if (_proxy!=null)
 			{
-				_proxy.Invoke("NotifyClients", (Notification)state);
+				_proxy.Invoke("NotifyClients", notification);
 			}
 		}
 

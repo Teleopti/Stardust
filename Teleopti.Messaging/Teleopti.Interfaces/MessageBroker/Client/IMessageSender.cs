@@ -23,31 +23,34 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// </remarks>
         bool IsAlive { get; }
 
-        /// <summary>
-        /// Sends the RTA data.
-        /// </summary>
-        /// <param name="personId">The person id.</param>
-        /// <param name="externalAgentState">State of the external agent.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 10/06/2010
-        /// </remarks>
-        void SendRtaData(Guid personId,IExternalAgentState externalAgentState);
+    	/// <summary>
+    	/// Sends the RTA data.
+    	/// </summary>
+    	/// <param name="personId">The person id.</param>
+    	/// <param name="businessUnitId">The business unit id.</param>
+    	/// <param name="externalAgentState">State of the external agent.</param>
+    	/// <remarks>
+    	/// Created by: ankarlp
+    	/// Created date: 10/06/2010
+    	/// </remarks>
+    	void SendRtaData(Guid personId, Guid businessUnitId,IExternalAgentState externalAgentState);
 
-        /// <summary>
-        /// Sends schedule data.
-        /// </summary>
-        /// <param name="floor">The floor.</param>
-        /// <param name="ceiling">The ceiling.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainInterfaceType">Type of the domain interface.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 12/06/2010
-        /// </remarks>
-        void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType);
+    	/// <summary>
+    	/// Sends schedule data.
+    	/// </summary>
+    	/// <param name="floor">The floor.</param>
+    	/// <param name="ceiling">The ceiling.</param>
+    	/// <param name="moduleId">The module id.</param>
+    	/// <param name="domainObjectId">The domain object id.</param>
+    	/// <param name="domainInterfaceType">Type of the domain interface.</param>
+    	/// <param name="updateType">Type of the update.</param>
+    	/// <param name="dataSource">Data source.</param>
+    	/// <param name="businessUnitId">Business unit id.</param>
+    	/// <remarks>
+    	/// Created by: ankarlp
+    	/// Created date: 12/06/2010
+    	/// </remarks>
+    	void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId);
 
         /// <summary>
         /// Instantiates the broker service.

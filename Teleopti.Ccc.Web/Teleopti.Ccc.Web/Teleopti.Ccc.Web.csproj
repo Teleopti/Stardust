@@ -571,7 +571,6 @@
     <Content Include="Content\Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="WiseIISConfig\adsutil.vbs" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
   </ItemGroup>
@@ -607,13 +606,7 @@
     <Content Include="Areas\MyTime\Views\Portal\Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WiseIISConfig\IIS7ConfigAgentPortalWeb.bat" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\MyTime\Views\Portal\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="WiseIISConfig\IIS6ConfigAgentPortalWeb.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
