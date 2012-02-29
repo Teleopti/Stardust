@@ -60,24 +60,31 @@ namespace Teleopti.Ccc.Win.Permissions
             return availableDataCollection;
         }
 
-        /// <summary>
-        /// Loads the people by application role.
-        /// </summary>
-        /// <param name="selectedRole">The selected role.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 2008-09-09
-        /// </remarks>
-        public static ICollection<IPerson> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
+        public static ICollection<IPersonInRole> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
         {
-        	ICollection<IPerson> people;
-        	using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                IPersonRepository personRepository = new PersonRepository(uow);
-            	people = personRepository.FindPeopleByApplicationRole(selectedRole);
+        	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+        	{
+                var personRepository = new ApplicationRolePersonRepository(uow);
+            	return personRepository.GetPersonsInRole(selectedRole.Id.Value);
             }
-        	return people;
+        }
+
+        public static ICollection<IPersonInRole> LoadPeopleNotInApplicationRole(IApplicationRole selectedRole, ICollection<Guid> personsIds)
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                var personRepository = new ApplicationRolePersonRepository(uow);
+                return personRepository.GetPersonsNotInRole(selectedRole.Id.Value, personsIds);
+            }
+        }
+
+        public static IPerson GetPerson(Guid id)
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var personRepository = new PersonRepository(uow);
+                return personRepository.Load(id);
+            }
         }
 
     	/// <summary>
