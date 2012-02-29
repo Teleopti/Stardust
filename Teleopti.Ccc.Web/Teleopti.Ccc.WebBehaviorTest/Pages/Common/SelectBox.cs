@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public List Menu { get { return AutoComplete.Lists.Single(); } }
 		public LinkCollection MenuItems { get { return Menu.Links; } }
 
+		public string SelectedText { get { return Button.InnerHtml; } }
 		public IEnumerable<string> Texts() { return from o in Options where o.Value != "-" select o.Text; }
 
 		public void Select(string text)

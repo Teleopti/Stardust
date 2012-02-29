@@ -15,16 +15,17 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _partialInit() {
-		_onSelectorChanged();
+		_initSelectors();
 		_passwordEvents();
 		_initButton();
 	}
 
 	function _initButton() {
-		$("input#passwordButton").button()
-				.click(function () {
-					_updatePassword($("input#oldPassword").val(), $("input#password").val());
-				});
+		$("input#passwordButton")
+			.button()
+			.click(function () {
+				_updatePassword($("input#oldPassword").val(), $("input#password").val());
+			});
 	}
 
 	function _passwordEvents() {
@@ -72,13 +73,21 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _onSelectorChanged() {
-		$("#selectors #cultureSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateCulture");
-		});
-		$("#selectors #cultureUiSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-		});
+	function _initSelectors() {
+		$('#cultureSelect')
+			.selectbox({
+				changed: function () {
+					_selectorChanged($(this).val(), "Settings/UpdateCulture");
+				}
+			})
+			;
+		$('#cultureUiSelect')
+			.selectbox({
+				changed: function () {
+					_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
+				}
+			})
+			;
 	}
 
 	function _selectorChanged(value, url) {

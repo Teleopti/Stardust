@@ -1,8 +1,10 @@
-﻿using System.Threading;
+﻿using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var user = UserFactory.User();
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureSelect.SelectedItem, Is.EqualTo(user.Person.PermissionInformation.Culture().DisplayName));
+			EventualAssert.That(() => page.CultureSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
 		}
 
 		[Then(@"I should see my language")]
@@ -87,48 +89,43 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var user = UserFactory.User();
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureUiSelect.SelectedItem, Is.EqualTo(user.Person.PermissionInformation.UICulture().DisplayName));
+			EventualAssert.That(() => page.CultureUiSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
 		}
 
 		[When(@"I change culture to US")]
 		public void WhenIChangeCultureToUS()
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureSelect.SelectByValue("1033");
-			Browser.Current.Eval("$('#cultureSelect').change();"); 
+			page.CultureSelect.Select(CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[When(@"I change culture to browser's default")]
 		public void WhenIChangeCultureToBrowserSDefault()
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureSelect.SelectByValue("-1");
-			Browser.Current.Eval("$('#cultureSelect').change();");
+			page.CultureSelect.Select(UserTexts.Resources.BrowserDefault);
 		}
 
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureUiSelect.SelectByValue("1033");
-			Browser.Current.Eval("$('#cultureUiSelect').change();");
+			page.CultureUiSelect.Select(CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[When(@"I change language to browser's default")]
 		public void WhenIChangeLanguageToBrowserSDefault()
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureUiSelect.SelectByValue("-1");
-			Browser.Current.Eval("$('#cultureUiSelect').change();");
+			page.CultureUiSelect.Select(UserTexts.Resources.BrowserDefault);
 		}
 
 		[Then(@"I should see US date format")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
-			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(300);
 			Navigation.GotoTeamSchedule();
-			EventualAssert.That(() => Browser.Current.Page<TeamSchedulePage>().DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
+			var page = Browser.Current.Page<TeamSchedulePage>();
+			EventualAssert.That(() => page.DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
 		}
 
 		[Then(@"I should see the browser's language's date format")]
@@ -141,10 +138,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
-			//not nice - but somehow I need to wait for a portal refresh here
-			Thread.Sleep(300);
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.RequestsLink.Text.Should().Be.EqualTo("Requests");
+			EventualAssert.That(() => page.RequestsLink.Text, Is.EqualTo("Requests"));
 		}
 
 		[Then(@"I should see text in the the browser's language")]
@@ -158,23 +153,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAMessageSayingThePasswordIsNotConfirmedCorrectly()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.NonMatchingNewPassword.Style.Display
-				.Should().Not.Contain("none");
+			EventualAssert.That(() => page.NonMatchingNewPassword.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"Confirm button should be disabled")]
 		public void ThenConfirmButtonShouldBeDisabled()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.ConfirmButton.Enabled.Should().Be.False();
+			EventualAssert.That(() => page.ConfirmButton.Enabled, Is.False);
 		}
 
 		[Then(@"I should see a message saying the password is incorrect")]
 		public void ThenIShouldSeeAMessageSayingThePasswordIsIncorrect()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
-			page.IncorrectPassword.Style.Display
-				.Should().Not.Contain("none");
+			EventualAssert.That(() => page.IncorrectPassword.DisplayVisible(), Is.True);
 		}
 	}
 }

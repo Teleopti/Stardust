@@ -724,11 +724,11 @@ header {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-.edit-module .ui-autocomplete-input {
+.edit-module input.ui-autocomplete-input {
 	height: 16px;
 	float: left;
 }
-.ie9 .edit-module .ui-autocomplete-input {
+.ie9 .edit-module input.ui-autocomplete-input {
 	height: 15px;
 	float: left;
 }
