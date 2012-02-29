@@ -8052,7 +8052,7 @@ Period</value>
     <comment>Business</comment>
   </data>
   <data name="UseMaxStddev" xml:space="preserve">
-    <value>Use Intra Interval Deviation</value>
+    <value>Use intra interval deviation</value>
     <comment>Use intra interval deviation</comment>
   </data>
   <data name="EndTimeAsc" xml:space="preserve">
@@ -8225,11 +8225,11 @@ Period</value>
     <comment>Error message shifts</comment>
   </data>
   <data name="ConsiderWeekAfter" xml:space="preserve">
-    <value>Consider The Week After</value>
+    <value>Consider the week after</value>
     <comment>Resource Optimizer DayOff Preferences Panel</comment>
   </data>
   <data name="ConsiderWeekBefore" xml:space="preserve">
-    <value>Consider The Week Before</value>
+    <value>Consider the week before</value>
     <comment>Resource Optimizer Day Off Preferences Panel</comment>
   </data>
   <data name="MustHave" xml:space="preserve">
@@ -10045,7 +10045,7 @@ These options are activated:
     <comment>Use standard deviation in period value calculation</comment>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>Use Tweaked Values</value>
+    <value>Use tweaked values</value>
     <comment>Use tweaked values</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
@@ -10412,5 +10412,93 @@ These options are activated:
   </data>
   <data name="DateFormat" xml:space="preserve">
     <value>Date Format</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Block</value>
+    <comment>Block</comment>
+  </data>
+  <data name="ConsecutiveDaysOff" xml:space="preserve">
+    <value>Consecutive days off</value>
+    <comment>Consecutive days off</comment>
+  </data>
+  <data name="ConsecutiveWorkDays" xml:space="preserve">
+    <value>Consecutive work days</value>
+    <comment>Consecutive work days</comment>
+  </data>
+  <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
+    <value>Days off for flexible work time</value>
+    <comment>Days off for flexible work time</comment>
+  </data>
+  <data name="DoNotBreakMaximumSeats" xml:space="preserve">
+    <value>Do not break maximum seats</value>
+    <comment>Do not break maximum seats</comment>
+  </data>
+  <data name="FulfillRestrictions" xml:space="preserve">
+    <value>Fulfill Restrictions</value>
+    <comment>Fulfill Restrictions</comment>
+  </data>
+  <data name="FullWeekEndDaysOff" xml:space="preserve">
+    <value>Weekend days off</value>
+    <comment>Weekend days off</comment>
+  </data>
+  <data name="FullWeekEndsOff" xml:space="preserve">
+    <value>Full weekends off</value>
+    <comment>Full weekends off</comment>
+  </data>
+  <data name="KeepExistingDaysOff" xml:space="preserve">
+    <value>Keep existing days off</value>
+    <comment>Keep existing days off</comment>
+  </data>
+  <data name="KeepShiftCategories" xml:space="preserve">
+    <value>Keep shift categories</value>
+    <comment>Keep shift categories</comment>
+  </data>
+  <data name="KeepShifts" xml:space="preserve">
+    <value>Keep shifts</value>
+    <comment>Keep shifts</comment>
+  </data>
+  <data name="KeepStartEndTimes" xml:space="preserve">
+    <value>Keep start and end times</value>
+    <comment>Keep start and end times</comment>
+  </data>
+  <data name="MaximumSeats" xml:space="preserve">
+    <value>Maximum seats</value>
+    <comment>Maximum seats</comment>
+  </data>
+  <data name="MaximumStaffing" xml:space="preserve">
+    <value>Maximum staffing</value>
+    <comment>Maximum staffing</comment>
+  </data>
+  <data name="MinimumStaffing" xml:space="preserve">
+    <value>Minimum staffing</value>
+    <comment>Minimum staffing</comment>
+  </data>
+  <data name="MustHaves" xml:space="preserve">
+    <value>Must haves</value>
+    <comment>Must haves</comment>
+  </data>
+  <data name="OptimizationSteps" xml:space="preserve">
+    <value>Optimization steps</value>
+    <comment>Optimization steps</comment>
+  </data>
+  <data name="ShiftLimits" xml:space="preserve">
+    <value>Shift Limits</value>
+    <comment>Shift Limits</comment>
+  </data>
+  <data name="ShiftSelection" xml:space="preserve">
+    <value>Shift selection</value>
+    <comment>Shift selection</comment>
+  </data>
+  <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
+    <value>Shifts for flexible work time</value>
+    <comment>Shifts for flexible work time</comment>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Student availabilities</value>
+    <comment>Student availabilities</comment>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
+    <comment>Teams</comment>
   </data>
 </root>
