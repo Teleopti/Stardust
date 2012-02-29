@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class ApplicationRolePersonRepository
+    
+
+    public class ApplicationRolePersonRepository : IApplicationRolePersonRepository
     {
         private readonly IStatelessUnitOfWork _unitOfWork;
 
@@ -52,14 +56,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetReadOnly(true)
                     .List<IPersonInRole>();
         }
+
+        public IList<IRoleLight> Roles()
+        {
+            const string query = @"SELECT Id, Name
+                        FROM ApplicationRole WHERE BusinessUnit = :bu";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetGuid("bu",
+                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
+                    .SetReadOnly(true)
+                    .List<IRoleLight>();
+        }
     }
 
-    public interface IPersonInRole :IEquatable<IPersonInRole>
+    class RoleLight : IRoleLight
     {
-        Guid Id { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
-        string Team { get; set; }
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
     }
 
     public class PersonInRole : IPersonInRole
@@ -69,6 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public string LastName { get; set; }
         public string Team { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool Equals(IPersonInRole other)
         {
             return Id.Equals(other.Id);
