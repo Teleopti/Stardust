@@ -396,6 +396,7 @@
     <Content Include="Areas\MobileReports\Content\Scripts\jquery.mobile.report.table.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
