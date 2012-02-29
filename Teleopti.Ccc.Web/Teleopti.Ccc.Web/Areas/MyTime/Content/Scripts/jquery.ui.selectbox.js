@@ -88,7 +88,7 @@
 
 			this._selectOption(select.children(":selected"));
 
-			$("html").click(function (arg1, arg2, arg3) {
+			$("html").click(function () {
 				if (menu.autocomplete("widget").is(":visible")) {
 					menu.autocomplete("close");
 				}
