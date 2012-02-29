@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.DBManager.Library;
 
 namespace Teleopti.Ccc.DBManager
 {
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DBManager
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
                     //Exclude Agg from Azure
-                    if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == CommandLineArgument.DatabaseType.TeleoptiCCCAgg.ToString())
+                    if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
 
                     {
                         logWrite("This is a TeleoptiCCCAgg, exclude from SQL Asure");
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DBManager
                         if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
                         {
 
-                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseTypeName);
+                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
                             CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                         }
                         else
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.DBManager
                     Console.Out.WriteLine("-P[Password]");
                     Console.Out.WriteLine("-N[Target build number]");
                     Console.Out.WriteLine("-E Uses Integrated Security, otherwise SQL Server security.");
-                    string databaseTypeList = string.Join("|", Enum.GetNames(typeof(CommandLineArgument.DatabaseType)));
+                    string databaseTypeList = string.Join("|", Enum.GetNames(typeof(DatabaseType)));
                     Console.Out.WriteLine(string.Format(CultureInfo.CurrentCulture, "-O[{0}]", databaseTypeList));
                     Console.Out.WriteLine("-C Creates a database with name from -D switch.");
                     Console.Out.WriteLine("-L[sqlUserName:sqlUserPassword] Will create a sql user that the application will use when running. Mandatory while using -C if -W is not used");
@@ -443,42 +444,15 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
-        private static void CreateDB(string databaseName, string databaseTypeName)
+        private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
-            
-            string fileName;
-            if (_isAzure)
-            {
-               fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\{1}.sql", _baseDirectory, databaseTypeName);
-            }
-            else
-            {
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\{1}.sql", _baseDirectory, databaseTypeName);
-            }
-           
-            TextReader textReader = new StreamReader(fileName);
-            string sql = textReader.ReadToEnd();
-            textReader.Close();
 
-            sql = sql.Replace("$(DBNAME)", databaseName);
-            sql = sql.Replace("$(DBTYPE)", databaseTypeName);
-
-            IniFile databaseSettingsIniFile = new IniFile(_baseDirectory + "\\" + databaseTypeName + "\\DatabaseSettings.ini");
-            Dictionary<string, string> sectionValues = databaseSettingsIniFile.GetSectionValues("Settings");
-
-            // Dynamic DatabaseSettings.ini now, throw in just about anything within the section "Settings".
-            foreach (KeyValuePair<string, string> keyValuePair in sectionValues)
-            {
-                string toBeReplaced = string.Format(CultureInfo.CurrentCulture, "$({0})", keyValuePair.Key);
-                sql = sql.Replace(toBeReplaced, keyValuePair.Value);
-            }
-
-            SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection);
-            sqlCommand.CommandTimeout = CommandTimeout;  //Create database might be an issue on a slow disk subsystem
-            sqlCommand.ExecuteNonQuery();
-
-
+        	var creator = new DatabaseCreator(_baseDirectory, _sqlConnection);
+			if (_isAzure)
+				creator.CreateAzureDatabase(databaseType, databaseName);
+			else
+				creator.CreateDatabase(databaseType, databaseName);
         }
 
         private static void CreateLogin(string user, string pwd, Boolean iswingroup)

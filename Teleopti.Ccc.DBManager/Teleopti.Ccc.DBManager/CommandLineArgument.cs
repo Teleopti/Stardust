@@ -4,19 +4,13 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.DBManager.Library;
 
 namespace Teleopti.Ccc.DBManager
 {
     public class CommandLineArgument
     {
-        public enum DatabaseType
-        {
-            TeleoptiCCC7 = 0,
-            TeleoptiCCCAgg,
-            TeleoptiAnalytics
-        }
-
-        private string _applicationName = "Teleopti.Ccc.DBManager";
+    	private string _applicationName = "Teleopti.Ccc.DBManager";
         private string _serverName = ".";
         private string _databaseName;
         private string _userName;
@@ -316,7 +310,7 @@ namespace Teleopti.Ccc.DBManager
         {
             get
             {
-                return Enum.GetName(typeof(DatabaseType), _targetDatabaseType);
+				return _targetDatabaseType.GetName();
             }
         }
 
