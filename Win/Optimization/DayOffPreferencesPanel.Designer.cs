@@ -26,6 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxConsiderWeekBefore"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxConsiderWeekAfter")]
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -133,7 +134,7 @@
             this.checkBoxConsiderWeekBefore.Name = "checkBoxConsiderWeekBefore";
             this.checkBoxConsiderWeekBefore.Size = new System.Drawing.Size(156, 17);
             this.checkBoxConsiderWeekBefore.TabIndex = 21;
-            this.checkBoxConsiderWeekBefore.Text = "xxConsiderTheWeekBefore";
+            this.checkBoxConsiderWeekBefore.Text = "xxConsiderWeekBefore";
             this.checkBoxConsiderWeekBefore.UseVisualStyleBackColor = true;
             // 
             // checkBoxConsiderWeekAfter
@@ -144,7 +145,7 @@
             this.checkBoxConsiderWeekAfter.Name = "checkBoxConsiderWeekAfter";
             this.checkBoxConsiderWeekAfter.Size = new System.Drawing.Size(147, 17);
             this.checkBoxConsiderWeekAfter.TabIndex = 22;
-            this.checkBoxConsiderWeekAfter.Text = "xxConsiderTheWeekAfter";
+            this.checkBoxConsiderWeekAfter.Text = "xxConsiderWeekAfter";
             this.checkBoxConsiderWeekAfter.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel21

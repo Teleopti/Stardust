@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStddev"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRMS"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -353,7 +353,7 @@
             this.checkBoxUseIntraIntervalDeviation.Name = "checkBoxUseIntraIntervalDeviation";
             this.checkBoxUseIntraIntervalDeviation.Size = new System.Drawing.Size(156, 17);
             this.checkBoxUseIntraIntervalDeviation.TabIndex = 10;
-            this.checkBoxUseIntraIntervalDeviation.Text = "xxUseIntraIntervalDeviation";
+            this.checkBoxUseIntraIntervalDeviation.Text = "xxUseMaxStddev";
             this.checkBoxUseIntraIntervalDeviation.UseVisualStyleBackColor = true;
             // 
             // labelTargetValue
@@ -375,7 +375,7 @@
             this.radioButtonRootMeanSquare.Size = new System.Drawing.Size(119, 17);
             this.radioButtonRootMeanSquare.TabIndex = 13;
             this.radioButtonRootMeanSquare.TabStop = true;
-            this.radioButtonRootMeanSquare.Text = "xxRootMeanSquare";
+            this.radioButtonRootMeanSquare.Text = "xxRMS";
             this.radioButtonRootMeanSquare.UseVisualStyleBackColor = true;
             // 
             // radioButtonTeleopti
