@@ -2,23 +2,24 @@
 ::Example: 7.1.334.48819 0 C:\Installation
 ::Get CCNet input
 SET version=%1
-SET ProductId=%2
-SET buildServerRoot=%3
+
+SET ROOTDIR=%~dp0
+SET ROOTDIR=%ROOTDIR:~0,-1%
+SET DriveLetter=%ROOTDIR:~0,2%
+
+SET buildServerRoot=%DriveLetter%\installation
 SET OUTDIR=%buildServerRoot%\AzurePackage
 SET MSIDIR=%buildServerRoot%\msi
 SET DEPLOYSHARE=%buildServerRoot%\PreviousBuilds
 
 IF "%version%"=="" GOTO :noinput
 
-SET ROOTDIR=%~dp0
-SET ROOTDIR=%ROOTDIR:~0,-1%
 SET AzureWork=%ROOTDIR%\Temp
 SET ConfigPath=%AzureWork%
 SET ContentDest=%AzureWork%\AzureContent
 SET ContentSource=%DEPLOYSHARE%\%version%
 SET msi=%MSIDIR%\%version%\Teleopti CCC AzureConfig %version%.msi
 SET output=%OUTDIR%\%version%
-SET DriveLetter=%ROOTDIR:~0,2%
 
 ::Get us to correct reletive location
 %DriveLetter%
