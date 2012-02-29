@@ -1220,6 +1220,7 @@ Personal drop down menu
 {
 	text-decoration: none;
 	outline: none;
+	font-size: 11px;
 }
 .dropdown dd
 {
