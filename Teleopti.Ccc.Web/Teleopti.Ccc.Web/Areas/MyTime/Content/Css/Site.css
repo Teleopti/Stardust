@@ -1220,12 +1220,6 @@ Personal drop down menu
 {
 	text-decoration: none;
 	outline: none;
-	font-size: 11px;
-}
-.dropdown dd, .dropdown dt, .dropdown ul
-{
-	margin: 0px;
-	padding: 0px;
 }
 .dropdown dd
 {
@@ -1237,12 +1231,8 @@ Personal drop down menu
 }
 .dropdown dd ul
 {
-	background: #f2f2f2 none repeat scroll 0 0;
-	border: 1px solid #d4ca9a;
-	color: #C5C0B0;
+	background: #f8f8f8 none repeat scroll 0 0;
 	display: none;
-	left: 0px;
-	padding: 5px 0px;
 	position: absolute;
 	top: 2px;
 	width: 232px;
@@ -1250,13 +1240,8 @@ Personal drop down menu
 }
 .dropdown dd ul li a
 {
-	padding: 5px;
 	display: block;
 	text-align: left;
-}
-.dropdown dd ul li a:hover
-{
-	background-color: #dddddd;
 }
 /*
 End personal drop down menu
