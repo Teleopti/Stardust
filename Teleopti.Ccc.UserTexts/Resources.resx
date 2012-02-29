@@ -10399,7 +10399,7 @@ These options are activated:
     <value>You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
-    <value>-- Browser Default --</value>
+    <value>Browser Default</value>
   </data>
   <data name="PasswordOld" xml:space="preserve">
     <value>Old password</value>
