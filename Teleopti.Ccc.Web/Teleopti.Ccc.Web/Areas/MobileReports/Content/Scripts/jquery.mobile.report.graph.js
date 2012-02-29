@@ -56,8 +56,9 @@
 				if (!$.isFunction(graphFn))
 					console.log('ChartType: ' + o.chartType + ' not defined!');
 				var graph = graphFn(id, gd);
+				if (!(graph.context != null && $.isFunction(graph.context.clearRect)))
+					return; 
 				graph.context.clearRect(0, 0, o.width, o.height);
-
 				var shortSeries = gd.Y1.length < 10;
 				graph.Set('chart.hmargin', shortSeries ? 30 : 5);
 				graph.Set('chart.labels', o.adjustXLabels(self, gd.X));

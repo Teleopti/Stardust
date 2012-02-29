@@ -36,7 +36,7 @@ Teleopti.MobileReports.Index = (function ($) {
 			$('#sel-skill').skillpicker();
 
 			(function setDefaultSettings() {
-				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'y', 'amount': -3 }).trigger('datebox', { 'method': 'doset' });
+				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'd', 'amount': -1 }).trigger('datebox', { 'method': 'doset' });
 				setRadioGrpValue('#report-settings-view', 'sel-report');
 				$('#report-settings-type-graph').attr('checked', true).checkboxradio("refresh");
 			})();

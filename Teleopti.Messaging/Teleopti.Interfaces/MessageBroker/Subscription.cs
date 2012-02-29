@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Xml;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.MessageBroker
 {
@@ -9,6 +11,8 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
+		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name};
+
 		/// <summary>
 		/// Creates a new instance of <see cref="Subscription"/>
 		/// </summary>
@@ -27,7 +31,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string Route()
 		{
-			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
+			var stringArray = new[] { excludeDatasourceForCertainTypes(), excludeBusinessUnitForCertainTypes(), DomainType };
 			var basicRoute = String.Join("/", stringArray);
 			
 			if (!string.IsNullOrEmpty(DomainId))
@@ -121,6 +125,17 @@ namespace Teleopti.Interfaces.MessageBroker
 		public static string DateToString(DateTime date)
 		{
 			return XmlConvert.ToString(date, XmlDateTimeSerializationMode.Unspecified);
+		}
+
+		private string excludeDatasourceForCertainTypes()
+		{
+			return TypesWithException.Contains(DomainType) ? null : DataSource;
+		}
+
+		private string excludeBusinessUnitForCertainTypes()
+		{
+			var emptyId = IdToString(Guid.Empty);
+			return TypesWithException.Contains(DomainType) && emptyId.Equals(DomainId) ? emptyId : BusinessUnitId;
 		}
 	}
 }

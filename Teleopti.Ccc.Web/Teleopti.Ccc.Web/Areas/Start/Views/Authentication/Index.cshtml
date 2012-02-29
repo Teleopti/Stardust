@@ -11,10 +11,19 @@
 		</script>
 		<script src="@Url.Content("~/Content/scripts/detectmobilebrowser.js")"> </script>
 		<script>
-			var orig = '@HttpUtility.JavaScriptStringEncode((string)Html.ViewContext.RequestContext.RouteData.Values["origin"])';
-			var desktop = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
-			var mobile = '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = @Html.ViewContext.RequestContext.RouteData.Values["origin"] }))';
-			window.location = jQuery.browser.mobile && !orig.length ? mobile : desktop;
+			@{
+				var origin = Html.ViewContext.RequestContext.RouteData.Values["origin"];
+			}
+			var locUrls = {
+				orig: '@HttpUtility.JavaScriptStringEncode((string)origin)',
+				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = origin ?? "Start" }))',
+				mobile: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = origin ?? "Start" }))',
+				target: ''
+			};
+			locUrls.target = jQuery.browser.mobile && !locUrls.orig.length ? locUrls.mobile : locUrls.desktop;
+			if(locUrls.target && locUrls.target.length) {
+				window.location.replace(locUrls.target);
+			}
 		</script>
 	</head>
 	<body>

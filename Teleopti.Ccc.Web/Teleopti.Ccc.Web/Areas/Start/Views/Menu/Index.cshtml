@@ -1,0 +1,30 @@
+﻿@model System.Collections.Generic.IEnumerable<Teleopti.Ccc.Web.Areas.Start.Models.Menu.MenuViewModel>
+@{
+	Layout = null;
+}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Browser Detection</title>
+		<script type="text/javascript">
+			var jQuery = jQuery || {};
+			jQuery.browser = jQuery.browser || {};
+		</script>
+		<script src="@Url.Content("~/Content/scripts/detectmobilebrowser.js")"> </script>
+		<script type="text/javascript">
+			var locUrls = {
+				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "Menu" }))',
+				mobile: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Menu", Action = "MobileMenu" }))',
+				target: ''
+			};
+			locUrls.target = jQuery.browser.mobile ? locUrls.mobile : locUrls.desktop;
+			if (locUrls.target && locUrls.target.length) {
+				window.location.replace(locUrls.target);
+			}
+			
+		</script>
+	</head>
+	<body>
+		Goto @Html.ActionLink("Desktop", "Menu", "Menu") or @Html.ActionLink("Mobile", "MobileMenu", "Menu")
+	</body>
+</html>
