@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Win.Permissions
             return availableDataCollection;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static ICollection<IPersonInRole> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
         {
         	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static ICollection<IPersonInRole> LoadPeopleNotInApplicationRole(IApplicationRole selectedRole, ICollection<Guid> personsIds)
         {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
