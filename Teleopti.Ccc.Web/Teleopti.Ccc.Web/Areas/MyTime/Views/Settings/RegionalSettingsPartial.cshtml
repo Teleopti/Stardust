@@ -2,17 +2,17 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 @model SettingsViewModel
 @{
-	 Layout = null;
+	Layout = null;
 }
-
-
-<div id ="selectors" class="ui-corner-all">
-	<p style="height: 50px">
-		@Resources.Language<br/>
-		@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
-	</p>
-	<p style="height: 50px">
-		@Resources.DateFormat<br/>
-		@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
-	</p>
+<div id="settings" class="edit-module">
+	<div id="selectors" class="edit-module-inner">
+		<div class="edit-module-element">
+			<label>@Resources.Language</label><br/>
+			@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+		</div>
+		<div class="edit-module-element">
+			<label>@Resources.DateFormat</label><br/>
+			@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
+		</div>
+	</div>
 </div>
