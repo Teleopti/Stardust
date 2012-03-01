@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseCreator
 	{
-		private readonly string _databaseFolder;
+		private readonly DatabaseFolder _databaseFolder;
 		private readonly SqlConnection _connection;
 
-		public DatabaseCreator(string databaseFolder, SqlConnection connection)
+		public DatabaseCreator(DatabaseFolder databaseFolder, SqlConnection connection)
 		{
 			_databaseFolder = databaseFolder;
 			_connection = connection;
@@ -30,10 +30,8 @@ namespace Teleopti.Ccc.DBManager.Library
 		private string ScriptFilePath(DatabaseType type, string subFolder)
 		{
 			var fileName = type.GetName() + ".sql";
-			var path = Path.Combine(_databaseFolder, subFolder);
+			var path = Path.Combine(_databaseFolder.Path(), subFolder);
 			return Path.Combine(path, fileName);
-			//var scriptFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\{1}.sql", _databaseFolder, type.GetName());
-			//return scriptFile;
 		}
 
 		private void CreateDatabaseByScriptFile(string scriptFile, DatabaseType type, string name)
