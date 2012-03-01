@@ -38,9 +38,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				Url = new Uri(IniFileInfo.Url);
 			}
-			//BackupExistingNHibFiles();
+			BackupExistingNHibFiles();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
-			
 
 			var setupTime = DateTime.Now.Subtract(startTime);
 			Log.Write("Test site setup took " + setupTime);
@@ -52,8 +51,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (IniFileInfo.CassiniDev)
 				_server.ShutDown();
 
-			//RemoveTestDataNHibFile();
-			//RevertBackedUpNHibFiles();
+			RemoveTestDataNHibFile();
+			RevertBackedUpNHibFiles();
 
 			removeTestDataAutoFacOverrideFile();
 		}
