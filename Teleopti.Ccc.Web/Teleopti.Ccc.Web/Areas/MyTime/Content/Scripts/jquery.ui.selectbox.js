@@ -24,6 +24,7 @@
 
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
+				.attr("disabled", "disabled")
 				.addClass('ui-selectbox-button')
 				.html('&nbsp;')
 				.button({
