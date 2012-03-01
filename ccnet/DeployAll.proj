@@ -41,7 +41,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;BuildAndTest;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -97,7 +97,7 @@
 						$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\**\RtaStates.xml"/>
 		</ItemGroup>
 		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
-		<Delete Files="@(DeleteFilesCollection)" />
+		<Exec Command="del /Q &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
 	</Target>
 	
 	
@@ -123,6 +123,7 @@
   </Target>
   
   <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
 

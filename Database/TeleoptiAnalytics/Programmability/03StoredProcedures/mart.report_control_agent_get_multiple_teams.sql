@@ -8,13 +8,14 @@ GO
 -- Create date: 2011-10-26
 --				2012-01-09 Pass BU to AllOwnedAgents
 -- Description:	Loads agents to report selection control. Takes one or more teams as parameter.
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROC [mart].[report_control_agent_get_multiple_teams]
 @date_from		datetime,
 @date_to		datetime = @date_from,
 @site_id		int,
 @team_set		nvarchar(max),
-@report_id		int,
+@report_id		uniqueidentifier,
 @person_code	uniqueidentifier,
 @language_id	int,
 @bu_id uniqueidentifier

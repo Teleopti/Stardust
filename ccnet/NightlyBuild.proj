@@ -6,8 +6,7 @@
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
-
-		<DBManagerExe>"$(CCNetWorkingDirectory)\Database\DBManager.exe"</DBManagerExe>
+		<DBManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DBManagerExe>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
@@ -36,9 +35,7 @@
 	
 </PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
-	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<ItemGroup>
 		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
@@ -52,7 +49,10 @@
 		
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="BuildAndTest;AzureDeploy;AzureAnalyticsReportTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
+	<Target Name="Run" DependsOnTargets="AzureDeploy;AzureAnalyticsReportTest;BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Message Text="All target executed!" Importance="high" />
+	</Target>
+	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
@@ -122,9 +122,9 @@
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
 
 		<Message Text="Patching 3 x databases..." Importance="high" />
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiAnalyticsArgs)"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiCCC7Args)"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiCCCAggArgs)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
 
 	</Target>
 
@@ -150,8 +150,11 @@
 		<Message Text="Drop Azure databases. Done!" Importance="high" />
 
 		<Message Text="Create Azure database ..." Importance="high" />
-		<Exec Command ="$(DBManagerExe) $(DBManagerAzure) -D$(AnalyticsDB) -OTeleoptiAnalytics"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerAzure) -D$(CCC7DB) -OTeleoptiCCC7"/>
+		<Message Text="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(AnalyticsDB) -OTeleoptiAnalytics" Importance="high" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(AnalyticsDB) -OTeleoptiAnalytics"/>
+		
+		<Message Text="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(CCC7DB) -OTeleoptiCCC7" Importance="high" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(CCC7DB) -OTeleoptiCCC7"/>
 		<Message Text="Create Azure database. Done!" Importance="high" />
 	</Target>
 

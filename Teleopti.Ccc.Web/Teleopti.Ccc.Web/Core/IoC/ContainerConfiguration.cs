@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<MyTimeAreaModule>();
-			builder.RegisterModule<AuthenticationAreaModule>();
+			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<RuleSetModule>();
 			builder.RegisterModule<MobileReportsAreaModule>();
 

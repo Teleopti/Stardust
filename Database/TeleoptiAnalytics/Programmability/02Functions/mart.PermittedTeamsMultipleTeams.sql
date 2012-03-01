@@ -16,14 +16,14 @@ GO
 -- Description:	
 -- Revisions:	
 ------------------------------------------------
-
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 
 
 CREATE FUNCTION [mart].[PermittedTeamsMultipleTeams]
 (
 	@person_code uniqueidentifier,
-	@report_id int,
+	@report_id uniqueidentifier,
 	@site_id int,
 	@team_set nvarchar(max)
 )

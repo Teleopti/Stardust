@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Threading;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -448,49 +447,6 @@ namespace Teleopti.Messaging.Server
         /// <param name="moduleId">The module id.</param>
         /// <param name="packageSize">Size of the package.</param>
         /// <param name="isHeartbeat">if set to <c>true</c> [is heartbeat].</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the parent object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2009-03-29
-        /// </remarks>
-        public void SendEventMessage(DateTime eventStartDate,
-                                        DateTime eventEndDate,
-                                        Int32 userId,
-                                        Int32 processId,
-                                        Guid moduleId,
-                                        Int32 packageSize,
-                                        bool isHeartbeat,
-                                        Guid referenceObjectId,
-                                        string referenceObjectType,
-                                        Guid domainObjectId,
-                                        string domainObjectType,
-                                        DomainUpdateType updateType,
-                                        string userName)
-        {
-            IDomainObjectFactory factory = new DomainObjectFactory();
-            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, userName);
-            CustomThreadPool.QueueUserWorkItem(SendAsync, eventMessage);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="processId">The process id.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="packageSize">Size of the package.</param>
-        /// <param name="isHeartbeat">if set to <c>true</c> [is heartbeat].</param>
         /// <param name="domainObjectId">The domain object id.</param>
         /// <param name="domainObjectType">Type of the domain object.</param>
         /// <param name="updateType">Type of the update.</param>
@@ -517,47 +473,6 @@ namespace Teleopti.Messaging.Server
         {
             IDomainObjectFactory factory = new DomainObjectFactory();
             IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType, userName);
-            CustomThreadPool.QueueUserWorkItem(SendAsync, eventMessage);
-        }
-
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="processId">The process id.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="packageSize">Size of the package.</param>
-        /// <param name="isHeartbeat">if set to <c>true</c> [is heartbeat].</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the parent object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        public void SendEventMessage(DateTime eventStartDate,
-                                     DateTime eventEndDate,
-                                     Int32 userId,
-                                     Int32 processId,
-                                     Guid moduleId,
-                                     Int32 packageSize,
-                                     bool isHeartbeat,
-                                     Guid referenceObjectId,
-                                     string referenceObjectType,
-                                     Guid domainObjectId,
-                                     string domainObjectType,
-                                     DomainUpdateType updateType,
-                                     byte[] domainObject,
-                                     string userName)
-        {
-            IDomainObjectFactory factory = new DomainObjectFactory();
-            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject, userName);
             CustomThreadPool.QueueUserWorkItem(SendAsync, eventMessage);
         }
 
@@ -660,20 +575,6 @@ namespace Teleopti.Messaging.Server
         public void SendHeartbeat(IEventHeartbeat beat)
         {
             HeartbeatThreadPool.QueueUserWorkItem(AcceptHeartbeat, beat);
-        }
-
-        /// <summary>
-        /// Gets the service path.
-        /// </summary>
-        /// <value>The service path.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public string ServicePath
-        {
-            get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Remove(0, 6); }
         }
 
         /// <summary>

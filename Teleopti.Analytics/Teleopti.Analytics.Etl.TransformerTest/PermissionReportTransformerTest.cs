@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
@@ -48,7 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             DataRow row1;
             DataRow row2;
-            using (DataTable table = new DataTable())
+            using (var table = new DataTable())
             {
                 table.Locale = Thread.CurrentThread.CurrentCulture;
                 PermissionReportInfrastructure.AddColumnsToDataTable(table);
@@ -62,14 +61,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             }
 
             Assert.AreEqual(_permissionHolder1.Person.Id, row1["person_code"]);
-            Assert.AreEqual(int.Parse(_permissionHolder1.ApplicationFunction.ForeignId, CultureInfo.InvariantCulture),
-                            row1["report_id"]);
+            Assert.AreEqual(new Guid(_permissionHolder1.ApplicationFunction.ForeignId), row1["ReportId"]);
             Assert.AreEqual(_permissionHolder1.Team.Id, row1["team_id"]);
             Assert.AreEqual(_permissionHolder1.IsMy, row1["my_own"]);
 
             Assert.AreEqual(_permissionHolder2.Person.Id, row2["person_code"]);
-            Assert.AreEqual(int.Parse(_permissionHolder2.ApplicationFunction.ForeignId, CultureInfo.InvariantCulture),
-                            row2["report_id"]);
+            Assert.AreEqual(new Guid(_permissionHolder2.ApplicationFunction.ForeignId),
+                            row2["ReportId"]);
             Assert.AreEqual(_permissionHolder2.Team.Id, row2["team_id"]);
             Assert.AreEqual(_permissionHolder2.IsMy, row2["my_own"]);
         }

@@ -132,7 +132,7 @@ namespace Teleopti.Messaging.Management.Controllers
                     string message = emv.Message;
                     IMessageSender messageSender = MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]);
                     messageSender.InstantiateBrokerService();
-                    messageSender.SendRtaData(Guid.Empty, new ExternalAgentState(Environment.UserName, message, new TimeSpan(1, 0, 0), DateTime.Now, Guid.Empty, 0, DateTime.Now, true));
+                    messageSender.SendRtaData(Guid.Empty, Guid.Empty, new ExternalAgentState(Environment.UserName, message, new TimeSpan(1, 0, 0), DateTime.Now, Guid.Empty, 0, DateTime.Now, true));
                 }
                 
             }

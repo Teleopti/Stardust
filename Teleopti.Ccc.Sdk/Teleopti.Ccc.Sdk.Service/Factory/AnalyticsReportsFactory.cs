@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 return dtoList;
             foreach (IApplicationFunction appFunc in appFuncList)
             {
-                int foreignId = Int32.Parse(appFunc.ForeignId, CultureInfo.InvariantCulture);
+                var foreignId = new Guid(appFunc.ForeignId);
                 MatrixReportInfo matrixReportInfo = MatrixReportInfo.FindByReportId(matrixReportCollection, foreignId);
                 var dto = new MatrixReportInfoDto
                               {
-                                  ReportId = matrixReportInfo.ReportId,
+                                  Id = matrixReportInfo.ReportId,
                                   ReportName = matrixReportInfo.ReportName,
                                   ReportUrl = matrixReportInfo.ReportUrl.Replace("~", string.Empty),
                                   TargetFrame = matrixReportInfo.TargetFrame

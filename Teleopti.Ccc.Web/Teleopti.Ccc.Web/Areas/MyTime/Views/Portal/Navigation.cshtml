@@ -1,4 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
@@ -13,6 +14,10 @@
 			<li><a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a></li>
 		}
 	</ul>
+		<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div class="toolbar-inner">
+			</div>
+		</section>
 	@foreach (var navSection in Model.NavigationItems)
 	{
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
@@ -75,17 +80,17 @@
 			
 	<section id="toolbar-right" class="col-main floatright">
 		<div class="toolbar-inner">
-			<div class="floatleft">
-				<span class="icon employee icon-left" title="@Resources.UserName" id="username">@User.Identity.Name</span>
-			</div>
-			<div class="seperator" style="visibility: hidden"></div>
-			<div class="floatleft" style="visibility: hidden">
-				<button class="icon icon-left mail" title="Inbox">(0)</button>
-			</div>
-			<div class="seperator"></div>
-			<div class="floatleft">
-				@Html.ActionLink("Log out", "SignOut", "Authentication", new {area = "Start"}, new {@class = "ir icon logout", title = Resources.LogOut, id = "signout"})
-			</div>
+				<dl class="dropdown">
+						<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
+						<dd>
+							<ul class="ui-widget-content ui-corner-all ui-menu">
+								<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
+								<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+								<li>&nbsp;</li>
+								<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout",@class="ui-corner-all" })</li>
+							</ul>
+						</dd>
+				</dl>
 		</div>
 	</section>
 				

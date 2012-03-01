@@ -13,7 +13,7 @@ CREATE PROCEDURE [mart].[raptor_reports_load]
 AS
 
 CREATE TABLE #report(
-	[report_id] [int] NOT NULL,
+	[report_id] [uniqueidentifier] NOT NULL,
 	[url] [nvarchar](500) NULL,
 	[target] [nvarchar](50) NULL,
 	[report_name_resource_key] [nvarchar](50) NOT NULL
