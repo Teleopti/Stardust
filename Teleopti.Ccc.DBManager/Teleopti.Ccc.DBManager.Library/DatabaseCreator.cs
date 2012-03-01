@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private static string ReadScriptFile(string scriptFile)
 		{
-			TextReader textReader = new StreamReader(scriptFile);
-			var script = textReader.ReadToEnd();
-			textReader.Close();
-			return script;
+			return File.ReadAllText(scriptFile);
 		}
 
 		private string ReplaceScriptTags(string script, DatabaseType type, string name)
@@ -67,10 +64,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			return script;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void ExecuteScript(string script)
 		{
-			var sqlCommand = new SqlCommand(script, _connection) {CommandTimeout = Timeouts.CommandTimeout};
-			sqlCommand.ExecuteNonQuery();
+			using (var sqlCommand = new SqlCommand(script, _connection) { CommandTimeout = Timeouts.CommandTimeout })
+			{
+				sqlCommand.ExecuteNonQuery();
+			}
 		}
 
 		private IniFile IniFile(DatabaseType type)
