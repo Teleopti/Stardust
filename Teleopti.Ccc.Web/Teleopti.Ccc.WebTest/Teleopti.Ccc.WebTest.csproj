@@ -110,7 +110,7 @@
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
-    <Compile Include="Core\Mapping\FuncResolver.cs" />
+    <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
     <Compile Include="Core\Portal\FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryStudentAvailabilityTest.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="Areas\MobileReports\Core\IoC\MobileReportsAreaModuleTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\ReportViewModelFactoryTest.cs" />
+    <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
@@ -179,10 +180,10 @@
     <Compile Include="Core\Portal\PortalViewModelFactoryTest.cs" />
     <Compile Include="Core\Preference\DataProvider\PreferenceOptionsProviderTest.cs" />
     <Compile Include="Core\Preference\DataProvider\PreferencePersisterTest.cs" />
-    <Compile Include="Core\Preference\Mapping\PreferenceDayResultMappingTest.cs" />
+    <Compile Include="Core\Preference\Mapping\PreferenceDayInputResultMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceDomainDataMappingTest.cs" />
     <Compile Include="Core\Preference\Mapping\PreferenceViewModelMappingTest.cs" />
-    <Compile Include="Core\Preference\Mapping\PreferenceInputMappingTest.cs" />
+    <Compile Include="Core\Preference\Mapping\PreferenceDayInputMappingTest.cs" />
     <Compile Include="Core\Preference\ViewModelFactory\PreferenceViewModelFactoryTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PersonRequestProviderTest.cs" />
     <Compile Include="Core\UserTimeZoneTest.cs" />

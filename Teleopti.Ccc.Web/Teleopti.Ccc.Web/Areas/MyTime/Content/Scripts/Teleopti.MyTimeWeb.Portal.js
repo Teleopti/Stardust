@@ -302,6 +302,12 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 				if (!$clicked.parents().hasClass("dropdown"))
 					$(".dropdown dd ul").hide();
 			});
+
+			$(".dropdown a").hover(function() {
+				$(this).addClass('ui-state-hover');
+			}, function() {
+				$(this).removeClass('ui-state-hover');
+			});
 		}
 	};
 })(jQuery);

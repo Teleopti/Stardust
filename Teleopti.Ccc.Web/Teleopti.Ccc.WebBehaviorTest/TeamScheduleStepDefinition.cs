@@ -259,14 +259,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Button.InnerHtml, Contains.Substring(theOtherSitesTeam));
+			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.SelectedText, Contains.Substring(theOtherSitesTeam));
 		}
 
 		[Then(@"the team-picker should have my team selected")]
 		public void ThenTheTeam_PickerShouldHaveMyTeamSelected()
 		{
 			var myTeam = UserFactory.User().UserData<Team>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Button.InnerHtml, Contains.Substring(myTeam));
+			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.SelectedText, Contains.Substring(myTeam));
 		}
 
 		[Then(@"the team-picker should have the first of the other site's teams selected")]

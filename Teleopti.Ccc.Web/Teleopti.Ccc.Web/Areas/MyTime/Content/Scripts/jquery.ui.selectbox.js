@@ -30,7 +30,7 @@
 					icons: { secondary: 'ui-icon-triangle-1-s' },
 					text: true
 				})
-				.click(function () {
+				.click(function (e) {
 					// close if already visible
 					if (menu.autocomplete("widget").is(":visible")) {
 						menu.autocomplete("close");
@@ -41,6 +41,7 @@
 					// pass empty string as value to search for, displaying all results
 					menu.autocomplete("search", "");
 					menu.focus();
+					e.stopPropagation();
 				})
 				.appendTo(container)
 				;
@@ -99,6 +100,7 @@
 			var items = this._select
 				.children("option")
 				.map(function () {
+					console.log(('mapping option ' + this.value));
 					var text = $(this).text();
 					var value = this.value;
 					return {

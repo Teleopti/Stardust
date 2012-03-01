@@ -36,6 +36,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
+		[Given(@"I am an agent that has a dayoff today according to my contract")]
+		public void GivenIAmAnAgentThatHasAContractDayOffToday()
+		{
+			UserFactory.User().Setup(new Agent());
+			UserFactory.User().Setup(new SchedulePeriod());
+			UserFactory.User().Setup(new PersonPeriod {ContractSchedule = TestData.DayOffTodayContractSchedule});
+			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
 		[Given(@"I am a supervisor")]
 		public void GivenIAmASupervisorWithMobile()
 		{
@@ -281,6 +290,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new DayOffToday());
 		}
 
+		[Given(@"I have a contract dayoff today")]
+		public void GivenIHaveAContractDayoffToday()
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 		[Given(@"I have a full-day absence today")]
 		public void GivenIHaveAFull_DayAbsenceToday()

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Drawing;
+using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -12,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 {
 	[TestFixture]
-	public class PreferenceDayResultMappingTest
+	public class PreferenceDayInputResultMappingTest
 	{
 		[SetUp]
 		public void Setup()
@@ -46,6 +47,18 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapShiftCategoryStyleClassName()
+		{
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory(" ") {DisplayColor = Color.PeachPuff}};
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.StyleClassName
+				.Should().Be(Color.PeachPuff.ToStyleClass());
+		}
+
+		[Test]
 		public void ShouldMapDayOffTemplatePreference()
 		{
 			var preferenceRestriction = new PreferenceRestriction { DayOffTemplate = new DayOffTemplate(new Description("Day Off", "DO"))};
@@ -54,6 +67,21 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
 
 			result.PreferenceRestriction.Should().Be(preferenceRestriction.DayOffTemplate.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapDayOffTemplateStyleClassName()
+		{
+			var preferenceRestriction = new PreferenceRestriction
+			                            	{
+			                            		DayOffTemplate = new DayOffTemplate(new Description()) { DisplayColor = Color.Sienna}
+			                            	};
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.StyleClassName
+				.Should().Be(Color.Sienna.ToStyleClass());
 		}
 
 		[Test]
@@ -67,5 +95,21 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			result.PreferenceRestriction.Should().Be(preferenceRestriction.Absence.Description.Name);
 		}
+
+		[Test]
+		public void ShouldMapAbsenceStyleClassName()
+		{
+			var preferenceRestriction = new PreferenceRestriction
+			                            	{
+			                            		Absence = new Absence() {DisplayColor = Color.Thistle}
+			                            	};
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.StyleClassName
+				.Should().Be(Color.Thistle.ToStyleClass());
+		}
+
 	}
 }

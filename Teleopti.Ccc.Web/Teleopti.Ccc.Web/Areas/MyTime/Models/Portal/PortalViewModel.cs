@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -49,25 +50,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 
 	public class ToolBarSplitButton : ToolBarItemBase
 	{
-		public IEnumerable<ISplitButtonOption> PreferenceOptions { get; set; }
+		public IEnumerable<ISplitButtonOption> Options { get; set; }
 	}
 
 	public interface ISplitButtonOption
 	{
 		string Value { get; }
 		string Text { get; }
+		StyleClassViewModel Style { get; }
 	}
 
 	public class SplitButtonSplitter : ISplitButtonOption
 	{
 		public string Value { get { return "-"; } }
 		public string Text { get { return "-"; } }
+		public StyleClassViewModel Style { get; set; }
 	}
 
 	public class SplitButtonOption : ISplitButtonOption
 	{
 		public string Value { get; set; }
 		public string Text { get; set; }
+		public StyleClassViewModel Style { get; set; }
 	}
 
 	public class ToolBarDatePicker : ToolBarItemBase

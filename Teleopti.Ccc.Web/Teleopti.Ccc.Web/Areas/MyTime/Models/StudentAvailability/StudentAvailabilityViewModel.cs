@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
@@ -29,12 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 		public bool IsWorkTimeInRange { get; set; }
 		public string Message { get; set; }
 		public string Summary { get; set; }
-	}
-
-	public class StyleClassViewModel
-	{
-		public string Name { get; set; }
-		public string ColorHex { get; set; }
 	}
 
 	public class WeekViewModel

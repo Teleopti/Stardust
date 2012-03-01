@@ -15,31 +15,36 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _partialInit() {
-		_onSelectorChanged();
+		_initSelectors();
 		_passwordEvents();
+		_initButton();
+	}
+
+	function _initButton() {
+		$("input#passwordButton")
+			.button()
+			.click(function () {
+				_updatePassword($("input#oldPassword").val(), $("input#password").val());
+			});
 	}
 
 	function _passwordEvents() {
 		$("input#password, input#passwordValidation").keyup(function () {
-			var incorrectLabel = $("label#nonMatchingPassword");
+			var incorrectLabel = $("#nonMatchingPassword");
 			var passwordButton = $("input#passwordButton");
 			var pw = $("input#password").val();
 			var pw2 = $("input#passwordValidation").val();
 			if (pw != pw2) {
 				incorrectLabel.show();
-				passwordButton.attr("disabled", "disabled");
+				passwordButton.button("disable");
 			} else {
 				incorrectLabel.hide();
-				passwordButton.removeAttr("disabled");
+				passwordButton.button("enable");
 			}
 		});
 
 		$("input#oldPassword").keyup(function () {
-			$("label#incorrectOldPassword").hide();
-		});
-
-		$("input#passwordButton").click(function () {
-			_updatePassword($("input#oldPassword").val(), $("input#password").val());
+			$("#incorrectOldPassword").hide();
 		});
 	}
 
@@ -60,7 +65,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 401) {
-					$("label#incorrectOldPassword").show();
+					$("#incorrectOldPassword").show();
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -68,13 +73,21 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _onSelectorChanged() {
-		$("#selectors #cultureSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateCulture");
-		});
-		$("#selectors #cultureUiSelect").change(function () {
-			_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-		});
+	function _initSelectors() {
+		$('#cultureSelect')
+			.selectbox({
+				changed: function () {
+					_selectorChanged($(this).val(), "Settings/UpdateCulture");
+				}
+			})
+			;
+		$('#cultureUiSelect')
+			.selectbox({
+				changed: function () {
+					_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
+				}
+			})
+			;
 	}
 
 	function _selectorChanged(value, url) {

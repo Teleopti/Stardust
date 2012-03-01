@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 	{
 		public DateOnly Date { get; set; }
 		public IEnumerable<WeekScheduleDayDomainData> Days { get; set; }
+		public IScheduleColorSource ColorSource { get; set; }
 	}
 }

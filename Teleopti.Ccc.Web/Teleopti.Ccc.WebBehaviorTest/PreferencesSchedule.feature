@@ -57,8 +57,7 @@ Scenario: See scheduled absence on schedule dayoff
 	Then I should see the absence
 
 Scenario: See scheduled absence on contract dayoff
-	Given I am an agent
-	And I have a contract dayoff today
+	Given I am an agent that has a dayoff today according to my contract
 	And I have a full-day absence today
 	And My schedule is published
 	When I view preferences
