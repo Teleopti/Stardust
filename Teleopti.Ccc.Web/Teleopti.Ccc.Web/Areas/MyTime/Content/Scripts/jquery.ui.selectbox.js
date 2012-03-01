@@ -24,11 +24,13 @@
 
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
+				.attr("disabled", "disabled")
 				.addClass('ui-selectbox-button')
 				.html('&nbsp;')
 				.button({
 					icons: { secondary: 'ui-icon-triangle-1-s' },
-					text: true
+					text: true,
+					disabled: true
 				})
 				.click(function (e) {
 					// close if already visible
@@ -94,13 +96,14 @@
 				}
 			})
 			;
+
+			button.button('enable');
 		},
 
 		_mapOptions: function (response) {
 			var items = this._select
 				.children("option")
 				.map(function () {
-					console.log(('mapping option ' + this.value));
 					var text = $(this).text();
 					var value = this.value;
 					return {

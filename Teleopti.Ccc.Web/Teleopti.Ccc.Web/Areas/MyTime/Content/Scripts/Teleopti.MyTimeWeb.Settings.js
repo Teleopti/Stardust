@@ -64,7 +64,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				setTimeout(function () { updatedLabel.hide() }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 401) {
+				if (jqXHR.status == 400) {
 					$("#incorrectOldPassword").show();
 					return;
 				}

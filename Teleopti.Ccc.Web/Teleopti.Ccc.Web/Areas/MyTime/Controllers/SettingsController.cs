@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (!result)
 			{
 				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 401;
+				Response.StatusCode = 400;
 			}
 		}
 	}
