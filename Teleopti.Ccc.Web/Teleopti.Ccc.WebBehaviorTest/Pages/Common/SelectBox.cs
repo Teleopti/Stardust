@@ -2,14 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
+using log4net;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
 	public class SelectBox : Control<Div>
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(SelectBox));
+
 		public override WatiN.Core.Constraints.Constraint ElementConstraint { get { return Find.ByClass(s => s.Contains("ui-selectbox")); } }
 
 		public SelectList SelectList { get { return Element.SelectList(Find.First()); } }
@@ -26,6 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public void Select(string text)
 		{
+			Log.Write("Selecting selectbox item " + text);
 			Button.EventualClick();
 			AutoComplete.WaitUntilDisplayed();
 			Menu.WaitUntilDisplayed();

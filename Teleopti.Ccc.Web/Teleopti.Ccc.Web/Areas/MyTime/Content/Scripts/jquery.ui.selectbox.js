@@ -28,7 +28,8 @@
 				.html('&nbsp;')
 				.button({
 					icons: { secondary: 'ui-icon-triangle-1-s' },
-					text: true
+					text: true,
+					disabled: true
 				})
 				.click(function (e) {
 					// close if already visible
@@ -94,6 +95,8 @@
 				}
 			})
 			;
+
+			button.button('enable');
 		},
 
 		_mapOptions: function (response) {
