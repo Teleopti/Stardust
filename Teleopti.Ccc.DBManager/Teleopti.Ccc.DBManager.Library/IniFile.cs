@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Teleopti.Ccc.DBManager
+namespace Teleopti.Ccc.DBManager.Library
 {
     public class IniFile
     {
