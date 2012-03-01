@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			Log.Write("Selecting selectbox item " + text);
 			Button.EventualClick();
+			AutoComplete.WaitUntilExists();
 			AutoComplete.WaitUntilDisplayed();
+			Menu.WaitUntilExists();
 			Menu.WaitUntilDisplayed();
 			EventualAssert.That(() => Menu.InnerHtml, Contains.Substring(text));
 			JQuery.Select(string.Format("#{0} a:contains('{1}')", AutoComplete.Id, text))
