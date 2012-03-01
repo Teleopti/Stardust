@@ -33,11 +33,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			Log.Write("Selecting selectbox item " + text);
 			Button.EventualClick();
-			AutoComplete.WaitUntilExists();
-			AutoComplete.WaitUntilDisplayed();
-			Menu.WaitUntilExists();
-			Log.Write("GURKA! " + Menu.Style.Display);
-			Menu.WaitUntilDisplayed();
+			EventualAssert.That(() => AutoComplete.Exists, Is.True);
+			EventualAssert.That(() => AutoComplete.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Menu.Exists, Is.True);
 			EventualAssert.That(() => Menu.InnerHtml, Contains.Substring(text));
 			JQuery.Select(string.Format("#{0} a:contains('{1}')", AutoComplete.Id, text))
 				.Trigger("mouseover")
