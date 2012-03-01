@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public Button Button { get { return Element.Button(SelectList.Id + "-button"); } }
 
 		public Div AutoComplete { get { return Element.Div(SelectList.Id + "-menu"); } }
-		public List Menu { get { return AutoComplete.Lists.Single(); } }
+		public List Menu { get { return Element.List(Find.First()); } }
 		public LinkCollection MenuItems { get { return Menu.Links; } }
 
 		public string SelectedText { get { return Button.InnerHtml; } }
