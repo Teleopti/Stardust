@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			AutoComplete.WaitUntilExists();
 			AutoComplete.WaitUntilDisplayed();
 			Menu.WaitUntilExists();
+			Log.Write("GURKA! " + Menu.Style.Display);
 			Menu.WaitUntilDisplayed();
 			EventualAssert.That(() => Menu.InnerHtml, Contains.Substring(text));
 			JQuery.Select(string.Format("#{0} a:contains('{1}')", AutoComplete.Id, text))
