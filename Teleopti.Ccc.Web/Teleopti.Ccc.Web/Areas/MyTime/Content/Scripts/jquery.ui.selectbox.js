@@ -104,7 +104,6 @@
 			var items = this._select
 				.children("option")
 				.map(function () {
-					console.log(('mapping option ' + this.value));
 					var text = $(this).text();
 					var value = this.value;
 					return {
