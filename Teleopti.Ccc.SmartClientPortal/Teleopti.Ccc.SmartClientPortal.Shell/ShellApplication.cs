@@ -28,6 +28,7 @@ using Teleopti.Ccc.Win.Grouping;
 using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.Meetings.Overview;
+using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
@@ -131,6 +132,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new SchedulingServiceModule());
                 builder.RegisterModule(new ShiftsModule());
                 builder.RegisterModule(new PersonSelectorModule());
+                builder.RegisterModule(new PermissionsModule());
                 return builder.Build();
             }
 

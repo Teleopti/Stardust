@@ -20,6 +20,7 @@ using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
@@ -62,10 +63,13 @@ namespace Teleopti.Ccc.Win.Permissions
         private Control _lastInFocus;
         private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
+        private readonly IPermissionViewerRolesPresenter _permissionsViewerPresenter;
 
         public PermissionsExplorer(IComponentContext container)
         {
             _container = container;
+            _permissionsViewerPresenter = _container.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPermissionViewerRolesPresenter>();
+            
             InitializeComponent();
             instantiateEditControl();
             instantiateClipboardControl();
@@ -2095,7 +2099,7 @@ namespace Teleopti.Ccc.Win.Permissions
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private static void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
+        private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
         {
             try
             {
@@ -2126,7 +2130,7 @@ namespace Teleopti.Ccc.Win.Permissions
             handleRolePaste();
         }
 
-        private static void contextMenuStripClipboardOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void contextMenuStripClipboardOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
         }
@@ -2364,5 +2368,19 @@ namespace Teleopti.Ccc.Win.Permissions
         }
 
         #endregion
+
+        private void permissionsExplorerKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.N && (e.Alt))
+            {
+                toolStripExViewer.Visible = !toolStripExViewer.Visible;
+            }
+        }
+
+        private void toolStripButtonShowViewerClick(object sender, EventArgs e)
+        {
+            _permissionsViewerPresenter.ShowViewer();
+        }
+
     }
 }

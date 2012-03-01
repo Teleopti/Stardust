@@ -8,6 +8,20 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IPersonInRole> GetPersonsInRole(Guid roleId);
         IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds);
         IList<IRoleLight> Roles();
+        IList<IPersonInRole> Persons();
+        IList<IRoleLight> RolesOnPerson(Guid selectedPerson);
+        IList<IFunctionLight> FunctionsOnPerson(Guid selectedPerson);
+        IList<IFunctionLight> Functions();
+        IList<IPersonInRole> PersonsWithFunction(Guid selectedFunction);
+        IList<IRoleLight> RolesWithFunction(Guid selectedFunction);
+    }
+
+    public interface IFunctionLight
+    {
+        Guid Id { get; set; }
+        string Name { get; set; }
+        string ResourceName { get; set; }
+        string Role { get; set; }
     }
 
     public interface IRoleLight
