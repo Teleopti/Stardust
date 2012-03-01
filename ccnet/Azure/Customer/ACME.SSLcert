@@ -1,3 +1,3 @@
-$(THUMBPRINT),"ssldfjlsdkfsdlfkjlsdfjk"
-$(THUMBPRINTALGORITHM),"gin356"
-$(CERTNAME),"teleopticcc-acme.cloudapp.net"
+$(SSLTHUMBPRINT),"1D4A14053603B993A0BF4773BC36D5DCACDA8E06"
+$(SSLTHUMBPRINTALGORITHM),"sha1"
+$(SSLCERTNAME),"teleopticcc-acme.cloudapp.net"
