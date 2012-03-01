@@ -87,6 +87,8 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 		public void CulturesShouldBeSorted()
 		{
 			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
+			//remove browser default
+			result.Cultures.RemoveAt(0);
 			var sortedCultures = result.Cultures.OrderBy(c => c.DisplayName);
 			result.Cultures.Should().Have.SameSequenceAs(sortedCultures);
 		}
