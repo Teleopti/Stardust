@@ -29,5 +29,14 @@ namespace Teleopti.Ccc.DBManager.Library
 				sqlCommand.ExecuteNonQuery();
 			}
 		}
+
+		public int GetDatabaseBuildNumber()
+		{
+			using (var sqlCommand = new SqlCommand("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]", _connection))
+			{
+				return (int)sqlCommand.ExecuteScalar();
+			}
+		}
+
 	}
 }

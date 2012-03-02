@@ -10,53 +10,40 @@ namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseSchemeCreator
 	{
+		private readonly DatabaseVersionInformation _versionInformation;
 		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly ILog _logger;
 
-		public DatabaseSchemeCreator(SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
+		public DatabaseSchemeCreator(DatabaseVersionInformation versionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
 		{
+			_versionInformation = versionInformation;
 			_sqlConnection = sqlConnection;
 			_databaseFolder = databaseFolder;
 			_logger = logger;
 		}
 
-		private int GetDatabaseBuildNumber()
+		public void CreateScheme(DatabaseType databaseType)
 		{
-			using (SqlCommand sqlCommand = new SqlCommand("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]", _sqlConnection))
+			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseBuildNumber();
+			var releasesPath = _databaseFolder.ReleasePath(databaseType);
+			
+			if (!Directory.Exists(releasesPath)) return;
+			
+			var scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
+			var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
+
+			var applicableScriptFiles = from f in scriptFiles
+			                            let name = f.Name.Replace(".sql", "")
+			                            let number = Convert.ToInt32(name)
+			                            where number > currentDatabaseBuildNumber
+			                            select new {file = f, name};
+
+			foreach (var scriptFile in applicableScriptFiles)
 			{
-				return (int)sqlCommand.ExecuteScalar();
-			}
-		}
-
-		public void CreateScheme(string databaseTypeName)
-		{
-			var currentDatabaseBuildNumber = GetDatabaseBuildNumber();
-			string releasesPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Releases";
-			if (Directory.Exists(releasesPath))
-			{
-				DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
-				FileInfo[] scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
-
-				foreach (FileInfo scriptFile in scriptFiles)
-				{
-					//Check the versionnumber
-					string releaseName = scriptFile.Name.Replace(".sql", "");
-					int releaseNumber = Convert.ToInt32(releaseName, CultureInfo.CurrentCulture);
-
-					//Always add release files (DDL and src-code)
-					if (releaseNumber > currentDatabaseBuildNumber)
-					{
-						_logger.Write("Applying Release " + releaseName + "...");
-						string fileName = scriptFile.FullName;
-						string sql;
-						using (TextReader textReader = new StreamReader(fileName))
-						{
-							sql = textReader.ReadToEnd();
-						}
-						new SQLBatchExecutor(_sqlConnection, _logger).ExecuteBatchSQL(sql);
-					}
-				}
+				_logger.Write("Applying Release " + scriptFile.name + "...");
+				var sql = System.IO.File.ReadAllText(scriptFile.file.FullName);
+				new SqlBatchExecutor(_sqlConnection, _logger).ExecuteBatchSql(sql);
 			}
 		}
 

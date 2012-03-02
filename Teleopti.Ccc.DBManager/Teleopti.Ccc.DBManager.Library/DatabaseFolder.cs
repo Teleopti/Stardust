@@ -31,6 +31,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			return System.IO.Path.Combine(CreateScriptsPath(), "Azure");
 		}
 
+		public string ReleasePath(DatabaseType databaseType)
+		{
+			var path = System.IO.Path.Combine(Path(), databaseType.GetName());
+			return System.IO.Path.Combine(path, "Releases");
+		}
+
 		private string LocateDatabaseFolderUsingBlackMagic()
 		{
 			if (System.IO.Directory.Exists(@"..\..\..\..\Database"))

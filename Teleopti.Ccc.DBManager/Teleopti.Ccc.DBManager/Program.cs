@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.DBManager
         private static bool _isAzure;
         private const string AzureEdition = "SQL Azure";
     	private static MyLogger _logger;
+    	private static DatabaseVersionInformation _databaseVersionInformation;
 
-        /// <summary>
+    	/// <summary>
         /// Mains the specified args.
         /// Usage:
         /// DBManager.exe (-c) [*Database name] [Login name] [Password] [Server name]
@@ -60,6 +61,8 @@ namespace Teleopti.Ccc.DBManager
                     _isAzure = IsAzure();
 
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
+
+					_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
 
                     //Exclude Agg from Azure
                     if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
@@ -110,7 +113,7 @@ namespace Teleopti.Ccc.DBManager
                             }
 
                             //Add Released DDL
-                            applyReleases(_commandLineArgument.TargetDatabaseTypeName);
+                            applyReleases(_commandLineArgument.TargetDatabaseType);
                             //Add upcoming DDL (Trunk)
                             if (_commandLineArgument.WillAddTrunk)
                                 applyTrunk(_commandLineArgument.TargetDatabaseTypeName);
@@ -210,9 +213,9 @@ namespace Teleopti.Ccc.DBManager
 			}
 		}
 
-        private static void applyReleases(string databaseTypeName)
+        private static void applyReleases(DatabaseType databaseType)
         {
-        	new DatabaseSchemeCreator(_sqlConnection, _databaseFolder, _logger).CreateScheme(databaseTypeName);
+			new DatabaseSchemeCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger).CreateScheme(databaseType);
         }
 
         private static void applyAzureStartDDL(string databaseTypeName)
@@ -233,7 +236,7 @@ namespace Teleopti.Ccc.DBManager
 
     	private static void executeBatchSQL(string sql)
     	{
-			new SQLBatchExecutor(_sqlConnection,_logger).ExecuteBatchSQL(sql);
+			new SqlBatchExecutor(_sqlConnection,_logger).ExecuteBatchSql(sql);
     	}
 
 
@@ -286,13 +289,7 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
-        private static int GetDatabaseBuildNumber()
-        {
-            using(SqlCommand sqlCommand = new SqlCommand("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]", _sqlConnection))
-            {
-                return (int)sqlCommand.ExecuteScalar();
-            }
-        }
+        private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseBuildNumber(); }
 
         private static bool VersionTableExists()
         {
@@ -440,7 +437,7 @@ namespace Teleopti.Ccc.DBManager
         private static void CreateDefaultVersionInformation()
         {
         	logWrite("Creating database version table and setting inital version to 0...");
-        	new DatabaseVersionInformation(_databaseFolder, _sqlConnection).CreateTable();
+			_databaseVersionInformation.CreateTable();
         }
 
     	private static SqlConnection ConnectAndOpen(string connectionString)
