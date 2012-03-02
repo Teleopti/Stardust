@@ -401,6 +401,9 @@
     <Compile Include="Forecasting\ExportPages\MultisiteSkillSelectionModel.cs" />
     <Compile Include="Forecasting\IJobHistoryProvider.cs" />
     <Compile Include="Forecasting\IJobHistoryView.cs" />
+    <Compile Include="Forecasting\ImportForecast\Models\ImportForecastModel.cs" />
+    <Compile Include="Forecasting\ImportForecast\Presenters\ImportForecastPresenter.cs" />
+    <Compile Include="Forecasting\ImportForecast\Views\IImportForecast.cs" />
     <Compile Include="Forecasting\JobHistoryPresenter.cs" />
     <Compile Include="Forecasting\JobHistoryProvider.cs" />
     <Compile Include="Forecasting\JobResultModel.cs" />

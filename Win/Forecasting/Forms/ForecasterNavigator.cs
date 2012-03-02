@@ -39,6 +39,7 @@ using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
+using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -424,6 +425,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
+
+        
 
 		private ISkillType getSkillType(TreeNode node)
 		{
@@ -1206,6 +1209,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     view.ShowDialog(this);
                 }
             });
-	    }
+        }
+
+        private void importForecast(TreeNode node)
+        {
+            node = findAncestorNodeOfType(node, typeof(ISkill));
+            var s = (ISkill)node.Tag;
+            DialogResult result;
+
+            using (var impForecast = new ImportForecastForm(s, _repositoryFactory, _unitOfWorkFactory))
+            {
+                impForecast.ShowDialog(this);
+            }
+        }
+
+        private void toolStripMenuItemSkillsImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastContextMenuNode);
+        }
+
+        private void toolStripMenuItemActionSkillImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastActionNode);
+        }
 	}
 }
