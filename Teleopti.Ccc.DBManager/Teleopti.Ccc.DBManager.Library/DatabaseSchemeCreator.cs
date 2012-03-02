@@ -37,12 +37,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			                            let name = f.Name.Replace(".sql", "")
 			                            let number = Convert.ToInt32(name)
 			                            where number > currentDatabaseBuildNumber
+										orderby number
 			                            select new {file = f, name};
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
 				_logger.Write("Applying Release " + scriptFile.name + "...");
-				var sql = System.IO.File.ReadAllText(scriptFile.file.FullName);
+				var sql = File.ReadAllText(scriptFile.file.FullName);
 				new SqlBatchExecutor(_sqlConnection, _logger).ExecuteBatchSql(sql);
 			}
 		}

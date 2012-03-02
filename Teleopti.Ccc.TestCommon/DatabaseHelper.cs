@@ -72,8 +72,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void CreateSchemaByDbManager()
 		{
-			var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), _connection);
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var versionInfo = new DatabaseVersionInformation(databaseFolder, _connection);
 			versionInfo.CreateTable();
+			new DatabaseSchemeCreator(versionInfo, _connection, databaseFolder, new NullLog()).CreateScheme(_databaseType);
 		}
 
 
