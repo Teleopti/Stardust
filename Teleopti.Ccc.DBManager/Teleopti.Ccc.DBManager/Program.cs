@@ -62,8 +62,6 @@ namespace Teleopti.Ccc.DBManager
 
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
-					_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
-
                     //Exclude Agg from Azure
                     if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
 
@@ -96,7 +94,9 @@ namespace Teleopti.Ccc.DBManager
                         _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionString);
                         _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
-                        //Set permissions of the newly application user on db.
+						_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
+
+						//Set permissions of the newly application user on db.
                         if (_commandLineArgument.WillCreateNewDatabase)
                         {
                             CreateDefaultVersionInformation();
