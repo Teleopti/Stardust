@@ -94,11 +94,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		tabs = $('#tabs')
 			.tabberiet({
-					click: function() {
-						_navigateTo($(this).data('mytime-action'));
-					},
-					emptyContentSelector: '#EmptyTab'
-				})
+				click: function () {
+					_navigateTo($(this).data('mytime-action'));
+				},
+				emptyContentSelector: '#EmptyTab'
+			})
 			;
 
 		if (location.hash.length <= 1) {
@@ -118,6 +118,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 
 	function _navigateTo(action, date, id) {
+		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu(); //needed due to stopPropagation in tabberiet
 		var hash = action;
 		if (date) {
 			if (Teleopti.MyTimeWeb.Common.IsFixedDate(date)) {
@@ -258,6 +259,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 })(jQuery);
 
 Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
+
+	function _hideSettingsMenu() {
+		$(".dropdown dd ul").hide();
+	}
 	return {
 		// Activating buttons in toolbar
 		ActivateToolbarButtons: function () {
@@ -287,25 +292,28 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 				$('header').css("left", -$(window).scrollLeft() + "px");
 			});
 		},
+		HideSettingsMenu: function () {
+			_hideSettingsMenu();
+		},
 		ActivateSettingsMenu: function () {
 			$(".dropdown dt span").live("click", function () {
 				$(".dropdown dd ul").toggle();
 			});
 
 			$(".dropdown dd ul").live("click", function () {
-				$(".dropdown dd ul").hide();
+				_hideSettingsMenu();
 			});
 
 
 			$(document).bind('click', function (e) {
 				var $clicked = $(e.target);
 				if (!$clicked.parents().hasClass("dropdown"))
-					$(".dropdown dd ul").hide();
+					_hideSettingsMenu();
 			});
 
-			$(".dropdown a").hover(function() {
+			$(".dropdown a").hover(function () {
 				$(this).addClass('ui-state-hover');
-			}, function() {
+			}, function () {
 				$(this).removeClass('ui-state-hover');
 			});
 		}
