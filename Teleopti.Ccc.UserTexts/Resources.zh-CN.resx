@@ -9215,4 +9215,7 @@ Periods</comment>
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>至少为{0}小时。</value>
   </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>活动设置不能为空</value>
+  </data>
 </root>
