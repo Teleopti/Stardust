@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.IO;
+using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
@@ -14,25 +14,53 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public static IDataSource CreateDataSource()
 		{
-			IDataSource dataSource;
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(),new List<IDenormalizer>()) { UseCache = false };
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
 
+			if (IniFileInfo.Create)
+				PrepareDatabases(ccc7, analytics);
+
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()) { UseCache = false };
+			var dataSource = CreateDataSource(dataSourceFactory);
+
+			if (IniFileInfo.Create)
+				CreateSchema(dataSourceFactory);
+
+			return dataSource;
+		}
+
+		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
+		{
 			try
 			{
-				if (IniFileInfo.Create)
-				{
-					DropDatabaseConnections();
-					DropAndReCreateDatabase();
-				}
+				ccc7.DropConnections();
+				ccc7.Drop();
+				ccc7.Create();
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Failed to recreate database! Remove tables manually from [" +
-										ConnectionStringHelper.ConnectionStringUsedInTests + "] and/or make sure db exists.");
+				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
 				Console.WriteLine(e.ToString());
 				throw;
 			}
 
+			try
+			{
+				analytics.DropConnections();
+				analytics.Drop();
+				analytics.CreateByDbManager();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to prepare database {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+		}
+
+		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory)
+		{
+			IDataSource dataSource;
 			try
 			{
 				var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
@@ -40,26 +68,25 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			catch (Exception)
 			{
-				Console.WriteLine("Failed to create datasource for [" + ConnectionStringHelper.ConnectionStringUsedInTests + "].");
-				throw;
-			}
-
-			try
-			{
-				if (IniFileInfo.Create)
-				{
-					dataSourceFactory.CreateSchema();
-					PersistAuditSetting();
-				}
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Failed to recreate database! Remove tables manually from [" +
-										ConnectionStringHelper.ConnectionStringUsedInTests + "] and/or make sure db exists.");
-				Console.WriteLine(e.ToString());
+				Console.WriteLine("Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
 				throw;
 			}
 			return dataSource;
+		}
+
+		private static void CreateSchema(DataSourcesFactory dataSourceFactory)
+		{
+			try
+			{
+				dataSourceFactory.CreateSchema();
+				PersistAuditSetting();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
+				Console.WriteLine(e.ToString());
+				throw;
+			}
 		}
 
 		public static void PersistAuditSetting()
@@ -74,68 +101,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public static void CleanDatabase()
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
 
-				var command = connection.CreateCommand();
-				command.CommandText = File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.DROP.sql");
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.sql");
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = "EXEC sp_deleteAllData";
-				command.ExecuteNonQuery();
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public static void DropDatabaseConnections()
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-
-				var command = connection.CreateCommand();
-				command.CommandText = "USE master";
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = string.Format("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", IniFileInfo.Database);
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = string.Format("ALTER DATABASE [{0}] SET ONLINE", IniFileInfo.Database);
-				command.ExecuteNonQuery();
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public static void DropAndReCreateDatabase()
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-
-				var command = connection.CreateCommand();
-				command.CommandText = "USE master";
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = string.Format("DROP DATABASE [{0}]", IniFileInfo.Database);
-				command.ExecuteNonQuery();
-
-				command = connection.CreateCommand();
-				command.CommandText = string.Format("CREATE DATABASE [{0}]", IniFileInfo.Database);
-				command.ExecuteNonQuery();
-			}
-		}
 
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout)
 		{

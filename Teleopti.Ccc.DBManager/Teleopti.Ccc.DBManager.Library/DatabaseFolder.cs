@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseFolder
@@ -12,11 +14,22 @@ namespace Teleopti.Ccc.DBManager.Library
 		public string Path()
 		{
 #if DEBUG
-			var path = @"..\..\..\..\Database";
+			var path = LocateDatabaseFolderUsingBlackMagic();
 #else
 			var path = _dbManagerFolder.Path();
 #endif
 			return System.IO.Path.GetFullPath(path);
+		}
+
+		private string LocateDatabaseFolderUsingBlackMagic()
+		{
+			if (System.IO.Directory.Exists(@"..\..\..\..\Database"))
+				return @"..\..\..\..\Database";
+			if (System.IO.Directory.Exists(@"..\..\..\Database"))
+				return @"..\..\..\Database";
+			if (System.IO.Directory.Exists(@"..\..\Database"))
+				return @"..\..\Database";
+			throw new Exception("LocateDatabaseFolderUsingBlackMagic failed!");
 		}
 
 		public override string ToString()

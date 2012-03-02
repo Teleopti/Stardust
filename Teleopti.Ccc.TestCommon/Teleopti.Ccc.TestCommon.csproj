@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
     <Compile Include="DataSourceHelper.cs" />
@@ -157,6 +158,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
+      <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
+      <Name>Teleopti.Ccc.DBManager.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
