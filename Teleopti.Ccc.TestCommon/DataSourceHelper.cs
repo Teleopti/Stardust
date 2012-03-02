@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon
 			var dataSource = CreateDataSource(dataSourceFactory);
 
 			if (IniFileInfo.Create)
-				CreateSchema(dataSourceFactory);
+				CreateSchemas(dataSourceFactory, ccc7, analytics);
 
 			return dataSource;
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon
 			return dataSource;
 		}
 
-		private static void CreateSchema(DataSourcesFactory dataSourceFactory)
+		private static void CreateSchemas(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
 			try
 			{
@@ -84,6 +84,17 @@ namespace Teleopti.Ccc.TestCommon
 			catch (Exception e)
 			{
 				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTests);
+				Console.WriteLine(e.ToString());
+				throw;
+			}
+
+			try
+			{
+				analytics.CreateSchemaByDbManager();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to create database schema {0}!", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 				Console.WriteLine(e.ToString());
 				throw;
 			}

@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.TestCommon
 		{ 
 			var creator = new DatabaseCreator(new DatabaseFolder(new DbManagerFolder()), _connection);
 			creator.CreateDatabase(_databaseType, _databaseName);
+			ExecuteNonQuery("USE [{0}]", _databaseName);
 		}
 
 		public void Clean()
@@ -67,6 +68,12 @@ namespace Teleopti.Ccc.TestCommon
 			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", _databaseName);
 			ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", _databaseName);
 			ExecuteNonQuery("USE [{0}]", _databaseName);
+		}
+
+		public void CreateSchemaByDbManager()
+		{
+			var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), _connection);
+			versionInfo.CreateTable();
 		}
 
 
@@ -95,6 +102,5 @@ namespace Teleopti.Ccc.TestCommon
 			if (_connection != null)
 				_connection.Dispose();
 		}
-
 	}
 }

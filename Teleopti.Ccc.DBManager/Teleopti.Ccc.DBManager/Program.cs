@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.DBManager
         {
             logWrite("Creating database " + databaseName + "...");
 
-        	var creator = new DatabaseCreator(new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager)), _sqlConnection);
+        	var creator = new DatabaseCreator(_databaseFolder, _sqlConnection);
 			if (_isAzure)
 				creator.CreateAzureDatabase(databaseType, databaseName);
 			else
@@ -519,16 +519,11 @@ namespace Teleopti.Ccc.DBManager
 
         private static void CreateDefaultVersionInformation()
         {
-            logWrite("Creating database version table and setting inital version to 0...");
-            string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\CreateDatabaseVersion.sql", _databaseFolder.Path());
-            TextReader textReader = new StreamReader(fileName);
-            string sql = textReader.ReadToEnd();
-            textReader.Close();
-            SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+        	logWrite("Creating database version table and setting inital version to 0...");
+        	new DatabaseVersionInformation(_databaseFolder, _sqlConnection).CreateTable();
         }
 
-        private static SqlConnection ConnectAndOpen(string connectionString)
+    	private static SqlConnection ConnectAndOpen(string connectionString)
         {
             SqlConnection sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
