@@ -164,7 +164,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void PinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
-            _pinnedSkillHelper.PinSlashUnpinTab(tab);
+            
+            if (tab!=null)
+                _pinnedSkillHelper.PinSlashUnpinTab(tab);
         }
 
         public void PinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
