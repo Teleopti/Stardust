@@ -12,16 +12,14 @@ namespace Teleopti.Ccc.DBManager
 {
     class Program
     {
-        private static TextWriter _logger;
-        private static int _currentDatabaseBuildNumber;
         private static SqlConnection _sqlConnection;
         private static DatabaseFolder _databaseFolder;
         private static CommandLineArgument _commandLineArgument;
         private static string _fileName;
-        private const int CommandTimeout = 900; //Command Timeout for Create + Release scripts
         private static bool _isAzure;
         private const string AzureEdition = "SQL Azure";
-        
+    	private static MyLogger _logger;
+
         /// <summary>
         /// Mains the specified args.
         /// Usage:
@@ -38,9 +36,8 @@ namespace Teleopti.Ccc.DBManager
         {
             try
             {
-                DateTime nowDateTime = DateTime.Now;
+				_logger = new MyLogger();
 
-                _logger = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManager_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
                 // hhmmss
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string versionNumber = version.ToString();
@@ -174,8 +171,7 @@ namespace Teleopti.Ccc.DBManager
             }
             finally
             {
-                _logger.Close();
-
+                _logger.Dispose();
             }
         }
 
@@ -186,105 +182,37 @@ namespace Teleopti.Ccc.DBManager
 
         private static void logWrite(string s)
         {
-            Console.Out.WriteLine(s);
-            _logger.WriteLine(s);
+        	_logger.Write(s);
         }
 
-        /// <summary>
-        /// Applies the releases.
-        /// </summary>
-        /// <param name="databaseTypeName">Name of the database type.</param>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-09-23
-        /// </remarks>
+		public class MyLogger : ILog, IDisposable
+		{
+			private readonly TextWriter _logFile;
+
+			public MyLogger()
+			{
+				var nowDateTime = DateTime.Now;
+				_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManager_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+			}
+
+			public void Write(string message)
+			{
+				Console.Out.WriteLine(message);
+				_logFile.WriteLine(message);
+			}
+
+			public void Dispose()
+			{
+				if (_logFile == null)
+					return;
+				_logFile.Close();
+				_logFile.Dispose();
+			}
+		}
+
         private static void applyReleases(string databaseTypeName)
         {
-            _currentDatabaseBuildNumber = GetDatabaseBuildNumber();
-            string releasesPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Releases";
-            if (Directory.Exists(releasesPath))
-            {
-                DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
-                FileInfo[] scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
-
-                foreach (FileInfo scriptFile in scriptFiles)
-                {
-                    //Check the versionnumber
-                    string releaseName = scriptFile.Name.Replace(".sql", "");
-                    int releaseNumber = Convert.ToInt32(releaseName, CultureInfo.CurrentCulture);
-
-                    //Always add release files (DDL and src-code)
-                    if (releaseNumber > _currentDatabaseBuildNumber)
-                    {
-                        logWrite("Applying Release " + releaseName + "...");
-                        _fileName = scriptFile.FullName;
-                        string sql;
-                        using (TextReader textReader = new StreamReader(_fileName))
-                        {
-                            sql = textReader.ReadToEnd();
-                        }
-                        executeBatchSQL(sql);
-
-                        //Don't add data If AddDataFiles is false. Used by Nightly builds
-                        if (_commandLineArgument.AddDatFiles)
-                            executeDatFile(scriptFile);
-                    }
-                }
-            }
-        }
-
-        private static void executeDatFile(FileSystemInfo scriptFile)
-        {
-            _fileName = scriptFile.FullName.Replace(".sql", ".dat");
-            try
-            {
-                using (TextReader datReader = new StreamReader(_fileName))
-                {
-                    string datSql = datReader.ReadToEnd();
-                    executeBatchSQL(datSql);
-                }
-            }
-            catch (IOException)
-            {
-                //logWrite("Cannot find file " + datFile);
-            }
-        }
-
-
-        private static void executeBatchSQL(string sql)
-        {
-            SqlTransaction transaction = _sqlConnection.BeginTransaction();
-            Regex regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            string[] lines = regex.Split(sql);
-
-            using (SqlCommand sqlCommand = _sqlConnection.CreateCommand())
-            {
-                sqlCommand.Connection = _sqlConnection;
-                sqlCommand.CommandTimeout = CommandTimeout;
-                sqlCommand.Transaction = transaction;
-
-                foreach (string line in lines)
-                {
-                    if (line.Length > 0)
-                    {
-                        sqlCommand.CommandText = line;
-                        sqlCommand.CommandType = CommandType.Text;
-
-                        try
-                        {
-                            sqlCommand.ExecuteNonQuery();
-                        }
-                        catch (SqlException e)
-                        {
-                            logWrite(e.Message);
-                            transaction.Rollback();
-                            break;
-                            //In this case stop the whole thing
-                        }
-                    }
-                }
-                transaction.Commit();
-            }
+        	new DatabaseSchemeCreator(_sqlConnection, _databaseFolder, _logger).CreateScheme(databaseTypeName);
         }
 
         private static void applyAzureStartDDL(string databaseTypeName)
@@ -299,18 +227,23 @@ namespace Teleopti.Ccc.DBManager
             {
                 sql = sqlTextReader.ReadToEnd();
             }
+
             executeBatchSQL(sql);
         }
 
+    	private static void executeBatchSQL(string sql)
+    	{
+			new SQLBatchExecutor(_sqlConnection,_logger).ExecuteBatchSQL(sql);
+    	}
 
-        private static void applyTrunk(string databaseTypeName)
+
+    	private static void applyTrunk(string databaseTypeName)
         {
             logWrite("Applying Trunk...");
             string trunkPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Trunk";
             if (Directory.Exists(trunkPath))
             {
                 string sqlFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.sql", trunkPath);
-                string datFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.dat", trunkPath);
 
                 string sql;
                 using (TextReader sqlTextReader = new StreamReader(sqlFile))
@@ -321,19 +254,6 @@ namespace Teleopti.Ccc.DBManager
                 //Always DDL and src-code
                 executeBatchSQL(sql);
 
-                //Add data If AddDataFiles is true. Used by Nightly builds (-A)
-                if (_commandLineArgument.AddDatFiles)
-                {
-                    if (File.Exists(datFile))
-                    {
-                        string dat;
-                        using (TextReader datTextReader = new StreamReader(datFile))
-                        {
-                            dat = datTextReader.ReadToEnd();
-                        }
-                        executeBatchSQL(dat);
-                    }
-                }
             }
         }
 
