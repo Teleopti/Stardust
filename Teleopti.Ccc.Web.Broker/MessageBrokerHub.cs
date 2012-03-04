@@ -1,4 +1,7 @@
-﻿using SignalR.Hubs;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -18,7 +21,11 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			Clients[notification.Route()].onEventMessage(notification);
+			var routes = notification.Routes();
+			foreach (var route in routes)
+			{
+				Clients[route].onEventMessage(notification);
+			}
 		}
 	}
 }

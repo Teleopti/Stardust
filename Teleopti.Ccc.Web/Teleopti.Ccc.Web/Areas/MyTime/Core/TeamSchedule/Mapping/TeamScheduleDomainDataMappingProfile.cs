@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -17,20 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private readonly Func<IScheduleProvider> _scheduleProvider;
 		private readonly Func<ITeamScheduleProjectionProvider> _projectionProvider;
 		private readonly Func<IUserTimeZone> _userTimeZone;
+		private readonly Func<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public TeamScheduleDomainDataMappingProfile(
-			Func<IMappingEngine> mapper,
-			Func<ISchedulePersonProvider> personProvider,
-			Func<IScheduleProvider> scheduleProvider,
-			Func<ITeamScheduleProjectionProvider> projectionProvider,
-			Func<IUserTimeZone> userTimeZone 
-			)
+		public TeamScheduleDomainDataMappingProfile(Func<IMappingEngine> mapper, Func<ISchedulePersonProvider> personProvider, Func<IScheduleProvider> scheduleProvider, Func<ITeamScheduleProjectionProvider> projectionProvider, Func<IUserTimeZone> userTimeZone, Func<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
 		{
 			_mapper = mapper;
 			_personProvider = personProvider;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_userTimeZone = userTimeZone;
+			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
 		protected override void Configure()
@@ -74,6 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.Person, o => o.MapFrom(s => s.Item1))
 				.ForMember(d => d.Projection, o => o.MapFrom(s => s.Item2 == null ? null : _projectionProvider().Projection(s.Item2)))
 				.ForMember(d => d.DisplayTimePeriod, o => o.Ignore())
+				.ForMember(d => d.HasDayOffUnder, o => o.MapFrom(s => _hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(s.Item2)))
 				;
 
 			CreateMap<TeamScheduleDomainData, DateTimePeriod>()

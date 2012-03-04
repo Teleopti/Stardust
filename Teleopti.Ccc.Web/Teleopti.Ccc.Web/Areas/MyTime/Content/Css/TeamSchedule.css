@@ -59,7 +59,6 @@
 .teamschedule-agents {
 	width: 100%;
 	position: relative;
-	z-index: 499;
 }
 .teamschedule-agent 
 {
@@ -69,6 +68,7 @@
 	width: 100%;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 	vertical-align: bottom;
+	z-index: 99;
 }
 .teamschedule-agent-name 
 {
@@ -97,14 +97,18 @@
 	left: 125px;
 }
 
-.layer 
+.teamschedule .layer 
 {
 	vertical-align: bottom;
 	height: 19px;
 	border-radius: 2px;
 }
 
-.dayoff 
+.teamschedule .gradient {
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
+} 
+
+.teamschedule .dayoff 
 {
 	margin-left: 5px;
 	width: 824px;
@@ -113,18 +117,6 @@
 	text-align: center;
 	height: 18px;
 	border-radius: 2px;
-	
-	background-color: beige;
-	 -webkit-background-size: 6px 6px;
-	background-image: -webkit-linear-gradient(-45deg, 
-			rgba(0, 0, 0, .1) 0%, 
-			rgba(0, 0, 0, .1) 10%, 
-			transparent 10%, 
-			transparent 50%, 
-			rgba(0, 0, 0, .1) 50%, 
-			rgba(0, 0, 0, .1) 60%, 
-			transparent 60%, 
-			transparent 100%)
 }
 
 #TeamScheduleDateRangeSelector.date-range-selector .datepicker{

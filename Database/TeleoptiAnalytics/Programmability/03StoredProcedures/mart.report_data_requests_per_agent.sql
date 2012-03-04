@@ -11,6 +11,7 @@ GO
 ------------------------------------------------
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
 -- 2012-02-14	DavidJ	#	- refactor tables
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --Static dimension table
 --------------------------------------------------------
@@ -20,9 +21,9 @@ GO
 --2					Absence Request		ResAbsenceRequest
 --3					Shift Trade Request	ResShiftTradeRequest
 --------------------------------------------------------
-
---exec mart.report_data_requests_per_agent @date_from='2012-03-05 00:00:00',@date_to='2012-03-06 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'0',@team_set=N'7',@agent_set=N'11610fe4-0130-4568-97de-9b5e015b2564',@request_type_id=N'-2',@time_zone_id=N'1',@person_code='826F2A46-93BB-4B04-8D5E-9B5E015B2577',@report_id=27,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-
+/*
+exec mart.report_data_requests_per_agent @date_from='2012-01-31 00:00:00',@date_to='2012-03-31 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'0',@team_set=N'7',@agent_set=N'11610fe4-0130-4568-97de-9b5e015b2564',@request_type_id=N'-2',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id=27,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+*/
 CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 @date_from datetime,
 @date_to datetime,
@@ -34,7 +35,7 @@ CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 @agent_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @request_type_id int,
 @business_unit_code uniqueidentifier

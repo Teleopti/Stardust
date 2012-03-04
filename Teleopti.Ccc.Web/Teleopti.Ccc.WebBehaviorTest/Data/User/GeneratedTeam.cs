@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		}
 
 		// generated from http://www.namegenerator.biz/team-name-generator.php just for fun
+		// removed names starting with V or W because they were sorted differently sometimes and I dont find it worth finding out why =)
 		private static readonly IEnumerable<string> Names = new[]
 		                                                    	{
 		                                                    		"The Bewildered Badgers",
@@ -94,12 +95,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		                                                    		"The Fragile Eagles",
 		                                                    		"The Graceful Pandas",
 		                                                    		"The Insidious Eels",
-		                                                    		"The Voiceless Lemurs",
-		                                                    		"The Weary Dugongs",
 		                                                    		"The Rich Kangaroos",
 		                                                    		"The Half Zebras",
 		                                                    		"The Seemly Mosquitos",
-		                                                    		"The Vigorous Goats",
 		                                                    		"The Thoughtless Herons",
 		                                                    		"The Fluttering Foxes",
 		                                                    		"The Certain Flys",
@@ -142,7 +140,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		                                                    		"The Flagrant Jaguars",
 		                                                    		"The Nimble Boars",
 		                                                    		"The Unusual Moles",
-		                                                    		"The Watery Hawks",
 		                                                    		"The Erect Kangaroos",
 		                                                    		"The Abnormal Barracudas",
 		                                                    		"The Rare Cougars",

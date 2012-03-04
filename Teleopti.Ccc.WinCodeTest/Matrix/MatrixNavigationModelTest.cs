@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
             var matrixFunctions = new List<IApplicationFunction>
                                       {
-                                          new ApplicationFunction {ForeignId = "1"},
+                                          new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54"},
                                           new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup"}
                                       };
             IEnumerable<IMatrixFunctionGroup> actualMatrixFunctionGroups;
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
             var matrixFunctions = new List<IApplicationFunction>
                                       {
-                                          new ApplicationFunction {ForeignId = "1"},
+                                          new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54"},
                                           new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup"}
                                       };
             IEnumerable<IApplicationFunction> orphanMatrixFunctions;

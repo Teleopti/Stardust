@@ -1,0 +1,56 @@
+﻿
+.body-calendarview{background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;}
+.body-calendarview-inner{background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;}
+
+.weekdays li,
+.calendarview-week li{
+	border-left: 1px solid #f9f9f9;
+	border-right: 1px solid #dfdfdf;
+}
+.rgba .weekdays li, 
+.rgba .calendarview-week li{
+	border-left: 1px solid rgba(255, 255, 255, 0.7);
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+.calendarview-week li:first-child{border-left-color: transparent; color: #fff; font-size: 11px; text-align: center; width: 38px;}
+.calendarview-week li:first-child > div{margin-top: 58px; padding-bottom: 0px;}
+.weekdays{font-size: 0; padding-left: 40px;}
+.weekdays li{
+	font-size: 11px;
+	display: inline-block;
+	list-style-type: none; 
+	text-align: center;
+	width: 130px;
+}
+.ie7 .weekdays li{zoom: 1; display: inline;} /* IE7 inline-block fix */
+
+.calendarview-week{ background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat; padding-left: 0px; font-size: 0; }
+.body-calendarview-inner ul:nth-child(2){background-image: none;}
+.calendarview-week li{
+	font-size: 12px;
+	display: inline-block;
+	min-height: 115px;
+	vertical-align: top;
+	width: 130px;
+}
+.ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
+
+.calendarview-week li div.day-content {
+	padding: 10px 5px; 
+	border-left-style: solid; 
+	border-left-width: 8px; 
+	border-left-color: transparent;
+}
+
+.calendarview-week .today{background-position: 0 -1600px; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
+.calendarview-week .ui-selected{background-position: 0 -2019px;}
+.calendarview-week li .day-header{background-color: #c7dfe7; line-height: 19px; min-height: 19px;}
+.calendarview-week .today .day-header{background-color: #a8cfdd;}
+
+.calendarview-week li.non-editable{background-color: #eaeaea;}
+.calendarview-week li.non-editable .day-content{background-color: #eaeaea; color: #797979;}
+
+.calendarview-week li .day-content{text-align: center; min-height:76px;}
+.calendarview-week li .day-content span{min-height: 15px;}
+
+.calendarview-week li.unvalidated{ font-style: italic;}

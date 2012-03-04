@@ -27,3 +27,8 @@ Scenario: Sign in without permission
 	Given I dont have permission to sign in
 	When I sign in by user name
 	Then I am not signed in
+
+@IgnoreBeforeScenario
+Scenario: Enter signin page with page preference 
+	Given I Navigate to the signin page with subpage preference
+	Then I Should see the login page

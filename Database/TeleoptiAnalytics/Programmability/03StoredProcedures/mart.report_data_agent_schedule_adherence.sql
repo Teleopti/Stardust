@@ -28,6 +28,8 @@ GO
 --				2011-12-05 #17180 - Multi-bu and @adherence_id = 2
 --				2012-01-09 Change the handling of multi-bu and @adherence_id = 2
 --				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
+--				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+
 -- Description:	Used by report Agent  - Schedule Adherence
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
@@ -45,7 +47,7 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence]
 @time_zone_id int,
 @person_code uniqueidentifier,
 @agent_person_code uniqueidentifier,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier,
 @from_matrix bit = 1 --Not from SDK

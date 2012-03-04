@@ -1,4 +1,5 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamScheduleViewModel
 @{
@@ -31,7 +32,7 @@
 						<ul class="teamschedule-agent-schedule floatleft relative">
 							@if (agentSchedule.DayOffText != null)
 							{
-								<li class="dayoff ui-corner-all absolute">@agentSchedule.DayOffText</li>
+								<li class="dayoff striped ui-corner-all absolute">@agentSchedule.DayOffText</li>
 							}
 							else
 							{
@@ -40,12 +41,12 @@
 									var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
-									<li class="layer absolute tooltip" data-mytime-activity="@layer.ActivityName" data-mytime-start-time="@layer.StartTime" data-mytime-end-time="@layer.EndTime"
+									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
+									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@layer.ActivityName" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 											style="width: @(widthPixel)px;
 												left: @(leftPixel)px;
 												background-color: @layer.Color;
-												background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
-												filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='@layer.Color',GradientType=0 ); /* IE6-9 */"> </li>
+												@(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
 								}
 							}
 						</ul>

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [SetUp]
         public void TestInit()
         {
-            _target = new MatrixReportInfo(1, "Report");
+            _target = new MatrixReportInfo(Guid.NewGuid(), "Report");
         }
 
         [TearDown]
@@ -60,18 +60,19 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyFindByReportId()
         {
-            IList<MatrixReportInfo> list = new List<MatrixReportInfo>();
-            list.Add(new MatrixReportInfo(1, "Report1"));
-            list.Add(new MatrixReportInfo(2, "Report2"));
-            list.Add(new MatrixReportInfo(3, "Report3"));
+            var findGuid = Guid.NewGuid();
+            IList<MatrixReportInfo> list = new List<MatrixReportInfo>
+                                               {
+                                                   new MatrixReportInfo(findGuid, "Report1"),
+                                                   new MatrixReportInfo(Guid.NewGuid(), "Report2"),
+                                                   new MatrixReportInfo(Guid.NewGuid(), "Report3")
+                                               };
 
-            MatrixReportInfo foundItem;
-
-            foundItem = MatrixReportInfo.FindByReportId(list, 1);
+            MatrixReportInfo foundItem = MatrixReportInfo.FindByReportId(list, findGuid);
             Assert.IsNotNull(foundItem);
             Assert.AreEqual("Report1", foundItem.ReportName);
 
-            foundItem = MatrixReportInfo.FindByReportId(list, -1);
+            foundItem = MatrixReportInfo.FindByReportId(list, Guid.NewGuid());
             Assert.IsNull(foundItem);
         }
 
@@ -83,16 +84,13 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyReportId()
         {
             // Declare variable to hold property set method
-            System.Int32 setValue = 2;
+           var setValue = Guid.NewGuid();
 
             // Test set method
             _target.ReportId = setValue;
 
-            // Declare return variable to hold property get method
-            System.Int32 getValue = 0;
-
             // Test get method
-            getValue = _target.ReportId;
+            Guid getValue = _target.ReportId;
 
             // Perform Assert Tests
             Assert.AreEqual(setValue, getValue);
@@ -102,16 +100,13 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyReportName()
         {
             // Declare variable to hold property set method
-            System.String setValue = "Report";
+            const string setValue = "Report";
 
             // Test set method
             _target.ReportName = setValue;
 
-            // Declare return variable to hold property get method
-            System.String getValue;
-
             // Test get method
-            getValue = _target.ReportName;
+            string getValue = _target.ReportName;
 
             // Perform Assert Tests
             Assert.AreEqual(setValue, getValue);
@@ -121,16 +116,13 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyReportUrl()
         {
             // Declare variable to hold property set method
-            System.String setValue = "ReportUrl";
+            const string setValue = "ReportUrl";
 
             // Test set method
             _target.ReportUrl = setValue;
 
-            // Declare return variable to hold property get method
-            System.String getValue;
-
             // Test get method
-            getValue = _target.ReportUrl;
+            string getValue = _target.ReportUrl;
 
             // Perform Assert Tests
             Assert.AreEqual(setValue, getValue);

@@ -1,1 +1,0 @@
-SQLCMD.EXE -S antonov\sql2005dev -U sa -P cadadi -Q "IF EXISTS (SELECT name FROM sys.databases WHERE name = N'%1') DROP DATABASE %1"

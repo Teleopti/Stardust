@@ -3830,7 +3830,6 @@
     <None Include="Resources\ccc_Undo_small.png" />
     <None Include="Resources\ccc_WorkloadGridWeek1.png" />
     <None Include="Resources\server.jpg" />
-    <None Include="Scheduling\RequestGUI.cd" />
     <None Include="Scheduling\ScheduleViewMVP.cd" />
   </ItemGroup>
   <ItemGroup>

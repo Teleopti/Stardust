@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -36,14 +37,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private ICccTimeZoneInfo _timeZone;
         private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 
-        private IList<IPersonAssignment> _assignments;
-
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
 
             _date = new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc);
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZone);
@@ -57,8 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _range = _mocks.StrictMock<IScheduleRange>();
             _days = new List<IScheduleDay>{_day};
             _dic = new Dictionary<IPerson, IScheduleRange> {{_person, _range}};
-            _assignments = new List<IPersonAssignment>();
-
+           
             Expect.Call(_day.Person).Return(_person);
             Expect.Call(_day.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
             Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>());
@@ -70,9 +68,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void VerifyValidateTrue()
         {
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(_assignments);
-   
-             Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
+            
+             Expect.Call(_day.HasProjection).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
             _target = new OpenHoursRule(_state);
@@ -98,11 +95,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
             
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-            
-            _assignments.Add(assignment);
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(_assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
             var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
@@ -112,9 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Twice();
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(1);
@@ -147,11 +138,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            _assignments.Add(assignment);
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(_assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
             var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
@@ -162,9 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Times(3);
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(2);
@@ -173,9 +158,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Expect.Call(skillStaffPeriodDictionary.SkillOpenHoursCollection).Return(skillOpenHoursCollection).Repeat.Twice();
 
             _mocks.ReplayAll();
-                
-             _target = new OpenHoursRule(_state);
-             Assert.AreNotEqual(0, _target.Validate(_dic, _days).Count());
+
+            _target = new OpenHoursRule(_state);
+            var response = _target.Validate(_dic, _days);
+
+            Assert.AreNotEqual(0, response.Count());
+
+            var expectedErrorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                                           UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
+                                           layer.DisplayDescription(),
+                                           TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),
+                                           TimeZoneHelper.ConvertFromUtc(layer.Period.EndDateTime, _timeZone));
+
+            Assert.AreEqual(expectedErrorMessage, response.First().Message);
             _mocks.VerifyAll();
 
         }
@@ -201,11 +196,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer, layer1};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            _assignments.Add(assignment);
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(_assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
             var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
@@ -219,9 +209,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(personPeriod).Repeat.Once();
             Expect.Call(personPeriod.PersonSkillCollection).Return(personSkillColl);
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Times(3);
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(2);
@@ -252,12 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> { assignment };
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(assignments);
-
+            
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
             var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
@@ -267,9 +251,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Twice();
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(1);
@@ -289,16 +272,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer>();
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
             
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> { assignment };
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
-
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
@@ -318,18 +295,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> { assignment };
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
 
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
            _mocks.ReplayAll();
 
@@ -355,20 +326,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            var assignment = _mocks.StrictMock<IPersonAssignment>();
-
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> { assignment };
-            var personAssignments = new ReadOnlyCollection<IPersonAssignment>(assignments);
-
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
 
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.PersonAssignmentCollection()).Return(personAssignments).Repeat.AtLeastOnce();
-            Expect.Call(assignment.HasProjection).Return(true).Repeat.AtLeastOnce();
-            Expect.Call(assignment.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary);
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(0);
@@ -391,5 +356,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Assert.IsFalse(_target.HaltModify);
             Assert.AreEqual("", _target.ErrorMessage);
         }
+
     }
 }

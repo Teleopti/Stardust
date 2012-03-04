@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
+			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>();
 		}
 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
@@ -135,6 +136,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
+			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
+			builder.RegisterType<HasDayOffUnderFullDayAbsence>().As<IHasDayOffUnderFullDayAbsence>();
 		}
 	}
 }

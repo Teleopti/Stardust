@@ -6,10 +6,11 @@ GO
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 
 
-CREATE FUNCTION [mart].[AllOwnedSites](@person_code uniqueidentifier,@report_id int)
+CREATE FUNCTION [mart].[AllOwnedSites](@person_code uniqueidentifier,@report_id uniqueidentifier)
 RETURNS @sites TABLE (id int NOT NULL)
 AS
 BEGIN	
@@ -27,7 +28,7 @@ INNER JOIN mart.dim_team dt ON
 INNER JOIN mart.dim_site ds 
 	ON ds.site_id=dt.site_id
 WHERE person_code=@person_code
-AND perm.report_id=@report_id
+AND perm.ReportId=@report_id
 AND perm.my_own=0 --not myown
 
 --select * from dim_team
@@ -42,7 +43,7 @@ INNER JOIN mart.dim_site ds
 	ON ds.site_id=dt.site_id
 WHERE perm.my_own=1 --only myself permissions
 AND perm.person_code=@person_code
-AND perm.report_id=@report_id
+AND perm.ReportId=@report_id
 AND ds.site_id NOT IN (SELECT id FROM @sites)
 RETURN
 END

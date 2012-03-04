@@ -11,14 +11,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public abstract class ShiftForDate : IUserDataSetup
 	{
-		private readonly TimeSpan _startTime;
-		private readonly TimeSpan _endTime;
+		public DateTime Date;
+		public IShiftCategory ShiftCategory;
+		public readonly TimeSpan StartTime;
+		public readonly TimeSpan EndTime;
+
 		private readonly bool _withLunch;
+		private DateTimePeriod _assignmentPeriod;
 
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime)
 		{
-			_startTime = startTime;
-			_endTime = endTime;
+			StartTime = startTime;
+			EndTime = endTime;
 			_withLunch = true;
 		}
 
@@ -27,33 +31,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime, bool withLunch)
 		{
-			_startTime = startTime;
-			_endTime = endTime;
+			StartTime = startTime;
+			EndTime = endTime;
 			_withLunch = withLunch;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = ApplyDate(cultureInfo);
-			var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(date);
+			Date = ApplyDate(cultureInfo);
+			ShiftCategory = TestData.ShiftCategory;
+			var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(Date);
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
-			var layerPeriod = new DateTimePeriod(dateUtc.Add(_startTime), dateUtc.Add(_endTime));
+			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, TestData.Scenario);
-			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));
+			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory));
 
 			// add lunch
 			if (_withLunch)
 			{
-				layerPeriod = layerPeriod.ChangeStartTime(TimeSpan.FromHours(3)).ChangeEndTime(TimeSpan.FromHours(-4));
-				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, layerPeriod));
+				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
+				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
 			}
 
 			assignmentRepository.Add(assignment);
 		}
 
 		protected abstract DateTime ApplyDate(CultureInfo cultureInfo);
+
+		public TimeSpan GetContractTime()
+		{
+			// rolling my own contract time calculation.
+			// do we need to do a projection here really?
+			var contractTime = _assignmentPeriod.ElapsedTime();
+			if (_withLunch)
+				contractTime = contractTime.Subtract(TimeSpan.FromHours(1));
+			return contractTime;
+		}
+
 	}
 }

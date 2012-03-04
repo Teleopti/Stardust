@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--EXTERNAL_PROPERTIES: CCNetProject;CCNetWorkingDirectory-->
+
+<Project DefaultTargets="Run" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<PropertyGroup>
+		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
+		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+		<DBManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DBManagerExe>
+		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
+		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
+		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
+		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
+		<ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
+		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
+		<SQLCmdConn>SQLCMD -S$(COMPUTERNAME) -E</SQLCmdConn>
+		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
+		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
+		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
+		<AggDB>$(DBNamePrefix)_agg</AggDB>
+		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E</DBManagerTeleoptiCCC7Args>
+		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E</DBManagerTeleoptiCCCAggArgs>
+		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E</DBManagerTeleoptiAnalyticsArgs>
+		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
+		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
+		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
+		<LogObjectId>1</LogObjectId>
+	
+</PropertyGroup>
+
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
+
+	<!-- Add license -->
+	<Target Name="AddLic">
+		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
+		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
+	</Target>
+
+	<Target Name="Run" DependsOnTargets="BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Message Text="All target executed!" Importance="high" />
+	</Target>
+	<Target Name="RunETL">
+		<Message Text="Testing ETL service ..." Importance="high" />
+
+		<!-- Un-Install ETL Service-->
+		<Message Text="un-Install ETL service. Working..." Importance="high" />
+		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<Message Text="un-Install ETL service. Done!" Importance="high" />
+
+		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
+		<Message Text="Prepare Files. Working..." Importance="high" />
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)"/>
+		<Message Text="Prepare Files. Done!" Importance="high" />
+
+		<!-- Install ETL Service-->
+		<Message Text="Install ETL service. Working..." Importance="high" />
+		<Message Text="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<Message Text="Install ETL service. Done!" Importance="high" />
+
+		<!-- 
+	a) Clean out the datamart (exept for Initial load data and sys_datasource)
+	b) Clean out old ETL job history
+	c) Add extra ETL Test SP
+	d) Create one job for the ETL service
+	-->
+		<Message Text="Prepare ETL. Working..." Importance="high" />
+		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
+		<Message Text="Prepare ETL. Done!" Importance="high" />
+
+		<Message Text="Start ETL service. Working..." Importance="high" />
+		<Message Text="NET START AnalyticsEtlService" Importance="high" />
+		<Exec Command ="NET START AnalyticsEtlService"/>
+		<Message Text="Start ETL service. Done!" Importance="high" />
+
+		<!--
+	This is our Test!!!
+	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
+	-->
+		<Message Text="Start ETL test. Working..." Importance="high" />
+		<Message Text="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22"/>
+		<Message Text="Start ETL test. Done!" Importance="high" />
+
+		<!-- Clean up-->
+		<!--Sleep for 10 secs then STOP service-->
+		<Message Text="PING 127.0.0.1 -n 10 > NUL" Importance="high" />
+		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
+
+		<Message Text="NET STOP AnalyticsEtlService" Importance="high" />
+		<Exec Command ="NET STOP AnalyticsEtlService"/>
+
+		<!-- Un-Install ETL Service-->
+		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+	</Target>
+
+	<!--
+  <Target Name="DeployCube">
+	<Message Text="I Will deploy cube ..." Importance="high" />
+  </Target>
+  -->
+
+	<Target Name="RestoreDatabasesAndPatch">
+		<Message Text="Set DBs in single user mode, retore and update CrossDb views..." Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
+
+		<Message Text="Patching 3 x databases..." Importance="high" />
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
+
+	</Target>
+
+	<Target Name="MoveOneLogObject">
+		<Message Text="update dimensions ones" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+
+		<Message Text="update dimensions once more" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+
+		<Message Text="move one log object" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(moveDataSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+
+		<Message Text="make log object internal" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
+	</Target>
+
+</Project>

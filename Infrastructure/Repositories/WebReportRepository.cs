@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		#region IWebReportRepository Members
 
-		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(int reportId, Guid personCode, int languageId,
+		public IEnumerable<ReportControlSkillGet> ReportControlSkillGet(Guid reportId, Guid personCode, int languageId,
 		                                                                   Guid businessUnitCode)
 		{
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("Id", NHibernateUtil.Int32)
 						.AddScalar("Name", NHibernateUtil.String)
 						.SetReadOnly(true)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetGuid("person_code", personCode)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_id", businessUnitCode)
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                                                  int intervalTo,
 		                                                                                                  int timeZoneId,
 		                                                                                                  Guid personCode,
-		                                                                                                  int reportId,
+		                                                                                                  Guid reportId,
 		                                                                                                  int languageId,
 		                                                                                                  Guid
 		                                                                                                  	businessUnitCode)
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				                                                               CallingConventions.HasThis,
 				                                                               new[]
 				                                                               	{
-				                                                               		typeof (string), typeof (decimal), typeof (decimal)
+				                                                               		typeof (string), typeof (decimal), typeof (decimal), typeof(int)
 				                                                               	},
 				                                                               null);
 
@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("period", NHibernateUtil.String)
 						.AddScalar("forecasted_calls", NHibernateUtil.Decimal)
 						.AddScalar("offered_calls", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true).SetInt32("scenario_id", scenarioId)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("interval_to", intervalTo)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))
@@ -133,14 +134,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                              int intervalTo,
 		                                                                              int timeZoneId,
 		                                                                              Guid personCode,
-		                                                                              int reportId,
+																					  Guid reportId,
 		                                                                              int languageId,
 		                                                                              Guid businessUnitCode)
 		{
 			ConstructorInfo constructorInfo =
 				typeof (ReportDataQueueStatAbandoned).GetConstructor(BindingFlags.Instance | BindingFlags.Public, null,
 				                                                     CallingConventions.HasThis,
-				                                                     new[] {typeof (string), typeof (decimal), typeof (decimal)},
+				                                                     new[] {typeof (string), typeof (decimal), typeof (decimal), typeof(int)},
 				                                                     null);
 
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -154,6 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("period", NHibernateUtil.String)
 						.AddScalar("calls_answ", NHibernateUtil.Decimal)
 						.AddScalar("calls_abnd", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
@@ -164,7 +166,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("interval_to", intervalTo)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))
@@ -182,14 +184,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		                                                                                        int serviceLevelCalculationId,
 		                                                                                        int timeZoneId,
 		                                                                                        Guid personCode,
-		                                                                                        int reportId,
+		                                                                                        Guid reportId,
 		                                                                                        int languageId,
 		                                                                                        Guid businessUnitCode)
 		{
 			ConstructorInfo constructorInfo =
 				typeof (ReportDataServiceLevelAgentsReady).GetConstructor(BindingFlags.Instance | BindingFlags.Public, null,
 				                                                          CallingConventions.HasThis,
-				                                                          new[] { typeof(string), typeof(decimal), typeof(decimal), typeof(decimal) },
+				                                                          new[] { typeof(string), typeof(decimal), typeof(decimal), typeof(decimal), typeof(int) },
 				                                                          null);
 
 			using (IStatelessUnitOfWork uow = _statisticUowFactory.CreateAndOpenStatelessUnitOfWork())
@@ -204,6 +206,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.AddScalar("scheduled_agents_ready", NHibernateUtil.Decimal)
 						.AddScalar("agents_ready", NHibernateUtil.Decimal)
 						.AddScalar("service_level", NHibernateUtil.Decimal)
+						.AddScalar("weekday_number", NHibernateUtil.Int32)
 						.SetReadOnly(true)
 						.SetString("skill_set", skillSet)
 						.SetString("workload_set", workloadSet)
@@ -215,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						.SetInt32("sl_calc_id", serviceLevelCalculationId)
 						.SetInt32("time_zone_id", timeZoneId)
 						.SetGuid("person_code", personCode)
-						.SetInt32("report_id", reportId)
+						.SetGuid("report_id", reportId)
 						.SetInt32("language_id", languageId)
 						.SetGuid("bu_code", businessUnitCode)
 						.SetResultTransformer(Transformers.AliasToBeanConstructor(constructorInfo))

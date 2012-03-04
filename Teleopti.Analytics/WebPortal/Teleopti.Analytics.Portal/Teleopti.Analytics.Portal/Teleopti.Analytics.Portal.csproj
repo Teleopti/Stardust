@@ -87,8 +87,12 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
+      <Link>CodeAnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
     <Content Include="App_Themes\Theme1\images\loading.gif" />
     <Content Include="PerformanceManager\test_login.aspx" />
+    <Content Include="PmContainer.aspx" />
     <Content Include="ReportViewer.aspx" />
     <Content Include="Selection.aspx" />
     <Content Include="Web.config">
@@ -196,6 +200,13 @@
     <Compile Include="PerformanceManager\View\ReportTreeView.ascx.cs">
       <DependentUpon>ReportTreeView.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PmContainer.aspx.cs">
+      <DependentUpon>PmContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PmContainer.aspx.designer.cs">
+      <DependentUpon>PmContainer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Ccc\ColorExtensions.cs" />
     <Compile Include="Reports\Ccc\DataCellModel.cs" />
@@ -391,6 +402,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Reports\Custom\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

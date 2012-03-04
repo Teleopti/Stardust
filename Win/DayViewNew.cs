@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling;
@@ -80,13 +81,17 @@ namespace Teleopti.Ccc.Win
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
                 var scheduleDay = e.Style.CellValue as IScheduleDay;
+            	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence();
                 if (scheduleDay != null)
                 {
                     var significantPart = scheduleDay.SignificantPart();
 
                     if (significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.FullDayAbsence)
                     {
-                        drawAssignmentFromSchedule(e, scheduleDay);
+						if (hasDayOffUnderFullDayAbsence.HasDayOff(scheduleDay))
+							drawCoveredDayOffFromSchedule(e, scheduleDay);
+						else
+							drawAssignmentFromSchedule(e, scheduleDay);	
                     }
                     else
                     {
@@ -98,7 +103,7 @@ namespace Teleopti.Ccc.Win
                         {
                             if (significantPart == SchedulePartView.ContractDayOff)
                             {
-                                drawContractDayOffFromSchedule(e, scheduleDay);
+                                drawCoveredDayOffFromSchedule(e, scheduleDay);
                             }
                             else
                             {
@@ -114,7 +119,7 @@ namespace Teleopti.Ccc.Win
 
                         drawDayOffFromSchedule(e, scheduleDay);
                     if (significantPart == SchedulePartView.ContractDayOff)
-                        drawContractDayOffFromSchedule(e, scheduleDay);
+                        drawCoveredDayOffFromSchedule(e, scheduleDay);
                     AddMarkersToCell(e, scheduleDay, significantPart);
                 }
             }
@@ -232,7 +237,7 @@ namespace Teleopti.Ccc.Win
             drawTomorrow(e, person, pixelConverter, tomorrow);
         }
 
-        private void drawContractDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
+        private void drawCoveredDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
         {
             var pixelConverter = new LengthToTimeCalculator(_presenter.ScalePeriod, e.Bounds.Width);
             IPerson person = scheduleDay.Person;

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
@@ -33,13 +34,13 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new WeekScheduleDomainDataMappingProfile(
-			                                    	() => Mapper.Engine,
-			                                    	() => scheduleProvider,
-			                                    	() => projectionProvider,
-			                                    	() => personRequestProvider,
-													() => userTimeZone
-			                                    	)));
+			Mapper.Initialize(c => c.AddProfile(
+				new WeekScheduleDomainDataMappingProfile(
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider),
+					Depend.On(personRequestProvider),
+					Depend.On(userTimeZone)
+					)));
 		}
 
 		[Test]
@@ -72,7 +73,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.Days.Select(x => x.Date)
 				.Should().Have.SameSequenceAs(datesInWeek);
-
 		}
 
 		[Test]
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                                      		DateTime.UtcNow, DateTime.UtcNow.AddHours(1))
 			                                      	));
 
-			personRequestProvider.Stub(x => x.RetrieveRequests(period)).Return(new[] {personRequest });
+			personRequestProvider.Stub(x => x.RetrieveRequests(period)).Return(new[] {personRequest});
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
@@ -155,6 +155,21 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+		}
+
+		[Test]
+		public void ShouldMapColorSource()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var projection = new StubFactory().ProjectionStub();
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(DateOnly.Today);
+
+			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
+			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
 		}
 	}
 }

@@ -19,8 +19,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool IsDayOff()
         {
-            var dateOnly = _scheduleDay.DateOnlyAsPeriod.DateOnly;
-            var personPeriod = _scheduleDay.Person.Period(dateOnly);
+        	var dateOnlyAsPeriod = _scheduleDay.DateOnlyAsPeriod;
+			if (dateOnlyAsPeriod == null)
+				return false;
+
+			var dateOnly = dateOnlyAsPeriod.DateOnly;
+
+        	var person = _scheduleDay.Person;
+			if (person == null)
+				return false;
+
+			var personPeriod = person.Period(dateOnly);
 
             if (personPeriod == null)
                 return false;

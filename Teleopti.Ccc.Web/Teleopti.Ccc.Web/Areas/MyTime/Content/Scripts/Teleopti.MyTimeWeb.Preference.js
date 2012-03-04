@@ -14,10 +14,6 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Preference = (function ($) {
 
-	function _layout() {
-		Teleopti.MyTimeWeb.Preference.Layout.SetClassesFromDayState();
-	}
-
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
 		var periodData = $('#Preference-body').data('mytime-periodselection');
@@ -47,16 +43,16 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	function _initDeleteButton() {
 		$('#Preference-delete-button')
-			.click(function() {
+			.click(function () {
 				$('#Preference-body-inner .ui-selected')
-					.each(function(index, cell) {
+					.each(function (index, cell) {
 						var date = $(cell).data('mytime-date');
 						_ajax({
-								type: 'DELETE',
-								data: { Date: date },
-								date: date,
-								statusCode404: function() { }
-							});
+							type: 'DELETE',
+							data: { Date: date },
+							date: date,
+							statusCode404: function () { }
+						});
 					});
 			})
 			.removeAttr('disabled')
@@ -91,8 +87,11 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			},
 			data: data,
 			success: function (data, textStatus, jqXHR) {
-				var cell = $('li[data-mytime-date="' + data.Date + '"] .preference');
-				cell.html(data.PreferenceRestriction);
+				var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
+				preference.html(data.PreferenceRestriction);
+				var cell = $('li[data-mytime-date="' + data.Date + '"]');
+				cell.removeClassStartingWith('color_');
+				cell.addClass(data.StyleClassName);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (statusCode404 && jqXHR.status == 404) {
@@ -137,13 +136,11 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	return {
 		Init: function () {
-			_layout();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Preference/Index', Teleopti.MyTimeWeb.Preference.PreferencePartialInit);
 			_initSplitButton();
 			_initDeleteButton();
 		},
 		PreferencePartialInit: function () {
-			_layout();
 			_initPeriodSelection();
 			_activateSelectable();
 		}
@@ -153,28 +150,3 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 $(function () { Teleopti.MyTimeWeb.Preference.Init(); });
 
-Teleopti.MyTimeWeb.Preference.Layout = (function ($) {
-
-	function _setDayState(week) {
-		$('li[data-mytime-date]', week).each(function () {
-			var curDay = $(this);
-			var state = parseInt(curDay.data('mytime-state'));
-			if (!state) {
-				curDay.addClass('non-editable');
-				return;
-			}
-			if (state & 1) {
-				curDay.addClass('editable');
-			}
-		});
-	}
-	
-	return {		
-		SetClassesFromDayState: function () {
-			var weeks = $('.calendarview-week');
-			weeks.each(function () {
-				_setDayState($(this));
-			});
-		}
-	};
-})(jQuery);

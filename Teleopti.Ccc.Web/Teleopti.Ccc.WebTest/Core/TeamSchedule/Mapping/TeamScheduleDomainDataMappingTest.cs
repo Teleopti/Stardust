@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private ISchedulePersonProvider personProvider;
 		private IUserTimeZone userTimeZone;
 		private CccTimeZoneInfo timeZone;
+		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 
 		[SetUp]
 		public void Setup()
@@ -30,13 +32,21 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			personProvider = MockRepository.GenerateMock<ISchedulePersonProvider>();
 			projectionProvider = MockRepository.GenerateStub<ITeamScheduleProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 
 			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			userTimeZone.Stub(x => x.TimeZone()).Do((Func<CccTimeZoneInfo>)(() => timeZone));
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new TeamScheduleDomainDataMappingProfile(() => Mapper.Engine, () => personProvider, () => scheduleProvider, () => projectionProvider, () => userTimeZone)));
+			Mapper.Initialize(c => c.AddProfile(new TeamScheduleDomainDataMappingProfile(
+			                                    	() => Mapper.Engine,
+			                                    	() => personProvider,
+			                                    	() => scheduleProvider,
+			                                    	() => projectionProvider,
+			                                    	() => userTimeZone,
+													() => hasDayOffUnderFullDayAbsence
+			                                    	)));
 		}
 
 		[Test]
@@ -227,6 +237,21 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(expectedStartDateTime);
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(expectedEndDateTime);
+		}
+
+		[Test]
+		public void ShouldMapHasDayOffUnderAbsence()
+		{
+			var persons = new[] { new Person() };
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.FullDayAbsence, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
+
+			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty)).Return(persons);
+			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
+			hasDayOffUnderFullDayAbsence.Stub(x => x.HasDayOff(scheduleDay)).Return(true);
+
+			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
+
+			result.Days.First().HasDayOffUnder.Should().Be.True();
 		}
 
 	}

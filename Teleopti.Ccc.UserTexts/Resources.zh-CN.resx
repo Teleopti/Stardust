@@ -5617,7 +5617,16 @@ Periods</comment>
     <value>应用授权证书</value>
   </data>
   <data name="ApplyLicenseInstructions" xml:space="preserve">
-    <value>提示: *购买一个授权证书（联系信息www.teleopti.com)*收到授权证书（例如通过邮件） * 把授权证书保存到磁盘* 如果有任何工作需要临时保存，请在应用授权证书之前保存*请按浏览键浏览证书文件*应用授权证书*应用程序将被关闭*重新启动My Time来获取新的被授权选项*重新启动应用</value>
+    <value>提示:
+* 购买一个授权证书(联系信息www.teleopti.com)
+* 收到授权证书(例如通过邮件)
+* 把授权证书保存到磁盘
+* 如果有任何工作需要临时保存，请在应用授权证书之前保存
+* 请按浏览键浏览证书文件
+* 应用授权证书
+* 应用程序将被关闭
+* 重新启动MyTime来获取新的被授权选项
+* 重新启动应用</value>
   </data>
   <data name="CannotReadLicenseFile" xml:space="preserve">
     <value>授权证书文件"{0}"不能读取，错误详情为: {1}</value>
@@ -9205,5 +9214,8 @@ Periods</comment>
   </data>
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>至少为{0}小时。</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>活动设置不能为空</value>
   </data>
 </root>

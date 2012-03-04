@@ -4,21 +4,20 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
 	public class WeekScheduleDomainDataMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mapper;
-		private readonly Func<IScheduleProvider> _scheduleProvider;
-		private readonly Func<IProjectionProvider> _projectionProvider;
-		private readonly Func<IPersonRequestProvider> _personRequestProvider;
-		private readonly Func<IUserTimeZone> _userTimeZone; 
+		private readonly IResolve<IScheduleProvider> _scheduleProvider;
+		private readonly IResolve<IProjectionProvider> _projectionProvider;
+		private readonly IResolve<IPersonRequestProvider> _personRequestProvider;
+		private readonly IResolve<IUserTimeZone> _userTimeZone;
 
-		public WeekScheduleDomainDataMappingProfile(Func<IMappingEngine> mapper, Func<IScheduleProvider> scheduleProvider, Func<IProjectionProvider> projectionProvider, Func<IPersonRequestProvider> personRequestProvider, Func<IUserTimeZone> userTimeZone)
+		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone)
 		{
-			_mapper = mapper;
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
 			_personRequestProvider = personRequestProvider;
@@ -52,10 +51,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															}
 											   ).ToArray();
 
+									var colorSource = new ScheduleColorSource
+									                  	{
+															ScheduleDays = scheduleDays,
+															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
+									                  	};
 									return new WeekScheduleDomainData
 											{
 												Date = date,
 												Days = days,
+												ColorSource = colorSource
 											};
 								});
 

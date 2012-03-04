@@ -34,15 +34,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void That<T>(Func<T> value, Constraint constraint, string message)
 		{
+			ReusableConstraint reusableConstraint = constraint;
 			AssertionException exception = null;
 			Func<bool> longPollTimeSafeAssert = () =>
 			                   	{
 			                   		try
 			                   		{
 										if (string.IsNullOrEmpty(message))
-											Assert.That(() => value.Invoke(), constraint);
+											Assert.That(value.Invoke(), reusableConstraint);
 										else
-											Assert.That(() => value.Invoke(), constraint, message);
+											Assert.That(value.Invoke(), reusableConstraint, message);
 										return true;
 			                   		}
 									catch (AssertionException ex)

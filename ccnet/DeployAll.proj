@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
 		<CCCMajorMinor>7.1</CCCMajorMinor>
@@ -26,11 +26,14 @@
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
+		<FullBuild>Yes</FullBuild>
+		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(COMPUTERNAME)' == 'INTEGRATION'" >
-		<TfsLibraryLocation>C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
-		<SDKDocProj>$(CCNetWorkingDirectory)\docSdk.shfbproj</SDKDocProj>
+	
+	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
+		<FullBuild>No</FullBuild>
+		<ProductsToBuild>1</ProductsToBuild> <!-- only Server MSI -->
+		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(CCNetProject)' == 'BuildMSI-root'" >
@@ -94,18 +97,18 @@
 						$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\**\RtaStates.xml"/>
 		</ItemGroup>
 		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
-		<Delete Files="@(DeleteFilesCollection)" />
+		<Exec Command="del /Q &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
 	</Target>
 	
 	
 	<Target Name="CreateMSI">
 		<Message Text="Building MSI..." Importance="high" />
-		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
-		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
+		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
 		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
 	
-	<Target Name="CreateAzure">
+	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
 		<Message Text="Building Azure packages ..." Importance="high" />
 		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
@@ -118,11 +121,16 @@
      ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip"
      ZipLevel="9" />
   </Target>
-
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;UploadRoot;UploadNew">
-    <Message Text="Calling upload target"/>
+  
+  <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
+	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
 
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;UploadRoot;UploadNew">
+    <Message Text="Calling upload target"/>
+  </Target>
+  
   <Target Name="UploadRoot" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
     <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
     <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
@@ -242,7 +250,8 @@
   $(CCNetWorkingDirectory)\Database\**\DemoDatabase\**\*.*;
 	$(CCNetWorkingDirectory)\Database\DBManager.exe"/>
 			<Database
-			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe"/>
+			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Teleopti.Ccc.DBManager.Library.dll"/>
 
 			<!-- DemoDatabase -->
 			<DemoDatabase

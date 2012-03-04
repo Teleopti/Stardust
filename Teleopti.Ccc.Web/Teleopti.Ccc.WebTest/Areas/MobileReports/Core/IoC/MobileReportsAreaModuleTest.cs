@@ -9,6 +9,8 @@ using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.IoC
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+
 	[TestFixture]
 	public class MobileReportsAreaModuleTest
 	{

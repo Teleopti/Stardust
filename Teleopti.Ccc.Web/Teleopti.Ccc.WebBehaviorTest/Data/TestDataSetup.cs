@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UnitOfWorkAction(CreatePersonThatCreatesTestData);
 			UnitOfWorkAction(CreateLicense);
 			UnitOfWorkAction(CreateBusinessUnits);
-			UnitOfWorkAction(CreateAllApplicationFunctions);
+			UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
+			UnitOfWorkAction(CreateMatrixApplicationFunctions);
 			UnitOfWorkAction(CreateSites);
 			UnitOfWorkAction(CreateApplicationRoles);
 			UnitOfWorkAction(CreateShiftCategory);
@@ -100,12 +101,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			licenseRepository.Add(license);
 		}
 
-		private static void CreateAllApplicationFunctions(IUnitOfWork uow)
+		private static void CreateAllRaptorApplicationFunctions(IUnitOfWork uow)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
 			var definedRaptorApplicationFunctionFactory = new DefinedRaptorApplicationFunctionFactory();
 
 			applicationFunctionRepository.AddRange(definedRaptorApplicationFunctionFactory.ApplicationFunctionList);
+		}
+
+		private static void CreateMatrixApplicationFunctions(IUnitOfWork uow)
+		{
+			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
+			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
+			var names = new[] {"ResReportAbandonmentAndSpeedOfAnswer","ResReportForecastvsActualWorkload", "ResReportServiceLevelAndAgentsReady"};
+
+			applicationFunctionRepository.AddRange(
+				names.Select(n => new ApplicationFunction(n, matrixReportsParent) { ForeignSource = DefinedForeignSourceNames.SourceMatrix }));
 		}
 
 		private static void CreateApplicationRoles(IUnitOfWork uow)
@@ -146,11 +157,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
 				select r;
 
+			var agentRoleWithoutMyTimeWebApplicationFunctions =
+				from r in agentRoleApplicationFunctions
+				where
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
+				select r;
 			var agentRoleWithoutMobileReportsApplicationFunctions =
 				from r in agentRoleApplicationFunctions
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
 				select r;
+			var agentRoleWithoutAgentRoleWithoutResReportServiceLevelAndAgentsReadyMatrixFunction =
+				from r in agentRoleApplicationFunctions
+				where
+					!(r.FunctionCode == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
+				select r;
+			
 			
 
 			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out TestData.AdministratorRole, out TestData.AgentRole, out TestData.UnitRole, out TestData.SiteRole, out TestData.TeamRole);
@@ -173,6 +195,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
 			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
 			TestData.AgentRoleWithoutMobileReports = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMobileReports", null);
+			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
+			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "AgentRoleWithoutResReportServiceLevelAndAgentsReady", null);
+			
 			
 
 			var test = new AvailableData();
@@ -186,7 +211,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutTextRequests, functions = agentRoleWithoutTextRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutTeamSchedule, functions = agentRoleWithoutTeamScheduleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
+									new { role = TestData.AgentRoleWithoutMyTimeWeb, functions = agentRoleWithoutMyTimeWebApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutMobileReports, functions = agentRoleWithoutMobileReportsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
+									new { role = TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady, functions = agentRoleWithoutAgentRoleWithoutResReportServiceLevelAndAgentsReadyMatrixFunction, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = test},
@@ -272,14 +299,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateContractStuff(IUnitOfWork uow)
 		{
-			TestData.ContractOne = ContractFactory.CreateContract("Contract One");
+			TestData.CommonContract = ContractFactory.CreateContract("Common contract");
 			TestData.PartTimePercentageOne = PartTimePercentageFactory.CreatePartTimePercentage("PartTimePercentage One");
-			TestData.ContractScheduleOne = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			TestData.ContractScheduleOne.Description = new Description("ContractSchedule One");
+
+			TestData.WorkingWeekContractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			TestData.WorkingWeekContractSchedule.Description = new Description("Working week schedule");
+
+			TestData.DayOffTodayContractSchedule = new ContractSchedule("Day off today schedule");
+			TestData.DayOffTodayContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
 
 			var repository = new Repository(uow);
-			repository.Add(TestData.ContractOne);
-			repository.Add(TestData.ContractScheduleOne);
+			repository.Add(TestData.CommonContract);
+			repository.Add(TestData.WorkingWeekContractSchedule);
+			repository.Add(TestData.DayOffTodayContractSchedule);
 			repository.Add(TestData.PartTimePercentageOne);
 		}
 

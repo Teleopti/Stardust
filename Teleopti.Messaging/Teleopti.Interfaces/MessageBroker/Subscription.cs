@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Xml;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.MessageBroker
 {
@@ -9,15 +11,16 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
+		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name};
+
 		/// <summary>
 		/// Creates a new instance of <see cref="Subscription"/>
 		/// </summary>
 		public Subscription()
 		{
-			DomainId = Guid.Empty.ToString();
-			DomainReferenceId = DomainId;
-			SubscriptionId = DomainId;
-			BusinessUnitId = DomainId;
+			DomainId = null;
+			DomainReferenceId = null;
+			BusinessUnitId = Guid.Empty.ToString();
 			LowerBoundary = DateToString(DateTime.MinValue);
 			UpperBoundary = DateToString(DateTime.MinValue);
 		}
@@ -28,8 +31,20 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string Route()
 		{
-			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
-			return String.Join("/", stringArray);
+			var stringArray = new[] { excludeDatasourceForCertainTypes(), excludeBusinessUnitForCertainTypes(), DomainType };
+			var basicRoute = String.Join("/", stringArray);
+			
+			if (!string.IsNullOrEmpty(DomainId))
+			{
+				return String.Join("/", new[] {basicRoute, "id", DomainId});
+			}
+
+			if (!string.IsNullOrEmpty(DomainReferenceId))
+			{
+				return String.Join("/", new[] { basicRoute, "ref", DomainReferenceId});
+			}
+
+			return basicRoute;
 		}
 
 		/// <summary>
@@ -62,11 +77,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public string UpperBoundary { get; set; }
 
-		/// <summary>
-		/// Gets or sets the subscription id.
-		/// </summary>
-		public string SubscriptionId { get; set; }
-
 		///<summary>
 		/// Gets or sets the data source.
 		///</summary>
@@ -76,30 +86,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// Gets or sets the business unit id.
 		/// </summary>
 		public string BusinessUnitId { get; set; }
-
-		/// <summary>
-		/// Gets the domain id as guid.
-		/// </summary>
-		public Guid DomainIdAsGuid()
-		{
-			return XmlConvert.ToGuid(DomainId);
-		}
-
-		/// <summary>
-		/// Gets the domain reference id as guid.
-		/// </summary>
-		public Guid DomainReferenceIdAsGuid()
-		{
-			return XmlConvert.ToGuid(DomainReferenceId);
-		}
-
-		/// <summary>
-		/// Gets the subscription id as guid.
-		/// </summary>
-		public Guid SubscriptionIdAsGuid()
-		{
-			return XmlConvert.ToGuid(SubscriptionId);
-		}
 
 		/// <summary>
 		/// Gets the business unit id as guid.
@@ -139,6 +125,17 @@ namespace Teleopti.Interfaces.MessageBroker
 		public static string DateToString(DateTime date)
 		{
 			return XmlConvert.ToString(date, XmlDateTimeSerializationMode.Unspecified);
+		}
+
+		private string excludeDatasourceForCertainTypes()
+		{
+			return TypesWithException.Contains(DomainType) ? null : DataSource;
+		}
+
+		private string excludeBusinessUnitForCertainTypes()
+		{
+			var emptyId = IdToString(Guid.Empty);
+			return TypesWithException.Contains(DomainType) && emptyId.Equals(DomainId) ? emptyId : BusinessUnitId;
 		}
 	}
 }
