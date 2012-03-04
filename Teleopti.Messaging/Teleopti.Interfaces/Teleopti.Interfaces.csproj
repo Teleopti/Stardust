@@ -192,6 +192,7 @@
     <Compile Include="Domain\IAuditSetter.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
+    <Compile Include="Domain\IRestrictionsOverLimitDecider.cs" />
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />

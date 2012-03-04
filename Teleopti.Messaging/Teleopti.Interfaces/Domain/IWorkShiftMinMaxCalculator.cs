@@ -60,7 +60,18 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="matrix"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix);
+        MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(
+            DateOnly dayToSchedule, 
+            IScheduleMatrixPro matrix);
+
+        ///// <summary>
+        ///// Mins the max allowed shift contract time.
+        ///// </summary>
+        ///// <param name="dayToSchedule">The day to schedule.</param>
+        ///// <param name="matrix">The matrix.</param>
+        ///// <param name="schedulingOptions">The scheduling options.</param>
+        ///// <returns></returns>
+        //MinMax<TimeSpan>? MinMaxAllowedShiftContractTime(DateOnly dayToSchedule, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 
 		/// <summary>
 		/// Possibles the min max time for period.
@@ -78,5 +89,17 @@ namespace Teleopti.Interfaces.Domain
         /// Empties the cashed values for all days
         ///</summary>
         void ResetCache();
+
+        ///// <summary>
+        ///// Periods the legal state status.
+        ///// </summary>
+        ///// <param name="matrix">The matrix.</param>
+        ///// <param name="restrictionsOverLimitDecider">The restrictions over limit decider.</param>
+        ///// <param name="schedulingOptions">The scheduling options.</param>
+        ///// <returns></returns>
+        //int PeriodLegalStateStatus(
+        //    IScheduleMatrixPro matrix,
+        //    IRestrictionsOverLimitDecider restrictionsOverLimitDecider,
+        //    ISchedulingOptions schedulingOptions);
     }
 }

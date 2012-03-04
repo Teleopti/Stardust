@@ -45,9 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 // note that we do not change the order of the decisionmakers
                 if (_decisionMakers.Any(runDayOffOptimizer))
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -63,12 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                     _dayOffDecisionMakerExecuter);
 
             bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _originalStateContainer);
-            if (dayOffOptimizerResult)
-            {
-                return true;
-            }
-
-            return false;
+            return dayOffOptimizerResult;
         }
 
 

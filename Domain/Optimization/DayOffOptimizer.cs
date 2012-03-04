@@ -42,9 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             bool decisionMakerChoiceResultedInBetterPeriod =
                 _dayOffDecisionMakerExecuter.Execute(_workingBitArray, originalArray, matrix, originalStateContainer, true, true);
-            if (!decisionMakerChoiceResultedInBetterPeriod)
-                return false;
-            return true;
+            return decisionMakerChoiceResultedInBetterPeriod;
         }
 
 

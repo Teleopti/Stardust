@@ -11,7 +11,10 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
 
-        public PossibleMinMaxWorkShiftLengthExtractor(IRestrictionExtractor restrictionExtractor, IRuleSetProjectionService ruleSetProjectionService, ISchedulingOptions schedulingOptions)
+        public PossibleMinMaxWorkShiftLengthExtractor(
+            IRestrictionExtractor restrictionExtractor, 
+            IRuleSetProjectionService ruleSetProjectionService, 
+            ISchedulingOptions schedulingOptions)
         {
             _restrictionExtractor = restrictionExtractor;
             _ruleSetProjectionService = ruleSetProjectionService;
