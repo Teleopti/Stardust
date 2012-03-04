@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -28,13 +29,13 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
             {
                 Guid selectedPerson = _permissionViewerRoles.SelectedPerson;
                 var roles = _repositoryFactory.CreateApplicationRolePersonRepository(uow).RolesOnPerson(selectedPerson);
-                ListView list = _permissionViewerRoles.PersonRolesList;
-                list.Items.Clear();
+                var list = new List<ListViewItem>();
                 foreach (var roleLight in roles)
                 {
                     //list.Items.Add(roleLight.Id.ToString(), roleLight.Name, 0);
-                    list.Items.Add(new ListViewItem(roleLight.Name) {Tag = roleLight.Id});
+                    list.Add(new ListViewItem(roleLight.Name) {Tag = roleLight.Id});
                 }
+                _permissionViewerRoles.FillPersonRolesList(list.ToArray());
             }
         }
     }

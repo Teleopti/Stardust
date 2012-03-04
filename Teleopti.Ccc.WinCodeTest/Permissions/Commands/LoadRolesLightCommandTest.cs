@@ -35,15 +35,13 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
         {
             var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
             var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
-            var list = new ListView();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
             Expect.Call(rep.Roles()).Return(new List<IRoleLight> {new RoleLight {Id = Guid.NewGuid(), Name = "Admin"}});
-            Expect.Call(_permissionViewerRoles.RolesMainList).Return(list);
+            Expect.Call(() =>_permissionViewerRoles.FillRolesMainList(new ListViewItem[0])).IgnoreArguments();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.Execute();
-            Assert.That(list.Items.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
     }

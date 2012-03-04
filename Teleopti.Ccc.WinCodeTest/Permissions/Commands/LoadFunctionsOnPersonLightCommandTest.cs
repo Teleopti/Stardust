@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
 {
-    [TestFixture]
+    [TestFixture, RequiresSTA]
     public class LoadFunctionsOnPersonLightCommandTest
     {
         private MockRepository _mocks;
@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
         private  IRepositoryFactory _repositoryFactory;
         private  IPermissionViewerRoles _permissionViewerRoles;
         private LoadFunctionsOnPersonLightCommand _target;
+        private ListView _list;
 
         [SetUp]
         public void Setup()
@@ -28,24 +29,25 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _permissionViewerRoles = _mocks.StrictMock<IPermissionViewerRoles>();
             _target = new LoadFunctionsOnPersonLightCommand(_unitOfWorkFactory, _repositoryFactory, _permissionViewerRoles);
+            _list = new ListView();
         }
 
-        [Test]
+        [Test, RequiresSTA]
         public void ShouldGetFunctionsFromRepAndLoadListView()
         {
             var id = Guid.NewGuid();
             var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
             var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
-            var list = new ListView();
+            
             Expect.Call(_permissionViewerRoles.SelectedPerson).Return(id);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
             Expect.Call(rep.FunctionsOnPerson(id)).Return(new List<IFunctionLight> { new FunctionLight() { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt"} });
-            Expect.Call(_permissionViewerRoles.PersonFunctionsList).Return(list);
+            Expect.Call(() => _permissionViewerRoles.FillPersonFunctionsList(new ListViewItem[0])).IgnoreArguments();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.Execute();
-            Assert.That(list.Items.Count, Is.EqualTo(1));
+            Assert.That(_list.Items.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
     }

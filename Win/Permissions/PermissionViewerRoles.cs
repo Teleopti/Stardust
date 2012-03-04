@@ -25,9 +25,51 @@ namespace Teleopti.Ccc.Win.Permissions
             get { return listViewRolesMain; }
         }
 
-        public ListView PersonsMainList
+        public Guid SelectedRole
         {
-            get { return listViewPersonsMain; }
+            get { throw new NotImplementedException(); }
+        }
+
+        public void FillPersonsMainList(ListViewItem[] listViewItems)
+        {
+            listViewPersonsMain.Items.Clear();
+            listViewPersonsMain.Items.AddRange(listViewItems);
+        }
+
+        public void FillPersonRolesList(ListViewItem[] listViewItems)
+        {
+            listViewPersonRoles.Items.Clear();
+            listViewPersonRoles.Items.AddRange(listViewItems);
+        }
+
+        public void FillPersonFunctionsList(ListViewItem[] listViewItems)
+        {
+            listViewPersonFunctions.Items.Clear();
+            listViewPersonFunctions.Items.AddRange(listViewItems);
+        }
+
+        public void FillFunctionsMainList(ListViewItem[] listViewItems)
+        {
+            listViewFunctionsMain.Items.Clear();
+            listViewFunctionsMain.Items.AddRange(listViewItems);
+        }
+
+        public void FillFunctionPersonsList(ListViewItem[] listViewItems)
+        {
+            listViewFunctionPersons.Items.Clear();
+            listViewFunctionPersons.Items.AddRange(listViewItems);
+        }
+
+        public void FillFunctionRolesList(ListViewItem[] listViewItems)
+        {
+            listViewFunctionRoles.Items.Clear();
+            listViewFunctionRoles.Items.AddRange(listViewItems);
+        }
+
+        public void FillRolesMainList(ListViewItem[] listViewItems)
+        {
+            listViewRolesMain.Items.Clear();
+            listViewRolesMain.Items.AddRange(listViewItems);
         }
 
         public Guid SelectedPerson

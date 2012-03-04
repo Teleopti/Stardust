@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -26,13 +27,13 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 var roles = _repositoryFactory.CreateApplicationRolePersonRepository(uow).Roles();
-                ListView list = _permissionViewerRoles.RolesMainList;
-                list.Items.Clear();
+                var list = new List<ListViewItem>();
                 foreach (var roleLight in roles)
                 {
                     //list.Items.Add(roleLight.Id.ToString(), roleLight.Name, 0);
-                    list.Items.Add(new ListViewItem(roleLight.Name) {Tag = roleLight.Id});
+                    list.Add(new ListViewItem(roleLight.Name) {Tag = roleLight.Id});
                 }
+                _permissionViewerRoles.FillRolesMainList(list.ToArray());
             }
         }
     }

@@ -34,16 +34,16 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
         public void ShouldGetFunctionsFromRepAndLoadListView()
         {
            var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
-            var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
-            var list = new ListView();
+            var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();         
+
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
             Expect.Call(rep.Functions()).Return(new List<IFunctionLight> { new FunctionLight() { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt"} });
-            Expect.Call(_permissionViewerRoles.FunctionsMainList).Return(list);
+            Expect.Call(() =>_permissionViewerRoles.FillFunctionsMainList(new ListViewItem[0])).IgnoreArguments();
+
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.Execute();
-            Assert.That(list.Items.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
     }

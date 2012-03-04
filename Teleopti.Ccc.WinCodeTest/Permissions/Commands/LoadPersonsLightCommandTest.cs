@@ -30,20 +30,19 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             _target = new LoadPersonsLightCommand(_unitOfWorkFactory, _repositoryFactory, _permissionViewerRoles);
         }
 
-        [Test]
+        [Test, RequiresSTA]
         public void ShouldGetPersonsFromRepAndLoadListView()
         {
             var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
             var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
-            var list = new ListView();
+            
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
             Expect.Call(rep.Persons()).Return(new List<IPersonInRole> { new PersonInRole { Id = Guid.NewGuid(), FirstName = "Admin" } });
-            Expect.Call(_permissionViewerRoles.PersonsMainList).Return(list);
+            Expect.Call(() => _permissionViewerRoles.FillPersonsMainList(new ListViewItem[0])).IgnoreArguments();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.Execute();
-            Assert.That(list.Items.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
     }
