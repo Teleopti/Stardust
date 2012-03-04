@@ -142,6 +142,120 @@ GO
 CREATE NONCLUSTERED INDEX IX_dim_person_person_code_from_to
 ON [mart].[dim_person] ([person_code],[valid_from_date],[valid_to_date])
 INCLUDE ([person_id])
+
+---------------------
+--Blue/Ola custom report
+---------------------
+--rename existing tables and PKs
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_report_visible]') AND type = 'D')
+BEGIN
+	ALTER TABLE [mart].[report] DROP CONSTRAINT [DF_report_visible]
+END
+EXEC dbo.sp_rename @objname = N'[mart].[report]', @newname = N'report_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[mart].[report_old].[PK_report]', N'PK_report_old', N'INDEX'
+GO
+
+EXEC dbo.sp_rename @objname = N'[mart].[report_control]', @newname = N'report_control_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[mart].[report_control_old].[PK_report_control]', N'PK_report_control_old', N'INDEX'
+GO
+EXEC dbo.sp_rename @objname = N'[mart].[report_control_collection]', @newname = N'report_control_collection_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[mart].[report_control_collection_old].[PK_report_control_collection]', N'PK_report_control_collection_old', N'INDEX'
+GO
+EXEC dbo.sp_rename @objname = N'[mart].[report_user_setting]', @newname = N'report_user_setting_old', @objtype = N'OBJECT'
+EXEC sp_rename N'[mart].[report_user_setting_old].[PK_report_user_setting]', N'PK_report_user_setting_old', N'INDEX'
+GO
+
+
+CREATE TABLE [mart].[report_user_setting](
+	[ReportId] [uniqueidentifier] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[report_id] [int] NOT NULL,
+	[param_name] [varchar](50) NOT NULL,
+	[saved_name_id] [int] NOT NULL,
+	[control_setting] [varchar](max) NULL
+ CONSTRAINT [PK_report_user_setting] PRIMARY KEY CLUSTERED 
+(
+	person_code,
+	param_name,
+	saved_name_id,
+	ReportId
+)
+) 
+
+CREATE TABLE [mart].[report](
+	[Id] [uniqueidentifier] NOT NULL,
+	[report_id] [int] NOT NULL,
+	[control_collection_id] [int] NOT NULL,
+	[url] [nvarchar](500) NULL,
+	[target] [nvarchar](50) NULL,
+	[report_name] [nvarchar](500) NULL,
+	[report_name_resource_key] [nvarchar](50) NOT NULL,
+	[visible] [bit] NOT NULL,
+	[rpt_file_name] [varchar](100) NOT NULL,
+	[proc_name] [varchar](100) NOT NULL,
+	[help_key] [nvarchar](500) NULL,
+	[sub1_name] [varchar](50) NOT NULL,
+	[sub1_proc_name] [varchar](50) NOT NULL,
+	[sub2_name] [varchar](50) NOT NULL,
+	[sub2_proc_name] [varchar](50) NOT NULL,
+	[ControlCollectionId] [uniqueidentifier] NOT NULL
+ CONSTRAINT [PK_report] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+CREATE TABLE [mart].[report_control](
+	[Id] [uniqueidentifier] NOT NULL,
+	[control_id] [int] NOT NULL,
+	[control_name] [varchar](50) NULL,
+	[fill_proc_name] [varchar](200) NOT NULL	
+ CONSTRAINT [PK_report_control] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+) 
+
+GO
+
+CREATE TABLE [mart].[report_control_collection](
+	[Id] [uniqueidentifier] NOT NULL,
+	[ControlId] [uniqueidentifier] NOT NULL,
+	[CollectionId] [uniqueidentifier] NOT NULL,
+	[control_collection_id] [int] NOT NULL,
+	[collection_id] [int] NOT NULL,
+	[print_order] [int] NOT NULL,
+	[control_id] [int] NOT NULL,
+	[default_value] [nvarchar](4000) NOT NULL,
+	[control_name_resource_key] [nvarchar](50) NOT NULL,
+	[fill_proc_param] [varchar](100) NULL,
+	[param_name] [varchar](50) NULL,
+	[depend_of1] [int] NULL,
+	[depend_of2] [int] NULL,
+	[depend_of3] [int] NULL,
+	[depend_of4] [int] NULL,
+	[DependOf1] [uniqueidentifier] NULL,
+	[DependOf2] [uniqueidentifier] NULL,
+	[DependOf3] [uniqueidentifier] NULL,
+	[DependOf4] [uniqueidentifier] NULL
+ CONSTRAINT [PK_report_control_collection] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+
+-----------
+--mart.report
+-----------
+INSERT INTO [mart].[report]
+SELECT
+[Id] = NEWID(),
+[report_id] =[report_id],
+[control_collection_id]=[control_collection_id],
+[url]=[url],
+[target]=[target],
+[report_name]=[report_name],
 [report_name_resource_key]=[report_name_resource_key],
 [visible]=[visible],
 [rpt_file_name]=[rpt_file_name],
