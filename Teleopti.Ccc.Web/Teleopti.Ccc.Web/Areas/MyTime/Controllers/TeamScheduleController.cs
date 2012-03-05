@@ -26,7 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (!date.HasValue)
 				date = DateOnly.Today;
 			if (!id.HasValue)
-				id = _defaultTeamCalculator.Calculate(date.Value).Id;
+			{
+				var defaultTeam = _defaultTeamCalculator.Calculate(date.Value);
+				if (defaultTeam == null)
+					return View("NoTeamsPartial");
+
+				id = defaultTeam.Id;
+			}
 			return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
 		}
 

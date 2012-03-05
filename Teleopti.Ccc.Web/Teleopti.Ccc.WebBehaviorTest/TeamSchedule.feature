@@ -240,4 +240,4 @@ Scenario: Default team when no own team but everyone access
 Scenario: Show error message when acces to my team but no own team
 	Given I am an agent in no team with access to my team
 	When I view team schedule
-	Then I should see an error message
+	Then I should see a user-friendly message explaining I dont have anything to view

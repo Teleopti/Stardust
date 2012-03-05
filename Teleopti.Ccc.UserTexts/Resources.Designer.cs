@@ -13537,6 +13537,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no teams available.
+        /// </summary>
+        public static string NoTeamsAvailable {
+            get {
+                return ResourceManager.GetString("NoTeamsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Users.
         /// </summary>
         public static string NotInHierarchy {

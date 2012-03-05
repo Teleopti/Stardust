@@ -740,7 +740,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 242
  testRunner.When("I view team schedule");
 #line 243
- testRunner.Then("I should see an error message");
+ testRunner.Then("I should see a user-friendly message explaining I dont have anything to view");
 #line hidden
             testRunner.CollectScenarioErrors();
         }

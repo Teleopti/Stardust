@@ -10504,4 +10504,8 @@ These options are activated:
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
     <value>Activity cannot be empty.</value>
   </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>There are no teams available</value>
+    <comment>There are no teams available</comment>
+  </data>
 </root>
