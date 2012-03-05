@@ -6,11 +6,9 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
+using Autofac;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -41,6 +39,7 @@ using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
+using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -426,6 +425,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
+
+        
 
 		private ISkillType getSkillType(TreeNode node)
 		{
@@ -1208,61 +1209,28 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     view.ShowDialog(this);
                 }
             });
-	    }
+        }
 
-        private void importForecastsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void importForecast(TreeNode node)
         {
-            using (var stream = new StreamReader(@"c:\temp\test.csv"))
+            node = findAncestorNodeOfType(node, typeof(ISkill));
+            var s = (ISkill)node.Tag;
+            DialogResult result;
+
+            using (var impForecast = new ImportForecastForm(s, _repositoryFactory, _unitOfWorkFactory))
             {
-                var reader = new CsvFileReader(stream);
-                var row = new CsvFileRow();
-                var rowIndex = 1;
-                var validators = new List<IForecastsFileValidator>
-                                     {
-                                         new ForecastsFileSkillNameValidator(),
-                                         new ForecastsFileDateTimeValidator(),
-                                         new ForecastsFileDateTimeValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileDoubleValueValidator()
-                                     };
-                try
-                {
-                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
-                    {
-                        while (reader.ReadNextRow(row))
-                        {
-                            if (row.Count < 6 || row.Count > 7)
-                            {
-                                throw new ValidationException("There are more or less columns than expected.");
-                            }
-                            for (var i = 0; i < row.Count; i++)
-                            {
-                                if (!validators[i].Validate(row[i]))
-                                    throw new ValidationException(validators[i].ErrorMessage);
-                            }
-                            row.Clear();
-                            rowIndex++;
-                        }
-                    }
-                    MessageBoxAdv.Show("Validation succeeded.");
-                    var dto = new ImportForecastsFileCommandDto
-                                  {
-                                      ImportForecastsOption = ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
-                                      UploadedFileId = Guid.NewGuid()
-                                  };
-                    var statusDialog =
-                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
-                    statusDialog.Show(this);
-                    statusDialog.SetJobStatusId(executeExportCommand(dto));
-                }
-                catch (ValidationException exception)
-                {
-                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
-                                       "ValidationError");
-                }
+                impForecast.ShowDialog(this);
             }
+        }
+
+        private void toolStripMenuItemSkillsImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastContextMenuNode);
+        }
+
+        private void toolStripMenuItemActionSkillImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastActionNode);
         }
 	}
 }
