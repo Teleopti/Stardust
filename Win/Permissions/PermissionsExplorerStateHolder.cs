@@ -320,22 +320,13 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        /// <summary>
-        /// Assigns the person in permissions data dictionary.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <param name="personCollection">The person collection.</param>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
-        public void AssignPersonInPermissionsDataDictionary(IApplicationRole role, ICollection<IPerson> personCollection)
+        public void AssignPersonInPermissionsDataDictionary(IApplicationRole role, ICollection<IPersonInRole> personCollection)
         {
             if (personCollection != null && personCollection.Count > 0)
             {
                 if (_permissionsDataDictionary.ContainsKey(role))
                 {
-                    foreach (IPerson person in personCollection)
+                    foreach (IPersonInRole person in personCollection)
                     {
                         _permissionsDataDictionary[role].AddPersonToCollection(person);
                     }
@@ -343,16 +334,7 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        /// <summary>
-        /// Removes the person in permissions data dictionary.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <param name="person">The person.</param>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
-        public void RemovePersonInPermissionsDataDictionary(IApplicationRole role, IPerson person)
+        public void RemovePersonInPermissionsDataDictionary(IApplicationRole role, IPersonInRole person)
         {
             if (_permissionsDataDictionary.ContainsKey(role))
             {
@@ -360,41 +342,16 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        /// <summary>
-        /// Gets the person in permissions data dictionary.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
-        public ICollection<IPerson> GetPersonInPermissionsDataDictionary(IApplicationRole role)
+        public ICollection<IPersonInRole> GetPersonInPermissionsDataDictionary(IApplicationRole role)
         {
             if (_permissionsDataDictionary.ContainsKey(role))
             {
-                var builtInUsers = from p in _permissionsDataDictionary[role].PersonCollection
-                                   where p.BuiltIn
-                                   select p;
-                foreach (IPerson builtInUser in builtInUsers.ToList())
-                {
-                    _permissionsDataDictionary[role].PersonCollection.Remove(builtInUser);
-                }
                 return _permissionsDataDictionary[role].PersonCollection;
             }
 
             return null;
         }
 
-        /// <summary>
-        /// Gets the available data in permissions data dictionary.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
         public IAvailableData GetAvailableDataInPermissionsDataDictionary(IApplicationRole role)
         {
             if (_permissionsDataDictionary.ContainsKey(role))
@@ -405,15 +362,6 @@ namespace Teleopti.Ccc.Win.Permissions
             return null;
         }
 
-        /// <summary>
-        /// Determines whether [is person in the list] [the specified id].
-        /// </summary>
-        /// <param name="id">The id.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
         public IPerson IsPersonInTheList(Guid? id)
         {
             IEnumerable<PersonAdapter> personAdapters = _personAdapterCollection.Where(pa => pa.Person.Id == id);
@@ -426,14 +374,6 @@ namespace Teleopti.Ccc.Win.Permissions
             return null;
         }
 
-        /// <summary>
-        /// Saves the application role.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
         public void SaveApplicationRole(IApplicationRole role)
         {
             if (role != null)
@@ -443,15 +383,6 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        /// <summary>
-        /// Adds the role to permissions data dictionary.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <param name="permissionsDataHolder">The permissions data holder.</param>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/17/2008
-        /// </remarks>
         public void AddRoleToPermissionsDataDictionary(IApplicationRole role, PermissionsDataHolder permissionsDataHolder)
         {
             if (!_permissionsDataDictionary.ContainsKey(role))
