@@ -896,9 +896,13 @@
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
+    <Compile Include="Messages\General\IForecastsFileRow.cs" />
+    <Compile Include="Messages\General\ImportForecastsToSkill.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
+    <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\General\RunPayrollExport.cs" />
+    <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />

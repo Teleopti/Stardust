@@ -139,6 +139,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	public class JobStatusModel
 	{
 		public Guid JobStatusId { get; set; }
-        public ExportMultisiteSkillToSkillCommandDto CommandDto { get; set; }
+        public CommandDto CommandDto { get; set; }
 	}
 }

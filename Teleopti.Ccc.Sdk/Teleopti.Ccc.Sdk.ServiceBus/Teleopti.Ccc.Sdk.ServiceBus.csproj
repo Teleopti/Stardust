@@ -231,10 +231,13 @@
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
     <Compile Include="Forecast\DateOnlyPeriodExtensions.cs" />
+    <Compile Include="Forecast\ImportForecastsFileToSkillConsumer.cs" />
+    <Compile Include="Forecast\ImportForecastsToSkillConsumer.cs" />
     <Compile Include="Forecast\OpenAndSplitChildSkillsConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillConsumer.cs" />
     <Compile Include="Forecast\JobResultFeedback.cs" />
+    <Compile Include="Forecast\OpenAndSplitTargetSkillConsumer.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
     <Compile Include="IPersonAbsenceAccountProvider.cs" />
     <Compile Include="IRequestFactory.cs" />

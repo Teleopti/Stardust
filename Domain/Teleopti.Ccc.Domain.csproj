@@ -232,6 +232,7 @@
     <Compile Include="Forecasting\ForecastsFile\CsvFileRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />

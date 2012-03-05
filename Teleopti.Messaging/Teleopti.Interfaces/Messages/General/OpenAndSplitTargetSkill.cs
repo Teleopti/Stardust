@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Interfaces.Messages.General
+{
+    /// <summary>
+    /// Message with details to perform an import of forecasting data to a target skill.
+    /// </summary>
+    public class OpenAndSplitTargetSkill : RaptorDomainMessage
+    {
+        ///<summary>
+        /// The Id of the job this message will feed with updates.
+        ///</summary>
+        public Guid JobId { get; set; }
+
+        public override Guid Identity
+        {
+            get { return JobId; }
+        }
+
+        ///<summary>
+        /// The import date in the target skills time zone.
+        ///</summary>
+        public DateOnly Date { get; set; }
+
+        /// <summary>
+        /// The owner of this action.
+        /// </summary>
+        public Guid OwnerPersonId { get; set; }
+        
+        /// <summary>
+        /// The target skill Id.
+        /// </summary>
+        public Guid TargetSkillId { get; set; }
+
+        /// <summary>
+        /// Forecasts
+        /// </summary>
+        public ICollection<IForecastsFileRow> Forecasts { get; set; }
+
+        /// <summary>
+        /// Open hours
+        /// </summary>
+        public IList<TimePeriod> OpenHoursList { get; set; }
+    }
+}
