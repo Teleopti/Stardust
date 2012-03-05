@@ -17,6 +17,7 @@ hg update default
 hg branch %releaseBranchName%
 hg ci -m "Creating release %SYSTEMVERSION%"
 hg push --new-branch
+hg update default
 
 echo Finished!
 )
