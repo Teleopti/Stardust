@@ -6,9 +6,11 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Autofac;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -1207,5 +1209,60 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 }
             });
 	    }
+
+        private void importForecastsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var stream = new StreamReader(@"c:\temp\test.csv"))
+            {
+                var reader = new CsvFileReader(stream);
+                var row = new CsvFileRow();
+                var rowIndex = 1;
+                var validators = new List<IForecastsFileValidator>
+                                     {
+                                         new ForecastsFileSkillNameValidator(),
+                                         new ForecastsFileDateTimeValidator(),
+                                         new ForecastsFileDateTimeValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileDoubleValueValidator()
+                                     };
+                try
+                {
+                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
+                    {
+                        while (reader.ReadNextRow(row))
+                        {
+                            if (row.Count < 6 || row.Count > 7)
+                            {
+                                throw new ValidationException("There are more or less columns than expected.");
+                            }
+                            for (var i = 0; i < row.Count; i++)
+                            {
+                                if (!validators[i].Validate(row[i]))
+                                    throw new ValidationException(validators[i].ErrorMessage);
+                            }
+                            row.Clear();
+                            rowIndex++;
+                        }
+                    }
+                    MessageBoxAdv.Show("Validation succeeded.");
+                    var dto = new ImportForecastsFileCommandDto
+                                  {
+                                      ImportForecastsOption = ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
+                                      UploadedFileId = Guid.NewGuid()
+                                  };
+                    var statusDialog =
+                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                    statusDialog.Show(this);
+                    statusDialog.SetJobStatusId(executeExportCommand(dto));
+                }
+                catch (ValidationException exception)
+                {
+                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
+                                       "ValidationError");
+                }
+            }
+        }
 	}
 }
