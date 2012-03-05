@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon
 			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
 
 			if (IniFileInfo.Create)
-				PrepareDatabases(ccc7, analytics);
+				CreateDatabases(ccc7, analytics);
 
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()) { UseCache = false };
 			var dataSource = CreateDataSource(dataSourceFactory);
@@ -30,12 +30,15 @@ namespace Teleopti.Ccc.TestCommon
 			return dataSource;
 		}
 
-		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
+		private static void CreateDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
 			try
 			{
-				ccc7.DropConnections();
-				ccc7.Drop();
+				if (ccc7.Exists())
+				{
+					ccc7.DropConnections();
+					ccc7.Drop();
+				}
 				ccc7.Create();
 			}
 			catch (Exception e)
@@ -47,8 +50,11 @@ namespace Teleopti.Ccc.TestCommon
 
 			try
 			{
-				analytics.DropConnections();
-				analytics.Drop();
+				if (analytics.Exists())
+				{
+					analytics.DropConnections();
+					analytics.Drop();
+				}
 				analytics.CreateByDbManager();
 			}
 			catch (Exception e)

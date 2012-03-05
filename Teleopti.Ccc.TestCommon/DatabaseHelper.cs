@@ -25,15 +25,19 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			if (_connection == null)
 			{
-				_connection = new SqlConnection(_connectionString);
+				var connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString);
+				connectionStringBuilder.InitialCatalog = "master";
+				_connection = new SqlConnection(connectionStringBuilder.ConnectionString);
 				_connection.Open();
+				if (Exists())
+					ExecuteNonQuery("USE [{0}]", _databaseName);
 			}
 			return _connection;
 		}
 
 		public bool Exists()
 		{
-			var databaseId = ExecuteScalar<int>("SELECT database_id FROM sys.databases WHERE Name = '{0}'", _databaseName);
+			var databaseId = ExecuteScalar<int>("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, _databaseName);
 			return databaseId > 0;
 		}
 
@@ -95,12 +99,15 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private T ExecuteScalar<T>(string sql, params object[] args)
+		private T ExecuteScalar<T>(string sql, T nullValue, params object[] args)
 		{
 			using (var command = Connection().CreateCommand())
 			{
 				command.CommandText = string.Format(sql, args);
-				return (T)command.ExecuteScalar();
+				var value = command.ExecuteScalar();
+				if (value == null)
+					return nullValue;
+				return (T) value;
 			}
 		}
 
