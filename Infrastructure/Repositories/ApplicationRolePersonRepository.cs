@@ -147,6 +147,87 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetReadOnly(true)
                     .List<IRoleLight>();
         }
+
+        public IList<Guid> AvailableData(Guid selectedPerson)
+        {
+            const string query = @"SELECT DISTINCT AvailableBusinessUnit AS Available
+                                FROM AvailableUnitsInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE d.ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole WHERE Person = :person)
+                                UNION
+                                SELECT DISTINCT AvailableSite
+                                FROM dbo.AvailableSitesInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE d.ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole WHERE Person = :person)
+                                UNION
+                                SELECT DISTINCT AvailableTeam 
+                                FROM dbo.AvailableTeamsInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE d.ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole WHERE Person = :person)";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetGuid("person", selectedPerson)
+                    .SetReadOnly(true)
+                    .List<Guid>();
+        }
+
+        public IList<int> DataRangeOptions(Guid selectedPerson)
+        {
+            const string query = @"SELECT AvailableDataRange FROM AvailableData
+                                WHERE ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole WHERE Person = :person)";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetGuid("person", selectedPerson)
+                    .SetReadOnly(true)
+                    .List<int>();
+        }
+
+        public IList<IPersonInRole> PersonsWithRoles(IList<Guid> roles)
+        {
+            var onDate = DateTime.Today.Date;
+            const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
+                        FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person 
+                        AND a.ApplicationRole IN( :roles )
+                        AND BuiltIn = 0
+                        LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                        AND StartDate <= :onDate AND EndDate >= :onDate
+                        LEFT JOIN Team t ON t.Id = Team";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetParameterList("roles", roles)
+                    .SetDateTime("onDate", onDate)
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
+                    .SetReadOnly(true)
+                    .List<IPersonInRole>();
+        }
+
+        public IList<IRoleLight> RolesWithData(Guid id)
+        {
+            const string query = @"SELECT Id, Name FROM ApplicationRole WHERE Id IN(
+                                SELECT DISTINCT ApplicationRole 
+                                FROM AvailableUnitsInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE t.AvailableBusinessUnit = :data
+                                UNION
+                                SELECT DISTINCT ApplicationRole
+                                FROM dbo.AvailableSitesInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE t.AvailableSite = :data
+                                UNION
+                                SELECT DISTINCT ApplicationRole 
+                                FROM dbo.AvailableTeamsInApplicationRole t
+                                INNER JOIN AvailableData d ON d.Id = t.AvailableData
+                                WHERE t.AvailableTeam = :data)";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetGuid("data", id)
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
+                    .SetReadOnly(true)
+                    .List<IRoleLight>();
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "selectedData"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        public IList<IPersonInRole> PersonsWithData(Guid selectedData)
+        {
+            //later
+            throw new NotImplementedException();
+        }
     }
 
     public class FunctionLight : IFunctionLight

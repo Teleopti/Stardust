@@ -134,6 +134,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.That(result.Count, Is.EqualTo(0));
             }
         }
+
+        [Test]
+        public void ShouldLoadDataOnPerson()
+        {
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                _target = new ApplicationRolePersonRepository(uow);
+                var result = _target.DataRangeOptions(Guid.NewGuid());
+                Assert.That(result.Count, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void ShouldLoadDataRangeOptionsOnPerson()
+        {
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                _target = new ApplicationRolePersonRepository(uow);
+                var result = _target.AvailableData(Guid.NewGuid());
+                Assert.That(result.Count, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void ShouldLoadRolesWithData()
+        {
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                _target = new ApplicationRolePersonRepository(uow);
+                var result = _target.RolesWithData(Guid.NewGuid());
+                Assert.That(result.Count, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void ShouldLoadPersonsOnRoles()
+        {
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                _target = new ApplicationRolePersonRepository(uow);
+                var result = _target.PersonsWithRoles(new List<Guid>{Guid.NewGuid(), Guid.NewGuid()});
+                Assert.That(result.Count, Is.EqualTo(0));
+            }
+        }
     }
 
 }

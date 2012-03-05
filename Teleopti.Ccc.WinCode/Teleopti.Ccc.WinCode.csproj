@@ -460,6 +460,8 @@
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
+    <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommand.cs" />
+    <Compile Include="Permissions\Commands\LoadDataOnPersonsLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesWithFunctionLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadPersonsWithFunctionLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadFunctionsLightCommand.cs" />
@@ -467,6 +469,7 @@
     <Compile Include="Permissions\Commands\LoadRolesOnPersonLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadPersonsLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesLightCommand.cs" />
+    <Compile Include="Permissions\Events\DataPersonsAndRolesNeedLoad.cs" />
     <Compile Include="Permissions\Events\PermissionsViewerUnloaded.cs" />
     <Compile Include="Permissions\Events\FunctionPersonsAndRolesNeedLoad.cs" />
     <Compile Include="Permissions\Events\PersonRolesAndFunctionsNeedLoad.cs" />

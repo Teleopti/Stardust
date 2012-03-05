@@ -30,6 +30,10 @@
         {
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("");
@@ -40,105 +44,135 @@
             System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("");
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPagePersons = new System.Windows.Forms.TabPage();
-            this.splitContainerPersonsMain = new System.Windows.Forms.SplitContainer();
+            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem("");
+            this.tabControlAdv1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
+            this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
             this.listViewPersonsMain = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainerPersonsSub = new System.Windows.Forms.SplitContainer();
+            this.splitContainerAdv2 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.splitContainerAdv3 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.listViewPersonRoles = new System.Windows.Forms.ListView();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.treeViewData = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
             this.listViewPersonFunctions = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageFunctions = new System.Windows.Forms.TabPage();
-            this.splitContainerFunctions = new System.Windows.Forms.SplitContainer();
+            this.tabPageAdv2 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.splitContainerAdv4 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
             this.listViewFunctionsMain = new System.Windows.Forms.ListView();
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainerFunctionsSub = new System.Windows.Forms.SplitContainer();
+            this.splitContainerAdv5 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
             this.listViewFunctionPersons = new System.Windows.Forms.ListView();
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listViewFunctionRoles = new System.Windows.Forms.ListView();
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageRoles = new System.Windows.Forms.TabPage();
+            this.tabPageAdv3 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.splitContainerAdv6 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.treeViewDataMain = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
+            this.splitContainerAdv7 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.listViewDataPersons = new System.Windows.Forms.ListView();
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listViewDataRoles = new System.Windows.Forms.ListView();
+            this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageAdv4 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listViewRolesMain = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageData = new System.Windows.Forms.TabPage();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.listViewPersonRoles = new System.Windows.Forms.ListView();
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listViewPersonData = new System.Windows.Forms.ListView();
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabControl1.SuspendLayout();
-            this.tabPagePersons.SuspendLayout();
-            this.splitContainerPersonsMain.Panel1.SuspendLayout();
-            this.splitContainerPersonsMain.Panel2.SuspendLayout();
-            this.splitContainerPersonsMain.SuspendLayout();
-            this.splitContainerPersonsSub.Panel1.SuspendLayout();
-            this.splitContainerPersonsSub.Panel2.SuspendLayout();
-            this.splitContainerPersonsSub.SuspendLayout();
-            this.tabPageFunctions.SuspendLayout();
-            this.splitContainerFunctions.Panel1.SuspendLayout();
-            this.splitContainerFunctions.Panel2.SuspendLayout();
-            this.splitContainerFunctions.SuspendLayout();
-            this.splitContainerFunctionsSub.Panel1.SuspendLayout();
-            this.splitContainerFunctionsSub.Panel2.SuspendLayout();
-            this.splitContainerFunctionsSub.SuspendLayout();
-            this.tabPageRoles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).BeginInit();
+            this.tabControlAdv1.SuspendLayout();
+            this.tabPageAdv1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
+            this.splitContainerAdv1.Panel1.SuspendLayout();
+            this.splitContainerAdv1.Panel2.SuspendLayout();
+            this.splitContainerAdv1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).BeginInit();
+            this.splitContainerAdv2.Panel1.SuspendLayout();
+            this.splitContainerAdv2.Panel2.SuspendLayout();
+            this.splitContainerAdv2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv3)).BeginInit();
+            this.splitContainerAdv3.Panel1.SuspendLayout();
+            this.splitContainerAdv3.Panel2.SuspendLayout();
+            this.splitContainerAdv3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).BeginInit();
+            this.tabPageAdv2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv4)).BeginInit();
+            this.splitContainerAdv4.Panel1.SuspendLayout();
+            this.splitContainerAdv4.Panel2.SuspendLayout();
+            this.splitContainerAdv4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv5)).BeginInit();
+            this.splitContainerAdv5.Panel1.SuspendLayout();
+            this.splitContainerAdv5.Panel2.SuspendLayout();
+            this.splitContainerAdv5.SuspendLayout();
+            this.tabPageAdv3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv6)).BeginInit();
+            this.splitContainerAdv6.Panel1.SuspendLayout();
+            this.splitContainerAdv6.Panel2.SuspendLayout();
+            this.splitContainerAdv6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewDataMain)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv7)).BeginInit();
+            this.splitContainerAdv7.Panel1.SuspendLayout();
+            this.splitContainerAdv7.Panel2.SuspendLayout();
+            this.splitContainerAdv7.SuspendLayout();
+            this.tabPageAdv4.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControlAdv1
             // 
-            this.tabControl1.Controls.Add(this.tabPagePersons);
-            this.tabControl1.Controls.Add(this.tabPageFunctions);
-            this.tabControl1.Controls.Add(this.tabPageData);
-            this.tabControl1.Controls.Add(this.tabPageRoles);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1015, 608);
-            this.tabControl1.TabIndex = 3;
+            this.tabControlAdv1.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.tabControlAdv1.Controls.Add(this.tabPageAdv1);
+            this.tabControlAdv1.Controls.Add(this.tabPageAdv2);
+            this.tabControlAdv1.Controls.Add(this.tabPageAdv3);
+            this.tabControlAdv1.Controls.Add(this.tabPageAdv4);
+            this.tabControlAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
+            this.tabControlAdv1.Name = "tabControlAdv1";
+            this.tabControlAdv1.Size = new System.Drawing.Size(1015, 608);
+            this.tabControlAdv1.TabIndex = 4;
+            this.tabControlAdv1.TabPanelBackColor = System.Drawing.SystemColors.Control;
+            this.tabControlAdv1.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererIE7);
             // 
-            // tabPagePersons
+            // tabPageAdv1
             // 
-            this.tabPagePersons.Controls.Add(this.splitContainerPersonsMain);
-            this.tabPagePersons.Location = new System.Drawing.Point(4, 22);
-            this.tabPagePersons.Name = "tabPagePersons";
-            this.tabPagePersons.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePersons.Size = new System.Drawing.Size(1007, 582);
-            this.tabPagePersons.TabIndex = 0;
-            this.tabPagePersons.Text = "xxPersons";
-            this.tabPagePersons.UseVisualStyleBackColor = true;
+            this.tabPageAdv1.Controls.Add(this.splitContainerAdv1);
+            this.tabPageAdv1.Image = null;
+            this.tabPageAdv1.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageAdv1.Location = new System.Drawing.Point(1, 33);
+            this.tabPageAdv1.Name = "tabPageAdv1";
+            this.tabPageAdv1.Size = new System.Drawing.Size(1012, 573);
+            this.tabPageAdv1.TabIndex = 1;
+            this.tabPageAdv1.Text = "xxPersons";
+            this.tabPageAdv1.ThemesEnabled = false;
             // 
-            // splitContainerPersonsMain
+            // splitContainerAdv1
             // 
-            this.splitContainerPersonsMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerPersonsMain.Location = new System.Drawing.Point(3, 3);
-            this.splitContainerPersonsMain.Name = "splitContainerPersonsMain";
+            this.splitContainerAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv1.Name = "splitContainerAdv1";
             // 
-            // splitContainerPersonsMain.Panel1
+            // splitContainerAdv1.Panel1
             // 
-            this.splitContainerPersonsMain.Panel1.Controls.Add(this.listViewPersonsMain);
+            this.splitContainerAdv1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv1.Panel1.Controls.Add(this.listViewPersonsMain);
             // 
-            // splitContainerPersonsMain.Panel2
+            // splitContainerAdv1.Panel2
             // 
-            this.splitContainerPersonsMain.Panel2.Controls.Add(this.splitContainerPersonsSub);
-            this.splitContainerPersonsMain.Size = new System.Drawing.Size(1001, 576);
-            this.splitContainerPersonsMain.SplitterDistance = 452;
-            this.splitContainerPersonsMain.TabIndex = 0;
+            this.splitContainerAdv1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv1.Panel2.Controls.Add(this.splitContainerAdv2);
+            this.splitContainerAdv1.Size = new System.Drawing.Size(1012, 573);
+            this.splitContainerAdv1.SplitterDistance = 416;
+            this.splitContainerAdv1.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv1.TabIndex = 2;
+            this.splitContainerAdv1.Text = "splitContainerAdv1";
             // 
             // listViewPersonsMain
             // 
@@ -149,15 +183,16 @@
             this.listViewPersonsMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewPersonsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewPersonsMain.FullRowSelect = true;
+            this.listViewPersonsMain.HideSelection = false;
             this.listViewPersonsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2});
             this.listViewPersonsMain.Location = new System.Drawing.Point(0, 0);
             this.listViewPersonsMain.MultiSelect = false;
             this.listViewPersonsMain.Name = "listViewPersonsMain";
-            this.listViewPersonsMain.Size = new System.Drawing.Size(452, 576);
+            this.listViewPersonsMain.Size = new System.Drawing.Size(416, 573);
             this.listViewPersonsMain.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewPersonsMain.TabIndex = 3;
+            this.listViewPersonsMain.TabIndex = 4;
             this.listViewPersonsMain.UseCompatibleStateImageBehavior = false;
             this.listViewPersonsMain.View = System.Windows.Forms.View.Details;
             this.listViewPersonsMain.SelectedIndexChanged += new System.EventHandler(this.listViewPersonsMainSelectedIndexChanged);
@@ -177,22 +212,101 @@
             this.columnHeader6.Text = "xxTeam";
             this.columnHeader6.Width = 123;
             // 
-            // splitContainerPersonsSub
+            // splitContainerAdv2
             // 
-            this.splitContainerPersonsSub.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerPersonsSub.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerPersonsSub.Name = "splitContainerPersonsSub";
+            this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv2.Name = "splitContainerAdv2";
             // 
-            // splitContainerPersonsSub.Panel1
+            // splitContainerAdv2.Panel1
             // 
-            this.splitContainerPersonsSub.Panel1.Controls.Add(this.splitContainer2);
+            this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv2.Panel1.Controls.Add(this.splitContainerAdv3);
             // 
-            // splitContainerPersonsSub.Panel2
+            // splitContainerAdv2.Panel2
             // 
-            this.splitContainerPersonsSub.Panel2.Controls.Add(this.listViewPersonFunctions);
-            this.splitContainerPersonsSub.Size = new System.Drawing.Size(545, 576);
-            this.splitContainerPersonsSub.SplitterDistance = 269;
-            this.splitContainerPersonsSub.TabIndex = 0;
+            this.splitContainerAdv2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv2.Panel2.Controls.Add(this.listViewPersonFunctions);
+            this.splitContainerAdv2.Size = new System.Drawing.Size(589, 573);
+            this.splitContainerAdv2.SplitterDistance = 328;
+            this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv2.TabIndex = 0;
+            this.splitContainerAdv2.Text = "splitContainerAdv2";
+            // 
+            // splitContainerAdv3
+            // 
+            this.splitContainerAdv3.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255))))), System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207))))));
+            this.splitContainerAdv3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv3.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(151)))), ((int)(((byte)(61))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(184)))), ((int)(((byte)(94))))));
+            this.splitContainerAdv3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv3.Name = "splitContainerAdv3";
+            this.splitContainerAdv3.Orientation = System.Windows.Forms.Orientation.Vertical;
+            // 
+            // splitContainerAdv3.Panel1
+            // 
+            this.splitContainerAdv3.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv3.Panel1.Controls.Add(this.listViewPersonRoles);
+            // 
+            // splitContainerAdv3.Panel2
+            // 
+            this.splitContainerAdv3.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv3.Panel2.Controls.Add(this.treeViewData);
+            this.splitContainerAdv3.Size = new System.Drawing.Size(328, 573);
+            this.splitContainerAdv3.SplitterDistance = 149;
+            this.splitContainerAdv3.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv3.TabIndex = 0;
+            this.splitContainerAdv3.Text = "splitContainerAdv3";
+            // 
+            // listViewPersonRoles
+            // 
+            this.listViewPersonRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2});
+            this.listViewPersonRoles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewPersonRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPersonRoles.FullRowSelect = true;
+            this.listViewPersonRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem3,
+            listViewItem4});
+            this.listViewPersonRoles.Location = new System.Drawing.Point(0, 0);
+            this.listViewPersonRoles.Name = "listViewPersonRoles";
+            this.listViewPersonRoles.Size = new System.Drawing.Size(328, 149);
+            this.listViewPersonRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewPersonRoles.TabIndex = 4;
+            this.listViewPersonRoles.UseCompatibleStateImageBehavior = false;
+            this.listViewPersonRoles.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "xxThePerson\'sRoles";
+            this.columnHeader2.Width = 250;
+            // 
+            // treeViewData
+            // 
+            this.treeViewData.Dock = System.Windows.Forms.DockStyle.Fill;
+            // 
+            // 
+            // 
+            this.treeViewData.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewData.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewData.HelpTextControl.Name = "helpText";
+            this.treeViewData.HelpTextControl.Size = new System.Drawing.Size(49, 15);
+            this.treeViewData.HelpTextControl.TabIndex = 0;
+            this.treeViewData.HelpTextControl.Text = "help text";
+            this.treeViewData.Location = new System.Drawing.Point(0, 0);
+            this.treeViewData.Name = "treeViewData";
+            this.treeViewData.Size = new System.Drawing.Size(328, 417);
+            this.treeViewData.TabIndex = 1;
+            this.treeViewData.Text = "treeViewAdv1";
+            // 
+            // 
+            // 
+            this.treeViewData.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
+            this.treeViewData.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewData.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewData.ToolTipControl.Name = "toolTip";
+            this.treeViewData.ToolTipControl.Size = new System.Drawing.Size(41, 15);
+            this.treeViewData.ToolTipControl.TabIndex = 1;
+            this.treeViewData.ToolTipControl.Text = "toolTip";
             // 
             // listViewPersonFunctions
             // 
@@ -203,13 +317,13 @@
             this.listViewPersonFunctions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewPersonFunctions.FullRowSelect = true;
             this.listViewPersonFunctions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8});
+            listViewItem5,
+            listViewItem6});
             this.listViewPersonFunctions.Location = new System.Drawing.Point(0, 0);
             this.listViewPersonFunctions.Name = "listViewPersonFunctions";
-            this.listViewPersonFunctions.Size = new System.Drawing.Size(272, 576);
+            this.listViewPersonFunctions.Size = new System.Drawing.Size(254, 573);
             this.listViewPersonFunctions.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewPersonFunctions.TabIndex = 3;
+            this.listViewPersonFunctions.TabIndex = 4;
             this.listViewPersonFunctions.UseCompatibleStateImageBehavior = false;
             this.listViewPersonFunctions.View = System.Windows.Forms.View.Details;
             // 
@@ -223,33 +337,38 @@
             this.columnHeader7.Text = "xxFrom role";
             this.columnHeader7.Width = 76;
             // 
-            // tabPageFunctions
+            // tabPageAdv2
             // 
-            this.tabPageFunctions.Controls.Add(this.splitContainerFunctions);
-            this.tabPageFunctions.Location = new System.Drawing.Point(4, 22);
-            this.tabPageFunctions.Name = "tabPageFunctions";
-            this.tabPageFunctions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFunctions.Size = new System.Drawing.Size(1007, 582);
-            this.tabPageFunctions.TabIndex = 1;
-            this.tabPageFunctions.Text = "xxFunctions";
-            this.tabPageFunctions.UseVisualStyleBackColor = true;
+            this.tabPageAdv2.Controls.Add(this.splitContainerAdv4);
+            this.tabPageAdv2.Image = null;
+            this.tabPageAdv2.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageAdv2.Location = new System.Drawing.Point(1, 33);
+            this.tabPageAdv2.Name = "tabPageAdv2";
+            this.tabPageAdv2.Size = new System.Drawing.Size(1012, 573);
+            this.tabPageAdv2.TabIndex = 2;
+            this.tabPageAdv2.Text = "xxFunctions";
+            this.tabPageAdv2.ThemesEnabled = false;
             // 
-            // splitContainerFunctions
+            // splitContainerAdv4
             // 
-            this.splitContainerFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerFunctions.Location = new System.Drawing.Point(3, 3);
-            this.splitContainerFunctions.Name = "splitContainerFunctions";
+            this.splitContainerAdv4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv4.Name = "splitContainerAdv4";
             // 
-            // splitContainerFunctions.Panel1
+            // splitContainerAdv4.Panel1
             // 
-            this.splitContainerFunctions.Panel1.Controls.Add(this.listViewFunctionsMain);
+            this.splitContainerAdv4.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv4.Panel1.Controls.Add(this.listViewFunctionsMain);
             // 
-            // splitContainerFunctions.Panel2
+            // splitContainerAdv4.Panel2
             // 
-            this.splitContainerFunctions.Panel2.Controls.Add(this.splitContainerFunctionsSub);
-            this.splitContainerFunctions.Size = new System.Drawing.Size(1001, 576);
-            this.splitContainerFunctions.SplitterDistance = 291;
-            this.splitContainerFunctions.TabIndex = 1;
+            this.splitContainerAdv4.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv4.Panel2.Controls.Add(this.splitContainerAdv5);
+            this.splitContainerAdv4.Size = new System.Drawing.Size(1012, 573);
+            this.splitContainerAdv4.SplitterDistance = 265;
+            this.splitContainerAdv4.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv4.TabIndex = 3;
+            this.splitContainerAdv4.Text = "splitContainerAdv4";
             // 
             // listViewFunctionsMain
             // 
@@ -259,14 +378,14 @@
             this.listViewFunctionsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionsMain.FullRowSelect = true;
             this.listViewFunctionsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem9,
-            listViewItem10});
+            listViewItem7,
+            listViewItem8});
             this.listViewFunctionsMain.Location = new System.Drawing.Point(0, 0);
             this.listViewFunctionsMain.MultiSelect = false;
             this.listViewFunctionsMain.Name = "listViewFunctionsMain";
-            this.listViewFunctionsMain.Size = new System.Drawing.Size(291, 576);
+            this.listViewFunctionsMain.Size = new System.Drawing.Size(265, 573);
             this.listViewFunctionsMain.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewFunctionsMain.TabIndex = 3;
+            this.listViewFunctionsMain.TabIndex = 4;
             this.listViewFunctionsMain.UseCompatibleStateImageBehavior = false;
             this.listViewFunctionsMain.View = System.Windows.Forms.View.Details;
             this.listViewFunctionsMain.SelectedIndexChanged += new System.EventHandler(this.listViewFunctionsMainSelectedIndexChanged);
@@ -276,22 +395,26 @@
             this.columnHeader8.Text = "xxFunctions";
             this.columnHeader8.Width = 250;
             // 
-            // splitContainerFunctionsSub
+            // splitContainerAdv5
             // 
-            this.splitContainerFunctionsSub.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerFunctionsSub.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerFunctionsSub.Name = "splitContainerFunctionsSub";
+            this.splitContainerAdv5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv5.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv5.Name = "splitContainerAdv5";
             // 
-            // splitContainerFunctionsSub.Panel1
+            // splitContainerAdv5.Panel1
             // 
-            this.splitContainerFunctionsSub.Panel1.Controls.Add(this.listViewFunctionPersons);
+            this.splitContainerAdv5.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv5.Panel1.Controls.Add(this.listViewFunctionPersons);
             // 
-            // splitContainerFunctionsSub.Panel2
+            // splitContainerAdv5.Panel2
             // 
-            this.splitContainerFunctionsSub.Panel2.Controls.Add(this.listViewFunctionRoles);
-            this.splitContainerFunctionsSub.Size = new System.Drawing.Size(706, 576);
-            this.splitContainerFunctionsSub.SplitterDistance = 453;
-            this.splitContainerFunctionsSub.TabIndex = 0;
+            this.splitContainerAdv5.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv5.Panel2.Controls.Add(this.listViewFunctionRoles);
+            this.splitContainerAdv5.Size = new System.Drawing.Size(740, 573);
+            this.splitContainerAdv5.SplitterDistance = 484;
+            this.splitContainerAdv5.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv5.TabIndex = 4;
+            this.splitContainerAdv5.Text = "splitContainerAdv5";
             // 
             // listViewFunctionPersons
             // 
@@ -303,13 +426,13 @@
             this.listViewFunctionPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionPersons.FullRowSelect = true;
             this.listViewFunctionPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem11,
-            listViewItem12});
+            listViewItem9,
+            listViewItem10});
             this.listViewFunctionPersons.Location = new System.Drawing.Point(0, 0);
             this.listViewFunctionPersons.Name = "listViewFunctionPersons";
-            this.listViewFunctionPersons.Size = new System.Drawing.Size(453, 576);
+            this.listViewFunctionPersons.Size = new System.Drawing.Size(484, 573);
             this.listViewFunctionPersons.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewFunctionPersons.TabIndex = 2;
+            this.listViewFunctionPersons.TabIndex = 3;
             this.listViewFunctionPersons.UseCompatibleStateImageBehavior = false;
             this.listViewFunctionPersons.View = System.Windows.Forms.View.Details;
             // 
@@ -336,13 +459,13 @@
             this.listViewFunctionRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionRoles.FullRowSelect = true;
             this.listViewFunctionRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem13,
-            listViewItem14});
+            listViewItem11,
+            listViewItem12});
             this.listViewFunctionRoles.Location = new System.Drawing.Point(0, 0);
             this.listViewFunctionRoles.Name = "listViewFunctionRoles";
-            this.listViewFunctionRoles.Size = new System.Drawing.Size(249, 576);
+            this.listViewFunctionRoles.Size = new System.Drawing.Size(249, 573);
             this.listViewFunctionRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewFunctionRoles.TabIndex = 3;
+            this.listViewFunctionRoles.TabIndex = 4;
             this.listViewFunctionRoles.UseCompatibleStateImageBehavior = false;
             this.listViewFunctionRoles.View = System.Windows.Forms.View.Details;
             // 
@@ -351,29 +474,172 @@
             this.columnHeader12.Text = "xxRoles";
             this.columnHeader12.Width = 232;
             // 
-            // tabPageRoles
+            // tabPageAdv3
             // 
-            this.tabPageRoles.Controls.Add(this.splitContainer1);
-            this.tabPageRoles.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRoles.Name = "tabPageRoles";
-            this.tabPageRoles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRoles.Size = new System.Drawing.Size(1007, 582);
-            this.tabPageRoles.TabIndex = 2;
-            this.tabPageRoles.Text = "xxRoles";
-            this.tabPageRoles.UseVisualStyleBackColor = true;
+            this.tabPageAdv3.Controls.Add(this.splitContainerAdv6);
+            this.tabPageAdv3.Image = null;
+            this.tabPageAdv3.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageAdv3.Location = new System.Drawing.Point(1, 33);
+            this.tabPageAdv3.Name = "tabPageAdv3";
+            this.tabPageAdv3.Size = new System.Drawing.Size(1012, 573);
+            this.tabPageAdv3.TabIndex = 3;
+            this.tabPageAdv3.Text = "xxData";
+            this.tabPageAdv3.ThemesEnabled = false;
+            // 
+            // splitContainerAdv6
+            // 
+            this.splitContainerAdv6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv6.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv6.Name = "splitContainerAdv6";
+            // 
+            // splitContainerAdv6.Panel1
+            // 
+            this.splitContainerAdv6.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv6.Panel1.Controls.Add(this.treeViewDataMain);
+            // 
+            // splitContainerAdv6.Panel2
+            // 
+            this.splitContainerAdv6.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv6.Panel2.Controls.Add(this.splitContainerAdv7);
+            this.splitContainerAdv6.Size = new System.Drawing.Size(1012, 573);
+            this.splitContainerAdv6.SplitterDistance = 265;
+            this.splitContainerAdv6.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv6.TabIndex = 4;
+            this.splitContainerAdv6.Text = "splitContainerAdv6";
+            // 
+            // treeViewDataMain
+            // 
+            this.treeViewDataMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewDataMain.FullRowSelect = true;
+            // 
+            // 
+            // 
+            this.treeViewDataMain.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewDataMain.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewDataMain.HelpTextControl.Name = "helpText";
+            this.treeViewDataMain.HelpTextControl.Size = new System.Drawing.Size(49, 15);
+            this.treeViewDataMain.HelpTextControl.TabIndex = 0;
+            this.treeViewDataMain.HelpTextControl.Text = "help text";
+            this.treeViewDataMain.HideSelection = false;
+            this.treeViewDataMain.Location = new System.Drawing.Point(0, 0);
+            this.treeViewDataMain.Name = "treeViewDataMain";
+            this.treeViewDataMain.Size = new System.Drawing.Size(265, 573);
+            this.treeViewDataMain.Text = "treeViewAdv1";
+            // 
+            // 
+            // 
+            this.treeViewDataMain.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
+            this.treeViewDataMain.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewDataMain.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewDataMain.ToolTipControl.Name = "toolTip";
+            this.treeViewDataMain.ToolTipControl.Size = new System.Drawing.Size(41, 15);
+            this.treeViewDataMain.ToolTipControl.TabIndex = 1;
+            this.treeViewDataMain.ToolTipControl.Text = "toolTip";
+            this.treeViewDataMain.AfterSelect += new System.EventHandler(this.treeViewDataMainAfterSelect);
+            // 
+            // splitContainerAdv7
+            // 
+            this.splitContainerAdv7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerAdv7.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerAdv7.Name = "splitContainerAdv7";
+            // 
+            // splitContainerAdv7.Panel1
+            // 
+            this.splitContainerAdv7.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv7.Panel1.Controls.Add(this.listViewDataPersons);
+            // 
+            // splitContainerAdv7.Panel2
+            // 
+            this.splitContainerAdv7.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+            this.splitContainerAdv7.Panel2.Controls.Add(this.listViewDataRoles);
+            this.splitContainerAdv7.Size = new System.Drawing.Size(740, 573);
+            this.splitContainerAdv7.SplitterDistance = 484;
+            this.splitContainerAdv7.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+            this.splitContainerAdv7.TabIndex = 4;
+            this.splitContainerAdv7.Text = "splitContainerAdv7";
+            // 
+            // listViewDataPersons
+            // 
+            this.listViewDataPersons.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader10,
+            this.columnHeader13,
+            this.columnHeader16});
+            this.listViewDataPersons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewDataPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewDataPersons.FullRowSelect = true;
+            this.listViewDataPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem13,
+            listViewItem14});
+            this.listViewDataPersons.Location = new System.Drawing.Point(0, 0);
+            this.listViewDataPersons.Name = "listViewDataPersons";
+            this.listViewDataPersons.Size = new System.Drawing.Size(484, 573);
+            this.listViewDataPersons.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewDataPersons.TabIndex = 3;
+            this.listViewDataPersons.UseCompatibleStateImageBehavior = false;
+            this.listViewDataPersons.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "xxFirstName";
+            this.columnHeader10.Width = 159;
+            // 
+            // columnHeader13
+            // 
+            this.columnHeader13.Text = "xxLastName";
+            this.columnHeader13.Width = 140;
+            // 
+            // columnHeader16
+            // 
+            this.columnHeader16.Text = "xxTeam";
+            this.columnHeader16.Width = 155;
+            // 
+            // listViewDataRoles
+            // 
+            this.listViewDataRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader17});
+            this.listViewDataRoles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewDataRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewDataRoles.FullRowSelect = true;
+            this.listViewDataRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem15,
+            listViewItem16});
+            this.listViewDataRoles.Location = new System.Drawing.Point(0, 0);
+            this.listViewDataRoles.Name = "listViewDataRoles";
+            this.listViewDataRoles.Size = new System.Drawing.Size(249, 573);
+            this.listViewDataRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewDataRoles.TabIndex = 4;
+            this.listViewDataRoles.UseCompatibleStateImageBehavior = false;
+            this.listViewDataRoles.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader17
+            // 
+            this.columnHeader17.Text = "xxRoles";
+            this.columnHeader17.Width = 232;
+            // 
+            // tabPageAdv4
+            // 
+            this.tabPageAdv4.Controls.Add(this.splitContainer1);
+            this.tabPageAdv4.Image = null;
+            this.tabPageAdv4.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageAdv4.Location = new System.Drawing.Point(1, 33);
+            this.tabPageAdv4.Name = "tabPageAdv4";
+            this.tabPageAdv4.Size = new System.Drawing.Size(1012, 573);
+            this.tabPageAdv4.TabIndex = 4;
+            this.tabPageAdv4.Text = "xxRoles";
+            this.tabPageAdv4.ThemesEnabled = false;
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.listViewRolesMain);
-            this.splitContainer1.Size = new System.Drawing.Size(1001, 576);
-            this.splitContainer1.SplitterDistance = 332;
-            this.splitContainer1.TabIndex = 2;
+            this.splitContainer1.Size = new System.Drawing.Size(1012, 573);
+            this.splitContainer1.SplitterDistance = 335;
+            this.splitContainer1.TabIndex = 3;
             // 
             // listViewRolesMain
             // 
@@ -383,11 +649,11 @@
             this.listViewRolesMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewRolesMain.FullRowSelect = true;
             this.listViewRolesMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem15,
-            listViewItem16});
+            listViewItem17,
+            listViewItem18});
             this.listViewRolesMain.Location = new System.Drawing.Point(0, 0);
             this.listViewRolesMain.Name = "listViewRolesMain";
-            this.listViewRolesMain.Size = new System.Drawing.Size(332, 576);
+            this.listViewRolesMain.Size = new System.Drawing.Size(335, 573);
             this.listViewRolesMain.TabIndex = 1;
             this.listViewRolesMain.UseCompatibleStateImageBehavior = false;
             this.listViewRolesMain.View = System.Windows.Forms.View.Details;
@@ -397,147 +663,100 @@
             this.columnHeader1.Text = "xxRoles";
             this.columnHeader1.Width = 217;
             // 
-            // tabPageData
-            // 
-            this.tabPageData.Location = new System.Drawing.Point(4, 22);
-            this.tabPageData.Name = "tabPageData";
-            this.tabPageData.Size = new System.Drawing.Size(1007, 582);
-            this.tabPageData.TabIndex = 3;
-            this.tabPageData.Text = "xxData";
-            this.tabPageData.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.listViewPersonRoles);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.listViewPersonData);
-            this.splitContainer2.Size = new System.Drawing.Size(269, 576);
-            this.splitContainer2.SplitterDistance = 155;
-            this.splitContainer2.TabIndex = 3;
-            // 
-            // listViewPersonRoles
-            // 
-            this.listViewPersonRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader2});
-            this.listViewPersonRoles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewPersonRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewPersonRoles.FullRowSelect = true;
-            this.listViewPersonRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3,
-            listViewItem4});
-            this.listViewPersonRoles.Location = new System.Drawing.Point(0, 0);
-            this.listViewPersonRoles.Name = "listViewPersonRoles";
-            this.listViewPersonRoles.Size = new System.Drawing.Size(269, 155);
-            this.listViewPersonRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewPersonRoles.TabIndex = 3;
-            this.listViewPersonRoles.UseCompatibleStateImageBehavior = false;
-            this.listViewPersonRoles.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "xxThePerson\'sRoles";
-            this.columnHeader2.Width = 250;
-            // 
-            // listViewPersonData
-            // 
-            this.listViewPersonData.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader9});
-            this.listViewPersonData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewPersonData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewPersonData.FullRowSelect = true;
-            this.listViewPersonData.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5,
-            listViewItem6});
-            this.listViewPersonData.Location = new System.Drawing.Point(0, 0);
-            this.listViewPersonData.Name = "listViewPersonData";
-            this.listViewPersonData.Size = new System.Drawing.Size(269, 417);
-            this.listViewPersonData.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewPersonData.TabIndex = 4;
-            this.listViewPersonData.UseCompatibleStateImageBehavior = false;
-            this.listViewPersonData.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "xxThePerson\'sData";
-            this.columnHeader9.Width = 250;
-            // 
             // PermissionViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1015, 608);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControlAdv1);
             this.Name = "PermissionViewer";
             this.Text = "xxPermissionViewer";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.permissionViewerFormClosed);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPagePersons.ResumeLayout(false);
-            this.splitContainerPersonsMain.Panel1.ResumeLayout(false);
-            this.splitContainerPersonsMain.Panel2.ResumeLayout(false);
-            this.splitContainerPersonsMain.ResumeLayout(false);
-            this.splitContainerPersonsSub.Panel1.ResumeLayout(false);
-            this.splitContainerPersonsSub.Panel2.ResumeLayout(false);
-            this.splitContainerPersonsSub.ResumeLayout(false);
-            this.tabPageFunctions.ResumeLayout(false);
-            this.splitContainerFunctions.Panel1.ResumeLayout(false);
-            this.splitContainerFunctions.Panel2.ResumeLayout(false);
-            this.splitContainerFunctions.ResumeLayout(false);
-            this.splitContainerFunctionsSub.Panel1.ResumeLayout(false);
-            this.splitContainerFunctionsSub.Panel2.ResumeLayout(false);
-            this.splitContainerFunctionsSub.ResumeLayout(false);
-            this.tabPageRoles.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).EndInit();
+            this.tabControlAdv1.ResumeLayout(false);
+            this.tabPageAdv1.ResumeLayout(false);
+            this.splitContainerAdv1.Panel1.ResumeLayout(false);
+            this.splitContainerAdv1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).EndInit();
+            this.splitContainerAdv1.ResumeLayout(false);
+            this.splitContainerAdv2.Panel1.ResumeLayout(false);
+            this.splitContainerAdv2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv2)).EndInit();
+            this.splitContainerAdv2.ResumeLayout(false);
+            this.splitContainerAdv3.Panel1.ResumeLayout(false);
+            this.splitContainerAdv3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv3)).EndInit();
+            this.splitContainerAdv3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).EndInit();
+            this.tabPageAdv2.ResumeLayout(false);
+            this.splitContainerAdv4.Panel1.ResumeLayout(false);
+            this.splitContainerAdv4.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv4)).EndInit();
+            this.splitContainerAdv4.ResumeLayout(false);
+            this.splitContainerAdv5.Panel1.ResumeLayout(false);
+            this.splitContainerAdv5.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv5)).EndInit();
+            this.splitContainerAdv5.ResumeLayout(false);
+            this.tabPageAdv3.ResumeLayout(false);
+            this.splitContainerAdv6.Panel1.ResumeLayout(false);
+            this.splitContainerAdv6.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv6)).EndInit();
+            this.splitContainerAdv6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewDataMain)).EndInit();
+            this.splitContainerAdv7.Panel1.ResumeLayout(false);
+            this.splitContainerAdv7.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv7)).EndInit();
+            this.splitContainerAdv7.ResumeLayout(false);
+            this.tabPageAdv4.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPagePersons;
-        private System.Windows.Forms.SplitContainer splitContainerPersonsMain;
-        private System.Windows.Forms.ListView listViewPersonsMain;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.SplitContainer splitContainerPersonsSub;
-        private System.Windows.Forms.ListView listViewPersonFunctions;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.TabPage tabPageFunctions;
-        private System.Windows.Forms.TabPage tabPageRoles;
+        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv1;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv1;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv2;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv3;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv3;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv4;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListView listViewRolesMain;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ListView listViewPersonsMain;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ListView listViewPersonRoles;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewData;
+        private System.Windows.Forms.ListView listViewPersonFunctions;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.SplitContainer splitContainerFunctions;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv2;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv4;
         private System.Windows.Forms.ListView listViewFunctionsMain;
         private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.SplitContainer splitContainerFunctionsSub;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv5;
         private System.Windows.Forms.ListView listViewFunctionPersons;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader14;
         private System.Windows.Forms.ColumnHeader columnHeader15;
         private System.Windows.Forms.ListView listViewFunctionRoles;
         private System.Windows.Forms.ColumnHeader columnHeader12;
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.ListView listViewPersonRoles;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ListView listViewPersonData;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.TabPage tabPageData;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv6;
+        private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewDataMain;
+        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv7;
+        private System.Windows.Forms.ListView listViewDataPersons;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader13;
+        private System.Windows.Forms.ColumnHeader columnHeader16;
+        private System.Windows.Forms.ListView listViewDataRoles;
+        private System.Windows.Forms.ColumnHeader columnHeader17;
+
 
 
     }

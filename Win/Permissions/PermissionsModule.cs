@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Win.Permissions
             builder.RegisterType<LoadFunctionsLightCommand>().As<ILoadFunctionsLightCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadPersonsWithFunctionLightCommand>().As<ILoadPersonsWithFunctionLightCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadRolesWithFunctionLightCommand>().As<ILoadRolesWithFunctionLightCommand>().InstancePerLifetimeScope();
+            builder.RegisterType<LoadDataOnPersonsLightCommand>().As<ILoadDataOnPersonsLightCommand>().InstancePerLifetimeScope();
+            builder.RegisterType<LoadRolesAndPersonsOnDataLightCommand>().As<ILoadRolesAndPersonsOnDataLightCommand>().InstancePerLifetimeScope();
             
         }  
     }

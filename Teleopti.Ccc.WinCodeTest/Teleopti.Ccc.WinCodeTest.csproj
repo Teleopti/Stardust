@@ -511,6 +511,8 @@
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherCheckerTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
     <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombinationTest.cs" />
+    <Compile Include="Permissions\Commands\LoadDataOnPersonLightCommandTest.cs" />
+    <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommandTest.cs" />
     <Compile Include="Permissions\Commands\LoadRolesWithFunctionLightCommandTest.cs" />
     <Compile Include="Permissions\Commands\LoadPersonsWithFunctionLightCommandTest.cs" />
     <Compile Include="Permissions\Commands\LoadFunctionsLightCommandTest.cs" />

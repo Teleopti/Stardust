@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -14,6 +15,10 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IFunctionLight> Functions();
         IList<IPersonInRole> PersonsWithFunction(Guid selectedFunction);
         IList<IRoleLight> RolesWithFunction(Guid selectedFunction);
+        IList<Guid> AvailableData(Guid selectedPerson);
+        IList<int> DataRangeOptions(Guid selectedPerson);
+        IList<IPersonInRole> PersonsWithRoles(IList<Guid> roles);
+        IList<IRoleLight> RolesWithData(Guid id);
     }
 
     public interface IFunctionLight
