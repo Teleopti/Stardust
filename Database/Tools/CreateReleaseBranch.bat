@@ -3,6 +3,15 @@
 
 SET THISDIR=%~dp0
 
+::Confirm
+ECHO This will create release db scripts and
+ECHO create a new named branch on server repository.
+ECHO This operation cant be rolled back.
+CHOICE /M "Are you sure you want to continue"
+IF ERRORLEVEL 2 exit
+ECHO.
+
+
 :: Call VersionBuild.bat
 call "%THISDIR%\versionbuild.bat"
 
