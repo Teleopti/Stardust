@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			ApplyReleases(databaseType);
 			ApplyTrunk(databaseType);
+			ApplyProgrammability(databaseType);
 		}
 
 		public void ApplyReleases(DatabaseType databaseType)
@@ -68,5 +69,27 @@ namespace Teleopti.Ccc.DBManager.Library
 			new SqlBatchExecutor(_sqlConnection, _logger)
 				.ExecuteBatchSql(sql);
 		}
+
+		public void ApplyProgrammability(DatabaseType databaseType)
+		{
+			var programmabilityPath = _databaseFolder.ProgrammabilityPath(databaseType);
+			var directories = Directory.GetDirectories(programmabilityPath);
+
+			foreach (var directory in directories)
+			{
+				var scriptsDirectoryInfo = new DirectoryInfo(directory);
+				var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
+
+				_logger.Write(string.Format("Applying programmability directory '{0}'", scriptsDirectoryInfo.Name));
+
+				foreach (var scriptFile in scriptFiles)
+				{
+					var sql = File.ReadAllText(scriptFile.FullName);
+					new SqlBatchExecutor(_sqlConnection, _logger)
+						.ExecuteBatchSql(sql);
+				}
+			}
+		}
+
 	}
 }

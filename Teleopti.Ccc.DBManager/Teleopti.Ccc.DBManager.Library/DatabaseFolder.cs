@@ -43,6 +43,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			return System.IO.Path.Combine(path, "Trunk");
 		}
 
+		public string ProgrammabilityPath(DatabaseType databaseType)
+		{
+			var path = System.IO.Path.Combine(Path(), databaseType.GetName());
+			return System.IO.Path.Combine(path, "Programmability");
+		}
+
 		private string LocateDatabaseFolderUsingBlackMagic()
 		{
 			if (System.IO.Directory.Exists(@"..\..\..\..\Database"))

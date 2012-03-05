@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DBManager
                             if (_commandLineArgument.WillAddTrunk)
 								applyTrunk(_commandLineArgument.TargetDatabaseType);
                             //Add Programmabilty
-                            applyProgrammability(_commandLineArgument.TargetDatabaseTypeName);
+							applyProgrammability(_commandLineArgument.TargetDatabaseType);
                         }
                         else
                         {
@@ -240,41 +240,17 @@ namespace Teleopti.Ccc.DBManager
 			new SqlBatchExecutor(_sqlConnection,_logger).ExecuteBatchSql(sql);
     	}
 
-
 		private static void applyTrunk(DatabaseType databaseType)
         {
 			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
 				.ApplyTrunk(databaseType);
         }
 
-
-        private static void applyProgrammability(string databaseTypeName)
-        {
-            string progPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Programmability";
-            string[] directories = Directory.GetDirectories(progPath);
-
-            foreach (string directory in directories)
-            {
-                if (Directory.Exists(directory))
-                {
-                    DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(directory);
-                    FileInfo[] scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
-
-                    logWrite(string.Format("Adding programmability directory '{0}'", scriptsDirectoryInfo.Name));
-
-                    foreach (FileInfo scriptFile in scriptFiles)
-                    {
-                        _fileName = scriptFile.FullName;
-                        string sql;
-                        using(TextReader textReader = new StreamReader(_fileName))
-                        {
-                            sql = textReader.ReadToEnd();
-                        }
-                        executeBatchSQL(sql);
-                    }
-                }
-            }
-        }
+		private static void applyProgrammability(DatabaseType databaseType)
+		{
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyProgrammability(databaseType);
+		}
 
         private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseBuildNumber(); }
 
