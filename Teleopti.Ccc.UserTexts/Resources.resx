@@ -10501,4 +10501,7 @@ These options are activated:
     <value>Teams</value>
     <comment>Teams</comment>
   </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>Activity cannot be empty.</value>
+  </data>
 </root>

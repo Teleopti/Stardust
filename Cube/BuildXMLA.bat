@@ -13,18 +13,13 @@ SET XmlaFile=%ROOTDIR%\XMLA\CreateDatabase.xmla
 ::Set path to Visual Studio Team Foundation
 IF %PROCESSOR_ARCHITECTURE% == AMD64 (
 ECHO OS is 64bit
-SET TEAMFOUNDATION="%ProgramFiles(x86)%\%IDETF%\tf.exe"
 SET AsDBDeploy="%ProgramFiles(x86)%\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\Microsoft.AnalysisServices.Deployment.exe"
 SET DEVENV="%ProgramFiles(x86)%\%IDEBUILD%\devenv.exe"
 ) ELSE (
 ECHO OS is 32bit
-SET TEAMFOUNDATION="%ProgramFiles%\%IDETF%\tf.exe"
 SET AsDBDeploy="%ProgramFiles%\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\Microsoft.AnalysisServices.Deployment.exe"
 SET DEVENV="%ProgramFiles%\%IDEBUILD%\devenv.exe"
 )
-
-::Check out XMLA-file
-%TEAMFOUNDATION% checkout /lock:checkout "%XmlaFile%"
 
 SET Project=%ROOTDIR%\TeleoptiAnalytics
 SET Solution=TeleoptiAnalytics.sln

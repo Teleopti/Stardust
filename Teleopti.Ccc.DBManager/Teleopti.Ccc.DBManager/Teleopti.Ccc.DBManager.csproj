@@ -115,7 +115,6 @@
   <ItemGroup>
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IniFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -157,6 +156,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
+      <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
+      <Name>Teleopti.Ccc.DBManager.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

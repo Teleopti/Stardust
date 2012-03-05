@@ -250,7 +250,8 @@
   $(CCNetWorkingDirectory)\Database\**\DemoDatabase\**\*.*;
 	$(CCNetWorkingDirectory)\Database\DBManager.exe"/>
 			<Database
-			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe"/>
+			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Teleopti.Ccc.DBManager.Library.dll"/>
 
 			<!-- DemoDatabase -->
 			<DemoDatabase

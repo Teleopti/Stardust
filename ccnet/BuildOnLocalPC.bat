@@ -1,10 +1,7 @@
 @ECHO off
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-7%
-SET Raptor2=ccnet\Raptor2.proj
-SET DefaultCCNetProject=none
-SET CCNetProject=%DefaultCCNetProject%
-SET NightlyBuild=ccnet\NightlyBuild.proj
+SET MsbuildProj=ccnet\Raptor2.proj
 SET CCNetWorkingDirectory=%ROOTDIR%
 SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 
@@ -17,10 +14,12 @@ CD %CCNetWorkingDirectory%
 ECHO %CCNetWorkingDirectory%
 
 ::Standard build
-SET MsbuildProj=%Raptor2%
+::Select build type
+CHOICE /C wn /M "Do you want to include (w)eb-test or run (n)ot"
+IF ERRORLEVEL 1 SET CCNetProject=NightlyBuild
+IF ERRORLEVEL 2 SET CCNetProject=RaptorMain
+ECHO.
 
-::include WebBehaviour test and Azure deployment
-SET CCNetProject=RaptorMain
 
 PAUSE
 ::Run Build
