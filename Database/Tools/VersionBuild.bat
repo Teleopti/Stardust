@@ -42,14 +42,14 @@ IF %size% EQU 0 goto :NothingToBuild
 
 ::pull latest from hg (don't know if this is necessary really...)
 hg pull
-hg update tip
+hg update default
 
 echo.%Build% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
 
 ::Build each DB
-if %myError% EQU 0 call:CreateRelease TeleoptiAnalytics %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
-if %myError% EQU 0 call:CreateRelease TeleoptiCCC7 %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
-if %myError% EQU 0 call:CreateRelease TeleoptiCCCAgg %ReleaseFile% "%SYSTEMVERSION%" "%tf%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiAnalytics %ReleaseFile% "%SYSTEMVERSION%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiCCC7 %ReleaseFile% "%SYSTEMVERSION%" myError
+if %myError% EQU 0 call:CreateRelease TeleoptiCCCAgg %ReleaseFile% "%SYSTEMVERSION%" myError
 
 ::Commit changes
 if %myError% EQU 0 (
@@ -194,7 +194,7 @@ goto:error
 
 :error
 echo Something went wrong, make sure nothing is checked out!
-"%tf%" undo /recursive "%ROOTDIR%\.." /noprompt
+hg revert -a
 goto:finished
 
 :NothingToBuild
@@ -202,5 +202,4 @@ echo.There is no changes in current trunks. Skip database build
 goto:finished
 
 :finished
-ping 127.0.0.1 -n 3 > NUL
-exit %myError%
+exit /b %myError%
