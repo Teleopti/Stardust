@@ -14,8 +14,8 @@ if %myError% EQU 0 (
 echo Creating branch %releaseBranchName%
 hg pull
 hg update default
-hg branch "%releaseBranchName%"
-hg ci -m "Creating release %releaseBranchName%"
+hg branch %releaseBranchName%
+hg ci -m "Creating release %SYSTEMVERSION%"
 hg push --new-branch
 
 echo Finished!
