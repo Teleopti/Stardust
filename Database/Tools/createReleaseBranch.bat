@@ -10,7 +10,7 @@ set releaseBranchName="Release %SYSTEMVERSION%"
 echo Creating branch %releaseBranchName%
 hg pull
 hg update default
-hg branch %releaseBranchName%
+hg branch "%releaseBranchName%"
 hg ci -m "Creating release %releaseBranchName%"
 hg push --new-branch
 
