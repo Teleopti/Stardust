@@ -23,7 +23,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger = logger;
 		}
 
-		public void CreateSchema(DatabaseType databaseType)
+		public void Create(DatabaseType databaseType)
+		{
+			ApplyReleases(databaseType);
+			ApplyTrunk(databaseType);
+		}
+
+		public void ApplyReleases(DatabaseType databaseType)
 		{
 			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseBuildNumber();
 			var releasesPath = _databaseFolder.ReleasePath(databaseType);
@@ -44,9 +50,23 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				_logger.Write("Applying Release " + scriptFile.name + "...");
 				var sql = File.ReadAllText(scriptFile.file.FullName);
-				new SqlBatchExecutor(_sqlConnection, _logger).ExecuteBatchSql(sql);
+				new SqlBatchExecutor(_sqlConnection, _logger)
+					.ExecuteBatchSql(sql);
 			}
 		}
 
+		public void ApplyTrunk(DatabaseType databaseType)
+		{
+			_logger.Write("Applying Trunk...");
+			var trunkPath = _databaseFolder.TrunkPath(databaseType);
+
+			if (!Directory.Exists(trunkPath)) return;
+
+			var trunkFile = Path.Combine(trunkPath, "Trunk.sql");
+			var sql = File.ReadAllText(trunkFile);
+
+			new SqlBatchExecutor(_sqlConnection, _logger)
+				.ExecuteBatchSql(sql);
+		}
 	}
 }

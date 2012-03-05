@@ -44,8 +44,10 @@ namespace Teleopti.Ccc.DBManager.Library
 					catch (SqlException e)
 					{
 						_log.Write(e.Message);
+						_log.Write("Failing script:");
+						_log.Write(script);
 						transaction.Rollback();
-						throw;
+						throw new ApplicationException("Sql script failed: " + script, e);
 					}
 				}
 				transaction.Commit();

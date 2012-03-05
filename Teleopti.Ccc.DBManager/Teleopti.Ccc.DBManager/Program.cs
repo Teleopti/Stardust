@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DBManager
                             applyReleases(_commandLineArgument.TargetDatabaseType);
                             //Add upcoming DDL (Trunk)
                             if (_commandLineArgument.WillAddTrunk)
-                                applyTrunk(_commandLineArgument.TargetDatabaseTypeName);
+								applyTrunk(_commandLineArgument.TargetDatabaseType);
                             //Add Programmabilty
                             applyProgrammability(_commandLineArgument.TargetDatabaseTypeName);
                         }
@@ -215,7 +215,8 @@ namespace Teleopti.Ccc.DBManager
 
         private static void applyReleases(DatabaseType databaseType)
         {
-			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger).CreateSchema(databaseType);
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyReleases(databaseType);
         }
 
         private static void applyAzureStartDDL(string databaseTypeName)
@@ -240,24 +241,10 @@ namespace Teleopti.Ccc.DBManager
     	}
 
 
-    	private static void applyTrunk(string databaseTypeName)
+		private static void applyTrunk(DatabaseType databaseType)
         {
-            logWrite("Applying Trunk...");
-            string trunkPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Trunk";
-            if (Directory.Exists(trunkPath))
-            {
-                string sqlFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.sql", trunkPath);
-
-                string sql;
-                using (TextReader sqlTextReader = new StreamReader(sqlFile))
-                {
-                    sql = sqlTextReader.ReadToEnd();
-                }
-
-                //Always DDL and src-code
-                executeBatchSQL(sql);
-
-            }
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyTrunk(databaseType);
         }
 
 
