@@ -264,6 +264,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
@@ -291,7 +292,6 @@
     <Compile Include="Optimization\IRuleSetBagCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IWorkShiftRuleSetCanHaveShortBreak.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDecider.cs" />
-    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\OptimizationPreferences.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProvider.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolver.cs" />

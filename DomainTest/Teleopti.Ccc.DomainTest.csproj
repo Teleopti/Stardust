@@ -279,7 +279,7 @@
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDeciderTest.cs" />
-    <Compile Include="Optimization\OptimizationOverLimitByRestrictionsDeciderTest.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
