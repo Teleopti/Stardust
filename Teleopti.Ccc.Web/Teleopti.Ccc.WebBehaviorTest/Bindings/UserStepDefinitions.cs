@@ -15,6 +15,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new Administrator());
 		}
 
+		[Given(@"I am a user with everyone access")]
+		public void GivenIAmAUserWithEveryoneAccess()
+		{
+			UserFactory.User().Setup(new AdministratorRoleWithEveryoneData());
+		}
+
 		[Given(@"I am a user with access only to MyTime")]
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{

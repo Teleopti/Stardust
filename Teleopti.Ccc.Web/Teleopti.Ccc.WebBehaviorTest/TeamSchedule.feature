@@ -231,3 +231,13 @@ Scenario: Don't show team-picker with only one team
 	When I view team schedule
 	Then I should not see the team-picker
 
+Scenario: Default team when no own team but everyone access
+	Given I am a user with everyone access
+	And the site has another team
+	When I view team schedule
+	Then I should see the team-picker
+
+Scenario: Show error message when acces to my team but no own team
+	Given I am an agent in no team with access to my team
+	When I view team schedule
+	Then I should see an error message
