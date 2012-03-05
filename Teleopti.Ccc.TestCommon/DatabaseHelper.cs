@@ -5,6 +5,7 @@ using Teleopti.Ccc.DBManager.Library;
 
 namespace Teleopti.Ccc.TestCommon
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class DatabaseHelper : IDisposable
 	{
 		private readonly string _connectionString;
@@ -83,6 +84,7 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void ExecuteNonQuery(string sql, params object[] args)
 		{
 			using (var command = Connection().CreateCommand())
@@ -92,6 +94,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private T ExecuteScalar<T>(string sql, params object[] args)
 		{
 			using (var command = Connection().CreateCommand())
@@ -101,6 +104,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
 			if (_connection != null)

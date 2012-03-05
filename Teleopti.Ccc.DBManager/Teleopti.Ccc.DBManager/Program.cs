@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DBManager
         private static SqlConnection _sqlConnection;
         private static DatabaseFolder _databaseFolder;
         private static CommandLineArgument _commandLineArgument;
-        private static string _fileName;
         private static bool _isAzure;
         private const string AzureEdition = "SQL Azure";
     	private static MyLogger _logger;
@@ -164,11 +163,6 @@ namespace Teleopti.Ccc.DBManager
             catch (Exception e)
             {
                 logWrite("An error occurred:");
-                if (_fileName != "")
-                {
-                    logWrite("Last opened script file: ");
-                    logWrite(_fileName);
-                }
                 logWrite(e.Message);
                 return -1;
             }

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_log = log;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public void ExecuteBatchSql(string sql)
 		{
 			var transaction = _sqlConnection.BeginTransaction();
