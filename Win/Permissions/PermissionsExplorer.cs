@@ -2379,7 +2379,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void toolStripButtonShowViewerClick(object sender, EventArgs e)
         {
-            if(_permissionsViewerPresenter == null || _permissionsViewerPresenter.UnLoaded)
+            if(_permissionsViewerPresenter == null || _permissionsViewerPresenter.Unloaded)
                 _permissionsViewerPresenter = _container.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPermissionViewerRolesPresenter>();
 
             _permissionsViewerPresenter.ShowViewer();

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
     public interface IPermissionViewerRolesPresenter
     {
         void ShowViewer();
-        bool UnLoaded { get; }
+        bool Unloaded { get; }
     }
 
     public class PermissionViewerRolesPresenter : IPermissionViewerRolesPresenter
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
 
         private void permissionsViewerUnloaded(string obj)
         {
-            UnLoaded = true;
+            Unloaded = true;
         }
 
         private void loadFunctionPersonsAndRoles(string obj)
@@ -78,6 +78,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
             _permissionViewerRoles.BringToFront();
         }
 
-        public bool UnLoaded { get; private set; }
+        public bool Unloaded { get; private set; }
     }
 }

@@ -82,14 +82,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IPersonInRole>();
         }
 
-        public IList<IRoleLight> RolesOnPerson(Guid person)
+        public IList<IRoleLight> RolesOnPerson(Guid selectedPerson)
         {
             const string query = @"SELECT r.Id, r.Name FROM ApplicationRole r
                                 WHERE Id IN(SELECT ApplicationRole FROM PersonInApplicationRole 
                                 WHERE Person = :person)
                                 AND BuiltIn = 0 AND IsDeleted = 0";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetGuid("person", person)
+                    .SetGuid("person", selectedPerson)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
                     .SetReadOnly(true)
                     .List<IRoleLight>();
