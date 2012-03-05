@@ -467,7 +467,8 @@
     <Compile Include="Permissions\Commands\LoadRolesOnPersonLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadPersonsLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesLightCommand.cs" />
-    <Compile Include="Permissions\Events\Copy of RolesNeedLoad.cs" />
+    <Compile Include="Permissions\Events\PermissionsViewerUnloaded.cs" />
+    <Compile Include="Permissions\Events\FunctionPersonsAndRolesNeedLoad.cs" />
     <Compile Include="Permissions\Events\PersonRolesAndFunctionsNeedLoad.cs" />
     <Compile Include="Permissions\IPermissionViewerRoles.cs" />
     <Compile Include="Permissions\PermissionViewerRolesPresenter.cs" />

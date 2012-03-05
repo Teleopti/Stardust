@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.Win.Permissions
         private Control _lastInFocus;
         private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
-        private readonly IPermissionViewerRolesPresenter _permissionsViewerPresenter;
+        private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
 
         public PermissionsExplorer(IComponentContext container)
         {
             _container = container;
-            _permissionsViewerPresenter = _container.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPermissionViewerRolesPresenter>();
+
             
             InitializeComponent();
             instantiateEditControl();
@@ -2379,6 +2379,9 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void toolStripButtonShowViewerClick(object sender, EventArgs e)
         {
+            if(_permissionsViewerPresenter == null || _permissionsViewerPresenter.UnLoaded)
+                _permissionsViewerPresenter = _container.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPermissionViewerRolesPresenter>();
+
             _permissionsViewerPresenter.ShowViewer();
         }
 

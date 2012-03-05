@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
     public interface IPermissionViewerRolesPresenter
     {
         void ShowViewer();
+        bool UnLoaded { get; }
     }
 
     public class PermissionViewerRolesPresenter : IPermissionViewerRolesPresenter
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
         private readonly ILoadFunctionsLightCommand _loadFunctionsLightCommand;
         private readonly ILoadPersonsWithFunctionLightCommand _loadPersonsWithFunctionLightCommand;
         private readonly ILoadRolesWithFunctionLightCommand _loadRolesWithFunctionLightCommand;
+        private bool _initialLoadDone;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public PermissionViewerRolesPresenter(IEventAggregator eventAggregator, ILoadRolesLightCommand loadRolesCommand, IPermissionViewerRoles permissionViewerRoles, 
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
             ILoadRolesWithFunctionLightCommand loadRolesWithFunctionLightCommand)
         {
             _eventAggregator = eventAggregator;
+            _initialLoadDone = false;
             _loadRolesCommand = loadRolesCommand;
             _permissionViewerRoles = permissionViewerRoles;
             _loadPersonsLightCommand = loadPersonsLightCommand;
@@ -40,6 +43,13 @@ namespace Teleopti.Ccc.WinCode.Permissions
 
             _eventAggregator.GetEvent<PersonRolesAndFunctionsNeedLoad>().Subscribe(loadRolePersonsAndFunctions);
             _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Subscribe(loadFunctionPersonsAndRoles);
+
+            _eventAggregator.GetEvent<PermissionsViewerUnloaded>().Subscribe(permissionsViewerUnloaded);
+        }
+
+        private void permissionsViewerUnloaded(string obj)
+        {
+            UnLoaded = true;
         }
 
         private void loadFunctionPersonsAndRoles(string obj)
@@ -56,10 +66,18 @@ namespace Teleopti.Ccc.WinCode.Permissions
 
         public void ShowViewer()
         {
-            _loadPersonsLightCommand.Execute();
-            _loadRolesCommand.Execute();
-            _loadFunctionsLightCommand.Execute();
+            if (!_initialLoadDone)
+            {
+                _loadPersonsLightCommand.Execute();
+                _loadRolesCommand.Execute();
+                _loadFunctionsLightCommand.Execute();
+                _initialLoadDone = true;
+            }
+            
             _permissionViewerRoles.Show();
+            _permissionViewerRoles.BringToFront();
         }
+
+        public bool UnLoaded { get; private set; }
     }
 }

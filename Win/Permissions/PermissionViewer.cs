@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Events;
 
 namespace Teleopti.Ccc.Win.Permissions
 {
-    public partial class PermissionViewerRoles : Form, IPermissionViewerRoles
+    public partial class PermissionViewer : BaseDialogForm, IPermissionViewerRoles
     {
         private readonly IEventAggregator _eventAggregator;
 
-        public PermissionViewerRoles(IEventAggregator eventAggregator):this()
+        public PermissionViewer(IEventAggregator eventAggregator):this()
         {
             _eventAggregator = eventAggregator;
         }
 
-        public PermissionViewerRoles()
+        public PermissionViewer()
         {
             InitializeComponent();
+            SetTexts();
         }
 
         public ListView RolesMainList
@@ -25,9 +27,14 @@ namespace Teleopti.Ccc.Win.Permissions
             get { return listViewRolesMain; }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         public Guid SelectedRole
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                //later
+                throw new NotImplementedException();
+            }
         }
 
         public void FillPersonsMainList(ListViewItem[] listViewItems)
@@ -128,15 +135,15 @@ namespace Teleopti.Ccc.Win.Permissions
             _eventAggregator.GetEvent<PersonRolesAndFunctionsNeedLoad>().Publish("");
         }
 
-        private void permissionViewerRolesFormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
-        }
 
         private void listViewFunctionsMainSelectedIndexChanged(object sender, EventArgs e)
         {
             _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Publish("");
+        }
+
+        private void permissionViewerFormClosed(object sender, FormClosedEventArgs e)
+        {
+            _eventAggregator.GetEvent<PermissionsViewerUnloaded>().Publish("");
         }
     }
 }

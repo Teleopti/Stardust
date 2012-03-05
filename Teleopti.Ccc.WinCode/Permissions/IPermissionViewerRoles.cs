@@ -17,5 +17,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
         void FillRolesMainList(ListViewItem[] listViewItems);
 
         void Show();
+        void BringToFront();
     }
 }
