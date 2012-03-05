@@ -4,7 +4,7 @@
 SET THISDIR=%~dp0
 
 :: Call VersionBuild.bat
-call "%THISDIR\versionbuild.bat"
+call "%THISDIR%\versionbuild.bat"
 
 if %myError% EQU 0 (
 :: create new release branch and push it to server
