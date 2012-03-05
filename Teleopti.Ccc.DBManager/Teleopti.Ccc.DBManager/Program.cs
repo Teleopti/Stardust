@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DBManager
 
         private static void applyReleases(DatabaseType databaseType)
         {
-			new DatabaseSchemeCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger).CreateScheme(databaseType);
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger).CreateSchema(databaseType);
         }
 
         private static void applyAzureStartDDL(string databaseTypeName)

@@ -8,14 +8,14 @@ using System.Text;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
-	public class DatabaseSchemeCreator
+	public class DatabaseSchemaCreator
 	{
 		private readonly DatabaseVersionInformation _versionInformation;
 		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly ILog _logger;
 
-		public DatabaseSchemeCreator(DatabaseVersionInformation versionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
+		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
 		{
 			_versionInformation = versionInformation;
 			_sqlConnection = sqlConnection;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger = logger;
 		}
 
-		public void CreateScheme(DatabaseType databaseType)
+		public void CreateSchema(DatabaseType databaseType)
 		{
 			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseBuildNumber();
 			var releasesPath = _databaseFolder.ReleasePath(databaseType);

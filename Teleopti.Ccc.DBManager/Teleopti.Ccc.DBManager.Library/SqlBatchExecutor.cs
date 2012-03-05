@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					{
 						_log.Write(e.Message);
 						transaction.Rollback();
-						break;
+						throw;
 					}
 				}
 				transaction.Commit();

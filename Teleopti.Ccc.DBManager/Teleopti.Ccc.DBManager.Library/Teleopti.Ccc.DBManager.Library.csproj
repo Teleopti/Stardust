@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="DatabaseCreator.cs" />
     <Compile Include="DatabaseFolder.cs" />
-    <Compile Include="DatabaseSchemeCreator.cs" />
+    <Compile Include="DatabaseSchemaCreator.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DatabaseVersionInformation.cs" />
     <Compile Include="DbManagerFolder.cs" />

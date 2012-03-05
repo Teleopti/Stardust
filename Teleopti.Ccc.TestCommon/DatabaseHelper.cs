@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public void CreateByDbManager()
-		{ 
-			var creator = new DatabaseCreator(new DatabaseFolder(new DbManagerFolder()), _connection);
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var creator = new DatabaseCreator(databaseFolder, _connection);
 			creator.CreateDatabase(_databaseType, _databaseName);
 			ExecuteNonQuery("USE [{0}]", _databaseName);
 		}
@@ -75,7 +76,8 @@ namespace Teleopti.Ccc.TestCommon
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
 			var versionInfo = new DatabaseVersionInformation(databaseFolder, _connection);
 			versionInfo.CreateTable();
-			new DatabaseSchemeCreator(versionInfo, _connection, databaseFolder, new NullLog()).CreateScheme(_databaseType);
+			var schemaCreator = new DatabaseSchemaCreator(versionInfo, _connection, databaseFolder, new NullLog());
+			schemaCreator.CreateSchema(_databaseType);
 		}
 
 
