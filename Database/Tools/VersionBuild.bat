@@ -117,10 +117,9 @@ ECHO The trunk will now be re-initated (CTRL-C to abort)
 TYPE NUL > "%TRUNKFILE%"
 )
 
-:StopLabel
 (
 ENDLOCAL
-set "%~5=%myError%"
+set "%~4=%myError%"
 )
 goto:eof
 
