@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly ICollection<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 		private readonly ICollection<IPostSetup> _postSetups = new List<IPostSetup>();
-
+		private readonly ICollection<IStatisticsDataSetup> _statisticsSetups = new List<IStatisticsDataSetup>();
+ 
 		private readonly ICollection<UserFactory> _colleagues = new List<UserFactory>();
 		private UserFactory _teamColleague;
 
@@ -103,6 +106,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_postSetups.Add(postSetup);
 		}
 
+		public void Setup(IStatisticsDataSetup statisticsDataSetup)
+		{
+			_statisticsSetups.Add(statisticsDataSetup);
+		}
+
 		public void SetupCulture(IUserSetup setup)
 		{
 			_cultureSetup = setup;
@@ -149,9 +157,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestDataSetup.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
 
 			_postSetups.ForEach(s => s.Apply(person, culture));
+
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				connection.Open();
+				_statisticsSetups.ForEach(s => s.Apply(connection, CultureInfo.GetCultureInfo("sv-SE")));
+			}
 		}
 
-		private IEnumerable<object> AllSpecs { get { return _userSetups.Cast<object>().Union(_userDataSetups).Union(_postSetups).Union(_dataSetups); } }
+		private IEnumerable<object> AllSpecs
+		{
+			get
+			{
+				return _userSetups.Cast<object>()
+					.Union(_userDataSetups)
+					.Union(_postSetups)
+					.Union(_dataSetups)
+					.Union(_statisticsSetups)
+					;
+			}
+		}
+
 		private IEnumerable<T> QueryUserData<T>() { return from s in AllSpecs where typeof (T).IsAssignableFrom(s.GetType()) select (T) s; }
 
 		public bool HasSetup<T>() { return QueryUserData<T>().Any(); }

@@ -30,6 +30,12 @@ namespace Teleopti.Ccc.TestCommon
 			return dataSource;
 		}
 
+		public static void ClearAnalyticsData()
+		{
+			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+			analytics.CleanAnalytics();
+		}
+
 		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)
 		{
 			try

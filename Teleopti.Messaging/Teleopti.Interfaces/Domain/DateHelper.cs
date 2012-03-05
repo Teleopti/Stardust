@@ -12,6 +12,39 @@ namespace Teleopti.Interfaces.Domain
         private readonly static DateTime _minSmallDateTime = new DateTime(1901,1,1);
         private readonly static DateTime _maxSmallDateTime = new DateTime(2029,1,1);
 
+		/// <summary>
+		/// Returns quarter from month.
+		/// </summary>
+		/// <param name="month">The month.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: mathias
+		/// Created date: 2012-03-05
+		/// </remarks>
+		public static int GetQuarter(int month)
+		{
+			switch (month)
+			{
+				case 1:
+				case 2:
+				case 3:
+					return 1;
+				case 4:
+				case 5:
+				case 6:
+					return 2;
+				case 7:
+				case 8:
+				case 9:
+					return 3;
+				case 10:
+				case 11:
+				case 12:
+					return 4;
+			}
+			return 0;
+		}
+
         /// <summary>
         /// Returns week number. Contains a correction for FirstFourDayWeek CalendarWeekRule.
         /// </summary>

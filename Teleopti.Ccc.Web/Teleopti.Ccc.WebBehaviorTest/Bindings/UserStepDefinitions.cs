@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -49,6 +51,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmASupervisorWithMobile()
 		{
 			UserFactory.User().Setup(new Supervisor());
+		}
+
+		[Given(@"I have skill statistic data")]
+		public void GivenIHaveSkillStatisticData()
+		{
+			UserFactory.User().Setup(new DefaultStatisticsTimeZoneData());
 		}
 
 		[Given(@"I am user without permission to MobileReports")]
@@ -440,4 +448,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
 	}
+
 }
+
+

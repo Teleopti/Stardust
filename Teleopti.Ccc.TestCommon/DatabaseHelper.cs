@@ -68,6 +68,11 @@ namespace Teleopti.Ccc.TestCommon
 			ExecuteNonQuery("EXEC sp_deleteAllData");
 		}
 
+		public void CleanAnalytics()
+		{
+			ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
+		}
+
 		public void DropConnections()
 		{
 			ExecuteNonQuery("USE master");
@@ -117,5 +122,6 @@ namespace Teleopti.Ccc.TestCommon
 			if (_connection != null)
 				_connection.Dispose();
 		}
+
 	}
 }

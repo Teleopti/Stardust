@@ -50,6 +50,7 @@ Scenario: Select date in date-picker
 
 Scenario: Select skill in skill-picker
 	Given I am a supervisor
+	And I have skill statistic data
 	When I view ReportSettings
 	And I open the skill-picker
 	And I select a skill
