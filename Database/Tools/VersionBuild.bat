@@ -17,7 +17,7 @@ ECHO Previous build number is: %ActiveBranchVersion%
 SET /a Build=%ActiveBranchVersion% + 1
 ECHO New version will be: %Build%
 
-SET "SYSTEMVERSION=7.1.%Build%"
+SET SYSTEMVERSION="7.1.%Build%"
 
 ::Global myError
 SET myError=0
