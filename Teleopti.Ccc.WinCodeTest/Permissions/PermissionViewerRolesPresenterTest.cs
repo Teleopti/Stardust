@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             Expect.Call(_loadPersonsCommand.Execute);
             Expect.Call(_loadFunctionsLightCommand.Execute);
             Expect.Call(_view.Show);
+            Expect.Call(_view.BringToFront);
             _mocks.ReplayAll();
             _target.ShowViewer();
             _mocks.VerifyAll();
