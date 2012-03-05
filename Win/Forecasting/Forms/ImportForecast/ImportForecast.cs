@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
+using System.ServiceModel;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.ClientProxies;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
+using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
+using log4net;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
@@ -20,40 +27,120 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
     {
         private readonly ImportForecastPresenter _presenter;
         private ISkill _skill;
-        private IWorkload _workload;
-
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastForm));
         public ImportForecastForm(ISkill preselectedSkill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
         {
             InitializeComponent();
             _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, repositoryFactory, unitOfWorkFactory));
-            GetSelectedSkillName();
-            PopulateWorkloadList();
+            getSelectedSkillName();
+            populateWorkloadList();
             _skill = preselectedSkill;
         }
 
-        private void PopulateWorkloadList()
+        private void populateWorkloadList()
         {
             _presenter.PopulateWorkloadList();
             comboBoxAdvWorkloads.DataSource = _presenter.WorkloadList;
             comboBoxAdvWorkloads.DisplayMember = "Name";
         }
 
-        private void GetSelectedSkillName()
+        private void getSelectedSkillName()
         {
             _presenter.GetSelectedSkillName();
             txtSkillName.Text = _presenter.SkillName;
         }
 
-        private void browseImportFileButton_Click(object sender, EventArgs e)
+        private void browseImportFileButtonClick(object sender, EventArgs e)
         {
-            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
+            var result = openFileDialog.ShowDialog();
          
-            if (result == DialogResult.OK) // Test result.
+            if (result == DialogResult.OK)
             {
                 textBoxImportFileName.Text = openFileDialog.FileName;
+                using (var stream = new StreamReader(textBoxImportFileName.Text))
+                {
+                    var reader = new CsvFileReader(stream);
+                    var row = new CsvFileRow();
+                    var rowIndex = 1;
+                    var validators = new List<IForecastsFileValidator>
+                                     {
+                                         new ForecastsFileSkillNameValidator(),
+                                         new ForecastsFileDateTimeValidator(),
+                                         new ForecastsFileDateTimeValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileDoubleValueValidator()
+                                     };
+                    try
+                    {
+                        using (PerformanceOutput.ForOperation("Validate forecasts import file."))
+                        {
+                            while (reader.ReadNextRow(row))
+                            {
+                                if (row.Count < 6 || row.Count > 7)
+                                {
+                                    throw new ValidationException("There are more or less columns than expected.");
+                                }
+                                for (var i = 0; i < row.Count; i++)
+                                {
+                                    if (!validators[i].Validate(row[i]))
+                                        throw new ValidationException(validators[i].ErrorMessage);
+                                }
+                                row.Clear();
+                                rowIndex++;
+                            }
+                        }
+                        MessageBoxAdv.Show("Validation succeeded.");
+                        var dto = new ImportForecastsFileCommandDto
+                        {
+                            ImportForecastsOption = ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
+                            UploadedFileId = Guid.NewGuid()
+                        };
+                        var statusDialog =
+                                        new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                        statusDialog.Show(this);
+                        statusDialog.SetJobStatusId(executeCommand(dto));
+                    }
+                    catch (ValidationException exception)
+                    {
+                        MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
+                                           "ValidationError");
+                    }
+                }
             }
         }
 
+        private Guid? executeCommand(CommandDto commandDto)
+        {
+            var sdkAuthentication = new SdkAuthentication();
+            sdkAuthentication.SetSdkAuthenticationHeader();
+
+            var proxy = new Proxy();
+            try
+            {
+                proxy.Open();
+                var result = proxy.ExecuteCommand(commandDto);
+                return result.AffectedId.GetValueOrDefault();
+            }
+            catch (TimeoutException timeoutException)
+            {
+                Logger.Error("Import forecasts command can't reach Sdk due to a timeout.", timeoutException);
+            }
+            catch (CommunicationException exception)
+            {
+                Logger.Error("Import forecasts command can't reach Sdk.", exception);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Import forecasts command notification error.", exception);
+            }
+            finally
+            {
+                ((IDisposable)proxy).Dispose();
+            }
+            return null;
+        }
 
         public ISkill Skill
         {
@@ -64,7 +151,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public IWorkload Workload
         {
             get { return (IWorkload)comboBoxAdvWorkloads.SelectedItem; }
-            set { _workload = (IWorkload)comboBoxAdvWorkloads.SelectedItem; }
+            set { }
         }
 
         public bool IsWorkloadImport

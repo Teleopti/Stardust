@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportForecastForm));
             this.ribbonControlAdvFixed1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblSkillNameColon = new System.Windows.Forms.Label();
@@ -42,9 +43,9 @@
             this.textBoxImportFileName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
             this.buttonAdvBrowseFile = new Syncfusion.Windows.Forms.ButtonAdv();
             this.radioButtonImportWorkload = new System.Windows.Forms.RadioButton();
-            this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
             this.radioButtonImportWLAndStaffing = new System.Windows.Forms.RadioButton();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvWorkloads)).BeginInit();
@@ -77,7 +78,8 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.36585F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.63415F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 174F));
+            this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblSkillNameColon, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtSkillName, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblWorkloadNameColon, 0, 1);
@@ -87,11 +89,11 @@
             this.tableLayoutPanel1.Controls.Add(this.lblImportFileName, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxImportFileName, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.buttonAdvBrowseFile, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.radioButtonImportWorkload, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportWLAndStaffing, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.radioButtonImportWorkload, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 34);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -100,7 +102,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(487, 158);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(487, 159);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // lblSkillNameColon
@@ -123,7 +126,7 @@
             this.txtSkillName.BackColor = System.Drawing.Color.Transparent;
             this.txtSkillName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSkillName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtSkillName.Location = new System.Drawing.Point(114, 6);
+            this.txtSkillName.Location = new System.Drawing.Point(113, 6);
             this.txtSkillName.Name = "txtSkillName";
             this.txtSkillName.Size = new System.Drawing.Size(0, 13);
             this.txtSkillName.TabIndex = 1;
@@ -144,13 +147,13 @@
             // 
             // comboBoxAdvWorkloads
             // 
-            this.comboBoxAdvWorkloads.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.comboBoxAdvWorkloads.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxAdvWorkloads.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxAdvWorkloads.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvWorkloads.DropDownWidth = 294;
-            this.comboBoxAdvWorkloads.Location = new System.Drawing.Point(114, 28);
+            this.comboBoxAdvWorkloads.Location = new System.Drawing.Point(113, 28);
             this.comboBoxAdvWorkloads.Name = "comboBoxAdvWorkloads";
-            this.comboBoxAdvWorkloads.Size = new System.Drawing.Size(172, 21);
+            this.comboBoxAdvWorkloads.Size = new System.Drawing.Size(196, 21);
             this.comboBoxAdvWorkloads.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvWorkloads.TabIndex = 3;
             // 
@@ -165,9 +168,10 @@
             this.gradientPanelImportForecast.Controls.Add(this.buttonAdvCancel);
             this.gradientPanelImportForecast.Controls.Add(this.buttonAdvImport);
             this.gradientPanelImportForecast.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.gradientPanelImportForecast.Location = new System.Drawing.Point(3, 128);
+            this.gradientPanelImportForecast.Location = new System.Drawing.Point(0, 128);
+            this.gradientPanelImportForecast.Margin = new System.Windows.Forms.Padding(0);
             this.gradientPanelImportForecast.Name = "gradientPanelImportForecast";
-            this.gradientPanelImportForecast.Size = new System.Drawing.Size(481, 30);
+            this.gradientPanelImportForecast.Size = new System.Drawing.Size(487, 30);
             this.gradientPanelImportForecast.TabIndex = 1;
             // 
             // buttonAdvCancel
@@ -202,6 +206,7 @@
             this.progressBarImportForecast.Name = "progressBarImportForecast";
             this.progressBarImportForecast.Size = new System.Drawing.Size(481, 19);
             this.progressBarImportForecast.TabIndex = 0;
+            this.progressBarImportForecast.Visible = false;
             // 
             // lblImportFileName
             // 
@@ -211,7 +216,7 @@
             this.lblImportFileName.ForeColor = System.Drawing.SystemColors.ControlText;
             this.lblImportFileName.Location = new System.Drawing.Point(3, 75);
             this.lblImportFileName.Name = "lblImportFileName";
-            this.lblImportFileName.Size = new System.Drawing.Size(105, 25);
+            this.lblImportFileName.Size = new System.Drawing.Size(103, 25);
             this.lblImportFileName.TabIndex = 4;
             this.lblImportFileName.Text = "xxImportFileNameColon";
             this.lblImportFileName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -220,7 +225,7 @@
             // 
             this.textBoxImportFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxImportFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxImportFileName.Location = new System.Drawing.Point(114, 78);
+            this.textBoxImportFileName.Location = new System.Drawing.Point(113, 78);
             this.textBoxImportFileName.Name = "textBoxImportFileName";
             this.textBoxImportFileName.Size = new System.Drawing.Size(196, 20);
             this.textBoxImportFileName.TabIndex = 0;
@@ -231,18 +236,19 @@
             this.buttonAdvBrowseFile.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvBrowseFile.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvBrowseFile.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(316, 78);
+            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(315, 78);
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 1;
             this.buttonAdvBrowseFile.Text = "Browse";
             this.buttonAdvBrowseFile.UseVisualStyle = true;
-            this.buttonAdvBrowseFile.Click += new System.EventHandler(this.browseImportFileButton_Click);
+            this.buttonAdvBrowseFile.Click += new System.EventHandler(this.browseImportFileButtonClick);
             // 
             // radioButtonImportWorkload
             // 
             this.radioButtonImportWorkload.AutoSize = true;
-            this.radioButtonImportWorkload.Location = new System.Drawing.Point(316, 28);
+            this.radioButtonImportWorkload.Checked = true;
+            this.radioButtonImportWorkload.Location = new System.Drawing.Point(315, 3);
             this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
             this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
             this.radioButtonImportWorkload.TabIndex = 5;
@@ -250,31 +256,29 @@
             this.radioButtonImportWorkload.Text = "xxImportWorkload";
             this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
             // 
-            // radioButtonImportStaffing
-            // 
-            this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(316, 3);
-            this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
-            this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
-            this.radioButtonImportStaffing.TabIndex = 6;
-            this.radioButtonImportStaffing.TabStop = true;
-            this.radioButtonImportStaffing.Text = "xxImportStaffing";
-            this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
-            // 
             // radioButtonImportWLAndStaffing
             // 
             this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(316, 53);
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(315, 53);
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
-            this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(86, 17);
+            this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 7;
-            this.radioButtonImportWLAndStaffing.TabStop = true;
-            this.radioButtonImportWLAndStaffing.Text = "xxImportBoth";
+            this.radioButtonImportWLAndStaffing.Text = "xxImportWorkloadAndStaffing";
             this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
             // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog";
+            // 
+            // radioButtonImportStaffing
+            // 
+            this.radioButtonImportStaffing.AutoSize = true;
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(315, 28);
+            this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
+            this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
+            this.radioButtonImportStaffing.TabIndex = 9;
+            this.radioButtonImportStaffing.Text = "xxImportStaffing";
+            this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
             // 
             // ImportForecastForm
             // 
@@ -282,10 +286,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonAdvCancel;
-            this.ClientSize = new System.Drawing.Size(499, 198);
+            this.ClientSize = new System.Drawing.Size(499, 199);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.ribbonControlAdvFixed1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "ImportForecastForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -318,7 +323,7 @@
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvImport;
         private System.Windows.Forms.RadioButton radioButtonImportWorkload;
-        private System.Windows.Forms.RadioButton radioButtonImportStaffing;
         private System.Windows.Forms.RadioButton radioButtonImportWLAndStaffing;
+        private System.Windows.Forms.RadioButton radioButtonImportStaffing;
     }
 }
