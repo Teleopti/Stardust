@@ -6,9 +6,11 @@ SET THISDIR=%~dp0
 :: Call VersionBuild.bat
 call "%THISDIR%\versionbuild.bat"
 
+set releaseBranchName="Release %SYSTEMVERSION%"
+echo using releasebranchname %releaseBranchName%
+
 if %myError% EQU 0 (
 :: create new release branch and push it to server
-set releaseBranchName="Release %SYSTEMVERSION%"
 echo Creating branch %releaseBranchName%
 hg pull
 hg update default
