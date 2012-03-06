@@ -110,24 +110,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
                 int y;
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
+                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y))
+                    .Return(true).OutRef(1, 0);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
-                Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod)).Return(false);
+                Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod))
+                    .Return(false);
                 Expect.Call(() => _scheduleDay.DeleteDayOff());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
-                Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix)).Return(true);
-                Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly>{DateOnly.MinValue});
+                Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix))
+                    .Return(true);
+                Expect.Call(_workTimeBackToLegalStateService.RemovedDays)
+                    .Return(new List<DateOnly>{DateOnly.MinValue});
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
-                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(
-                    new Dictionary<DateOnly, IScheduleDay>
+                Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState)
+                    .Return(new Dictionary<DateOnly, IScheduleDay>
                         {
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _personAssignment.MainShift.ShiftCategory))
+                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _personAssignment.MainShift.ShiftCategory)).IgnoreArguments()
                    .Return(true).Repeat.AtLeastOnce();
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(false);
@@ -248,11 +252,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _personAssignment.MainShift.ShiftCategory))
+                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _personAssignment.MainShift.ShiftCategory)).IgnoreArguments()
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction))
+                Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments()
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions)).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions)).IgnoreArguments()
+                    .Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_originalStateContainerForTagChange.IsFullyScheduled()).Return(false);
                 Expect.Call(_rollbackService.ModificationCollection).Return(
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay>{ _scheduleDay }));
@@ -300,7 +305,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _rollbackService.ClearModificationCollection());
             Expect.Call(_matrixConverter.SourceMatrix).Return(_matrix).Repeat.Any();
             Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
-            Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).Repeat.AtLeastOnce();
+            Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).IgnoreArguments()
+                .Repeat.AtLeastOnce();
             Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToLengthen.Value))
                 .Return(_scheduleDayPro).Repeat.Any();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay)
@@ -309,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(_extendReduceTimeDecisionMakerResult.DayToShorten.Value))
                 .Return(_scheduleDayPro).Repeat.Any();
-            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions))
+            Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).IgnoreArguments()
                 .Return(_effectiveRestriction).Repeat.Any();
         }
     }
