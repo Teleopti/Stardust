@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return (double)brokenDays / (double)allDays;
         }
 
-        private double calculateBrokenLimit(double fulFillValue)
+        private static double calculateBrokenLimit(double fulFillValue)
         {
             return 1 - fulFillValue;
         }
