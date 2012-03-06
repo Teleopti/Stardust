@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
     {
         void ShowViewer();
         bool Unloaded { get; }
+        void CloseViewer();
     }
 
     public class PermissionViewerRolesPresenter : IPermissionViewerRolesPresenter
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
         private readonly ILoadRolesWithFunctionLightCommand _loadRolesWithFunctionLightCommand;
         private readonly ILoadDataOnPersonsLightCommand _loadDataOnPersonsLightCommand;
         private readonly ILoadRolesAndPersonsOnDataLightCommand _loadRolesAndPersonsOnDataLightCommand;
+        private readonly ILoadRolesAndPersonsOnDataRangeLightCommand _loadRolesAndPersonsOnDataRangeLightCommand;
         private bool _initialLoadDone;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
             ILoadPersonsLightCommand loadPersonsLightCommand, ILoadRolesOnPersonLightCommand loadRolesOnPersonLightCommand, ILoadFunctionsOnPersonLightCommand loadFunctionsOnPersonLightCommand,
             ILoadFunctionsLightCommand loadFunctionsLightCommand, ILoadPersonsWithFunctionLightCommand loadPersonsWithFunctionLightCommand,
             ILoadRolesWithFunctionLightCommand loadRolesWithFunctionLightCommand, ILoadDataOnPersonsLightCommand loadDataOnPersonsLightCommand, 
-            ILoadRolesAndPersonsOnDataLightCommand loadRolesAndPersonsOnDataLightCommand)
+            ILoadRolesAndPersonsOnDataLightCommand loadRolesAndPersonsOnDataLightCommand, ILoadRolesAndPersonsOnDataRangeLightCommand loadRolesAndPersonsOnDataRangeLightCommand)
         {
             _eventAggregator = eventAggregator;
             _initialLoadDone = false;
@@ -50,11 +52,19 @@ namespace Teleopti.Ccc.WinCode.Permissions
             _loadRolesWithFunctionLightCommand = loadRolesWithFunctionLightCommand;
             _loadDataOnPersonsLightCommand = loadDataOnPersonsLightCommand;
             _loadRolesAndPersonsOnDataLightCommand = loadRolesAndPersonsOnDataLightCommand;
+            _loadRolesAndPersonsOnDataRangeLightCommand = loadRolesAndPersonsOnDataRangeLightCommand;
 
             _eventAggregator.GetEvent<PersonRolesAndFunctionsNeedLoad>().Subscribe(loadRolePersonsAndFunctions);
             _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Subscribe(loadFunctionPersonsAndRoles);
             _eventAggregator.GetEvent<DataPersonsAndRolesNeedLoad>().Subscribe(loadPersonsAndRolesOnData);
+            _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Subscribe(loadPersonsAndRolesOnDataRange);
+
             _eventAggregator.GetEvent<PermissionsViewerUnloaded>().Subscribe(permissionsViewerUnloaded);
+        }
+
+        private void loadPersonsAndRolesOnDataRange(string obj)
+        {
+            _loadRolesAndPersonsOnDataRangeLightCommand.Execute();
         }
 
         private void loadPersonsAndRolesOnData(string obj)
@@ -202,5 +212,10 @@ namespace Teleopti.Ccc.WinCode.Permissions
         }
 
         public bool Unloaded { get; private set; }
+
+        public void CloseViewer()
+        {
+            _permissionViewerRoles.Close();
+        }
     }
 }

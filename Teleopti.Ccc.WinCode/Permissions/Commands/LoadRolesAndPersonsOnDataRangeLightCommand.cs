@@ -9,15 +9,15 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.WinCode.Permissions.Commands
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface ILoadRolesAndPersonsOnDataLightCommand : IExecutableCommand { }
+    public interface ILoadRolesAndPersonsOnDataRangeLightCommand : IExecutableCommand { }
 
-    public class LoadRolesAndPersonsOnDataLightCommand : ILoadRolesAndPersonsOnDataLightCommand
+    public class LoadRolesAndPersonsOnDataRangeLightCommand : ILoadRolesAndPersonsOnDataRangeLightCommand
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IPermissionViewerRoles _permissionViewerRoles;
 
-        public LoadRolesAndPersonsOnDataLightCommand(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IPermissionViewerRoles permissionViewerRoles)
+        public LoadRolesAndPersonsOnDataRangeLightCommand(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IPermissionViewerRoles permissionViewerRoles)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _repositoryFactory = repositoryFactory;
@@ -28,16 +28,16 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
-                Guid selectedData = _permissionViewerRoles.SelectedData;
+                int selectedData = _permissionViewerRoles.SelectedDataRange;
                 var roleGuid = new List<Guid>();
                 var rep = _repositoryFactory.CreateApplicationRolePersonRepository(uow);
-                var roles = rep.RolesWithData((selectedData));
+                var roles = rep.RolesWithDataRange((selectedData));
                 var list = new List<ListViewItem>();
                 foreach (var roleLight in roles)
                 {
                     var name = LanguageResourceHelper.Translate(roleLight.Name);
                     if (string.IsNullOrEmpty(name)) name = roleLight.Name;
-                    list.Add(new ListViewItem(name) {Tag = roleLight.Id});
+                    list.Add(new ListViewItem(name) { Tag = roleLight.Id });
                     roleGuid.Add(roleLight.Id);
                 }
 

@@ -183,6 +183,7 @@
             this.listViewPersonsMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewPersonsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewPersonsMain.FullRowSelect = true;
+            this.listViewPersonsMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonsMain.HideSelection = false;
             this.listViewPersonsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
@@ -264,6 +265,7 @@
             this.listViewPersonRoles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewPersonRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewPersonRoles.FullRowSelect = true;
+            this.listViewPersonRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem3,
             listViewItem4});
@@ -316,6 +318,7 @@
             this.listViewPersonFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewPersonFunctions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewPersonFunctions.FullRowSelect = true;
+            this.listViewPersonFunctions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonFunctions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem5,
             listViewItem6});
@@ -377,6 +380,7 @@
             this.listViewFunctionsMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewFunctionsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionsMain.FullRowSelect = true;
+            this.listViewFunctionsMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFunctionsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem7,
             listViewItem8});
@@ -425,6 +429,7 @@
             this.listViewFunctionPersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewFunctionPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionPersons.FullRowSelect = true;
+            this.listViewFunctionPersons.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFunctionPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem9,
             listViewItem10});
@@ -458,6 +463,7 @@
             this.listViewFunctionRoles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewFunctionRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFunctionRoles.FullRowSelect = true;
+            this.listViewFunctionRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFunctionRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem11,
             listViewItem12});
@@ -524,6 +530,7 @@
             this.treeViewDataMain.Location = new System.Drawing.Point(0, 0);
             this.treeViewDataMain.Name = "treeViewDataMain";
             this.treeViewDataMain.Size = new System.Drawing.Size(265, 573);
+            this.treeViewDataMain.TabIndex = 0;
             this.treeViewDataMain.Text = "treeViewAdv1";
             // 
             // 
@@ -567,6 +574,7 @@
             this.listViewDataPersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDataPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewDataPersons.FullRowSelect = true;
+            this.listViewDataPersons.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDataPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem13,
             listViewItem14});
@@ -600,6 +608,7 @@
             this.listViewDataRoles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDataRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewDataRoles.FullRowSelect = true;
+            this.listViewDataRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDataRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem15,
             listViewItem16});
@@ -648,6 +657,7 @@
             this.listViewRolesMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewRolesMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewRolesMain.FullRowSelect = true;
+            this.listViewRolesMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewRolesMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem17,
             listViewItem18});

@@ -186,6 +186,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.That(result.Count, Is.EqualTo(0));
             }
         }
+
+        [Test]
+        public void ShouldLoadRolesWithDataRange()
+        {
+            UnitOfWork.PersistAll();
+            SkipRollback();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+            {
+                _target = new ApplicationRolePersonRepository(uow);
+                var result = _target.RolesWithDataRange(1);
+                Assert.That(result.Count, Is.EqualTo(0));
+            }
+        }
     }
 
 }

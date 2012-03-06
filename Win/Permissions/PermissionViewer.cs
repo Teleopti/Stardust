@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Win.Permissions
             }
             if (id.GetType().Equals(typeof(int)))
             {
-                //_eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
+               _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
             }
             
         }

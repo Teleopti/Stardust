@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<int> DataRangeOptions(Guid selectedPerson);
         IList<IPersonInRole> PersonsWithRoles(IList<Guid> roles);
         IList<IRoleLight> RolesWithData(Guid id);
+        IList<IRoleLight> RolesWithDataRange(int range);
     }
 
     public interface IFunctionLight

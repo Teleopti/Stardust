@@ -2059,6 +2059,9 @@ namespace Teleopti.Ccc.Win.Permissions
                         break;
                 }
             }
+            if (!e.Cancel && _permissionsViewerPresenter != null)
+                _permissionsViewerPresenter.CloseViewer();
+
         }
 
         private void editControlDeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)

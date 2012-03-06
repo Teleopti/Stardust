@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IRoleLight> Roles()
         {
-            const string query = @"SELECT Id, Name
+            const string query = @"SELECT Id, DescriptionText AS Name
                         FROM ApplicationRole WHERE BusinessUnit = :bu";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
                     .SetGuid("bu",
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IRoleLight> RolesOnPerson(Guid selectedPerson)
         {
-            const string query = @"SELECT r.Id, r.Name FROM ApplicationRole r
+            const string query = @"SELECT r.Id, r.DescriptionText AS Name FROM ApplicationRole r
                                 WHERE Id IN(SELECT ApplicationRole FROM PersonInApplicationRole 
                                 WHERE Person = :person)
                                 AND BuiltIn = 0 AND IsDeleted = 0";
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IFunctionLight> FunctionsOnPerson(Guid selectedPerson)
         {
-            const string query = @"SELECT f.Id, FunctionCode AS Name, FunctionDescription AS ResourceName, r.Name AS Role FROM ApplicationFunction f
+            const string query = @"SELECT f.Id, FunctionCode AS Name, FunctionDescription AS ResourceName, r.DescriptionText AS Role FROM ApplicationFunction f
                                 INNER JOIN ApplicationFunctionInRole fir ON f.Id = fir.ApplicationFunction AND f.IsDeleted = 0
                                 INNER JOIN ApplicationRole r ON r.Id = fir.ApplicationRole AND BuiltIn = 0 AND r.IsDeleted = 0
                                 WHERE ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IRoleLight> RolesWithFunction(Guid selectedFunction)
         {
-            const string query = @"SELECT Id, Name FROM ApplicationRole
+            const string query = @"SELECT Id, DescriptionText as Name FROM ApplicationRole
                                  WHERE Id IN (SELECT ApplicationRole FROM ApplicationFunctionInRole WHERE ApplicationFunction = :function)
                                  AND BuiltIn = 0 AND IsDeleted = 0";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IRoleLight> RolesWithData(Guid id)
         {
-            const string query = @"SELECT Id, Name FROM ApplicationRole WHERE Id IN(
+            const string query = @"SELECT Id, DescriptionText as Name FROM ApplicationRole WHERE Id IN(
                                 SELECT DISTINCT ApplicationRole 
                                 FROM AvailableUnitsInApplicationRole t
                                 INNER JOIN AvailableData d ON d.Id = t.AvailableData
@@ -222,11 +222,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IRoleLight>();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "selectedData"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public IList<IPersonInRole> PersonsWithData(Guid selectedData)
+        public IList<IRoleLight> RolesWithDataRange(int range)
         {
-            //later
-            throw new NotImplementedException();
+            const string query = @"SELECT Id, DescriptionText as Name FROM ApplicationRole WHERE Id IN(
+                                SELECT ApplicationRole FROM AvailableData
+                                WHERE AvailableDataRange = :range)
+                                AND BuiltIn = 0";
+            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
+                    .SetInt32("range", range)
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
+                    .SetReadOnly(true)
+                    .List<IRoleLight>();
         }
     }
 

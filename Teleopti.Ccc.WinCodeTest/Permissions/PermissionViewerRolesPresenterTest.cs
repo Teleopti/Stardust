@@ -3,9 +3,13 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Commands;
 using Teleopti.Ccc.WinCode.Permissions.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Permissions
 {
@@ -25,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
         private ILoadRolesWithFunctionLightCommand _loadRolesWithFunctionLightCommand;
         private ILoadDataOnPersonsLightCommand _loadDataOnPersonsLightCommand;
         private ILoadRolesAndPersonsOnDataLightCommand _loadRolesAndPersonsOnDataLightCommand;
+        private ILoadRolesAndPersonsOnDataRangeLightCommand _loadRolesAndPersonsOnDataRangeLightCommand;
 
         [SetUp]
         public void Setup()
@@ -39,11 +44,13 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _loadRolesWithFunctionLightCommand = _mocks.StrictMock<ILoadRolesWithFunctionLightCommand>();
             _loadDataOnPersonsLightCommand = _mocks.StrictMock<ILoadDataOnPersonsLightCommand>();
             _loadRolesAndPersonsOnDataLightCommand = _mocks.StrictMock<ILoadRolesAndPersonsOnDataLightCommand>();
+            _loadRolesAndPersonsOnDataRangeLightCommand =
+                _mocks.StrictMock<ILoadRolesAndPersonsOnDataRangeLightCommand>();
             _eventAggregator = new EventAggregator();
             _view = _mocks.StrictMock<IPermissionViewerRoles>();
             _target = new PermissionViewerRolesPresenter(_eventAggregator, _loadRolesCommand, _view, _loadPersonsCommand, _loadRolesOnPersonCommand,
                 _loadFunctionsOnPersonLightCommand, _loadFunctionsLightCommand, _loadPersonsWithFunctionLightCommand, _loadRolesWithFunctionLightCommand,
-                _loadDataOnPersonsLightCommand, _loadRolesAndPersonsOnDataLightCommand);
+                _loadDataOnPersonsLightCommand, _loadRolesAndPersonsOnDataLightCommand, _loadRolesAndPersonsOnDataRangeLightCommand);
         }
 
         [Test]
@@ -72,9 +79,38 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Publish("");
             _mocks.VerifyAll();
         }
+
+        [Test]
+        public void ShouldLoadRolesAndPersonsOnData()
+        {
+            Expect.Call(_loadRolesAndPersonsOnDataLightCommand.Execute);
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<DataPersonsAndRolesNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldLoadRolesAndPersonsOnDataRange()
+        {
+            Expect.Call(_loadRolesAndPersonsOnDataRangeLightCommand.Execute);
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
         [Test]
         public void ShouldLoadSomeOnShow()
         {
+            var site = new Site("sajt");
+            var deletedSite = new Site("sajt");
+            deletedSite.SetDeleted();
+            var deletedTeam = new Team();
+            deletedTeam.SetDeleted();
+            site.AddTeam(new Team());
+            site.AddTeam(deletedTeam);
+            IBusinessUnit bu = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            bu.AddSite(site);
+            bu.AddSite(deletedSite);
             Expect.Call(_loadRolesCommand.Execute);
             Expect.Call(_loadPersonsCommand.Execute);
             Expect.Call(_loadFunctionsLightCommand.Execute);
@@ -83,6 +119,23 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             Expect.Call(_view.BringToFront);
             _mocks.ReplayAll();
             _target.ShowViewer();
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldSetUnloaded()
+        {
+            Assert.That(_target.Unloaded, Is.False);
+            _eventAggregator.GetEvent<PermissionsViewerUnloaded>().Publish("");
+            Assert.That(_target.Unloaded, Is.True);
+        }
+
+        [Test]
+        public void ShouldCloseForm()
+        {
+            Expect.Call(_view.Close);
+            _mocks.ReplayAll();
+            _target.CloseViewer();
             _mocks.VerifyAll();
         }
     }
