@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public ITeam Calculate(DateOnly date)
 		{
 			var myTeam = _loggedOnUser.MyTeam(date);
-			if (_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, myTeam))
+			if (myTeam != null && _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, myTeam))
 				return myTeam;
 			var team = _teamProvider.GetPermittedTeams(date).FirstOrDefault();
 			if (team == null)

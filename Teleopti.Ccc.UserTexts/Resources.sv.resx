@@ -10195,4 +10195,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Grupper</value>
     <comment>Teams</comment>
   </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>Det finns inga tillgängliga team</value>
+    <comment>There are no teams available</comment>
+  </data>
 </root>
