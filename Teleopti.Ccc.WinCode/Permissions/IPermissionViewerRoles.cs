@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
         void Show();
         void BringToFront();
         void FillDataTree(TreeNodeAdv[] treeNodes, TreeNodeAdv[] dataTreeNodes, TreeNodeAdv[] allTreeNodes);
-
+        void ShowDataSourceException(Infrastructure.Foundation.DataSourceException dataSourceException);
         void Close();
     }
 }

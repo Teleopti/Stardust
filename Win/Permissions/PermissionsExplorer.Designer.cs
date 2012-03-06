@@ -40,25 +40,25 @@ namespace Teleopti.Ccc.Win.Permissions
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RolesBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
-            this.PeopleBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
-            this.FunctionsBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
-            this.DataBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
-            this.toolStripTabItem5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
-            this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
-            this.HorizontalSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-            this.RolesBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
             this.listViewRoles = new System.Windows.Forms.ListView();
-            this.VerticalLeftSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-            this.PeopleAssignedBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
+            this.PeopleBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
             this.listViewPeople = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FunctionsBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
+            this.treeViewFunctions = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
+            this.DataBarItem = new Syncfusion.Windows.Forms.Tools.GroupBarItem();
+            this.treeViewData = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
+            this.toolStripTabItem5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
+            this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
+            this.HorizontalSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.RolesBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
+            this.VerticalLeftSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.PeopleAssignedBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
             this.VerticalRightSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
             this.FunctionsAssignedBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
-            this.treeViewFunctions = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
             this.DataAssignedBar = new Syncfusion.Windows.Forms.Tools.GroupBar();
-            this.treeViewData = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
             this.ExplorerRibbon = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.HomeTab = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
             this.toolStripExClipboard = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
@@ -73,6 +73,8 @@ namespace Teleopti.Ccc.Win.Permissions
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonCloseExit = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStripClipboard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HorizontalSplitter)).BeginInit();
             this.HorizontalSplitter.Panel1.SuspendLayout();
             this.HorizontalSplitter.Panel2.SuspendLayout();
@@ -91,10 +93,8 @@ namespace Teleopti.Ccc.Win.Permissions
             this.VerticalRightSplitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FunctionsAssignedBar)).BeginInit();
             this.FunctionsAssignedBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataAssignedBar)).BeginInit();
             this.DataAssignedBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ExplorerRibbon)).BeginInit();
             this.ExplorerRibbon.SuspendLayout();
             this.HomeTab.Panel.SuspendLayout();
@@ -163,11 +163,66 @@ namespace Teleopti.Ccc.Win.Permissions
             this.RolesBarItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
             this.RolesBarItem.Text = "xxNoRolesAvailable";
             // 
+            // listViewRoles
+            // 
+            this.listViewRoles.BackColor = System.Drawing.Color.White;
+            this.listViewRoles.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewRoles.ContextMenuStrip = this.contextMenuStripClipboard;
+            this.listViewRoles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewRoles.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
+            this.listViewRoles.FullRowSelect = true;
+            this.listViewRoles.HideSelection = false;
+            this.listViewRoles.LabelEdit = true;
+            this.listViewRoles.Location = new System.Drawing.Point(0, 22);
+            this.listViewRoles.Name = "listViewRoles";
+            this.listViewRoles.Size = new System.Drawing.Size(902, 138);
+            this.listViewRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewRoles.TabIndex = 0;
+            this.listViewRoles.UseCompatibleStateImageBehavior = false;
+            this.listViewRoles.View = System.Windows.Forms.View.List;
+            // 
             // PeopleBarItem
             // 
             this.PeopleBarItem.Client = this.listViewPeople;
             this.PeopleBarItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
             this.PeopleBarItem.Text = "xxNoPeopleAssigned";
+            // 
+            // listViewPeople
+            // 
+            this.listViewPeople.BackColor = System.Drawing.Color.White;
+            this.listViewPeople.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewPeople.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.listViewPeople.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
+            this.listViewPeople.FullRowSelect = true;
+            this.listViewPeople.LabelWrap = false;
+            this.listViewPeople.Location = new System.Drawing.Point(0, 22);
+            this.listViewPeople.Name = "listViewPeople";
+            this.listViewPeople.ShowGroups = false;
+            this.listViewPeople.Size = new System.Drawing.Size(350, 249);
+            this.listViewPeople.TabIndex = 0;
+            this.listViewPeople.UseCompatibleStateImageBehavior = false;
+            this.listViewPeople.View = System.Windows.Forms.View.Details;
+            this.listViewPeople.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewPeopleColumnClick);
+            this.listViewPeople.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewPeopleKeyUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "xxFirstName";
+            this.columnHeader1.Width = 137;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "xxLastName";
+            this.columnHeader2.Width = 114;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "xxTeam";
+            this.columnHeader3.Width = 111;
             // 
             // FunctionsBarItem
             // 
@@ -175,11 +230,78 @@ namespace Teleopti.Ccc.Win.Permissions
             this.FunctionsBarItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
             this.FunctionsBarItem.Text = "xxNoFunctionsAssigned";
             // 
+            // treeViewFunctions
+            // 
+            this.treeViewFunctions.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
+            this.treeViewFunctions.BackColor = System.Drawing.Color.White;
+            this.treeViewFunctions.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeViewFunctions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            // 
+            // 
+            // 
+            this.treeViewFunctions.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewFunctions.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewFunctions.HelpTextControl.Name = "helpText";
+            this.treeViewFunctions.HelpTextControl.Size = new System.Drawing.Size(62, 15);
+            this.treeViewFunctions.HelpTextControl.TabIndex = 0;
+            this.treeViewFunctions.HelpTextControl.Text = "xxHelpText";
+            this.treeViewFunctions.Location = new System.Drawing.Point(0, 22);
+            this.treeViewFunctions.Name = "treeViewFunctions";
+            this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
+            this.treeViewFunctions.ShowCheckBoxes = true;
+            this.treeViewFunctions.Size = new System.Drawing.Size(280, 249);
+            this.treeViewFunctions.TabIndex = 0;
+            // 
+            // 
+            // 
+            this.treeViewFunctions.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
+            this.treeViewFunctions.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewFunctions.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewFunctions.ToolTipControl.Name = "toolTip";
+            this.treeViewFunctions.ToolTipControl.Size = new System.Drawing.Size(55, 15);
+            this.treeViewFunctions.ToolTipControl.TabIndex = 1;
+            this.treeViewFunctions.ToolTipControl.Text = "xxToolTip";
+            // 
             // DataBarItem
             // 
             this.DataBarItem.Client = this.treeViewData;
             this.DataBarItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
             this.DataBarItem.Text = "xxNoDataAssigned";
+            // 
+            // treeViewData
+            // 
+            this.treeViewData.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
+            this.treeViewData.BackColor = System.Drawing.Color.White;
+            this.treeViewData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeViewData.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+            // 
+            // 
+            // 
+            this.treeViewData.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewData.HelpTextControl.Location = new System.Drawing.Point(1, 23);
+            this.treeViewData.HelpTextControl.Name = "helpText";
+            this.treeViewData.HelpTextControl.Size = new System.Drawing.Size(62, 15);
+            this.treeViewData.HelpTextControl.TabIndex = 0;
+            this.treeViewData.HelpTextControl.Text = "xxHelpText";
+            this.treeViewData.HelpTextControl.Visible = true;
+            this.treeViewData.Location = new System.Drawing.Point(0, 22);
+            this.treeViewData.Name = "treeViewData";
+            this.treeViewData.Office2007ScrollBars = true;
+            this.treeViewData.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
+            this.treeViewData.ShowCheckBoxes = true;
+            this.treeViewData.Size = new System.Drawing.Size(258, 249);
+            this.treeViewData.TabIndex = 0;
+            // 
+            // 
+            // 
+            this.treeViewData.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
+            this.treeViewData.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewData.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewData.ToolTipControl.Name = "toolTip";
+            this.treeViewData.ToolTipControl.Size = new System.Drawing.Size(55, 15);
+            this.treeViewData.ToolTipControl.TabIndex = 1;
+            this.treeViewData.ToolTipControl.Text = "xxToolTip";
             // 
             // toolStripTabItem5
             // 
@@ -254,24 +376,6 @@ namespace Teleopti.Ccc.Win.Permissions
             this.RolesBar.TextAlign = Syncfusion.Windows.Forms.Tools.TextAlignment.Left;
             this.RolesBar.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.VS2005;
             // 
-            // listViewRoles
-            // 
-            this.listViewRoles.BackColor = System.Drawing.Color.White;
-            this.listViewRoles.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewRoles.ContextMenuStrip = this.contextMenuStripClipboard;
-            this.listViewRoles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewRoles.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
-            this.listViewRoles.FullRowSelect = true;
-            this.listViewRoles.HideSelection = false;
-            this.listViewRoles.LabelEdit = true;
-            this.listViewRoles.Location = new System.Drawing.Point(0, 22);
-            this.listViewRoles.Name = "listViewRoles";
-            this.listViewRoles.Size = new System.Drawing.Size(902, 138);
-            this.listViewRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewRoles.TabIndex = 0;
-            this.listViewRoles.UseCompatibleStateImageBehavior = false;
-            this.listViewRoles.View = System.Windows.Forms.View.List;
-            // 
             // VerticalLeftSplitter
             // 
             this.VerticalLeftSplitter.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -321,43 +425,6 @@ namespace Teleopti.Ccc.Win.Permissions
             this.PeopleAssignedBar.TextAlign = Syncfusion.Windows.Forms.Tools.TextAlignment.Left;
             this.PeopleAssignedBar.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.VS2005;
             // 
-            // listViewPeople
-            // 
-            this.listViewPeople.BackColor = System.Drawing.Color.White;
-            this.listViewPeople.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listViewPeople.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.listViewPeople.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(140)))));
-            this.listViewPeople.FullRowSelect = true;
-            this.listViewPeople.LabelWrap = false;
-            this.listViewPeople.Location = new System.Drawing.Point(0, 22);
-            this.listViewPeople.Name = "listViewPeople";
-            this.listViewPeople.ShowGroups = false;
-            this.listViewPeople.Size = new System.Drawing.Size(350, 249);
-            this.listViewPeople.TabIndex = 0;
-            this.listViewPeople.UseCompatibleStateImageBehavior = false;
-            this.listViewPeople.View = System.Windows.Forms.View.Details;
-            this.listViewPeople.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewPeopleColumnClick);
-            this.listViewPeople.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewPeopleKeyUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "xxFirstName";
-            this.columnHeader1.Width = 137;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "xxLastName";
-            this.columnHeader2.Width = 114;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "xxTeam";
-            this.columnHeader3.Width = 111;
-            // 
             // VerticalRightSplitter
             // 
             this.VerticalRightSplitter.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -406,38 +473,6 @@ namespace Teleopti.Ccc.Win.Permissions
             this.FunctionsAssignedBar.TextAlign = Syncfusion.Windows.Forms.Tools.TextAlignment.Left;
             this.FunctionsAssignedBar.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.VS2005;
             // 
-            // treeViewFunctions
-            // 
-            this.treeViewFunctions.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
-            this.treeViewFunctions.BackColor = System.Drawing.Color.White;
-            this.treeViewFunctions.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeViewFunctions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            // 
-            // 
-            // 
-            this.treeViewFunctions.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeViewFunctions.HelpTextControl.Location = new System.Drawing.Point(0, 0);
-            this.treeViewFunctions.HelpTextControl.Name = "helpText";
-            this.treeViewFunctions.HelpTextControl.Size = new System.Drawing.Size(62, 15);
-            this.treeViewFunctions.HelpTextControl.TabIndex = 0;
-            this.treeViewFunctions.HelpTextControl.Text = "xxHelpText";
-            this.treeViewFunctions.Location = new System.Drawing.Point(0, 22);
-            this.treeViewFunctions.Name = "treeViewFunctions";
-            this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
-            this.treeViewFunctions.ShowCheckBoxes = true;
-            this.treeViewFunctions.Size = new System.Drawing.Size(280, 249);
-            this.treeViewFunctions.TabIndex = 0;
-            // 
-            // 
-            // 
-            this.treeViewFunctions.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
-            this.treeViewFunctions.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeViewFunctions.ToolTipControl.Location = new System.Drawing.Point(0, 0);
-            this.treeViewFunctions.ToolTipControl.Name = "toolTip";
-            this.treeViewFunctions.ToolTipControl.Size = new System.Drawing.Size(55, 15);
-            this.treeViewFunctions.ToolTipControl.TabIndex = 1;
-            this.treeViewFunctions.ToolTipControl.Text = "xxToolTip";
-            // 
             // DataAssignedBar
             // 
             this.DataAssignedBar.AllowDrop = true;
@@ -461,41 +496,6 @@ namespace Teleopti.Ccc.Win.Permissions
             this.DataAssignedBar.Text = "yygroupBar4";
             this.DataAssignedBar.TextAlign = Syncfusion.Windows.Forms.Tools.TextAlignment.Left;
             this.DataAssignedBar.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.VS2005;
-            // 
-            // treeViewData
-            // 
-            this.treeViewData.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
-            this.treeViewData.BackColor = System.Drawing.Color.White;
-            this.treeViewData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeViewData.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
-            // 
-            // 
-            // 
-            this.treeViewData.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeViewData.HelpTextControl.Location = new System.Drawing.Point(1, 23);
-            this.treeViewData.HelpTextControl.Name = "helpText";
-            this.treeViewData.HelpTextControl.Size = new System.Drawing.Size(62, 15);
-            this.treeViewData.HelpTextControl.TabIndex = 0;
-            this.treeViewData.HelpTextControl.Text = "xxHelpText";
-            this.treeViewData.HelpTextControl.Visible = true;
-            this.treeViewData.Location = new System.Drawing.Point(0, 22);
-            this.treeViewData.Name = "treeViewData";
-            this.treeViewData.Office2007ScrollBars = true;
-            this.treeViewData.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
-            this.treeViewData.ShowCheckBoxes = true;
-            this.treeViewData.Size = new System.Drawing.Size(258, 249);
-            this.treeViewData.TabIndex = 0;
-            // 
-            // 
-            // 
-            this.treeViewData.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
-            this.treeViewData.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeViewData.ToolTipControl.Location = new System.Drawing.Point(0, 0);
-            this.treeViewData.ToolTipControl.Name = "toolTip";
-            this.treeViewData.ToolTipControl.Size = new System.Drawing.Size(55, 15);
-            this.treeViewData.ToolTipControl.TabIndex = 1;
-            this.treeViewData.ToolTipControl.Text = "xxToolTip";
             // 
             // ExplorerRibbon
             // 
@@ -640,7 +640,7 @@ namespace Teleopti.Ccc.Win.Permissions
             this.toolStripButtonShowViewer});
             this.toolStripExViewer.Location = new System.Drawing.Point(301, 1);
             this.toolStripExViewer.Name = "toolStripExViewer";
-            this.toolStripExViewer.Size = new System.Drawing.Size(145, 90);
+            this.toolStripExViewer.Size = new System.Drawing.Size(157, 90);
             this.toolStripExViewer.TabIndex = 14;
             this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripExViewer, false);
             this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripExViewer, false);
@@ -654,8 +654,8 @@ namespace Teleopti.Ccc.Win.Permissions
             this.toolStripButtonShowViewer.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonShowViewer.Name = "toolStripButtonShowViewer";
             this.SetShortcut(this.toolStripButtonShowViewer, System.Windows.Forms.Keys.None);
-            this.toolStripButtonShowViewer.Size = new System.Drawing.Size(107, 87);
-            this.toolStripButtonShowViewer.Text = "Permission Viewer";
+            this.toolStripButtonShowViewer.Size = new System.Drawing.Size(119, 69);
+            this.toolStripButtonShowViewer.Text = "xxPermissionsViewer";
             this.toolStripButtonShowViewer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowViewer, false);
             this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButtonShowViewer, false);
@@ -746,6 +746,8 @@ namespace Teleopti.Ccc.Win.Permissions
             this.Load += new System.EventHandler(this.permissionsExplorerLoad);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.permissionsExplorerKeyDown);
             this.contextMenuStripClipboard.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).EndInit();
             this.HorizontalSplitter.Panel1.ResumeLayout(false);
             this.HorizontalSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.HorizontalSplitter)).EndInit();
@@ -764,10 +766,8 @@ namespace Teleopti.Ccc.Win.Permissions
             this.VerticalRightSplitter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FunctionsAssignedBar)).EndInit();
             this.FunctionsAssignedBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataAssignedBar)).EndInit();
             this.DataAssignedBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.treeViewData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ExplorerRibbon)).EndInit();
             this.ExplorerRibbon.ResumeLayout(false);
             this.ExplorerRibbon.PerformLayout();

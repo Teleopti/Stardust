@@ -2,7 +2,9 @@
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Events;
@@ -165,6 +167,16 @@ namespace Teleopti.Ccc.Win.Permissions
         public ListView FunctionRolesList
         {
             get { return listViewFunctionRoles; }
+        }
+
+        public void ShowDataSourceException(Infrastructure.Foundation.DataSourceException dataSourceException)
+        {
+            using (var view = new SimpleExceptionHandlerView(dataSourceException,
+                                                                    Resources.PermissionsViewer,
+                                                                    Resources.ServerUnavailable))
+            {
+                view.ShowDialog();
+            }
         }
 
         private void listViewPersonsMainSelectedIndexChanged(object sender, EventArgs e)

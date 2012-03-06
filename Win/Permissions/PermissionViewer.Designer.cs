@@ -322,7 +322,7 @@
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "xxFunctions";
+            this.columnHeader4.Text = "xxFunctionsCap";
             this.columnHeader4.Width = 190;
             // 
             // columnHeader7

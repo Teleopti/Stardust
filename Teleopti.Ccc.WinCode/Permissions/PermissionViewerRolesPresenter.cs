@@ -62,12 +62,26 @@ namespace Teleopti.Ccc.WinCode.Permissions
 
         private void loadPersonsAndRolesOnDataRange(string obj)
         {
-            _loadRolesAndPersonsOnDataRangeLightCommand.Execute();
+            try
+            {
+                _loadRolesAndPersonsOnDataRangeLightCommand.Execute();
+            }
+            catch (Infrastructure.Foundation.DataSourceException e)
+            {
+                _permissionViewerRoles.ShowDataSourceException(e);
+            }
         }
 
         private void loadPersonsAndRolesOnData(string obj)
         {
-            _loadRolesAndPersonsOnDataLightCommand.Execute();
+            try
+            {
+                _loadRolesAndPersonsOnDataLightCommand.Execute();
+            }
+            catch (Infrastructure.Foundation.DataSourceException e)
+            {
+                _permissionViewerRoles.ShowDataSourceException(e);
+            }
         }
 
         private void permissionsViewerUnloaded(string obj)
@@ -78,16 +92,30 @@ namespace Teleopti.Ccc.WinCode.Permissions
         private void loadFunctionPersonsAndRoles(string obj)
         {
             if (_permissionViewerRoles.SelectedFunction.Equals(Guid.Empty)) return;
-            _loadPersonsWithFunctionLightCommand.Execute();
-            _loadRolesWithFunctionLightCommand.Execute();
+            try
+            {
+                _loadPersonsWithFunctionLightCommand.Execute();
+                _loadRolesWithFunctionLightCommand.Execute();
+            }
+            catch (Infrastructure.Foundation.DataSourceException e)
+            {
+                _permissionViewerRoles.ShowDataSourceException(e);
+            } 
         }
 
         private void loadRolePersonsAndFunctions(string obj)
         {
             if(_permissionViewerRoles.SelectedPerson.Equals(Guid.Empty)) return;
-            _loadRolesOnPersonLightCommand.Execute();
-            _loadFunctionsOnPersonLightCommand.Execute();
-            _loadDataOnPersonsLightCommand.Execute();
+            try
+            {
+                _loadRolesOnPersonLightCommand.Execute();
+                _loadFunctionsOnPersonLightCommand.Execute();
+                _loadDataOnPersonsLightCommand.Execute();
+            }
+            catch (Infrastructure.Foundation.DataSourceException e)
+            {
+                _permissionViewerRoles.ShowDataSourceException(e);
+            } 
         }
 
         private void initializeDataTreeRangeOptions()
@@ -192,16 +220,22 @@ namespace Teleopti.Ccc.WinCode.Permissions
 
         }
 
-        
-
         public void ShowViewer()
         {
             if (!_initialLoadDone)
             {
-                _loadPersonsLightCommand.Execute();
-                _loadFunctionsLightCommand.Execute();
-                initializeDataTreeRangeOptions();
-                _initialLoadDone = true;
+                try
+                {
+                    _loadPersonsLightCommand.Execute();
+                    _loadFunctionsLightCommand.Execute();
+                    initializeDataTreeRangeOptions();
+                    _initialLoadDone = true;
+                }
+                catch (Infrastructure.Foundation.DataSourceException e)
+                {
+                    _permissionViewerRoles.ShowDataSourceException(e);
+                    return;
+                }
             }
             
             _permissionViewerRoles.Show();

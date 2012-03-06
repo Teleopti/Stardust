@@ -135,6 +135,64 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _target.CloseViewer();
             _mocks.VerifyAll();
         }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnPerson()
+        {
+            var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
+            Expect.Call(_view.SelectedPerson).Return(Guid.NewGuid());
+            Expect.Call(_loadRolesOnPersonCommand.Execute).Throw(err);
+            Expect.Call(() => _view.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<PersonRolesAndFunctionsNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnFunction()
+        {
+            var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
+            Expect.Call(_view.SelectedFunction).Return(Guid.NewGuid());
+            Expect.Call(_loadPersonsWithFunctionLightCommand.Execute).Throw(err);
+            Expect.Call(() => _view.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnDataRange()
+        {
+            var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
+            Expect.Call(_loadRolesAndPersonsOnDataRangeLightCommand.Execute).Throw(err);
+            Expect.Call(() =>_view.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnData()
+        {
+            var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
+            Expect.Call(_loadRolesAndPersonsOnDataLightCommand.Execute).Throw(err);
+            Expect.Call(() => _view.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<DataPersonsAndRolesNeedLoad>().Publish("");
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnShow()
+        {
+            var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
+            
+            Expect.Call(_loadPersonsCommand.Execute).Throw(err);
+            Expect.Call(() => _view.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _target.ShowViewer();
+            _mocks.VerifyAll();
+        }
     }
 
     
