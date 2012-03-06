@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using log4net;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
@@ -17,35 +18,38 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IList<IDayOffDecisionMaker> _decisionMakers;
-        private readonly IDaysOffPreferences _daysOffPreferences;
+        private readonly IOptimizationPreferences _optimizationPreferences;
         private readonly IScheduleMatrixPro _matrix;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly IList<IDayOffLegalStateValidator> _validatorList;
         private readonly IList<IPerson> _allSelectedPersons;
         private readonly IList<IScheduleMatrixPro> _allMatrixes;
         private readonly IGroupDayOffOptimizerCreator _groupDayOffOptimizerCreator;
+        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
         public GroupDayOffOptimizerContainer(IScheduleMatrixLockableBitArrayConverter converter,
             IEnumerable<IDayOffDecisionMaker> decisionMakers,
-            IDaysOffPreferences daysOffPreferences,
+            IOptimizationPreferences optimizationPreferences,
             IScheduleMatrixPro matrix,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IList<IDayOffLegalStateValidator> validatorList,
             IList<IPerson> allSelectedPersons,
             IList<IScheduleMatrixPro> allMatrixes,
-            IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator)
+            IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator, 
+            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
         {
             _converter = converter;
             _decisionMakers = new List<IDayOffDecisionMaker>(decisionMakers);
-            _daysOffPreferences = daysOffPreferences;
+            _optimizationPreferences = optimizationPreferences;
             _matrix = matrix;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
             _validatorList = validatorList;
             _allSelectedPersons = allSelectedPersons;
             _allMatrixes = allMatrixes;
             _groupDayOffOptimizerCreator = groupDayOffOptimizerCreator;
+            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
         }
 
         public bool Execute()
@@ -53,17 +57,23 @@ namespace Teleopti.Ccc.Domain.Optimization
             string agent =
                 _matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
 
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizationPreferences, schedulingOptions);
+
             using (PerformanceOutput.ForOperation("Day off optimization for " + agent))
             {
-                return _decisionMakers.Any(runDecisionMaker);
+                return _decisionMakers.Any(dayOffDecisionMaker => runDecisionMaker(dayOffDecisionMaker, schedulingOptions));
             }
         }
 
-        private bool runDecisionMaker(IDayOffDecisionMaker decisionMaker)
+        private bool runDecisionMaker(IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions)
         {
-            var dayOffOptimizer = _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter ,_daysOffPreferences,_validatorList,_allSelectedPersons);
+            IDaysOffPreferences daysOffPreferences = _optimizationPreferences.DaysOff;
 
-            bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes);
+            var dayOffOptimizer =
+                _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences,_validatorList,_allSelectedPersons);
+
+            bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions);
             return dayOffOptimizerResult;
         }
 

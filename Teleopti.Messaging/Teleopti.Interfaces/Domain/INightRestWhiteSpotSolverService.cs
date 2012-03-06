@@ -9,7 +9,8 @@
         /// Resolves the specified matrix.
         /// </summary>
         /// <param name="matrix">The matrix.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        bool Resolve(IScheduleMatrixPro matrix); 
+        bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions); 
     }
 }

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
         void DayOffScheduling(IList<IScheduleDay> selectedParts, ISchedulePartModifyAndRollbackService rollbackService);
-        bool DoTheScheduling(IList<IScheduleDay> selectedParts, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
+        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
     }
 
     public class FixedStaffSchedulingService : IFixedStaffSchedulingService
@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
-        private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
     	private readonly IDayOffScheduler _dayOffScheduler;
 
@@ -32,16 +31,18 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public FixedStaffSchedulingService(ISchedulingResultStateHolder schedulingResultStateHolder,
-			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IScheduleService scheduleService, ISchedulingOptions schedulingOptions, 
-			 IAbsencePreferenceScheduler absencePreferenceScheduler, IDayOffScheduler dayOffScheduler)
+		public FixedStaffSchedulingService(
+            ISchedulingResultStateHolder schedulingResultStateHolder,
+			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
+            IEffectiveRestrictionCreator effectiveRestrictionCreator,
+			IScheduleService scheduleService, 
+			IAbsencePreferenceScheduler absencePreferenceScheduler, 
+            IDayOffScheduler dayOffScheduler)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleService = scheduleService;
-			_schedulingOptions = schedulingOptions;
 			if (absencePreferenceScheduler == null)
 				throw new ArgumentNullException("absencePreferenceScheduler");
 
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			//Call backToLegalState for days off
 		}
 
-        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
+        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
         {
            var result = true;
 
@@ -117,11 +118,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         if (exists != null)
                         {
                             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
-                                schedulePart, _schedulingOptions);
+                                schedulePart, schedulingOptions);
 
-                            bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
-                                                                                                  useOccupancyAdjustment,
-                                                                                                  effectiveRestriction);
+                            bool schedulePersonOnDayResult = 
+                                _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction);
 
                             result = result && schedulePersonOnDayResult;
                             if (!result && breakIfPersonCannotSchedule)

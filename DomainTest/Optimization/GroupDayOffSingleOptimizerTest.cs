@@ -5,7 +5,6 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -37,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IList<DateOnly> _daysOffToRemove;
         private IList<DateOnly> _daysOffToAdd;
         private IGroupMatrixContainerCreator _groupMatrixContainerCreator;
+        private ISchedulingOptions _schedulingOptions;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _groupMatrixContainerCreator = _mocks.StrictMock<IGroupMatrixContainerCreator>();
             _activeScheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
@@ -92,8 +93,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldReturnFalseIfMatrixOrAllMatrixesIsNull()
         {
-            Assert.That(_target.Execute(null,_allScheduleMatrixes), Is.False);
-            Assert.That(_target.Execute(_activeScheduleMatrix,null), Is.False);
+            Assert.That(_target.Execute(null, _allScheduleMatrixes, _schedulingOptions), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, null, _schedulingOptions), Is.False);
         }
 
         [Test]
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(false);
 
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(_dayOffToRemove, _selectedPersons, true)).Return(null);
             Expect.Call(_activeScheduleMatrix.Person).Return(_person);
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_groupMatrixContainerCreator.CreateGroupMatrixContainer(_daysOffToRemove, _daysOffToAdd, _activeScheduleMatrix, _daysOffPreferences)).Return(
                                                                            null);
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -220,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(false);
 
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -260,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(false);
 
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -298,11 +299,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(true);
             Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).
                 Return(true);
-            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson)).Return(false);
+            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _schedulingOptions, _groupPerson)).Return(false);
             //Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
 
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -340,11 +341,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(true);
             Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).
                 Return(true);
-            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson)).Return(true);
+            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _schedulingOptions, _groupPerson)).Return(true);
             
 
             _mocks.ReplayAll();
-            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.True);
+            Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions), Is.True);
             _mocks.VerifyAll();
         }
   

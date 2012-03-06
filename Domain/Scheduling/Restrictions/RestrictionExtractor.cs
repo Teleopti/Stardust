@@ -127,34 +127,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _restrictionExtractor = restrictionExtractor;
         }
 
-        public IEffectiveRestriction Extract(IEffectiveRestriction effectiveRestriction, IOptimizationOverLimitDecider overLimit)
-        {
-            if (_schedulingOptions.UseRotations && overLimit.OverLimit())
-            {
-                effectiveRestriction = ExtractRotations(effectiveRestriction);
-                if (effectiveRestriction == null) return effectiveRestriction;
-            }
+        //public IEffectiveRestriction Extract(IEffectiveRestriction effectiveRestriction, IOptimizationOverLimitDecider overLimit)
+        //{
+        //    if (_schedulingOptions.UseRotations && overLimit.OverLimit())
+        //    {
+        //        effectiveRestriction = ExtractRotations(effectiveRestriction);
+        //        if (effectiveRestriction == null) return effectiveRestriction;
+        //    }
 
-            if (_schedulingOptions.UsePreferences)
-            {
-                effectiveRestriction = ExtractPreferences(effectiveRestriction);
-                if (effectiveRestriction == null) return effectiveRestriction;
-            }
+        //    if (_schedulingOptions.UsePreferences)
+        //    {
+        //        effectiveRestriction = ExtractPreferences(effectiveRestriction);
+        //        if (effectiveRestriction == null) return effectiveRestriction;
+        //    }
 
-            if (_schedulingOptions.UseAvailability)
-            {
-                effectiveRestriction = ExtractAvailabilities(effectiveRestriction);
-                if (effectiveRestriction == null) return effectiveRestriction;
-            }
+        //    if (_schedulingOptions.UseAvailability)
+        //    {
+        //        effectiveRestriction = ExtractAvailabilities(effectiveRestriction);
+        //        if (effectiveRestriction == null) return effectiveRestriction;
+        //    }
 
-            if (_schedulingOptions.UseStudentAvailability)
-            {
-                effectiveRestriction = ExtractStudentAvailabilities(effectiveRestriction);
-                if (effectiveRestriction == null) return effectiveRestriction;
-            }
+        //    if (_schedulingOptions.UseStudentAvailability)
+        //    {
+        //        effectiveRestriction = ExtractStudentAvailabilities(effectiveRestriction);
+        //        if (effectiveRestriction == null) return effectiveRestriction;
+        //    }
 
-            return effectiveRestriction;
-        }
+        //    return effectiveRestriction;
+        //}
 
         public IEffectiveRestriction Extract(IEffectiveRestriction effectiveRestriction)
         {

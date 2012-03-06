@@ -40,12 +40,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="groupPerson">The group person.</param>
         /// <param name="groupSchedulingService">The group scheduling service.</param>
         /// <param name="schedulePartModifyAndRollbackService">The schedule part modify and rollback service.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
         bool ScheduleRemovedDayOffDays(
             IList<DateOnly> daysOffToRemove,
             IGroupPerson groupPerson,
             IGroupSchedulingService groupSchedulingService,
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+            ISchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Creates the group matrix containers.
@@ -138,11 +140,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
         {
             foreach (var dateOnly in daysOffToRemove)
             {
-                if (!groupSchedulingService.ScheduleOneDay(dateOnly, groupPerson))
+                if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson))
                 {
                     schedulePartModifyAndRollbackService.Rollback();
                     return false;

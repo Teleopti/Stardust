@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool Resolve(IScheduleMatrixPro matrix)
+        public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
             // om inte solvern returnerar något så returnera false
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _workShiftFinderResultHolder.Clear(person, dateOnly);
                 
-                if(_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), true))
+                if(_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, true))
                 {
                     //_schedulePartModifyAndRollbackService.Rollback();
                     success = true;

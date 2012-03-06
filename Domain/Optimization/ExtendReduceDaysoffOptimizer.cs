@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool success = false;
 
-            var schedulingOptions = _scheduleServiceForFlexibleAgents.SchedulingOptions;
+            var schedulingOptions = new SchedulingOptions();
             var sourceMatrix = _matrixConverter.SourceMatrix;
 
             _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
-                if (addDayOff(dateOnly, true, _scheduleServiceForFlexibleAgents.SchedulingOptions))
+                if (addDayOff(dateOnly, true, schedulingOptions))
                     success = true;
                 else
                     sourceMatrix.LockPeriod(new DateOnlyPeriod(daysToBeRescheduled.DayToShorten.Value, daysToBeRescheduled.DayToShorten.Value));
@@ -191,17 +192,17 @@ namespace Teleopti.Ccc.Domain.Optimization
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
                 {
-                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, originalShiftCategory);
+                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, originalShiftCategory);
                     if (!schedulingResult)
-                        schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+                        schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction);
                 }
                 else
-                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction);
 
                 if (!schedulingResult)
                 {
                     int iterations = 0;
-                    while (_nightRestWhiteSpotSolverService.Resolve(matrix) && iterations < 10)
+                    while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions) && iterations < 10)
                     {
                         iterations++;
                     }

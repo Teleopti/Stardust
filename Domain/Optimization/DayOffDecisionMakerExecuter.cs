@@ -66,8 +66,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
         }
 
-        public bool Execute(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro currentScheduleMatrix, 
-            IScheduleMatrixOriginalStateContainer originalStateContainer, bool doReschedule, bool handleDayOffConflict)
+        public bool Execute(
+            ILockableBitArray workingBitArray, 
+            ILockableBitArray originalBitArray, 
+            IScheduleMatrixPro currentScheduleMatrix, 
+            IScheduleMatrixOriginalStateContainer originalStateContainer, 
+            bool doReschedule, 
+            bool handleDayOffConflict)
         {
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
@@ -77,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (movesOverMaxDaysLimit())
                 return false;
 
-            ISchedulingOptions schedulingOptions = _scheduleService.SchedulingOptions;
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
             IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
 
             _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
@@ -338,7 +343,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 IScheduleDay schedulePart = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-
                 // reviewed and fixed version
                 IShiftCategory originalShiftCategory = null;
                 IScheduleDay originalScheduleDay = originalStateContainer.OldPeriodDaysState[dateOnly];
@@ -355,17 +359,17 @@ namespace Teleopti.Ccc.Domain.Optimization
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
                 {
-                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, true, originalShiftCategory);
+                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, originalShiftCategory);
                     if(!schedulingResult)
-                        schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+                        schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction);
                 }
                 else
-                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction);
 
                 if (!schedulingResult)
                 {
                     int iterations = 0;
-                    while (_nightRestWhiteSpotSolverService.Resolve(matrix) && iterations < 10)
+                    while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions) && iterations < 10)
                     {
                         iterations++;
                     }

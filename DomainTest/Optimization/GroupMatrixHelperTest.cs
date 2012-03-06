@@ -294,6 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyScheduleRemovedDayOffDaysSuccessful()
         {
+
             DateOnly date1 = new DateOnly(2001, 01, 01);
             DateOnly date2 = new DateOnly(2001, 02, 01);
 
@@ -302,17 +303,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+            ISchedulingOptions schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 
             using (_mocks.Record())
             {
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, groupPerson))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson))
                     .Return(true);
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, groupPerson))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson))
                     .Return(true);
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService));
+                Assert.IsTrue(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, schedulingOptions));
             }
         }
 
@@ -327,18 +329,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+            ISchedulingOptions schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 
             using (_mocks.Record())
             {
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, groupPerson))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson))
                     .Return(true);
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, groupPerson))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson))
                     .Return(false);
                 rollbackService.Rollback();
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService));
+                Assert.IsFalse(_target.ScheduleRemovedDayOffDays(dates, groupPerson, groupSchedulingService, rollbackService, schedulingOptions));
             }
         }
     }

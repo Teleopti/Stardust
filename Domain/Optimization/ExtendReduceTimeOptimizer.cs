@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -71,7 +70,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool sucess = false;
 
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _scheduleServiceForFlexibleAgents.SchedulingOptions);
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor);
 
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, dateOnly, considerShortBreaks))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, schedulingOptions, dateOnly, considerShortBreaks))
                     sucess = true;
             }
 
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, dateOnly, considerShortBreaks))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, schedulingOptions,  dateOnly, considerShortBreaks))
                     sucess = true;
             }
 
@@ -105,8 +106,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _matrixConverter.SourceMatrix.Person; }
         }
 
-        private bool rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption lenghtHint, DateOnly dateOnly,
-                                                   bool considerShortBreaks)
+        private bool rescheduleAndCheckPeriodValue(
+            WorkShiftLengthHintOption lenghtHint, 
+            ISchedulingOptions schedulingOptions,
+            DateOnly dateOnly,
+            bool considerShortBreaks)
         {
             double oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
             _rollbackService.ClearModificationCollection();
@@ -124,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-            if (!tryScheduleDay(dateOnly, lenghtHint))
+            if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 return false;
@@ -162,13 +166,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private bool tryScheduleDay(DateOnly day, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(day);
-            _scheduleServiceForFlexibleAgents.SchedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), _scheduleServiceForFlexibleAgents.SchedulingOptions);
+            schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
+            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), schedulingOptions);
 
-            if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), false, effectiveRestriction))
+            if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction))
             {
                 _rollbackService.Rollback();
                 return false;

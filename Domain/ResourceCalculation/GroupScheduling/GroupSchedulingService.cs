@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     public interface IGroupSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(DateOnlyPeriod selectedDays, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
-        bool ScheduleOneDay(DateOnly dateOnly, IGroupPerson groupPerson);
+        void Execute(DateOnlyPeriod selectedDays, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
+        bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void Execute(DateOnlyPeriod selectedDays, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
+        public void Execute(DateOnlyPeriod selectedDays, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
 		{
             _cancelMe = false;
 			foreach (var dateOnly in selectedDays.DayCollection())
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     if (backgroundWorker.CancellationPending)
                         return;
                     _rollbackService.ClearModificationCollection();
-				    if(!ScheduleOneDay(dateOnly, groupPerson))
+                    if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson))
 				    {
                         // add some information probably already added when trying to schedule
                         //AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			}
 		}
 
-        public bool ScheduleOneDay( DateOnly dateOnly, IGroupPerson groupPerson)
+        public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson)
         {
             var scheduleDictionary = _resultStateHolder.Schedules;
             var totalFairness = scheduleDictionary.FairnessPoints();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
                 if (!scheduleDay.IsScheduled())
                 {
-                    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, true, bestCategory);
+                    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, bestCategory);
                     if (!sucess)
                     {
                         return false;

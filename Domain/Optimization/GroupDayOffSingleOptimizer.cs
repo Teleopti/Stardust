@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMatrixHelper = groupMatrixHelper;
         }
 
-        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes)
+        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
         {
             if (matrix == null || allMatrixes == null)
                 return false;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
                     return false;
 
-                if (!_groupSchedulingService.ScheduleOneDay(dateOnly, groupPerson))
+                if (!_groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson))
                 {
                     return false;
                 }

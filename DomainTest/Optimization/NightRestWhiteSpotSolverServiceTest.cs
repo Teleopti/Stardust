@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, _schedulingOptions);
             }
 
             Assert.IsFalse(result);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, _schedulingOptions);
             }
 
             Assert.IsTrue(result);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, _schedulingOptions);
             }
 
             Assert.IsFalse(result);

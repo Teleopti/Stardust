@@ -348,13 +348,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerContainer =
                 new GroupDayOffOptimizerContainer(scheduleMatrixArrayConverter,
                                              decisionMakers,
-                                             dayOffPreferences,
+                                             optimizerPreferences,
                                              scheduleMatrix,
                                              dayOffDecisionMakerExecuter,
                                              legalStateValidators,
                                              selectedPersons,
                                              allMatrixes,
-                                             groupDayOffOptimizerCreator);
+                                             groupDayOffOptimizerCreator, 
+                                             schedulingOptionsCreator);
             return optimizerContainer;
         }
     }

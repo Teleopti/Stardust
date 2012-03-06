@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _activeScheduleMatrix;
         private readonly IList<IScheduleMatrixPro> _allScheduleMatrixes = new List<IScheduleMatrixPro>();
         private IScheduleMatrixPro _scheduleMatrix2;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _groupMatrixHelper = _mocks.StrictMock<IGroupMatrixHelper>();
             _activeScheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
@@ -111,14 +113,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter,_schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService)).IgnoreArguments()
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions)).IgnoreArguments()
                     .Return(true);
 
             }
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsTrue(result);
             }
 
@@ -155,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 
@@ -207,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 
@@ -263,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 
@@ -324,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 
@@ -387,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 
@@ -445,14 +447,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService)).IgnoreArguments()
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions)).IgnoreArguments()
                     .Return(false);
 
             }
             using (_mocks.Playback())
             {
 
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions);
                 Assert.IsFalse(result);
             }
 

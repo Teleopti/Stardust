@@ -311,14 +311,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 }
 
-                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, useOccupancyAdjustment, false);
+                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false);
                 _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
                 fixedStaffSchedulingService.FinderResults.Clear();
                 
                 foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
                 {
                     int iterations = 0;
-                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix) && iterations < 10)
+                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions) && iterations < 10)
                     {
                         iterations++;
                     }
@@ -981,7 +981,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
             groupSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-            groupSchedulingService.Execute(selectedPeriod, selectedPersons, backgroundWorker);
+            groupSchedulingService.Execute(selectedPeriod, schedulingOptions, selectedPersons, backgroundWorker);
             groupSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);

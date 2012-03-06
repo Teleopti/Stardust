@@ -33,12 +33,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		private IFairnessValueResult _averagePersonFairness;
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private WorkShiftFinderResultHolder _schedulingResults;
-        
 		private IScheduleService _scheduleService;
         private ISchedulingResultStateHolder _stateHolder;
         private IList<IPerson> _selectedPersons;
         private BackgroundWorker _bgWorker;
-        //private IGroupPagePerDate _groupPagePerDate;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -73,8 +72,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_schedulingResults = new WorkShiftFinderResultHolder();
     	    _scheduleService = _mock.StrictMock<IScheduleService>();
             _selectedPersons = new List<IPerson>();
-            //_groupPagePerDate = _mock.StrictMock<IGroupPagePerDate>();
             _bgWorker = new BackgroundWorker();
+            _schedulingOptions = new SchedulingOptions();
 
     	    _target = new GroupSchedulingService(_groupPersonsBuilder,
 													_bestBlockShiftCategoryFinder,
@@ -108,27 +107,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory)).Return(true);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory)).Return(true);
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 		    }
 
 			using(_mock.Playback())
 			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _selectedPersons, _bgWorker);
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
 			}
         }
 
@@ -143,14 +142,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(false);
 				Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
@@ -158,20 +157,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				
 			}
 
 			using (_mock.Playback())
 			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _selectedPersons, _bgWorker);
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
 			}
 		}
 
@@ -188,20 +187,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, true, _shiftCategory))
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
                     .Return(true);
 				
 			}
 
 			using (_mock.Playback())
 			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _selectedPersons, _bgWorker);
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
 			}
 		}
 
@@ -226,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			using (_mock.Playback())
 			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _selectedPersons, _bgWorker);
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
 			}
 		}
 

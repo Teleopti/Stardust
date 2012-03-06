@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupDayOffOptimizer
     {
-        bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes);
+        bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions);
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes)
+        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
         {
             //_schedulePartModifyAndRollbackService.ClearModificationCollection();
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
                 return false;
 
-            if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService))
+            if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions))
                 return false;
 
             return true;

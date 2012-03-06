@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using log4net;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -81,14 +82,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!oldPeriodValue.HasValue)
                 return false;
 
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             _rollbackService.ClearModificationCollection();
 
 			IScheduleDayPro scheduleDayPro = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved);
         	IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, _scheduleService.SchedulingOptions);
+            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
             
             //delete schedule on the two days
 			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };    
@@ -106,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             
             resourceCalculateMovedDays(changed);
 
-            if (!tryScheduleDay(dateToBeRemoved, effectiveRestriction, WorkShiftLengthHintOption.Free)) 
+            if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Free)) 
                 return true;
 
             // Step: Check that there are no white spots
@@ -171,12 +174,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             return _dailyValueCalculator.DayValue(scheduleDay);
         }
 
-        private bool tryScheduleDay(DateOnly day, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.FullWeeksPeriodDictionary[day];
-            _scheduleService.SchedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
+            schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
-            if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), false, effectiveRestriction))
+            if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction))
             {
 				var days = _rollbackService.ModificationCollection;
                 _rollbackService.Rollback();
