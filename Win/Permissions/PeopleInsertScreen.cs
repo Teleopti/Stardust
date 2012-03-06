@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Win.Permissions
             _personSelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
             _personSelectorPresenter.ApplicationFunction = _myApplicationFunction;
             _personSelectorPresenter.ShowPersons = true;
+            _personSelectorPresenter.ShowUsers = true;
             var view = (Control)_personSelectorPresenter.View;
             tableLayoutPanel1.Controls.Add(view);
             tableLayoutPanel1.SetCellPosition(view, new TableLayoutPanelCellPosition(0,1) );
