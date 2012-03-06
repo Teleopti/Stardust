@@ -103,8 +103,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void expectationsForSuccessfullExecute()
         {
-            Expect.Call(_scheduleService.SchedulingOptions)
-                .Return(_schedulingOptions).Repeat.AtLeastOnce();
             Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions));
             Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                  .Return(false).Repeat.AtLeastOnce();

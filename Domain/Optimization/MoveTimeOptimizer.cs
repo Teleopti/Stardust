@@ -68,7 +68,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _scheduleService.SchedulingOptions);
+
+            var schedulingOptions = new SchedulingOptions();
+            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             if (MovedDaysOverMaxDaysLimit())
                 return false;
@@ -87,12 +89,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             DateOnly firstDayDate = daysToBeMoved[0];
             IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
 
-            var firstDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(firstScheduleDay, _scheduleService.SchedulingOptions);
+            var firstDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(firstScheduleDay, schedulingOptions);
 
             IScheduleDayPro secondDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(daysToBeMoved[1]);
             DateOnly secondDayDate = daysToBeMoved[1];
             IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
-            var secondDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(secondScheduleDay, _scheduleService.SchedulingOptions);
+            var secondDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(secondScheduleDay, schedulingOptions);
 
             if (firstDayDate == secondDayDate)
                 return false;
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             resourceCalculateMovedDays(dic.Values);
 
-            if (!tryScheduleFirstDay(firstDayDate, firstDayEffectiveRestriction))
+            if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction))
             {
 
                 resourceCalculateDays(firstDayDate, secondDayDate);
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             // Back to legal state
             // leave it for now
 
-            if (!tryScheduleSecondDay(secondDayDate, secondDayEffectiveRestriction))
+            if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction))
             {
                 resourceCalculateDays(firstDayDate, secondDayDate);
                 return true;
@@ -236,22 +238,22 @@ namespace Teleopti.Ccc.Domain.Optimization
             return _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
         }
 
-        private bool tryScheduleSecondDay(DateOnly secondDate, IEffectiveRestriction effectiveRestriction)
+        private bool tryScheduleSecondDay(DateOnly secondDate, ISchedulingOptions  schedulingOptions, IEffectiveRestriction effectiveRestriction)
         {
-            return tryScheduleDay(secondDate, effectiveRestriction, WorkShiftLengthHintOption.Short);
+            return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Short);
         }
 
-        private bool tryScheduleFirstDay(DateOnly firstDate, IEffectiveRestriction effectiveRestriction)
+        private bool tryScheduleFirstDay(DateOnly firstDate, ISchedulingOptions  schedulingOptions, IEffectiveRestriction effectiveRestriction)
         {
-            return tryScheduleDay(firstDate, effectiveRestriction, WorkShiftLengthHintOption.Long);
+            return tryScheduleDay(firstDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Long);
         }
 
-        private bool tryScheduleDay(DateOnly day, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption)
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.FullWeeksPeriodDictionary[day];
-            _scheduleService.SchedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
+            schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
-            if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), false, effectiveRestriction))
+            if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction))
             {
                 _rollbackService.Rollback();
                 lockDay(day);

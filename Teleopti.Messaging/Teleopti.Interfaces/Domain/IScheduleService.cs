@@ -17,11 +17,13 @@ namespace Teleopti.Interfaces.Domain
         /// Schedules the person on day.
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
         /// <param name="effectiveRestriction">The effective restriction.</param>
         /// <returns></returns>
 	    bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
+            ISchedulingOptions schedulingOptions,
             bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction);
 
@@ -33,11 +35,13 @@ namespace Teleopti.Interfaces.Domain
         /// Uses the desired ShiftCategory when creating the restriction
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
         /// <param name="useThisCategory">The use this category.</param>
         /// <returns></returns>
         bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
+            ISchedulingOptions schedulingOptions,
             bool useOccupancyAdjustment,
             IShiftCategory useThisCategory);
 
@@ -45,16 +49,12 @@ namespace Teleopti.Interfaces.Domain
         /// Creates the effective restriction and Schedule
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
         /// <returns></returns>
         bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
+            ISchedulingOptions schedulingOptions,
             bool useOccupancyAdjustment);
-
-        /// <summary>
-        /// Gets the scheduling options.
-        /// </summary>
-        /// <value>The scheduling options.</value>
-	    ISchedulingOptions SchedulingOptions { get; }
 	}
 }

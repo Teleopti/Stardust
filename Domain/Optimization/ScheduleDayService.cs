@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, _schedulingOptions);
 
-            return _scheduleService.SchedulePersonOnDay(schedulePart, true, effectiveRestriction);
+            return _scheduleService.SchedulePersonOnDay(schedulePart, _schedulingOptions, true, effectiveRestriction);
         }
 
         public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList)

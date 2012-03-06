@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
     	private IScheduleService _scheduleService;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _timeZoneInfo = new CccTimeZoneInfo(zone);
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
 			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder,
 				_effectiveRestrictionCreator, _scheduleService);
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Record())
             {
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, true, _effectiveRestriction)).IgnoreArguments().Return(true)
+                Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -309,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			//var periodForPart2 = new DateOnlyAsDateTimePeriod(date12, _timeZoneInfo);
             using (_mocks.Record())
             {
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, true, _effectiveRestriction)).IgnoreArguments().Return(true)
+                Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();

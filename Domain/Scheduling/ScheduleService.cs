@@ -14,21 +14,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
-        public ScheduleService(IResourceOptimizationHelper resourceOptimizationHelper,
-            IWorkShiftFinderService finderService, IScheduleMatrixListCreator scheduleMatrixListCreator,
-            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, ISchedulePartModifyAndRollbackService rollbackService,
-            ISchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator)
+        public ScheduleService(
+            IResourceOptimizationHelper resourceOptimizationHelper,
+            IWorkShiftFinderService finderService, 
+            IScheduleMatrixListCreator scheduleMatrixListCreator,
+            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
+            ISchedulePartModifyAndRollbackService rollbackService,
+            IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _finderService = finderService;
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
             _rollbackService = rollbackService;
-            _schedulingOptions = schedulingOptions;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
         }
 
@@ -50,28 +51,27 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _finderResults.Clear();
         }
 
-        public bool SchedulePersonOnDay(IScheduleDay schedulePart, bool useOccupancyAdjustment, IShiftCategory useThisCategory)
+        public bool SchedulePersonOnDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, IShiftCategory useThisCategory)
         {
-            var originalCategory = _schedulingOptions.ShiftCategory;
-            _schedulingOptions.ShiftCategory = useThisCategory;
-            var result = SchedulePersonOnDay(schedulePart, useOccupancyAdjustment);
-            _schedulingOptions.ShiftCategory = originalCategory;
+            var originalCategory = schedulingOptions.ShiftCategory;
+            schedulingOptions.ShiftCategory = useThisCategory;
+            var result = SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment);
+            schedulingOptions.ShiftCategory = originalCategory;
             return result;
         }
 
-        public bool SchedulePersonOnDay(IScheduleDay schedulePart, bool useOccupancyAdjustment)
+        public bool SchedulePersonOnDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment)
         {
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, _schedulingOptions);
-            return SchedulePersonOnDay(schedulePart, useOccupancyAdjustment, effectiveRestriction);
-        }
-
-        public ISchedulingOptions SchedulingOptions
-        {
-            get { return _schedulingOptions; }
+            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
+            return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool SchedulePersonOnDay(IScheduleDay schedulePart, bool useOccupancyAdjustment, IEffectiveRestriction effectiveRestriction)
+        public bool SchedulePersonOnDay(
+            IScheduleDay schedulePart,
+            ISchedulingOptions schedulingOptions,
+            bool useOccupancyAdjustment, 
+            IEffectiveRestriction effectiveRestriction)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 using (PerformanceOutput.ForOperation("Finding the best shift in total"))
                 {
-                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, person,
-                                                                                  scheduleDateOnly);
+                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
 
                     IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.
                         CreateMatrixListFromScheduleParts(
@@ -122,13 +121,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 schedulePart.AddMainShift((IMainShift)cache.ShiftProjection.TheMainShift.EntityClone());
                 _rollbackService.Modify(schedulePart);
 
-                _resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, useOccupancyAdjustment, _schedulingOptions.ConsiderShortBreaks);
+                _resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, useOccupancyAdjustment, schedulingOptions.ConsiderShortBreaks);
                 DateTimePeriod? dateTimePeriod = cache.ShiftProjection.WorkShiftProjectionPeriod;
                 if (dateTimePeriod.HasValue)
                 {
                     DateTimePeriod period = dateTimePeriod.Value;
                     if (period.StartDateTime.Date != period.EndDateTime.Date)
-                        _resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), useOccupancyAdjustment, _schedulingOptions.ConsiderShortBreaks);
+                        _resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), useOccupancyAdjustment, schedulingOptions.ConsiderShortBreaks);
                 }
 
                 return true;
