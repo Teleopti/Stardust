@@ -10199,4 +10199,16 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Det finns inga tillgängliga team</value>
     <comment>There are no teams available</comment>
   </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>Från roll</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>Funktioner</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Rättighetsutforskare</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>Personens roller</value>
+  </data>
 </root>
