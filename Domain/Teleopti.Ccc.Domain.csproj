@@ -337,6 +337,7 @@
     <Compile Include="Payroll\PayrollResultDetail.cs" />
     <Compile Include="Payroll\XmlResult.cs" />
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
+    <Compile Include="Repositories\IApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPublicNoteRepository.cs" />

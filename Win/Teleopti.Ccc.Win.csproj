@@ -1094,7 +1094,14 @@
     <Compile Include="PerformanceManager\PerformanceManagerNavigator.Designer.cs">
       <DependentUpon>PerformanceManagerNavigator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Permissions\PermissionsModule.cs" />
     <Compile Include="Permissions\PermissionsDataHolder.cs" />
+    <Compile Include="Permissions\PermissionViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Permissions\PermissionViewer.Designer.cs">
+      <DependentUpon>PermissionViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Permissions\PersonAdapter.cs" />
     <Compile Include="Reporting\ReportUserSelectorAuditingView.cs">
       <SubType>UserControl</SubType>
@@ -2627,6 +2634,9 @@
     <EmbeddedResource Include="Permissions\AuthorizationSettingsPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AuthorizationSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Permissions\PermissionViewer.resx">
+      <DependentUpon>PermissionViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportUserSelectorAuditingView.resx">
       <DependentUpon>ReportUserSelectorAuditingView.cs</DependentUpon>

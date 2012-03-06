@@ -308,44 +308,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-        /// <summary>
-        /// Finds the people by application role.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-04-08
-        /// </remarks>
-        public ICollection<IPerson> FindPeopleByApplicationRole(IApplicationRole role)
-        {
-            ICollection<IPerson> personList = new List<IPerson>();
-
-            ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
-                      .SetFetchMode("PermissionInformation", FetchMode.Join)
-                      .SetFetchMode("PermissionInformation.ApplicationRoleCollection", FetchMode.Join)
-                      .AddOrder(Order.Asc("Name.LastName"))
-                      .AddOrder(Order.Asc("Name.FirstName"))
-                      .SetResultTransformer(Transformers.DistinctRootEntity)
-                      .List<IPerson>();
-
-
-            foreach (IPerson person in retList)
-            {
-                foreach (IApplicationRole appRole in person.PermissionInformation.ApplicationRoleCollection)
-                {
-                    if (appRole.Id == role.Id)
-                    {
-                        personList.Add(person);
-                        break;
-                    }
-                }
-            }
-
-            return personList;
-        }
-
-        public ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber)
+       public ICollection<IPerson> FindPeopleByEmploymentNumber(string employmentNumber)
         {
             ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
                        .Add(Restrictions.Eq("EmploymentNumber", employmentNumber))
