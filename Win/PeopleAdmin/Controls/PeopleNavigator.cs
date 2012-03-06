@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -103,7 +104,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 {
 
                     IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
-                    var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+                    //var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
+
+                    var rep = new PersonRepository(uow);
+                    var foundPeople = rep.FindPeople(selectedGuids).ToList();
+                    var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
+
                     ITraceableRefreshService service =
                         new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(), new RepositoryFactory());
 
@@ -121,7 +127,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                     filteredPeopleHolder.SetRotationCollection(state.AllRotations);
                     filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
 
-                    filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(selectedGuids);
+                    //filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(selectedGuids);
+                    filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople);
 
                     //Open ppladmin form.
                     openPeopleAdmin(state, filteredPeopleHolder);
