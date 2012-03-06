@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Permissions;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
             Expect.Call(rep.Functions()).Return(new List<IFunctionLight> { new FunctionLight() { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt"} });
-            Expect.Call(() =>_permissionViewerRoles.FillFunctionsMainList(new ListViewItem[0])).IgnoreArguments();
+            Expect.Call(() =>_permissionViewerRoles.FillFunctionTree(new TreeNodeAdv[0], new TreeNodeAdv[0] )).IgnoreArguments();
 
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();

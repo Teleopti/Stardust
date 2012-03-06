@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
         void FillPersonsMainList(ListViewItem[] listViewItems);
         void FillPersonRolesList(ListViewItem[] listViewItems);
         void FillPersonFunctionsList(ListViewItem[] listViewItems);
-        void FillFunctionsMainList(ListViewItem[] listViewItems);
         void FillFunctionPersonsList(ListViewItem[] listViewItems);
         void FillFunctionRolesList(ListViewItem[] listViewItems);
         void FillDataPersonsList(ListViewItem[] listViewItems);
@@ -25,6 +24,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
         void Show();
         void BringToFront();
         void FillDataTree(TreeNodeAdv[] treeNodes, TreeNodeAdv[] dataTreeNodes, TreeNodeAdv[] allTreeNodes);
+        void FillFunctionTree(TreeNodeAdv[] personFunctionNodes, TreeNodeAdv[] mainFunctionNodes);
         void ShowDataSourceException(Infrastructure.Foundation.DataSourceException dataSourceException);
         void Close();
     }

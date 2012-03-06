@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -29,21 +31,53 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
                 var functions = _repositoryFactory.CreateApplicationRolePersonRepository(uow).Functions();
-                var list = new List<ListViewItem>();
-                foreach (var function in functions)
+                IEnumerable<IFunctionLight> rootApplicationFunctions = functions.Where(af => af.Parent.Equals(Guid.Empty));
+                var nodes = new List<TreeNodeAdv>();
+                foreach (IFunctionLight function in rootApplicationFunctions)
                 {
                     string name = "";
-                    if(!string.IsNullOrEmpty(function.ResourceName))
+                    if (!string.IsNullOrEmpty(function.ResourceName))
                         name = LanguageResourceHelper.Translate(function.ResourceName);
-                    if (string.IsNullOrEmpty(name))
-                        name = function.Name;
+                    var rootNode = new TreeNodeAdv(name)
+                    {
+                        TagObject = function.Id,
+                        Tag = 1,
+                        CheckState = CheckState.Unchecked
+                    };
 
-                    var newFunction = new ListViewItem(name) { Tag = function.Id };
-                    newFunction.SubItems.Add(function.Role);
+                    //disableFunctionsNotLicensed(function, rootNode);
 
-                    list.Add(newFunction);
+                    recursivelyAddChildNodes(rootNode, functions);
+                    nodes.Add(rootNode);
                 }
-                _permissionViewerRoles.FillFunctionsMainList(list.ToArray());
+                // smacka in trädet i vyn
+                _permissionViewerRoles.FillFunctionTree(null, nodes.ToArray());
+            }
+        }
+
+        private static void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IFunctionLight> functions)
+        {
+            if (functions == null) return;
+            var parentApplicationFunction = (Guid)treeNode.TagObject;
+            if (parentApplicationFunction.Equals(Guid.Empty)) return;
+
+            foreach (IFunctionLight function in
+                    functions.Where(f => parentApplicationFunction.Equals(f.Parent)))
+            {
+                string name = "";
+                if (!string.IsNullOrEmpty(function.ResourceName))
+                    name = LanguageResourceHelper.Translate(function.ResourceName);
+                var rootNode = new TreeNodeAdv(name)
+                {
+                    TagObject = function.Id,
+                    Tag = 1,
+                    CheckState = CheckState.Unchecked
+                };
+
+                //disableFunctionsNotLicensed(function, rootNode);
+
+                treeNode.Nodes.Add(rootNode);
+                recursivelyAddChildNodes(rootNode, functions);
             }
         }
     }

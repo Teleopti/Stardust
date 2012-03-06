@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IFunctionLight> FunctionsOnPerson(Guid selectedPerson)
         {
-            const string query = @"SELECT f.Id, FunctionCode AS Name, FunctionDescription AS ResourceName, r.DescriptionText AS Role FROM ApplicationFunction f
+            const string query = @"SELECT f.Id, FunctionCode AS Name, Parent, ForeignSource, FunctionDescription AS ResourceName, r.DescriptionText AS Role FROM ApplicationFunction f
                                 INNER JOIN ApplicationFunctionInRole fir ON f.Id = fir.ApplicationFunction AND f.IsDeleted = 0
                                 INNER JOIN ApplicationRole r ON r.Id = fir.ApplicationRole AND BuiltIn = 0 AND r.IsDeleted = 0
                                 WHERE ApplicationRole IN(SELECT ApplicationRole FROM PersonInApplicationRole 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IFunctionLight> Functions()
         {
-            const string query = @"SELECT Id, FunctionCode AS Name, FunctionDescription AS ResourceName, '' AS Role FROM ApplicationFunction
+            const string query = @"SELECT Id, FunctionCode AS Name, Parent, ForeignSource, FunctionDescription AS ResourceName, '' AS Role FROM ApplicationFunction
                                     WHERE IsDeleted = 0";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(FunctionLight)))
@@ -227,7 +227,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
+        public Guid Parent { get; set; }
+        public string ForeignSource { get; set; }
         public string ResourceName { get; set; }
         public string Role { get; set; }
     }

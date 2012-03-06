@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         Guid Id { get; set; }
         string Name { get; set; }
+        Guid Parent { get; set; }
+        string ForeignSource { get; set; }
         string ResourceName { get; set; }
         string Role { get; set; }
     }

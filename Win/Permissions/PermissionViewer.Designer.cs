@@ -28,22 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem19 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem20 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem21 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem27 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem28 = new System.Windows.Forms.ListViewItem("");
             this.tabControlAdv1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
             this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
@@ -61,8 +59,6 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPageAdv2 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.splitContainerAdv4 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-            this.listViewFunctionsMain = new System.Windows.Forms.ListView();
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainerAdv5 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
             this.listViewFunctionPersons = new System.Windows.Forms.ListView();
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,6 +76,8 @@
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listViewDataRoles = new System.Windows.Forms.ListView();
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPageAdv4 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.treeViewFunctionsMain = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).BeginInit();
             this.tabControlAdv1.SuspendLayout();
             this.tabPageAdv1.SuspendLayout();
@@ -115,6 +113,7 @@
             this.splitContainerAdv7.Panel1.SuspendLayout();
             this.splitContainerAdv7.Panel2.SuspendLayout();
             this.splitContainerAdv7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctionsMain)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlAdv1
@@ -123,6 +122,7 @@
             this.tabControlAdv1.Controls.Add(this.tabPageAdv1);
             this.tabControlAdv1.Controls.Add(this.tabPageAdv2);
             this.tabControlAdv1.Controls.Add(this.tabPageAdv3);
+            this.tabControlAdv1.Controls.Add(this.tabPageAdv4);
             this.tabControlAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
             this.tabControlAdv1.Name = "tabControlAdv1";
@@ -171,13 +171,13 @@
             this.columnHeader5,
             this.columnHeader6});
             this.listViewPersonsMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewPersonsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPersonsMain.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewPersonsMain.FullRowSelect = true;
             this.listViewPersonsMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonsMain.HideSelection = false;
             this.listViewPersonsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
+            listViewItem19,
+            listViewItem20});
             this.listViewPersonsMain.Location = new System.Drawing.Point(0, 0);
             this.listViewPersonsMain.MultiSelect = false;
             this.listViewPersonsMain.Name = "listViewPersonsMain";
@@ -253,12 +253,12 @@
             this.listViewPersonRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2});
             this.listViewPersonRoles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewPersonRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPersonRoles.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewPersonRoles.FullRowSelect = true;
             this.listViewPersonRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3,
-            listViewItem4});
+            listViewItem21,
+            listViewItem22});
             this.listViewPersonRoles.Location = new System.Drawing.Point(0, 0);
             this.listViewPersonRoles.Name = "listViewPersonRoles";
             this.listViewPersonRoles.Size = new System.Drawing.Size(328, 149);
@@ -275,6 +275,7 @@
             // treeViewData
             // 
             this.treeViewData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewData.Font = new System.Drawing.Font("Tahoma", 8.25F);
             // 
             // 
             // 
@@ -306,12 +307,12 @@
             this.columnHeader4,
             this.columnHeader7});
             this.listViewPersonFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewPersonFunctions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPersonFunctions.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewPersonFunctions.FullRowSelect = true;
             this.listViewPersonFunctions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewPersonFunctions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5,
-            listViewItem6});
+            listViewItem23,
+            listViewItem24});
             this.listViewPersonFunctions.Location = new System.Drawing.Point(0, 0);
             this.listViewPersonFunctions.Name = "listViewPersonFunctions";
             this.listViewPersonFunctions.Size = new System.Drawing.Size(254, 573);
@@ -351,7 +352,7 @@
             // splitContainerAdv4.Panel1
             // 
             this.splitContainerAdv4.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
-            this.splitContainerAdv4.Panel1.Controls.Add(this.listViewFunctionsMain);
+            this.splitContainerAdv4.Panel1.Controls.Add(this.treeViewFunctionsMain);
             // 
             // splitContainerAdv4.Panel2
             // 
@@ -362,32 +363,6 @@
             this.splitContainerAdv4.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
             this.splitContainerAdv4.TabIndex = 3;
             this.splitContainerAdv4.Text = "splitContainerAdv4";
-            // 
-            // listViewFunctionsMain
-            // 
-            this.listViewFunctionsMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader8});
-            this.listViewFunctionsMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewFunctionsMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewFunctionsMain.FullRowSelect = true;
-            this.listViewFunctionsMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewFunctionsMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8});
-            this.listViewFunctionsMain.Location = new System.Drawing.Point(0, 0);
-            this.listViewFunctionsMain.MultiSelect = false;
-            this.listViewFunctionsMain.Name = "listViewFunctionsMain";
-            this.listViewFunctionsMain.Size = new System.Drawing.Size(265, 573);
-            this.listViewFunctionsMain.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listViewFunctionsMain.TabIndex = 4;
-            this.listViewFunctionsMain.UseCompatibleStateImageBehavior = false;
-            this.listViewFunctionsMain.View = System.Windows.Forms.View.Details;
-            this.listViewFunctionsMain.SelectedIndexChanged += new System.EventHandler(this.listViewFunctionsMainSelectedIndexChanged);
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "xxFunctions";
-            this.columnHeader8.Width = 250;
             // 
             // splitContainerAdv5
             // 
@@ -417,12 +392,12 @@
             this.columnHeader14,
             this.columnHeader15});
             this.listViewFunctionPersons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewFunctionPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewFunctionPersons.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewFunctionPersons.FullRowSelect = true;
             this.listViewFunctionPersons.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFunctionPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem9,
-            listViewItem10});
+            listViewItem15,
+            listViewItem16});
             this.listViewFunctionPersons.Location = new System.Drawing.Point(0, 0);
             this.listViewFunctionPersons.Name = "listViewFunctionPersons";
             this.listViewFunctionPersons.Size = new System.Drawing.Size(484, 573);
@@ -451,12 +426,12 @@
             this.listViewFunctionRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader12});
             this.listViewFunctionRoles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewFunctionRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewFunctionRoles.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewFunctionRoles.FullRowSelect = true;
             this.listViewFunctionRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewFunctionRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem11,
-            listViewItem12});
+            listViewItem17,
+            listViewItem18});
             this.listViewFunctionRoles.Location = new System.Drawing.Point(0, 0);
             this.listViewFunctionRoles.Name = "listViewFunctionRoles";
             this.listViewFunctionRoles.Size = new System.Drawing.Size(249, 573);
@@ -506,6 +481,7 @@
             // treeViewDataMain
             // 
             this.treeViewDataMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewDataMain.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.treeViewDataMain.FullRowSelect = true;
             // 
             // 
@@ -562,12 +538,12 @@
             this.columnHeader13,
             this.columnHeader16});
             this.listViewDataPersons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewDataPersons.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewDataPersons.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewDataPersons.FullRowSelect = true;
             this.listViewDataPersons.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDataPersons.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem13,
-            listViewItem14});
+            listViewItem25,
+            listViewItem26});
             this.listViewDataPersons.Location = new System.Drawing.Point(0, 0);
             this.listViewDataPersons.Name = "listViewDataPersons";
             this.listViewDataPersons.Size = new System.Drawing.Size(484, 573);
@@ -596,12 +572,12 @@
             this.listViewDataRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader17});
             this.listViewDataRoles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewDataRoles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewDataRoles.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.listViewDataRoles.FullRowSelect = true;
             this.listViewDataRoles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDataRoles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem15,
-            listViewItem16});
+            listViewItem27,
+            listViewItem28});
             this.listViewDataRoles.Location = new System.Drawing.Point(0, 0);
             this.listViewDataRoles.Name = "listViewDataRoles";
             this.listViewDataRoles.Size = new System.Drawing.Size(249, 573);
@@ -614,6 +590,48 @@
             // 
             this.columnHeader17.Text = "xxRoles";
             this.columnHeader17.Width = 232;
+            // 
+            // tabPageAdv4
+            // 
+            this.tabPageAdv4.Image = null;
+            this.tabPageAdv4.ImageSize = new System.Drawing.Size(16, 16);
+            this.tabPageAdv4.Location = new System.Drawing.Point(1, 33);
+            this.tabPageAdv4.Name = "tabPageAdv4";
+            this.tabPageAdv4.Size = new System.Drawing.Size(1012, 573);
+            this.tabPageAdv4.TabIndex = 4;
+            this.tabPageAdv4.Text = "tabPageAdv4";
+            this.tabPageAdv4.ThemesEnabled = false;
+            // 
+            // treeViewFunctionsMain
+            // 
+            this.treeViewFunctionsMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewFunctionsMain.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.treeViewFunctionsMain.FullRowSelect = true;
+            // 
+            // 
+            // 
+            this.treeViewFunctionsMain.HelpTextControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewFunctionsMain.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewFunctionsMain.HelpTextControl.Name = "helpText";
+            this.treeViewFunctionsMain.HelpTextControl.Size = new System.Drawing.Size(49, 15);
+            this.treeViewFunctionsMain.HelpTextControl.TabIndex = 0;
+            this.treeViewFunctionsMain.HelpTextControl.Text = "help text";
+            this.treeViewFunctionsMain.Location = new System.Drawing.Point(0, 0);
+            this.treeViewFunctionsMain.Name = "treeViewFunctionsMain";
+            this.treeViewFunctionsMain.Size = new System.Drawing.Size(265, 573);
+            this.treeViewFunctionsMain.TabIndex = 1;
+            this.treeViewFunctionsMain.Text = "treeViewAdv1";
+            // 
+            // 
+            // 
+            this.treeViewFunctionsMain.ToolTipControl.BackColor = System.Drawing.SystemColors.Info;
+            this.treeViewFunctionsMain.ToolTipControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewFunctionsMain.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewFunctionsMain.ToolTipControl.Name = "toolTip";
+            this.treeViewFunctionsMain.ToolTipControl.Size = new System.Drawing.Size(41, 15);
+            this.treeViewFunctionsMain.ToolTipControl.TabIndex = 1;
+            this.treeViewFunctionsMain.ToolTipControl.Text = "toolTip";
+            this.treeViewFunctionsMain.AfterSelect += new System.EventHandler(this.treeViewFunctionsMainAfterSelect);
             // 
             // PermissionViewer
             // 
@@ -659,6 +677,7 @@
             this.splitContainerAdv7.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv7)).EndInit();
             this.splitContainerAdv7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewFunctionsMain)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -683,8 +702,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv2;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv4;
-        private System.Windows.Forms.ListView listViewFunctionsMain;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv5;
         private System.Windows.Forms.ListView listViewFunctionPersons;
         private System.Windows.Forms.ColumnHeader columnHeader11;
@@ -701,6 +718,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader16;
         private System.Windows.Forms.ListView listViewDataRoles;
         private System.Windows.Forms.ColumnHeader columnHeader17;
+        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv4;
+        private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewFunctionsMain;
 
 
 

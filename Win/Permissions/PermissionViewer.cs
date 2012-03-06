@@ -79,12 +79,6 @@ namespace Teleopti.Ccc.Win.Permissions
             listViewPersonFunctions.Items.AddRange(listViewItems);
         }
 
-        public void FillFunctionsMainList(ListViewItem[] listViewItems)
-        {
-            listViewFunctionsMain.Items.Clear();
-            listViewFunctionsMain.Items.AddRange(listViewItems);
-        }
-
         public void FillFunctionPersonsList(ListViewItem[] listViewItems)
         {
             listViewFunctionPersons.Items.Clear();
@@ -118,6 +112,12 @@ namespace Teleopti.Ccc.Win.Permissions
             treeViewDataMain.Nodes.AddRange(dataTreeNodes);
         }
 
+        public void FillFunctionTree(TreeNodeAdv[] personFunctionNodes, TreeNodeAdv[] mainFunctionNodes)
+        {
+            treeViewFunctionsMain.Nodes.Clear();
+            treeViewFunctionsMain.Nodes.AddRange(mainFunctionNodes);
+        }
+
         public Guid SelectedPerson
         {
             get
@@ -131,29 +131,14 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        public ListView PersonRolesList
-        {
-            get { return  listViewPersonRoles; }
-        }
-
-        public ListView PersonFunctionsList
-        {
-            get { return listViewPersonFunctions; }
-        }
-
-        public ListView FunctionsMainList
-        {
-            get { return listViewFunctionsMain; }
-        }
-
         public Guid SelectedFunction
         {
             get
             {
                 var id = new Guid();
-                if (listViewFunctionsMain.SelectedItems.Count > 0)
+                if (treeViewFunctionsMain.SelectedNode != null)
                 {
-                    id = (Guid)listViewFunctionsMain.SelectedItems[0].Tag;
+                    id = (Guid)treeViewFunctionsMain.SelectedNode.TagObject;
                 }
                 return id;
             }
@@ -184,12 +169,6 @@ namespace Teleopti.Ccc.Win.Permissions
             _eventAggregator.GetEvent<PersonRolesAndFunctionsNeedLoad>().Publish("");
         }
 
-
-        private void listViewFunctionsMainSelectedIndexChanged(object sender, EventArgs e)
-        {
-            _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Publish("");
-        }
-
         private void permissionViewerFormClosed(object sender, FormClosedEventArgs e)
         {
             _eventAggregator.GetEvent<PermissionsViewerUnloaded>().Publish("");
@@ -207,6 +186,11 @@ namespace Teleopti.Ccc.Win.Permissions
                _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
             }
             
+        }
+
+        private void treeViewFunctionsMainAfterSelect(object sender, EventArgs e)
+        {
+            _eventAggregator.GetEvent<FunctionPersonsAndRolesNeedLoad>().Publish("");
         }
     }
 }
