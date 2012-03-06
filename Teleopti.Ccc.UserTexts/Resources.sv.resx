@@ -10208,6 +10208,9 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="PermissionsViewer" xml:space="preserve">
     <value>Rättighetsutforskare</value>
   </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Personer</value>
+  </data>
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>Personens roller</value>
   </data>

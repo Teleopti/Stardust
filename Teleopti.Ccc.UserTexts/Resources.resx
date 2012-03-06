@@ -10517,6 +10517,9 @@ These options are activated:
   <data name="PermissionsViewer" xml:space="preserve">
     <value>Permissions Viewer</value>
   </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Persons</value>
+  </data>
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>The person's roles</value>
   </data>

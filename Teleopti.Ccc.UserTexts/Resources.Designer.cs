@@ -15468,6 +15468,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Persons.
+        /// </summary>
+        public static string Persons {
+            get {
+                return ResourceManager.GetString("Persons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Person Selection.
         /// </summary>
         public static string PersonSelection {
