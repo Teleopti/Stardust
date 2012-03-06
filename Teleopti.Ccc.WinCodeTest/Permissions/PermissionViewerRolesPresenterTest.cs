@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
     public class PermissionViewerRolesPresenterTest
     {
         private MockRepository _mocks;
-        private ILoadRolesLightCommand _loadRolesCommand;
         private EventAggregator _eventAggregator;
         private PermissionViewerRolesPresenter _target;
         private IPermissionViewerRoles _view;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
         public void Setup()
         {
             _mocks = new MockRepository();
-            _loadRolesCommand = _mocks.StrictMock<ILoadRolesLightCommand>();
             _loadPersonsCommand = _mocks.StrictMock<ILoadPersonsLightCommand>();
             _loadRolesOnPersonCommand = _mocks.StrictMock<ILoadRolesOnPersonLightCommand>();
             _loadFunctionsOnPersonLightCommand = _mocks.StrictMock<ILoadFunctionsOnPersonLightCommand>();
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
                 _mocks.StrictMock<ILoadRolesAndPersonsOnDataRangeLightCommand>();
             _eventAggregator = new EventAggregator();
             _view = _mocks.StrictMock<IPermissionViewerRoles>();
-            _target = new PermissionViewerRolesPresenter(_eventAggregator, _loadRolesCommand, _view, _loadPersonsCommand, _loadRolesOnPersonCommand,
+            _target = new PermissionViewerRolesPresenter(_eventAggregator, _view, _loadPersonsCommand, _loadRolesOnPersonCommand,
                 _loadFunctionsOnPersonLightCommand, _loadFunctionsLightCommand, _loadPersonsWithFunctionLightCommand, _loadRolesWithFunctionLightCommand,
                 _loadDataOnPersonsLightCommand, _loadRolesAndPersonsOnDataLightCommand, _loadRolesAndPersonsOnDataRangeLightCommand);
         }
@@ -111,7 +109,6 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             IBusinessUnit bu = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
             bu.AddSite(site);
             bu.AddSite(deletedSite);
-            Expect.Call(_loadRolesCommand.Execute);
             Expect.Call(_loadPersonsCommand.Execute);
             Expect.Call(_loadFunctionsLightCommand.Execute);
             Expect.Call(() => _view.FillDataTree(new TreeNodeAdv[0], new TreeNodeAdv[0], new TreeNodeAdv[0])).IgnoreArguments();

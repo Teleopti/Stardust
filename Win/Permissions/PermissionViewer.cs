@@ -26,20 +26,6 @@ namespace Teleopti.Ccc.Win.Permissions
             ColorHelper.SetTabControlTheme(tabControlAdv1);
         }
 
-        public ListView RolesMainList
-        {
-            get { return listViewRolesMain; }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-        public Guid SelectedRole
-        {
-            get
-            {
-                //later
-                throw new NotImplementedException();
-            }
-        }
 
         public Guid SelectedData
         {
@@ -108,13 +94,6 @@ namespace Teleopti.Ccc.Win.Permissions
             listViewFunctionRoles.Items.Clear();
             listViewFunctionRoles.Items.AddRange(listViewItems);
         }
-
-        public void FillRolesMainList(ListViewItem[] listViewItems)
-        {
-            listViewRolesMain.Items.Clear();
-            listViewRolesMain.Items.AddRange(listViewItems);
-        }
-
         public void FillDataPersonsList(ListViewItem[] listViewItems)
         {
             listViewDataPersons.Items.Clear();

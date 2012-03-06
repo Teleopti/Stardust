@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
     {
         Guid SelectedPerson { get; }
         Guid SelectedFunction { get; }
-        Guid SelectedRole { get; }
         Guid SelectedData { get; }
         int SelectedDataRange { get; }
 
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
         void FillFunctionsMainList(ListViewItem[] listViewItems);
         void FillFunctionPersonsList(ListViewItem[] listViewItems);
         void FillFunctionRolesList(ListViewItem[] listViewItems);
-        void FillRolesMainList(ListViewItem[] listViewItems);
         void FillDataPersonsList(ListViewItem[] listViewItems);
         void FillDataRolesList(ListViewItem[] listViewItems);
 

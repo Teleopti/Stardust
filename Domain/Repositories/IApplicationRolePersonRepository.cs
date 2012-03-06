@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -8,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         IList<IPersonInRole> GetPersonsInRole(Guid roleId);
         IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds);
-        IList<IRoleLight> Roles();
         IList<IPersonInRole> Persons();
         IList<IRoleLight> RolesOnPerson(Guid selectedPerson);
         IList<IFunctionLight> FunctionsOnPerson(Guid selectedPerson);

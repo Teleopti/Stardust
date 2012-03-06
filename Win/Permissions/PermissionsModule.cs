@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Win.Permissions
         
         private static void overviewMain(ContainerBuilder builder)
         {
-            builder.RegisterType<LoadRolesLightCommand>().As<ILoadRolesLightCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadPersonsLightCommand>().As<ILoadPersonsLightCommand>().InstancePerLifetimeScope();
             builder.RegisterType<PermissionViewer>().As<IPermissionViewerRoles>().InstancePerLifetimeScope();
             builder.RegisterType<PermissionViewerRolesPresenter>().As<IPermissionViewerRolesPresenter>().InstancePerLifetimeScope();

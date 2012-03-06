@@ -44,8 +44,6 @@
             System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("");
             System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem("");
             this.tabControlAdv1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
             this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
@@ -82,10 +80,6 @@
             this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listViewDataRoles = new System.Windows.Forms.ListView();
             this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPageAdv4 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.listViewRolesMain = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).BeginInit();
             this.tabControlAdv1.SuspendLayout();
             this.tabPageAdv1.SuspendLayout();
@@ -121,9 +115,6 @@
             this.splitContainerAdv7.Panel1.SuspendLayout();
             this.splitContainerAdv7.Panel2.SuspendLayout();
             this.splitContainerAdv7.SuspendLayout();
-            this.tabPageAdv4.SuspendLayout();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlAdv1
@@ -132,7 +123,6 @@
             this.tabControlAdv1.Controls.Add(this.tabPageAdv1);
             this.tabControlAdv1.Controls.Add(this.tabPageAdv2);
             this.tabControlAdv1.Controls.Add(this.tabPageAdv3);
-            this.tabControlAdv1.Controls.Add(this.tabPageAdv4);
             this.tabControlAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
             this.tabControlAdv1.Name = "tabControlAdv1";
@@ -279,7 +269,7 @@
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "xxThePerson\'sRoles";
+            this.columnHeader2.Text = "xxThePersonsRoles";
             this.columnHeader2.Width = 250;
             // 
             // treeViewData
@@ -337,7 +327,7 @@
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "xxFrom role";
+            this.columnHeader7.Text = "xxFromRole";
             this.columnHeader7.Width = 76;
             // 
             // tabPageAdv2
@@ -349,7 +339,7 @@
             this.tabPageAdv2.Name = "tabPageAdv2";
             this.tabPageAdv2.Size = new System.Drawing.Size(1012, 573);
             this.tabPageAdv2.TabIndex = 2;
-            this.tabPageAdv2.Text = "xxFunctions";
+            this.tabPageAdv2.Text = "xxFunctionsCap";
             this.tabPageAdv2.ThemesEnabled = false;
             // 
             // splitContainerAdv4
@@ -625,54 +615,6 @@
             this.columnHeader17.Text = "xxRoles";
             this.columnHeader17.Width = 232;
             // 
-            // tabPageAdv4
-            // 
-            this.tabPageAdv4.Controls.Add(this.splitContainer1);
-            this.tabPageAdv4.Image = null;
-            this.tabPageAdv4.ImageSize = new System.Drawing.Size(16, 16);
-            this.tabPageAdv4.Location = new System.Drawing.Point(1, 33);
-            this.tabPageAdv4.Name = "tabPageAdv4";
-            this.tabPageAdv4.Size = new System.Drawing.Size(1012, 573);
-            this.tabPageAdv4.TabIndex = 4;
-            this.tabPageAdv4.Text = "xxRoles";
-            this.tabPageAdv4.ThemesEnabled = false;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.listViewRolesMain);
-            this.splitContainer1.Size = new System.Drawing.Size(1012, 573);
-            this.splitContainer1.SplitterDistance = 335;
-            this.splitContainer1.TabIndex = 3;
-            // 
-            // listViewRolesMain
-            // 
-            this.listViewRolesMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.listViewRolesMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewRolesMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listViewRolesMain.FullRowSelect = true;
-            this.listViewRolesMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listViewRolesMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem17,
-            listViewItem18});
-            this.listViewRolesMain.Location = new System.Drawing.Point(0, 0);
-            this.listViewRolesMain.Name = "listViewRolesMain";
-            this.listViewRolesMain.Size = new System.Drawing.Size(335, 573);
-            this.listViewRolesMain.TabIndex = 1;
-            this.listViewRolesMain.UseCompatibleStateImageBehavior = false;
-            this.listViewRolesMain.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "xxRoles";
-            this.columnHeader1.Width = 217;
-            // 
             // PermissionViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -680,7 +622,7 @@
             this.ClientSize = new System.Drawing.Size(1015, 608);
             this.Controls.Add(this.tabControlAdv1);
             this.Name = "PermissionViewer";
-            this.Text = "xxPermissionViewer";
+            this.Text = "xxPermissionsViewer";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.permissionViewerFormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).EndInit();
             this.tabControlAdv1.ResumeLayout(false);
@@ -717,9 +659,6 @@
             this.splitContainerAdv7.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv7)).EndInit();
             this.splitContainerAdv7.ResumeLayout(false);
-            this.tabPageAdv4.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -732,10 +671,6 @@
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv2;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv3;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv3;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv4;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView listViewRolesMain;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ListView listViewPersonsMain;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader5;

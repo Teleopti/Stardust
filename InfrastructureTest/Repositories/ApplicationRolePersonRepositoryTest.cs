@@ -44,20 +44,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void ShouldLoadRoles()
-        {
-            UnitOfWork.PersistAll();
-            SkipRollback();
-            
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var roles = _target.Roles();
-                Assert.That(roles.Count, Is.EqualTo(0));
-            }
-        }
-
-        [Test]
         public void ShouldLoadPersons()
         {
             UnitOfWork.PersistAll();

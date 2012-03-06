@@ -469,7 +469,6 @@
     <Compile Include="Permissions\Commands\LoadFunctionsOnPersonLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesOnPersonLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadPersonsLightCommand.cs" />
-    <Compile Include="Permissions\Commands\LoadRolesLightCommand.cs" />
     <Compile Include="Permissions\Events\DataRangePersonsAndRolesNeedLoad.cs" />
     <Compile Include="Permissions\Events\DataPersonsAndRolesNeedLoad.cs" />
     <Compile Include="Permissions\Events\PermissionsViewerUnloaded.cs" />

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
     public class PermissionViewerRolesPresenter : IPermissionViewerRolesPresenter
     {
         private readonly IEventAggregator _eventAggregator;
-        private readonly ILoadRolesLightCommand _loadRolesCommand;
         private readonly IPermissionViewerRoles _permissionViewerRoles;
         private readonly ILoadPersonsLightCommand _loadPersonsLightCommand;
         private readonly ILoadRolesOnPersonLightCommand _loadRolesOnPersonLightCommand;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
         private bool _initialLoadDone;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public PermissionViewerRolesPresenter(IEventAggregator eventAggregator, ILoadRolesLightCommand loadRolesCommand, IPermissionViewerRoles permissionViewerRoles, 
+        public PermissionViewerRolesPresenter(IEventAggregator eventAggregator, IPermissionViewerRoles permissionViewerRoles, 
             ILoadPersonsLightCommand loadPersonsLightCommand, ILoadRolesOnPersonLightCommand loadRolesOnPersonLightCommand, ILoadFunctionsOnPersonLightCommand loadFunctionsOnPersonLightCommand,
             ILoadFunctionsLightCommand loadFunctionsLightCommand, ILoadPersonsWithFunctionLightCommand loadPersonsWithFunctionLightCommand,
             ILoadRolesWithFunctionLightCommand loadRolesWithFunctionLightCommand, ILoadDataOnPersonsLightCommand loadDataOnPersonsLightCommand, 
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
         {
             _eventAggregator = eventAggregator;
             _initialLoadDone = false;
-            _loadRolesCommand = loadRolesCommand;
             _permissionViewerRoles = permissionViewerRoles;
             _loadPersonsLightCommand = loadPersonsLightCommand;
             _loadRolesOnPersonLightCommand = loadRolesOnPersonLightCommand;
@@ -201,7 +199,6 @@ namespace Teleopti.Ccc.WinCode.Permissions
             if (!_initialLoadDone)
             {
                 _loadPersonsLightCommand.Execute();
-                _loadRolesCommand.Execute();
                 _loadFunctionsLightCommand.Execute();
                 initializeDataTreeRangeOptions();
                 _initialLoadDone = true;

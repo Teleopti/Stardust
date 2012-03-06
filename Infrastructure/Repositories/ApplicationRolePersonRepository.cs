@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -53,18 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
                     .SetReadOnly(true)
                     .List<IPersonInRole>();
-        }
-
-        public IList<IRoleLight> Roles()
-        {
-            const string query = @"SELECT Id, DescriptionText AS Name
-                        FROM ApplicationRole WHERE BusinessUnit = :bu";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetGuid("bu",
-                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
-                    .SetReadOnly(true)
-                    .List<IRoleLight>();
         }
 
         public IList<IPersonInRole> Persons()
