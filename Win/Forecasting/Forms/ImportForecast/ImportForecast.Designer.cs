@@ -41,8 +41,8 @@
             this.lblImportFileName = new System.Windows.Forms.Label();
             this.textBoxImportFileName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
             this.buttonAdvBrowseFile = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.radioButtonImportWorkload = new System.Windows.Forms.RadioButton();
             this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
+            this.radioButtonImportWorkload = new System.Windows.Forms.RadioButton();
             this.radioButtonImportWLAndStaffing = new System.Windows.Forms.RadioButton();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).BeginInit();
@@ -77,7 +77,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.36585F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.63415F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 175F));
             this.tableLayoutPanel1.Controls.Add(this.lblSkillNameColon, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtSkillName, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblWorkloadNameColon, 0, 1);
@@ -123,7 +123,7 @@
             this.txtSkillName.BackColor = System.Drawing.Color.Transparent;
             this.txtSkillName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSkillName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtSkillName.Location = new System.Drawing.Point(114, 6);
+            this.txtSkillName.Location = new System.Drawing.Point(113, 6);
             this.txtSkillName.Name = "txtSkillName";
             this.txtSkillName.Size = new System.Drawing.Size(0, 13);
             this.txtSkillName.TabIndex = 1;
@@ -148,7 +148,7 @@
             this.comboBoxAdvWorkloads.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxAdvWorkloads.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvWorkloads.DropDownWidth = 294;
-            this.comboBoxAdvWorkloads.Location = new System.Drawing.Point(114, 28);
+            this.comboBoxAdvWorkloads.Location = new System.Drawing.Point(113, 28);
             this.comboBoxAdvWorkloads.Name = "comboBoxAdvWorkloads";
             this.comboBoxAdvWorkloads.Size = new System.Drawing.Size(172, 21);
             this.comboBoxAdvWorkloads.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -193,6 +193,7 @@
             this.buttonAdvImport.TabIndex = 0;
             this.buttonAdvImport.Text = "xxImport";
             this.buttonAdvImport.UseVisualStyle = true;
+            this.buttonAdvImport.Click += new System.EventHandler(this.ImportForecastBtn_Click);
             // 
             // progressBarImportForecast
             // 
@@ -211,7 +212,7 @@
             this.lblImportFileName.ForeColor = System.Drawing.SystemColors.ControlText;
             this.lblImportFileName.Location = new System.Drawing.Point(3, 75);
             this.lblImportFileName.Name = "lblImportFileName";
-            this.lblImportFileName.Size = new System.Drawing.Size(105, 25);
+            this.lblImportFileName.Size = new System.Drawing.Size(103, 25);
             this.lblImportFileName.TabIndex = 4;
             this.lblImportFileName.Text = "xxImportFileNameColon";
             this.lblImportFileName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -220,9 +221,9 @@
             // 
             this.textBoxImportFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxImportFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxImportFileName.Location = new System.Drawing.Point(114, 78);
+            this.textBoxImportFileName.Location = new System.Drawing.Point(113, 78);
             this.textBoxImportFileName.Name = "textBoxImportFileName";
-            this.textBoxImportFileName.Size = new System.Drawing.Size(196, 20);
+            this.textBoxImportFileName.Size = new System.Drawing.Size(195, 20);
             this.textBoxImportFileName.TabIndex = 0;
             // 
             // buttonAdvBrowseFile
@@ -231,7 +232,7 @@
             this.buttonAdvBrowseFile.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvBrowseFile.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvBrowseFile.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(316, 78);
+            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(314, 78);
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 1;
@@ -239,21 +240,10 @@
             this.buttonAdvBrowseFile.UseVisualStyle = true;
             this.buttonAdvBrowseFile.Click += new System.EventHandler(this.browseImportFileButton_Click);
             // 
-            // radioButtonImportWorkload
-            // 
-            this.radioButtonImportWorkload.AutoSize = true;
-            this.radioButtonImportWorkload.Location = new System.Drawing.Point(316, 28);
-            this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
-            this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonImportWorkload.TabIndex = 5;
-            this.radioButtonImportWorkload.TabStop = true;
-            this.radioButtonImportWorkload.Text = "xxImportWorkload";
-            this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
-            // 
             // radioButtonImportStaffing
             // 
             this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(316, 3);
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(314, 3);
             this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
             this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
             this.radioButtonImportStaffing.TabIndex = 6;
@@ -261,10 +251,21 @@
             this.radioButtonImportStaffing.Text = "xxImportStaffing";
             this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
             // 
+            // radioButtonImportWorkload
+            // 
+            this.radioButtonImportWorkload.AutoSize = true;
+            this.radioButtonImportWorkload.Location = new System.Drawing.Point(314, 28);
+            this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
+            this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonImportWorkload.TabIndex = 5;
+            this.radioButtonImportWorkload.TabStop = true;
+            this.radioButtonImportWorkload.Text = "xxImportWorkload";
+            this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
+            // 
             // radioButtonImportWLAndStaffing
             // 
             this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(316, 53);
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(314, 53);
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
             this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(86, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 7;

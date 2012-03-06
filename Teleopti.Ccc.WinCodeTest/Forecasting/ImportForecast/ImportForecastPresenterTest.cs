@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
     public class ImportForecastPresenterTest
     {
         private MockRepository _mock;
-        private MockRepository _mock2;
+        //private MockRepository _mock2;
         private IImportForecast _view;
         private ImportForecastModel _model;
         private ImportForecastPresenter _target;

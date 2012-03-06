@@ -287,6 +287,8 @@
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
+    <Compile Include="Repositories\IImportForecastRepository.cs" />
+    <Compile Include="Repositories\ImportForecastRepository.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepository.cs" />

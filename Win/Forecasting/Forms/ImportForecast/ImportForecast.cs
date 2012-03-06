@@ -6,7 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Interfaces.Domain;
@@ -83,6 +87,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             get { return radioButtonImportWLAndStaffing.Checked; }
             set { radioButtonImportWLAndStaffing.Checked = value; }
+        }
+
+        private void ImportForecastBtn_Click(object sender, EventArgs e)
+        {
+            new GracefulDataSourceExceptionHandler().AttemptDatabaseConnectionDependentAction(() =>
+            {
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    string fileName =  openFileDialog.FileName;
+                    var encoding = new UTF8Encoding();
+                    _presenter.SaveForecastFile(fileName, encoding.GetBytes("Test Forecast Import"));
+                }
+            });
         }
     }
 }

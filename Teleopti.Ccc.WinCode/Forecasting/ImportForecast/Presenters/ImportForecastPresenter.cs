@@ -33,6 +33,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
         }
 
 
-        
+        public void SaveForecastFile(string fileName, byte[] fileContent)
+        {
+            _model.SaveForecastFileInDb(fileName, fileContent);
+        }
     }
 }

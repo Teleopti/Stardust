@@ -1215,8 +1215,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));
             var s = (ISkill)node.Tag;
-            DialogResult result;
-
+            
             using (var impForecast = new ImportForecastForm(s, _repositoryFactory, _unitOfWorkFactory))
             {
                 impForecast.ShowDialog(this);
