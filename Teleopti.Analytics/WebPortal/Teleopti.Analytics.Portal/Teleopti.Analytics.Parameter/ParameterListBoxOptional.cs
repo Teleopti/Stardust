@@ -268,7 +268,7 @@ namespace Teleopti.Analytics.Parameters
 			// Knappar
 			//writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "10%");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:10px 5px 10px 5px");
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:middle");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:center");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.Write("<Br/>");
 			_buttonMoveAll.RenderControl(writer);			
@@ -419,6 +419,7 @@ namespace Teleopti.Analytics.Parameters
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
+                alert(ListFrom);
 					var lstFrom = document.getElementById(ListFrom);
 					var lstTo = document.getElementById(ListTo);
 					var lstVal = document.getElementById(ListVal);

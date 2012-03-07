@@ -412,12 +412,13 @@ namespace Teleopti.Analytics.Parameters
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
+                    alert(ListFrom);
 					var lstFrom = document.getElementById(ListFrom);
 					var lstTo = document.getElementById(ListTo);
 					var lstVal = document.getElementById(ListVal);
 					var txtVal = document.getElementById(TextVal);
 					var txtText = document.getElementById(TextText);
-
+                    
 					for (i=0;i<lstFrom.length;i++)
 					{
 						if ((lstFrom[i].selected) || (Type ==1))

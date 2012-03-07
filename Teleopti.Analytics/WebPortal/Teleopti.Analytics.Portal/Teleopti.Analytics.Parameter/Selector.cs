@@ -496,7 +496,7 @@ namespace Teleopti.Analytics.Parameters
         protected override void AddAttributesToRender(HtmlTextWriter writer)
         {
             base.AddAttributesToRender(writer);
-            writer.AddStyleAttribute("cellPadding", "5px");
+            writer.AddStyleAttribute("cellpadding", "5px");
         }
 
         public Guid GroupPageCode
