@@ -265,32 +265,43 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
+                Expect.Call(()=> _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions)).IgnoreArguments();
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+                    .Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
-                Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay8.DaySchedulePart()).Return(part).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay9.DaySchedulePart()).Return(part).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays)
+                    .Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay8.DaySchedulePart())
+                    .Return(part).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay9.DaySchedulePart())
+                    .Return(part).Repeat.AtLeastOnce();
                 Expect.Call(part.Clone()).Return(part).Repeat.AtLeastOnce();
                 part.DeleteMainShift(part);
                 part.CreateAndAddDayOff(_dayOffTemplate);
                 part.DeleteDayOff();
                 Expect.Call(() => _rollbackService.Modify(part)).Repeat.Twice();
-                Expect.Call(_decider.DecideDates(part, part)).Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Twice();
-                Expect.Call(scheduleDay8.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
-                Expect.Call(scheduleDay9.Day).Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
+                Expect.Call(_decider.DecideDates(part, part))
+                    .Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Twice();
+                Expect.Call(scheduleDay8.Day)
+                    .Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
+                Expect.Call(scheduleDay9.Day)
+                    .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true)).Repeat.Twice();
-                Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix)).Return(true).Repeat.Once();
-                Expect.Call(_workShiftBackToLegalStateService.RemovedDays).Return(new List<DateOnly>());
+                Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix))
+                    .Return(true).Repeat.Once();
+                Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
+                    .Return(new List<DateOnly>());
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
-                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly())).Return(true);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Return(true).Repeat.Twice();
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).
-                    IgnoreArguments().Return(_effectiveRestriction).Repeat.AtLeastOnce();
+                Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly())).IgnoreArguments()
+                    .Return(true);
+                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).IgnoreArguments()
+                    .Return(true).Repeat.Twice();
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+                    .Return(5).Repeat.AtLeastOnce();
+                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments()
+                    .Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-            .Return(false)
-            .Repeat.AtLeastOnce();
+                    .Return(false).Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
 
@@ -381,48 +392,58 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mocks.Record())
             {
-                _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10).Repeat.Once();
+                Expect.Call(()=>_schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions)).IgnoreArguments();
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+                    .Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
-                Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
-                Expect.Call(scheduleDay8.DaySchedulePart()).Return(part).Repeat.Twice();
+                Expect.Call(_scheduleMatrix.OuterWeeksPeriodDays)
+                    .Return(new ReadOnlyCollection<IScheduleDayPro>(outerWeekList)).Repeat.Times(4);
+                Expect.Call(scheduleDay8.DaySchedulePart())
+                    .Return(part).Repeat.Twice();
                 Expect.Call(scheduleDay9.DaySchedulePart()).Return(part).Repeat.Twice();
-                Expect.Call(part.Clone()).Return(part).Repeat.Twice();
+                Expect.Call(part.Clone())
+                    .Return(part).Repeat.Twice();
                 part.DeleteMainShift(part);
                 part.CreateAndAddDayOff(_dayOffTemplate);
                 part.DeleteDayOff();
                 _rollbackService.Modify(part);
                 LastCall.Repeat.Twice();
-                Expect.Call(_decider.DecideDates(part, part)).Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Twice();
-                Expect.Call(scheduleDay8.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
-                Expect.Call(scheduleDay9.Day).Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
+                Expect.Call(_decider.DecideDates(part, part))
+                    .Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Twice();
+                Expect.Call(scheduleDay8.Day)
+                    .Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
+                Expect.Call(scheduleDay9.Day)
+                    .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true)).Repeat.Twice();
                 Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.Any();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(
                     _effectiveRestriction).Repeat.AtLeastOnce().IgnoreArguments();
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).
-                    IgnoreArguments().Return(true).Repeat.Twice();
-                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(5).Repeat.Once();
+                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).IgnoreArguments()
+                    .Return(true).Repeat.Twice();
+                Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+                    .Return(5).Repeat.Once();
                 Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix))
                     .Return(true);
                 Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
                     .Return(new List<DateOnly> { DateOnly.Today });
                 Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().
                     Return(null).Repeat.Once();
-                Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments().Return(true).Repeat
-                    .Once();
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).
-                    IgnoreArguments().Return(true).Repeat.Once();
+                Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
+                    .Return(true).Repeat.Once();
+                Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, true, _effectiveRestriction)).IgnoreArguments()
+                    .Return(true).Repeat.Once();
                 _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today, true, true);
                 LastCall.IgnoreArguments().Repeat.Twice();
-                
-                Expect.Call(_scheduleMatrix.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
-                    _scheduleDayPro).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(part).Repeat.AtLeastOnce();
-                Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
-                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly);
-                Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
+                Expect.Call(_scheduleMatrix.GetScheduleDayByKey(new DateOnly())).IgnoreArguments()
+                    .Return(_scheduleDayPro).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.DaySchedulePart())
+                    .Return(part).Repeat.AtLeastOnce();
+                Expect.Call(part.DateOnlyAsPeriod)
+                    .Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(dateOnlyPeriod.DateOnly)
+                    .Return(dateOnly);
+                Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
+                    .Return(true);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                     .Return(false)
                     .Repeat.AtLeastOnce();

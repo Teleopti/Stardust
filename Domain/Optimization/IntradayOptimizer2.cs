@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
-
             _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             _rollbackService.ClearModificationCollection();
