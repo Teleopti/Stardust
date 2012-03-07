@@ -103,12 +103,12 @@ BEGIN
 	--fact_request
 	delete mart.fact_request
 	from mart.fact_request f
-	inner join mart.dim_date d on f.date_id = d.date_id
+	inner join mart.dim_date d on f.request_start_date_id = d.date_id
 	where 1=1
 	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 8
 						and configuration_name = 'YearsToKeepFactRequest'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_request f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+						from mart.fact_request f2 inner join mart.dim_date d2 on f2.request_start_date_id = d2.date_id)
 					
 	--fact_schedule
 	delete mart.fact_schedule

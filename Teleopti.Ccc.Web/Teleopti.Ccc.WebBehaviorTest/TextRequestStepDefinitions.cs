@@ -124,6 +124,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = string.Empty;
 		}
 
+        [When(@"I input too long text request values")]
+        public void WhenIInputTooLongTextRequestValues()
+        {
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
+            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value = new string('t', 2002);
+        }
+
+
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
@@ -148,6 +160,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.Period)));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MissingSubject));
 		}
+
+        [Then(@"I should see texts describing too long text error")]
+        public void ThenIShouldSeeTextsDescribingTooLongTextError()
+        {
+            EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.Exists, Is.True);
+            EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MessageTooLong));
+        }
+
 
 		[Then(@"I should not see the add text request button")]
 		public void ThenIShouldNotSeeTheAddTextRequestButton()

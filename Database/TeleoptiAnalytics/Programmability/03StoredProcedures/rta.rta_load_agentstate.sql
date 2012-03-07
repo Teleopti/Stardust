@@ -39,7 +39,11 @@ BEGIN
 			EAS.TimestampValue [Timestamp],
 			EAS.PlatformTypeId,
 			EAS.DataSourceId, 
-			EAS.BatchId, 
+			(CASE EAS.IsSnapshot
+			WHEN 0
+			THEN EAS.TimestampValue
+			ELSE EAS.BatchId
+			END) AS BatchId,
 			EAS.IsSnapshot
     FROM RTA.ExternalAgentState EAS WITH(NOLOCK)
     INNER JOIN @TempExternalLogOnList tmp

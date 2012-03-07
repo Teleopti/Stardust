@@ -8384,6 +8384,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From role.
+        /// </summary>
+        public static string FromRole {
+            get {
+                return ResourceManager.GetString("FromRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From - To.
         /// </summary>
         public static string FromTo {
@@ -8461,6 +8470,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FunctionsAvailable {
             get {
                 return ResourceManager.GetString("FunctionsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Functions.
+        /// </summary>
+        public static string FunctionsCap {
+            get {
+                return ResourceManager.GetString("FunctionsCap", resourceCulture);
             }
         }
         
@@ -13537,6 +13555,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no teams available.
+        /// </summary>
+        public static string NoTeamsAvailable {
+            get {
+                return ResourceManager.GetString("NoTeamsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Users.
         /// </summary>
         public static string NotInHierarchy {
@@ -15133,6 +15160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Permissions Viewer.
+        /// </summary>
+        public static string PermissionsViewer {
+            get {
+                return ResourceManager.GetString("PermissionsViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Per period.
         /// </summary>
         public static string PerPeriod {
@@ -15428,6 +15464,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PersonRotationView {
             get {
                 return ResourceManager.GetString("PersonRotationView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Persons.
+        /// </summary>
+        public static string Persons {
+            get {
+                return ResourceManager.GetString("Persons", resourceCulture);
             }
         }
         
@@ -21068,6 +21113,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheNameIsTooLong {
             get {
                 return ResourceManager.GetString("TheNameIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The person&apos;s roles.
+        /// </summary>
+        public static string ThePersonsRoles {
+            get {
+                return ResourceManager.GetString("ThePersonsRoles", resourceCulture);
             }
         }
         

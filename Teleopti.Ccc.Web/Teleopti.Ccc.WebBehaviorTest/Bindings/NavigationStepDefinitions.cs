@@ -61,6 +61,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 			var page = Browser.Current.Page<SignInPage>();
 			page.SignInApplication(userName, TestData.CommonPassword);
+			if (page.BusinessUnitList.Exists)
+			{
+				page.SelectFirstBusinessUnit();
+				page.ClickBusinessUnitOkButton();
+			}
 			Navigation.GotoTeamSchedule();
 		}
 

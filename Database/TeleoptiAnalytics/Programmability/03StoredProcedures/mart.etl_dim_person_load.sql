@@ -25,6 +25,7 @@ GO
 -- 2010-07-07	AnFo	Deleted PPs was not removed properly in dim_person
 -- 2010-09-15	DaJo	temp-fix of #11390 - Adding 24 h to ending person periods
 -- 2010-11-30	DaJo	#12550 - Refactor dim_person_load to use Person_Period_Code as key
+-- 2012-03-05	DaJo	#????? - Try to avoid IsDeleted to be set when multiple ETL processes run at the same time
 -- =============================================
 --EXEC [mart].[etl_dim_person_load] @current_business_unit_code = '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_dim_person_load] 
@@ -45,6 +46,10 @@ DECLARE @maxdate as smalldatetime
 SELECT @maxdateid = max(date_id),@maxdate = max(date_date) FROM mart.dim_date
 WHERE date_id >= 0 --exclude the special ones < 0
 
+--If the current BU-code is not i stage, something is fishy, Abort!
+--ETL Service and ETL Tool conflict
+if not exists (select 1 from stage.stg_person where business_unit_code=@current_business_unit_code)
+RETURN 0
 
 -----------------------
 -- Not Defined Person

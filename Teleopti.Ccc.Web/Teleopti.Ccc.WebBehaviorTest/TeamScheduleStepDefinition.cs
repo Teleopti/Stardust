@@ -287,6 +287,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(visible, Is.False);
 		}
 
+		[Then(@"I should see the team-picker")]
+		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
+		{
+			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
+
+			picker.Should().Not.Be.Null();
+		}
 
 
 		private static void AssertAgentIsDisplayed(string name)

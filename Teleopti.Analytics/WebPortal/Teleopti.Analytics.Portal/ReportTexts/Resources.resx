@@ -1169,4 +1169,12 @@ Schedule</value>
     <value>Type</value>
     <comment>Request type</comment>
   </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Application Date</value>
+    <comment>Application Date</comment>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Request Period</value>
+    <comment>Request Period</comment>
+  </data>
 </root>

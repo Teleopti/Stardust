@@ -82,8 +82,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
             Add(new FactScheduleDeviationJobStep(jobParameters));
             Add(new FactKpiTargetTeamJobStep(jobParameters));
-            Add(new PermissionReportJobStep(jobParameters));
             Add(new FactRequestJobStep(jobParameters));
+            Add(new FactRequestedDaysJobStep(jobParameters));
+            Add(new PermissionReportJobStep(jobParameters));
+            
             // WEB SERVICE TO ANALYZER
             //Add(new PerformanceManagerPermissionJobStep(jobParameters));
         }
