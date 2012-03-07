@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
 {
@@ -32,7 +31,7 @@ namespace Teleopti.Interfaces.Messages.General
         /// <summary>
         /// The import date
         /// </summary>
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         /// <summary>
         /// Forecasts

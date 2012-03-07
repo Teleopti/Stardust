@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
 {
@@ -22,7 +21,7 @@ namespace Teleopti.Interfaces.Messages.General
         ///<summary>
         /// The import date in the target skills time zone.
         ///</summary>
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         /// <summary>
         /// The owner of this action.
@@ -40,8 +39,13 @@ namespace Teleopti.Interfaces.Messages.General
         public ICollection<IForecastsFileRow> Forecasts { get; set; }
 
         /// <summary>
-        /// Open hours
+        /// Open hour start time
         /// </summary>
-        public IList<TimePeriod> OpenHoursList { get; set; }
+        public TimeSpan StartOpenHour { get; set; }  
+        
+        /// <summary>
+        /// Open hour end time
+        /// </summary>
+        public TimeSpan EndOpenHour { get; set; }
     }
 }

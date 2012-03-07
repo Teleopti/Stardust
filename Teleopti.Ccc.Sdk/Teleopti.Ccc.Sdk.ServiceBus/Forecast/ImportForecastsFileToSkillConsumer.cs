@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
             foreach (var date in commandResult.Period.DayCollection())
             {
+                var openHours = commandResult.WorkloadDayOpenHours.Get(date);
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                 {
                     BusinessUnitId = message.BusinessUnitId,
@@ -91,7 +92,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     Date = date,
                     Timestamp = message.Timestamp,
                     TargetSkillId = message.TargetSkillId,
-                    OpenHoursList = new []{commandResult.WorkloadDayOpenHours.Get(date.DayOfWeek)},
+                    StartOpenHour = openHours.StartTime,
+                    EndOpenHour = openHours.EndTime,
                     Forecasts = commandResult.ForecastFileDictionary.Get(date)
                 });
             }
@@ -189,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                workloadDayOpenHours.Add(forecastsRow.LocalDateTimeFrom.DayOfWeek,
+                workloadDayOpenHours.Add(new DateOnly(forecastsRow.LocalDateTimeFrom),
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
                                                         forecastsRow.LocalDateTimeTo.TimeOfDay));
 
@@ -221,19 +223,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
     public interface IWorkloadDayOpenHoursDictionary
     {
-        void Add(DayOfWeek dayOfWeek, TimePeriod openHours);
-        TimePeriod Get(DayOfWeek dayOfWeek);
+        void Add(DateOnly dateOnly, TimePeriod openHours);
+        TimePeriod Get(DateOnly dateOnly);
     }
 
     public class WorkloadDayOpenHoursDictionary : IWorkloadDayOpenHoursDictionary
     {
-        private readonly IDictionary<DayOfWeek, TimePeriod> _workloadDayOpenHours =
-            new Dictionary<DayOfWeek, TimePeriod>();
-        
-        public void Add(DayOfWeek dayOfWeek, TimePeriod openHours)
+        private readonly IDictionary<DateOnly, TimePeriod> _workloadDayOpenHours =
+            new Dictionary<DateOnly, TimePeriod>();
+
+        public void Add(DateOnly dateOnly, TimePeriod openHours)
         {
             TimePeriod existingOpenHours;
-            if (_workloadDayOpenHours.TryGetValue(dayOfWeek, out existingOpenHours))
+            if (_workloadDayOpenHours.TryGetValue(dateOnly, out existingOpenHours))
             {
                 TimeSpan mergedStartTime;
                 TimeSpan mergedEndTime;
@@ -241,23 +243,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 {
                     mergedStartTime = openHours.StartTime;
                     mergedEndTime = existingOpenHours.EndTime;
-                    _workloadDayOpenHours[dayOfWeek] = new TimePeriod(mergedStartTime, mergedEndTime);
+                    _workloadDayOpenHours[dateOnly] = new TimePeriod(mergedStartTime, mergedEndTime);
                 }
                 if (openHours.EndTime.Subtract(existingOpenHours.EndTime) > TimeSpan.Zero)
                 {
                     mergedStartTime = existingOpenHours.StartTime;
                     mergedEndTime = openHours.EndTime;
-                    _workloadDayOpenHours[dayOfWeek] = new TimePeriod(mergedStartTime, mergedEndTime);
+                    _workloadDayOpenHours[dateOnly] = new TimePeriod(mergedStartTime, mergedEndTime);
                 }
             }
             else
-                _workloadDayOpenHours.Add(dayOfWeek, openHours);
+                _workloadDayOpenHours.Add(dateOnly, openHours);
         }
 
-        public TimePeriod Get(DayOfWeek dayOfWeek)
+        public TimePeriod Get(DateOnly dateOnly)
         {
             TimePeriod openHours;
-            _workloadDayOpenHours.TryGetValue(dayOfWeek, out openHours);
+            _workloadDayOpenHours.TryGetValue(dateOnly, out openHours);
             return openHours;
         }
     }

@@ -21,10 +21,6 @@ namespace Teleopti.Interfaces.Messages.General
         /// </summary>
         DateTime LocalDateTimeTo { get; set; }
         /// <summary>
-        /// Period in UTC
-        /// </summary>
-        DateTimePeriod Period { get; set; }
-        /// <summary>
         /// Start date time in UTC
         /// </summary>
         DateTime UtcDateTimeFrom { get; set; }

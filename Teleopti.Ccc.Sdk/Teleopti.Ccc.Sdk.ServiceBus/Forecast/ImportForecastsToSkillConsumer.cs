@@ -2,6 +2,8 @@
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
@@ -33,13 +35,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var skill = _skillRepository.Get(message.TargetSkillId);
-                if (skill == null)
+                using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
                 {
-                    Logger.Error("Skill not exists.");
-                    return;
+                    var skill = _skillRepository.Get(message.TargetSkillId);
+                    if (skill == null)
+                    {
+                        Logger.Error("Skill not exists.");
+                        return;
+                    }
+                    _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts);
                 }
-                _saveForecastToSkillCommand.Execute(message.Date, skill, message.Forecasts);
+                unitOfWork.PersistAll();
             }
         }
     }

@@ -1,7 +1,9 @@
-﻿using Rhino.ServiceBus;
+﻿using System.Collections.Generic;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -34,9 +36,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var targetSkill = _skillRepository.Get(message.TargetSkillId);
-                _command.Execute(targetSkill, new DateOnlyPeriod(message.Date, message.Date), message.OpenHoursList);
-                endProcessing(unitOfWork);
+                using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
+                {
+                    var targetSkill = _skillRepository.Get(message.TargetSkillId);
+                    var openHours = new TimePeriod(message.StartOpenHour, message.EndOpenHour);
+                    var dateOnly = new DateOnly(message.Date);
+                    _command.Execute(targetSkill, new DateOnlyPeriod(dateOnly, dateOnly), new[] {openHours});
+                    endProcessing(unitOfWork);
+                }
             }
             _serviceBus.Send(new ImportForecastsToSkill
             {
@@ -45,6 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 JobId = message.JobId,
                 OwnerPersonId = message.OwnerPersonId,
                 Date = message.Date,
+                TargetSkillId = message.TargetSkillId,
                 Forecasts = message.Forecasts,
                 Timestamp = message.Timestamp
             });

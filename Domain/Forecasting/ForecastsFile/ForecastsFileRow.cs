@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public DateTime LocalDateTimeTo { get; set; }
         public DateTime UtcDateTimeFrom { get; set; }
         public DateTime UtcDateTimeTo { get; set; }
-        public DateTimePeriod Period { get; set; }
         public int Tasks { get; set; }
         public int TaskTime { get; set; }
         public int AfterTaskTime { get; set; }
@@ -25,8 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
             if (row == null)
                 return false;
             return row.SkillName.Equals(SkillName) && row.LocalDateTimeFrom.Equals(LocalDateTimeFrom) &&
-                   row.LocalDateTimeTo.Equals(LocalDateTimeTo) && row.UtcDateTimeFrom.Equals(row.UtcDateTimeTo) &&
-                   row.Period.Equals(Period)
+                   row.LocalDateTimeTo.Equals(LocalDateTimeTo) && row.UtcDateTimeFrom.Equals(row.UtcDateTimeTo)
                    && row.Tasks.Equals(Tasks) && row.TaskTime.Equals(TaskTime) &&
                    row.AfterTaskTime.Equals(AfterTaskTime) && (row.Agents == Agents);
         }
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         {
             return SkillName.GetHashCode() ^ LocalDateTimeFrom.GetHashCode() ^ LocalDateTimeTo.GetHashCode() ^
                    UtcDateTimeFrom.GetHashCode() ^ UtcDateTimeTo.GetHashCode() ^ Tasks.GetHashCode() ^
-                   Period.GetHashCode() ^
                    TaskTime.GetHashCode() ^ AfterTaskTime.GetHashCode() ^ (Agents == null ? 1 : Agents.GetHashCode());
         }
     }
@@ -55,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
                                   };
             forecastRow.UtcDateTimeFrom = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeFrom, timeZone);
             forecastRow.UtcDateTimeTo = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeTo, timeZone);
-            forecastRow.Period = new DateTimePeriod(forecastRow.UtcDateTimeFrom, forecastRow.UtcDateTimeTo);
 
             if (row.Count > 6)
                 forecastRow.Agents = double.Parse(row[6], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
