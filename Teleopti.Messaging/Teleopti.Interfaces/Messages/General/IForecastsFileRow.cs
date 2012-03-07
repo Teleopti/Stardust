@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
 {
@@ -35,11 +34,11 @@ namespace Teleopti.Interfaces.Messages.General
         /// <summary>
         /// Task time
         /// </summary>
-        int TaskTime { get; set; }
+        double TaskTime { get; set; }
         /// <summary>
         /// After task time
         /// </summary>
-        int AfterTaskTime { get; set; }
+        double AfterTaskTime { get; set; }
         /// <summary>
         /// Forecasted agents
         /// </summary>

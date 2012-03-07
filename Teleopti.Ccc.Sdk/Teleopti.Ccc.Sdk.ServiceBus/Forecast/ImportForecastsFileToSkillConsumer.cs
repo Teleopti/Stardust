@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -134,8 +133,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                      new ForecastsFileDateTimeValidator(),
                                      new ForecastsFileDateTimeValidator(),
                                      new ForecastsFileIntegerValueValidator(),
-                                     new ForecastsFileIntegerValueValidator(),
-                                     new ForecastsFileIntegerValueValidator(),
+                                     new ForecastsFileDoubleValueValidator(),
+                                     new ForecastsFileDoubleValueValidator(),
                                      new ForecastsFileDoubleValueValidator()
                                  };
 
@@ -195,7 +194,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
                                                         forecastsRow.LocalDateTimeTo.TimeOfDay));
 
-                result.ForecastFileDictionary.Add(new DateOnly(startDateTime), forecastsRow);
+                result.ForecastFileDictionary.Add(new DateOnly(forecastsRow.LocalDateTimeFrom), forecastsRow);
             }
             result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
             result.WorkloadDayOpenHours = workloadDayOpenHours;

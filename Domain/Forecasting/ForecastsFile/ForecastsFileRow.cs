@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public DateTime UtcDateTimeFrom { get; set; }
         public DateTime UtcDateTimeTo { get; set; }
         public int Tasks { get; set; }
-        public int TaskTime { get; set; }
-        public int AfterTaskTime { get; set; }
+        public double TaskTime { get; set; }
+        public double AfterTaskTime { get; set; }
         public double? Agents { get; set; }
 
         public override bool Equals(object obj)
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
                                       LocalDateTimeFrom = DateTime.ParseExact(row[1], "yyyyMMdd HH:mm", null),
                                       LocalDateTimeTo = DateTime.ParseExact(row[2], "yyyyMMdd HH:mm", null),
                                       Tasks = int.Parse(row[3]),
-                                      TaskTime = int.Parse(row[4]),
-                                      AfterTaskTime = int.Parse(row[5]),
+                                      TaskTime = double.Parse(row[4], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture),
+                                      AfterTaskTime = double.Parse(row[5], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture)
                                   };
             forecastRow.UtcDateTimeFrom = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeFrom, timeZone);
             forecastRow.UtcDateTimeTo = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeTo, timeZone);
