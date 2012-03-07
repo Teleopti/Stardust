@@ -230,8 +230,8 @@ namespace Teleopti.Analytics.Parameters
             //_ButtonMoveAllBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
 
             // Doubleclick one item in the list to move it to the other
-            _listBox.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOne.ClientID + ")");
-            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOneBack.ClientID + ")");
+            _listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
+            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
 
 			// Label
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
@@ -419,7 +419,6 @@ namespace Teleopti.Analytics.Parameters
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
-                alert(ListFrom);
 					var lstFrom = document.getElementById(ListFrom);
 					var lstTo = document.getElementById(ListTo);
 					var lstVal = document.getElementById(ListVal);
