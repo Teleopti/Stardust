@@ -12,10 +12,11 @@ GO
 -- EXEC mart.report_control_group_page_group_get @report_id=13,@person_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@group_page_code='0AB77CB7-F2C1-43FC-9F99-152A1DEB6968',@language_id=1025,@bu_id='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 -- Change Log
 -- Date			Author	Description
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_control_group_page_group_get] 
 @group_page_code uniqueidentifier, --parent group page
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier

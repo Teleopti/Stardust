@@ -4,6 +4,8 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+
 	public class MobileReportsAreaModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)

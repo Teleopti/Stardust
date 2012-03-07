@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -52,12 +53,12 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new PreferenceDomainDataMappingProfile(
-					Resolver.Of(() => virtualScheduleProvider),
-					Resolver.Of(() => preferenceProvider),
-					Resolver.Of(() => loggedOnUser),
-					Resolver.Of(() => preferenceFeedbackProvider),
-					Resolver.Of(() => scheduleProvider),
-					Resolver.Of(() => projectionProvider)
+					Depend.On(virtualScheduleProvider),
+					Depend.On(preferenceProvider),
+					Depend.On(loggedOnUser),
+					Depend.On(preferenceFeedbackProvider),
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider)
 					)));
 		}
 
@@ -185,6 +186,27 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			result.Days.Single().Projection.Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldMapColorSource()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			var projection = new StubFactory().ProjectionStub();
+			var preferenceDay = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(new[] {preferenceDay});
+			
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
+			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
+			result.ColorSource.PreferenceDays.Single().Should().Be(preferenceDay);
+			result.ColorSource.WorkflowControlSet.Should().Be(person.WorkflowControlSet);
+		}
 
 	}
 }

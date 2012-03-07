@@ -84,28 +84,31 @@ namespace Teleopti.Ccc.WinCode.Matrix
         public IEnumerable<MatrixTreeNode> CreateTree(IEnumerable<IMatrixFunctionGroup> matrixFunctionGroups,
                                                       IEnumerable<IApplicationFunction> orphanMatrixFunctions)
         {
-            var rootTreeNode = new MatrixTreeNode();
-            rootTreeNode.DisplayName = Resources.HistoricalReports;
-            rootTreeNode.ImageIndex = 0;
+            var rootTreeNode = new MatrixTreeNode
+                                   {
+                                       DisplayName = Resources.HistoricalReports,
+                                       ImageIndex = 0,
+                                       Nodes = (from g in matrixFunctionGroups
+                                                let childNodes =
+                                                    (from f in g.ApplicationFunctions select CreateTreeNode(f))
+                                                let node = CreateTreeNode(g, childNodes)
+                                                select node)
+                                   };
 
-            rootTreeNode.Nodes =
-                (from g in matrixFunctionGroups
-                 let childNodes = (from f in g.ApplicationFunctions select CreateTreeNode(f))
-                 let node = CreateTreeNode(g, childNodes)
-                 select node)
-                    .Union
-                    (from o in orphanMatrixFunctions
-                     let node = CreateTreeNode(o)
-                     select node);
-
-            return new List<MatrixTreeNode> {rootTreeNode};
+            var customTreeNode = new MatrixTreeNode
+                                     {
+                                         DisplayName = Resources.CustomReports,
+                                         ImageIndex = 0,
+                                         Nodes = from o in orphanMatrixFunctions
+                                                 let node = CreateTreeNode(o)
+                                                 select node
+                                     };
+            return new List<MatrixTreeNode> { rootTreeNode, customTreeNode };
         }
 
         public IEnumerable<MatrixTreeNode> CreateTree(IEnumerable<IApplicationFunction> permittedOnlineReportFunctions)
         {
-            var rootTreeNode = new MatrixTreeNode();
-            rootTreeNode.DisplayName = UserTexts.Resources.RealTime;
-            rootTreeNode.ImageIndex = 0;
+            var rootTreeNode = new MatrixTreeNode {DisplayName = Resources.RealTime, ImageIndex = 0};
             IList<MatrixTreeNode> nodes = new List<MatrixTreeNode>();
 
             foreach (IApplicationFunction func in permittedOnlineReportFunctions)
@@ -121,11 +124,13 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
         public MatrixTreeNode CreateTreeNode(IApplicationFunction applicationFunction)
         {
-            var treeNode = new MatrixTreeNode();
-            treeNode.DisplayName = applicationFunction.LocalizedFunctionDescription;
-            treeNode.ImageIndex = 2;
-            treeNode.ApplicationFunction = applicationFunction;
-            treeNode.RealTime = false;
+            var treeNode = new MatrixTreeNode
+                               {
+                                   DisplayName = applicationFunction.LocalizedFunctionDescription,
+                                   ImageIndex = 2,
+                                   ApplicationFunction = applicationFunction,
+                                   RealTime = false
+                               };
             return treeNode;
         }
 
@@ -139,9 +144,11 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
         public MatrixTreeNode CreateTreeNode(IMatrixFunctionGroup matrixFunctionGroup)
         {
-            var treeNode = new MatrixTreeNode();
-            treeNode.DisplayName = matrixFunctionGroup.LocalizedDescription;
-            treeNode.ImageIndex = 1;
+            var treeNode = new MatrixTreeNode
+                               {
+                                   DisplayName = matrixFunctionGroup.LocalizedDescription,
+                                   ImageIndex = 1
+                               };
             return treeNode;
         }
     }

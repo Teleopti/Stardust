@@ -2,6 +2,8 @@
 {
 	public class ReportDataPeriodEntry
 	{
+		public int PeriodNumber { get; set; }
+
 		public string Period { get; set; }
 
 		public decimal Y1 { get; set; }

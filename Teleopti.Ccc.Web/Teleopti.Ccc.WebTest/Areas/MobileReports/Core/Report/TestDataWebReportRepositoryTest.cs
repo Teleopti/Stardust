@@ -21,7 +21,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		[Test]
 		public void VerifyReportControlSkillGet()
 		{
-			var result = _target.ReportControlSkillGet(0, Guid.Empty, 0, Guid.Empty);
+			var result = _target.ReportControlSkillGet(
+				Guid.Empty,
+				Guid.Empty,
+				0,
+				Guid.Empty
+				);
+
 
 			result.Count().Should().Be.EqualTo(6);
 			result.Any(r => r.Id == -1).Should().Be.True();
@@ -33,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		{
 			var result = _target.ReportDataForecastVersusActualWorkload(0,
 			                                                            string.Empty, string.Empty, 1, DateTime.Today,
-			                                                            DateTime.Today, 0, 4, 0, Guid.Empty, 0, 0, Guid.Empty);
+																		DateTime.Today, 0, 4, 0, Guid.Empty, Guid.Empty, 0, Guid.Empty);
 			result.Count().Should().Be.EqualTo(5);
 		}
 
@@ -41,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		public void VerifyReportDataQueueStatAbandoned()
 		{
 			var result = _target.ReportDataQueueStatAbandoned(0, string.Empty, string.Empty, 1, DateTime.Today, DateTime.Today, 0,
-			                                                  4, 0, Guid.Empty, 0, 0, Guid.Empty);
+			                                                  4, 0, Guid.Empty, Guid.Empty, 0, Guid.Empty);
 			result.Count().Should().Be.EqualTo(5);
 		}
 
@@ -49,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		public void VerifyReportDataServiceLevelAgentsReady()
 		{
 			var result = _target.ReportDataServiceLevelAgentsReady(string.Empty, string.Empty, 1, DateTime.Today, DateTime.Today,
-			                                                       0, 4, 0, 0, Guid.Empty, 0, 0, Guid.Empty);
+																   0, 4, 0, 0, Guid.Empty, Guid.Empty, 0, Guid.Empty);
 			result.Count().Should().Be.EqualTo(5);
 		}
 

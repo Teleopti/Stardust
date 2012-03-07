@@ -32,6 +32,10 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout
 		[DataMember(Name = "dateFormat")]
 		public string DateFormat { get; set; }
 
+		[DataMember(Name = "calStartDay")]
+		public int CalStartDay { get; set; }
+
+
 		[DataMember(Name = "isRTL")]
 		public bool IsRtl { get; set; }
 

@@ -24,13 +24,15 @@
 
 			var button = this._button = $('<button></button>')
 				.attr("id", id + '-button')
+				.attr("disabled", "disabled")
 				.addClass('ui-selectbox-button')
 				.html('&nbsp;')
 				.button({
 					icons: { secondary: 'ui-icon-triangle-1-s' },
-					text: true
+					text: true,
+					disabled: true
 				})
-				.click(function () {
+				.click(function (e) {
 					// close if already visible
 					if (menu.autocomplete("widget").is(":visible")) {
 						menu.autocomplete("close");
@@ -41,6 +43,7 @@
 					// pass empty string as value to search for, displaying all results
 					menu.autocomplete("search", "");
 					menu.focus();
+					e.stopPropagation();
 				})
 				.appendTo(container)
 				;
@@ -93,6 +96,8 @@
 				}
 			})
 			;
+
+			button.button('enable');
 		},
 
 		_mapOptions: function (response) {

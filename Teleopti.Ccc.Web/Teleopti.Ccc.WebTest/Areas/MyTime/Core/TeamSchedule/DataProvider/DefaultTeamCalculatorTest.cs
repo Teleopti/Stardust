@@ -65,5 +65,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			actual.Should().Be(myTeam);
 		}
 
+		[Test]
+		public void ShouldDefaultToFirstPermittedTeamWhenNoOwnTeam()
+		{
+			var otherTeams = new[] { new Team(), new Team() };
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+			loggedOnUser.Stub(x => x.MyTeam(DateOnly.Today)).Return(null);
+			permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, null)).Return(true);
+			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today)).Return(otherTeams);
+			var target = new DefaultTeamCalculator(loggedOnUser, permissionProvider, teamProvider);
+
+			var actual = target.Calculate(DateOnly.Today);
+
+			actual.Should().Be(otherTeams.ElementAt(0));
+		}
+
 	}
 }

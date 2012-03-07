@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             String shortName = absence.ConfidentialDescription(scheduleRange.Person).ShortName;
             SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
             Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-        	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(scheduleRange);
+        	var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence();
 
-			if (hasDayOffUnderFullDayAbsence.HasDayOff())
+			if (hasDayOffUnderFullDayAbsence.HasDayOff(scheduleRange))
             {
                 using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleRange.Person)))
                 {

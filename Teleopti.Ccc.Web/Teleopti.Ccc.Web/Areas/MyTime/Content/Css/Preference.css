@@ -1,0 +1,10 @@
+﻿
+.preference 
+{
+}
+
+.calendarview-week li.modified div.day-content
+{
+	border-left-color: white;
+	border-right-color: white;
+}

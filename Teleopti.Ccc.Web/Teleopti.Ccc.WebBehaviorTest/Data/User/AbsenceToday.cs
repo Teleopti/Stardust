@@ -10,15 +10,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class AbsenceToday : IUserDataSetup
 	{
+		public DateOnly Date = DateOnly.Today;
+		public IAbsence Absence = TestData.Absence;
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = DateTime.Now.Date;
-
-			var startTime = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(date);
+			var startTime = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(Date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
 
-			var absence = new PersonAbsence(user, TestData.Scenario, new AbsenceLayer(TestData.Absence, period));
+			var absence = new PersonAbsence(user, TestData.Scenario, new AbsenceLayer(Absence, period));
 
 			var absenceRepository = new PersonAbsenceRepository(uow);
 

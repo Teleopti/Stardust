@@ -1094,7 +1094,7 @@
     <comment>Snitt Samtalstid (s)</comment>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agent - Köresultat</value>
+    <value>Agent - Mätvärden per kö</value>
     <comment>Agent - Köresultat</comment>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
@@ -1158,5 +1158,13 @@
   <data name="ResRequestStatus" xml:space="preserve">
     <value>Status</value>
     <comment>Status</comment>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Ansökningsdatum</value>
+    <comment>Ansökningsdatum</comment>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Förfrågningsperiod</value>
+    <comment>Förfrågningsperiod</comment>
   </data>
 </root>

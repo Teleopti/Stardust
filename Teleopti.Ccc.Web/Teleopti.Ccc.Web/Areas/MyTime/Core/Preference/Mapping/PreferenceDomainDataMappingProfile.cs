@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
@@ -55,13 +56,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 															ScheduleDay = scheduleDay,
 															Projection = projection
 				              		                   	}).ToArray();
-									
+				              		var workflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet;
+				              		var colorSource = new ScheduleColorSource
+				              		                  	{
+				              		                  		ScheduleDays = scheduleDays,
+				              		                  		Projections = (from p in days where p.Projection != null select p.Projection).ToArray(),
+				              		                  		PreferenceDays = preferenceDays,
+															WorkflowControlSet = workflowControlSet
+				              		                  	};
 				              		return new PreferenceDomainData
 				              		       	{
 				              		       		SelectedDate = s,
 				              		       		Period = period,
-				              		       		WorkflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet,
-				              		       		Days = days
+				              		       		WorkflowControlSet = workflowControlSet,
+				              		       		Days = days,
+												ColorSource = colorSource
 				              		       	};
 				              	});
 		}

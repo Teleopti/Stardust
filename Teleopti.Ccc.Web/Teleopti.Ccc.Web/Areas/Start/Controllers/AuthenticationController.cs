@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ActionResult Index()
 		{
-			return RedirectToAction("SignIn");
+			return View();
 		}
 
 		public ActionResult SignIn()

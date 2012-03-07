@@ -63,18 +63,22 @@
     <Reference Include="TechTalk.SpecFlow">
       <HintPath>..\..\packages\SpecFlow.1.6.1\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
-    <Reference Include="WatiN.Core">
+    <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />
+    <Compile Include="Data\User\ExistingPreference.cs" />
+    <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Content Include="Data\TestData.autofac.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />
     <Compile Include="Data\User\UserWithoutMobileReportsAccess.cs" />
@@ -103,9 +107,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\SignInPageBase.cs" />
+    <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
+    <Compile Include="Pages\PasswordPage.cs" />
+    <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\User\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />

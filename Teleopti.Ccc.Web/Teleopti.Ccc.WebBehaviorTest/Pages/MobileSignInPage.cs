@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
 		}
 
+		protected override void WaitUntilSignInOrErrorAppears()
+		{
+			Func<bool> SignedInExists = () => SignoutButton.Exists;
+			SignedInExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
+		}
+
 		public override void SelectFirstBusinessUnit()
 		{
 			SignInBusinessInits.First().Click();

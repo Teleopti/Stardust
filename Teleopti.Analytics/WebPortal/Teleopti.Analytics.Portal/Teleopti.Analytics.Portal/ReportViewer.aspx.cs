@@ -99,7 +99,7 @@ namespace Teleopti.Analytics.Portal
 
         private static IList<SqlParameter> GetSqlParametersFromQueryString(NameValueCollection queryString)
 	{
-		List<SqlParameter> parameters = new List<SqlParameter>();
+		var parameters = new List<SqlParameter>();
 		foreach (string k in queryString.Keys) {
             if (k.StartsWith("@", StringComparison.CurrentCultureIgnoreCase) & k != "@report_type")
 			{
@@ -127,59 +127,40 @@ namespace Teleopti.Analytics.Portal
             //"pageFrame"
             ReportViewer1.LocalReport.EnableHyperlinks = true;
 
-            IList<ReportParameter> @params = new List<ReportParameter>
-                                                 {
-                                                     new ReportParameter("culture",
-                                                                         //#12578
-                                                                         //Thread.CurrentThread.CurrentCulture.Parent.IetfLanguageTag, false)
-                                                                         Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false)
-                                                 };
-
-            //@params.Add(new ReportParameter("culture", Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName, false));
-            //@params.Add(new ReportParameter("culture", "sv", false));
-            
+            IList<ReportParameter> @params = new List<ReportParameter>();           
            
             ReportParameterInfoCollection repInfos = ReportViewer1.LocalReport.GetParameters();
             IList<string> texts = new List<string>();
-            if (repInfos.Count > 3)
+
+            if (SessionParameterTexts != null)
             {
-                if (SessionParameterTexts != null)
-                {
-                    texts = SessionParameterTexts;
-                }
-                IList<SqlParameter> sqlParams = SessionParameters;
-                foreach (ReportParameterInfo repInfo in repInfos)
-                {
-                    int i = 0;
-                    foreach (SqlParameter param in sqlParams)
-                    {
-                        if (repInfo.Name.StartsWith("Res",StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            @params.Add(new ReportParameter(repInfo.Name,ReportTexts.Resources.ResourceManager.GetString(repInfo.Name), false));
-                        }
-                        if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
-                        {
-                            if (texts != null)
-                            {
-                                @params.Add(new ReportParameter(repInfo.Name, texts[i], false));
-                            }
-                            else
-                            {
-                                @params.Add(new ReportParameter(repInfo.Name, param.Value.ToString(), false));
-                            }
-                        }
-                        i += 1;
-                    }
-                    //if (repInfo.Name == "ReportName")
-                    //{
-                     //   @params.Add(new ReportParameter(repInfo.Name, fill.ReportTitle(ReportID), false));
-                   // }
-                }
-                //
-
-
+                texts = SessionParameterTexts;
             }
-
+            IList<SqlParameter> sqlParams = SessionParameters;
+            foreach (ReportParameterInfo repInfo in repInfos)
+            {
+                int i = 0;
+                var added = false;
+                foreach (SqlParameter param in sqlParams)
+                {
+                    if (repInfo.Name.StartsWith("Res",StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        @params.Add(new ReportParameter(repInfo.Name,ReportTexts.Resources.ResourceManager.GetString(repInfo.Name), false));
+                        added = true;
+                    }
+                    if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
+                    {
+                        {
+                            @params.Add(new ReportParameter(repInfo.Name, texts[i], false));
+                            added = true;
+                        }
+                    }
+                    if (!added && repInfo.Name == "culture")
+                        @params.Add(new ReportParameter("culture",Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
+                    i += 1;
+                }
+            }
+ 
             ReportViewer1.LocalReport.SetParameters(@params);
 
             //The first in the report has to hve the name DataSet1
@@ -188,13 +169,6 @@ namespace Teleopti.Analytics.Portal
             {
                 ReportViewer1.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
             }
-            //ReportViewer1.Height = 
-            //Response.Write("FillReport Före DataBind")
-            //Return
-        	//ReportViewer1.DataBind();
-
         }
-
-        
     }
 }

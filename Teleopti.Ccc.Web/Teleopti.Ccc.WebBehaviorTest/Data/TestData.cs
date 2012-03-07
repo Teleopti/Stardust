@@ -27,10 +27,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithoutTextRequests;
 		public static IApplicationRole AgentRoleWithoutTeamSchedule;
 		public static IApplicationRole AgentRoleWithoutMobileReports;
+		public static IApplicationRole AgentRoleWithoutMyTimeWeb;
+
+		public static IApplicationRole AgentRoleWithoutResReportServiceLevelAndAgentsReady;
 		
 		public static IApplicationRole AgentRoleOnlyWithOwnData;
 		public static IApplicationRole AgentRoleWithSiteData;
 		public static IApplicationRole AgentRoleWithAnotherSiteData;
+		public static IApplicationRole AdministratorRoleWithEveryoneData;
 
 		public static IActivity ActivityPhone;
 		public static IActivity ActivityLunch;
@@ -60,9 +64,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ISite CommonSite;
 		public static ISite AnotherSite;
 
-		public static IContract ContractOne;
+		public static IContract CommonContract;
 		public static IPartTimePercentage PartTimePercentageOne;
-		public static IContractSchedule ContractScheduleOne;
-
+		public static IContractSchedule WorkingWeekContractSchedule;
+		public static IContractSchedule DayOffTodayContractSchedule;
 	}
 }

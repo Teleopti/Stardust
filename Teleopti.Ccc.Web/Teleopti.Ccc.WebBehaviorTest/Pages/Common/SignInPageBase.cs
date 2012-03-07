@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public abstract void ClickApplicationOkButton();
 		public abstract void SignInApplication(string username, string password);
 		protected abstract void WaitUntilSignInOrBusinessUnitListOrErrorAppears();
+		protected abstract void WaitUntilSignInOrErrorAppears();
 		public abstract void SelectFirstBusinessUnit();
 		public abstract void ClickBusinessUnitOkButton();
 

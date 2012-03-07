@@ -87,9 +87,12 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyFindByForeignId()
         {
+            var idOne = "09DB7510-ED3C-49CE-B49C-D43D94EC7263";
+            var idNotExists = "2CF43425-2C18-41D8-8897-2F8BD5B60323";
+
             IList<IApplicationFunction> list = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
-            Assert.IsNotNull(ApplicationFunction.FindByForeignId(list, DefinedForeignSourceNames.SourceMatrix, "1"));
-            Assert.IsNull(ApplicationFunction.FindByForeignId(list, DefinedForeignSourceNames.SourceMatrix, "4"));
+            Assert.IsNotNull(ApplicationFunction.FindByForeignId(list, DefinedForeignSourceNames.SourceMatrix, idOne));
+            Assert.IsNull(ApplicationFunction.FindByForeignId(list, DefinedForeignSourceNames.SourceMatrix, idNotExists));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

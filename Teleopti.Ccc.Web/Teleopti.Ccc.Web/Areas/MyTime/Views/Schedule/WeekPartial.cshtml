@@ -10,10 +10,8 @@
 	<style>
 		@foreach (var style in Model.Styles)
 		{
-			@string.Format(".weekview-day li.{0} div{{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
+			@string.Format(".weekview-day li.{0} div {{border-left-color: {1}; border-right-color: {1};}}\n", style.Name, style.ColorHex)
 		}
-
-		
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		@foreach (var day in Model.Days)
@@ -39,7 +37,7 @@
 					<div class="relative">
 						<div class="text-request absolute" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
 							<div class="floatright extrasmall">@day.TextRequestCount</div>
-							<div class="icon text-request floatright" />
+							<div class="icon text-request ir floatright" />
 						</div>
 						@if (day.HasNote)
 						{
@@ -59,7 +57,7 @@
 							<div class="truncate">@period.Title</div>
 							@if (period.Meeting != null)
 							{
-								<div class="icon meeting tooltip floatright" data-mytime-subject="@Html.AttributeEncode(period.Meeting.Title)" data-mytime-location="@Html.AttributeEncode(period.Meeting.Location)"></div>
+								<div class="icon meeting tooltip floatright" tooltip-text="<div><dl><dt>Subject: </dt><dd> @period.Meeting.Title </dd><dt>Location: </dt><dd> @period.Meeting.Location </dd></dl></div>"></div>
 							}
 						</div>
 					</li>
@@ -95,10 +93,10 @@
 					<div class="edit-module-element floatleft">
 						<label class="displayblock" for="Schedule-addTextRequest-fromTime-input-input">@Resources.Time</label>
 						<select id="Schedule-addTextRequest-fromTime-input" class="time-input combobox">
-							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-							{
+							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+	   {
 								<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-							}
+	   }
 						</select>
 					</div>
 					<div class="edit-module-element clearleftfloat floatleft">
@@ -108,10 +106,10 @@
 					<div class="edit-module-element floatleft">
 						<label class="displayblock" for="Schedule-addTextRequest-toTime-input-input">@Resources.Time</label>
 						<select id="Schedule-addTextRequest-toTime-input" class="time-input combobox">
-							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-							{
+							@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+	   {
 								<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-							}
+	   }
 						</select>
 					</div>
 					<div class="clearboth"></div>

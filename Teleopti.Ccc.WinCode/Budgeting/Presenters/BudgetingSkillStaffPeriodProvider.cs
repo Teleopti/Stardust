@@ -42,12 +42,14 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			return new BudgetSkillStaffPeriodContainer(allSkillStaffPeriods, selectedBudgetDays);
 		}
 
-	    private static IEnumerable<ISkillStaffPeriod> GetAllSkillStaffPeriods(IDictionary<ISkill, IList<ISkillDay>> skillDaysForSkills)
-		{
-			var allSkillDays = from s in skillDaysForSkills.Values
-			                   from d in s
-			                   select d;
-			return from s in allSkillDays
+	    private IEnumerable<ISkillStaffPeriod> GetAllSkillStaffPeriods(IDictionary<ISkill, IList<ISkillDay>> skillDaysForSkills)
+	    {
+	    	var skillDayList = new List<ISkillDay>();
+			foreach (var skill in _mainModel.BudgetGroup.SkillCollection)
+	    	{
+	    		skillDayList.AddRange(skillDaysForSkills[skill]);
+	    	}
+			return from s in skillDayList
 			       from p in s.SkillStaffPeriodCollection
 			       select p;
 		}

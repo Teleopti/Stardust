@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IWebReportRepository
 	{
-		IEnumerable<ReportControlSkillGet> ReportControlSkillGet(int reportId, Guid personCode, int languageId,
+		IEnumerable<ReportControlSkillGet> ReportControlSkillGet(Guid reportId, Guid personCode, int languageId,
 		                                                            Guid businessUnitCode);
 
 		ReportMobileReportInit ReportMobileReportInit(Guid personCode, int languageId, Guid businessUnitCode, string skillSet, string timeZoneCode);
 
-		IEnumerable<ReportDataForecastVersusActualWorkload> ReportDataForecastVersusActualWorkload(int scenarioId, string skillSet, string workloadSet, int intervalType, DateTime dateFrom, DateTime dateTo, int intervalFrom, int intervalTo, int timeZoneId, Guid personCode, int reportId, int languageId, Guid businessUnitCode);
+		IEnumerable<ReportDataForecastVersusActualWorkload> ReportDataForecastVersusActualWorkload(int scenarioId, string skillSet, string workloadSet, int intervalType, DateTime dateFrom, DateTime dateTo, int intervalFrom, int intervalTo, int timeZoneId, Guid personCode, Guid reportId, int languageId, Guid businessUnitCode);
 
 		IEnumerable<ReportDataQueueStatAbandoned> ReportDataQueueStatAbandoned(int scenarioId,
 		                                                                             string skillSet,
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		                                                                             int intervalTo,
 		                                                                             int timeZoneId,
 		                                                                             Guid personCode,
-		                                                                             int reportId,
+		                                                                             Guid reportId,
 		                                                                             int languageId,
 		                                                                             Guid businessUnitCode);
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		                                                                                                 int serviceLevelCalculationId,
 		                                                                                                 int timeZoneId,
 		                                                                                                 Guid personCode,
-		                                                                                                 int reportId,
+		                                                                                                 Guid reportId,
 		                                                                                                 int languageId,
 		                                                                                                 Guid businessUnitCode);
 	}

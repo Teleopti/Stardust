@@ -181,6 +181,7 @@
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListViewColumnClick);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.ListViewSelectedIndexChanged);
+            this.listView1.DoubleClick += new System.EventHandler(this.PersonSelectedDoubleClick);
             // 
             // columnHeaderFirstName
             // 

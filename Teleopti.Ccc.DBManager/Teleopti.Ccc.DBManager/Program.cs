@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.DBManager.Library;
 
 namespace Teleopti.Ccc.DBManager
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.DBManager
         private static TextWriter _logger;
         private static int _currentDatabaseBuildNumber;
         private static SqlConnection _sqlConnection;
-        private static string _baseDirectory;
+        private static DatabaseFolder _databaseFolder;
         private static CommandLineArgument _commandLineArgument;
         private static string _fileName;
         private const int CommandTimeout = 900; //Command Timeout for Create + Release scripts
@@ -49,17 +50,11 @@ namespace Teleopti.Ccc.DBManager
                 if (args.Length > 0 && args.Length < 9)
                 {
                     _commandLineArgument = new CommandLineArgument(args);
-
 #if DEBUG
-                    logWrite("DBManager is running in DEBUG Mode...");
-                    _baseDirectory = @"..\..\..\..\Database";
-#else
-                    _baseDirectory = _commandLineArgument.PathToDbManager;
-                    if (_baseDirectory.Equals(string.Empty))
-                        _baseDirectory = getBaseDirectory();
+					logWrite("DBManager is running in DEBUG Mode...");
 #endif
-                    _baseDirectory = Path.GetFullPath(_baseDirectory);
-                    logWrite("Running from:" + _baseDirectory);
+					_databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
+                    logWrite("Running from:" + _databaseFolder.Path());
 
                     //Connect and open db
                     _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionStringToMaster);
@@ -70,7 +65,7 @@ namespace Teleopti.Ccc.DBManager
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
                     //Exclude Agg from Azure
-                    if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == CommandLineArgument.DatabaseType.TeleoptiCCCAgg.ToString())
+                    if (_isAzure && _commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
 
                     {
                         logWrite("This is a TeleoptiCCCAgg, exclude from SQL Asure");
@@ -83,7 +78,7 @@ namespace Teleopti.Ccc.DBManager
                         if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
                         {
 
-                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseTypeName);
+                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
                             CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                         }
                         else
@@ -155,7 +150,7 @@ namespace Teleopti.Ccc.DBManager
                     Console.Out.WriteLine("-P[Password]");
                     Console.Out.WriteLine("-N[Target build number]");
                     Console.Out.WriteLine("-E Uses Integrated Security, otherwise SQL Server security.");
-                    string databaseTypeList = string.Join("|", Enum.GetNames(typeof(CommandLineArgument.DatabaseType)));
+                    string databaseTypeList = string.Join("|", Enum.GetNames(typeof(DatabaseType)));
                     Console.Out.WriteLine(string.Format(CultureInfo.CurrentCulture, "-O[{0}]", databaseTypeList));
                     Console.Out.WriteLine("-C Creates a database with name from -D switch.");
                     Console.Out.WriteLine("-L[sqlUserName:sqlUserPassword] Will create a sql user that the application will use when running. Mandatory while using -C if -W is not used");
@@ -184,22 +179,6 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
-        private static string getBaseDirectory()
-        {
-
-            string baseDirectory = string.Empty;
-            Assembly[] assemblyCollection = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var assembly in assemblyCollection)
-            {
-                if (assembly.ManifestModule.Name.ToLower() == "dbmanager.exe")
-                {
-                    baseDirectory = Path.GetDirectoryName(assembly.Location);
-                }
-            }
-            return baseDirectory;
-        }
-
         static void _sqlConnection_InfoMessage(object sender, SqlInfoMessageEventArgs e)
         {
             logWrite(e.Message);
@@ -222,7 +201,7 @@ namespace Teleopti.Ccc.DBManager
         private static void applyReleases(string databaseTypeName)
         {
             _currentDatabaseBuildNumber = GetDatabaseBuildNumber();
-            string releasesPath = _baseDirectory + @"\" + databaseTypeName + @"\Releases";
+            string releasesPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Releases";
             if (Directory.Exists(releasesPath))
             {
                 DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
@@ -313,7 +292,7 @@ namespace Teleopti.Ccc.DBManager
             logWrite("Applying Azure DDL starting point...");
 
             string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\{1}.00000329.sql",
-                                            _baseDirectory, databaseTypeName);
+                                            _databaseFolder.Path(), databaseTypeName);
 
             string sql;
             using(TextReader sqlTextReader = new StreamReader(fileName))
@@ -327,7 +306,7 @@ namespace Teleopti.Ccc.DBManager
         private static void applyTrunk(string databaseTypeName)
         {
             logWrite("Applying Trunk...");
-            string trunkPath = _baseDirectory + @"\" + databaseTypeName + @"\Trunk";
+            string trunkPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Trunk";
             if (Directory.Exists(trunkPath))
             {
                 string sqlFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.sql", trunkPath);
@@ -361,7 +340,7 @@ namespace Teleopti.Ccc.DBManager
 
         private static void applyProgrammability(string databaseTypeName)
         {
-            string progPath = _baseDirectory + @"\" + databaseTypeName + @"\Programmability";
+            string progPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Programmability";
             string[] directories = Directory.GetDirectories(progPath);
 
             foreach (string directory in directories)
@@ -443,42 +422,15 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
-        private static void CreateDB(string databaseName, string databaseTypeName)
+        private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
-            
-            string fileName;
-            if (_isAzure)
-            {
-               fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\{1}.sql", _baseDirectory, databaseTypeName);
-            }
-            else
-            {
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\{1}.sql", _baseDirectory, databaseTypeName);
-            }
-           
-            TextReader textReader = new StreamReader(fileName);
-            string sql = textReader.ReadToEnd();
-            textReader.Close();
 
-            sql = sql.Replace("$(DBNAME)", databaseName);
-            sql = sql.Replace("$(DBTYPE)", databaseTypeName);
-
-            IniFile databaseSettingsIniFile = new IniFile(_baseDirectory + "\\" + databaseTypeName + "\\DatabaseSettings.ini");
-            Dictionary<string, string> sectionValues = databaseSettingsIniFile.GetSectionValues("Settings");
-
-            // Dynamic DatabaseSettings.ini now, throw in just about anything within the section "Settings".
-            foreach (KeyValuePair<string, string> keyValuePair in sectionValues)
-            {
-                string toBeReplaced = string.Format(CultureInfo.CurrentCulture, "$({0})", keyValuePair.Key);
-                sql = sql.Replace(toBeReplaced, keyValuePair.Value);
-            }
-
-            SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection);
-            sqlCommand.CommandTimeout = CommandTimeout;  //Create database might be an issue on a slow disk subsystem
-            sqlCommand.ExecuteNonQuery();
-
-
+        	var creator = new DatabaseCreator(new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager)), _sqlConnection);
+			if (_isAzure)
+				creator.CreateAzureDatabase(databaseType, databaseName);
+			else
+				creator.CreateDatabase(databaseType, databaseName);
         }
 
         private static void CreateLogin(string user, string pwd, Boolean iswingroup)
@@ -488,16 +440,16 @@ namespace Teleopti.Ccc.DBManager
             if (_isAzure)
             {
                 if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _baseDirectory);
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
                 else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _baseDirectory);
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _databaseFolder.Path());
             }
             else
             {
                 if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _baseDirectory);
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
                 else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _baseDirectory);
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
             }
     
             TextReader tr = new StreamReader(fileName);
@@ -535,11 +487,11 @@ namespace Teleopti.Ccc.DBManager
                     cmd.ExecuteNonQuery();
                 }
 
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\permissions - add.sql", _baseDirectory);
+                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\permissions - add.sql", _databaseFolder.Path());
             }
             else
             {
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _baseDirectory);
+                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
             }              
 
             sql = System.IO.File.ReadAllText(fileName);
@@ -568,7 +520,7 @@ namespace Teleopti.Ccc.DBManager
         private static void CreateDefaultVersionInformation()
         {
             logWrite("Creating database version table and setting inital version to 0...");
-            string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\CreateDatabaseVersion.sql", _baseDirectory);
+            string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\CreateDatabaseVersion.sql", _databaseFolder.Path());
             TextReader textReader = new StreamReader(fileName);
             string sql = textReader.ReadToEnd();
             textReader.Close();

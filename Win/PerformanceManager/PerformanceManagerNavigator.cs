@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.PerformanceManager
             proc.EnableRaisingEvents = false;
             proc.StartInfo.FileName = "iexplore.exe";
             
-            string matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "?pm=1&forceformslogin={0}&buid={1}";
+			string matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
             proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
             //proc.Start();
 			try

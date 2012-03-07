@@ -42,3 +42,18 @@ $.fn.extend({
 		return (total != visible);
 	}
 });
+
+$.fn.extend({
+	removeClassStartingWith: function (prefix) {
+		return this.each(function () {
+			var regex = new RegExp('\\b' + prefix + '.*?\\b', 'gm');
+			var original = this.className;
+			var modified = original
+				.replace(regex, '')
+				.replace('  ', ' ')
+				;
+			this.className = modified;
+			//$('#a')[0].className = $('#a')[0].className.replace(/\bbg.*?\b/g, '');
+		});
+	}
+});

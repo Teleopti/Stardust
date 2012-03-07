@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		private BudgetGroupMainModel mainModel;
 		private ISkill skill;
 		private IScenario scenario;
+		private IDictionary<ISkill, IList<ISkillDay>> skillDayDictionary;
+		private ISkillStaffPeriod skillStaffPeriod1;
+		private ISkillStaffPeriod skillStaffPeriod2;
 
 		[SetUp]
 		public void Setup()
@@ -44,12 +47,15 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			dayDetail1 = new BudgetGroupDayDetailModel(budgetDay1);
 			dayDetail2 = new BudgetGroupDayDetailModel(budgetDay2);
 
-		    mainModel = new BudgetGroupMainModel(null)
-		                    {
-		                        BudgetGroup = budgetGroup,
-		                        Period = new DateOnlyPeriod(2010, 10, 15, 2010, 10, 31),
-		                        Scenario = scenario
-		                    };
+			skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
+			skillStaffPeriod2 = mocks.StrictMock<ISkillStaffPeriod>();
+
+			mainModel = new BudgetGroupMainModel(null)
+			{
+				BudgetGroup = budgetGroup,
+				Period = new DateOnlyPeriod(2010, 10, 15, 2010, 10, 31),
+				Scenario = scenario
+			};
 		}
 
 		[Test]
@@ -58,16 +64,13 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			var budgetSkillStaffPeriodProvider = mocks.StrictMock<IBudgetSkillStaffPeriodProvider>();
 			var budgetSkillStaffPeriodContainer = mocks.StrictMock<IBudgetSkillStaffPeriodContainer>();
 
-			var skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
-			var skillStaffPeriod2 = mocks.StrictMock<ISkillStaffPeriod>();
-
 			using (mocks.Record())
 			{
 				Expect.Call(budgetSkillStaffPeriodProvider.CreateContainer()).Return(budgetSkillStaffPeriodContainer);
-				Expect.Call(budgetSkillStaffPeriodContainer.SelectedBudgetDays).Return(new List<IBudgetGroupDayDetailModel> {dayDetail1, dayDetail2});
+				Expect.Call(budgetSkillStaffPeriodContainer.SelectedBudgetDays).Return(new List<IBudgetGroupDayDetailModel> { dayDetail1, dayDetail2 });
 				Expect.Call(
 					budgetSkillStaffPeriodContainer.ForPeriod(
-						new DateOnlyPeriod(budgetDay1.Day, budgetDay1.Day).ToDateTimePeriod(budgetGroup.TimeZone))).Return(new List<ISkillStaffPeriod>{skillStaffPeriod1});
+						new DateOnlyPeriod(budgetDay1.Day, budgetDay1.Day).ToDateTimePeriod(budgetGroup.TimeZone))).Return(new List<ISkillStaffPeriod> { skillStaffPeriod1 });
 				Expect.Call(
 					budgetSkillStaffPeriodContainer.ForPeriod(
 						new DateOnlyPeriod(budgetDay2.Day, budgetDay2.Day).ToDateTimePeriod(budgetGroup.TimeZone))).Return(new List<ISkillStaffPeriod> { skillStaffPeriod2 });
@@ -92,16 +95,14 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			var skillDayLoader = mocks.StrictMock<ISkillDayLoadHelper>();
 			var skillDay1 = mocks.StrictMock<ISkillDay>();
 			var skillDay2 = mocks.StrictMock<ISkillDay>();
-			var skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
-			var skillStaffPeriod2 = mocks.StrictMock<ISkillStaffPeriod>();
+
+			prepareDictionaryForRegularSkill(skillDay1, skillDay2);
 
 			using (mocks.Record())
 			{
 				Expect.Call(selectedBudgetDays.Find()).Return(new List<IBudgetGroupDayDetailModel> { dayDetail1, dayDetail2 });
 
 				var expectedPeriodToLoad = new DateOnlyPeriod(2010, 10, 20, 2010, 10, 22);
-				var skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
-				skillDayDictionary.Add(skill, new List<ISkillDay> { skillDay1, skillDay2 });
 				Expect.Call(skillDayLoader.LoadSchedulerSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
 																	skillDayDictionary);
 				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(
@@ -109,9 +110,51 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(
 					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod2 })).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod1.Period).Return(
-                    DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 19, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
+					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 19, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod2.Period).Return(
-                    DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
+					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
+
+				Expect.Call(skillDay1.IsClosed).Return(false);
+				Expect.Call(skillDay1.CurrentDate).Return(new DateOnly(2010, 10, 20));
+				Expect.Call(skillDay2.CurrentDate).Return(new DateOnly(2010, 10, 20));
+			}
+			using (mocks.Playback())
+			{
+				var target = new BudgetingSkillStaffPeriodProvider(mainModel, selectedBudgetDays, skillDayLoader);
+				var result = target.CreateContainer();
+				Assert.AreEqual(2, result.SelectedBudgetDays.Count());
+				Assert.AreEqual(2, result.ForPeriod(new DateTimePeriod(2010, 1, 1, 2010, 12, 31)).Count());
+			}
+		}
+
+		private void prepareDictionaryForRegularSkill(ISkillDay skillDay1, ISkillDay skillDay2)
+		{
+			skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+			skillDayDictionary.Add(skill, new List<ISkillDay> { skillDay1, skillDay2 });
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldOnlyHaveSelectedChildSkillInSkillStaffPeriodContainerFromTheProvider()
+		{
+			var selectedBudgetDays = mocks.StrictMock<ISelectedBudgetDays>();
+			var skillDayLoader = mocks.StrictMock<ISkillDayLoadHelper>();
+			var skillDay1 = mocks.StrictMock<ISkillDay>();
+			var skillDay2 = mocks.StrictMock<ISkillDay>();
+
+			prepareDictionaryForMultisite(skillDay1, skillDay2);
+
+			var expectedPeriodToLoad = new DateOnlyPeriod(2010, 10, 20, 2010, 10, 22);
+
+			using (mocks.Record())
+			{
+				Expect.Call(selectedBudgetDays.Find()).Return(new List<IBudgetGroupDayDetailModel> { dayDetail1, dayDetail2 });
+
+				Expect.Call(skillDayLoader.LoadSchedulerSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
+																	skillDayDictionary);
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(
+					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod2 })).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod2.Period).Return(
+					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 
 			    //Expect.Call(skillDay1.IsClosed).Return(false);
                 Expect.Call(skillDay1.OpenForWork).Return(new OpenForWork(){IsOpenForIncomingWork = true, IsOpen = true});
@@ -122,9 +165,22 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			{
 				var target = new BudgetingSkillStaffPeriodProvider(mainModel, selectedBudgetDays, skillDayLoader);
 				var result = target.CreateContainer();
-				Assert.AreEqual(2,result.SelectedBudgetDays.Count());
-				Assert.AreEqual(2,result.ForPeriod(new DateTimePeriod(2010,1,1,2010,12,31)).Count());
+				Assert.AreEqual(2, result.SelectedBudgetDays.Count());
+				Assert.AreEqual(1, result.ForPeriod(new DateTimePeriod(2010, 1, 1, 2010, 12, 31)).Count());
 			}
+		}
+
+		private void prepareDictionaryForMultisite(ISkillDay skillDay1, ISkillDay skillDay2)
+		{
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill("test");
+			var childSkill = SkillFactory.CreateChildSkill("child", multisiteSkill);
+
+			budgetGroup.RemoveAllSkills();
+			budgetGroup.AddSkill(childSkill);
+
+			skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+			skillDayDictionary.Add(multisiteSkill, new List<ISkillDay> { skillDay1 });
+			skillDayDictionary.Add(childSkill, new List<ISkillDay> { skillDay2 });
 		}
 
 		[Test]

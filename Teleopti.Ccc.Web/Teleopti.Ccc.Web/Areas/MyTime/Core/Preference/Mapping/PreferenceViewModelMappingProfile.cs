@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceViewModelMappingProfile : Profile
 	{
-		private readonly Func<IMappingEngine> _mappingEngine;
+		private readonly IResolve<IScheduleColorProvider> _scheduleColorProvider;
+		private readonly IResolve<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public PreferenceViewModelMappingProfile(Func<IMappingEngine> mappingEngine)
+		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider, IResolve<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
 		{
-			_mappingEngine = mappingEngine;
+			_scheduleColorProvider = scheduleColorProvider;
+			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
-		public class PreferenceWeekMappingData
+		private class PreferenceWeekMappingData
 		{
 			public DateOnly FirstDayOfWeek { get; set; }
 			public DateOnlyPeriod Period { get; set; }
@@ -26,21 +32,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
 		}
 
-		public class BaseDayMappingData
+		private class DayMappingData
 		{
 			public DateOnly Date { get; set; }
 			public DateOnlyPeriod Period { get; set; }
-			public IWorkflowControlSet WorkflowControlSet { get; set; }
-		}
 
-		public class ScheduledDayMappingData : BaseDayMappingData
-		{
 			public IScheduleDay ScheduleDay { get; set; }
+			public SchedulePartView SignificantPart { get; set; }
+			public bool HasDayOffUnderAbsence { get; set; }
 			public IVisualLayerCollection Projection { get; set; }
-		}
 
-		public class PreferenceDayMappingData : BaseDayMappingData
-		{
+			public IWorkflowControlSet WorkflowControlSet { get; set; }
 			public IShiftCategory ShiftCategory { get; set; }
 			public IDayOffTemplate DayOffTemplate { get; set; }
 			public IAbsence Absence { get; set; }
@@ -55,27 +57,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.WeekDayHeaders, o => o.MapFrom(s => DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture)))
 				.ForMember(d => d.Weeks, o => o.MapFrom(s =>
-																		{
-																			var firstDatesOfWeeks = new List<DateOnly>();
-																			var firstDateOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-																			var lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(s.Period.EndDate, CultureInfo.CurrentCulture).AddDays(7));
-																			while (firstDateOfWeek < lastDisplayedDate)
-																			{
-																				firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
-																				firstDateOfWeek = firstDateOfWeek.AddDays(7);
-																			}
+				                                        	{
+				                                        		var firstDatesOfWeeks = new List<DateOnly>();
+				                                        		var firstDateOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
+				                                        		var lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(s.Period.EndDate, CultureInfo.CurrentCulture).AddDays(7));
+				                                        		while (firstDateOfWeek < lastDisplayedDate)
+				                                        		{
+				                                        			firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
+				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
+				                                        		}
 
-																			return (from d in firstDatesOfWeeks
-																			        select
-																			        	new PreferenceWeekMappingData
-																			        		{
-																			        			FirstDayOfWeek = d,
-																			        			Period = s.Period,
-																			        			Days = s.Days,
-																			        			WorkflowControlSet = s.WorkflowControlSet,
-																			        		}).ToArray();
-																		}))
+				                                        		return (from d in firstDatesOfWeeks
+				                                        		        select
+				                                        		        	new PreferenceWeekMappingData
+				                                        		        		{
+				                                        		        			FirstDayOfWeek = d,
+				                                        		        			Period = s.Period,
+				                                        		        			Days = s.Days,
+				                                        		        			WorkflowControlSet = s.WorkflowControlSet,
+				                                        		        		}).ToArray();
+				                                        	}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
+				.ForMember(d => d.Styles, c => c.MapFrom(s => _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				;
 
 			CreateMap<string, WeekDayHeader>()
@@ -119,55 +122,88 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
 				                                       		       	let projection = day == null ? null : day.Projection
 				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
+				                                       		       	let significantPart = scheduleDay == null ? SchedulePartView.None : scheduleDay.SignificantPartForDisplay()
+																	let hasDayOffUnderAbsence = scheduleDay != null && _hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(scheduleDay)
 				                                       		       	select
-				                                       		       		projection != null || scheduleDay != null
-				                                       		       			? new ScheduledDayMappingData
-				                                       		       			  	{
-				                                       		       			  		Date = d,
-				                                       		       			  		Period = s.Period,
-				                                       		       			  		Projection = projection,
-				                                       		       			  		ScheduleDay = scheduleDay
-				                                       		       			  	} as BaseDayMappingData
-				                                       		       			: new PreferenceDayMappingData
-				                                       		       			  	{
-				                                       		       			  		Date = d,
-				                                       		       			  		Period = s.Period,
-				                                       		       			  		ShiftCategory = shiftCategory,
-				                                       		       			  		DayOffTemplate = dayOffTemplate,
-				                                       		       			  		Absence = absence,
-				                                       		       			  		WorkflowControlSet = s.WorkflowControlSet,
-				                                       		       			  		WorkTimeMinMax = workTimeMinMax
-				                                       		       			  	} as BaseDayMappingData
+				                                       		       		new DayMappingData
+				                                       		       			{
+				                                       		       				Date = d,
+				                                       		       				Period = s.Period,
+
+				                                       		       				Projection = projection,
+				                                       		       				ScheduleDay = scheduleDay,
+																				SignificantPart = significantPart,
+																				HasDayOffUnderAbsence = hasDayOffUnderAbsence,
+
+				                                       		       				ShiftCategory = shiftCategory,
+				                                       		       				DayOffTemplate = dayOffTemplate,
+				                                       		       				Absence = absence,
+				                                       		       				WorkflowControlSet = s.WorkflowControlSet,
+				                                       		       				WorkTimeMinMax = workTimeMinMax
+				                                       		       			}
 				                                       		       ).ToArray();
 				                                       	}))
 				;
 
-			CreateMap<BaseDayMappingData, DayViewModelBase>()
-				.Include<ScheduledDayMappingData, ScheduledDayViewModel>()
-				.Include<PreferenceDayMappingData, PreferenceDayViewModel>()
+			CreateMap<DayMappingData, DayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.Editable, o => o.MapFrom(IsDayEditable))
-				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.Ignore())
-				;
+				.ForMember(d => d.Editable, o => o.MapFrom(s =>
+				                                           	{
+				                                           		if (s.ScheduleDay != null)
+				                                           			return false;
+				                                           		if (s.WorkflowControlSet == null)
+				                                           			return false;
 
-			// duplication in child mapping will not be required in automapper 2.0
-			CreateMap<ScheduledDayMappingData, ScheduledDayViewModel>()
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.Editable, o => o.MapFrom(IsDayEditable))
+				                                           		var isInsideSchedulePeriod = s.Period.Contains(s.Date);
+				                                           		var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
+				                                           		var isInsidePreferenceInputPeriod = s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
+
+				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
+				                                           	}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.Ignore())
+				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+				                                                 	{
+																		if (s.ScheduleDay != null)
+																		{
+																			if (s.HasDayOffUnderAbsence)
+																				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass()
+																					   + " " + StyleClasses.Striped;
+																			if (s.SignificantPart == SchedulePartView.FullDayAbsence)
+																				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass();
+																			if (s.SignificantPart == SchedulePartView.MainShift)
+																				return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass();
+																			if (s.SignificantPart == SchedulePartView.DayOff)
+																				return StyleClasses.DayOff + " " + StyleClasses.Striped;
+																		}
+																		if (s.ShiftCategory != null)
+																			return s.ShiftCategory.DisplayColor.ToStyleClass();
+																		if (s.Absence != null)
+																			return s.Absence.DisplayColor.ToStyleClass();
+																		if (s.DayOffTemplate != null)
+																			return s.DayOffTemplate.DisplayColor.ToStyleClass();
+				                                                 		return null;
+				                                                 	}))
+				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
+				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence ? s : null))
+				;
+			
+			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
 				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
 				;
 
-			// duplication in child mapping will not be required in automapper 2.0
-			CreateMap<PreferenceDayMappingData, PreferenceDayViewModel>()
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
-				.ForMember(d => d.Editable, o => o.MapFrom(IsDayEditable))
-				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.Ignore())
+			CreateMap<DayMappingData, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
+				;
+
+			CreateMap<DayMappingData, AbsenceDayViewModel>()
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name))
+				;
+
+			CreateMap<DayMappingData, PreferenceDayViewModel>()
 				.ForMember(d => d.Preference, o => o.MapFrom(s =>
 																				{
 																					if (s.DayOffTemplate != null)
@@ -201,15 +237,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																				EndTimeString))
 				;
 
-			CreateMap<BaseDayMappingData, HeaderViewModel>()
+			CreateMap<DayMappingData, HeaderViewModel>()
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))
 				.ForMember(d => d.DayDescription, o => o.MapFrom(s =>
-																					{
-																						var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-																						if (s.Date.Day == 1 || s.Date == firstDisplayDate)
-																							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
-																						return string.Empty;
-																					}))
+				                                                 	{
+				                                                 		var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
+				                                                 		if (s.Date.Day == 1 || s.Date == firstDisplayDate)
+				                                                 			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
+				                                                 		return string.Empty;
+				                                                 	}))
 				;
 
 			CreateMap<IWorkflowControlSet, PreferencePeriodViewModel>()
@@ -218,7 +254,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 		}
 
-		private static bool IsDayEditable(BaseDayMappingData s)
+		private static bool IsDayEditable(DayMappingData s)
 		{
 			if (s.WorkflowControlSet != null)
 			{

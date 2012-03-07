@@ -34,15 +34,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.Current = Browser.Current.Page<SignInPage>();
 		}
 
+		public static void GotoGlobalMobileSignInPage()
+		{
+			GoToWithPossibleLongApplicationStartTime("Start/Authentication/MobileSignIn");
+			Pages.Pages.Current = Browser.Current.Page<MobileSignInPage>();
+		}
+
+		public static void GotoGlobalMobileMenuPage()
+		{
+			GoToWithPossibleLongApplicationStartTime("Start/Menu/MobileMenu");
+			Pages.Pages.Current = Browser.Current.Page<MobileSignInPage>();
+		}
+
 		public static void GotoMyTimeSignInPage()
 		{
 			GoToWithPossibleLongApplicationStartTime("MyTime/Authentication/SignIn");
 			Pages.Pages.Current = Browser.Current.Page<SignInPage>();
 		}
 
-		public static void GotoMobileReportsSignInPage()
+		public static void GotoMobileReportsSignInPage(string hash)
 		{
-			GoToWithPossibleLongApplicationStartTime("MobileReports/Authentication/SignIn");
+			GoToWithPossibleLongApplicationStartTime("MobileReports/Authentication/SignIn" + hash);
 			Pages.Pages.Current = Browser.Current.Page<MobileSignInPage>();
 		}
 
@@ -106,6 +118,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo("MyTime#Preference/Index");
 			Pages.Pages.Current = Browser.Current.Page<PreferencePage>();
+		}
+
+		public static void GotoRegionalSettings()
+		{
+			GoTo("MyTime#Settings/Index");
+			Pages.Pages.Current = Browser.Current.Page<RegionalSettingsPage>();
+		}
+
+		public static void GotoPasswordPage()
+		{
+			GoTo("MyTime#Settings/Password");
+			Pages.Pages.Current = Browser.Current.Page<PasswordPage>();
 		}
 
 		public static void GotoPreference(DateTime date)

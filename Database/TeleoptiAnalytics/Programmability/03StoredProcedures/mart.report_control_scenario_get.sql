@@ -14,9 +14,10 @@ GO
 -- 20090211		KJ		Added new mart schema
 -- 20080910		KJ		Added parameter @bu_id
 -- 20100727		DJ		Added hard coded filter: is_deleted
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_control_scenario_get] 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id			uniqueidentifier

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenISignIn()
 		{
 			var userName = UserFactory.User().MakeUser();
-			if (!(Browser.Current.Url.EndsWith("/SignIn") || Browser.Current.Url.EndsWith("/MobileSignIn")))
+			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
 				Navigation.GotoGlobalSignInPage();
 			var page = (SignInPageBase) Pages.Pages.Current;
 			page.SignInApplication(userName, TestData.CommonPassword);
@@ -61,6 +61,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 			var page = Browser.Current.Page<SignInPage>();
 			page.SignInApplication(userName, TestData.CommonPassword);
+			if (page.BusinessUnitList.Exists)
+			{
+				page.SelectFirstBusinessUnit();
+				page.ClickBusinessUnitOkButton();
+			}
 			Navigation.GotoTeamSchedule();
 		}
 

@@ -728,6 +728,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Date.
+        /// </summary>
+        public static string ResApplicationDate {
+            get {
+                return ResourceManager.GetString("ResApplicationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average Talk Time (ATT).
         /// </summary>
         public static string ResATT {
@@ -1975,6 +1984,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResReportTeamMetrics {
             get {
                 return ResourceManager.GetString("ResReportTeamMetrics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request Period.
+        /// </summary>
+        public static string ResRequestPeriod {
+            get {
+                return ResourceManager.GetString("ResRequestPeriod", resourceCulture);
             }
         }
         

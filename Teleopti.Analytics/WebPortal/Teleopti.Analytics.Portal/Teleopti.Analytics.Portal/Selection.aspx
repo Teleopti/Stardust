@@ -6,10 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script type="text/javascript">
 
-function window.onload()
-		{
-		  setSize();
-		}
+    window.onload = setSize;
 		
 function setSize(){
 		//alert(document.all.AllParts.offsetHeight);
@@ -71,7 +68,7 @@ function setSize(){
         <asp:Panel ID="Reports_ContentPanel" runat="server" Height="0px">
             <table cellspacing="0" width="100%" border="0" cellpadding="1">
                 <tr>
-                    <td class="DetailsView" style="width: 70%; border-right: solid 1 blue;">
+                    <td class="DetailsView" style="width: 70%; ">
                         <Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">
                         </Analytics:Selector>
                     </td>
@@ -89,7 +86,7 @@ function setSize(){
         </asp:Panel>
     </div>
     
-        <iframe  runat="server" id="ViewerFrame" name="ViewerFrame" style="height:670px; overflow:hidden; margin:0px padding:0px; display:none;" src="" width="100%" frameborder="1"  allowtransparency="true" ></iframe>
+        <iframe  runat="server" id="ViewerFrame" name="ViewerFrame" style="height:670px; overflow:hidden; margin:0px; padding:0px; display:none;" src="" width="100%" frameborder="1"  allowtransparency="true" ></iframe>
     
     <!--<div class="Panel" style="overflow:hidden;border-top:none;height:680px" id="Viewer" ></div>    -->     
     

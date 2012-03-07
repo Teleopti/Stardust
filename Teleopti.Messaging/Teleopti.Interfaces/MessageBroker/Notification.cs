@@ -27,16 +27,26 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// Gets the route for this subscription.
 		/// </summary>
 		/// <returns></returns>
-		public string Route()
+		public string[] Routes()
 		{
 			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
-			return String.Join("/", stringArray);
+			var basicRoute = String.Join("/", stringArray);
+			
+			var idRoute = String.Join("/", new []{basicRoute, "id", DomainId ?? string.Empty});
+			var referenceRoute = String.Join("/", new []{basicRoute, "ref", DomainReferenceId ?? string.Empty});
+
+			return new[] { basicRoute, idRoute, referenceRoute};
 		}
 
 		/// <summary>
 		/// Gets or sets the domain type.
 		/// </summary>
 		public string DomainType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the domain type.
+		/// </summary>
+		public string DomainQualifiedType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the domain id.

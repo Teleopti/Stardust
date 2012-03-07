@@ -5,7 +5,7 @@
 			<!-- properties -->
 			<property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
 			<property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
-			<property name="connection.connection_string">Data Source=.;Integrated Security=True;initial Catalog=ETLNightlyBuild_TeleoptiCCC7</property>
+			<property name="connection.connection_string">Data Source=.;Integrated Security=True;initial Catalog=$(CCC7DB)</property>
 			<property name="show_sql">false</property>
 			<property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
 			<property name="default_schema">dbo</property>
@@ -15,7 +15,7 @@
 		</session-factory>
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">
-		<connectionString>Data Source=.;Integrated Security=True;Initial Catalog=ETLNightlyBuild_TeleoptiAnalytics</connectionString>
+		<connectionString>Data Source=.;Integrated Security=True;Initial Catalog=$(AnalyticsDB)</connectionString>
 	</matrix>
 	<authentication>
 		<logonMode>mix</logonMode>
