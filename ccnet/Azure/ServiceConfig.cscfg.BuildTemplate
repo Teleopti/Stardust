@@ -11,7 +11,8 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="BD1536FC8F9C6232414076BBB77E107537B44CE6" thumbprintAlgorithm="sha1" />
+	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="BD1536FC8F9C6232414076BBB77E107537B44CE6" thumbprintAlgorithm="sha1" />
+	  <Certificate name="$(SSLCERTNAME)" thumbprint="$(SSLTHUMBPRINT)" thumbprintAlgorithm="$(SSLTHUMBPRINTALGORITHM)"/>
     </Certificates>
   </Role>
 </ServiceConfiguration>

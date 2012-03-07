@@ -63,7 +63,7 @@ IF %ProductId%==1 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.msi" "%OUTDIR%\%OU
 IF %ProductId%==2 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.exe" "%OUTDIR%\%OUTFILE%"
 IF %ProductId%==3 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.msi" "%OUTDIR%\%OUTFILE%"
 IF %ProductId%==4 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.msi" "%OUTDIR%\%OUTFILE%"
-IF %ProductId%==5 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.msi" "%OUTDIR%\%OUTFILE%"
+::IF %ProductId%==5 MOVE /Y "%WISEPROJFILE%\%Product%\%Product%.msi" "%OUTDIR%\%OUTFILE%"
 GOTO Done
 
 :DontReCompile
