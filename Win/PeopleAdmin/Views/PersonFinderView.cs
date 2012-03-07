@@ -247,5 +247,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             attemptDatabaseConnectionSaveSettings(); 
         }
+
+       private void PersonSelectedDoubleClick(object sender, EventArgs e)
+       {
+           OnDoubleClickSelectedPeople(null);
+       }
+
+        public event EventHandler<EventArgs> DoubleClickSelectedPeople;
+
+        public void OnDoubleClickSelectedPeople(EventArgs e)
+        {
+            var handler = DoubleClickSelectedPeople;
+            if (handler != null) handler(this, e);
+        }
+
+       
     }
 }
