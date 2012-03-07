@@ -42,22 +42,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             ForecastsAnalyzeCommandResult commandResult;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var jobResult = _jobResultRepository.Get(message.JobId);
-                LazyLoadingManager.Initialize(jobResult.Details);
+                //var jobResult = _jobResultRepository.Get(message.JobId);
+                //LazyLoadingManager.Initialize(jobResult.Details);
 
-                if (jobResult.FinishedOk)
-                {
-                    Logger.InfoFormat("The forecasts import with job id {0} was already processed.", message.JobId);
-                    return;
-                }
+                //if (jobResult.FinishedOk)
+                //{
+                //    Logger.InfoFormat("The forecasts import with job id {0} was already processed.", message.JobId);
+                //    return;
+                //}
 
-                _feedback.SetJobResult(jobResult, _messageBroker);
-                _feedback.ReportProgress(1, "Starting import...");
+                //_feedback.SetJobResult(jobResult, _messageBroker);
+                //_feedback.ReportProgress(1, "Starting import...");
 
                 var targetSkill = _skillRepository.Get(message.TargetSkillId);
                 if (targetSkill == null)
                 {
-                    _feedback.Error("Invalid skill id in the message.");
+                    //_feedback.Error("Invalid skill id in the message.");
                     endProcessing(unitOfWork);
                     return;
                 }
@@ -84,10 +84,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             {
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                 {
+                    BusinessUnitId = message.BusinessUnitId,
+                    Datasource = message.Datasource,
                     JobId = message.JobId,
                     OwnerPersonId = message.OwnerPersonId,
                     Date = date,
                     Timestamp = message.Timestamp,
+                    TargetSkillId = message.TargetSkillId,
                     OpenHoursList = new []{commandResult.WorkloadDayOpenHours.Get(date.DayOfWeek)},
                     Forecasts = commandResult.ForecastFileDictionary.Get(date)
                 });
@@ -145,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     if (!validators[i].Validate(row[i]))
                         throw new ValidationException(validators[i].ErrorMessage);
                 }
-                _forecasts.Add(new ForecastsFileRow(row, _timeZone));
+                _forecasts.Add(ForecastsFileRowCreator.Create(row, _timeZone));
                 row.Clear();
             }
         }
@@ -164,28 +167,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             var result = new ForecastsAnalyzeCommandResult {ForecastFileDictionary = new ForecastFileDictionary()};
             var firstRow = _forecasts.First();
-            var intervalLengthTicks = firstRow.UtcDateTimeTo.Subtract(firstRow.UtcDateTimeFrom).Ticks;
+            var intervalLengthTicks = firstRow.LocalDateTimeTo.Subtract(firstRow.LocalDateTimeFrom).Ticks;
             var skillName = firstRow.SkillName;
             var startDateTime = DateTime.MaxValue;
             var endDateTime = DateTime.MinValue;
             var workloadDayOpenHours = new WorkloadDayOpenHoursDictionary();
             foreach (var forecastsRow in _forecasts)
             {
-                var period = new DateTimePeriod(forecastsRow.UtcDateTimeFrom, forecastsRow.UtcDateTimeTo);
                 if (!forecastsRow.SkillName.Equals(skillName))
                 {
                     result.ErrorMessage = "There exists multiple skill names in the file.";
                     break;
                 }
-                if (period.ElapsedTime().Ticks != intervalLengthTicks)
+                if (forecastsRow.LocalDateTimeTo.Subtract(forecastsRow.LocalDateTimeFrom).Ticks != intervalLengthTicks)
                 {
                     result.ErrorMessage = "Intervals do not have the same length.";
                     break;
                 }
-                if (period.StartDateTime < startDateTime)
-                    startDateTime = period.StartDateTime;
-                if (period.EndDateTime > endDateTime)
-                    endDateTime = period.EndDateTime;
+                if (forecastsRow.LocalDateTimeFrom < startDateTime)
+                    startDateTime = forecastsRow.LocalDateTimeFrom;
+                if (forecastsRow.LocalDateTimeTo > endDateTime)
+                    endDateTime = forecastsRow.LocalDateTimeTo;
 
                 workloadDayOpenHours.Add(forecastsRow.LocalDateTimeFrom.DayOfWeek,
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
@@ -193,7 +195,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
                 result.ForecastFileDictionary.Add(new DateOnly(startDateTime), forecastsRow);
             }
-            result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime).AddDays(1));
+            result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
+            result.WorkloadDayOpenHours = workloadDayOpenHours;
             result.IntervalLengthTicks = intervalLengthTicks;
             result.SkillName = firstRow.SkillName;
             return result;

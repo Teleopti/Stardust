@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    [Serializable]
     public class ForecastsFileRow : IForecastsFileRow
     {
         public string SkillName { get; set; }
@@ -18,22 +18,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public int TaskTime { get; set; }
         public int AfterTaskTime { get; set; }
         public double? Agents { get; set; }
-
-        public ForecastsFileRow(IList<string> row, ICccTimeZoneInfo timeZone)
-        {
-            SkillName = row[0];
-            LocalDateTimeFrom = DateTime.ParseExact(row[1], "yyyyMMdd HH:mm", null);
-            LocalDateTimeTo = DateTime.ParseExact(row[2], "yyyyMMdd HH:mm", null);
-            UtcDateTimeFrom = TimeZoneHelper.ConvertToUtc(LocalDateTimeFrom, timeZone);
-            UtcDateTimeTo = TimeZoneHelper.ConvertToUtc(LocalDateTimeTo, timeZone);
-            Period = new DateTimePeriod(UtcDateTimeFrom, UtcDateTimeTo);
-            Tasks = int.Parse(row[3]);
-            TaskTime = int.Parse(row[4]);
-            AfterTaskTime = int.Parse(row[5]);
-
-            if (row.Count > 6)
-                Agents = double.Parse(row[6]);
-        }
 
         public override bool Equals(object obj)
         {
@@ -53,6 +37,29 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
                    UtcDateTimeFrom.GetHashCode() ^ UtcDateTimeTo.GetHashCode() ^ Tasks.GetHashCode() ^
                    Period.GetHashCode() ^
                    TaskTime.GetHashCode() ^ AfterTaskTime.GetHashCode() ^ (Agents == null ? 1 : Agents.GetHashCode());
+        }
+    }
+
+    public class ForecastsFileRowCreator
+    {
+        public static ForecastsFileRow Create(IList<string> row, ICccTimeZoneInfo timeZone)
+        {
+            var forecastRow = new ForecastsFileRow
+                                  {
+                                      SkillName = row[0],
+                                      LocalDateTimeFrom = DateTime.ParseExact(row[1], "yyyyMMdd HH:mm", null),
+                                      LocalDateTimeTo = DateTime.ParseExact(row[2], "yyyyMMdd HH:mm", null),
+                                      Tasks = int.Parse(row[3]),
+                                      TaskTime = int.Parse(row[4]),
+                                      AfterTaskTime = int.Parse(row[5]),
+                                  };
+            forecastRow.UtcDateTimeFrom = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeFrom, timeZone);
+            forecastRow.UtcDateTimeTo = TimeZoneHelper.ConvertToUtc(forecastRow.LocalDateTimeTo, timeZone);
+            forecastRow.Period = new DateTimePeriod(forecastRow.UtcDateTimeFrom, forecastRow.UtcDateTimeTo);
+
+            if (row.Count > 6)
+                forecastRow.Agents = double.Parse(row[6], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+            return forecastRow;
         }
     }
 }

@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     public class OpenAndSplitTargetSkillConsumer : ConsumerOf<OpenAndSplitTargetSkill>
     {
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IOpenAndSplitSkillCommand _command;
-        private ISkillRepository _skillRepository;
+        private readonly IOpenAndSplitSkillCommand _command;
+        private readonly ISkillRepository _skillRepository;
         private IJobResultRepository _jobResultRepository;
-        private IJobResultFeedback _feedback;
+        private readonly IJobResultFeedback _feedback;
         private IMessageBroker _messageBroker;
-        private IServiceBus _serviceBus;
+        private readonly IServiceBus _serviceBus;
 
         public OpenAndSplitTargetSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
 		{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var targetSkill = _skillRepository.Get(message.TargetSkillId);
-                _command.Execute(targetSkill, new DateOnlyPeriod(message.Date, message.Date.AddDays(1)), message.OpenHoursList);
+                _command.Execute(targetSkill, new DateOnlyPeriod(message.Date, message.Date), message.OpenHoursList);
                 endProcessing(unitOfWork);
             }
             _serviceBus.Send(new ImportForecastsToSkill

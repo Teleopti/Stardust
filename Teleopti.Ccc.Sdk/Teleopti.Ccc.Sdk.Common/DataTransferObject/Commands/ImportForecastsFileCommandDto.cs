@@ -14,5 +14,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         
         [DataMember]
         public Guid UploadedFileId { get; set; }
+
+        [DataMember]
+        public Guid TargetSkillId { get; set; }
     }
 }
