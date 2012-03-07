@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -30,21 +30,30 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
             {
                 Guid selectedPerson = _permissionViewerRoles.SelectedPerson;
                 var functions = _repositoryFactory.CreateApplicationRolePersonRepository(uow).FunctionsOnPerson(selectedPerson);
-                var list = new List<ListViewItem>();
-                foreach (var function in functions)
+                
+                checkAvailableFunctions(functions);
+            }
+        }
+
+        private void checkAvailableFunctions(IEnumerable<IFunctionLight> functionLights)
+        {
+            var nodes = _permissionViewerRoles.AllFunctionNodes;
+            foreach (var treeNodeAdv in nodes)
+            {
+                treeNodeAdv.Checked = false;
+                treeNodeAdv.HelpText = Resources.FromRole;
+            }
+
+            foreach (var treeNodeAdv in nodes)
+            {
+                treeNodeAdv.Checked = false;
+                var id = (Guid)treeNodeAdv.TagObject;
+                foreach (var functionLight in functionLights.Where(functionLight => functionLight.Id.Equals(id)))
                 {
-                    string name = "";
-                    if(!string.IsNullOrEmpty(function.ResourceName))
-                        name = LanguageResourceHelper.Translate(function.ResourceName);
-                    if (string.IsNullOrEmpty(name))
-                        name = function.Name;
-
-                    var newFunction = new ListViewItem(name) { Tag = function.Id };
-                    newFunction.SubItems.Add(function.Role);
-
-                    list.Add(newFunction);
+                    treeNodeAdv.Checked = true;
+                    treeNodeAdv.HelpText = treeNodeAdv.HelpText + Environment.NewLine +  functionLight.Role;
                 }
-                _permissionViewerRoles.FillPersonFunctionsList(list.ToArray());
+                
             }
         }
     }

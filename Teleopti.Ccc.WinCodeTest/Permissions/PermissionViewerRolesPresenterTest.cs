@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "errrorrrrrr"), Test]
         public void ShouldCallViewToShowErrorOnPerson()
         {
             var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "errrorrrrrr"), Test]
         public void ShouldCallViewToShowErrorOnFunction()
         {
             var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "errrorrrrrr"), Test]
         public void ShouldCallViewToShowErrorOnDataRange()
         {
             var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "errrorrrrrr"), Test]
         public void ShouldCallViewToShowErrorOnData()
         {
             var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "errrorrrrrr"), Test]
         public void ShouldCallViewToShowErrorOnShow()
         {
             var err = new Infrastructure.Foundation.DataSourceException("errrorrrrrr");

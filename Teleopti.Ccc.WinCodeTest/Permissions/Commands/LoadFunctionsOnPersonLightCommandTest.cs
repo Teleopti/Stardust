@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Permissions;
@@ -34,17 +34,19 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
         public void ShouldGetFunctionsFromRepAndLoadListView()
         {
             var id = Guid.NewGuid();
+            var node = new TreeNodeAdv {TagObject = id, ShowCheckBox = true};
             var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
             var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
             
             Expect.Call(_permissionViewerRoles.SelectedPerson).Return(id);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
-            Expect.Call(rep.FunctionsOnPerson(id)).Return(new List<IFunctionLight> { new FunctionLight { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt"} });
-            Expect.Call(() => _permissionViewerRoles.FillPersonFunctionsList(new ListViewItem[0])).IgnoreArguments();
+            Expect.Call(rep.FunctionsOnPerson(id)).Return(new List<IFunctionLight> { new FunctionLight { Id = id, Name = "Admin", ResourceName = "xxNgt"} });
+            Expect.Call(_permissionViewerRoles.AllFunctionNodes).Return(new[] {node});
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
             _target.Execute();
+           Assert.That(node.Checked, Is.True);
             _mocks.VerifyAll();
         }
     }

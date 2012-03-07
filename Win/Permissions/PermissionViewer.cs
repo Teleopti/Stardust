@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Win.Permissions
     {
         private readonly IEventAggregator _eventAggregator;
         private TreeNodeAdv[] _allTreeNodeAdvs;
+        private TreeNodeAdv[] _allFunctionTreeNodeAdvs;
 
         public PermissionViewer(IEventAggregator eventAggregator):this()
         {
@@ -61,6 +62,11 @@ namespace Teleopti.Ccc.Win.Permissions
             get { return _allTreeNodeAdvs; }
         }
 
+        public TreeNodeAdv[] AllFunctionNodes
+        {
+            get { return _allFunctionTreeNodeAdvs; }
+        }
+
         public void FillPersonsMainList(ListViewItem[] listViewItems)
         {
             listViewPersonsMain.Items.Clear();
@@ -71,12 +77,6 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             listViewPersonRoles.Items.Clear();
             listViewPersonRoles.Items.AddRange(listViewItems);
-        }
-
-        public void FillPersonFunctionsList(ListViewItem[] listViewItems)
-        {
-            listViewPersonFunctions.Items.Clear();
-            listViewPersonFunctions.Items.AddRange(listViewItems);
         }
 
         public void FillFunctionPersonsList(ListViewItem[] listViewItems)
@@ -112,10 +112,14 @@ namespace Teleopti.Ccc.Win.Permissions
             treeViewDataMain.Nodes.AddRange(dataTreeNodes);
         }
 
-        public void FillFunctionTree(TreeNodeAdv[] personFunctionNodes, TreeNodeAdv[] mainFunctionNodes)
+        public void FillFunctionTree(TreeNodeAdv[] personFunctionNodes, TreeNodeAdv[] mainFunctionNodes, TreeNodeAdv[] allTreeNodes)
         {
+            _allFunctionTreeNodeAdvs = allTreeNodes;
             treeViewFunctionsMain.Nodes.Clear();
             treeViewFunctionsMain.Nodes.AddRange(mainFunctionNodes);
+
+            treeViewPersonFunctions.Nodes.Clear();
+            treeViewPersonFunctions.Nodes.AddRange(personFunctionNodes);
         }
 
         public Guid SelectedPerson

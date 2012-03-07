@@ -33,51 +33,68 @@ namespace Teleopti.Ccc.WinCode.Permissions.Commands
                 var functions = _repositoryFactory.CreateApplicationRolePersonRepository(uow).Functions();
                 IEnumerable<IFunctionLight> rootApplicationFunctions = functions.Where(af => af.Parent.Equals(Guid.Empty));
                 var nodes = new List<TreeNodeAdv>();
+                var checkBoxnodes = new List<TreeNodeAdv>();
+                var allNodes = new List<TreeNodeAdv>();
+                
                 foreach (IFunctionLight function in rootApplicationFunctions)
                 {
-                    string name = "";
-                    if (!string.IsNullOrEmpty(function.ResourceName))
-                        name = LanguageResourceHelper.Translate(function.ResourceName);
+                    string  name = LanguageResourceHelper.Translate(function.ResourceName);
+                    if (string.IsNullOrEmpty(name))
+                        name = function.Name;
                     var rootNode = new TreeNodeAdv(name)
                     {
                         TagObject = function.Id,
-                        Tag = 1,
-                        CheckState = CheckState.Unchecked
+                        CheckState = CheckState.Unchecked,
+                        Expanded = true
+                    };
+
+                    var cbNode = new TreeNodeAdv(name)
+                    {
+                        TagObject = function.Id,
+                        CheckState = CheckState.Unchecked,
+                        ShowCheckBox = true,
+                        Expanded = true
                     };
 
                     //disableFunctionsNotLicensed(function, rootNode);
 
-                    recursivelyAddChildNodes(rootNode, functions);
+                    recursivelyAddChildNodes(rootNode, functions, null);
                     nodes.Add(rootNode);
+
+                    allNodes.Add(cbNode);
+                    recursivelyAddChildNodes(cbNode, functions, allNodes);
+                    checkBoxnodes.Add(cbNode);
                 }
                 // smacka in trädet i vyn
-                _permissionViewerRoles.FillFunctionTree(null, nodes.ToArray());
+                _permissionViewerRoles.FillFunctionTree(checkBoxnodes.ToArray(), nodes.ToArray(), allNodes.ToArray());
             }
         }
 
-        private static void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IFunctionLight> functions)
+        private static void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IFunctionLight> functions,  IList<TreeNodeAdv> addNodeToThis)
         {
-            if (functions == null) return;
             var parentApplicationFunction = (Guid)treeNode.TagObject;
             if (parentApplicationFunction.Equals(Guid.Empty)) return;
 
             foreach (IFunctionLight function in
                     functions.Where(f => parentApplicationFunction.Equals(f.Parent)))
             {
-                string name = "";
-                if (!string.IsNullOrEmpty(function.ResourceName))
-                    name = LanguageResourceHelper.Translate(function.ResourceName);
+                string name = LanguageResourceHelper.Translate(function.ResourceName);
+                if (string.IsNullOrEmpty(name))
+                    name = function.Name;
                 var rootNode = new TreeNodeAdv(name)
                 {
                     TagObject = function.Id,
-                    Tag = 1,
-                    CheckState = CheckState.Unchecked
+                    CheckState = CheckState.Unchecked,
+                    ShowCheckBox =  treeNode.ShowCheckBox,
+                    Expanded = true
                 };
 
                 //disableFunctionsNotLicensed(function, rootNode);
 
                 treeNode.Nodes.Add(rootNode);
-                recursivelyAddChildNodes(rootNode, functions);
+                if (addNodeToThis != null)
+                    addNodeToThis.Add(rootNode);
+                recursivelyAddChildNodes(rootNode, functions, addNodeToThis);
             }
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
@@ -35,12 +34,15 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
         public void ShouldGetFunctionsFromRepAndLoadListView()
         {
            var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
-            var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();         
+            var rep = _mocks.StrictMock<IApplicationRolePersonRepository>();
+            var rootId = Guid.NewGuid();
+            var funcRoot = new FunctionLight { Id = rootId, Name = "Root", ResourceName = "xxNgt", Parent = Guid.Empty};
+            var funcNext = new FunctionLight { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt", Parent = rootId};
 
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
             Expect.Call(_repositoryFactory.CreateApplicationRolePersonRepository(uow)).Return(rep);
-            Expect.Call(rep.Functions()).Return(new List<IFunctionLight> { new FunctionLight() { Id = Guid.NewGuid(), Name = "Admin", ResourceName = "xxNgt"} });
-            Expect.Call(() =>_permissionViewerRoles.FillFunctionTree(new TreeNodeAdv[0], new TreeNodeAdv[0] )).IgnoreArguments();
+            Expect.Call(rep.Functions()).Return(new List<IFunctionLight> { funcRoot, funcNext });
+            Expect.Call(() => _permissionViewerRoles.FillFunctionTree(new TreeNodeAdv[0], new TreeNodeAdv[0], new TreeNodeAdv[0])).IgnoreArguments();
 
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
@@ -48,6 +50,4 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             _mocks.VerifyAll();
         }
     }
-
-    
 }
