@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             return ScheduleAppointmentFactory.Create(schedulePartDtos);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
         {
             var dateOnlyDto = new DateOnlyDto {DateTime = dateInPeriod.Date, DateTimeSpecified = true};
