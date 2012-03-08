@@ -116,7 +116,8 @@ SELECT ' '
 
 INSERT INTO #BCPOut
 SELECT 'bcp [' + t.SchemaName + '].[' + t.TableName + '] out "' + @Path +'\BCPData\' + t.SchemaName + '.' +  
-t.TableName + '.dat" -E -N -b 10000 -S ' + @SourceServer + ' -U ' + @SourceUser + ' -P ' + @SourcePwd + ' -d ' + @SourceDB  
+t.TableName + '.dat" -E -N -b 10000 -S ' + @SourceServer + ' -U ' + @SourceUser + ' -P ' + @SourcePwd + ' -d ' + @SourceDB + CHAR(13) + CHAR(10) +
+'IF %ERRORLEVEL% NEQ 0 exit %ERRORLEVEL%'
 FROM #TableList t
 order by t.SchemaName,t.[Level],t.TableName;
 
