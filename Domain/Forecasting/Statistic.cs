@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			else workloadDayTemplate.SetTaskPeriodCollection(newList);
     		if (workloadDayTemplate.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony)
     		{
-    			if (!workloadDayTemplate.IsClosed)
+    			if (workloadDayTemplate.OpenForWork.IsOpen)
     			{
     				workloadDayTemplate.AverageTaskTime = workloadDayTemplate.AverageTaskTime;
     				workloadDayTemplate.AverageAfterTaskTime = workloadDayTemplate.AverageAfterTaskTime;
