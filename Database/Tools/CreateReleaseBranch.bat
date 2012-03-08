@@ -24,6 +24,7 @@ echo Creating branch %releaseBranchName%
 hg pull
 hg update default
 hg branch %releaseBranchName%
+hg tip "Starting %SYSTEMVERSION%"
 hg ci -m "Creating release %SYSTEMVERSION%"
 hg push --new-branch
 hg update default
