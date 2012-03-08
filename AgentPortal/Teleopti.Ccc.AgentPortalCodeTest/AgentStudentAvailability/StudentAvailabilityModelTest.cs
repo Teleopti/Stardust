@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.AgentPortalCode.AgentPreference;
 using Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCodeTest.AgentPreference;

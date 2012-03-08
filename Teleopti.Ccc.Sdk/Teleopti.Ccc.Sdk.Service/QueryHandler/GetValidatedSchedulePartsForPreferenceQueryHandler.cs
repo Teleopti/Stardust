@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
             _factoryProvider = factoryProvider;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public ICollection<ValidatedSchedulePartDto> Handle(GetValidatedSchedulePartsForPreferenceQueryDto query)
         {
             using (var inner = _lifetimeScope.BeginLifetimeScope())
