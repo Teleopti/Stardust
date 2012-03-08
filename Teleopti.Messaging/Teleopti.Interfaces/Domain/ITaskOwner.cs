@@ -275,7 +275,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        bool IsClosed { get; }
+        IOpenForWork OpenForWork { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is locked.
@@ -314,5 +314,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-05-26
         /// </remarks>
         void ResetTaskOwner();
+
     }
 }

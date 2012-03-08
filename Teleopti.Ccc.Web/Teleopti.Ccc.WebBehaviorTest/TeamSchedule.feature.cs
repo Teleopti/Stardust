@@ -744,6 +744,25 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             testRunner.CollectScenarioErrors();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show friendly message when after leaving date")]
+        public virtual void ShowFriendlyMessageWhenAfterLeavingDate()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show friendly message when after leaving date", ((string[])(null)));
+#line 245
+this.ScenarioSetup(scenarioInfo);
+#line 246
+ testRunner.Given("I am an agent in a team that leaves tomorrow");
+#line 247
+ testRunner.And("I am viewing team schedule for today");
+#line 248
+ testRunner.When("I click the next day button");
+#line 249
+ testRunner.Then("I should see a user-friendly message explaining I dont have anything to view");
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
     }
 }
 #endregion

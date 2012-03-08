@@ -230,8 +230,8 @@ namespace Teleopti.Analytics.Parameters
             //_ButtonMoveAllBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
 
             // Doubleclick one item in the list to move it to the other
-            _listBox.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOne.ClientID + ")");
-            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOneBack.ClientID + ")");
+            _listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
+            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
 
 			// Label
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
@@ -268,7 +268,7 @@ namespace Teleopti.Analytics.Parameters
 			// Knappar
 			//writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "10%");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:10px 5px 10px 5px");
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:middle");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:center");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.Write("<Br/>");
 			_buttonMoveAll.RenderControl(writer);			

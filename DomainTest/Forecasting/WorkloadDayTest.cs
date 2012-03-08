@@ -738,16 +738,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             template1.Create("Template1", DateTime.SpecifyKind(_dt,DateTimeKind.Utc), _workload, new List<TimePeriod>());
             _workloadDay.ApplyTemplate(template1);
 
-            Assert.IsTrue(_workloadDay.IsClosed);
-            Assert.IsTrue(template1.IsClosed);
+            //Assert.IsTrue(_workloadDay.IsClosed);
+            Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
+            //Assert.IsTrue(template1.IsClosed);
+            Assert.IsFalse(template1.OpenForWork.IsOpen);
             Assert.AreEqual(0, template1.TaskPeriodList.Count);
             Assert.AreEqual(0, _workloadDay.TaskPeriodList.Count);
 
             template1.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(7, 0, 15, 0) });
             _workloadDay.ApplyTemplate(template1);
 
-            Assert.IsFalse(_workloadDay.IsClosed);
-            Assert.IsFalse(template1.IsClosed);
+            //Assert.IsFalse(_workloadDay.IsClosed);
+            Assert.IsTrue(_workloadDay.OpenForWork.IsOpen);
+            //Assert.IsFalse(template1.IsClosed);
+            Assert.IsTrue(template1.OpenForWork.IsOpen);
             Assert.AreEqual(32, template1.TaskPeriodList.Count);
             Assert.AreEqual(32, _workloadDay.TaskPeriodList.Count);
         }
@@ -826,7 +830,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDay.Create(_dt, _workload, openHours);
 
             Assert.AreEqual(24, _workloadDay.TaskPeriodList.Count);
-            Assert.IsTrue(_workloadDay.IsClosed);
+            //Assert.IsTrue(_workloadDay.IsClosed);
+            Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
 
             _workloadDay.Tasks = 240;
 
@@ -854,7 +859,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             _workloadDay.ApplyTemplate(workloadDayTemplate);
 
-            Assert.IsTrue(_workloadDay.IsClosed);
+            //Assert.IsTrue(_workloadDay.IsClosed);
+            Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
             Assert.AreEqual(10, _workloadDay.TaskPeriodList[0].Tasks);
             Assert.AreEqual(10, _workloadDay.TaskPeriodList[23].Tasks);
         }
@@ -893,7 +899,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDay.CreateFromTemplate(createDate,_workload, workloadDayTemplate);
 
             Assert.AreEqual(24, _workloadDay.TaskPeriodList.Count);
-            Assert.IsTrue(_workloadDay.IsClosed);
+            //Assert.IsTrue(_workloadDay.IsClosed);
+            Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
         }
 
         [Test]
@@ -905,7 +912,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDay.Create(_dt,_workload,_openHours);
             _workloadDay.Close();
 
-            Assert.IsTrue(_workloadDay.IsClosed);
+            //Assert.IsTrue(_workloadDay.IsClosed);
+            Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
             Assert.AreEqual(24, _workloadDay.TaskPeriodList.Count);
         }
 
@@ -1046,7 +1054,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_workloadDay.CampaignTasks, clonedWorkloadDay.CampaignTasks);
             Assert.AreEqual(_workloadDay.CampaignTaskTime, clonedWorkloadDay.CampaignTaskTime);
             Assert.AreEqual(_workloadDay.CurrentDate, clonedWorkloadDay.CurrentDate);
-            Assert.AreEqual(_workloadDay.IsClosed, clonedWorkloadDay.IsClosed);
+            Assert.AreEqual(_workloadDay.OpenForWork, clonedWorkloadDay.OpenForWork);
             Assert.AreEqual(_workloadDay.IsLocked, clonedWorkloadDay.IsLocked);
             Assert.AreEqual(_workloadDay.TaskPeriodListPeriod, clonedWorkloadDay.TaskPeriodListPeriod);
             Assert.AreEqual(_workloadDay.Tasks, clonedWorkloadDay.Tasks);
@@ -1082,7 +1090,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_workloadDay.CampaignTasks, clonedWorkloadDay.CampaignTasks);
             Assert.AreEqual(_workloadDay.CampaignTaskTime, clonedWorkloadDay.CampaignTaskTime);
             Assert.AreEqual(_workloadDay.CurrentDate, clonedWorkloadDay.CurrentDate);
-            Assert.AreEqual(_workloadDay.IsClosed, clonedWorkloadDay.IsClosed);
+            Assert.AreEqual(_workloadDay.OpenForWork, clonedWorkloadDay.OpenForWork);
             Assert.AreEqual(_workloadDay.IsLocked, clonedWorkloadDay.IsLocked);
             Assert.AreEqual(_workloadDay.TaskPeriodListPeriod, clonedWorkloadDay.TaskPeriodListPeriod);
             Assert.AreEqual(_workloadDay.Tasks, clonedWorkloadDay.Tasks);
@@ -1116,7 +1124,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_workloadDay.CampaignTasks, clonedWorkloadDay.CampaignTasks);
             Assert.AreEqual(_workloadDay.CampaignTaskTime, clonedWorkloadDay.CampaignTaskTime);
             Assert.AreEqual(_workloadDay.CurrentDate, clonedWorkloadDay.CurrentDate);
-            Assert.AreEqual(_workloadDay.IsClosed, clonedWorkloadDay.IsClosed);
+            Assert.AreEqual(_workloadDay.OpenForWork, clonedWorkloadDay.OpenForWork);
             Assert.AreEqual(_workloadDay.IsLocked, clonedWorkloadDay.IsLocked);
             Assert.AreEqual(_workloadDay.TaskPeriodListPeriod, clonedWorkloadDay.TaskPeriodListPeriod);
             Assert.AreEqual(_workloadDay.Tasks, clonedWorkloadDay.Tasks);

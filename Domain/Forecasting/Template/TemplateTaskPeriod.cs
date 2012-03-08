@@ -476,9 +476,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public virtual bool IsClosed
+        public virtual IOpenForWork OpenForWork
         {
-            get { return false; }
+            //get { return false; }
+            get
+            {
+               return new OpenForWork()
+                    {
+                        IsOpenForIncomingWork = true,
+                        IsOpen =  true
+                        
+                    };
+            }
         }
 
         /// <summary>

@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             /// Created by: robink
             /// Created date: 2008-01-25
             /// </remarks>
-            public bool IsClosed
+            public IOpenForWork OpenForWork
             {
                 get { throw new NotImplementedException(); }
             }

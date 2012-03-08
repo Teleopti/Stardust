@@ -320,16 +320,26 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
                 using (var findForm = new PersonFinderView())
                 {
+                    findForm.DoubleClickSelectedPeople += FindFormDoubleClickSelectedPeople;
                     findForm.ShowDialog(this);
                     if (findForm.DialogResult == DialogResult.OK)
                     {
                         selectedGuids = findForm.SelectedPersonGuids;
                     }
+                    findForm.DoubleClickSelectedPeople -= FindFormDoubleClickSelectedPeople;
                 }
                 openPeople(selectedGuids);
 
             }
             Cursor.Current = Cursors.Default;
+        }
+
+        private void FindFormDoubleClickSelectedPeople(object sender, EventArgs e)
+        {
+            var form = sender as PersonFinderView;
+            if (form == null) return;
+            openPeople(form.SelectedPersonGuids);
+            form.Close();
         }
 
         private void toolStripRefreshClick(object sender, EventArgs e)
