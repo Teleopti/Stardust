@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Rhino.ServiceBus;
+﻿using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -54,7 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 Date = message.Date,
                 TargetSkillId = message.TargetSkillId,
                 Forecasts = message.Forecasts,
-                Timestamp = message.Timestamp
+                Timestamp = message.Timestamp,
+                ImportMode = message.ImportMode
             });
 
             _unitOfWorkFactory = null;

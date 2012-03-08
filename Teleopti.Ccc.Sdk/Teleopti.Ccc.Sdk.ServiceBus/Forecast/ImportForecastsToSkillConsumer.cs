@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                         Logger.Error("Skill not exists.");
                         return;
                     }
-                    _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts);
+                    _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
                 }
                 unitOfWork.PersistAll();
             }

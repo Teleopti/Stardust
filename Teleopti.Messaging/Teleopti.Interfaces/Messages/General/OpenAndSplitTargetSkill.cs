@@ -47,5 +47,10 @@ namespace Teleopti.Interfaces.Messages.General
         /// Open hour end time
         /// </summary>
         public TimeSpan EndOpenHour { get; set; }
+        
+        /// <summary>
+        /// Mode of importing forecasts
+        /// </summary>
+        public ImportForecastsMode ImportMode { get; set; }
     }
 }

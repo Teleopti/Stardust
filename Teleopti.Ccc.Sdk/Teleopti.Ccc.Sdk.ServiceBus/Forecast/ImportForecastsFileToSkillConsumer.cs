@@ -93,7 +93,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     TargetSkillId = message.TargetSkillId,
                     StartOpenHour = openHours.StartTime,
                     EndOpenHour = openHours.EndTime,
-                    Forecasts = commandResult.ForecastFileDictionary.Get(date)
+                    Forecasts = commandResult.ForecastFileDictionary.Get(date),
+                    ImportMode = message.ImportMode
                 });
             }
             listOfMessages.ForEach(m => _serviceBus.Send(m));

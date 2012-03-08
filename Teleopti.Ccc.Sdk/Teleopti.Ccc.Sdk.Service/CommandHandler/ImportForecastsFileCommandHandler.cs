@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Messages.General;
@@ -32,9 +33,24 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
                 Datasource = identity.DataSource.Application.Name,
                 Timestamp = DateTime.UtcNow,
+                ImportMode = getImportForecastMode(command.ImportForecastsMode)
             };
             _busSender.NotifyServiceBus(message);
             return new CommandResultDto { AffectedId = command.UploadedFileId, AffectedItems = 1 };
+        }
+
+        private static ImportForecastsMode getImportForecastMode(ImportForecastsOptionsDto optionsDto)
+        {
+            switch (optionsDto)
+            {
+                case ImportForecastsOptionsDto.ImportWorkload:
+                    return ImportForecastsMode.ImportWorkload;
+                case ImportForecastsOptionsDto.ImportStaffing:
+                    return ImportForecastsMode.ImportStaffing;
+                case ImportForecastsOptionsDto.ImportWorkloadAndStaffing:
+                    return ImportForecastsMode.ImportWorkloadAndStaffing;
+            }
+            return ImportForecastsMode.ImportWorkloadAndStaffing;
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -67,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			}
 		}
 
-        public void Execute(DateOnly date, ISkill targetSkill, ICollection<IForecastsFileRow> forecasts)
+        public void Execute(DateOnly date, ISkill targetSkill, ICollection<IForecastsFileRow> forecasts, ImportForecastsMode importMode)
         {
             var defaultScenario = _scenarioProvider.DefaultScenario(targetSkill.BusinessUnit);
             var dateOnlyPeriod = new DateOnlyPeriod(date, date);
@@ -93,14 +90,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                         forecasts.FirstOrDefault(
                             f => new DateTimePeriod(f.UtcDateTimeFrom, f.UtcDateTimeTo).Equals(period.Period));
                     if (forecastRow == null) continue;
-                    skillDataPeriod.ManualAgents = forecastRow.Agents;
-                    var taskPeriod =
-                        workloadDay.TaskPeriodList.FirstOrDefault(
-                            p => p.Period.StartDateTime == skillDataPeriod.Period.StartDateTime);
-                    if (taskPeriod == null) continue;
-                    taskPeriod.Tasks = forecastRow.Tasks;
-                    taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(forecastRow.TaskTime);
-                    taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(forecastRow.AfterTaskTime);
+                    if (importMode == ImportForecastsMode.ImportStaffing || importMode == ImportForecastsMode.ImportWorkloadAndStaffing)
+                        skillDataPeriod.ManualAgents = forecastRow.Agents;
+                    if (importMode == ImportForecastsMode.ImportWorkload || importMode == ImportForecastsMode.ImportWorkloadAndStaffing)
+                    {
+                        var taskPeriod =
+                            workloadDay.TaskPeriodList.FirstOrDefault(
+                                p => p.Period.StartDateTime == skillDataPeriod.Period.StartDateTime);
+                        if (taskPeriod == null) continue;
+                        taskPeriod.Tasks = forecastRow.Tasks;
+                        taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(forecastRow.TaskTime);
+                        taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(forecastRow.AfterTaskTime);
+                    }
                 }
             }
         }

@@ -26,5 +26,29 @@ namespace Teleopti.Interfaces.Messages.General
         /// The owner of this action.
         /// </summary>
         public Guid OwnerPersonId { get; set; }
+
+        /// <summary>
+        /// Mode of importing forecasts
+        /// </summary>
+        public ImportForecastsMode ImportMode { get; set; }
+    }
+
+    /// <summary>
+    /// Provide choices regarding importing forecasts
+    /// </summary>
+    public enum ImportForecastsMode
+    {
+         /// <summary>
+        /// Import workload only
+        /// </summary>
+        ImportWorkload,
+        /// <summary>
+        /// Import staffing only
+        /// </summary>
+        ImportStaffing,
+        /// <summary>
+        /// Import both workload and staffing
+        /// </summary>
+        ImportWorkloadAndStaffing
     }
 }

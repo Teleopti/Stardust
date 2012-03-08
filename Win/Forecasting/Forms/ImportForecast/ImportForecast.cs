@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private readonly ImportForecastPresenter _presenter;
         private ISkill _skill;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastForm));
+        
+
         public ImportForecastForm(ISkill preselectedSkill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
         {
             InitializeComponent();
@@ -40,8 +43,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private void populateWorkloadList()
         {
             _presenter.PopulateWorkloadList();
-            comboBoxAdvWorkloads.DataSource = _presenter.WorkloadList;
-            comboBoxAdvWorkloads.DisplayMember = "Name";
+            var firstWorkload = _presenter.WorkloadList.FirstOrDefault();
+            if(firstWorkload==null)
+            {
+                throw new ArgumentNullException("No workload exists.");
+            }
+            labelWorkloadName.Text = firstWorkload.Name;
         }
 
         private void getSelectedSkillName()
@@ -53,61 +60,102 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private void browseImportFileButtonClick(object sender, EventArgs e)
         {
             var result = openFileDialog.ShowDialog();
-         
+            
             if (result == DialogResult.OK)
             {
                 textBoxImportFileName.Text = openFileDialog.FileName;
-                using (var stream = new StreamReader(textBoxImportFileName.Text))
-                {
-                    var reader = new CsvFileReader(stream);
-                    var row = new CsvFileRow();
-                    var rowIndex = 1;
-                    var validators = new List<IForecastsFileValidator>
+            }
+        }
+
+        public ISkill Skill
+        {
+            get { return _skill; }
+            set { _skill = value; }
+        }
+
+        public bool IsWorkloadImport
+        {
+            get { return radioButtonImportWorkload.Checked; }
+            set { radioButtonImportWorkload.Checked = value;}
+        }
+
+        public bool IsStaffingImport
+        {
+            get { return radioButtonImportStaffing.Checked; }
+            set { radioButtonImportStaffing.Checked = value; }
+        }
+
+        public bool IsStaffingAndWorkloadImport
+        {
+            get { return radioButtonImportWLAndStaffing.Checked; }
+            set { radioButtonImportWLAndStaffing.Checked = value; }
+        }
+
+        private ImportForecastsOptionsDto getImportForecastOption()
+        {
+            if (IsWorkloadImport)
+                return ImportForecastsOptionsDto.ImportWorkload;
+            if (IsStaffingImport)
+                return ImportForecastsOptionsDto.ImportStaffing;
+            if (IsStaffingAndWorkloadImport)
+                return ImportForecastsOptionsDto.ImportWorkloadAndStaffing;
+            throw new NotSupportedException("Options not supported.");
+        }
+
+        private void buttonAdvImportClick(object sender, EventArgs e)
+        {
+            using (var stream = new StreamReader(textBoxImportFileName.Text))
+            {
+                var reader = new CsvFileReader(stream);
+                var row = new CsvFileRow();
+                var rowIndex = 1;
+                var validators = new List<IForecastsFileValidator>
                                      {
                                          new ForecastsFileSkillNameValidator(),
                                          new ForecastsFileDateTimeValidator(),
                                          new ForecastsFileDateTimeValidator(),
                                          new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
+                                         new ForecastsFileDoubleValueValidator(),
+                                         new ForecastsFileDoubleValueValidator(),
                                          new ForecastsFileDoubleValueValidator()
                                      };
-                    try
+                try
+                {
+                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
                     {
-                        using (PerformanceOutput.ForOperation("Validate forecasts import file."))
+                        while (reader.ReadNextRow(row))
                         {
-                            while (reader.ReadNextRow(row))
+                            if (row.Count < 6 || row.Count > 7)
                             {
-                                if (row.Count < 6 || row.Count > 7)
-                                {
-                                    throw new ValidationException("There are more or less columns than expected.");
-                                }
-                                for (var i = 0; i < row.Count; i++)
-                                {
-                                    if (!validators[i].Validate(row[i]))
-                                        throw new ValidationException(validators[i].ErrorMessage);
-                                }
-                                row.Clear();
-                                rowIndex++;
+                                throw new ValidationException("There are more or less columns than expected.");
                             }
+                            for (var i = 0; i < row.Count; i++)
+                            {
+                                if (!validators[i].Validate(row[i]))
+                                    throw new ValidationException(validators[i].ErrorMessage);
+                            }
+                            row.Clear();
+                            rowIndex++;
                         }
-                        MessageBoxAdv.Show("Validation succeeded.");
-                        var dto = new ImportForecastsFileCommandDto
-                        {
-                            ImportForecastsOption = ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
-                            UploadedFileId = Guid.NewGuid()
-                        };
-                        var statusDialog =
-                                        new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
-                        statusDialog.Show(this);
-                        statusDialog.SetJobStatusId(executeCommand(dto));
                     }
-                    catch (ValidationException exception)
-                    {
-                        MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
-                                           "ValidationError");
-                    }
+                    MessageBoxAdv.Show("Validation succeeded.");
                 }
+                catch (ValidationException exception)
+                {
+                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
+                                       "ValidationError");
+                }
+
+                var dto = new ImportForecastsFileCommandDto
+                {
+                    ImportForecastsMode = getImportForecastOption(),
+                    UploadedFileId = Guid.NewGuid(),
+                    TargetSkillId = _skill.Id.GetValueOrDefault()
+                };
+                var statusDialog =
+                                new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                statusDialog.Show(this);
+                statusDialog.SetJobStatusId(executeCommand(dto));
             }
         }
 
@@ -140,36 +188,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                 ((IDisposable)proxy).Dispose();
             }
             return null;
-        }
-
-        public ISkill Skill
-        {
-            get { return _skill; }
-            set { _skill = value; }
-        }
-
-        public IWorkload Workload
-        {
-            get { return (IWorkload)comboBoxAdvWorkloads.SelectedItem; }
-            set { }
-        }
-
-        public bool IsWorkloadImport
-        {
-            get { return radioButtonImportWorkload.Checked; }
-            set { radioButtonImportWorkload.Checked = value; }
-        }
-
-        public bool IsStaffingImport
-        {
-            get { return radioButtonImportStaffing.Checked; }
-            set { radioButtonImportStaffing.Checked = value; }
-        }
-
-        public bool IsStaffingAndWorkloadImport
-        {
-            get { return radioButtonImportWLAndStaffing.Checked; }
-            set { radioButtonImportWLAndStaffing.Checked = value; }
         }
     }
 }

@@ -37,5 +37,10 @@ namespace Teleopti.Interfaces.Messages.General
         /// Forecasts
         /// </summary>
         public ICollection<IForecastsFileRow> Forecasts { get; set; }
+
+        /// <summary>
+        /// Mode of importing forecasts
+        /// </summary>
+        public ImportForecastsMode ImportMode { get; set; }
     }
 }

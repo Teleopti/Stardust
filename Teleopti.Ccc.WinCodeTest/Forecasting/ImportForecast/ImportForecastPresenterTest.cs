@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
@@ -20,7 +15,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
     public class ImportForecastPresenterTest
     {
         private MockRepository _mock;
-        private MockRepository _mock2;
         private IImportForecast _view;
         private ImportForecastModel _model;
         private ImportForecastPresenter _target;
@@ -57,8 +51,5 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             Assert.IsNotEmpty(_target.WorkloadList.ToList());
 
         }
-
-
-
     }
 }
