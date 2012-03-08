@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				Expect.Call(skillStaffPeriod2.Period).Return(
 					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 
-				Expect.Call(skillDay1.IsClosed).Return(false);
+				Expect.Call(skillDay1.OpenForWork.IsOpen).Return(true);
 				Expect.Call(skillDay1.CurrentDate).Return(new DateOnly(2010, 10, 20));
 				Expect.Call(skillDay2.CurrentDate).Return(new DateOnly(2010, 10, 20));
 			}
@@ -156,9 +156,10 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				Expect.Call(skillStaffPeriod2.Period).Return(
 					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 
-				Expect.Call(skillDay1.IsClosed).Return(false);
-				Expect.Call(skillDay1.CurrentDate).Return(new DateOnly(2010, 10, 20));
-				Expect.Call(skillDay2.CurrentDate).Return(new DateOnly(2010, 10, 20));
+			    //Expect.Call(skillDay1.IsClosed).Return(false);
+                Expect.Call(skillDay1.OpenForWork).Return(new OpenForWork(){IsOpenForIncomingWork = true, IsOpen = true});
+			    Expect.Call(skillDay1.CurrentDate).Return(new DateOnly(2010, 10, 20));
+			    Expect.Call(skillDay2.CurrentDate).Return(new DateOnly(2010, 10, 20));
 			}
 			using (mocks.Playback())
 			{

@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (var workloadDay in foundList)
             {
                 if (workloadDay.Key<=dateTime) continue;
-                if (!workloadDay.Value.IsClosed) return (ISkillDay)workloadDay.Value.Parent;
+                if (workloadDay.Value.OpenForWork.IsOpen) return (ISkillDay)workloadDay.Value.Parent;
             }
 
             return null;

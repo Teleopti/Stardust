@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private static void formatCell(GridStyleInfo gridStyleInfo, ITaskOwner workloadPeriod)
         {
-            if (workloadPeriod.IsClosed)
+            if (!workloadPeriod.OpenForWork.IsOpen)
             {//note findme
                 gridStyleInfo.TextColor = ColorFontClosedCell;
                 gridStyleInfo.Font.FontStyle = FontClosedCell;

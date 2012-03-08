@@ -333,7 +333,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         [Test]
         public void VerifyIsClosed()
         {
-            Assert.IsFalse(_target.IsClosed);
+            //Assert.IsFalse(_target.IsClosed);
+            Assert.IsTrue(_target.OpenForWork.IsOpen);
         }
 
         /// <summary>

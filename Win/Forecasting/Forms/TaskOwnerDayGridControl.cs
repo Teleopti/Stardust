@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     realWorkloadDay.Workload.TryFindTemplateByName(TemplateTarget.Workload, templateName) as IWorkloadDayTemplate;
                 if (workloadDayTemplate != null)
                 {
-                    if (workloadDayTemplate.IsClosed && !realWorkloadDay.IsClosed)
+                    if (workloadDayTemplate.OpenForWork.IsOpen && !realWorkloadDay.OpenForWork.IsOpen)
                         TaskOwnerDayGridHelper.ResetClosedDay(realWorkloadDay);
                     if (!_turnOffUpdate) realWorkloadDay.Lock();
                     realWorkloadDay.ApplyTemplate(workloadDayTemplate);
@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     gridExcelTipStyleProperties.ExcelTipText = annotatable.Annotation;
                 }
             }
-            else if (taskOwner.IsClosed)
+            else if (taskOwner.OpenForWork.IsOpen)
             {
                 gridStyleInfo.TextColor = ColorFontClosedCell;
                 gridStyleInfo.Font.FontStyle = FontClosedCell;
