@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		public void ShouldReturnRequestPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>(), null);
 			var date = DateOnly.Today.AddDays(1);
 			var id = Guid.NewGuid();
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		public void ShouldUseTodayWhenDateNotSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>(), null);
 
 			target.Index(null, Guid.Empty);
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.Calculate(DateOnly.Today)).Return(team);
 
-			var target = new TeamScheduleController(viewModelFactory, defaultTeamCalculator);
+			var target = new TeamScheduleController(viewModelFactory, defaultTeamCalculator, null);
 
 			target.Index(DateOnly.Today, null);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today)).Return(teams);
 
-			var target = new TeamScheduleController(viewModelFactory, null);
+			var target = new TeamScheduleController(viewModelFactory, null, null);
 
 			var result = target.Teams(DateOnly.Today);
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var target = new TeamScheduleController(viewModelFactory, null);
+			var target = new TeamScheduleController(viewModelFactory, null, null);
 
 			target.Teams(null);
 
