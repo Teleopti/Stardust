@@ -13,14 +13,10 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
     public class ScheduleHelper : IScheduleHelper
     {
         public static IList<ICustomScheduleAppointment> LoadSchedules(PersonDto person, DateTimePeriodDto period)
-        {   
-            DateOnlyDto startDate = new DateOnlyDto();
-            startDate.DateTime = period.LocalStartDateTime;
-            startDate.DateTimeSpecified = true;
+        {
+            var startDate = new DateOnlyDto {DateTime = period.LocalStartDateTime, DateTimeSpecified = true};
 
-            DateOnlyDto endDate = new DateOnlyDto();
-            endDate.DateTime = period.LocalEndDateTime;
-            endDate.DateTimeSpecified = true;
+            var endDate = new DateOnlyDto {DateTime = period.LocalEndDateTime, DateTimeSpecified = true};
 
             //Fill with Assignments
             IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetScheduleParts(person, startDate, endDate, StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
@@ -29,16 +25,27 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             return ScheduleAppointmentFactory.Create(schedulePartDtos);
         }
 
-        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod)
+        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
         {
-            DateOnlyDto dateOnlyDto = new DateOnlyDto();
-            dateOnlyDto.DateTime = dateInPeriod.Date;
-            dateOnlyDto.DateTimeSpecified = true;
+            var dateOnlyDto = new DateOnlyDto {DateTime = dateInPeriod.Date, DateTimeSpecified = true};
             loggedOnPerson.CultureLanguageId = CultureInfo.CurrentCulture.LCID;
             loggedOnPerson.CultureLanguageIdSpecified = true;
-            
-            IList<ValidatedSchedulePartDto> returnList = SdkServiceHelper.SchedulingService.GetValidatedSchedulePartsOnSchedulePeriod(loggedOnPerson, dateOnlyDto, loggedOnPerson.TimeZoneId);
-            return returnList;
+
+            return useStudentAvailability
+                       ? SdkServiceHelper.SchedulingService.GetValidatedSchedulePartsOnSchedulePeriodByQuery(
+                           new GetValidatedSchedulePartsForStudentAvailabilityQueryDto
+                               {
+                                   DateInPeriod = dateOnlyDto,
+                                   Person = loggedOnPerson,
+                                   TimeZoneId = loggedOnPerson.TimeZoneId
+                               })
+                       : SdkServiceHelper.SchedulingService.GetValidatedSchedulePartsOnSchedulePeriodByQuery(
+                           new GetValidatedSchedulePartsForPreferenceQueryDto
+                               {
+                                   DateInPeriod = dateOnlyDto,
+                                   Person = loggedOnPerson,
+                                   TimeZoneId = loggedOnPerson.TimeZoneId
+                               });
         }
     }
 }

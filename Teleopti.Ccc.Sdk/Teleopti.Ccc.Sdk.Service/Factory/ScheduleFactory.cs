@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriod(
             PersonDto personDto, 
             DateOnlyDto dateInPeriod, 
-            string timeZoneInfoId)
+            string timeZoneInfoId, bool useStudentAvailability)
         {
             IList<IPerson> personList = new List<IPerson>();
             IVirtualSchedulePeriod schedulePeriod;
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                                 realSchedulePeriod, stateHolder,
                                                 (int) periodTarget.TotalMinutes, (int)tolerance.StartTime.TotalMinutes, (int)tolerance.EndTime.TotalMinutes, daysOffTarget, person,
                                                 schedulePeriod.MustHavePreference, (int)schedulePeriodTargetBalanced.TotalMinutes,(int)schedulePeriod.BalanceIn.TotalMinutes,
-                                                (int)schedulePeriod.Extra.TotalMinutes,(int)schedulePeriod.BalanceOut.TotalMinutes, numberOfDaysOff, schedulePeriod.Seasonality.Value);
+                                                (int)schedulePeriod.Extra.TotalMinutes, (int)schedulePeriod.BalanceOut.TotalMinutes, numberOfDaysOff, schedulePeriod.Seasonality.Value, useStudentAvailability);
                 }
             }
         }
