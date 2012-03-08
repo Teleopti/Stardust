@@ -233,6 +233,8 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
+    <Compile Include="Forecasting\Import\ForecastFile.cs" />
+    <Compile Include="Forecasting\Import\IForecastFile.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />
@@ -1627,6 +1629,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

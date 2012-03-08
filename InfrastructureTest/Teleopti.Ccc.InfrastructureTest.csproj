@@ -287,6 +287,7 @@
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />
+    <Compile Include="Repositories\ImportForecastRepositoryTest.cs" />
     <Compile Include="Repositories\JobResultRepositoryTest.cs" />
     <Compile Include="Repositories\PeopleAndSkillLoaderDeciderForTeamLeaderModeTest.cs" />
     <Compile Include="Repositories\PersonAssignmentCascadeDeleteTest.cs" />
