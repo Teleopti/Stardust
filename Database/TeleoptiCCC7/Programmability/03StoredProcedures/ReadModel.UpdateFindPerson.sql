@@ -43,6 +43,14 @@ SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, EmploymentN
 FROM Person WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
+SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, WindowsLogOnName, '', NULL, NULL, NULL  
+FROM Person WHERE IsDeleted = 0
+
+INSERT [ReadModel].[FindPerson]
+SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, ApplicationLogOnName, '', NULL, NULL, NULL  
+FROM Person WHERE IsDeleted = 0
+
+INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ptp.Name, 'PartTimePercentage', NULL, NULL, NULL  
 FROM Person p
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
