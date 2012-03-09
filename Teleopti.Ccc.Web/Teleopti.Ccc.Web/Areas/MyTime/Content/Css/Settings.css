@@ -1,0 +1,12 @@
+﻿#settings.edit-module
+{
+	margin: 0px;
+}
+#settings .ui-selectbox
+{
+	width: 320px;
+}
+#settings .ui-selectbox-menu a
+{
+	width: 263px;
+}

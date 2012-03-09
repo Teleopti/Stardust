@@ -10084,9 +10084,115 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>Det finns redan frånvaro registrerad under angiven period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
-    </data>
+  </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Kundanpassade rapporter</value>
     <comment>CustomReports</comment>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Fler agenter ({0}) än din licens tillåter ({1}) är aktiva. Du har nu {2} dagar på dig att minska antalet agenter eller lägga på en licens som täcker tillräckligt många.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>Webbläsarens default</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Gammalt lösenord</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Fel lösenord!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Uppdaterad</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Datumformat</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Block</value>
+    <comment>Block</comment>
+  </data>
+  <data name="ConsecutiveDaysOff" xml:space="preserve">
+    <value>Sammanhängande fridagar</value>
+    <comment>Consecutive days off</comment>
+  </data>
+  <data name="ConsecutiveWorkDays" xml:space="preserve">
+    <value>Sammanhängande arbetsdagar</value>
+    <comment>Consecutive work days</comment>
+  </data>
+  <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
+    <value>Fridagar för flexibel arbetstid</value>
+    <comment>Days off for flexible work time</comment>
+  </data>
+  <data name="DoNotBreakMaximumSeats" xml:space="preserve">
+    <value>Bryt inte mot max arbetsplatser</value>
+    <comment>Do not break maximum seats</comment>
+  </data>
+  <data name="FulfillRestrictions" xml:space="preserve">
+    <value>Uppfyll begränsningar</value>
+    <comment>Fulfill Restrictions</comment>
+  </data>
+  <data name="FullWeekEndDaysOff" xml:space="preserve">
+    <value>Lediga helgdagar</value>
+    <comment>Weekend days off</comment>
+  </data>
+  <data name="FullWeekEndsOff" xml:space="preserve">
+    <value>Lediga veckoslut</value>
+    <comment>Full weekends off</comment>
+  </data>
+  <data name="KeepExistingDaysOff" xml:space="preserve">
+    <value>Behåll nuvarande fridagar</value>
+    <comment>Keep existing days off</comment>
+  </data>
+  <data name="KeepShiftCategories" xml:space="preserve">
+    <value>Behåll skiftkategorier</value>
+    <comment>Keep shift categories</comment>
+  </data>
+  <data name="KeepShifts" xml:space="preserve">
+    <value>Behåll skift</value>
+    <comment>Keep shifts</comment>
+  </data>
+  <data name="KeepStartEndTimes" xml:space="preserve">
+    <value>Behåll start- och sluttider</value>
+    <comment>Keep start and end times</comment>
+  </data>
+  <data name="MaximumSeats" xml:space="preserve">
+    <value>Max arbetsplatser</value>
+    <comment>Maximum seats</comment>
+  </data>
+  <data name="MaximumStaffing" xml:space="preserve">
+    <value>Max bemanning</value>
+    <comment>Maximum staffing</comment>
+  </data>
+  <data name="MinimumStaffing" xml:space="preserve">
+    <value>Lägsta bemanning</value>
+    <comment>Minimum staffing</comment>
+  </data>
+  <data name="MustHaves" xml:space="preserve">
+    <value>Veton</value>
+    <comment>Must haves</comment>
+  </data>
+  <data name="OptimizationSteps" xml:space="preserve">
+    <value>Optimeringssteg</value>
+    <comment>Optimization steps</comment>
+  </data>
+  <data name="ShiftLimits" xml:space="preserve">
+    <value>Skiftkategoribegränsningar</value>
+    <comment>Shift Limits</comment>
+  </data>
+  <data name="ShiftSelection" xml:space="preserve">
+    <value>Skiftval</value>
+    <comment>Shift selection</comment>
+  </data>
+  <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
+    <value>Skift för flexibel arbetstid</value>
+    <comment>Shifts for flexible work time</comment>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Tillgänglighet timanställda</value>
+    <comment>Student availabilities</comment>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Grupper</value>
+    <comment>Teams</comment>
   </data>
 </root>

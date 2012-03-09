@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_personContract.Stub(x => x.ContractSchedule).Return(_contractSchedule);
 			_contractSchedule.Stub(x => x.IsWorkday(Arg<DateOnly>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(false);
 
-			_target = new HasDayOffUnderFullDayAbsence(_scheduleDay);
-			_target.HasDayOff().Should().Be.EqualTo(true);
+			_target = new HasDayOffUnderFullDayAbsence();
+
+			_target.HasDayOff(_scheduleDay).Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new[] { _personDayOff }));
 			_scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence);
 
-			_target = new HasDayOffUnderFullDayAbsence(_scheduleDay);
-			_target.HasDayOff().Should().Be.EqualTo(true);
+			_target = new HasDayOffUnderFullDayAbsence();
+
+			_target.HasDayOff(_scheduleDay).Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -76,8 +78,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_personContract.Stub(x => x.ContractSchedule).Return(_contractSchedule);
 			_contractSchedule.Stub(x => x.IsWorkday(Arg<DateOnly>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(false);
 
-			_target = new HasDayOffUnderFullDayAbsence(_scheduleDay);
-			_target.HasDayOff().Should().Be.EqualTo(false);
+			_target = new HasDayOffUnderFullDayAbsence();
+
+			_target.HasDayOff(_scheduleDay).Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -85,8 +88,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			_scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence);
 
-			_target = new HasDayOffUnderFullDayAbsence(_scheduleDay);
-			_target.HasDayOff().Should().Be.EqualTo(false);
+			_target = new HasDayOffUnderFullDayAbsence();
+
+			_target.HasDayOff(_scheduleDay).Should().Be.EqualTo(false);
 		}
 	}
 }

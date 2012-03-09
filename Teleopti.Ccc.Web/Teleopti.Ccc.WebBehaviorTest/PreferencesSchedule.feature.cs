@@ -217,16 +217,14 @@ this.ScenarioSetup(scenarioInfo);
 #line 59
 this.ScenarioSetup(scenarioInfo);
 #line 60
- testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent that has a dayoff today according to my contract");
 #line 61
- testRunner.And("I have a contract dayoff today");
-#line 62
  testRunner.And("I have a full-day absence today");
-#line 63
+#line 62
  testRunner.And("My schedule is published");
-#line 64
+#line 63
  testRunner.When("I view preferences");
-#line 65
+#line 64
  testRunner.Then("I should see the absence");
 #line hidden
             testRunner.CollectScenarioErrors();

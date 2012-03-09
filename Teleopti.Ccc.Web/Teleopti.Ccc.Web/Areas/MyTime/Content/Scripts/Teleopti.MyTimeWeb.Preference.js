@@ -43,16 +43,16 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	function _initDeleteButton() {
 		$('#Preference-delete-button')
-			.click(function() {
+			.click(function () {
 				$('#Preference-body-inner .ui-selected')
-					.each(function(index, cell) {
+					.each(function (index, cell) {
 						var date = $(cell).data('mytime-date');
 						_ajax({
-								type: 'DELETE',
-								data: { Date: date },
-								date: date,
-								statusCode404: function() { }
-							});
+							type: 'DELETE',
+							data: { Date: date },
+							date: date,
+							statusCode404: function () { }
+						});
 					});
 			})
 			.removeAttr('disabled')
@@ -87,8 +87,11 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			},
 			data: data,
 			success: function (data, textStatus, jqXHR) {
-				var cell = $('li[data-mytime-date="' + data.Date + '"] .preference');
-				cell.html(data.PreferenceRestriction);
+				var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
+				preference.html(data.PreferenceRestriction);
+				var cell = $('li[data-mytime-date="' + data.Date + '"]');
+				cell.removeClassStartingWith('color_');
+				cell.addClass(data.StyleClassName);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (statusCode404 && jqXHR.status == 404) {

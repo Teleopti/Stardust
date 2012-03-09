@@ -60,7 +60,8 @@ namespace Teleopti.Messaging.SignalR
 						StartDate = Subscription.DateToString(eventStartDate),
 						EndDate = Subscription.DateToString(eventEndDate),
 						DomainId = Subscription.IdToString(domainObjectId),
-						DomainType = type.AssemblyQualifiedName,
+						DomainType = type.Name,
+						DomainQualifiedType =  type.AssemblyQualifiedName,
 						DomainReferenceId = Subscription.IdToString(referenceObjectId),
 						DomainReferenceType =
 							(referenceObjectType == null)
@@ -134,7 +135,7 @@ namespace Teleopti.Messaging.SignalR
 			var subscription = new Subscription
 			{
 				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
-				DomainType = domainObjectType.AssemblyQualifiedName,
+				DomainType = domainObjectType.Name,
 				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
 				DomainReferenceType =
 					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
@@ -331,7 +332,7 @@ namespace Teleopti.Messaging.SignalR
 			var d = ((JObject)obj[0]).ToObject<Notification>();
 			
 			var message = new EventMessage();
-			message.InterfaceType = Type.GetType(d.DomainType, false, true);
+			message.InterfaceType = Type.GetType(d.DomainQualifiedType, false, true);
 			message.DomainObjectType = d.DomainType;
 			message.DomainObjectId = d.DomainIdAsGuid();
 			message.ModuleId = d.ModuleIdAsGuid();

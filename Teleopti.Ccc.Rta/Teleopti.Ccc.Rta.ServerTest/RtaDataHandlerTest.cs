@@ -74,12 +74,12 @@ namespace Teleopti.Ccc.Rta.ServerTest
             int dataSourceAfterResolve;
             Expect.Call(dataSourceResolver.TryResolveId("1",
                                                         out dataSourceAfterResolve)).Return(true).OutRef(1);
-            IEnumerable<Guid> personListAfterResolve;
+            IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(1, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] { Guid.NewGuid() });
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             messageSender.InstantiateBrokerService();
-            messageSender.SendRtaData(Guid.Empty, null);
+            messageSender.SendRtaData(Guid.Empty,Guid.Empty, null);
             LastCall.IgnoreArguments();
             Expect.Call(messageSender.IsAlive).Return(true);
             loggingSvc.Warn("No connection information available in configuration file.");
@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
             int dataSourceAfterResolve;
             Expect.Call(dataSourceResolver.TryResolveId(dataSourceId.ToString(CultureInfo.InvariantCulture),
                                                         out dataSourceAfterResolve)).Return(true).OutRef(dataSourceId);
-            IEnumerable<Guid> personListAfterResolve;
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(dataSourceId, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] { Guid.NewGuid() });
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             //This is the important stuff! Checking parameters and values
             dataParameter.ParameterName = "@LogOn";
@@ -204,9 +204,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
             int dataSourceAfterResolve;
             Expect.Call(dataSourceResolver.TryResolveId(dataSourceId.ToString(CultureInfo.InvariantCulture),
                                                         out dataSourceAfterResolve)).Return(true).OutRef(dataSourceId);
-            IEnumerable<Guid> personListAfterResolve;
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(dataSourceId, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] {Guid.NewGuid()});
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             //This is the important stuff! Checking parameters and values
             dataParameter.ParameterName = "@LogOn";
@@ -275,9 +275,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
             int dataSourceAfterResolve;
             Expect.Call(dataSourceResolver.TryResolveId("1",
                                                         out dataSourceAfterResolve)).Return(true).OutRef(1);
-            IEnumerable<Guid> personListAfterResolve;
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(1, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] { Guid.NewGuid() });
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             DbException exception = mocks.StrictMock<DbException>();
             Expect.Call(messageSender.IsAlive).Return(false);
@@ -318,10 +318,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
             int dataSourceAfterResolve;
             Expect.Call(dataSourceResolver.TryResolveId(dataSourceId.ToString(CultureInfo.InvariantCulture),
                                                         out dataSourceAfterResolve)).Return(true).OutRef(dataSourceId);
-            
-            IEnumerable<Guid> personListAfterResolve;
+
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(dataSourceId, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] { Guid.NewGuid() });
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             //This is the important stuff! Checking parameters and values
             dataParameter.ParameterName = "@LogOn";
@@ -415,9 +415,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Expect.Call(dataSourceResolver.TryResolveId("1",
                                                         out dataSourceAfterResolve)).Return(true).OutRef(1);
 
-            IEnumerable<Guid> personListAfterResolve;
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(1, "002", out personListAfterResolve)).Return(false).
-                OutRef(new Guid[]{});
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             loggingSvc.WarnFormat("", "1", "002");
             LastCall.IgnoreArguments();
@@ -471,9 +471,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Expect.Call(dataSourceResolver.TryResolveId(dataSourceId.ToString(CultureInfo.InvariantCulture),
                                                         out dataSourceAfterResolve)).Return(true).OutRef(dataSourceId);
 
-            IEnumerable<Guid> personListAfterResolve;
+			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
             Expect.Call(personResolver.TryResolveId(dataSourceId, "002", out personListAfterResolve)).Return(true).
-                OutRef(new[] { Guid.NewGuid() });
+				OutRef(new List<PersonWithBusinessUnit> { new PersonWithBusinessUnit() });
 
             //This is the important stuff! Checking parameters and values
             dataParameter.ParameterName = "@LogOn";

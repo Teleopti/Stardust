@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -19,13 +20,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IPeriodSelectionViewModelFactory> _periodSelectionViewModelFactory;
 		private readonly Func<IPeriodViewModelFactory> _periodViewModelFactory;
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
+		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
+		private readonly Func<IHasDayOffUnderFullDayAbsence> _hasDayOffUnderFullDayAbsence;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IHasDayOffUnderFullDayAbsence> hasDayOffUnderFullDayAbsence)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
 			_headerViewModelFactory = headerViewModelFactory;
+			_scheduleColorProvider = scheduleColorProvider;
+			_hasDayOffUnderFullDayAbsence = hasDayOffUnderFullDayAbsence;
 		}
 
 		protected override void Configure()
@@ -34,37 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
-				.ForMember(d => d.Styles, o => o.MapFrom(s =>
-				                                         	{
-				                                         		if (s.Days == null) return null;
-				                                         		var shiftCategoryColors =
-				                                         			from d in s.Days
-				                                         			let isMainShift = d.ScheduleDay != null && d.ScheduleDay.AssignmentHighZOrder() != null
-				                                         			where isMainShift
-				                                         			select d.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor;
-				                                         		var visualLayerColors =
-				                                         			from d in s.Days
-				                                         			let enumerableProjection = d.Projection as IEnumerable<IVisualLayer>
-				                                         			let projection = enumerableProjection ?? new IVisualLayer[] {}
-				                                         			from l in projection
-				                                         			select l.DisplayColor();
-				                                         		var absenceColors =
-				                                         			from d in s.Days
-				                                         			let isAbsence = d.ScheduleDay != null && d.ScheduleDay.PersonAbsenceCollection() != null
-				                                         			where isAbsence
-				                                         			from a in d.ScheduleDay.PersonAbsenceCollection()
-				                                         			select a.Layer.Payload.DisplayColor;
-				                                         		return shiftCategoryColors
-				                                         			.Union(visualLayerColors)
-				                                         			.Union(absenceColors)
-				                                         			.Distinct()
-				                                         			.ToArray();
-				                                         	}))
-				;
-
-			CreateMap<Color, StyleClassViewModel>()
-				.ForMember(d => d.Name, o => o.MapFrom(s => s.ToStyleClass()))
-				.ForMember(d => d.ColorHex, o => o.MapFrom(s => s.ToHtml()))
+				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
@@ -85,11 +60,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						{
 							var mappingEngine = _mapper();
 							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-							var hasDayOffUnderFullDayAbsence = new HasDayOffUnderFullDayAbsence(s.ScheduleDay);
-							if (hasDayOffUnderFullDayAbsence.HasDayOff())
+							if (_hasDayOffUnderFullDayAbsence.Invoke().HasDayOff(s.ScheduleDay))
 							{
 								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-								periodViewModel.StyleClassName += " striped";
+								periodViewModel.StyleClassName += " " + StyleClasses.Striped;
 								return periodViewModel;
 							}
 							if (significantPart == SchedulePartView.DayOff)
@@ -124,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Summary, c => c.Ignore())
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
-				.ForMember(d => d.StyleClassName, c => c.Ignore())
+				.ForMember(d => d.StyleClassName, c => c.UseValue(StyleClasses.DayOff + " " + StyleClasses.Striped))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()

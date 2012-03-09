@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public IEnumerable<WeekDayHeader> WeekDayHeaders { get; set; }
 		public IEnumerable<WeekViewModel> Weeks { get; set; }
 		public PreferencePeriodViewModel PreferencePeriod { get; set; }
+		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 	}
 
 	public class PreferencePeriodViewModel
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public PreferenceDayViewModel Preference { get; set; }
 		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
 		public DayOffDayViewModel DayOff { get; set; }
+		public AbsenceDayViewModel Absence { get; set; }
 	}
 
 	public class HeaderViewModel
@@ -64,6 +67,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	public class DayOffDayViewModel
 	{
 		public string DayOff { get; set; }
+	}
+
+	public class AbsenceDayViewModel
+	{
+		public string Absence { get; set; }
 	}
 
 }

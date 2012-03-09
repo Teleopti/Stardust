@@ -403,6 +403,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity cannot be empty..
+        /// </summary>
+        public static string ActivityCanNotBeEmptyDot {
+            get {
+                return ResourceManager.GetString("ActivityCanNotBeEmptyDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity:.
         /// </summary>
         public static string ActivityColon {
@@ -2766,6 +2775,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block.
+        /// </summary>
+        public static string Block {
+            get {
+                return ResourceManager.GetString("Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block and Team Scheduling.
         /// </summary>
         public static string BlockAndTeamScheduling {
@@ -2807,6 +2825,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Browse {
             get {
                 return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browser Default.
+        /// </summary>
+        public static string BrowserDefault {
+            get {
+                return ResourceManager.GetString("BrowserDefault", resourceCulture);
             }
         }
         
@@ -4284,6 +4311,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Consecutive days off.
+        /// </summary>
+        public static string ConsecutiveDaysOff {
+            get {
+                return ResourceManager.GetString("ConsecutiveDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Consecutive Days Off per week must be lower or equal to max.
         /// </summary>
         public static string ConsecutiveDaysOffPerWeekMustBeLowerOrEqualToMax {
@@ -4298,6 +4334,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConsecutiveDaysOffRule {
             get {
                 return ResourceManager.GetString("ConsecutiveDaysOffRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive work days.
+        /// </summary>
+        public static string ConsecutiveWorkDays {
+            get {
+                return ResourceManager.GetString("ConsecutiveWorkDays", resourceCulture);
             }
         }
         
@@ -4320,7 +4365,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider The Week After.
+        ///   Looks up a localized string similar to Consider the week after.
         /// </summary>
         public static string ConsiderWeekAfter {
             get {
@@ -4329,7 +4374,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider The Week Before.
+        ///   Looks up a localized string similar to Consider the week before.
         /// </summary>
         public static string ConsiderWeekBefore {
             get {
@@ -5143,6 +5188,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date Format.
+        /// </summary>
+        public static string DateFormat {
+            get {
+                return ResourceManager.GetString("DateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From.
         /// </summary>
         public static string DateFrom {
@@ -5445,6 +5499,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DaysOffColon {
             get {
                 return ResourceManager.GetString("DaysOffColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Days off for flexible work time.
+        /// </summary>
+        public static string DaysOffFromFlexibleWorkTime {
+            get {
+                return ResourceManager.GetString("DaysOffFromFlexibleWorkTime", resourceCulture);
             }
         }
         
@@ -6264,6 +6327,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Done {
             get {
                 return ResourceManager.GetString("Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not break maximum seats.
+        /// </summary>
+        public static string DoNotBreakMaximumSeats {
+            get {
+                return ResourceManager.GetString("DoNotBreakMaximumSeats", resourceCulture);
             }
         }
         
@@ -8321,6 +8393,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fulfill Restrictions.
+        /// </summary>
+        public static string FulfillRestrictions {
+            get {
+                return ResourceManager.GetString("FulfillRestrictions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full name.
         /// </summary>
         public static string FullName {
@@ -8335,6 +8416,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FulltimeEquivalentHoursPerDay {
             get {
                 return ResourceManager.GetString("FulltimeEquivalentHoursPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekend days off.
+        /// </summary>
+        public static string FullWeekEndDaysOff {
+            get {
+                return ResourceManager.GetString("FullWeekEndDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full weekends off.
+        /// </summary>
+        public static string FullWeekEndsOff {
+            get {
+                return ResourceManager.GetString("FullWeekEndsOff", resourceCulture);
             }
         }
         
@@ -9591,6 +9690,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep existing days off.
+        /// </summary>
+        public static string KeepExistingDaysOff {
+            get {
+                return ResourceManager.GetString("KeepExistingDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep Number Of Free Weekend Days.
         /// </summary>
         public static string KeepFreeWeekEndDays {
@@ -9618,6 +9726,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep shift categories.
+        /// </summary>
+        public static string KeepShiftCategories {
+            get {
+                return ResourceManager.GetString("KeepShiftCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep shift category.
         /// </summary>
         public static string KeepShiftCategory {
@@ -9627,11 +9744,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep shifts.
+        /// </summary>
+        public static string KeepShifts {
+            get {
+                return ResourceManager.GetString("KeepShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep start and end time.
         /// </summary>
         public static string KeepStartAndEndTime {
             get {
                 return ResourceManager.GetString("KeepStartAndEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep start and end times.
+        /// </summary>
+        public static string KeepStartEndTimes {
+            get {
+                return ResourceManager.GetString("KeepStartEndTimes", resourceCulture);
             }
         }
         
@@ -10969,6 +11104,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum seats.
+        /// </summary>
+        public static string MaximumSeats {
+            get {
+                return ResourceManager.GetString("MaximumSeats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum staffing.
+        /// </summary>
+        public static string MaximumStaffing {
+            get {
+                return ResourceManager.GetString("MaximumStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum Time Per Week:.
         /// </summary>
         public static string MaximumTimePerWeekColon {
@@ -11379,6 +11532,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MinimumOccupancyPercentSignColon {
             get {
                 return ResourceManager.GetString("MinimumOccupancyPercentSignColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum staffing.
+        /// </summary>
+        public static string MinimumStaffing {
+            get {
+                return ResourceManager.GetString("MinimumStaffing", resourceCulture);
             }
         }
         
@@ -12090,6 +12252,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MustHaveCapitalized {
             get {
                 return ResourceManager.GetString("MustHaveCapitalized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must haves.
+        /// </summary>
+        public static string MustHaves {
+            get {
+                return ResourceManager.GetString("MustHaves", resourceCulture);
             }
         }
         
@@ -13978,6 +14149,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimization steps.
+        /// </summary>
+        public static string OptimizationSteps {
+            get {
+                return ResourceManager.GetString("OptimizationSteps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimize Activities.
         /// </summary>
         public static string OptimizeActivities {
@@ -14466,6 +14646,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old password.
+        /// </summary>
+        public static string PasswordOld {
+            get {
+                return ResourceManager.GetString("PasswordOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The new password does not follow the password policy..
         /// </summary>
         public static string PasswordPolicyWarning {
@@ -14498,6 +14687,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PasswordSettings {
             get {
                 return ResourceManager.GetString("PasswordSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong password!.
+        /// </summary>
+        public static string PasswordWrong {
+            get {
+                return ResourceManager.GetString("PasswordWrong", resourceCulture);
             }
         }
         
@@ -18766,11 +18964,38 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Limits.
+        /// </summary>
+        public static string ShiftLimits {
+            get {
+                return ResourceManager.GetString("ShiftLimits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shifts.
         /// </summary>
         public static string Shifts {
             get {
                 return ResourceManager.GetString("Shifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift selection.
+        /// </summary>
+        public static string ShiftSelection {
+            get {
+                return ResourceManager.GetString("ShiftSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shifts for flexible work time.
+        /// </summary>
+        public static string ShiftsForFlexibleWorkTime {
+            get {
+                return ResourceManager.GetString("ShiftsForFlexibleWorkTime", resourceCulture);
             }
         }
         
@@ -19991,6 +20216,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Student availabilities.
+        /// </summary>
+        public static string StudentAvailabilities {
+            get {
+                return ResourceManager.GetString("StudentAvailabilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Student Availability.
         /// </summary>
         public static string StudentAvailability {
@@ -20419,6 +20653,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamMembers {
             get {
                 return ResourceManager.GetString("TeamMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teams.
+        /// </summary>
+        public static string Teams {
+            get {
+                return ResourceManager.GetString("Teams", resourceCulture);
             }
         }
         
@@ -21234,6 +21477,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents..
+        /// </summary>
+        public static string TooManyAgentsIsUsedWarning {
+            get {
+                return ResourceManager.GetString("TooManyAgentsIsUsedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total.
         /// </summary>
         public static string Total {
@@ -21701,6 +21953,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated by.
         /// </summary>
         public static string UpdatedBy {
@@ -21927,7 +22188,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Intra Interval Deviation.
+        ///   Looks up a localized string similar to Use intra interval deviation.
         /// </summary>
         public static string UseMaxStddev {
             get {
@@ -22161,7 +22422,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Tweaked Values.
+        ///   Looks up a localized string similar to Use tweaked values.
         /// </summary>
         public static string UseTweakedValues {
             get {

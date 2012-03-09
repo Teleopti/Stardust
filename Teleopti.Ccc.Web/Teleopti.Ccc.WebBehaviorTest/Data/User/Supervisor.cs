@@ -1,17 +1,20 @@
-using System;
-using System.Globalization;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
+	using System.Globalization;
+
+	using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
+	using Teleopti.Interfaces.Domain;
+
 	public class Supervisor : IUserSetup
 	{
+		#region IUserSetup Members
+
 		public void Apply(IPerson user, CultureInfo cultureInfo)
 		{
+			// TODO: Use TestData.AgentRoleWithoutMyTimeWeb When logOnOff handles this
 			user.PermissionInformation.AddApplicationRole(TestData.AgentRole);
 		}
+
+		#endregion
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime
 			var mapRoute = context.MapRoute(
 				"MyTime-authentication",
 				"MyTime/Authentication/{action}",
-				new { controller = "Authentication", action = "Index", area = "Start" },
+				new { controller = "Authentication", action = "Index", area = "Start", origin= "MyTime" },
 				null,
 				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
 			mapRoute.DataTokens["area"] = "Start";

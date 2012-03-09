@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping

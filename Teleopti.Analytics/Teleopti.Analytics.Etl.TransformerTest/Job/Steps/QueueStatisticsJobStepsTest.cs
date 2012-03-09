@@ -37,7 +37,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             Expect.Call(_messageSender.InstantiateBrokerService);
             Expect.Call(_messageSender.IsAlive).Return(true);
             Expect.Call(()=>_messageSender.SendData(DateTime.Now, DateTime.Now, Guid.Empty, Guid.Empty,
-                                                typeof (IStatisticTask), DomainUpdateType.Insert)).IgnoreArguments();
+                                                typeof (IStatisticTask), DomainUpdateType.Insert, null, Guid.Empty)).IgnoreArguments();
             _mockRepository.ReplayAll();
             IList<IJobStep> jobStepList = new QueueStatisticsJobCollection(_jobParameters);
             foreach (IJobStep jobStep in jobStepList)

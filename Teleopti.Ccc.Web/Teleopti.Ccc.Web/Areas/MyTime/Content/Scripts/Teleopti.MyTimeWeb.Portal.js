@@ -14,9 +14,9 @@ if (typeof (Teleopti) === 'undefined') {
 
 
 Teleopti.MyTimeWeb.Portal = (function ($) {
-	var top_nav_selector = 'ul.ui-tabs-nav a';
 	var _settings = {};
 	var _partialViewInitCallback = {};
+	var tabs = null;
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
@@ -25,14 +25,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateToolbarButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateDateButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
+		Teleopti.MyTimeWeb.Portal.Layout.ActivateSettingsMenu();
 	}
 
 	function _registerPartialCallback(viewId, callBack) {
 		_partialViewInitCallback[viewId] = callBack;
 	}
-
-
-
 
 
 	//disable navigation controls on ajax-begin
@@ -92,29 +90,17 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			});
 	}
 
-
-
-
-
-
-
 	function _initNavigation() {
 
-		topNavTabs = $('#tabs');
-
-		// Enable tabs on all tab widgets. The `event` property must be overridden so
-		// that the tabs aren't changed on click, and any custom event name can be
-		// specified. Note that if you define a callback for the 'select' event, it
-		// will be executed for the selected tab whenever the hash changes.
-		topNavTabs.tabs({ event: 'change' });
-
-		// Define our own click handler for the top nav.
-		topNavTabs
-			.find('[data-mytime-action]')
-			.click(function () {
-				_navigateTo($(this).data('mytime-action'));
+		tabs = $('#tabs')
+			.tabberiet({
+				click: function () {
+					_navigateTo($(this).data('mytime-action'));
+				},
+				emptyContentSelector: '#EmptyTab'
 			})
 			;
+
 		if (location.hash.length <= 1) {
 			location.hash = '#' + _settings.defaultNavigation;
 		} else {
@@ -132,6 +118,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 
 	function _navigateTo(action, date, id) {
+		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu(); //needed due to stopPropagation in tabberiet
 		var hash = action;
 		if (date) {
 			if (Teleopti.MyTimeWeb.Common.IsFixedDate(date)) {
@@ -175,32 +162,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _adjustTabs(hashInfo) {
 
-		var navSectionHash = '#' + hashInfo.controller + 'Tab';
-		var navSectionAction = hashInfo.actionHash;
+		var tabId = '#' + hashInfo.controller + 'Tab';
+		tabs.tabberiet('selectById', tabId);
 
-		var tab = topNavTabs
-			.find(top_nav_selector)
-			.filter((function () { return this.hash == navSectionHash; }))
-			;
-		var navSection = $(navSectionHash);
-		navSection
-			.find('input[data-mytime-action]')
-			.each(function (i, inp) {
-				var b = $(inp);
-				b.attr('checked', (b.data('mytime-action') == navSectionAction) ? 'checked' : '');
-			})
-			;
-		navSection
-			.find('.buttonset-nav')
-			.buttonset("refresh")
-			;
-
-		navSection
+		// initializes action for next/previous buttons in the period picker.
+		// should be set from whoever initializes the period picker instead.
+		var toolbar = $(tabId);
+		toolbar
 			.find('.date-range-selector')
-			.data('mytime-action', navSectionAction)
+			.data('mytime-action', hashInfo.actionHash)
 			;
-
-		tab.triggerHandler('change');
 	}
 
 	function _loadContent(hashInfo) {
@@ -269,8 +240,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				var urlPrevPeriod = common.FixedDateToPartsUrl(prevPeriod);
 
 				range.find('span').html(periodData.Display);
-				range.find('button:first').data('mytime-action', actionPrefix + urlPrevPeriod + actionSuffix);
-				range.find('button:last').data('mytime-action', actionPrefix + urlNextPeriod + actionSuffix);
+				range.find('button:first')
+					.click(function () {
+						_navigateTo(actionPrefix + urlPrevPeriod + actionSuffix);
+					})
+					;
+				range.find('button:last')
+					.click(function () {
+						_navigateTo(actionPrefix + urlNextPeriod + actionSuffix);
+					})
+					;
 
 				_enablePortalControls(rangeSelectorId);
 			}
@@ -280,6 +259,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 })(jQuery);
 
 Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
+
+	function _hideSettingsMenu() {
+		$(".dropdown dd ul").hide();
+	}
 	return {
 		// Activating buttons in toolbar
 		ActivateToolbarButtons: function () {
@@ -304,12 +287,40 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 				});
 			});
 		},
-		ActivateHorizontalScroll: function() {
+		ActivateHorizontalScroll: function () {
 			$(window).scroll(function () {
 				$('header').css("left", -$(window).scrollLeft() + "px");
+			});
+		},
+		HideSettingsMenu: function () {
+			_hideSettingsMenu();
+		},
+		ActivateSettingsMenu: function () {
+			$(".dropdown dt span").live("click", function () {
+				$(".dropdown dd ul").toggle();
+			});
+
+			$(".dropdown dd ul").live("click", function () {
+				_hideSettingsMenu();
+			});
+
+
+			$(document).bind('click', function (e) {
+				var $clicked = $(e.target);
+				if (!$clicked.parents().hasClass("dropdown"))
+					_hideSettingsMenu();
+			});
+
+			$(".dropdown a").hover(function () {
+				$(this).addClass('ui-state-hover');
+			}, function () {
+				$(this).removeClass('ui-state-hover');
 			});
 		}
 	};
 })(jQuery);
 
 
+
+
+ 

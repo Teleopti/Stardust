@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			}
 			BackupExistingNHibFiles();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
-			
 
 			var setupTime = DateTime.Now.Subtract(startTime);
 			Log.Write("Test site setup took " + setupTime);

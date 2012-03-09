@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
 			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("Start", "Authentication", "SignIn");
+			result.RouteValues.Values.Should().Have.SameValuesAs("Start", "Authentication", "Index");
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.AddRouteDataToken("area", "MyTime");
 
 			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("MyTime", "Authentication", "SignIn");
+			result.RouteValues.Values.Should().Have.SameValuesAs("MyTime", "Authentication", "Index");
 		}
 
 		[Test]

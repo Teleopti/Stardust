@@ -6,33 +6,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public interface IHasDayOffUnderFullDayAbsence
 	{
-		bool HasDayOff();
+		bool HasDayOff(IScheduleDay scheduleDay);
 	}
-	
+
 	public class HasDayOffUnderFullDayAbsence : IHasDayOffUnderFullDayAbsence
 	{
-		private readonly IScheduleDay _scheduleDay;
-		private SchedulePartView _significantPart;
-		private ReadOnlyCollection<IPersonDayOff> _dayOffCollection;
-		private HasDayOffDefinition _hasDayOff;
-
-
-		public HasDayOffUnderFullDayAbsence(IScheduleDay scheduleDay)
+		public bool HasDayOff(IScheduleDay scheduleDay)
 		{
-			_scheduleDay = scheduleDay;
-		}
-
-		public bool HasDayOff()
-		{
-			if (_scheduleDay == null)
+			if (scheduleDay == null)
 				return false;
 
-			_significantPart = _scheduleDay.SignificantPartForDisplay();
-			_dayOffCollection = _scheduleDay.PersonDayOffCollection();
-			_hasDayOff = new HasDayOffDefinition(_scheduleDay);
+			if (scheduleDay.SignificantPartForDisplay() != SchedulePartView.FullDayAbsence)
+				return false;
 
-			return (((_dayOffCollection != null && _dayOffCollection.ToList().Count > 0) || _hasDayOff.IsDayOff()) &&
-			        _significantPart == SchedulePartView.FullDayAbsence);
+			var dayOffCollection = scheduleDay.PersonDayOffCollection();
+			if (dayOffCollection != null && dayOffCollection.Any())
+				return true;
+
+			if (new HasDayOffDefinition(scheduleDay).IsDayOff())
+				return true;
+
+			return false;
 		}
 	}
 }

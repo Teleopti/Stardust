@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder,DateOnly startDate, IEnumerable<IPerson> participants )
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
-                                        schedulerStateHolder.CommonStateHolder.Activities.FirstOrDefault(), startDate, participants,
+										schedulerStateHolder.CommonStateHolder.ActiveActivities.FirstOrDefault(), startDate, participants,
                                         schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo);
         }
 

@@ -10,9 +10,16 @@ using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Teleopti.Ccc.Web.Core.RequestContext;
+
 	public class ReportGenerationViewModelMappingProfile : Profile
 	{
 		private readonly Func<IReportDataService> _dataService;
+
+		private readonly Func<ICultureProvider> _cultureProvider;
+
+		private readonly NumberFormatInfo _fixedFormatInfo;
 		private readonly Func<IMappingEngine> _mappingEngine;
 		private readonly Func<ISkillProvider> _skillProvider;
 		private readonly Func<IUserTextTranslator> _userTextTranslator;
@@ -20,13 +27,18 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 		public ReportGenerationViewModelMappingProfile(Func<IMappingEngine> mappingEngine,
 		                                               Func<IUserTextTranslator> userTextTranslator,
 		                                               Func<ISkillProvider> skillProvider,
-		                                               Func<IReportDataService> dataService)
+		                                               Func<IReportDataService> dataService,
+													   Func<ICultureProvider> cultureProvider )
 		{
 			_mappingEngine = mappingEngine;
 			_userTextTranslator = userTextTranslator;
 			_skillProvider = skillProvider;
 			_dataService = dataService;
+			_cultureProvider = cultureProvider;
+
+			_fixedFormatInfo = new NumberFormatInfo {NumberDecimalSeparator = "."};
 		}
+
 
 		protected override void Configure()
 		{
@@ -36,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.ReportName,
 				           o => o.MapFrom(s => _userTextTranslator.Invoke().TranslateText(s.Report.ReportNameResourceKey)))
 				.ForMember(d => d.PeriodLegend,
-				           o => o.MapFrom(s => s.ReportInput.IntervalType == 1 ? Resources.Time : Resources.Day))
+				o => o.MapFrom(s => s.ReportInput.IntervalType.IsTypeWeek() ? Resources.Day : Resources.Time))
 				.ForMember(d => d.ReportDate,
 				           o =>
 				           o.MapFrom(
@@ -64,30 +76,39 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	s.Report.LegendResourceKeys[0] == null
+				           	s.Report.ReportInfo.SeriesResourceKeys[0] == null
 				           		? string.Empty
-				           		: _userTextTranslator.Invoke().TranslateText(s.Report.LegendResourceKeys[0])))
+				           		: _userTextTranslator.Invoke().TranslateText(s.Report.ReportInfo.SeriesResourceKeys[0])))
 				.ForMember(d => d.Y2Legend,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	s.Report.LegendResourceKeys[1] == null
+				           	s.Report.ReportInfo.SeriesResourceKeys[1] == null
 				           		? string.Empty
-				           		: _userTextTranslator.Invoke().TranslateText(s.Report.LegendResourceKeys[1])));
+				           		: _userTextTranslator.Invoke().TranslateText(s.Report.ReportInfo.SeriesResourceKeys[1])))
+				.ForMember(d => d.ChartTypeHint,
+				           o =>
+						   o.MapFrom(s => s.Report.ReportInfo.ChartTypeHint[s.ReportInput.IntervalType.IsTypeWeek() ? 1 : 0]))
+				.ForMember(d => d.Y1DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[0]))
+				.ForMember(d => d.Y2DecimalsHint, o => o.MapFrom(s => s.Report.ReportInfo.SeriesFixedDecimalHint[1]));
 
-
+			/*
+			CreateMap<IEnumerable<ReportDataPeriodEntry>, IEnumerable<ReportTableRowViewModel>>()
+				.ConvertUsing(s => { return new List<ReportTableRowViewModel>( );  });
+*/				
+				
+			
 			CreateMap<ReportDataPeriodEntry, ReportTableRowViewModel>()
 				.ForMember(d => d.Period, o => o.ResolveUsing(new PeriodValueResolver(_userTextTranslator)))
-				.ForMember(d => d.DataColumn1, o => o.MapFrom(s => string.Format("{0:0.0}", s.Y1)))
-				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format("{0:0.0}", s.Y2)));
+				.ForMember(d => d.DataColumn1, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y1)))
+				.ForMember(d => d.DataColumn2, o => o.MapFrom(s => string.Format(_fixedFormatInfo, "{0:0.00}", s.Y2)));
 
-			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>()
-				.ConvertUsing(
-					s =>
-					_mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(s.ReportData));
+			CreateMap<ReportGenerationResult, ReportTableRowViewModel[]>().ConvertUsing(
+				s => this._mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>, ReportTableRowViewModel[]>(
+					s.ReportInput.IntervalType == ReportIntervalType.Week ? ShiftEntriesToMatchFirstDayOfWeek(s.ReportData, this._cultureProvider.Invoke().GetCulture().DateTimeFormat.FirstDayOfWeek) :
+						s.ReportData));
+					
 
-
-			//_mappingEngine.Invoke().Map<IEnumerable<ReportDataPeriodEntry>,ReportTableRowViewModel[]>(s.ReportData)
 
 			CreateMap<ReportGenerationResult, ReportResponseModel>()
 				.ForMember(d => d.Report, o => o.MapFrom(s => s));
@@ -96,15 +117,18 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				.ForMember(d => d.ReportInfo, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportData, o => o.MapFrom(s => s))
 				.ForMember(d => d.ReportChart, o => o.UseValue(null));
+		}
+		public static IEnumerable<ReportDataPeriodEntry> ShiftEntriesToMatchFirstDayOfWeek(IEnumerable<ReportDataPeriodEntry> orig, DayOfWeek firstDayOfWeek)
+		{
+			// Analytics always returns order Monday..Sunday with 1..7 but there may be gaps...
+			return orig.OrderBy(
+				o =>
+					{
+						return ((o.PeriodNumber - (int)firstDayOfWeek) + 7) % 7;
+					}
+		
 
-
-			/*
-			// -2 for all special all skill from Mart
-			CreateMap<ReportControlSkillGet, SkillSelectionViewModel>()
-				.ForMember(d => d.SkillId, a => a.MapFrom(s => s.Id))
-				.ForMember(d => d.SkillName, a => a.MapFrom(s => s.Name))
-				.ForMember(d => d.AllSkills, a => a.MapFrom(s => s.Id == -2));
-			 * */
+	);
 		}
 	}
 

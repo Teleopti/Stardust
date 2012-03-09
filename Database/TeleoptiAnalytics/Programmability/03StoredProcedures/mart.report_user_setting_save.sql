@@ -34,7 +34,7 @@ AND saved_name_id = @saved_name_id
 IF @current_setting IS NULL
 BEGIN
 	INSERT INTO mart.report_user_setting
-		SELECT @person_code, @param_name, @saved_name_id, @setting, @report_id
+		SELECT @report_id, @person_code, @param_name, @saved_name_id, @setting
 END
 ELSE
 BEGIN

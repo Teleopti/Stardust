@@ -90,8 +90,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
             Add(new FactScheduleDeviationJobStep(jobParameters));
             Add(new FactKpiTargetTeamJobStep(jobParameters));
-            Add(new PermissionReportJobStep(jobParameters));
             Add(new FactRequestJobStep(jobParameters));
+            Add(new FactRequestedDaysJobStep(jobParameters));
+            Add(new PermissionReportJobStep(jobParameters));
+            
             // If PM is installed then show PM job steps
             if (jobParameters.IsPmInstalled)
             {

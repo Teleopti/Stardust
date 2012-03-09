@@ -5,8 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
@@ -160,11 +159,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             }
             catch (ArgumentException)
             {
-                Syncfusion.Windows.Forms.MessageBoxAdv.Show(string.Concat(UserTexts.Resources.SkillNameIsInvalid, "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+                MessageBoxAdv.Show(string.Concat(UserTexts.Resources.SkillNameIsInvalid, "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
                 return false;
             }
 
             var activity = (IActivity)comboBoxSkillActivity.SelectedItem;
+            if (activity == null)
+            {
+                MessageBoxAdv.Show(UserTexts.Resources.ActivityCanNotBeEmptyDot, "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+                return false;
+            }
             thisSkill.Activity = activity;
             var selectedIntervalLengthItem = (IntervalLengthItem)comboBoxAdvIntervalLength.SelectedItem;
             int resolution = selectedIntervalLengthItem.Minutes;

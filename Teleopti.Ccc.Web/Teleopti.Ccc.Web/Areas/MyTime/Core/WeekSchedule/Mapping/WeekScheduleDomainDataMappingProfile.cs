@@ -51,10 +51,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															}
 											   ).ToArray();
 
+									var colorSource = new ScheduleColorSource
+									                  	{
+															ScheduleDays = scheduleDays,
+															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
+									                  	};
 									return new WeekScheduleDomainData
 											{
 												Date = date,
 												Days = days,
+												ColorSource = colorSource
 											};
 								});
 

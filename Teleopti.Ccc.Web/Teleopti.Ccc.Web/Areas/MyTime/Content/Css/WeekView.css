@@ -1,0 +1,91 @@
+﻿.weekview-day li:first-child, .weekdays li{
+	color: #fff; 
+	line-height: 18px; 
+	text-transform: uppercase; 
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+.weekview-day li:first-child, .weekview-day li.second, .weekdays li, .calendarview-week li .day-header{
+	 background-color: transparent;
+	 font-size: 11px;
+	 min-height: 19px;
+	 padding: 0; 
+}
+.weekview-day li.second, .calendarview-week li .day-header{color: #2b90b3; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
+
+.body-weekview-inner ul.today, .body-weekview-inner ul.ui-selected, .calendarview-week li.today, .calendarview-week li.ui-selected{
+	 background-image: url(../Images/view_ul_states_sprite.png);
+	 background-color: #f8f8f8;
+	 background-repeat: repeat-x;
+}
+
+.body-weekview{background: #f8f8f8 url(../Images/view_repeater_bg.png) bottom left repeat-y;}
+.body-weekview-inner{background: transparent url(../Images/view_top_bg.png) top left no-repeat; font-size: 0;}
+.body-weekview-inner ul.today{background-position: 0 0; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
+
+.body-weekview-inner ul.ui-selected{background-position: 0 -2000px;}
+.body-weekview-inner ul:first-child{margin-left: 19px;}
+
+.weekview-day{
+	 border-left: 1px solid #f9f9f9;
+	 border-right: 1px solid #dfdfdf;
+	 display: inline-block;
+	 font-size: 12px;
+	 list-style: none;
+	 line-height: 19px;
+	 margin: 0; 
+	 padding: 0; 
+	 text-align: center;
+	 vertical-align: top;
+	 width: 133px;
+}
+.ie7 .weekview-day{display: block; float: left;} /* IE7 inline-block fix */
+
+.rgba .weekview-day{
+	 border-left: 1px solid rgba(255, 255, 255, 0.7);
+	 border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.weekview-day li{
+	 border-top: 1px solid  #f9f9f9;
+	 border-bottom: 1px solid #dfdfdf;
+	 min-height: 45px;
+}
+.rgba .weekview-day li{
+	 border-top: 1px solid rgba(255, 255, 255, 0.5);
+	 border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.weekview-day .comment-day 
+{
+	padding-bottom: 15px;
+}
+.weekview-day .icon.comment-day 
+{
+	background: transparent url(../Images/icon_sprite.png) -163px -4px no-repeat;
+	left: -4px;
+	top: 14px;
+	height: 16px;
+	width: 4px;
+}
+
+.weekview-day li:first-child, .weekview-day li.second{ border: 0px; cursor: pointer;}
+
+.weekview-day li:first-child div, .weekview-day li.second div{padding: 0; border-left-width: 0; border-right-width: 0;}
+
+.weekview-day.second{background: transparent url(../Images/date_field_bg.gif) top left repeat-x;}
+.weekview-day li.third{border-top: 0px;}
+.weekview-day li.empty{border-top-color: transparent; border-bottom-color: transparent;}
+.weekview-day > li > div {
+	padding: 10px 5px; 
+	border-left-style: solid; 
+	border-left-width: 8px; 
+	border-left-color: transparent;
+}
+.weekview-day li div.meeting {
+	bottom: 10px;
+	height: 18px;
+	right: -2px;
+	margin-left: 5px;
+}
+.ie7 .weekview-day li div.meeting{margin-left: 0px;}
+

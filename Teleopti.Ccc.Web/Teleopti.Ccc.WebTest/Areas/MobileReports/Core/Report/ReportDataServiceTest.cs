@@ -1,18 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.WebReport;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
-
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
+	using NUnit.Framework;
+
+	using Rhino.Mocks;
+
+	using SharpTestsEx;
+
+	using Teleopti.Ccc.Domain.Repositories;
+	using Teleopti.Ccc.Domain.WebReport;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Matrix;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;
+
 	[TestFixture]
 	public class ReportDataServiceTest
 	{
@@ -34,14 +38,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 		private void expectUserPreparation()
 		{
 			Expect.Call(_webReportUserInfo.GetUserInformation()).Return(new WebReportUserInformation());
-			Expect.Call(_webReportRepository.ReportMobileReportInit(Guid.NewGuid(), 0, Guid.NewGuid(), string.Empty,
-			                                                        string.Empty)).IgnoreArguments().Return(
-			                                                        	new ReportMobileReportInit());
+			Expect.Call(
+				_webReportRepository.ReportMobileReportInit(Guid.NewGuid(), 0, Guid.NewGuid(), string.Empty, string.Empty)).
+				IgnoreArguments().Return(new ReportMobileReportInit());
 		}
 
 		private IReportDataService _target;
+
 		private MockRepository _mock;
+
 		private IWebReportRepository _webReportRepository;
+
 		private IWebReportUserInfoProvider _webReportUserInfo;
 
 		[Test]
@@ -58,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 					.IgnoreArguments().Return(
 						new List<ReportDataQueueStatAbandoned>(new List<ReportDataQueueStatAbandoned>
 						                                       	{
-						                                       		new ReportDataQueueStatAbandoned("00:00", 100M, 10M)
+						                                       		new ReportDataQueueStatAbandoned("00:00", 100M, 10M, 1)
 						                                       	}));
 			}
 
@@ -70,6 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 				reportDataPeriodEntry.Period.Should().Be.EqualTo("00:00");
 				reportDataPeriodEntry.Y1.Should().Be.EqualTo(100M);
 				reportDataPeriodEntry.Y2.Should().Be.EqualTo(10M);
+				reportDataPeriodEntry.PeriodNumber.Should().Be.EqualTo(1);
 			}
 		}
 
@@ -90,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataForecastVersusActualWorkload>(new List<ReportDataForecastVersusActualWorkload>
 						                                                 	{
 						                                                 		new ReportDataForecastVersusActualWorkload("00:00", 100M,
-						                                                 		                                           10M)
+						                                                 		                                           10M, 2)
 						                                                 	}));
 			}
 
@@ -102,9 +110,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 				reportDataPeriodEntry.Period.Should().Be.EqualTo("00:00");
 				reportDataPeriodEntry.Y1.Should().Be.EqualTo(100M);
 				reportDataPeriodEntry.Y2.Should().Be.EqualTo(10M);
+				reportDataPeriodEntry.PeriodNumber.Should().Be.EqualTo(2);
 			}
 		}
-
 
 		[Test]
 		public void VerifyReportDataGetScheduledAndActual()
@@ -123,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
 						                                            	{
 						                                            		new ReportDataServiceLevelAgentsReady("00:00", 110M,
-						                                            		                                      11M, 0.12M)
+						                                            		                                      11M, 0.12M, 2)
 						                                            	}));
 			}
 
@@ -135,6 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 				reportDataPeriodEntry.Period.Should().Be.EqualTo("00:00");
 				reportDataPeriodEntry.Y1.Should().Be.EqualTo(110M);
 				reportDataPeriodEntry.Y2.Should().Be.EqualTo(11M);
+				reportDataPeriodEntry.PeriodNumber.Should().Be.EqualTo(2);
 			}
 		}
 
@@ -155,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 						new List<ReportDataServiceLevelAgentsReady>(new List<ReportDataServiceLevelAgentsReady>
 						                                            	{
 						                                            		new ReportDataServiceLevelAgentsReady("00:00", 100M,
-						                                            		                                      10M, 0.12M)
+						                                            		                                      10M, 0.12M, 3)
 						                                            	}));
 			}
 
@@ -167,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Report
 				reportDataPeriodEntry.Period.Should().Be.EqualTo("00:00");
 				reportDataPeriodEntry.Y1.Should().Be.EqualTo(12M);
 				reportDataPeriodEntry.Y2.Should().Be.EqualTo(0M);
+				reportDataPeriodEntry.PeriodNumber.Should().Be.EqualTo(3);
 			}
 		}
 	}

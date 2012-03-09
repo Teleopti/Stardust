@@ -1,4 +1,4 @@
-USE [ETLNightlyBuild_TeleoptiAnalytics]
+USE [$(TeleoptiAnalytics)]
 SET NOCOUNT ON
 
 --Insert ETL properties

@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Rta.Server
 {
     public class PersonResolver : IPersonResolver
     {
-        private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
+    	private const string CacheKey = "PeopleCache";
+    	private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
         private readonly string _connectionStringDataStore;
         private readonly ILog _loggingSvc;
         private readonly Cache _cache;
@@ -31,14 +32,18 @@ namespace Teleopti.Ccc.Rta.Server
             _cache = HttpRuntime.Cache;
         }
 
-        public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<Guid> personId)
+		public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<PersonWithBusinessUnit> personId)
         {
             var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn);
+			if (string.IsNullOrEmpty(logOn))
+			{
+				lookupKey = dataSourceId.ToString(CultureInfo.InvariantCulture);
+			}
 
-            IDictionary<string, IEnumerable<Guid>> dictionary;
+			IDictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary;
             lock (lockObj)
             {
-                dictionary = (IDictionary<string, IEnumerable<Guid>>)_cache.Get("PeopleCache");
+                dictionary = (IDictionary<string, IEnumerable<PersonWithBusinessUnit>>)_cache.Get(CacheKey);
                 if (dictionary==null)
                 {
                     dictionary = initialize();
@@ -48,10 +53,10 @@ namespace Teleopti.Ccc.Rta.Server
             return dictionary.TryGetValue(lookupKey, out personId);
         }
 
-        private IDictionary<string ,IEnumerable<Guid>> initialize()
+		private IDictionary<string, IEnumerable<PersonWithBusinessUnit>> initialize()
         {
             _loggingSvc.Info("Loading new data into cache.");
-            var dictionary = new Dictionary<string, IEnumerable<Guid>>();
+			var dictionary = new Dictionary<string, IEnumerable<PersonWithBusinessUnit>>();
             using (var connection = _databaseConnectionFactory.CreateConnection(_connectionStringDataStore))
             {
                 var command = connection.CreateCommand();
@@ -64,16 +69,23 @@ namespace Teleopti.Ccc.Rta.Server
                     int loadedDataSourceId = reader.GetInt16(reader.GetOrdinal("datasource_id"));
                     string originalLogOn = reader.GetString(reader.GetOrdinal("acd_login_original_id"));
                     Guid personId = reader.GetGuid(reader.GetOrdinal("person_code"));
+                    Guid businessUnitId = reader.GetGuid(reader.GetOrdinal("business_unit_code"));
                     
                     var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn);
-                    IEnumerable<Guid> list;
+                	var personWithBusinessUnit = new PersonWithBusinessUnit
+                	                             	{
+                	                             		PersonId = personId,
+                	                             		BusinessUnitId = businessUnitId
+                	                             	};
+
+					IEnumerable<PersonWithBusinessUnit> list;
                     if (dictionary.TryGetValue(lookupKey,out list))
                     {
-                        ((ICollection<Guid>)list).Add(personId);
+                    	((ICollection<PersonWithBusinessUnit>) list).Add(personWithBusinessUnit);
                     }
                     else
                     {
-                        dictionary.Add(lookupKey,new Collection<Guid>{personId});
+						dictionary.Add(lookupKey, new Collection<PersonWithBusinessUnit> { personWithBusinessUnit });
                     }
                 }
                 reader.Close();
@@ -81,7 +93,7 @@ namespace Teleopti.Ccc.Rta.Server
 
             addBatchSignature(dictionary);
 
-            _cache.Add("PeopleCache", dictionary, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration,
+            _cache.Add(CacheKey, dictionary, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration,
                        CacheItemPriority.Default, onRemoveCallback);
             
             _loggingSvc.Info("Done loading new data into cache.");
@@ -89,12 +101,12 @@ namespace Teleopti.Ccc.Rta.Server
             return dictionary;
         }
 
-        private static void addBatchSignature(Dictionary<string, IEnumerable<Guid>> dictionary)
+		private static void addBatchSignature(Dictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary)
         {
-            IEnumerable<Guid> foundIds;
+			IEnumerable<PersonWithBusinessUnit> foundIds;
             if (!dictionary.TryGetValue(string.Empty,out foundIds))
             {
-                dictionary.Add(string.Empty,new []{Guid.Empty});
+                dictionary.Add(string.Empty,new []{new PersonWithBusinessUnit{PersonId = Guid.Empty,BusinessUnitId = Guid.Empty}});
             }
         }
 
@@ -107,4 +119,10 @@ namespace Teleopti.Ccc.Rta.Server
             }
         }
     }
+
+	public class PersonWithBusinessUnit
+	{
+		public Guid PersonId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+	}
 }

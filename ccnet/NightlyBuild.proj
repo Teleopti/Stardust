@@ -6,29 +6,22 @@
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
-
-		<DBManagerExe>"$(CCNetWorkingDirectory)\Database\DBManager.exe"</DBManagerExe>
+		<DBManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DBManagerExe>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
+		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
 		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
 		<SQLCmdConn>SQLCMD -S$(COMPUTERNAME) -E</SQLCmdConn>
-		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
-		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
-		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
-		<AzureDbLogin>ccnet</AzureDbLogin>
-		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
-		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
-		<CCC7DB>ETLNightlyBuild_TeleoptiCCC7</CCC7DB>
-		<AnalyticsDB>ETLNightlyBuild_TeleoptiAnalytics</AnalyticsDB>
-		<AggDB>ETLNightlyBuild_TeleoptiCCCAgg</AggDB>
+		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
+		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
+		<AggDB>$(DBNamePrefix)_agg</AggDB>
 		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E</DBManagerTeleoptiCCC7Args>
 		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E</DBManagerTeleoptiCCCAggArgs>
 		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E</DBManagerTeleoptiAnalyticsArgs>
-		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbLogin)</DBManagerAzure>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
@@ -38,19 +31,13 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<ItemGroup>
-		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
-		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
-	</ItemGroup>
-
 	<!-- Add license -->
 	<Target Name="AddLic">
 		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
 		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
-		
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy;AzureAnalyticsReportTest;BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Target Name="Run" DependsOnTargets="BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -62,10 +49,10 @@
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		<Message Text="un-Install ETL service. Done!" Importance="high" />
 
-		<!-- Delete Old and Copy new ETL bin files to a temporary dir-->
+		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir)"/>
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)"/>
 		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->
@@ -81,8 +68,8 @@
 	d) Create one job for the ETL service
 	-->
 		<Message Text="Prepare ETL. Working..." Importance="high" />
-		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL)" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL)"/>
+		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
 		<Message Text="Prepare ETL. Done!" Importance="high" />
 
 		<Message Text="Start ETL service. Working..." Importance="high" />
@@ -123,9 +110,9 @@
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
 
 		<Message Text="Patching 3 x databases..." Importance="high" />
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiAnalyticsArgs)"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiCCC7Args)"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerTeleoptiCCCAggArgs)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
 
 	</Target>
 
@@ -141,34 +128,6 @@
 
 		<Message Text="make log object internal" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
-	</Target>
-
-	<Target Name="AzureDeploy">
-		<!-- try to hide away the potential error message by using SQLCMD-->
-		<Message Text="Drop Azure databases ..." Importance="high" />
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AnalyticsDB)]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(CCC7DB)]&quot;"/>
-		<Message Text="Drop Azure databases. Done!" Importance="high" />
-
-		<Message Text="Create Azure database ..." Importance="high" />
-		<Exec Command ="$(DBManagerExe) $(DBManagerAzure) -D$(AnalyticsDB) -OTeleoptiAnalytics"/>
-		<Exec Command ="$(DBManagerExe) $(DBManagerAzure) -D$(CCC7DB) -OTeleoptiCCC7"/>
-		<Message Text="Create Azure database. Done!" Importance="high" />
-	</Target>
-
-	<Target Name="AzureAnalyticsReportTest">
-		<Message Importance="high" Text="Check all Analytics report controls and reports are working ..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AnalyticsDB);User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
-		<Message Importance="high" Text="Analytics report controls. Finished"/>
-	</Target>
-
-	<Target Name="Compile">
-		<Message Importance="high" Text="Complie starting...(sln: @(SolutionFile), cfg: $(Configuration))" />
-		<MSBuild Projects="@(SolutionFile)"
-						Properties="Configuration=$(Configuration);TreatWarningsAsErrors=true;"
-						Targets="Build">
-		</MSBuild>
-		<Message Importance="high" Text="Complie finished." />
 	</Target>
 
 </Project>
