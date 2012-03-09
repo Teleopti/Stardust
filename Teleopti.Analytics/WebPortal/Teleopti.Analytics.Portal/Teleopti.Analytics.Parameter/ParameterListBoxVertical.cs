@@ -317,7 +317,7 @@ namespace Teleopti.Analytics.Parameters
 			EnsureChildControls();			
 		}
 
-		private void Move( System.Object sender, System.Web.UI.ImageClickEventArgs e)//Flyttar värden mellan listboxar och textboxar
+		private void Move( Object sender, ImageClickEventArgs e)//Flyttar värden mellan listboxar och textboxar
 		{
 			ListBox _From = new ListBox();
 			ListBox _To = new ListBox();

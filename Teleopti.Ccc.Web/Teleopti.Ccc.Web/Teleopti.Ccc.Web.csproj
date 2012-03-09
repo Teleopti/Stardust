@@ -156,7 +156,9 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IPersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\PersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
@@ -435,6 +437,8 @@
     <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />

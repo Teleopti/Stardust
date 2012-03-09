@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             _calculationInfo = "";
             DateOnly dateOnly = GetDateOnlyInPeriod(dateInPeriod);
 
-            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly);
+            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, false);
             var retList = new Dictionary<int, IPreferenceCellData>();
             int cellNumber = 0;
             bool firstDateIsSet = false;

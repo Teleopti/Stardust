@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
@@ -9,7 +10,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 
         public Assembly Find(string assemblyName)
         {
-            foreach (string file in Directory.GetFiles(ResolutionPath))
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ResolutionPath);
+			foreach (string file in Directory.GetFiles(path))
             {
                 Assembly assm;
                 if (TryLoad(file, assemblyName, out assm))

@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
     public interface IScheduleHelper
     {
-        IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod);
+        IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability);
     }
 }

@@ -1,6 +1,4 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -39,8 +37,6 @@ using Teleopti.Ccc.Sdk.WcfService.LogOn;
 using Teleopti.Ccc.Sdk.WcfService.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-
-#endregion
 
 namespace Teleopti.Ccc.Sdk.WcfService
 {
@@ -1098,9 +1094,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
             {
                 return _factoryProvider.CreateScheduleFactory(inner).GetValidatedSchedulePartsOnSchedulePeriod(person,
                                                                                                           dateInPeriod,
-                                                                                                          timeZoneId);
+                                                                                                          timeZoneId, false);
             }
 		}
+
+        public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto)
+        {
+            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<ValidatedSchedulePartDto>>>();
+            return invoker.Invoke(queryDto);
+        }
 
 		private IStudentAvailabilityDay GetStudentAvailabilityDomainFromDto(StudentAvailabilityDayDto dto)
 		{

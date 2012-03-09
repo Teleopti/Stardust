@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public override void ClickBusinessUnitOkButton()
 		{
 			BusinessUnitOkButton.EventualClick();
+			WaitUntilSignInOrErrorAppears();
 		}
 
 		public override void SignInApplication(string username, string password)
@@ -81,5 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			SignedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
 		}
 
+		protected override void WaitUntilSignInOrErrorAppears()
+		{
+			Func<bool> SignedInExists = () => SignOutLink.Exists;
+			SignedInExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
+		}
 	}
 }

@@ -109,6 +109,7 @@
     <Compile Include="Areas\Start\MenuViewModelFactoryTest.cs" />
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
+    <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
     <Compile Include="Core\Portal\FakePermissionProvider.cs" />

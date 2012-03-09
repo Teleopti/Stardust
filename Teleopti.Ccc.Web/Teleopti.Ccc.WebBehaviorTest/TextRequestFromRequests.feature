@@ -28,6 +28,15 @@ Scenario: Adding invalid text request values
 	Then I should see texts describing my errors
 	And I should not see the text request in the list
 
+Scenario: Adding too long text request
+	Given I am an agent
+	And I am viewing requests
+	When I click add text request button in the toolbar
+	And I input too long text request values
+	And I click the OK button
+	Then I should see texts describing too long text error
+	And I should not see the text request in the list
+
 Scenario: View text request details
 	Given I am an agent
 	And I have an existing text request

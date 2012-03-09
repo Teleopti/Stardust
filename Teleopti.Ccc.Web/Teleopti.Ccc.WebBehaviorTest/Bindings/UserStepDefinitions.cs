@@ -15,6 +15,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new Administrator());
 		}
 
+		[Given(@"I am a user with everyone access")]
+		public void GivenIAmAUserWithEveryoneAccess()
+		{
+			UserFactory.User().Setup(new AdministratorRoleWithEveryoneData());
+		}
+
 		[Given(@"I am a user with access only to MyTime")]
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{
@@ -42,6 +48,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new Agent());
 			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new PersonPeriod {ContractSchedule = TestData.DayOffTodayContractSchedule});
+			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
+		[Given(@"I am an agent in no team with access to my team")]
+		public void GivenIAmAnAgentInNoTeamWithAccessToMyTeam()
+		{
+			UserFactory.User().Setup(new Agent());
+			UserFactory.User().Setup(new SchedulePeriod());
 			UserFactory.User().Setup(new ScheduleIsPublished());
 		}
 
@@ -439,5 +453,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
+
+		[Given(@"I am an agent in a team that leaves tomorrow")]
+		public void GivenIAmAnAgentThatLeavesTomorrow()
+		{
+			UserFactory.User().Setup(new AgentThatLeavesTomorrow());
+			var team = new Team();
+			UserFactory.User().Setup(team);
+			UserFactory.User().Setup(new SchedulePeriod());
+			UserFactory.User().Setup(new PersonPeriod(team.TheTeam));
+			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
 	}
 }

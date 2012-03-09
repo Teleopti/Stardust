@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             if (_workloadDayTemplate == null) return;
 
-            if (_workloadDayTemplate.IsClosed)
+            if (!_workloadDayTemplate.OpenForWork.IsOpen)
             {
                 CloseTemplate();
             }

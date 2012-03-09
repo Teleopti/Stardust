@@ -50,11 +50,7 @@ namespace Teleopti.Analytics.Parameters
 	        }
 	        set
             {
-                if (value)
-                {
-                    Style[HtmlTextWriterStyle.Display] = "";
-                }
-                else
+                if (!value)
                 {
                     Style[HtmlTextWriterStyle.Display] = "none";
                 }
