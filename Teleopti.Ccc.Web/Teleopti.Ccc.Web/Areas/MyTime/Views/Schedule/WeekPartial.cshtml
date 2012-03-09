@@ -51,7 +51,7 @@
 				</li>
 				@foreach (var period in day.Periods)
 				{
-					<li class="@string.Format("{0}", period.StyleClassName)">
+					<li class="@period.StyleClassName">
 						<div>
 							<strong class="fullwidth displayblock">@period.TimeSpan</strong>
 							<div class="truncate">@period.Title</div>
