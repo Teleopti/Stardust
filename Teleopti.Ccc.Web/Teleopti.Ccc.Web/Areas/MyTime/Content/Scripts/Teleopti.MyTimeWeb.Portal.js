@@ -232,7 +232,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					}
 				});
 
-				range.find('.datepicker').datepicker('setDate', common.ParseToDate(periodData.Date));
+				range.find('.datepicker')
+					.datepicker('setDate', common.ParseToDate(periodData.Date));
 
 				var nextPeriod = periodData.PeriodNavigation.NextPeriod;
 				var prevPeriod = periodData.PeriodNavigation.PrevPeriod;
@@ -241,11 +242,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 				range.find('span').html(periodData.Display);
 				range.find('button:first')
+					.unbind('click')
 					.click(function () {
 						_navigateTo(actionPrefix + urlPrevPeriod + actionSuffix);
 					})
 					;
 				range.find('button:last')
+					.unbind('click')
 					.click(function () {
 						_navigateTo(actionPrefix + urlNextPeriod + actionSuffix);
 					})
