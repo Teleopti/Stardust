@@ -96,18 +96,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         IList<IPerson> FindPersonsWithGivenUserCredentials(IList<IPerson> persons);
 
-
-        /// <summary>
-        /// Finds the people by application role.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/19/2008
-        /// </remarks>
-        ICollection<IPerson> FindPeopleByApplicationRole(IApplicationRole role);
-
         /// <summary>
         /// Finds the people by employment number
         /// </summary>
