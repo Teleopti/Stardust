@@ -25,34 +25,64 @@
 .body-weekview-inner ul.ui-selected{background-position: 0 -2000px;}
 .body-weekview-inner ul:first-child{margin-left: 19px;}
 
-.weekview-day{
-	 border-left: 1px solid #f9f9f9;
-	 border-right: 1px solid #dfdfdf;
-	 display: inline-block;
-	 font-size: 12px;
-	 list-style: none;
-	 line-height: 19px;
-	 margin: 0; 
-	 padding: 0; 
-	 text-align: center;
-	 vertical-align: top;
-	 width: 133px;
+.weekview-day
+{
+	display: inline-block;
+	font-size: 12px;
+	list-style: none;
+	line-height: 19px;
+	margin: 0; 
+	padding: 0; 
+	text-align: center;
+	vertical-align: top;
+	width: 133px;
 }
-.ie7 .weekview-day{display: block; float: left;} /* IE7 inline-block fix */
-
-.rgba .weekview-day{
-	 border-left: 1px solid rgba(255, 255, 255, 0.7);
-	 border-right: 1px solid rgba(0, 0, 0, 0.15);
+.ie7 .weekview-day /* IE7 inline-block fix */
+{
+	display: block; 
+	float: left;
 }
 
-.weekview-day li{
-	 border-top: 1px solid  #f9f9f9;
-	 border-bottom: 1px solid #dfdfdf;
-	 min-height: 45px;
+.weekview-day
+{
+	border-left: 1px solid #f9f9f9;
+	border-right: 1px solid #dfdfdf;
 }
-.rgba .weekview-day li{
-	 border-top: 1px solid rgba(255, 255, 255, 0.5);
-	 border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+.rgba .weekview-day
+{
+	border-left: 1px solid rgba(255, 255, 255, 0.7);
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+/* rgba on many elements makes scrolling very slow in chrome so lets use static */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.rgba .weekview-day
+	{
+		border-left: 1px solid #f9f9f9;
+		border-right: 1px solid #dfdfdf;
+	}
+}
+
+.weekview-day li
+{
+	min-height: 45px;
+}
+.weekview-day li
+{
+	border-top: 1px solid  #f9f9f9;
+	border-bottom: 1px solid #dfdfdf;
+}
+.rgba .weekview-day li
+{
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+/* rgba on many elements makes scrolling very slow in chrome so lets use static */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.rgba .weekview-day li
+	{
+		border-top: 1px solid  #f9f9f9;
+		border-bottom: 1px solid #dfdfdf;
+	}
 }
 
 .weekview-day .comment-day 
