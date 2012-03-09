@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                           {
                               Id = entity.Id,
                               Person = _personAssembler.DomainEntityToDto(entity.Person),
-                              ScheduleNote = entity.ScheduleNote,
+                              ScheduleNote = entity.GetScheduleNote(new NormalizeText()),
                               Date = new DateOnlyDto(entity.NoteDate)
                           };
 

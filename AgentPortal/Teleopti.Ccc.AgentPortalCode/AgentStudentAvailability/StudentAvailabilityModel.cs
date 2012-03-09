@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
         public void LoadPeriod(DateTime dateInPeriod, IScheduleHelper scheduleHelper)
         {
             DateOnly dateOnly = GetDateOnlyInPeriod(dateInPeriod);
-            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly);
+            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, true);
             var retList = new Dictionary<int, IStudentAvailabilityCellData>();
             int cellNumber = 0;
             bool firstDateIsSet = false;

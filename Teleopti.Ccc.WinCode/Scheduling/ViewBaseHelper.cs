@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 if (sb.Length > 0) sb.AppendLine();
 
-                sb.Append(personMeeting.BelongsToMeeting.Subject);
+                sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
                 sb.Append(": ");
                 sb.Append(ToLocalStartEndTimeString(personMeeting.Period, cell.TimeZone));
 

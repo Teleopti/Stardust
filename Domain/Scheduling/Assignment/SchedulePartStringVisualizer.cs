@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     sb.AppendFormat(" - {0}: ", UserTexts.Resources.Meeting);
                     sb.AppendLine();
                     sb.Append("    ");
-                    sb.Append(personMeeting.BelongsToMeeting.Subject);
+                    sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
                     sb.Append(": ");
                     sb.Append(ToLocalStartEndTimeString(personMeeting.Period, timeZoneInfo, cultureInfo));
 

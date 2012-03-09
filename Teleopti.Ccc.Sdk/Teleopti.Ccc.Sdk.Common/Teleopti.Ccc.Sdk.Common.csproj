@@ -254,6 +254,7 @@
     <Compile Include="DataTransferObject\PersonPeriodLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\PersonSkillPeriodDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetValidatedSchedulePartsForStudentAvailabilityQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAgentPortalSettingsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllPayrollExportsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetCurrentBusinessUnitQueryDto.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetTeamByIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByEmploymentNumberQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPersonByIdQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetValidatedSchedulePartsForPreferenceQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\KnownTypesHelper.cs" />
     <Compile Include="DataTransferObject\QueryDtos\QueryDto.cs" />
     <Compile Include="DataTransferObject\ScheduleLoadOptionDto.cs" />

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -192,9 +193,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _requestPresenter.Reply(_requestViewAdapters, "Testin'");
 
-            Assert.AreEqual("b\r\nTestin'", _requestViewAdapters[0].Message);
-            Assert.AreEqual("b\r\nTestin'", _requestViewAdapters[1].Message);
-            Assert.AreEqual("a\r\nTestin'", _requestViewAdapters[2].Message);
+			Assert.AreEqual("b\r\nTestin'", _requestViewAdapters[0].GetMessage(new NoFormatting()));
+			Assert.AreEqual("b\r\nTestin'", _requestViewAdapters[1].GetMessage(new NoFormatting()));
+			Assert.AreEqual("a\r\nTestin'", _requestViewAdapters[2].GetMessage(new NoFormatting()));
 
             _mocks.VerifyAll();
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -68,9 +69,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value),
 																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value,
-																		Is.EqualTo(request.PersonRequest.Message));
+																		Is.EqualTo(request.PersonRequest.GetMessage(new NoFormatting())));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value,
-																		Is.EqualTo(request.PersonRequest.Subject));
+																		Is.EqualTo(request.PersonRequest.GetSubject(new NoFormatting())));
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value),
 																		Is.EqualTo(request.PersonRequest.Request.Period.EndDateTime.Date));
 			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value),

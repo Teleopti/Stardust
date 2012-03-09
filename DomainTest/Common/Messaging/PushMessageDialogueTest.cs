@@ -3,6 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -85,14 +86,14 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             {
                 _target.SetReply(replyNotOk);
                 Assert.IsFalse(_target.IsReplied);
-                Assert.AreNotEqual(_target.Reply, replyNotOk);
+				Assert.AreNotEqual(_target.GetReply(new NoFormatting()), replyNotOk);
 
                 _target.SetReply(replyOK);
                 Assert.IsTrue(_target.IsReplied);
-                Assert.AreEqual(replyOK, _target.Reply);
+				Assert.AreEqual(replyOK, _target.GetReply(new NoFormatting()));
 
                 _target.SetReply(replyOK2);
-                Assert.AreEqual(replyOK, _target.Reply, "To make sure its not called if Replied is True");
+				Assert.AreEqual(replyOK, _target.GetReply(new NoFormatting()), "To make sure its not called if Replied is True");
             }
         }
 
@@ -106,13 +107,13 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         [Test]
         public void VerifyClear()
         {
-            string defaultReply = _target.Reply;
+			string defaultReply = _target.GetReply(new NoFormatting());
             _pushMessage.ReplyOptions.Add("ok");
             _target.SetReply("ok");
             Assert.IsTrue(_target.IsReplied);
 
             _target.ClearReply();
-            Assert.AreEqual(defaultReply, _target.Reply);
+			Assert.AreEqual(defaultReply, _target.GetReply(new NoFormatting()));
             Assert.IsFalse(_target.IsReplied);
 
         }
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         [Test]
         public void VerifyThatTheDialogueIsNotRepliedIfSomeoneElseThanTheReceiverAddsAMessage()
         {
-            string defaultReply = _target.Reply;
+			string defaultReply = _target.GetReply(new NoFormatting());
             IPerson anotherPerson = PersonFactory.CreatePerson();
             _pushMessage.ReplyOptions.Add("ok");
             _target.SetReply("ok");
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
 
             _target.DialogueReply("blah", anotherPerson);
             Assert.IsFalse(_target.IsReplied, "target is cleared if a message is added from ANY other person");
-            Assert.AreEqual(defaultReply, _target.Reply);
+			Assert.AreEqual(defaultReply, _target.GetReply(new NoFormatting()));
 
         }
 
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         {
             _pushMessage.TranslateMessage = true;
             _pushMessage.Message = "a text that is guaranteed to not exist in resources eftersom halva texten är på english ock makes no sence";
-            Assert.AreEqual(_target.Message,_pushMessage.Message);
+			Assert.AreEqual(_target.Message, _pushMessage.GetMessage(new NoFormatting()));
         }
 
         [Test]
