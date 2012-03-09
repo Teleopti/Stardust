@@ -354,7 +354,7 @@
 			<!-- SupportTools -->
 			<SupportTools Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\**\*.*" />
 			<StartStopSystem Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\StartStopSystem\*.*" />
-			<RML Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\RML\**\*.*" />
+			<SQLServerPerformance Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\SQLServerPerformance\**\*.*" />
       <WiseIISConfig Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\WiseIISConfig\**\*.*" />
 
       <!-- ClientClickOnce -->
@@ -549,8 +549,8 @@
 			DestinationFiles="@(SupportTools->'$(DeployPath)\SupportTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(StartStopSystem)"
 			DestinationFiles="@(StartStopSystem->'$(DeployPath)\SupportTools\StartStopSystem\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		<Copy	SourceFiles="@(RML)"
-			DestinationFiles="@(RML->'$(DeployPath)\SupportTools\RML\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(SQLServerPerformance)"
+			DestinationFiles="@(SQLServerPerformance->'$(DeployPath)\SupportTools\SQLServerPerformance\%(RecursiveDir)%(Filename)%(Extension)')"/>
     <Copy	SourceFiles="@(WiseIISConfig)"
       DestinationFiles="@(WiseIISConfig->'$(DeployPath)\SupportTools\WiseIISConfig\%(RecursiveDir)%(Filename)%(Extension)')"/>
     <Copy	SourceFiles="@(Azure)"
