@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             Type t = _propertyReflector.GetType(taskOwner.GetType(), DisplayMember).UnderlyingSystemType;
 
             IWorkloadDay workloadDay = taskOwner as IWorkloadDay;
-            if (!taskOwner.IsClosed ||
+            if (taskOwner.OpenForWork.IsOpen ||
                 (workloadDay!=null && workloadDay.Workload.Skill.SkillType.ForecastSource!=ForecastSource.InboundTelephony))
             {
                 if (String.IsNullOrEmpty(value.ToString()))

@@ -148,7 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayBase.MakeOpen24Hours();
             IList<TimePeriod> list = new List<TimePeriod>();
             _workloadDayBase.ChangeOpenHours(list);
-            Assert.IsTrue(_workloadDayBase.IsClosed);
+            //Assert.IsTrue(_workloadDayBase.IsClosed);
+            Assert.IsFalse(_workloadDayBase.OpenForWork.IsOpen);
             Assert.AreEqual(0, _workloadDayBase.TotalTasks);
             Assert.AreEqual(0, _workloadDayBase.TaskPeriodList.Count);
         }
@@ -260,7 +261,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayBase.Close();
 
             Assert.AreEqual(0, _workloadDayBase.TotalTasks);
-            Assert.IsTrue(_workloadDayBase.IsClosed);
+            //Assert.IsTrue(_workloadDayBase.IsClosed);
+            Assert.IsFalse(_workloadDayBase.OpenForWork.IsOpen);
             Assert.AreEqual(0, _workloadDayBase.TaskPeriodList.Count);
         }
 
@@ -277,7 +279,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayBase.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(TimeSpan.FromHours(2), TimeSpan.FromHours(2)) });
             Assert.AreEqual(0, period.TotalTasks);
 
-            Assert.IsTrue(_workloadDayBase.IsClosed);
+            //Assert.IsTrue(_workloadDayBase.IsClosed);
+            Assert.IsFalse(_workloadDayBase.OpenForWork.IsOpen);
         }
 
         [Test]

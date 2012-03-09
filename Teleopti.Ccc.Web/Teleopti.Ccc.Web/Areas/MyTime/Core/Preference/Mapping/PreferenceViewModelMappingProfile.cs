@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<DayMappingData, AbsenceDayViewModel>()
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().Single().Layer.Payload.Description.Name))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name))
 				;
 
 			CreateMap<DayMappingData, PreferenceDayViewModel>()

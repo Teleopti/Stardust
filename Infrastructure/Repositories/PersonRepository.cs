@@ -580,7 +580,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                          Restrictions.IsNull("TerminalDate"),
 						 Restrictions.Ge("TerminalDate", new DateOnly(period.LocalStartDateTime))
                          ))
-                .Add(Subqueries.Exists(findPeriodMatch(period)))
+                //.Add(Subqueries.Exists(findPeriodMatch(period)))
                 .SetFetchMode("PersonSchedulePeriodCollection", FetchMode.Join)
                 .SetFetchMode("PersonSchedulePeriodCollection.shiftCategoryLimitation", FetchMode.Join);
         }

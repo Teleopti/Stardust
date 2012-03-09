@@ -453,5 +453,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
+
+		[Given(@"I am an agent in a team that leaves tomorrow")]
+		public void GivenIAmAnAgentThatLeavesTomorrow()
+		{
+			UserFactory.User().Setup(new AgentThatLeavesTomorrow());
+			var team = new Team();
+			UserFactory.User().Setup(team);
+			UserFactory.User().Setup(new SchedulePeriod());
+			UserFactory.User().Setup(new PersonPeriod(team.TheTeam));
+			UserFactory.User().Setup(new ScheduleIsPublished());
+		}
+
 	}
 }

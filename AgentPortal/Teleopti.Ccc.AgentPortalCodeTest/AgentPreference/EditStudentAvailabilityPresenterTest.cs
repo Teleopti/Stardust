@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 {
@@ -113,6 +114,83 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.SetViewValuesToModel();
 
             _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldNotBePossibleToSaveTimesToNoneNone()
+        {
+            using(_mocks.Record())
+            {
+                Expect.Call(() => _view.StartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.EndTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondStartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondEndTimeLimitationErrorMessage = null);
+
+                Expect.Call(_view.StartTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_view.EndTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.StartTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+                Expect.Call(() => _view.EndTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+
+                Expect.Call(_view.SecondStartTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_view.SecondEndTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.SecondStartTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+                Expect.Call(() => _view.SecondEndTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+            }
+
+            using(_mocks.Playback())
+            {
+                _target.Save();
+            }
+        }
+
+        [Test]
+        public void ShouldNotBePossibleToSaveStartTimeToNone()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(() => _view.StartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.EndTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondStartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondEndTimeLimitationErrorMessage = null);
+
+                Expect.Call(_view.StartTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_view.EndTimeLimitation).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.StartTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+
+                Expect.Call(_view.SecondStartTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(_view.SecondEndTimeLimitation).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.SecondStartTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+            }
+
+            using (_mocks.Playback())
+            {
+                _target.Save();
+            }   
+        }
+
+        [Test]
+        public void ShouldNotBePossibleToSaveEndTimeToNone()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(() => _view.StartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.EndTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondStartTimeLimitationErrorMessage = null);
+                Expect.Call(() => _view.SecondEndTimeLimitationErrorMessage = null);
+
+                Expect.Call(_view.StartTimeLimitation).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
+                Expect.Call(_view.EndTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.EndTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+
+                Expect.Call(_view.SecondStartTimeLimitation).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
+                Expect.Call(_view.SecondEndTimeLimitation).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(() => _view.SecondEndTimeLimitationErrorMessage = Resources.MustSpecifyValidTime);
+            }
+
+            using (_mocks.Playback())
+            {
+                _target.Save();
+            }      
         }
     }
 }

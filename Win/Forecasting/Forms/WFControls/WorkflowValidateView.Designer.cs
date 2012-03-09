@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // 
             // buttonAdvCancelLoad
             // 
-            this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
             this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -246,14 +246,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // percentTextBoxTasks
             // 
             this.percentTextBoxTasks.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.percentTextBoxTasks.BackGroundColor = System.Drawing.SystemColors.Window;
             this.percentTextBoxTasks.DoubleValue = 0D;
             this.percentTextBoxTasks.Location = new System.Drawing.Point(122, 10);
+            this.percentTextBoxTasks.MaxValue = 100D;
+            this.percentTextBoxTasks.MinValue = -100D;
             this.percentTextBoxTasks.Name = "percentTextBoxTasks";
             this.percentTextBoxTasks.NullString = "0,00 %";
             this.percentTextBoxTasks.OverflowIndicatorToolTipText = null;
             this.percentTextBoxTasks.PercentDecimalDigits = 0;
             this.percentTextBoxTasks.Size = new System.Drawing.Size(45, 20);
             this.percentTextBoxTasks.TabIndex = 5;
+            this.percentTextBoxTasks.Text = "0 %";
             this.percentTextBoxTasks.Validated += new System.EventHandler(this.percentTextBoxTasks_Validated);
             // 
             // labelDeviationTasks
@@ -270,27 +274,35 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             // percentTextBoxDeviationTaskTime
             // 
             this.percentTextBoxDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.percentTextBoxDeviationTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
             this.percentTextBoxDeviationTaskTime.DoubleValue = 0D;
             this.percentTextBoxDeviationTaskTime.Location = new System.Drawing.Point(122, 50);
+            this.percentTextBoxDeviationTaskTime.MaxValue = 100D;
+            this.percentTextBoxDeviationTaskTime.MinValue = -100D;
             this.percentTextBoxDeviationTaskTime.Name = "percentTextBoxDeviationTaskTime";
             this.percentTextBoxDeviationTaskTime.NullString = "0,00 %";
             this.percentTextBoxDeviationTaskTime.OverflowIndicatorToolTipText = null;
             this.percentTextBoxDeviationTaskTime.PercentDecimalDigits = 0;
             this.percentTextBoxDeviationTaskTime.Size = new System.Drawing.Size(45, 20);
             this.percentTextBoxDeviationTaskTime.TabIndex = 6;
+            this.percentTextBoxDeviationTaskTime.Text = "0 %";
             this.percentTextBoxDeviationTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationTaskTime_Validated);
             // 
             // percentTextBoxDeviationAfterTaskTime
             // 
             this.percentTextBoxDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.percentTextBoxDeviationAfterTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
             this.percentTextBoxDeviationAfterTaskTime.DoubleValue = 0D;
             this.percentTextBoxDeviationAfterTaskTime.Location = new System.Drawing.Point(122, 90);
+            this.percentTextBoxDeviationAfterTaskTime.MaxValue = 100D;
+            this.percentTextBoxDeviationAfterTaskTime.MinValue = -100D;
             this.percentTextBoxDeviationAfterTaskTime.Name = "percentTextBoxDeviationAfterTaskTime";
             this.percentTextBoxDeviationAfterTaskTime.NullString = "0,00 %";
             this.percentTextBoxDeviationAfterTaskTime.OverflowIndicatorToolTipText = null;
             this.percentTextBoxDeviationAfterTaskTime.PercentDecimalDigits = 0;
             this.percentTextBoxDeviationAfterTaskTime.Size = new System.Drawing.Size(45, 20);
             this.percentTextBoxDeviationAfterTaskTime.TabIndex = 7;
+            this.percentTextBoxDeviationAfterTaskTime.Text = "0 %";
             this.percentTextBoxDeviationAfterTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationAfterTaskTime_Validated);
             // 
             // xpTaskBarBoxSpecialEvents

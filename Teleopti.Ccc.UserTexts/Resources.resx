@@ -10508,4 +10508,19 @@ These options are activated:
     <value>There are no teams available</value>
     <comment>There are no teams available</comment>
   </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>From role</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>Functions</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Permissions Viewer</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Persons</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>The person's roles</value>
+  </data>
 </root>

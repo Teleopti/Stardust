@@ -307,7 +307,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 Expect.Call(workloadDay.CurrentDate).Return(new DateOnly(date)).Repeat.Any();
                 Expect.Call(workloadDay.Workload).Return(workload).Repeat.Any();
                 Expect.Call(workloadDay.IsLocked).Return(false).Repeat.Any();
-                Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
+                //Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
+                Expect.Call(workloadDay.OpenForWork).Return(new OpenForWork(){ IsOpen = true , IsOpenForIncomingWork = true}).Repeat.Any();
                 Expect.Call(workloadDay.TotalTasks).Return(30).Repeat.Any();
                 Expect.Call(workloadDay.TotalAverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
                 Expect.Call(workloadDay.TotalAverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();
@@ -412,7 +413,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 Expect.Call(workloadDay.CurrentDate).Return(new DateOnly(date)).Repeat.Any();
                 Expect.Call(workloadDay.Workload).Return(workload).Repeat.Any();
                 Expect.Call(workloadDay.IsLocked).Return(false).Repeat.Any();
-                Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
+                //Expect.Call(workloadDay.IsClosed).Return(false).Repeat.Any();
+                Expect.Call(workloadDay.OpenForWork).Return(new OpenForWork() { IsOpen = true, IsOpenForIncomingWork = true }).Repeat.Any();
                 Expect.Call(workloadDay.TotalTasks).Return(30).Repeat.Any();
                 Expect.Call(workloadDay.TotalAverageAfterTaskTime).Return(TimeSpan.FromSeconds(3)).Repeat.Any();
                 Expect.Call(workloadDay.TotalAverageTaskTime).Return(TimeSpan.FromSeconds(2)).Repeat.Any();

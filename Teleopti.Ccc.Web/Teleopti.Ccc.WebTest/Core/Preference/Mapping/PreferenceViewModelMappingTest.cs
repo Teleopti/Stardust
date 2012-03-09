@@ -543,14 +543,15 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		public void ShouldMapAbsence()
 		{
 			var stubs = new StubFactory();
-			var absence = stubs.PersonAbsenceStub();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] {absence});
+			var absenceToDisplay = stubs.PersonAbsenceStub();
+			var lowPriorityAbsence = stubs.PersonAbsenceStub();
+			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] { absenceToDisplay, lowPriorityAbsence });
 			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.Absence.Absence.Should().Be(absence.Layer.Payload.Description.Name);
+				.Absence.Absence.Should().Be(absenceToDisplay.Layer.Payload.Description.Name);
 		}
 
 		[Test]
