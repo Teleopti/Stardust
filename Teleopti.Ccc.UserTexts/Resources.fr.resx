@@ -7858,4 +7858,232 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Peut modifier et sauvegarder</value>
   </data>
+  <data name="ViewAllowance" xml:space="preserve">
+    <value>Voir la permission</value>
+  </data>
+  <data name="TeamSchedule" xml:space="preserve">
+    <value>Planning Equipe</value>
+  </data>
+  <data name="XRequests" xml:space="preserve">
+    <value>{0} Demande(s)</value>
+  </data>
+  <data name="PersonFinderFieldAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="PersonFinderFieldBudgetGroup" xml:space="preserve">
+    <value>Groupe Budget</value>
+  </data>
+  <data name="PersonFinderFieldContract" xml:space="preserve">
+    <value>Contrat</value>
+  </data>
+  <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
+    <value>Planning contrat</value>
+  </data>
+  <data name="PersonFinderFieldOrganization" xml:space="preserve">
+    <value>Organisation</value>
+  </data>
+  <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
+    <value>Pourcentage Temps Partiel</value>
+  </data>
+  <data name="PersonFinderFieldShiftBag" xml:space="preserve">
+    <value>Banque de roulements</value>
+  </data>
+  <data name="PersonFinderFieldSkill" xml:space="preserve">
+    <value>Compétence</value>
+  </data>
+  <data name="RowsPerPageFifty" xml:space="preserve">
+    <value>Cinquante</value>
+  </data>
+  <data name="RowsPerPageForty" xml:space="preserve">
+    <value>Quarante</value>
+  </data>
+  <data name="RowsPerPageTen" xml:space="preserve">
+    <value>Dix</value>
+  </data>
+  <data name="RowsPerPageThirty" xml:space="preserve">
+    <value>Trente</value>
+  </data>
+  <data name="RowsPerPageTwenty" xml:space="preserve">
+    <value>Vingt</value>
+  </data>
+  <data name="RowsPerPage" xml:space="preserve">
+    <value>Rangées Par Page</value>
+  </data>
+  <data name="TogglePinStatus" xml:space="preserve">
+    <value>Fixer au*dessus</value>
+  </data>
+  <data name="ExtendingAndReducingTime" xml:space="preserve">
+    <value>Temps d'extension et de réduction pour les agents flexibles</value>
+  </data>
+  <data name="ExtendReduceTimeForFlexibleAgents" xml:space="preserve">
+    <value>Ajuste pour temps de travail flexible</value>
+  </data>
+  <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
+    <value>Votre demande d'absence a été refusée automatiquement. Il n'y a pas assez de permission budgetée restante pour cette demande.</value>
+  </data>
+  <data name="MeetingActivityRequired" xml:space="preserve">
+    <value>Sélectionnez une activité!</value>
+  </data>
+  <data name="NoShiftsFound" xml:space="preserve">
+    <value>Aucun roulement n'a pu être trouvé</value>
+  </data>
+  <data name="FindThreeDots" xml:space="preserve">
+    <value>Trouver...</value>
+  </data>
+  <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
+    <value>Une erreur est survenue pendant la sauvegarde des paramètres.</value>
+  </data>
+  <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
+    <value>Vous avez la permission générale pour consulter les scénarios restreints mais pas pour les équipes et dates sélectionnées.</value>
+  </data>
+  <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
+    <value>Vous n'avez pas la permission de consulter les scénarios restreints et tous les scénarios sont restreints.</value>
+  </data>
+  <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
+    <value>Exporter la prévision à une autre unité opérationnelle</value>
+  </data>
+  <data name="RunningBackgroundJob" xml:space="preserve">
+    <value>Exécute requête d'arrière-plan...</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Demandes Par Agent</value>
+  </data>
+  <data name="TargetValue" xml:space="preserve">
+    <value>Valeur Cible</value>
+  </data>
+  <data name="Teleopti" xml:space="preserve">
+    <value>Teleopti</value>
+  </data>
+  <data name="DayOffTolerancePlus" xml:space="preserve">
+    <value>Tolérance + Jours libres</value>
+  </data>
+  <data name="DayOffTolerancMinus" xml:space="preserve">
+    <value>Tolérence - Jours libres</value>
+  </data>
+  <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
+    <value>Extension et Réduction des jours libres pour les agents flexibles</value>
+  </data>
+  <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
+    <value>Ajuste pour des jours libres flexibles</value>
+  </data>
+  <data name="ThisIsTheDefaultScenario" xml:space="preserve">
+    <value>Ceci est le scénario par défaut</value>
+  </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>Le maximum est {0} heures.</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>Le minimum est {0} heures.</value>
+  </data>
+  <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
+    <value>Il y a déjà une abscence planifiée pour la période donnée.</value>
+  </data>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Rapports personnalisés</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Vous utilisez plus d'agents ({0}) que votre licence le permet ({1}). Vous avez à présent ({2}) jours libres pour réduire les agents ou appliquez une licence qui couvre autant d'agents.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>Navigateur Défaut</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Ancien mot de passe</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Mauvais mot de passe!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Mis à jour</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Format Date</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Bloc</value>
+  </data>
+  <data name="ConsecutiveDaysOff" xml:space="preserve">
+    <value>Jours libres d'affilée</value>
+  </data>
+  <data name="ConsecutiveWorkDays" xml:space="preserve">
+    <value>Jours ouvrés d'affilée</value>
+  </data>
+  <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
+    <value>Jours libres pour horaires flexibles</value>
+  </data>
+  <data name="DoNotBreakMaximumSeats" xml:space="preserve">
+    <value>Ne pas enfreindre le maximum de postes</value>
+  </data>
+  <data name="FulfillRestrictions" xml:space="preserve">
+    <value>Tenir compte des Restrictions</value>
+  </data>
+  <data name="FullWeekEndDaysOff" xml:space="preserve">
+    <value>Jours libres weekend</value>
+  </data>
+  <data name="FullWeekEndsOff" xml:space="preserve">
+    <value>Weekend complets libres</value>
+  </data>
+  <data name="KeepExistingDaysOff" xml:space="preserve">
+    <value>Garder les jours libres existants</value>
+  </data>
+  <data name="KeepShiftCategories" xml:space="preserve">
+    <value>Garder les catégories de roulements</value>
+  </data>
+  <data name="KeepShifts" xml:space="preserve">
+    <value>Garder les roulements</value>
+  </data>
+  <data name="KeepStartEndTimes" xml:space="preserve">
+    <value>Garder les horaires de début et fin</value>
+  </data>
+  <data name="MaximumSeats" xml:space="preserve">
+    <value>Postes maximum</value>
+  </data>
+  <data name="MaximumStaffing" xml:space="preserve">
+    <value>Effectif Maximum</value>
+  </data>
+  <data name="MinimumStaffing" xml:space="preserve">
+    <value>Effectif Minimum</value>
+  </data>
+  <data name="MustHaves" xml:space="preserve">
+    <value>Doit avoir</value>
+  </data>
+  <data name="OptimizationSteps" xml:space="preserve">
+    <value>Etapes d'optimisation</value>
+  </data>
+  <data name="ShiftLimits" xml:space="preserve">
+    <value>Limites de Roulements</value>
+  </data>
+  <data name="ShiftSelection" xml:space="preserve">
+    <value>Sélection des roulements</value>
+  </data>
+  <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
+    <value>Roulements pour horaires flexibles</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Disponibilités Etudiant</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Equipes</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>L'Activité ne peut pas être vide.</value>
+  </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>Il n'y a pas d'équipes disponibles</value>
+  </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>Depuis rôle</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>Fonctions</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Visualisateur de Permissions</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Personnes</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>Les rôles de la Personne</value>
+  </data>
 </root>
