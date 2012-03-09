@@ -106,13 +106,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             var lastDate = uniqueDatesArray[i];
         	if (IsPermitted(functionPath, lastDate, person))
             {
-				var lastPersonPeriod = owningPersonPeriods.First(d => d.StartDate == lastDate);
-            	var lastDateOfLastPeriod = lastPersonPeriod.EndDate;
-				if (lastDateOfLastPeriod>period.EndDate)
+				var lastDateOfLastPeriod = period.EndDate;
+				var lastPersonPeriod = owningPersonPeriods.Where(d => d.StartDate == lastDate);
+				if (lastPersonPeriod.Any())
 				{
-					lastDateOfLastPeriod = period.EndDate;
+					var endDate = lastPersonPeriod.First().EndDate;
+					if (endDate < period.EndDate)
+					{
+						lastDateOfLastPeriod = endDate;
+					}
 				}
-				permittedPeriods.Add(new DateOnlyPeriod(lastDate, lastDateOfLastPeriod));
+            	permittedPeriods.Add(new DateOnlyPeriod(lastDate, lastDateOfLastPeriod));
             }
 
             //Maybe connect adjacent periods?
