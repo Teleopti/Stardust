@@ -3,15 +3,27 @@
 .body-calendarview-inner{background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;}
 
 .weekdays li,
-.calendarview-week li{
+.calendarview-week li
+{
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
 }
 .rgba .weekdays li, 
-.rgba .calendarview-week li{
+.rgba .calendarview-week li
+{
 	border-left: 1px solid rgba(255, 255, 255, 0.7);
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
+/* rgba on many elements makes scrolling very slow in chrome so lets use static */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.rgba .weekdays li, 
+	.rgba .calendarview-week li
+	{
+		border-left: 1px solid #f9f9f9;
+		border-right: 1px solid #dfdfdf;
+	}
+}
+
 .calendarview-week li:first-child{border-left-color: transparent; color: #fff; font-size: 11px; text-align: center; width: 38px;}
 .calendarview-week li:first-child > div{margin-top: 58px; padding-bottom: 0px;}
 .weekdays{font-size: 0; padding-left: 40px;}
