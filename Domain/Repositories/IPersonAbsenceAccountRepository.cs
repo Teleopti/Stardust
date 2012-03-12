@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts();
         IPersonAccountCollection Find(IPerson person);
+        IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons);
     }
 }
