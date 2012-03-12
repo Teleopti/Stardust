@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_personPeriodProvider = personPeriodProvider;
 		}
 
+		[EnsureInPortal]
 		[UnitOfWorkAction]
 		public ViewResult Index(DateOnly? date, Guid? id)
 		{

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_preferencePersister = preferencePersister;
 		}
 
+		[EnsureInPortal]
 		[UnitOfWorkAction]
 		public ViewResult Index(DateOnly? date)
 		{
