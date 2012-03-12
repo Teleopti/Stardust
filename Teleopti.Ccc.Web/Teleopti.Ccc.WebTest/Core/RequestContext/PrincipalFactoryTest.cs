@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	//ouch - för stor. blame roger. fixar till senare
 	//MS: I think this needs to be split into several resposibilites: data provider(s?), principal factory at the least..
 	[TestFixture]
-	public class PrincipalProviderTest
+	public class PrincipalFactoryTest
 	{
 		private MockRepository mocks;
-		private PrincipalProvider target;
+		private PrincipalFactory target;
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
 		private IRepositoryFactory repositoryFactory;
 		private IDataSourcesProvider dataSourcesProvider;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 			dataSourcesProvider = mocks.DynamicMock<IDataSourcesProvider>();
 			roleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
-			target = new PrincipalProvider(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand);
+			target = new PrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand);
 		}
 
 

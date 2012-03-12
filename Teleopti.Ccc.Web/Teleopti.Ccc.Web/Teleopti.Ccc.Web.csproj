@@ -341,8 +341,8 @@
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\IRequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\IPrincipalProvider.cs" />
-    <Compile Include="Core\RequestContext\PrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\IPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\PrincipalFactory.cs" />
     <Compile Include="Core\RequestContext\RequestContextInitializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />

@@ -5,28 +5,26 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	public class RequestContextInitializer : IRequestContextInitializer
 	{
 		private readonly HttpContextBase _httpContextBase;
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly IPrincipalFactory _principalFactory;
 		private readonly ISetThreadCulture _setThreadCulture;
 
 		public RequestContextInitializer(HttpContextBase httpContextBase,
-													IPrincipalProvider principalProvider,
+													IPrincipalFactory principalFactory,
 													ISetThreadCulture setThreadCulture)
 		{
 			_httpContextBase = httpContextBase;
-			_principalProvider = principalProvider;
+			_principalFactory = principalFactory;
 			_setThreadCulture = setThreadCulture;
 		}
 
 		public void AttachPrincipalForAuthenticatedUser()
 		{
-			var teleoptiPrincipal = _principalProvider.Generate();
-			if (teleoptiPrincipal != null)
-			{
-				_httpContextBase.User = teleoptiPrincipal;
-				System.Threading.Thread.CurrentPrincipal = teleoptiPrincipal;
+			var teleoptiPrincipal = _principalFactory.Generate();
+			if (teleoptiPrincipal == null) return;
 
-				_setThreadCulture.SetCulture(teleoptiPrincipal.Regional);
-			}
+			_httpContextBase.User = teleoptiPrincipal;
+			System.Threading.Thread.CurrentPrincipal = teleoptiPrincipal;
+			_setThreadCulture.SetCulture(teleoptiPrincipal.Regional);
 		}
 	}
 }
