@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime/Preference/Index");
+			GoToWithPossibleLongApplicationStartTime("MyTime#Preference/Index");
 			Pages.Pages.Current = Browser.Current.Page<PreferencePage>();
 		}
 
@@ -160,9 +161,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoTheInternet() { GoTo("about:blank"); }
 
-		public static void GotoExpireMyCookieUrl()
+		public static void ExpireMyCookie()
 		{
-			GoTo("Start/Test/ExpireMyCookie");
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Common.ExpireMyCookie();");
 		}
 	}
 }

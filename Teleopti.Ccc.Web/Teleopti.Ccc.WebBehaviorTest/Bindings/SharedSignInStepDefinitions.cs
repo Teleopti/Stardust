@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIAmNotSignedIn()
 		{
 			EventualAssert.That(() => Browser.Current.Link("signout").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.SignInPage.ApplicationOkButton.Exists, Is.True);
 		}
 	}
 }

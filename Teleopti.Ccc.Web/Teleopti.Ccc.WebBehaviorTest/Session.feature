@@ -11,29 +11,34 @@ Scenario: Stay logged in during server restart
 	And I browse to an application page
 	Then I should be signed in
 
-Scenario: Logged out when cookie expires
+Scenario: Signed out when cookie expires while I browse the internet
 	Given I am signed in
 	Then I should be signed in
-	When I browse the internet
-	And my cookie expires
+	When my cookie expires
+	And I browse the internet
+	And I browse to an application page
+	Then I should not be signed in
+
+Scenario: Signed out when cookie expires while I have the browser open
+	Given I am signed in
+	Then I should be signed in
+	When my cookie expires
 	And I browse to an application page
 	Then I should not be signed in
 
 Scenario: Save preference when cookie is expired
-	Given I am signed in
-	Then I should be signed in
-	When I browse the internet
-	And my cookie expires
-	And I navigate to the preferences page
+	Given I am an agent
+	And I have an open workflow control set with an allowed standard preference
+	And I am viewing preferences
+	When my cookie expires
 	And I select an editable day without preference
 	And I select a standard preference
 	Then I should not be signed in
 
 Scenario: Navigate to next period when cookie is expired
-	Given I am signed in
-	Then I should be signed in
-	When I browse the internet
-	And my cookie expires
-	And I navigate to the preferences page
+	Given I am an agent
+	And I have several virtual schedule periods
+	And I am viewing preferences
+	When my cookie expires
 	And I click next virtual schedule period button
 	Then I should not be signed in

@@ -68,8 +68,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _attachAjaxEvents() {
 		$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-			if (options.url.indexOf('http://') == -1)
-				options.url = _settings.baseUrl + options.url;
+			if (options.url.indexOf('http://') != -1)
+				return;
+			if (options.url.indexOf('/') == 0)
+				return;
+			options.url = _settings.baseUrl + options.url;
 		});
 		$('#loading')
 			.hide()  // hide it initially

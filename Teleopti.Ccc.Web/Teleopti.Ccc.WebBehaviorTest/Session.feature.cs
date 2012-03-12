@@ -78,10 +78,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Logged out when cookie expires")]
-        public virtual void LoggedOutWhenCookieExpires()
+        [NUnit.Framework.DescriptionAttribute("Signed out when cookie expires while I browse the internet")]
+        public virtual void SignedOutWhenCookieExpiresWhileIBrowseTheInternet()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Logged out when cookie expires", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Signed out when cookie expires while I browse the internet", ((string[])(null)));
 #line 14
 this.ScenarioSetup(scenarioInfo);
 #line 15
@@ -89,12 +89,33 @@ this.ScenarioSetup(scenarioInfo);
 #line 16
  testRunner.Then("I should be signed in");
 #line 17
- testRunner.When("I browse the internet");
+ testRunner.When("my cookie expires");
 #line 18
- testRunner.And("my cookie expires");
+ testRunner.And("I browse the internet");
 #line 19
  testRunner.And("I browse to an application page");
 #line 20
+ testRunner.Then("I should not be signed in");
+#line hidden
+            testRunner.CollectScenarioErrors();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Signed out when cookie expires while I have the browser open")]
+        public virtual void SignedOutWhenCookieExpiresWhileIHaveTheBrowserOpen()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Signed out when cookie expires while I have the browser open", ((string[])(null)));
+#line 22
+this.ScenarioSetup(scenarioInfo);
+#line 23
+ testRunner.Given("I am signed in");
+#line 24
+ testRunner.Then("I should be signed in");
+#line 25
+ testRunner.When("my cookie expires");
+#line 26
+ testRunner.And("I browse to an application page");
+#line 27
  testRunner.Then("I should not be signed in");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -105,23 +126,21 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SavePreferenceWhenCookieIsExpired()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Save preference when cookie is expired", ((string[])(null)));
-#line 22
-this.ScenarioSetup(scenarioInfo);
-#line 23
- testRunner.Given("I am signed in");
-#line 24
- testRunner.Then("I should be signed in");
-#line 25
- testRunner.When("I browse the internet");
-#line 26
- testRunner.And("my cookie expires");
-#line 27
- testRunner.And("I navigate to the preferences page");
-#line 28
- testRunner.And("I select an editable day without preference");
 #line 29
- testRunner.And("I select a standard preference");
+this.ScenarioSetup(scenarioInfo);
 #line 30
+ testRunner.Given("I am an agent");
+#line 31
+ testRunner.And("I have an open workflow control set with an allowed standard preference");
+#line 32
+ testRunner.And("I am viewing preferences");
+#line 33
+ testRunner.When("my cookie expires");
+#line 34
+ testRunner.And("I select an editable day without preference");
+#line 35
+ testRunner.And("I select a standard preference");
+#line 36
  testRunner.Then("I should not be signed in");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -132,21 +151,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigateToNextPeriodWhenCookieIsExpired()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to next period when cookie is expired", ((string[])(null)));
-#line 32
-this.ScenarioSetup(scenarioInfo);
-#line 33
- testRunner.Given("I am signed in");
-#line 34
- testRunner.Then("I should be signed in");
-#line 35
- testRunner.When("I browse the internet");
-#line 36
- testRunner.And("my cookie expires");
-#line 37
- testRunner.And("I navigate to the preferences page");
 #line 38
- testRunner.And("I click next virtual schedule period button");
+this.ScenarioSetup(scenarioInfo);
 #line 39
+ testRunner.Given("I am an agent");
+#line 40
+ testRunner.And("I have several virtual schedule periods");
+#line 41
+ testRunner.And("I am viewing preferences");
+#line 42
+ testRunner.When("my cookie expires");
+#line 43
+ testRunner.And("I click next virtual schedule period button");
+#line 44
  testRunner.Then("I should not be signed in");
 #line hidden
             testRunner.CollectScenarioErrors();

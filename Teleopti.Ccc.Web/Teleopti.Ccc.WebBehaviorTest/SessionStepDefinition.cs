@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenMyCookieExpires()
 		{
 			ScenarioContext.Current.Pending();
-			Navigation.GotoExpireMyCookieUrl();
+			Navigation.ExpireMyCookie();
 		}
 
 	}
