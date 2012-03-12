@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should be signed in")]
 		public void ThenIShouldBeSignedIn()
 		{
-			Assert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists,
-			            Is.True.After(5000, 10));
+			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
 		}
 
 		[When(@"I sign in by user name and wrong password")]
@@ -80,10 +79,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Page.Document.ContainsText(Resources.LogOnFailedInvalidUserNameOrPassword);
 		}
 
-		[Then(@"I am not signed in")]
+		[Then(@"I should not be signed in")]
 		public void ThenIAmNotSignedIn()
 		{
-			Assert.That(() => Browser.Current.Link("signout").Exists, Is.False.After(5000, 10));
+			EventualAssert.That(() => Browser.Current.Link("signout").Exists, Is.False);
 		}
 	}
 }

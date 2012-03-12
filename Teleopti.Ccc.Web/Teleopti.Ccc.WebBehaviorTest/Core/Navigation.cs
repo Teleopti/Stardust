@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.Current = Browser.Current.Page<SignInPage>();
 		}
 
-		public static void GotoAnApplicationPage()
+		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime#Schedule/Week");
-			Pages.Pages.Current = Browser.Current.Page<WeekSchedulePage>();
+			GoToWithPossibleLongApplicationStartTime("MyTime/Preference/Index");
+			Pages.Pages.Current = Browser.Current.Page<PreferencePage>();
 		}
 
 		public static void GotoWeekSchedulePage()
@@ -157,5 +157,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			                   date.Day.ToString("00")));
 			Pages.Pages.Current = Browser.Current.Page<TeamSchedulePage>();
 		}
+
+		public static void GotoTheInternet() { GoTo("about:blank"); }
 	}
 }
