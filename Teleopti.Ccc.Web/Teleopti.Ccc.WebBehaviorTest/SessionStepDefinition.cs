@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -16,5 +17,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TestSiteConfigurationSetup.RestartApplication();
 		}
+
+		[When(@"my cookie expires")]
+		public void WhenMyCookieExpires()
+		{
+			ScenarioContext.Current.Pending();
+			Navigation.GotoExpireMyCookieUrl();
+		}
+
 	}
 }

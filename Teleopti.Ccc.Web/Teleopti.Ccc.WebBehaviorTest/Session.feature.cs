@@ -116,7 +116,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 26
  testRunner.And("my cookie expires");
 #line 27
- testRunner.And("I view preferences");
+ testRunner.And("I navigate to the preferences page");
 #line 28
  testRunner.And("I select an editable day without preference");
 #line 29
@@ -143,7 +143,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 36
  testRunner.And("my cookie expires");
 #line 37
- testRunner.And("I view preferences");
+ testRunner.And("I navigate to the preferences page");
 #line 38
  testRunner.And("I click next virtual schedule period button");
 #line 39

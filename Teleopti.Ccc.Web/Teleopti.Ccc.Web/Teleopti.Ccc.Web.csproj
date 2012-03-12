@@ -192,6 +192,7 @@
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\StyleClassViewModel.cs" />
+    <Compile Include="Areas\Start\Controllers\TestController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Redirector.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IRedirector.cs" />
     <Compile Include="Areas\Start\Core\Menu\DefinedApplicationAreas.cs" />

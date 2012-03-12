@@ -159,5 +159,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 
 		public static void GotoTheInternet() { GoTo("about:blank"); }
+
+		public static void GotoExpireMyCookieUrl()
+		{
+			GoTo("Start/Test/ExpireMyCookie");
+		}
 	}
 }

@@ -24,7 +24,7 @@ Scenario: Save preference when cookie is expired
 	Then I should be signed in
 	When I browse the internet
 	And my cookie expires
-	And I view preferences
+	And I navigate to the preferences page
 	And I select an editable day without preference
 	And I select a standard preference
 	Then I should not be signed in
@@ -34,6 +34,6 @@ Scenario: Navigate to next period when cookie is expired
 	Then I should be signed in
 	When I browse the internet
 	And my cookie expires
-	And I view preferences
+	And I navigate to the preferences page
 	And I click next virtual schedule period button
 	Then I should not be signed in
