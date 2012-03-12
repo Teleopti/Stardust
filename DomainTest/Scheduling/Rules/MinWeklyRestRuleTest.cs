@@ -480,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			}
 		}
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotUseSameWeeklyRestOnTwoWeeks()
         {
             var maxTimePerWeek = new TimeSpan(40, 0, 0);
