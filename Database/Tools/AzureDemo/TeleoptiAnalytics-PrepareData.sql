@@ -1,3 +1,12 @@
+set quoted_identifier on
+set arithabort off
+set numeric_roundabort off
+set ansi_warnings on
+set ansi_padding on
+set ansi_nulls on
+set concat_null_yields_null on
+set cursor_close_on_commit off
+
 	-- Delete data from bridge and other tables
 	DELETE FROM mart.bridge_queue_workload
 	DELETE FROM mart.bridge_skillset_skill

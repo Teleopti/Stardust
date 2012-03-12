@@ -74,21 +74,21 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=9 & GOTO :error
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error
 
 ::Prepare (clean out and prepare data) in local database
-SQLCMD -S. -E -d%SRCCCC7% -i"%ROOTDIR%\TeleoptiCCC7-PrepareData.sql"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\TeleoptiCCC7-PrepareData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=11 & GOTO :error
-SQLCMD -S. -E -d%SRCANALYTICS% -i"%ROOTDIR%\TeleoptiAnalytics-PrepareData.sql"
+SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR%\TeleoptiAnalytics-PrepareData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ::Generate BCP in+out batch files
 ::CCC7
-SQLCMD -S. -E -d%SRCCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :error
-SQLCMD -S. -E -d%SRCCCC7% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC7%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%DESTUSER%@%DESTSERVERPREFIX%" DESTPWD = "%DESTPWD%"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC7%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%DESTUSER%@%DESTSERVERPREFIX%" DESTPWD = "%DESTPWD%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
-SQLCMD -S. -E -d%SRCCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
 ::Analytics
-SQLCMD -S. -E -d%SRCANALYTICS% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%DESTUSER%@%DESTSERVERPREFIX%" DESTPWD = "%DESTPWD%"
+SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%DESTUSER%@%DESTSERVERPREFIX%" DESTPWD = "%DESTPWD%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=16 & GOTO :error
 
 ::Execute bcp export from local databases
@@ -116,21 +116,26 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=22 & GOTO :error
 
 ::Prepare Azure DB = totally clean in out!
 ECHO Dropping Circular FKs, Delete All Azure data. Working ...
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=23 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTCCC7% -i"%ROOTDIR%\DeleteAllData.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DeleteAllData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=24 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=25 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTANALYTICS% -i"%ROOTDIR%\DeleteAllData.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\DeleteAllData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=26 & GOTO :error
 ECHO Dropping Circular FKs, Delete All Azure data. Done!
 
 ::Import To Azure Demo
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\AzureAnalyticsPreBcp.sql"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=31 & GOTO :error
 ECHO Running BcpIn on Azure Analytics ....
 CMD /C "%workingdir%\%SRCANALYTICS%\In.bat"
 if exist "%workingdir%\%SRCANALYTICS%\Logs\*.log" SET /A ERRORLEV=27 & GOTO :error
 ECHO Running BcpIn on Azure Analytics. Done!
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\AzureAnalyticsPostBcp.sql"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=32 & GOTO :error
+
 
 ECHO Running BcpIn on Azure ccc7 ....
 CMD /C "%workingdir%\%SRCCCC7%\in.bat"
@@ -138,13 +143,13 @@ if exist "%workingdir%\%SRCCCC7%\Logs\*log" SET /A ERRORLEV=28 & GOTO :error
 ECHO Running BcpIn on Azure ccc7. Done!
 
 ::Re-add Agg-views in Azure
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTANALYTICS% -Q"update mart.sys_crossdatabaseview_target set confirmed = 1"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -Q"update mart.sys_crossdatabaseview_target set confirmed = 1"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=29 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTANALYTICS% -Q"exec mart.sys_crossDatabaseView_load"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -Q"exec mart.sys_crossDatabaseView_load"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=29 & GOTO :error
 
 ::Add ETL schedules and extra statistics
-SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -d%DESTANALYTICS% -i"%ROOTDIR%\EtlScheduleAndExtraStats.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTUSER%@%DESTSERVERPREFIX% -P%DESTPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\EtlScheduleAndExtraStats.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=30 & GOTO :error
 
 ::------------
@@ -188,7 +193,11 @@ IF %ERRORLEV% EQU 26 ECHO Error running  Azure Analytics: DeleteAllData.sql
 IF %ERRORLEV% EQU 27 ECHO BcpIn error in Azure Analytics. Review log files: "%workingdir%\%SRCANALYTICS%\Logs"
 IF %ERRORLEV% EQU 28 ECHO BcpIn error in Azure Analytics. Review log files: "%workingdir%\%SRCCCC7%\Logs"
 IF %ERRORLEV% EQU 29 ECHO Error applying Crosss DB views
-IF %ERRORLEV% EQU 29 ECHO Error adding ETL Stuff to Azure
+IF %ERRORLEV% EQU 30 ECHO Error adding ETL Stuff to Azure
+IF %ERRORLEV% EQU 31 ECHO Error running Azure Analytics: AzureAnalyticsPreBcp.sql
+IF %ERRORLEV% EQU 32 ECHO Error running Azure Analytics: AzureAnalyticsPostBcp.sql
+
+
 ECHO.
 ECHO --------
 PAUSE
