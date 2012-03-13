@@ -37,7 +37,7 @@
 		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Target Name="Run" DependsOnTargets="RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -46,19 +46,19 @@
 		<!-- Un-Install ETL Service-->
 		<Message Text="un-Install ETL service. Working..." Importance="high" />
 		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<!-- <Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
 		<Message Text="un-Install ETL service. Done!" Importance="high" />
 
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
 		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)"/>
+		<!-- <Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)"/> -->
 		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->
 		<Message Text="Install ETL service. Working..." Importance="high" />
 		<Message Text="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+	<!--	<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
 		<Message Text="Install ETL service. Done!" Importance="high" />
 
 		<!-- 
