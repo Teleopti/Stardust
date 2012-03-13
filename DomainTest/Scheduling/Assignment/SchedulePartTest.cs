@@ -1111,7 +1111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 
 			//paste from wintertime to day of change to summertime("W. Europe Standard Time")
-			expectedDiff = new TimeSpan(4, 23, 0, 0);
+			expectedDiff = new TimeSpan(5, 0, 0, 0);
 			testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 23));
 			testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 28));
 			diff = testDestination.CalculatePeriodOffset(testSource.Period);
