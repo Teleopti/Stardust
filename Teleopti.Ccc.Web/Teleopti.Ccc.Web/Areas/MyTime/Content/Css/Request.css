@@ -55,3 +55,9 @@
 {
 	padding-top: 0.3em;
 }
+.request-data-subject {
+	word-wrap: break-word;	
+}
+.request-data-text {
+	word-wrap: break-word;	
+}
