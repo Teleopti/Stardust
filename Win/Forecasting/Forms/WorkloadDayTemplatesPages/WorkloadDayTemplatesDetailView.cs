@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
         private readonly int _templateIndex;
         private WorkloadIntradayTemplateGridControl _templateGridControl;
     	private bool _isDirty;
-		private readonly IDictionary<DateOnly, bool> _filteredDates = new Dictionary<DateOnly, bool>();
+        private readonly IFilteredData _filteredDates = new FilteredData();
         private ButtonAdv _buttonFilterData;
 
         private IList<IWorkloadDayBase> _workloadDaysForTemplatesWithStatistics;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 		private void btnFilterData_Click(object sender, EventArgs e)
 		{
             if (dateSelectionComposite1.SelectedDatesCount <= 0) return;
-			_filterDataView = new FilterDataView(_workload, this, _templateIndex, _filteredDates);
+            _filterDataView = new FilterDataView(_workload, this, _templateIndex, _filteredDates);
             _filterDataView.InitializeStatistics(_workloadDaysForTemplatesWithStatistics);
 			_filterDataView.Show(this);
 		}
@@ -300,25 +301,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			}
     	}
 
-		public void UpdateFilteredWorkloadDays(IDictionary<DateOnly, bool> filteredDates)
+        public void UpdateFilteredWorkloadDays(IFilteredData filteredDates)
 		{
 		    Cursor.Current = Cursors.WaitCursor;
-			foreach(var filteredDate in filteredDates)
-			{
-				var key = filteredDate.Key;
-				var value = filteredDate.Value;
-				if (_filteredDates.ContainsKey(key))
-					_filteredDates[key] = value;
-				else
-					_filteredDates.Add(key, value);
-			}
-
-            var filteredDates2 = (from filteredDate in _filteredDates where !filteredDate.Value select filteredDate.Key).ToList();
-
+			
+            _filteredDates.Merge(filteredDates);
+            
 			_filterDataView.Dispose();
             _filterDataView = null;
-            //SetDefaultSmoothingParameters();
-            TriggerFilterDataViewClosed(filteredDates2);
+            TriggerFilterDataViewClosed(_filteredDates);
             
             Cursor.Current = Cursors.Default;
 		}
@@ -332,8 +323,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 	    {
 	        _workloadDaysForTemplatesWithStatistics = historicalWorkloadDays;
 	    }
-        
-        public void TriggerFilterDataViewClosed(IList<DateOnly> filteredDates)
+
+        public void TriggerFilterDataViewClosed(IFilteredData filteredDates)
         {
         	var handler = FilterDataViewClosed;
             if (handler != null)
@@ -343,14 +334,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 
     public class FilterDataViewClosedEventArgs : EventArgs
     {
-        private readonly IList<DateOnly> _filteredDates;
+        private readonly IFilteredData _filteredDates;
 
-        public FilterDataViewClosedEventArgs(IList<DateOnly> filteredDates)
+        public FilterDataViewClosedEventArgs(IFilteredData filteredDates)
         {
             _filteredDates = filteredDates;
         }
 
-        public IList<DateOnly> FilteredDates
+        public IFilteredData FilteredDates
         {
             get { return _filteredDates; }
         }
