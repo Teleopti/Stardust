@@ -69,6 +69,27 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	function _expireMyCookie() {
+		$.ajax({
+				url: '/Start/Test/ExpireMyCookie',
+				global: false,
+				cache: false,
+				async: false,
+				success: function() {
+					$('#page')
+						.append('Cookie is expired!')
+						;
+				},
+				error: function(r) {
+					if (r.status == 401) {
+						$('#page')
+							.append('Cookie is expired!')
+							;
+					}
+				}
+			});
+	}
+
 	return {
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			$('#dialog-modal').attr('title', 'Ajax error: ' + title);
@@ -101,6 +122,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		CloseEditSection: function (editSectionId) {
 			_closeEditSection(editSectionId);
+		},
+		ExpireMyCookie: function () {
+			_expireMyCookie();
 		}
 	};
 

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_modifyPassword = modifyPassword;
 		}
 
+		[EnsureInPortal]
 		[UnitOfWorkAction]
 		[HttpGet]
 		public ViewResult Index()
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("RegionalSettingsPartial", viewModel);
 		}
 
+		[EnsureInPortal]
 		[HttpGet]
 		public ViewResult Password()
 		{

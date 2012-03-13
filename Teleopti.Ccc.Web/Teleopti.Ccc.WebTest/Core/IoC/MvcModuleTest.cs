@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterPrincipalProvider()
 		{
-			requestContainer.Resolve<IPrincipalProvider>()
+			requestContainer.Resolve<IPrincipalFactory>()
 				.Should().Not.Be.Null();
 		}
 

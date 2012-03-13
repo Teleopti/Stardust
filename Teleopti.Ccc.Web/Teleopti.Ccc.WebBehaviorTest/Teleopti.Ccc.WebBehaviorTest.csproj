@@ -110,7 +110,7 @@
     </Compile>
     <Compile Include="MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\Common\SignInPageBase.cs" />
+    <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\MobileSignInPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
@@ -145,6 +145,12 @@
       <DependentUpon>Routing.feature</DependentUpon>
     </Compile>
     <Compile Include="RoutingStepDefinition.cs" />
+    <Compile Include="Session.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Session.feature</DependentUpon>
+    </Compile>
+    <Compile Include="SessionStepDefinition.cs" />
     <Compile Include="TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -263,7 +269,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SignInStepDefinitions.cs" />
     <Compile Include="SignOut.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -332,6 +337,10 @@
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Routing.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Session.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Session.feature.cs</LastGenOutput>
     </None>
     <None Include="TeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

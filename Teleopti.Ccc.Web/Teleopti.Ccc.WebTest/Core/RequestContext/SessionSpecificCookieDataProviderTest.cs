@@ -83,5 +83,18 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			result.BusinessUnitId.Should().Be.EqualTo(sessionSpecificData.BusinessUnitId);
 			result.DataSourceName.Should().Be.EqualTo(sessionSpecificData.DataSourceName);
 		}
+
+		[Test]
+		public void ShouldExpireCookie()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.Store(sessionSpecificData);
+
+			target.Grab().Should().Not.Be.Null();
+
+			target.ExpireCookie();
+
+			target.Grab().Should().Be.Null();
+		}
 	}
 }

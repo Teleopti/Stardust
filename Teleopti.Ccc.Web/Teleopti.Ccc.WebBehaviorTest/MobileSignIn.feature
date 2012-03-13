@@ -26,7 +26,7 @@ Scenario: Sign in with wrong password should give me an informative error
 Scenario: Sign in without permission
 	Given I dont have permission to sign in
 	When I sign in by user name
-	Then I am not signed in
+	Then I should not be signed in
 
 @IgnoreBeforeScenario
 Scenario: Enter signin page with page preference 

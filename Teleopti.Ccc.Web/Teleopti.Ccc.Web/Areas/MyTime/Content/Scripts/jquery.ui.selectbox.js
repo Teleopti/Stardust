@@ -145,6 +145,7 @@
 				dataType: "json",
 				type: "GET",
 				global: false,
+				cache: false,
 				success: function (data, textStatus, jqXHR) {
 					$.each(data, function (index, value) {
 						var option = $('<option></option>')
