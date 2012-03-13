@@ -31,7 +31,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="PrepareDB">
+	<Target Name="Run" DependsOnTargets="PrepareDB;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -55,6 +55,11 @@
 		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		<Message Text="Install ETL service. Done!" Importance="high" />
 
+		<Message Text="Start ETL service. Working..." Importance="high" />
+		<Message Text="NET START AnalyticsEtlService" Importance="high" />
+		<Exec Command ="NET START AnalyticsEtlService"/>
+		<Message Text="Start ETL service. Done!" Importance="high" />
+		
 		<!--
 	This is our Test!!!
 	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
@@ -94,11 +99,6 @@
 		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
 		<Message Text="Prepare ETL. Done!" Importance="high" />
-
-		<Message Text="Start ETL service. Working..." Importance="high" />
-		<Message Text="NET START AnalyticsEtlService" Importance="high" />
-		<Exec Command ="NET START AnalyticsEtlService"/>
-		<Message Text="Start ETL service. Done!" Importance="high" />
 	</Target>
   
 	<Target Name="RestoreDatabasesAndPatch">
