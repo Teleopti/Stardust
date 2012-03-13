@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			}
 
 			var selectedDatePeriod = GetPeriodFromBudgetDays(selectedBudgetDays);
-            var skillDaysForSkills = _skillDayLoadHelper.LoadSchedulerSkillDays(selectedDatePeriod,
+            var skillDaysForSkills = _skillDayLoadHelper.LoadBudgetSkillDays(selectedDatePeriod,
 			                                                                    _mainModel.BudgetGroup.SkillCollection,
 			                                                                    _mainModel.Scenario);
 
@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 	    	{
 	    		skillDayList.AddRange(skillDaysForSkills[skill]);
 	    	}
+
 			return from s in skillDayList
 			       from p in s.SkillStaffPeriodCollection
 			       select p;

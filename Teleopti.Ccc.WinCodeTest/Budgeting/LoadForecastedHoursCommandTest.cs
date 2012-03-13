@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				Expect.Call(selectedBudgetDays.Find()).Return(new List<IBudgetGroupDayDetailModel> { dayDetail1, dayDetail2 });
 
 				var expectedPeriodToLoad = new DateOnlyPeriod(2010, 10, 20, 2010, 10, 22);
-				Expect.Call(skillDayLoader.LoadSchedulerSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
+				Expect.Call(skillDayLoader.LoadBudgetSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
 																	skillDayDictionary);
 				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(
 					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod1 })).Repeat.AtLeastOnce();
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			{
 				Expect.Call(selectedBudgetDays.Find()).Return(new List<IBudgetGroupDayDetailModel> { dayDetail1, dayDetail2 });
 
-				Expect.Call(skillDayLoader.LoadSchedulerSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
+				Expect.Call(skillDayLoader.LoadBudgetSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
 																	skillDayDictionary);
 				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(
 					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod2 })).Repeat.AtLeastOnce();

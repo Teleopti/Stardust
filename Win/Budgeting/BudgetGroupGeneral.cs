@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var repFac = new RepositoryFactory();
-				var skills = repFac.CreateSkillRepository(uow).LoadAll();
+			    var skills = repFac.CreateSkillRepository(uow).FindAllWithoutMultisiteSkills();
 				listBoxSkills.Items.AddRange(skills.ToArray());
 			}
 		}
