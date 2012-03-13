@@ -29,7 +29,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChangeStandardPreference()
 		{
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name);
+			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
+		}
+
+		[When(@"I try to select a standard preference")]
+		public void WhenITryToSelectStandardPreference()
+		{
+			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
+			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}
 
 		[When(@"I select an editable day without preference")]

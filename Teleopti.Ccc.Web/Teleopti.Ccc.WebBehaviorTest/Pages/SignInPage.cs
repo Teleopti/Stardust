@@ -6,7 +6,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class SignInPage : SignInPageBase
+	public class SignInPage : Page, ISignInPage
 	{
 		[FindBy(Id = "WindowsTabLink")] public Link WindowsTabLink;
 		[FindBy(Id = "ApplicationTabLink")] public Link ApplicationTabLink;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "WindowsOkButton")] public Button WindowsOkButton;
 		[FindBy(Id = "BusinessUnitOkButton")] public Button BusinessUnitOkButton;
 
-		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField;
+		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 
 		[FindBy(Id = "BusinessUnitList")] public List BusinessUnitList;
@@ -26,17 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout")]
 		public Link SignOutLink;
 
-		public override string ErrorMessage
-		{
-			get { return string.Empty; }
-		}
 
-		public override void SelectFirstApplicationDataSource()
+		public void SelectFirstApplicationDataSource()
 		{
 			ApplicationDataSourceList.ListItems.First().Click();
 		}
 
-		public override void ClickApplicationOkButton()
+		public void ClickApplicationOkButton()
 		{
 			ApplicationOkButton.EventualClick();
 		}
@@ -46,19 +42,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WindowsDataSourceList.ListItems.First().Click();
 		}
 
-		public override void SelectFirstBusinessUnit()
+		public void SelectFirstBusinessUnit()
 		{
 			BusinessUnitList.WaitUntilExists(5);
 			BusinessUnitList.ListItems.First().Click();
 		}
 
-		public override void ClickBusinessUnitOkButton()
+		public void ClickBusinessUnitOkButton()
 		{
 			BusinessUnitOkButton.EventualClick();
-			WaitUntilSignInOrErrorAppears();
+			Func<bool> SignedInExists = () => SignOutLink.Exists;
+			SignedInExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
 		}
 
-		public override void SignInApplication(string username, string password)
+		public void SignInApplication(string username, string password)
 		{
 			ApplicationTabLink.Click();
 			SelectFirstApplicationDataSource();
@@ -76,16 +73,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WindowsOkButton.Click();
 		}
 
-		protected override void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
+		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
 		{
 			Func<bool> SignedInOrBusinessUnitListExists = () => SignOutLink.Exists || BusinessUnitList.Exists;
 			SignedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
-		}
-
-		protected override void WaitUntilSignInOrErrorAppears()
-		{
-			Func<bool> SignedInExists = () => SignOutLink.Exists;
-			SignedInExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
 		}
 	}
 }

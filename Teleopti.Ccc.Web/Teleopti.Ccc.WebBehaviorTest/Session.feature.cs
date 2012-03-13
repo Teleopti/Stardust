@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Stay logged in during server restart")]
-        public virtual void StayLoggedInDuringServerRestart()
+        [NUnit.Framework.DescriptionAttribute("Stay signed in after server restart")]
+        public virtual void StaySignedInAfterServerRestart()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Stay logged in during server restart", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Stay signed in after server restart", ((string[])(null)));
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -122,10 +122,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Save preference when cookie is expired")]
-        public virtual void SavePreferenceWhenCookieIsExpired()
+        [NUnit.Framework.DescriptionAttribute("Signed out when saving preference when cookie is expired")]
+        public virtual void SignedOutWhenSavingPreferenceWhenCookieIsExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Save preference when cookie is expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Signed out when saving preference when cookie is expired", ((string[])(null)));
 #line 29
 this.ScenarioSetup(scenarioInfo);
 #line 30
@@ -139,7 +139,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 34
  testRunner.And("I select an editable day without preference");
 #line 35
- testRunner.And("I select a standard preference");
+ testRunner.And("I try to select a standard preference");
 #line 36
  testRunner.Then("I should not be signed in");
 #line hidden
@@ -147,10 +147,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Navigate to next period when cookie is expired")]
-        public virtual void NavigateToNextPeriodWhenCookieIsExpired()
+        [NUnit.Framework.DescriptionAttribute("Signed out when navigating to next period when cookie is expired")]
+        public virtual void SignedOutWhenNavigatingToNextPeriodWhenCookieIsExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to next period when cookie is expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Signed out when navigating to next period when cookie is expired", ((string[])(null)));
 #line 38
 this.ScenarioSetup(scenarioInfo);
 #line 39

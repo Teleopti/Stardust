@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<WeekSchedulePage>(() => Browser.Current.Page<WeekSchedulePage>());
 		public static WeekSchedulePage WeekSchedulePage { get { return _weekSchedulePage.Value; } }
 
-
 		private static readonly ScenarioContextLazy<SignInPage> _signInPage =
 			new ScenarioContextLazy<SignInPage>(() => Browser.Current.Page<SignInPage>());
 		public static SignInPage SignInPage { get { return _signInPage.Value; } }
@@ -40,14 +39,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<TeamSchedulePage>(() => Browser.Current.Page<TeamSchedulePage>());
 		public static TeamSchedulePage TeamSchedulePage { get { return _teamSchedulePage.Value; } }
 
-		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } set { ScenarioContext.Current.Value(value); } }
+		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } }
+
+		public static void NavigatingTo(WatiN.Core.Page page)
+		{
+			if (page is ISignInPage)
+				CurrentSignInPage = page as ISignInPage;
+			ScenarioContext.Current.Value(page);
+		}
 
 		public static IDeleteButton CurrentDeleteButton { get { return Current as IDeleteButton; } }
 		public static IOkButton CurrentOkButton { get { return Current as IOkButton; } }
 		public static ICancelButton CurrentCancelButton { get { return Current as ICancelButton; } }
 		public static IDateRangeSelector CurrentDateRangeSelector { get { return Current as IDateRangeSelector; } }
 		public static IEditTextRequestPage CurrentEditTextRequestPage { get { return Current as IEditTextRequestPage; } }
+		public static ISignInPage CurrentSignInPage { get { return ScenarioContext.Current.Value<ISignInPage>(); } set { ScenarioContext.Current.Value(value); } }
 
-		
 	}
 }

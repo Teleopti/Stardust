@@ -16,6 +16,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public Div AutoComplete { get { return Element.Div(Element.Id + "-menu"); } }
 		public List Menu { get { return AutoComplete.Lists.Single(); } }
 
+		public void SelectWait(string text)
+		{
+			Select(text);
+			EventualAssert.That(() => SetButton.InnerHtml, Contains.Substring(text));
+		}
+
 		public void Select(string text)
 		{
 			ListButton.EventualClick();
@@ -23,7 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 				.Trigger("mouseover")
 				.Trigger("click")
 				.EvalIn(Element.DomContainer);
-			EventualAssert.That(() => SetButton.InnerHtml, Contains.Substring(text));
 		}
 
 	}

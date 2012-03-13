@@ -71,10 +71,23 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	function _expireMyCookie() {
 		$.ajax({
-			url: '/Start/Test/ExpireMyCookie',
-			cache: false,
-			async: false
-		});
+				url: '/Start/Test/ExpireMyCookie',
+				global: false,
+				cache: false,
+				async: false,
+				success: function() {
+					$('#page')
+						.append('Cookie is expired!')
+						;
+				},
+				error: function(r) {
+					if (r.status == 401) {
+						$('#page')
+							.append('Cookie is expired!')
+							;
+					}
+				}
+			});
 	}
 
 	return {

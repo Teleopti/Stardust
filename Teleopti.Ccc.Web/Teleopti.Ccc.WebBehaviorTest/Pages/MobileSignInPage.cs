@@ -1,18 +1,19 @@
 using System;
 using System.Linq;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class MobileSignInPage : SignInPageBase
+	public class MobileSignInPage : Page, ISignInPage
 
 	{
 		[FindBy(Id = "ApplicationSignIn_SignIn_Password")] public TextField PasswordTextField;
 
 		[FindBy(Id = "application-signin-button")] public Button SignInButton;
-		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField;
+		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
 		[FindBy(Id = "application-signin")]
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-datasource")); }
 		}
-		public RadioButtonCollection SignInBusinessInits
+		public RadioButtonCollection SignInBusinessUnits
 		{
 			get { return Document.RadioButtons.Filter(Find.ByName("signin-sel-businessunit")); }
 		}
@@ -30,28 +31,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout-button")] // Belongs to MobileReports
 			public Link SignoutButton { get; set; }
 
+		//public SpanCollection ErrorSpans
+		//{
+		//    get { return Document.Spans.Filter(Find.ByClass("error")); }
+		//}
 
-		public SpanCollection ErrorSpans
-		{
-			get { return Document.Spans.Filter(Find.ByClass("error")); }
-		}
-
-		public override string ErrorMessage
-		{
-			get { return string.Empty; }
-		}
-
-		public override void SelectFirstApplicationDataSource()
+		public void SelectFirstApplicationDataSource()
 		{
 			SigninDataSources.First().Click();
 		}
 
-		public override void ClickApplicationOkButton()
+		public void SignInWindows()
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void SignInApplication(string userName, string password)
+		public void ClickApplicationOkButton()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SignInApplication(string userName, string password)
 		{
 			SigninDataSources.First().Click();
 			UserNameTextField.Value = userName;
@@ -61,28 +61,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			WaitUntilSignInOrBusinessUnitListOrErrorAppears();
 		}
 
-		protected override void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
+		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()
 		{
 			Func<bool> signedInOrBusinessUnitListExists =
-				() => SignoutButton.Exists || SignInBusinessInits.Any(e => e.Style.Display != "none");
+				() => SignoutButton.Exists || SignInBusinessUnits.Any(e => e.Style.Display != "none");
 					  /*|| ErrorSpans.Any(e => e.Style != null && e.Style.Display != "none");*/
 			signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
 		}
 
-		protected override void WaitUntilSignInOrErrorAppears()
+		public void SelectFirstBusinessUnit()
 		{
-			Func<bool> SignedInExists = () => SignoutButton.Exists;
-			SignedInExists.WaitUntil(TimeSpan.FromMilliseconds(10), TimeSpan.FromSeconds(10));
+			SignInBusinessUnits.First().Click();
 		}
 
-		public override void SelectFirstBusinessUnit()
+		public void ClickBusinessUnitOkButton()
 		{
-			SignInBusinessInits.First().Click();
-		}
-
-		public override void ClickBusinessUnitOkButton()
-		{
-			
 			SignInBusinessInitsOkButton.Click();
 		}
 	}
