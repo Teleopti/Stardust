@@ -319,21 +319,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
                 Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments()
                     .Return(2);
-                Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor)).IgnoreArguments()
+                Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                     .Return(_removedDate);
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
                     .Return(_fullWeeksPeriodDictionary).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
                      .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_reschedulingPreferences.ConsiderShortBreaks)
                     .Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free).Repeat.Once();
                 Expect.Call(_optimizerPreferences.Rescheduling)
                     .Return(_reschedulingPreferences).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingOptions.ConsiderShortBreaks)
-                    .Return(true).Repeat.Twice();
                 Expect.Call(_removedScheduleDay.DaySchedulePart())
                     .Return(_removedSchedulePart).Repeat.Once();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_removedDate))
@@ -347,9 +345,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_resourceCalculateDaysDecider.DecideDates(_removedSchedulePart, _removedSchedulePart)).
                     Return(new List<DateOnly> { _removedDate });
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_removedDate, true, true));
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions)).IgnoreArguments()
+                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
+                Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, false, _effectiveRestriction))
                     .Return(false);
 
                 // rollback
