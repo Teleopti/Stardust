@@ -84,13 +84,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static TimeSpan CalculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
         {
-            if (targetPeriod.StartDateTime != sourcePeriod.StartDateTime || targetPeriod.EndDateTime != sourcePeriod.EndDateTime)
-            {
-                int diffHours = targetPeriod.StartDateTime.TimeOfDay.Subtract(targetPeriod.EndDateTime.TimeOfDay).Hours;
-                diffHours -= sourcePeriod.StartDateTime.TimeOfDay.Subtract(sourcePeriod.EndDateTime.TimeOfDay).Hours;
-                return targetPeriod.StartDateTime.Subtract(sourcePeriod.StartDateTime.AddHours(diffHours));
-            }
-            else
                 return targetPeriod.StartDateTime.Subtract(sourcePeriod.StartDateTime);
         }
     }
