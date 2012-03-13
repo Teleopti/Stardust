@@ -37,7 +37,7 @@
 		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="RunETL">
+	<Target Name="Run" DependsOnTargets="Compile;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -51,8 +51,8 @@
 
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)" Importance="high" />
-		<!-- <Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB)"/> -->
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)" Importance="high" />
+		<!-- <Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)"/> -->
 		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->
@@ -69,12 +69,12 @@
 	-->
 		<Message Text="Prepare ETL. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
+<!--		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/> -->
 		<Message Text="Prepare ETL. Done!" Importance="high" />
 
 		<Message Text="Start ETL service. Working..." Importance="high" />
 		<Message Text="NET START AnalyticsEtlService" Importance="high" />
-		<Exec Command ="NET START AnalyticsEtlService"/>
+<!--		<Exec Command ="NET START AnalyticsEtlService"/> -->
 		<Message Text="Start ETL service. Done!" Importance="high" />
 
 		<!--
@@ -83,20 +83,20 @@
 	-->
 		<Message Text="Start ETL test. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22"/>
+<!--		<Exec Command ="$(SQLCmdConn) -dmaster -Q%22EXEC [$(AnalyticsDB)].[mart].[etl_nightlyBuild_CheckError]%22"/> -->
 		<Message Text="Start ETL test. Done!" Importance="high" />
 
 		<!-- Clean up-->
 		<!--Sleep for 10 secs then STOP service-->
 		<Message Text="PING 127.0.0.1 -n 10 > NUL" Importance="high" />
-		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
+<!--		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/> -->
 
 		<Message Text="NET STOP AnalyticsEtlService" Importance="high" />
 		<Exec Command ="NET STOP AnalyticsEtlService"/>
 
 		<!-- Un-Install ETL Service-->
 		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+<!--		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
 	</Target>
 
 	<!--
