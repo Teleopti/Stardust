@@ -198,15 +198,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_layout();
 			_attachAjaxEvents();
 			_initNavigation();
-
-			var button = $('<button></button>')
-				.click(function() {
-					Teleopti.MyTimeWeb.Common.ExpireMyCookie();
-				})
-				;
-			$('#page')
-				.append(button)
-				;
 		},
 
 		NavigateTo: function (action, date, id) {
