@@ -73,6 +73,19 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			result.Should().Be.OfType<ViewResult>();
 		}
+
+		[Test]
+		public void ShouldReturnHttpUnauthorizedResultWhenAjax()
+		{
+			var target = new TeleoptiPrincipalAuthorizeAttribute();
+			var filterTester = new FilterTester();
+			filterTester.IsAjaxRequest();
+			filterTester.IsUser(Thread.CurrentPrincipal);
+
+			var result = filterTester.InvokeFilter(target);
+
+			result.Should().Be.OfType<HttpUnauthorizedResult>();
+		}
 		
 	}
 }

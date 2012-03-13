@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IWorkflowControlSet WorkflowControlSetPreferenceClosed;
 
 		public static IScenario Scenario;
+		public static IScenario SecondScenario;
 		public static IGroupingActivity GroupingActivity;
 		public static IShiftCategory ShiftCategory;
 		public static IDayOffTemplate DayOffTemplate;
