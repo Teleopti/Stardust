@@ -31,7 +31,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="PrepareDB;RunETL">
+	<Target Name="Run" DependsOnTargets="Compile;PrepareDB;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
