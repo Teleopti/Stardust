@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var restrictionChecker = new RestrictionChecker();
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixContainer, restrictionChecker, _optimizerPreferences);
 
-                var schedulingOptionsCreator = new SchedulingOptionsSynchronizer();
+                var schedulingOptionsCreator = new SchedulingOptionsCreator();
 
         		IMoveTimeOptimizer optimizer =
         			new MoveTimeOptimizer(

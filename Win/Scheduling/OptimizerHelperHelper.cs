@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
             var optimizerPreferences = container.Resolve<IOptimizationPreferences>();
-            var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
-            var schedulingOptions = new SchedulingOptions();
-            schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizerPreferences, schedulingOptions);
+            var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
 
             foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
             {
@@ -59,10 +58,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
             var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
-            var schedulingOptions = new SchedulingOptions();
-
-            var schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
-            schedulingOptionsSynchronizer.SynchronizeSchedulingOption(optimizationPreferences, schedulingOptions);
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
             IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
             foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)

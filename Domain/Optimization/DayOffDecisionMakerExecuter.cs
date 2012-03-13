@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private readonly IOptimizationOverLimitDecider _overLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
-        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
+        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+        private readonly ILogWriter _logWriter;
 
         public DayOffDecisionMakerExecuter(
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainer,
             IOptimizationOverLimitDecider overLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
-            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer
+            ISchedulingOptionsCreator schedulingOptionsCreator
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -63,7 +64,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _originalStateContainer = originalStateContainer;
             _overLimitDecider = overLimitDecider;
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
-            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
+            _schedulingOptionsCreator = schedulingOptionsCreator;
+
+            _logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
 
         public bool Execute(
@@ -77,21 +80,18 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
 
-            ILogWriter logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
-
             if (movesOverMaxDaysLimit())
                 return false;
 
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+            ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+            
             IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
-
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
 
             var changesTracker = new LockableBitArrayChangesTracker();
 
             IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 
-            writeToLogMovedDays(movedDays, logWriter);
+            writeToLogMovedDays(movedDays, _logWriter);
 
             double oldValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 
@@ -99,14 +99,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!removeIllegalDayOffs(workingBitArray))
             {
-                writeToLogBackToLegalStateFailed(logWriter);
+                writeToLogBackToLegalStateFailed(_logWriter);
                 return false;
             }
 
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
             {
-                writeToLogDayOffBackToLegalStateRemovedDays(movedDays, logWriter);
+                writeToLogDayOffBackToLegalStateRemovedDays(movedDays, _logWriter);
             }
 
             if (doReschedule)
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix);
             if (removedIllegalWorkTimeDays.Count > 0)
             {
-                writeToLogWorkShiftBackToLegalStateRemovedDays(logWriter, removedIllegalWorkTimeDays);
+                writeToLogWorkShiftBackToLegalStateRemovedDays(_logWriter, removedIllegalWorkTimeDays);
             }
 
             if (!doReschedule)
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!rescheduleWhiteSpots(movedDates, removedIllegalWorkTimeDays, schedulingOptions, currentScheduleMatrix, originalStateContainer))
             {
-                writeToLogReschedulingFailed(logWriter);
+                writeToLogReschedulingFailed(_logWriter);
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             double newValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
             if (newValue >= oldValue)
             {
-                writeToLogValueNotBetter(logWriter);
+                writeToLogValueNotBetter(_logWriter);
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 return false;
             }

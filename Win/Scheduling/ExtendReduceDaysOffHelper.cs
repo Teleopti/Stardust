@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 INewDayOffRule dayOffRule = new NewDayOffRule(workTimeStartEndExtractor);
                 IDayOffOptimizerValidator dayOffOptimizerValidator = new DayOffOptimizerValidator(dayOffRule);
 
-                ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
+                ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
                     personalSkillsPeriodValueCalculator, 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     displayList[0], 
                     conflictHandler, 
                     dayOffOptimizerValidator,
-                    schedulingOptionsSynchronizer);
+                    schedulingOptionsCreator);
 
                 optimizers.Add(optimizer);
             }

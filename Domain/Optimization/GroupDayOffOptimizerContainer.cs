@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IList<IPerson> _allSelectedPersons;
         private readonly IList<IScheduleMatrixPro> _allMatrixes;
         private readonly IGroupDayOffOptimizerCreator _groupDayOffOptimizerCreator;
-        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
+        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<IPerson> allSelectedPersons,
             IList<IScheduleMatrixPro> allMatrixes,
             IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator, 
-            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
+            ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _converter = converter;
             _decisionMakers = new List<IDayOffDecisionMaker>(decisionMakers);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _allSelectedPersons = allSelectedPersons;
             _allMatrixes = allMatrixes;
             _groupDayOffOptimizerCreator = groupDayOffOptimizerCreator;
-            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
+            _schedulingOptionsCreator = schedulingOptionsCreator;
         }
 
         public bool Execute()
@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             string agent =
                 _matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
 
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizationPreferences, schedulingOptions);
+            ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences);
 
             using (PerformanceOutput.ForOperation("Day off optimization for " + agent))
             {

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IResourceCalculateDaysDecider _decider;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
         private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
-        private ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
+        private ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         private IScheduleMatrixPro _matrix;
         private IScheduleDayPro _scheduleDayPro1;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _optimizerPreferences = new OptimizationPreferences();
             _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
-            _schedulingOptionsSynchronizer = _mocks.StrictMock<ISchedulingOptionsSynchronizer>();
+            _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
 
             _target = new ExtendReduceTimeOptimizer(
                 _periodValueCalculator, 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _decider, 
                 _originalStateContainerForTagChange, 
                 _optimizationOverLimitDecider, 
-                _schedulingOptionsSynchronizer);
+                _schedulingOptionsCreator);
 
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
@@ -230,12 +230,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).IgnoreArguments();
+                Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
+                    .Return(_schedulingOptions);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
                     .Return(decisionMakerResult);
-
             }
 
             bool result;
@@ -268,7 +268,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void commonMocks(ExtendReduceTimeDecisionMakerResult decisionMakerResult)
         {
-            Expect.Call(() => _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, _schedulingOptions)).IgnoreArguments();
+            Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
+                .Return(_schedulingOptions);
             Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
                 .Return(decisionMakerResult);
             Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))

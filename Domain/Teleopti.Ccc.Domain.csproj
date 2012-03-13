@@ -300,7 +300,7 @@
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProvider.cs" />
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
-    <Compile Include="Optimization\SchedulingOptionsSynchronizer.cs" />
+    <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />

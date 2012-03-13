@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationPreferences);
 
-            var schedulingOptionsCreator = new SchedulingOptionsSynchronizer();
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,

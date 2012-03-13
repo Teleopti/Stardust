@@ -3,19 +3,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public interface ISchedulingOptionsSynchronizer
+    public interface ISchedulingOptionsCreator
     {
-        void SynchronizeSchedulingOption(
-            IOptimizationPreferences optimizationPreferences,
-            ISchedulingOptions schedulingOptions);
+        ISchedulingOptions CreateSchedulingOptions(
+            IOptimizationPreferences optimizationPreferences);
     }
 
-    public class SchedulingOptionsSynchronizer : ISchedulingOptionsSynchronizer
+    public class SchedulingOptionsCreator : ISchedulingOptionsCreator
     {
-        public void SynchronizeSchedulingOption(
-            IOptimizationPreferences optimizationPreferences, 
-            ISchedulingOptions schedulingOptions)
+        public ISchedulingOptions CreateSchedulingOptions(
+            IOptimizationPreferences optimizationPreferences)
         {
+            ISchedulingOptions schedulingOptions = new SchedulingOptions();
+
             schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
             schedulingOptions.UseBlockScheduling =
                 optimizationPreferences.Extra.UseBlockScheduling 
@@ -59,6 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             // extra properties
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
+
+            return schedulingOptions;
         }
     }
 }

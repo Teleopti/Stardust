@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
+        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public IntradayOptimizer2(
             IScheduleResultDailyValueCalculator dailyValueCalculator,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculateDaysDecider decider,
             IOptimizationOverLimitDecider optimizationOverLimitDecider, 
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
-            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
+            ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _dailyValueCalculator = dailyValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _decider = decider;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
-            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
+            _schedulingOptionsCreator = schedulingOptionsCreator;
         }
 
         public bool Execute()
@@ -82,8 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!oldPeriodValue.HasValue)
                 return false;
 
-            ISchedulingOptions schedulingOptions = new SchedulingOptions();
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+            ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
             _rollbackService.ClearModificationCollection();
 

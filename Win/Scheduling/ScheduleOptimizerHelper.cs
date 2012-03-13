@@ -195,7 +195,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
-            var schedulingOptions = _container.Resolve<ISchedulingOptions>();
             IList<IScheduleDay> unlockedSchedules = new List<IScheduleDay>();
             foreach (var scheduleDay in allSelectedSchedules)
             {
@@ -225,8 +224,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             studentSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
 
-            var schedulingOptionsCreator = new SchedulingOptionsSynchronizer();
-            schedulingOptionsCreator.SynchronizeSchedulingOption(optimizationPreferences, schedulingOptions);
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
             using (PerformanceOutput.ForOperation("Scheduling " + unlockedSchedules.Count))
             {
@@ -1124,7 +1123,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, optimizationUserPreferences);
 
-            var schedulingOptionsSyncronizer = new SchedulingOptionsSynchronizer();
+            var schedulingOptionsSyncronizer = new SchedulingOptionsCreator();
 
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),

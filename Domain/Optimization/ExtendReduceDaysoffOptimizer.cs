@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffTemplate _dayOffTemplate;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
-        private readonly ISchedulingOptionsSynchronizer _schedulingOptionsSynchronizer;
+        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public ExtendReduceDaysOffOptimizer(
             IPeriodValueCalculator periodValueCalculator,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffTemplate dayOffTemplate,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
             IDayOffOptimizerValidator dayOffOptimizerValidator, 
-            ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer)
+            ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _periodValueCalculator = periodValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _dayOffTemplate = dayOffTemplate;
             _dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
             _dayOffOptimizerValidator = dayOffOptimizerValidator;
-            _schedulingOptionsSynchronizer = schedulingOptionsSynchronizer;
+            _schedulingOptionsCreator = schedulingOptionsCreator;
         }
 
         public bool Execute()
@@ -89,10 +89,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool success = false;
 
-            var schedulingOptions = new SchedulingOptions();
-            var sourceMatrix = _matrixConverter.SourceMatrix;
+            var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
-            _schedulingOptionsSynchronizer.SynchronizeSchedulingOption(_optimizerPreferences, schedulingOptions);
+            var sourceMatrix = _matrixConverter.SourceMatrix;
 
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled =
                 _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor, _validatorList);

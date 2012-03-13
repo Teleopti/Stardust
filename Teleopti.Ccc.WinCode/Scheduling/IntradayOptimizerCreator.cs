@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var restrictionChecker = new RestrictionChecker();
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(originalStateContainer, restrictionChecker, _optimizerPreferences);
 
-                ISchedulingOptionsSynchronizer schedulingOptionsSynchronizer = new SchedulingOptionsSynchronizer();
+                ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 
                 IIntradayOptimizer2 optimizer =
                     new IntradayOptimizer2(
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         new ResourceCalculateDaysDecider(),  
                         optimizerOverLimitDecider,
                         workShiftStateContainer,
-                        schedulingOptionsSynchronizer);
+                        schedulingOptionsCreator);
 
                 result.Add(optimizer);
             }
