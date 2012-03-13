@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
@@ -227,6 +228,18 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsNotNull(_target.CellDataCollection[0].Preference.Absence); 
         }
 
+        [Test]
+        public void ShouldValidateByNotUsingStudentAvailability()
+        {
+            var date = new DateTime(2010, 05, 27, 0, 0, 0, DateTimeKind.Unspecified);
+            var scheduleHelper = MockRepository.GenerateMock<IScheduleHelper>();
+            scheduleHelper.Stub(x => x.Validate(_loggedOnPersonDto, new DateOnly(date), false)).Return(new List<ValidatedSchedulePartDto>());
+            
+            _target.LoadPeriod(date, scheduleHelper);
+
+            scheduleHelper.AssertWasCalled(x=> x.Validate(_loggedOnPersonDto, new DateOnly(date), false));
+        }
+
         #region Setup
 
         private static void CreatPerson()
@@ -397,7 +410,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
     internal class ScheduleHelperFake : IScheduleHelper
     {
-        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod)
+        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
         {
             return ValidatedSchedulePartDto;
         }
