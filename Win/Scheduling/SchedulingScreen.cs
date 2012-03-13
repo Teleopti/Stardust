@@ -7011,6 +7011,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			writeProtectSchedule();
 		}
 
+        private void ToolstripMenuRemoveWriteProtectionMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection)) return;
+            Cursor = Cursors.WaitCursor;
+
+            var removeCommand = new WriteProtectionRemoveCommand(_scheduleView.SelectedSchedules(), _modifiedWriteProtections);
+            removeCommand.Execute();
+            GridHelper.GridlockWriteProtected(_grid, LockManager);
+
+            Refresh();
+            refreshSelection();
+            Cursor = Cursors.Default;    
+        }
+
 		private void writeProtectSchedule()
 		{
 			if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
