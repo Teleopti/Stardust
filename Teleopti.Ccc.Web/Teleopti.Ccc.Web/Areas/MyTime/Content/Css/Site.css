@@ -740,6 +740,18 @@ header {
 {
 	width: 8.5em;
 }
+select.time-input
+{
+    width: 110px;
+}
+.rtl select.time-input
+{
+    width: 80px;
+}
+.rtl .time-input
+{
+    padding-right: 20px;
+}
 .edit-module-inner button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 
@@ -1003,58 +1015,6 @@ footer p
 	z-index: 599
 }
 
-.request-body-inner ol
-{
-	list-style: none;
-	margin-left: 0em;
-	margin-right: 0em;
-}
-.request-list 
-{
-	width: 483px;
-}
-.request-body-inner .request-item
-{
-	padding-top: 0.5em;
-	padding-bottom: 0.8em;
-	padding-left: 1.8em;
-	padding-right: 1.8em;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	background: #f8f8f8;
-	margin-top: 0.1em;
-	margin-bottom: 0.1em;
-}
-.request-body-inner .friendly-message {
-	width: 433px;
-}
-.request-body-inner .loading
-{
-	height: 5em;
-}
-.request-body-inner .arrow-down
-{
-	height: 5em;
-}
-
-.no-rgba .request-body-inner li {
-	 border: 1px solid #dfdfdf;
-}
-.request-body-inner .request-subject {
-}
-.request-body-inner .request-details 
-{
-	font-size: smaller;
-}
-.request-body-inner .request-caption 
-{
-	color: #B0B0B0;
-	font-style: italic;
-	font-size: xx-small;
-}
-.request-body-inner .request-text 
-{
-	padding-top: 0.3em;
-}
 
 .template
 {
