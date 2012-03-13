@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _model.SetWorkPeriod(selectedDate);
         }
 
-        public void ReloadFilteredWorkloadDayTemplates(IList<DateOnly> filteredDates)
+        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates)
         {
             _model.ReloadFilteredWorkloadDayTemplates(filteredDates);
         }
