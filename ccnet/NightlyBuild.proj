@@ -37,7 +37,7 @@
 		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
-	<Target Name="Run" DependsOnTargets="BuildAndTest;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
+	<Target Name="Run" DependsOnTargets="RestoreDatabasesAndPatch;AddLic;MoveOneLogObject;RunETL">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
