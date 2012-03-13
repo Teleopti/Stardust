@@ -31,13 +31,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<!-- Add license -->
-	<Target Name="AddLic">
-		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
-		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
-	</Target>
-
-	<Target Name="Run" DependsOnTargets="RestoreDatabasesAndPatch;AddLic">
+	<Target Name="Run" DependsOnTargets="PrepareDB">
 	<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -60,22 +54,6 @@
 		<Message Text="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		<Message Text="Install ETL service. Done!" Importance="high" />
-
-		<!-- 
-	a) Clean out the datamart (exept for Initial load data and sys_datasource)
-	b) Clean out old ETL job history
-	c) Add extra ETL Test SP
-	d) Create one job for the ETL service
-	-->
-		<Message Text="Prepare ETL. Working..." Importance="high" />
-		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
-		<Message Text="Prepare ETL. Done!" Importance="high" />
-
-		<Message Text="Start ETL service. Working..." Importance="high" />
-		<Message Text="NET START AnalyticsEtlService" Importance="high" />
-		<Exec Command ="NET START AnalyticsEtlService"/>
-		<Message Text="Start ETL service. Done!" Importance="high" />
 
 		<!--
 	This is our Test!!!
@@ -105,6 +83,24 @@
   </Target>
   -->
 
+  		<!-- 
+	a) Clean out the datamart (exept for Initial load data and sys_datasource)
+	b) Clean out old ETL job history
+	c) Add extra ETL Test SP
+	d) Create one job for the ETL service
+	-->
+	<Target Name="PrepareDB" DependsOnTargets="RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
+		<Message Text="Prepare ETL. Working..." Importance="high" />
+		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
+		<Message Text="Prepare ETL. Done!" Importance="high" />
+
+		<Message Text="Start ETL service. Working..." Importance="high" />
+		<Message Text="NET START AnalyticsEtlService" Importance="high" />
+		<Exec Command ="NET START AnalyticsEtlService"/>
+		<Message Text="Start ETL service. Done!" Importance="high" />
+	</Target>
+  
 	<Target Name="RestoreDatabasesAndPatch">
 		<Message Text="Set DBs in single user mode, retore and update CrossDb views..." Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
@@ -113,7 +109,11 @@
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
+	</Target>
 
+	<Target Name="AddLic">
+		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
+		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
