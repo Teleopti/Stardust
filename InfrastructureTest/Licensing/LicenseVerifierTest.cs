@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         private MockRepository _mocks;
         private ILicenseFeedback _licenseFeedback;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IPersonRepository _personRepository;
         private ILicenseRepository _licenseRepository;
         private ILicenseService _licenseService;
         private LicenseVerifier _target;
@@ -28,32 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             _mocks = new MockRepository();
             _licenseFeedback = _mocks.StrictMock<ILicenseFeedback>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _personRepository = _mocks.StrictMock<IPersonRepository>();
             _licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             _licenseService = _mocks.StrictMock<ILicenseService>();
-        }
-
-        [Test]
-        public void ShouldCheckNumberOfAgents()
-        {
-            var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
-            using(_mocks.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
-                Expect.Call(_licenseService.IsThisAlmostTooManyActiveAgents(50)).Return(true);
-            	Expect.Call(_licenseService.LicenseType).Return(LicenseType.Agent).Repeat.AtLeastOnce();
-                Expect.Call(_licenseService.MaxActiveAgents).Return(55);
-                Expect.Call(_licenseService.ExpirationDate).Return(DateTime.Today.AddDays(2));
-                Expect.Call(_licenseService.ExpirationGracePeriod).Return(TimeSpan.FromDays(1));
-                Expect.Call(()=>_licenseFeedback.Warning(string.Empty)).IgnoreArguments();
-            }
-            using (_mocks.Playback())
-            {
-                _target = new licenseVerifierForTest(() => _licenseService, _licenseFeedback, _unitOfWorkFactory,
-                                                    _personRepository, _licenseRepository);
-                _target.LoadAndVerifyLicense().Should().Not.Be.Null();
-            }
         }
 
         [Test]
@@ -63,8 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
-                Expect.Call(_licenseService.IsThisAlmostTooManyActiveAgents(50)).Return(false);
                 Expect.Call(_licenseService.ExpirationDate).Return(DateTime.Today.AddDays(2)).Repeat.Twice();
                 Expect.Call(_licenseService.ExpirationGracePeriod).Return(TimeSpan.FromDays(3));
                 Expect.Call(() => _licenseFeedback.Warning(string.Empty)).IgnoreArguments();
@@ -72,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => _licenseService, _licenseFeedback, _unitOfWorkFactory,
-                                                    _personRepository, _licenseRepository);
+                                                     _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Not.Be.Null();
             }
         }
@@ -84,14 +57,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
 				Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
             }
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw new SignatureValidationException (); }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory,  _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -103,14 +75,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
 				Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
             }
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw new LicenseMissingException (); }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory, _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -122,14 +93,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
             	Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
             }
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw new LicenseExpiredException(); }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory, _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -141,13 +111,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw new XmlException(); }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory, _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -159,13 +128,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw new FormatException(); }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory, _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -177,7 +145,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
                 Expect.Call(() => _licenseFeedback.Error(string.Empty)).IgnoreArguments();
 				Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
             }
@@ -186,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (_mocks.Playback())
             {
                 _target = new licenseVerifierForTest(() => { throw ex; }, _licenseFeedback,
-                                                    _unitOfWorkFactory, _personRepository, _licenseRepository);
+                                                    _unitOfWorkFactory, _licenseRepository);
                 _target.LoadAndVerifyLicense().Should().Be.Null();
             }
         }
@@ -199,14 +166,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			using (_mocks.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_personRepository.NumberOfActiveAgents()).Return(50);
 				Expect.Call(() => _licenseFeedback.Error(message));
 				Expect.Call(_unitOfWorkFactory.Name).Return("datasource name");
 			}
 			using (_mocks.Playback())
 			{
 				_target = new licenseVerifierForTest(() => { throw new TooManyActiveAgentsException(1, 2,LicenseType.Seat); }, _licenseFeedback,
-													_unitOfWorkFactory, _personRepository, _licenseRepository);
+													_unitOfWorkFactory, _licenseRepository);
 				_target.LoadAndVerifyLicense().Should().Be.Null();
 			}
 		}
@@ -215,12 +181,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             private readonly Func<ILicenseService> _licenseServiceFunction;
 
-            public licenseVerifierForTest(Func<ILicenseService> licenseServiceFunction, ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, ILicenseRepository licenseRepository) : base(licenseFeedback, unitOfWorkFactory, personRepository, licenseRepository)
+            public licenseVerifierForTest(Func<ILicenseService> licenseServiceFunction, ILicenseFeedback licenseFeedback, IUnitOfWorkFactory unitOfWorkFactory, ILicenseRepository licenseRepository) : base(licenseFeedback, unitOfWorkFactory, licenseRepository)
             {
                 _licenseServiceFunction = licenseServiceFunction;
             }
 
-            protected override ILicenseService XmlLicenseService(int numberOfActiveAgents)
+            protected override ILicenseService XmlLicenseService()
             {
                 return _licenseServiceFunction();
             }

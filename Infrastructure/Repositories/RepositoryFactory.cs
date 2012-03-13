@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)
         {
-            return new ApplicationRolePersonRepository(unitOfWork);
+            return new LicenseStatusRepository(unitOfWork);
         }
 
         public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
