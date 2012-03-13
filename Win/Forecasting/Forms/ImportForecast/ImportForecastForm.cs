@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
@@ -104,6 +105,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
+            var fileContent = new StringBuilder();
+
             using (var stream = new StreamReader(textBoxImportFileName.Text))
             {
                 var reader = new CsvFileReader(stream);
@@ -134,6 +137,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                                 if (!validators[i].Validate(row[i]))
                                     throw new ValidationException(validators[i].ErrorMessage);
                             }
+                            fileContent.Append(row.LineText);
                             row.Clear();
                             rowIndex++;
                         }
@@ -146,6 +150,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                                        "ValidationError");
                 }
 
+                _presenter.SaveForecastFile(textBoxImportFileName.Text,Encoding.UTF8.GetBytes(fileContent.ToString()));
                 var dto = new ImportForecastsFileCommandDto
                 {
                     ImportForecastsMode = getImportForecastOption(),
