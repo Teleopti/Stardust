@@ -37,6 +37,15 @@ Scenario: Adding too long text request
 	Then I should see texts describing too long text error
 	And I should not see the text request in the list
 
+Scenario: Adding too long subject request
+	Given I am an agent
+	And I am viewing requests
+	When I click add text request button in the toolbar
+	And I input too long subject request values
+	And I click the OK button
+	Then I should see texts describing too long subject error
+	And I should not see the text request in the list
+
 Scenario: View text request details
 	Given I am an agent
 	And I have an existing text request
