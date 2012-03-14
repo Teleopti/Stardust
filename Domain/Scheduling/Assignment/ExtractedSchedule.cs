@@ -621,9 +621,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private void MergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
         {
             IMainShift workingCopyOfMainShift = (IMainShift)source.AssignmentHighZOrder().MainShift.NoneEntityClone();
-
+            var sourceShiftPeriod = source.Period;
+            if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
+                sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
             IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
-            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges);
+            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
             workingCopyOfMainShift.LayerCollection.MoveAllLayers(periodOffset);
             DateTimePeriod period = source.Period.MovePeriod(periodOffset);
 
