@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -639,8 +640,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private static void addNoteMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
 
-            bool noteExist = scheduleRange.NoteCollection().Any(n => n.ScheduleNote != null);
-            bool publicNoteExist = scheduleRange.PublicNoteCollection().Any(n => n.ScheduleNote != null);
+            bool noteExist = scheduleRange.NoteCollection().Any(n => n.GetScheduleNote(new NoFormatting()) != null);
+            bool publicNoteExist = scheduleRange.PublicNoteCollection().Any(n => n.GetScheduleNote(new NoFormatting()) != null);
 
             if (noteExist || publicNoteExist)
             {

@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// <param name="source">The source.</param>
         /// <param name="target">The target.</param>
         /// <param name="ignoreTimeZoneChanges">if set to <c>true</c> [ignore time zone changes].</param>
+        /// <param name="sourceShiftPeriod">To know if Daylightsavingtime has changed we must know when the shift starts</param>
         /// <returns></returns>
-        TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges);
+        TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod);
 
         TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod);
     }
@@ -33,18 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             return CalculatePeriodOffsetWithTimeZoneChanges(sourcePeriod, targetPeriod);
         }
-        
-        /// <summary>
-        /// Calculates offset (timechange) between the source and the target period.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="target">The target.</param>
-        /// <param name="ignoreTimeZoneChanges">if set to <c>true</c> ignores the time zone changes, but not the daylight changes.</param>
-        /// <returns></returns>
-        public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges)
+
+        public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod)
         {
             if (ignoreTimeZoneChanges)
-                return CalculatePeriodOffsetWithoutTimeZoneChanges(source, target);
+                return CalculatePeriodOffsetWithoutTimeZoneChanges(source, target, sourceShiftPeriod);
             return CalculatePeriodOffsetWithTimeZoneChanges(source.Period, target.Period);
         }
 
@@ -53,11 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return CalculatePeriodDifference(sourcePeriod, targetPeriod);
         }
 
-        private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target)
+        private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
         {
             TimeSpan periodDifference = CalculatePeriodDifference(source.Period, target.Period);
             TimeSpan timeZoneRecorrection = CalculateTimeZoneRecorrection(target, source);
-            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(target, source);
+            var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference + timeZoneRecorrection);
+            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(target, source, sourceShiftPeriod, targetShiftPeriod);
             return periodDifference.Add(timeZoneRecorrection).Add(dayLightSavingsRecorrection);
         }
 
@@ -69,15 +64,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     .Subtract(sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime));
         }
 
-        private static TimeSpan CalculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source)
+        private static TimeSpan CalculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source, DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
         {
             ICccTimeZoneInfo sourceTimeZone = source.TimeZone;
             ICccTimeZoneInfo targetTimeZone = target.TimeZone;
-
+            var milliVanilli = 1;
+            if (targetShiftPeriod.StartDateTime.Month < 7) // spring, could be change to daylight
+                milliVanilli = -1;
             TimeSpan sourceDaylightOffset =
-                sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime).Subtract(sourceTimeZone.BaseUtcOffset);
+                sourceTimeZone.GetUtcOffset(sourceShiftPeriod.LocalStartDateTime).Subtract(sourceTimeZone.BaseUtcOffset);
             TimeSpan targetDaylightOffset =
-                targetTimeZone.GetUtcOffset(target.Period.LocalStartDateTime).Subtract((targetTimeZone.BaseUtcOffset));
+                targetTimeZone.GetUtcOffset(targetShiftPeriod.LocalStartDateTime.AddMilliseconds(milliVanilli)).Subtract((targetTimeZone.BaseUtcOffset));
 
             return sourceDaylightOffset.Subtract(targetDaylightOffset);
         }

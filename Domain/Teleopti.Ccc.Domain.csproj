@@ -258,6 +258,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPage.cs" />
     <Compile Include="Helper\LoggerNames.cs" />
     <Compile Include="Helper\LogPointOutput.cs" />
+    <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Payroll\PayrollResultDetail.cs" />
     <Compile Include="Payroll\XmlResult.cs" />
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
+    <Compile Include="Repositories\IApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPublicNoteRepository.cs" />

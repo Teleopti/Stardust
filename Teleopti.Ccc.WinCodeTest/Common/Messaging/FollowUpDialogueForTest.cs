@@ -14,17 +14,29 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
     /// </remarks>
     public class FollowUpDialogueForTest : IFollowUpMessageDialogueViewModel
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-            public IPerson Receiver
-            {
-                get { throw new NotImplementedException(); }
-            }
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-            public ObservableCollection<IDialogueMessage> Messages { get; set;}
-            public string ReplyText { get; set; }
-            public bool IsReplied { get; set; }
-            public string Reply { get; set; }
-            public bool AllowDialogueReply { get; set; }
+    	private string _reply;
+		
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+        public IPerson Receiver
+        {
+            get { throw new NotImplementedException(); }
+        }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public ObservableCollection<IDialogueMessage> Messages { get; set;}
+        public string ReplyText { get; set; }
+        public bool IsReplied { get; set; }
+    	public string Reply
+    	{
+			set { _reply = value; }
+    	}
+		public string GetReply(ITextFormatter formatter)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_reply);
+		}
+        public bool AllowDialogueReply { get; set; }
         
     }
 }

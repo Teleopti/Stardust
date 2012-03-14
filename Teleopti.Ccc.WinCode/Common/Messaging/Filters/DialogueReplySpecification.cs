@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.WinCode.Common.Messaging.Filters
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging.Filters
         }
         public override bool IsSatisfiedBy(IFollowUpMessageDialogueViewModel obj)
         {
-            return string.Equals(Reply, obj.Reply);
+            return string.Equals(Reply, obj.GetReply(new NoFormatting()));
         }
     }
 }

@@ -25,7 +25,24 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 ::init or re-init
-call :initParams
+SET /A logmanError=0
+SET INSTANCE=%COMPUTERNAME%
+SET MyINSTANCE=
+SET PERFCOUNTERINSTANCE=SQLServer
+SET Testname=
+SET MaxMinutes=1440
+SET MaxDisk=
+SET /A Silent=0
+SET PERFMONRUNAS=%userdomain%\%username% *
+SET ManualWait=0
+SET READTRACE="%ProgramFiles%\Microsoft Corporation\RMLUtils\ReadTrace.exe"
+SET AnalyseCmd=%ROOTDIR%\AnalyseExample.bat
+SET OutPutFolder=%ROOTDIR%\Data\
+SET TraceOutput=%ROOTDIR%\Helpers\TraceOutput.sql
+SET sqlerror=0
+SET /A traceid=0
+SET tracefile=
+SET winPerfmon=SQL2005BaselineCounters
 
 ::If now input parameters
 IF "%1"=="" (GOTO Manual) ELSE (GOTO Silent)
@@ -62,7 +79,7 @@ IF %Silent% EQU 0 PAUSE
 cls
 
 ECHO SQL Server instance name
-SET /P MyINSTANCE=(if you are running a default instance leave blank):
+SET /P MyINSTANCE=^(if you are running a default instance leave blank^):
 
 IF "%MyINSTANCE%" == "" (
 ECHO going for the default instance) ELSE (
@@ -71,13 +88,12 @@ SET PERFCOUNTERINSTANCE=MSSQL$%MyINSTANCE%
 )
 
 ECHO.
-ECHO Max time for trace (minutes)
-SET /P MaxMinutes=(to manually stop the trace, leave blank):
+ECHO Max time for trace ^(minutes^)
+SET /P MaxMinutes=^(to manually stop the trace, leave blank^):
 
 ::If manual stop, limit the trace to 24 hours
-IF "%MaxMinutes%" == "" (
+IF %MaxMinutes% EQU 1440 (
 SET /A ManualWait=1
-SET /A MaxMinutes=1440
 )
 
 ECHO.
@@ -132,11 +148,11 @@ GOTO :quitError
 
 ::just for user to see the output
 ping 127.0.0.1 -n 4 > NUL
-
 cls
-ECHO I will now start tracing. Set your users and/or applications in a start position.
-IF %Silent% EQU 0 PAUSE
+ECHO I will now start tracing. Set your users and/or applications in a start position.  
+if %Silent% EQU 0 PAUSE
 
+::Try start SQL Server trace
 echo SQL Server trace start ... 
 SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 1"
 if %ERRORLEVEL% NEQ 0 (
@@ -158,15 +174,14 @@ echo Windows perfmon started succesfully
 )
 echo.
 
-::IF silent mode; we probably will call some external program(s) at this point
-IF %Silent% EQU 1 CALL "%ROOTDIR%\UseCase\testWrapper.bat"
-
 ECHO Traces are running and start time is:
 TIME /T
 ECHO.
 
 IF %ManualWait% EQU 1 (
-call :ManualWait
+ECHO The SQL and windows trace are now running, please do not close this window
+ECHO To stop the trace press the AnyKey
+PAUSE
 ) else (
 ECHO Trace will now run for %MaxMinutes% minutes.
 ECHO Sleeping for %MaxMinutes% minutes. Zzz ....
@@ -182,28 +197,10 @@ call :cleanUpLogman
 ECHO %READTRACE% -S%INSTANCE% -E -I"%tracefile%.trc" > "%AnalyseCmd%"
 goto :finished
 
-::-----------Labels----------------
-:noConnection
-ECHO.
-ECHO Sorry, can not connect to the %INSTANCE% or you dont have ALTER TRACE permssions
-ping 127.0.0.1 -n 4 > NUL
-GOTO eof
-
-:quitError
-echo something went wrong
-IF %Silent% EQU 0 PAUSE
-GOTO eof
-
-:finished
-ECHO Done
-ECHO zip the Data-folder and do the anlyze at your local PC
-IF %Silent% EQU 0 PAUSE
-GOTO eof
-
 ::-----------functions----------------
 :cleanUpLogman
 logman stop %WinPerfmon% > NUL
-ping 127.0.0.1 -n 3 > NUL
+ping 127.0.0.1 -n 1 > NUL
 logman delete %WinPerfmon% > NUL
 IF EXIST "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" DEL "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" /Q /F
 exit /b
@@ -215,12 +212,6 @@ ping 127.0.0.1 -n 4 > NUL
 MORE "%TraceOutput%"
 exit /b
 
-:ManualWait
-ECHO The SQL and windows trace are now running, please do not close this window
-ECHO To stop the trace press the AnyKey
-IF %Silent% EQU 0 PAUSE
-exit /b
-
 :stopTrace
 SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 0"
 SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 2"
@@ -229,27 +220,6 @@ exit /b
 :getOutput
 SET /A traceid=%1
 SET tracefile=%~2
-exit /b
-
-:initParams
-SET /A logmanError=0
-SET INSTANCE=%COMPUTERNAME%
-SET MyINSTANCE=
-SET PERFCOUNTERINSTANCE=SQLServer
-SET Testname=
-SET MaxMinutes=
-SET MaxDisk=
-SET /A Silent=0
-SET PERFMONRUNAS=%userdomain%\%username% *
-SET ManualWait=0
-SET READTRACE="%ProgramFiles%\Microsoft Corporation\RMLUtils\ReadTrace.exe"
-SET AnalyseCmd=%ROOTDIR%\Data\AnalyseExample.bat
-SET OutPutFolder=%ROOTDIR%\Data\
-SET TraceOutput=%ROOTDIR%\TraceOutput.sql
-SET sqlerror=0
-SET /A traceid=0
-SET tracefile=
-SET winPerfmon=SQL2005BaselineCounters
 exit /b
 
 :createPerfmonTrace
@@ -305,3 +275,23 @@ IF %ManualWait%==1 logman create counter %WinPerfmon% -f bin -m stop -si 05 -v m
 set /A logmanError=%errorlevel%
 
 exit /b %logmanError%
+
+::-----------Labels----------------
+:noConnection
+ECHO.
+ECHO Sorry, can not connect to the %INSTANCE% or you dont have ALTER TRACE permssions
+ping 127.0.0.1 -n 4 > NUL
+GOTO eof
+
+:quitError
+echo something went wrong
+IF %Silent% EQU 0 PAUSE
+GOTO eof
+
+:finished
+ECHO Done
+ECHO zip the Data-folder and do the anlyze at your local PC
+IF %Silent% EQU 0 PAUSE
+GOTO eof
+
+:eof

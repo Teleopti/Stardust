@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPublicNote org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Scenario.Description, loadedAggregateFromDatabase.Scenario.Description);
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
-            Assert.AreEqual(org.ScheduleNote, loadedAggregateFromDatabase.ScheduleNote);
+            Assert.AreEqual(org.GetScheduleNote(new NoFormatting()), loadedAggregateFromDatabase.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(org.NoteDate, loadedAggregateFromDatabase.NoteDate);
         }
 

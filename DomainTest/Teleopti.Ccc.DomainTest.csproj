@@ -162,8 +162,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=3.3.0.3001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.3.3.0-CR1\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
@@ -249,6 +250,8 @@
     <Compile Include="Helper\DenormalizeScheduleProjectionTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
     <Compile Include="Helper\LogPointOutputTest.cs" />
+    <Compile Include="Helper\NoFormattingTest.cs" />
+    <Compile Include="Helper\NormalizeTextTest.cs" />
     <Compile Include="Helper\NotificationTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />

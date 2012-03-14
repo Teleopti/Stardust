@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,8 +46,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             {
                 var result = _target.DomainEntityToDto(dialogueMessage);
                 Assert.AreEqual(dialogueMessage.Sender.Id, result.Sender.Id);
-                Assert.AreEqual(dialogueMessage.Message, result.Message);
-                Assert.AreEqual(dialogueMessage.Title, result.Title);
+                Assert.AreEqual(dialogueMessage.GetMessage(new NormalizeText()), result.Message);
+                Assert.AreEqual(dialogueMessage.GetTitle(new NormalizeText()), result.Title);
                 Assert.AreEqual(2,result.ReplyOptions.Count);
             }
         }

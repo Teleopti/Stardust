@@ -34,12 +34,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
         {
             get { return _model.IsReplied; }
         }
-        public string Reply
+        
+		public string GetReply(ITextFormatter formatter)
         {
-            get
-            {
-                return _model.Reply;
-            }
+			return _model.GetReply(formatter);
         }
         public bool AllowDialogueReply { get; set; }
 

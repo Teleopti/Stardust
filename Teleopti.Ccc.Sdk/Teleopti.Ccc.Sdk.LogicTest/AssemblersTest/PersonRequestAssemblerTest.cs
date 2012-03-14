@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -109,10 +110,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks.ReplayAll();
             IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
-            Assert.AreEqual(personRequestDto.Message, personRequest.Message);
+            Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is TextRequest);
-            Assert.AreEqual(personRequestDto.Subject, personRequest.Subject);
+            Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
             _mocks.VerifyAll();
         }
@@ -145,10 +146,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks.ReplayAll();
             IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
-            Assert.AreEqual(personRequestDto.Message, personRequest.Message);
+            Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IAbsenceRequest);
-            Assert.AreEqual(personRequestDto.Subject, personRequest.Subject);
+            Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
             _mocks.VerifyAll();
         }
@@ -191,10 +192,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks.ReplayAll();
             IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
-            Assert.AreEqual(personRequestDto.Message, personRequest.Message);
+            Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IShiftTradeRequest);
-            Assert.AreEqual(personRequestDto.Subject, personRequest.Subject);
+            Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
             _mocks.VerifyAll();
         }
@@ -239,10 +240,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             personRequest = _target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
-            Assert.AreEqual(personRequestDto.Message, personRequest.Message);
+            Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IShiftTradeRequest);
-            Assert.AreEqual(personRequestDto.Subject, personRequest.Subject);
+            Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
             _mocks.VerifyAll();
         }
