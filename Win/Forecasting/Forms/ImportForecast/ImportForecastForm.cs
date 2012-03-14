@@ -8,9 +8,8 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
-using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -30,16 +29,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
     {
         private readonly ImportForecastPresenter _presenter;
         private ISkill _skill;
+        private readonly IGracefulDataSourceExceptionHandler _gracefulHandler;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastForm));
         
-
-        public ImportForecastForm(ISkill preselectedSkill, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public ImportForecastForm(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler)
         {
             InitializeComponent();
-            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, repositoryFactory, unitOfWorkFactory));
+            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
             getSelectedSkillName();
             populateWorkloadList();
             _skill = preselectedSkill;
+            _gracefulHandler = gracefulHandler;
         }
 
         private void populateWorkloadList()
@@ -107,65 +107,84 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
             var fileContent = new StringBuilder();
-
             using (var stream = new StreamReader(textBoxImportFileName.Text))
             {
                 var reader = new CsvFileReader(stream);
                 var row = new CsvFileRow();
-                var rowIndex = 1;
-                var validators = new List<IForecastsFileValidator>
-                                     {
-                                         new ForecastsFileSkillNameValidator(),
-                                         new ForecastsFileDateTimeValidator(),
-                                         new ForecastsFileDateTimeValidator(),
-                                         new ForecastsFileIntegerValueValidator(),
-                                         new ForecastsFileDoubleValueValidator(),
-                                         new ForecastsFileDoubleValueValidator(),
-                                         new ForecastsFileDoubleValueValidator()
-                                     };
+                var rowNumber = 1;
+                var validators = setUpForecastsFileValidators();
                 try
                 {
                     using (PerformanceOutput.ForOperation("Validate forecasts import file."))
                     {
                         while (reader.ReadNextRow(row))
                         {
-                            if (row.Count < 6 || row.Count > 7)
-                            {
-                                throw new ValidationException("There are more or less columns than expected.");
-                            }
-                            for (var i = 0; i < row.Count; i++)
-                            {
-                                if (!validators[i].Validate(row[i]))
-                                    throw new ValidationException(validators[i].ErrorMessage);
-                            }
+                            validateRowByRow(validators, row);
                             fileContent.Append(row.LineText + Environment.NewLine);
                             row.Clear();
-                            rowIndex++;
+                            rowNumber++;
                         }
                     }
                     MessageBoxAdv.Show("Validation succeeded.");
                 }
                 catch (ValidationException exception)
                 {
-                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowIndex, exception.Message),
-                                       "ValidationError");
+                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message),"ValidationError");
                 }
-
-                Guid temp = _presenter.SaveForecastFile(textBoxImportFileName.Text,Encoding.UTF8.GetBytes(fileContent.ToString()));
-
-                IForecastFile test = _presenter.GetForecastFile(temp);
-                
+                var savedFileId = saveFileToServer(fileContent);
+                if (savedFileId == null)
+                {
+                    MessageBoxAdv.Show("Error occured when trying to import file.");
+                    return;
+                }
                 var dto = new ImportForecastsFileCommandDto
                 {
                     ImportForecastsMode = getImportForecastOption(),
-                    UploadedFileId = Guid.NewGuid(),
+                    UploadedFileId = savedFileId.GetValueOrDefault(),
                     TargetSkillId = _skill.Id.GetValueOrDefault()
                 };
-                var statusDialog =
-                                new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
                 statusDialog.Show(this);
                 statusDialog.SetJobStatusId(executeCommand(dto));
             }
+        }
+
+        private static void validateRowByRow(IList<IForecastsFileValidator> validators, IList<string> row)
+        {
+            if (row.Count < 6 || row.Count > 7)
+            {
+                throw new ValidationException("There are more or less columns than expected.");
+            }
+            for (var i = 0; i < row.Count; i++)
+            {
+                if (!validators[i].Validate(row[i]))
+                    throw new ValidationException(validators[i].ErrorMessage);
+            }
+        }
+
+        private Guid? saveFileToServer(StringBuilder fileContent)
+        {
+            Guid? savedFileId = null;
+            _gracefulHandler.AttemptDatabaseConnectionDependentAction(
+                () =>{
+                        savedFileId = _presenter.SaveForecastFile(textBoxImportFileName.Text, Encoding.UTF8.GetBytes(fileContent.ToString()));
+                    });
+            return savedFileId;
+        }
+
+        private static List<IForecastsFileValidator> setUpForecastsFileValidators()
+        {
+            var validators = new List<IForecastsFileValidator>
+                                 {
+                                     new ForecastsFileSkillNameValidator(),
+                                     new ForecastsFileDateTimeValidator(),
+                                     new ForecastsFileDateTimeValidator(),
+                                     new ForecastsFileIntegerValueValidator(),
+                                     new ForecastsFileDoubleValueValidator(),
+                                     new ForecastsFileDoubleValueValidator(),
+                                     new ForecastsFileDoubleValueValidator()
+                                 };
+            return validators;
         }
 
         private Guid? executeCommand(CommandDto commandDto)

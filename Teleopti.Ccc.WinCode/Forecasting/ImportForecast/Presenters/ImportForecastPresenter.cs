@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Forecasting.Import;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
@@ -30,15 +30,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
             SkillName = _model.GetSelectedSkillName();
         }
 
-
-        public Guid SaveForecastFile(string fileName, byte[] fileContent)
+        public Guid? SaveForecastFile(string fileName, byte[] fileContent)
         {
             return _model.SaveForecastFileInDb(fileName, fileContent);
-        }
-
-        public IForecastFile GetForecastFile (Guid id)
-        {
-            return _model.GetForecastFileFromDb(id);
         }
     }
 }

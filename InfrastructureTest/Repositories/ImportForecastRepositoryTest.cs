@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -10,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    public class ImportForecastRepositoryTest:RepositoryTest<IForecastFile>
+    public class ImportForecastRepositoryTest : RepositoryTest<IForecastFile>
     {
         protected override IForecastFile CreateAggregateWithCorrectBusinessUnit()
         {
@@ -30,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override Repository<IForecastFile> TestRepository(IUnitOfWork unitOfWork)
         {
-            return new ImportForecastRepository(unitOfWork);
+            return new ImportForecastsRepository(unitOfWork);
         }
     }
 }
