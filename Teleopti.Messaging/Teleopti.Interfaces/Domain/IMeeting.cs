@@ -34,26 +34,12 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Description
         /// </summary>
-        string Description { set; }
-
-    	/// <summary>
-    	/// Get the formatted description
-    	/// </summary>
-    	/// <param name="formatter"></param>
-    	/// <returns></returns>
-    	string GetDescription(ITextFormatter formatter);
+        string Description { get; set; }
 
         /// <summary>
         /// Location
         /// </summary>
-        string Location { set; }
-
-    	/// <summary>
-    	/// Get the formatted location
-    	/// </summary>
-    	/// <param name="formatter"></param>
-    	/// <returns></returns>
-    	string GetLocation(ITextFormatter formatter);
+        string Location { get; set; }
 
         /// <summary>
         /// MeetingPersons
@@ -86,14 +72,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Subject
         /// </summary>
-        string Subject { set; }
-
-    	/// <summary>
-    	/// Get the formatted subject
-    	/// </summary>
-    	/// <param name="formatter"></param>
-    	/// <returns></returns>
-    	string GetSubject(ITextFormatter formatter);
+        string Subject { get; set; }
 
         /// <summary>
         /// Gets or sets the start time.

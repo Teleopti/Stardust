@@ -1436,6 +1436,65 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, testList.Count);
 		}
 
+		[Test]
+		public void VerifyFindPeopleByApplicationRole()
+		{
+	   
+			#region setup
+
+			ApplicationRole applicationRole1 = ApplicationRoleFactory.CreateRole("ApplicationRoleName", 
+				"ApplicationRoleDiscription");
+
+			ApplicationRole applicationRole2 = ApplicationRoleFactory.CreateRole("ApplicationRoleName",
+				"ApplicationRoleDiscription");
+
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
+			per1.PermissionInformation.AddApplicationRole(applicationRole1);
+
+			//Person2
+			IPerson per2 = PersonFactory.CreatePerson("Dinesh", "Ranasinghe");
+			per2.PermissionInformation.AddApplicationRole(applicationRole2);
+
+
+			//Person3
+			IPerson per3 = PersonFactory.CreatePerson("Madhuranga", "Pinnagoda");
+			per3.PermissionInformation.AddApplicationRole(applicationRole1);
+
+
+			#endregion
+
+			#region Persist
+
+			PersistAndRemoveFromUnitOfWork(applicationRole1);
+			PersistAndRemoveFromUnitOfWork(applicationRole2);
+
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);
+
+			#endregion
+			
+			IList<IPerson> testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleByApplicationRole(applicationRole1));
+
+
+			// Remove logged person
+			testList.Remove(LoggedOnPerson);
+
+			Assert.AreEqual(2, testList.Count);
+			Assert.AreEqual(per1, testList[0]);
+			
+			testList = new List<IPerson>(new PersonRepository(UnitOfWork).FindPeopleByApplicationRole(applicationRole2));
+			
+			// Remove logged person
+			testList.Remove(LoggedOnPerson);
+
+			Assert.AreEqual(1, testList.Count);
+			Assert.AreEqual(per2, testList[0]);
+			
+
+		}
+
 		[Test, ExpectedException(typeof(ConstraintViolationException))]
 		public void VerifyCannotSaveTwoUsersWithSameApplicationAuthentication()
 		{

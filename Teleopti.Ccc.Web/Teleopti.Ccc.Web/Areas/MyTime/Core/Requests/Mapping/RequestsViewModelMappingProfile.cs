@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Models.Shared;
@@ -25,10 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			CreateMap<IPersonRequest, RequestViewModel>()
 				.ForMember(d => d.Link, o => o.MapFrom(s => s))
-				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
+				.ForMember(d => d.Subject, o => o.MapFrom(s => s.Subject))
 				.ForMember(d => d.Dates, o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.Invoke().TimeZone())))
 				.ForMember(d => d.Status, o => o.MapFrom(s => s.StatusText))
-				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
+				.ForMember(d => d.Text, o => o.MapFrom(s => s.Message))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																					? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.UpdatedOn.Value).ToShortDateTimeString()

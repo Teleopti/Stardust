@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -14,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         private readonly IList<string> _replyOptions;
         private bool _allowDialogueReply = true;
         private bool _translateMessage;
+        private readonly NormalizeText _normalizeText = new NormalizeText();
 
         public PushMessage()
             : this(new List<string>())
@@ -27,31 +27,17 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
         public virtual string Title
         {
-            set { _title = value; }
+            get { return _title; }
+            set { _title = _normalizeText.Normalize(value); }
         }
 
-    	public virtual string GetTitle(ITextFormatter formatter)
-    	{
-			if (formatter == null)
-				throw new ArgumentNullException("formatter");
-			
-			return formatter.Format(_title);
-    	}
-
-    	public virtual string Message
+        public virtual string Message
         {
-            set { _message = value; }
+            get { return _message; }
+            set { _message = _normalizeText.Normalize(value); }
         }
 
-    	public virtual string GetMessage(ITextFormatter formatter)
-    	{
-			if (formatter == null)
-				throw new ArgumentNullException("formatter");
-			
-			return formatter.Format(_message);
-    	}
-
-    	public virtual bool AllowDialogueReply
+        public virtual bool AllowDialogueReply
         {
             get { return _allowDialogueReply; }
             set { _allowDialogueReply = value; }

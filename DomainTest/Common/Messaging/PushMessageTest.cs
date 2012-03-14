@@ -5,7 +5,6 @@ using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common.Messaging
@@ -30,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             _target.Title = title;
             _target.Message = message;
             _target.AllowDialogueReply = false;
-			Assert.AreEqual(title, _target.GetTitle(new NoFormatting()));
-			Assert.AreEqual(message, _target.GetMessage(new NoFormatting()));
+            Assert.AreEqual(title,_target.Title);
+            Assert.AreEqual(message,_target.Message);
             Assert.IsFalse(_target.AllowDialogueReply);
         }
 
@@ -63,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             //To check that we can parse xml
             var xml = "<?xml version=\"1.0\"?>" +
                 "<PushMessage>" +
-					"<Message>" + _target.GetMessage(new NormalizeText()) + "</Message>" +
-					"<Title>" + _target.GetTitle(new NormalizeText()) + "</Title>" +
+                    "<Message>" + _target.Message + "</Message>" +
+                    "<Title>" + _target.Title + "</Title>"+
                 "</PushMessage>";
             using (var s = new StringReader(xml))
             {
@@ -75,8 +74,8 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             }
 
             //The unvisible chars has been converted to xml-friendly 
-			_target.GetMessage(new NormalizeText()).Should().Be.EqualTo("Premium Digital.;КОЛЕГИ ИМА HS ЗА ПРЕУСТАНОВЯВАНЕ ИЗЛЪЧВАНЕТО НА КАНАЛ &#x1D; Premium Digital.ПРОЧЕТЕТЕ!");
-			_target.GetTitle(new NormalizeText()).Should().Be.EqualTo("Premium Digital.;КОЛЕГИ ИМА HS ЗА ПРЕУСТАНОВЯВАНЕ ИЗЛЪЧВАНЕТО НА КАНАЛ &#x1D; Premium Digital.ПРОЧЕТЕТЕ!");
+            _target.Message.Should().Be.EqualTo("Premium Digital.;КОЛЕГИ ИМА HS ЗА ПРЕУСТАНОВЯВАНЕ ИЗЛЪЧВАНЕТО НА КАНАЛ &#x1D; Premium Digital.ПРОЧЕТЕТЕ!");
+            _target.Title.Should().Be.EqualTo("Premium Digital.;КОЛЕГИ ИМА HS ЗА ПРЕУСТАНОВЯВАНЕ ИЗЛЪЧВАНЕТО НА КАНАЛ &#x1D; Premium Digital.ПРОЧЕТЕТЕ!");
         }
     }
 }

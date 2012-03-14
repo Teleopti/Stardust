@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Messaging;
@@ -91,8 +90,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             SetupForSend();
             
             ISendPushMessageService service = _target.CreateSendPushMessageService();
-			Assert.AreEqual(_target.Message, service.PushMessage.GetMessage(new NoFormatting()));
-			Assert.AreEqual(_target.Title, service.PushMessage.GetTitle(new NoFormatting()));
+            Assert.AreEqual(_target.Message, service.PushMessage.Message);
+            Assert.AreEqual(_target.Title, service.PushMessage.Title);
             Assert.AreEqual(_target.Receivers, service.Receivers);
             Assert.AreEqual(_target.ReplyOptions, service.PushMessage.ReplyOptions);
             Assert.IsTrue(service.PushMessage.AllowDialogueReply);

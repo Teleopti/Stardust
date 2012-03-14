@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
@@ -38,30 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 ret[paAcc.Person].Add(paAcc);
             }
-
-            return ret;
-        }
-
-        public IDictionary<IPerson, IPersonAccountCollection> FindByUsers(IEnumerable<IPerson> persons)
-        {
-            var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());
-
-            foreach (var personBatch in persons.Batch(400))
-            {
-                var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
-                       .SetFetchMode("accountCollection", FetchMode.Join)
-                       .SetFetchMode("Person", FetchMode.Join)
-                       .SetFetchMode("Absence", FetchMode.Join)
-                       .Add(Restrictions.In("Person", personBatch.ToArray()))
-                       .SetResultTransformer(Transformers.DistinctRootEntity)
-                       .List<IPersonAbsenceAccount>();
-
-                foreach (var paAcc in result)
-                {
-                    ret[paAcc.Person].Add(paAcc);
-                }    
-            }
-           
 
             return ret;
         }

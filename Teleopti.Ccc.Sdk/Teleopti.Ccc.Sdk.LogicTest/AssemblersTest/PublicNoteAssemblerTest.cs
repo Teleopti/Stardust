@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Assert.AreEqual(_publicNoteDomain.Id, _publicNoteDto.Id);
                 Assert.AreEqual(_publicNoteDomain.Person.Id, _publicNoteDto.Person.Id);
                 Assert.AreEqual(_publicNoteDomain.Person.Name.ToString(), _publicNoteDto.Person.Name);
-                Assert.AreEqual(_publicNoteDomain.GetScheduleNote(new NormalizeText()), _publicNoteDto.ScheduleNote);
+                Assert.AreEqual(_publicNoteDomain.ScheduleNote, _publicNoteDto.ScheduleNote);
                 Assert.AreEqual(_publicNoteDomain.NoteDate.Date, _publicNoteDto.Date.DateTime);
             }
         }

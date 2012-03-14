@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             target.NullSafeGet(null, new[] {"name1", "name2"},null);
         }
 
-        [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
+        [Test]
         public void VerifyNullSafeSet()
         {
             IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             mocks.VerifyAll();
         }
 
-		  [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
+        [Test]
         public void VerifyPasswordEncryptedOnlyOnce()
         {
             IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();

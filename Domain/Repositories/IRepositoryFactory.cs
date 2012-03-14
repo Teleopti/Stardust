@@ -485,6 +485,5 @@ namespace Teleopti.Ccc.Domain.Repositories
         IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork);
         IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork);
         IPersonSelectorReadOnlyRepository CreatePersonSelectorReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
-        IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork);
     }
 }

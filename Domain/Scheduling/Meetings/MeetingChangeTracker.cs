@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -58,11 +57,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		private void handleOtherChangedProperties(IMeeting afterChanges)
 		{
-			var noFormatting = new NoFormatting();
-
-			if (_beforeChanges.GetSubject(noFormatting) != afterChanges.GetSubject(noFormatting) ||
-				_beforeChanges.GetLocation(noFormatting) != afterChanges.GetLocation(noFormatting) ||
-				_beforeChanges.GetDescription(noFormatting) != afterChanges.GetDescription(noFormatting) ||
+			if (_beforeChanges.Subject != afterChanges.Subject ||
+			    _beforeChanges.Location != afterChanges.Location ||
+			    _beforeChanges.Description != afterChanges.Description ||
 			    !afterChanges.Scenario.Equals(_beforeChanges.Scenario) ||
 				!afterChanges.Activity.Equals(_beforeChanges.Activity))
 			{

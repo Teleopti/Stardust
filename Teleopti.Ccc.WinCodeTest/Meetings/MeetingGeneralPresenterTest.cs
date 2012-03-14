@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -96,9 +95,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.SetStartTime(_model.StartTime);
             _view.SetEndTime(_model.EndTime);
             _view.SetRecurringEndDate(_model.RecurringEndDate);
-			_view.SetSubject(_model.GetSubject(new NoFormatting()));
-			_view.SetLocation(_model.GetLocation(new NoFormatting()));
-			_view.SetDescription(_model.GetDescription(new NoFormatting()));
+            _view.SetSubject(_model.Subject);
+            _view.SetLocation(_model.Location);
+            _view.SetDescription(_model.Description);
 
             _mocks.ReplayAll();
             _target.Initialize();
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             _mocks.ReplayAll();
             _target.SetSubject("new subject");
-			Assert.AreEqual("new subject", _model.GetSubject(new NoFormatting()));
+            Assert.AreEqual("new subject", _model.Subject);
             _mocks.VerifyAll();
         }
 
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             _mocks.ReplayAll();
             _target.SetLocation("new location");
-			Assert.AreEqual("new location", _model.GetLocation(new NoFormatting()));
+            Assert.AreEqual("new location", _model.Location);
             _mocks.VerifyAll();
         }
 
@@ -139,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             _mocks.ReplayAll();
             _target.SetDescription("new description");
-			Assert.AreEqual("new description", _model.GetDescription(new NoFormatting()));
+            Assert.AreEqual("new description", _model.Description);
             _mocks.VerifyAll();
         }
 

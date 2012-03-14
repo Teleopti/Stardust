@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             target.NullSafeGet(null, new[] {"name1", "name2"},null);
         }
 
-		  [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
+        [Test]
         public void VerifyNullSafeSet()
         {
             MockRepository mocks = new MockRepository();

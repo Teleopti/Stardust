@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.Helper;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
                     try
                     {
-                        Logger.DebugFormat("Accepting ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
+                        Logger.DebugFormat("Accepting ShiftTrade: {0}", _personRequest.Subject);
                         _personRequest.Request.Accept(acceptingPerson, checkSum, _authorization);
                         SetUpdatedMessage(message);
 
@@ -141,7 +140,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                         _personRequest.Pending();
                         if (ShouldShiftTradeBeAutoGranted.IsSatisfiedBy(_shiftTradeRequest))
                         {
-                            Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
+                            Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.Subject);
                             var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization);
                             HandleBrokenBusinessRules(brokenBusinessRules);
 							var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
@@ -193,7 +192,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             {
                 var culture = _personRequest.Person.PermissionInformation.UICulture();
 
-                StringBuilder sb = new StringBuilder(_personRequest.GetMessage(new NormalizeText()));
+                StringBuilder sb = new StringBuilder(_personRequest.Message);
                 sb.AppendLine();
                 sb.Append(UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule",
                                                                         culture)).Append(":").AppendLine();

@@ -163,10 +163,10 @@
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.3.0-CR1\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers">
-      <HintPath>..\packages\NHibernate.Envers.1.1.0-CR1\lib\Net35\NHibernate.Envers.dll</HintPath>
+    <Reference Include="NHibernate.Envers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
+      <HintPath>..\nhibernateAddons\Envers\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
@@ -280,7 +280,6 @@
     <Compile Include="Repositories\AbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\ActivityRepositoryTest.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepositoryTest.cs" />
-    <Compile Include="Repositories\ApplicationRolePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditTest.cs" />
     <Compile Include="Repositories\Audit\RevisionListenerTest.cs" />

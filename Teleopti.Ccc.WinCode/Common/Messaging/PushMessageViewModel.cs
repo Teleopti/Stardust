@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Messaging
@@ -24,9 +23,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
         public string Title
         {
+            get { return _model.Title; }
             set
             {
-                if(_model.GetTitle(new NoFormatting()) != value)
+                if(_model.Title != value)
                 {
                     _model.Title = value;
                    
@@ -34,17 +34,12 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
                 }
             }
         }
-
-		public string GetTitle(ITextFormatter formatter)
-		{
-			return _model.GetTitle(formatter);
-		}
-
         public string Message
         {
+            get { return _model.Message; }
             set
             {
-                if (_model.GetMessage(new NoFormatting()) != value)
+                if (_model.Message != value)
                 {
                     _model.Message = value;
                     SendPropertyChanged("Message");
@@ -52,17 +47,12 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
             }
         }
 
-		public string GetMessage(ITextFormatter formatter)
-		{
-			return _model.GetMessage(formatter);
-		}
-
         public bool CanSend
         {
             get
             {
                 //designed by fx cop
-                return !(string.IsNullOrEmpty(_model.GetTitle(new NoFormatting())) || string.IsNullOrEmpty(_model.GetMessage(new NoFormatting())));
+                return !(string.IsNullOrEmpty(_model.Title) || string.IsNullOrEmpty(_model.Message));
             }
            
         }
@@ -70,8 +60,8 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
         public PushMessageViewModel(IPushMessage pushMessage)
         {
             _model = pushMessage;
-            Title = pushMessage.GetTitle(new NoFormatting());
-            Message = pushMessage.GetMessage(new NoFormatting());
+            Title = pushMessage.Title;
+            Message = pushMessage.Message;
         }
 
         private void SendPropertyChanged(string property)

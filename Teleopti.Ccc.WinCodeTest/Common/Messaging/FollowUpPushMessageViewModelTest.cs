@@ -5,7 +5,6 @@ using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -43,8 +42,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         [Test]
         public void VerifyConstructor()
         {
-           Assert.AreEqual(_title,_target.GetTitle(new NoFormatting()));
-           Assert.AreEqual(_message,_target.GetMessage(new NoFormatting()));
+           Assert.AreEqual(_title,_target.Title);
+           Assert.AreEqual(_message,_target.Message);
         }     
 
         [Test]

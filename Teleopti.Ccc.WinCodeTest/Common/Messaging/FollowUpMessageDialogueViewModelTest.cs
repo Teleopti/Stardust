@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Messaging;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         {
             Assert.AreEqual(_receiver,_target.Receiver);
             Assert.AreEqual(_dialogue.IsReplied,_target.IsReplied);
-			Assert.AreEqual(_dialogue.GetReply(new NoFormatting()), _target.GetReply(new NoFormatting()));
+            Assert.AreEqual(_dialogue.Reply,_target.Reply);
         }
 
         [Test]

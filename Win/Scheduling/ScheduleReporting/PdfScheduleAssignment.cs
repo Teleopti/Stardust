@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
 
@@ -122,8 +121,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             var meetingPayload = visualLayer.Payload as IMeetingPayload;
             if (meetingPayload != null)
             {
-                string subjectText = meetingPayload.Meeting.GetSubject(new NoFormatting());
-                string locationText = meetingPayload.Meeting.GetLocation(new NoFormatting());
+                string subjectText = meetingPayload.Meeting.Subject;
+                string locationText = meetingPayload.Meeting.Location;
                 if (subjectText.Length > MAX_NUMBER_OF_CHARACTERS)
                 {
                     subjectText = subjectText.Substring(0, MAX_NUMBER_OF_CHARACTERS);

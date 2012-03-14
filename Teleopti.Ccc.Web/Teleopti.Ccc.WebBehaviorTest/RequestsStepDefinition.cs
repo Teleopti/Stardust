@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyExistingTextRequest()
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Subject));
 		}
 
 		[Then(@"I should be able to see requests link")]
@@ -88,8 +87,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeThatTheListIsSortedOnChangedDateAndTime()
 		{
 			var data = UserFactory.User().UserData<TwoExistingTextRequestChangedOnDifferentTimes>();
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(data.PersonRequest2.GetSubject(new NoFormatting())));
-			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(data.PersonRequest2.Subject));
+			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.Subject));
 		}
 
 	}

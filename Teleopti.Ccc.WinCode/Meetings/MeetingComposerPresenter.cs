@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -175,7 +174,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             string messageTobeDisplayed = string.Empty;
 
-            if (string.IsNullOrEmpty(_model.GetSubject(new NoFormatting())))
+            if (string.IsNullOrEmpty(_model.Subject))
             {
                 messageTobeDisplayed = UserTexts.Resources.MeetingSubjectRequired;
             }

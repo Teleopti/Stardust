@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
@@ -21,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                 {
                     meetingModel = new MeetingViewModel
                                        {
-                                           Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
-                                           Title = meetingPayload.Meeting.GetSubject(new NoFormatting())
+                                           Location = meetingPayload.Meeting.Location,
+                                           Title = meetingPayload.Meeting.Subject
                                        };
                 }
                 

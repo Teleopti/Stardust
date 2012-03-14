@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -44,8 +43,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             PersonRequestDto personRequestDto = new PersonRequestDto();
             personRequestDto.Id = entity.Id;
-            personRequestDto.Message = entity.GetMessage(new NormalizeText());
-            personRequestDto.Subject = entity.GetSubject(new NormalizeText());
+            personRequestDto.Message = entity.Message;
+            personRequestDto.Subject = entity.Subject;
             personRequestDto.RequestStatus = (RequestStatusDto)PersonRequest.GetUnderlyingStateId(entity);
             personRequestDto.RequestedDate = entity.RequestedDate;
             personRequestDto.CreatedDate = entity.CreatedOn.HasValue ? TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value) : DateTime.MinValue;

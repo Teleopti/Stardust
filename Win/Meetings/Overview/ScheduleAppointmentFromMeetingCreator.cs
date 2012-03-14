@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Syncfusion.Schedule;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 using Teleopti.Interfaces.Domain;
 
@@ -26,10 +25,10 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
                 	                  		SimpleAppointment = simpleAppointment,
                 	                  		StartTime = simpleAppointment.StartDateTime,
                 	                  		EndTime = simpleAppointment.EndDateTime,
-                	                  		Subject = meeting.GetSubject(new NoFormatting()),
-                	                  		LocationValue = meeting.GetLocation(new NoFormatting()),
+                	                  		Subject = meeting.Subject,
+                	                  		LocationValue = meeting.Location,
                 	                  		LabelValue = getLabelValue(meeting.Activity, labelList),
-                	                  		Content = meeting.GetDescription(new NoFormatting()),
+                	                  		Content = meeting.Description,
                 	                  		Tag = meeting,
                 	                  		MarkerValue = simpleAppointment.OtherHasBeenDeleted ? 1 : 0,
                 	                  		AllDay = false

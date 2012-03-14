@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -223,8 +222,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             INote note = _schedulePart.NoteCollection().FirstOrDefault();
             IPublicNote publicNote = _schedulePart.PublicNoteCollection().FirstOrDefault();
 
-            _scheduleNote = note != null ? note.GetScheduleNote(new NoFormatting()) : string.Empty;
-            _publicScheduleNote = publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
+            _scheduleNote = note != null ? note.ScheduleNote : string.Empty;
+            _publicScheduleNote = publicNote != null ? publicNote.ScheduleNote : string.Empty;
 
             _originalNote = ScheduleNote;
             _publicOriginalNote = PublicScheduleNote;

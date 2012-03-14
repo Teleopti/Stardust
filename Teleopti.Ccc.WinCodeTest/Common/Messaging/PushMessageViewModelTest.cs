@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
@@ -30,8 +29,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         public void VerifyProperties()
         {
          
-            Assert.AreEqual(_title,_target.GetTitle(new NoFormatting()));
-            Assert.AreEqual(_message,_target.GetMessage(new NoFormatting()));
+            Assert.AreEqual(_title,_target.Title);
+            Assert.AreEqual(_message,_target.Message);
         }
 
         [Test]
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             string newMessage = "newMessage";
             _target.Title = newTitle;
             _target.Message = newMessage;
-            Assert.AreEqual(newTitle,_target.PushMessage.GetTitle(new NoFormatting()));
-            Assert.AreEqual(newMessage, _target.PushMessage.GetMessage(new NoFormatting()));
+            Assert.AreEqual(newTitle,_target.PushMessage.Title);
+            Assert.AreEqual(newMessage, _target.PushMessage.Message);
         }
 
         [Test]
@@ -51,17 +50,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
 
             PropertyChangedListener listener = new PropertyChangedListener();
             listener.ListenTo(_target);
-			_target.Title = _target.GetTitle(new NoFormatting());
-			_target.Message = _target.GetMessage(new NoFormatting());
+            _target.Title = _target.Title;
+            _target.Message = _target.Message;
             
             Assert.IsFalse(listener.HasFired("Message"));
             Assert.IsFalse(listener.HasFired("Title"));
             Assert.IsFalse(listener.HasFired("CanSend"));
-
-			_target.Title = _target.GetTitle(new NoFormatting()) + "new";
+            
+            _target.Title = _target.Title+"new";
             Assert.IsTrue(listener.HasFired("Title"));
             listener.Clear();
-			_target.Message = _target.GetMessage(new NoFormatting()) + "new";
+            _target.Message = _target.Message + "new";
             Assert.IsTrue(listener.HasFired("Message"));
             
         }

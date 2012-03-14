@@ -60,33 +60,24 @@ namespace Teleopti.Ccc.Win.Permissions
             return availableDataCollection;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static ICollection<IPersonInRole> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
+        /// <summary>
+        /// Loads the people by application role.
+        /// </summary>
+        /// <param name="selectedRole">The selected role.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Created by: Muhamad Risath
+        /// Created date: 2008-09-09
+        /// </remarks>
+        public static ICollection<IPerson> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
         {
-        	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-        	{
-                var personRepository = new ApplicationRolePersonRepository(uow);
-            	return personRepository.GetPersonsInRole(selectedRole.Id.Value);
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static ICollection<IPersonInRole> LoadPeopleNotInApplicationRole(IApplicationRole selectedRole, ICollection<Guid> personsIds)
-        {
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+        	ICollection<IPerson> people;
+        	using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var personRepository = new ApplicationRolePersonRepository(uow);
-                return personRepository.GetPersonsNotInRole(selectedRole.Id.Value, personsIds);
+                IPersonRepository personRepository = new PersonRepository(uow);
+            	people = personRepository.FindPeopleByApplicationRole(selectedRole);
             }
-        }
-
-        public static IPerson GetPerson(Guid id)
-        {
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var personRepository = new PersonRepository(uow);
-                return personRepository.Load(id);
-            }
+        	return people;
         }
 
     	/// <summary>

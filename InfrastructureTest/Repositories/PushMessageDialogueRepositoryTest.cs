@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(pushMessageDialogue.Receiver, loadedAggregateFromDatabase.Receiver);
             Assert.AreEqual(_messageText1,loadedAggregateFromDatabase.DialogueMessages[0].Text);
             Assert.AreEqual(_person,loadedAggregateFromDatabase.DialogueMessages[0].Sender);
-            Assert.AreEqual(_option,loadedAggregateFromDatabase.GetReply(new NoFormatting()));
+            Assert.AreEqual(_option,loadedAggregateFromDatabase.Reply);
         }
 
         /// <summary>

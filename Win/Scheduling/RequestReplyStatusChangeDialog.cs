@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 textBoxMessage.Visible = true;
                 textBoxMessage.Clear();
                 //?Primitivt, 2009, eller?
-                textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
+                textBoxMessage.Lines = list[0].Message.Split(Environment.NewLine.ToCharArray());
                 //textBoxMessage.Text = list[0].Note;
             }
             else if (list.Count > 1)
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 textBoxMessage.Visible = true;
                 textBoxMessage.Clear();
                 //?Primitivt, 2009, eller?
-                textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
+                textBoxMessage.Lines = list[0].Message.Split(Environment.NewLine.ToCharArray());
                 //textBoxMessage.Text = list[0].Note;
             }
             else if (list.Count > 1)

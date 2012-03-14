@@ -100,34 +100,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNotNull(users.ContainsKey(p1));
         }
 
-        [Test]
-        public void ShouldFindByUsers()
-        {
-            var p = PersonFactory.CreatePerson();
-            PersistAndRemoveFromUnitOfWork(p);
-
-            var u = new UserDetail(p);
-            u.RegisterPasswordChange();
-            u.RegisterInvalidAttempt(new DummyPasswordPolicy());
-            u.Lock();
-            PersistAndRemoveFromUnitOfWork(u);
-
-            var p1 = PersonFactory.CreatePerson();
-            PersistAndRemoveFromUnitOfWork(p1);
-
-            var u1 = new UserDetail(p1);
-            u1.RegisterPasswordChange();
-            u1.RegisterInvalidAttempt(new DummyPasswordPolicy());
-            u1.Lock();
-            PersistAndRemoveFromUnitOfWork(u1);
-
-            IList<IPerson> persons = new List<IPerson>{p1};
-            var users = new UserDetailRepository(UnitOfWork).FindByUsers(persons);
-
-            Assert.IsFalse(users.ContainsKey(p));
-            Assert.IsTrue(users.ContainsKey(p1));    
-        }
-
         protected override Repository<IUserDetail> TestRepository(IUnitOfWork unitOfWork)
         {
             return new UserDetailRepository(unitOfWork);

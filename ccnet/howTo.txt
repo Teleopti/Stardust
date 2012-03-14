@@ -179,9 +179,6 @@ Make sure it is set as "ReadOnly"
 netsh advfirewall firewall add rule name = IIS_80 dir = in protocol = tcp action = allow localport = 80 remoteip = any profile = DOMAIN
 netsh advfirewall firewall add rule name = CCTray dir = in protocol = tcp action = allow localport = 21234 remoteip = any profile = DOMAIN
 
-- share the folder
-net share CruiseControl.NET="C:\Program Files (x86)\CruiseControl.NET" /GRANT:everyone,CHANGE
-
 -WebDashBoard
 unzip this file: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2FDeployment%2Fwebdashboard.zip
 Into c:\Program Files (x86)\CruiseControl.NET\webdashboard

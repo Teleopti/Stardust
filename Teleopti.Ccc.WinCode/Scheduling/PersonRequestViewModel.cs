@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
@@ -135,19 +134,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        public string GetSubject(ITextFormatter formatter)
+        public string Subject
         {
-           return _personRequest.GetSubject(formatter);
+            get { return _personRequest.Subject; }
         }
 
         public string Message
-		{
-			get { return _personRequest.GetMessage(new NoFormatting()); }
-		}
-		
-		public string GetMessage(ITextFormatter formatter)
         {
-        	return _personRequest.GetMessage(formatter);
+            get { return _personRequest.Message; }
         }
 
         public DateTime LastUpdated

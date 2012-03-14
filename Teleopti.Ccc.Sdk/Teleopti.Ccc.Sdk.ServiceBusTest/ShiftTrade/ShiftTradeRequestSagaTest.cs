@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -192,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Assert.AreEqual(false, personRequest.IsPending);
                 Assert.AreEqual(true, personRequest.IsApproved);
                 Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
+                Assert.AreEqual(accept.Message,personRequest.Message);
                 ruleCollection.Item(typeof (NewPersonAccountRule)).HaltModify.Should().Be.False();
             }
         }
@@ -233,7 +232,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Assert.AreEqual(false, personRequest.IsPending);
                 Assert.AreEqual(true, personRequest.IsApproved);
                 Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
+                Assert.AreEqual(accept.Message, personRequest.Message);
             }
         }
 
@@ -276,7 +275,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Assert.AreEqual(true, personRequest.IsPending);
                 Assert.AreEqual(false, personRequest.IsApproved);
                 Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("aja baja!"));
+                Assert.IsTrue(personRequest.Message.Contains("aja baja!"));
             }
         }
 

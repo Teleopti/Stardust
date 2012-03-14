@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -52,15 +51,15 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
                     var person = meeting.Organizer;
                     uow.Reassociate(person);
                     text = _commonNameDescription.BuildCommonNameDescription(person) + "\r\n";
-                    text = text + meeting.GetSubject(new NoFormatting()) + "\r\n";
-                    text = text + meeting.GetLocation(new NoFormatting()) + "\r\n\r\n";
+                    text = text + meeting.Subject + "\r\n";
+                    text = text + meeting.Location + "\r\n\r\n";
                     var persons = meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
                     foreach (var p in persons)
                     {
                         uow.Reassociate(p);
                         text = text + _commonNameDescription.BuildCommonNameDescription(p) + "\r\n";
                     }
-                    text = text + "\r\n" + meeting.GetDescription(new NoFormatting()) + "\r\n\r\n";
+                    text = text + "\r\n" + meeting.Description + "\r\n\r\n";
 
                     if (meeting.UpdatedOn.HasValue)
                         text = text + _userTimeZone.ConvertTimeFromUtc(meeting.UpdatedOn.Value, _userTimeZone);

@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.DatabaseConverterTest.Helpers;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             IScenario expectedScenario = _agdFactory.ScenarioPairList.GetPaired(_agdFactory.AgentDay().AgentScenario);
             IPerson expectedPerson = _agdFactory.AgentPairList.GetPaired(_agdFactory.AgentDay().AssignedAgent);
             INote note = _target.Map(_agdFactory.AgentDay());
-			Assert.AreEqual(_agdFactory.AgentDay().Note, note.GetScheduleNote(new NoFormatting()));
+            Assert.AreEqual(_agdFactory.AgentDay().Note, note.ScheduleNote);
             Assert.AreEqual(expectedScenario, note.Scenario);
             Assert.AreEqual(_agdFactory.AgentDay().AgentDate, note.NoteDate.Date);
             Assert.AreEqual(expectedPerson, note.Person);

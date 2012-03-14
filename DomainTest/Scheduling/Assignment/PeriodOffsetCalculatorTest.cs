@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                 Assert.AreEqual(new TimeSpan(), offSet);
             }
         }
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                 Assert.AreEqual(new TimeSpan(30, 0, 0, 0), offSet);
             }
         }
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false);
                 Assert.AreEqual(new TimeSpan(0, 18, 0, 0), offSet);
             }
         }
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                 Assert.AreEqual(new TimeSpan(), offSet);
             }
         }
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false);
                 Assert.AreEqual(new TimeSpan(30, 18, 0, 0), offSet);
             }
         }
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                 Assert.AreEqual(new TimeSpan(30, 0, 0, 0), offSet);
             }
         }
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false);
                 Assert.AreEqual(new TimeSpan(31, 0, 0, 0), offSet);
             }
         }
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using(_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                 Assert.AreEqual(new TimeSpan(31, 0, 0, 0), offSet);
             }
         }
@@ -251,37 +251,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 }
                 using (_mocks.Playback())
                 {
-                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true);
                     Assert.AreEqual(new TimeSpan(31, 1, 0, 0), offSet);
                 }
             }
 
-            [Test]
-            public void ShouldMoveCorrectOnDayOffDayLightSavingChange()
-            {
-                CccTimeZoneInfo stockholmTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
-                var shiftStart = new DateTime(2012, 03, 24, 3, 0, 0, DateTimeKind.Utc);
-                _sourceStartDateTime = new DateTime(2012, 03, 23, 23, 0, 0, DateTimeKind.Utc); // local - 1 => utc
-                _sourceEndDateTime = new DateTime(2012, 03, 24, 23, 0, 0, DateTimeKind.Utc);
-                // local - 1 + 1 (summertime) => utc (changes on the 25th if the shift starts before the shift no problem, if after we must remove one hour more
-                _targetStartDateTime = new DateTime(2012, 03, 24, 23, 0, 0, DateTimeKind.Utc); 
-                _targetEndDateTime = new DateTime(2012, 03, 25, 23, 0, 0, DateTimeKind.Utc);
-                _sourceDateTimePeriod = new DateTimePeriod(_sourceStartDateTime, _sourceEndDateTime);
-                _targetDateTimePeriod = new DateTimePeriod(_targetStartDateTime, _targetEndDateTime);
-                var shiftPeriod = new DateTimePeriod(shiftStart, shiftStart.AddHours(8));
-
-                using (_mocks.Record())
-                {
-                    Expect.Call(_sourceScheduleDay.TimeZone).Return(stockholmTimeZone).Repeat.AtLeastOnce();
-                    Expect.Call(_targetScheduleDay.TimeZone).Return(stockholmTimeZone).Repeat.AtLeastOnce();
-                    Expect.Call(_sourceScheduleDay.Period).Return(_sourceDateTimePeriod).Repeat.AtLeastOnce();
-                    Expect.Call(_targetScheduleDay.Period).Return(_targetDateTimePeriod).Repeat.AtLeastOnce();
-                }
-                using (_mocks.Playback())
-                {
-                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, shiftPeriod);
-                    Assert.AreEqual(new TimeSpan(0, 23, 0, 0), offSet);
-                }
-            }
     }
 }

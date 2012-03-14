@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -263,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
 			_target.CreateAndAddNote(text);
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
-			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].GetScheduleNote(new NoFormatting()));
+			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].ScheduleNote);
 		}
 
 		[Test]

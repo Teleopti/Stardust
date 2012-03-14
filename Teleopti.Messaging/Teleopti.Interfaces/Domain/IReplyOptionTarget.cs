@@ -8,17 +8,17 @@
     /// Created by: henrika
     /// Created date: 2009-05-25
     /// </remarks>
-    public interface IReplyOptionTarget<T>
+    public interface IReplyOptionTarget<T> 
     {
-    	/// <summary>
-    	/// Gets the reply.L
-    	/// </summary>
-    	/// <value>The reply.</value>
-    	/// <remarks>
-    	/// Created by: henrika
-    	/// Created date: 2009-05-25
-    	/// </remarks>
-    	T GetReply(ITextFormatter formatter);
+        /// <summary>
+        /// Gets the reply.L
+        /// </summary>
+        /// <value>The reply.</value>
+        /// <remarks>
+        /// Created by: henrika
+        /// Created date: 2009-05-25
+        /// </remarks>
+        T Reply { get; }
 
 
         /// <summary>

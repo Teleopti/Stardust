@@ -355,58 +355,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 var repositoryFactory = new RepositoryFactory();
                 var repository = repositoryFactory.CreateUserDetailRepository(UnitOfWork);
-                //var userDetails = repository.FindAllUsers();
-
-                var userDetails = repository.FindByUsers(foundPeople);
-
-                foreach (var person in _filteredPersonCollection)
-                {
-                    IUserDetail ud;
-                    if (userDetails.ContainsKey(person))
-                    {
-                        ud = userDetails[person];
-                    }
-                    else
-                    {
-                        ud = new UserDetail(person);
-                        repository.Add(ud);
-                    }
-
-                    loadFilteredPeopleGridData(person, ud);
-                    getParentPersonPeriods(person, today);
-                    GetParentSchedulePeriods(person, today);
-                    GetParentPersonAccounts(person, today);
-                }
-            }
-        }
-
-        public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people)
-        {
-            InParameter.NotNull("peopleId", people);
-
-            int length = people.Count();
-
-            if (length > 0)
-            {
-                //var rep = new PersonRepository(UnitOfWork);
-                var personRotationRep = new PersonRotationRepository(UnitOfWork);
-                var personAvailRep = new PersonAvailabilityRepository(UnitOfWork);
-
-                clearCollections();
-
-                //var foundPeople = rep.FindPeople(peopleId).ToList();
-
-                _filteredPersonCollection.AddRange(people);
-                var today = DateOnly.Today;
-
-                LoadPersonRotations(people, today, personRotationRep);
-                LoadPersonAvailabilities(people, personAvailRep);
-
-                var repositoryFactory = new RepositoryFactory();
-                var repository = repositoryFactory.CreateUserDetailRepository(UnitOfWork);
-                //var userDetails = repository.FindAllUsers();
-
-                var userDetails = repository.FindByUsers(people);
+                var userDetails = repository.FindAllUsers();
 
                 foreach (var person in _filteredPersonCollection)
                 {

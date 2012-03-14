@@ -398,11 +398,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new PersonSelectorReadOnlyRepository(unitOfWork);
         }
 
-        public IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)
-        {
-            return new ApplicationRolePersonRepository(unitOfWork);
-        }
-
         public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
         {
             return new AgentDayScheduleTagRepository(unitOfWork);

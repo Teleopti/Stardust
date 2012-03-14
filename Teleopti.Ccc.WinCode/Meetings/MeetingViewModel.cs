@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -151,9 +150,10 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public string Location
         {
+            get { return _meeting.Location; }
             set
             {
-                if (_meeting.GetLocation(new NoFormatting()) != value)
+                if (_meeting.Location != value)
                 {
                     _meeting.Location = value;
                     NotifyPropertyChanged("Location");
@@ -161,16 +161,12 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-		public string GetLocation(ITextFormatter formatter)
-		{
-			return _meeting.GetLocation(formatter);
-		}
-
         public string Subject
         {
+            get { return _meeting.Subject; }
             set
             {
-                if (_meeting.GetSubject(new NoFormatting()) != value)
+                if (_meeting.Subject != value)
                 {
                     _meeting.Subject = value;
                     NotifyPropertyChanged("Subject");
@@ -178,27 +174,18 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-		public string GetSubject(ITextFormatter formatter)
-		{
-			return _meeting.GetSubject(formatter);
-		}
-
         public string Description
         {
+            get { return _meeting.Description; }
             set
             {
-                if (_meeting.GetDescription(new NoFormatting()) != value)
+                if (_meeting.Description != value)
                 {
                     _meeting.Description = value;
                     NotifyPropertyChanged("Description");
                 }
             }
         }
-
-		public string GetDescription(ITextFormatter formatter)
-		{
-			return _meeting.GetDescription(formatter);
-		}
 
         public IActivity Activity
         {
