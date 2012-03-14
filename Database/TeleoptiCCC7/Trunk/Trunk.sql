@@ -132,19 +132,11 @@ WHERE ForeignId = '26' AND ForeignSource = 'Matrix'
 UPDATE ApplicationFunction SET ForeignId = '8DE1AB0F-32C2-4619-A2B2-97385BE4C49C'
 WHERE ForeignId = '27' AND ForeignSource = 'Matrix'
 
-/*
-Talha Mar052012
-*/
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-SET ANSI_PADDING ON
-GO
-
+-- =============================================
+-- Author:		Talha
+-- Create date: 2012-3-05
+-- Description:	save forecasts file into database
+-- =============================================
 CREATE TABLE [dbo].[ForecastFile](
 	[Id] [uniqueidentifier] NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
@@ -160,30 +152,15 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-GO
-
-SET ANSI_PADDING OFF
-GO
-
 ALTER TABLE [dbo].[ForecastFile]  WITH CHECK ADD  CONSTRAINT [FK_ForecastFile_BusinessUnit] FOREIGN KEY([BusinessUnit])
 REFERENCES [dbo].[BusinessUnit] ([Id])
-GO
-
 ALTER TABLE [dbo].[ForecastFile] CHECK CONSTRAINT [FK_ForecastFile_BusinessUnit]
-GO
-
-ALTER TABLE [dbo].[ForecastFile]  WITH CHECK ADD  CONSTRAINT [FK_ForecastFile_Person1] FOREIGN KEY([CreatedBy])
+ALTER TABLE [dbo].[ForecastFile]  WITH CHECK ADD  CONSTRAINT [FK_ForecastFile_Person_CreatedBy] FOREIGN KEY([CreatedBy])
 REFERENCES [dbo].[Person] ([Id])
-GO
-
-ALTER TABLE [dbo].[ForecastFile] CHECK CONSTRAINT [FK_ForecastFile_Person1]
-GO
-
-ALTER TABLE [dbo].[ForecastFile]  WITH CHECK ADD  CONSTRAINT [FK_ForecastFile_Person2] FOREIGN KEY([UpdatedBy])
+ALTER TABLE [dbo].[ForecastFile] CHECK CONSTRAINT [FK_ForecastFile_Person_CreatedBy]
+ALTER TABLE [dbo].[ForecastFile]  WITH CHECK ADD  CONSTRAINT [FK_ForecastFile_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
 REFERENCES [dbo].[Person] ([Id])
-GO
-
-ALTER TABLE [dbo].[ForecastFile] CHECK CONSTRAINT [FK_ForecastFile_Person2]
+ALTER TABLE [dbo].[ForecastFile] CHECK CONSTRAINT [FK_ForecastFile_Person_UpdatedBy]
 GO
 
 
