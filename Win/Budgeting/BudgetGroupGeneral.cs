@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			foreach (var skill in budgetGroup.SkillCollection)
 			{
 				listBoxSkills.Items.Remove(skill);
-				listBoxAddedSkills.Items.Add(skill);
+                if (skill is IMultisiteSkill) continue;
+                listBoxAddedSkills.Items.Add(skill);
 			}
 		}
 

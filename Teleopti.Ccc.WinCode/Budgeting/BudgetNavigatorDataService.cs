@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
 					var groupModel = new BudgetGroupModel(budgetGroup);
 					foreach (var skill in budgetGroup.SkillCollection)
 					{
+                        if (skill is IMultisiteSkill) continue;
 						groupModel.SkillModels.Add(new SkillModel(skill));
 					}
 					root.BudgetGroups.Add(groupModel);
