@@ -487,5 +487,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IPersonSelectorReadOnlyRepository CreatePersonSelectorReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
         IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork);
         ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
+        ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
     }
 }

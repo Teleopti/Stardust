@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
         public ILicenseService XmlLicenseService(int numberOfActiveAgents)
         {
-            return new XmlLicenseService(new LicenseRepository(_unitOfWorkFactory.CreateAndOpenUnitOfWork()), numberOfActiveAgents);
+            return new XmlLicenseService(_repositoryFactory.CreateLicenseRepository(_unitOfWorkFactory.CreateAndOpenUnitOfWork()), numberOfActiveAgents);
         }
     }
 }
