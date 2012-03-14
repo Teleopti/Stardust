@@ -132,8 +132,8 @@
 	
 	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'">
 		<!-- create web site/app/VirDir + Copy content-->
-		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSitepath) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
-		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSitepath) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
+		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
+		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
 	</Target>
 
 	<Target Name="CreateAnalyticsDb">
