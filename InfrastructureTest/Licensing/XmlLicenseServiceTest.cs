@@ -69,17 +69,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
-            var personRepository = _mocks.StrictMock<IPersonRepository>();
-
+            
             using(_mocks.Record())
             {
-                Expect.Call(personRepository.NumberOfActiveAgents()).Return(10);
                 Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             }
             using (_mocks.Playback())
             {
-                _licenseService = new XmlLicenseService(unitOfWorkFactory, licenseRepository, personRepository);
+                _licenseService = new XmlLicenseService(licenseRepository, 10);
             }
         }
 

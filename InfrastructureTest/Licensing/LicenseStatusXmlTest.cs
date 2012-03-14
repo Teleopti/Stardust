@@ -46,6 +46,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.That(signNode[0].InnerXml, Is.Not.EqualTo(newSignNode[0].InnerXml));
 
         }
+
+        [Test]
+        public void ShouldBeAbleToReadTheDocument()
+        {
+
+            var status =  new LicenseStatusXml(XDocument.Parse(_target.XmlDocument.OuterXml));
+            Assert.That(status.StatusOk, Is.True);
+        }
 	}
 
 	
