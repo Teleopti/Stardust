@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             var budgetGroup = new BudgetGroup {Name = "BG"};
             var skill = SkillFactory.CreateSkill("Skill");
             budgetGroup.AddSkill(skill);
-
+            var multisiteSkill = SkillFactory.CreateMultisiteSkill("MultiSkill");
+            budgetGroup.AddSkill(multisiteSkill);
             using (mock.Record())
             {
                 Expect.Call(budgetRepository.LoadAll()).Return(new List<IBudgetGroup>{ budgetGroup });
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             using (mock.Playback())
             {
                 var models = target.GetBudgetRootModels();
+
+                Assert.AreEqual(1, models.BudgetGroups[0].SkillModels.Count);
 
                 Assert.AreEqual(budgetGroup, models.BudgetGroups[0].ContainedEntity);
                 Assert.AreEqual(skill, models.BudgetGroups[0].SkillModels[0].ContainedEntity);
