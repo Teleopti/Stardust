@@ -6,7 +6,11 @@
 	<script type="text/javascript">
 		jQuery(function () { 
 			$.datepicker.setDefaults(@Html.LayoutBase().DatePickerGlobalizationAsJson());
-			Teleopti.MyTimeWeb.Portal.Init({ defaultNavigation: '@Html.Portal().GetDefaultAction(Model)', baseUrl: '@Url.Content("~/MyTime/")' });
+			Teleopti.MyTimeWeb.Portal.Init(
+				{
+					defaultNavigation: '@Html.Portal().GetDefaultAction(Model)',
+					baseUrl: '@Url.Content("~/MyTime/")'
+				});
 		});
 	</script>
 }

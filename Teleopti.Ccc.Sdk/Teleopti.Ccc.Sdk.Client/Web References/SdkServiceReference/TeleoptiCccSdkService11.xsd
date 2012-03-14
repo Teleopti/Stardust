@@ -1,226 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2011/07/" elementFormDefault="qualified" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" />
-  <xs:complexType name="QueryDto">
-    <xs:sequence />
-  </xs:complexType>
-  <xs:element name="QueryDto" nillable="true" type="tns:QueryDto" />
-  <xs:complexType name="GetSiteByIdQueryDto">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.ServiceModel" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.ServiceModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="FaultException">
     <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="SiteId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension base="tns:CommunicationException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GetSiteByIdQueryDto" nillable="true" type="tns:GetSiteByIdQueryDto" />
-  <xs:complexType name="GetSiteByDescriptionNameQueryDto">
+  <xs:element name="FaultException" nillable="true" type="tns:FaultException" />
+  <xs:complexType name="CommunicationException">
     <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DescriptionName" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System" base="q1:SystemException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GetSiteByDescriptionNameQueryDto" nillable="true" type="tns:GetSiteByDescriptionNameQueryDto" />
-  <xs:complexType name="GetPersonByEmploymentNumberQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="EmploymentNumber" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetPersonByEmploymentNumberQueryDto" nillable="true" type="tns:GetPersonByEmploymentNumberQueryDto" />
-  <xs:complexType name="GetPersonByIdQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetPersonByIdQueryDto" nillable="true" type="tns:GetPersonByIdQueryDto" />
-  <xs:complexType name="GetTeamByIdQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="TeamId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetTeamByIdQueryDto" nillable="true" type="tns:GetTeamByIdQueryDto" />
-  <xs:complexType name="GetAllPayrollExportsQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetAllPayrollExportsQueryDto" nillable="true" type="tns:GetAllPayrollExportsQueryDto" />
-  <xs:complexType name="GetPeopleByGroupPageGroupQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="GroupPageGroupId" type="ser:guid" />
-          <xs:element xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="QueryDate" nillable="true" type="q1:DateOnlyDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetPeopleByGroupPageGroupQueryDto" nillable="true" type="tns:GetPeopleByGroupPageGroupQueryDto" />
-  <xs:complexType name="GetTeamByDescriptionNameQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="DescriptionName" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetTeamByDescriptionNameQueryDto" nillable="true" type="tns:GetTeamByDescriptionNameQueryDto" />
-  <xs:complexType name="CommandDto">
-    <xs:sequence />
-  </xs:complexType>
-  <xs:element name="CommandDto" nillable="true" type="tns:CommandDto" />
-  <xs:complexType name="ApproveRequestCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="PersonRequestId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ApproveRequestCommandDto" nillable="true" type="tns:ApproveRequestCommandDto" />
-  <xs:complexType name="DenyRequestCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="PersonRequestId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DenyRequestCommandDto" nillable="true" type="tns:DenyRequestCommandDto" />
-  <xs:complexType name="SavePersonAbsenceRequestCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="PersonRequestDto" nillable="true" type="q2:PersonRequestDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="SavePersonAbsenceRequestCommandDto" nillable="true" type="tns:SavePersonAbsenceRequestCommandDto" />
-  <xs:complexType name="DenormalizeScheduleCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="EndDateTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-          <xs:element minOccurs="0" name="ScenarioId" type="ser:guid" />
-          <xs:element minOccurs="0" name="StartDateTime" type="xs:dateTime" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DenormalizeScheduleCommandDto" nillable="true" type="tns:DenormalizeScheduleCommandDto" />
-  <xs:complexType name="ExportMultisiteSkillToSkillCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="MultisiteSkillSelection" nillable="true" type="tns:ArrayOfMultisiteSkillSelectionDto" />
-          <xs:element xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q3:DateOnlyPeriodDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ExportMultisiteSkillToSkillCommandDto" nillable="true" type="tns:ExportMultisiteSkillToSkillCommandDto" />
-  <xs:complexType name="ArrayOfMultisiteSkillSelectionDto">
+  <xs:element name="CommunicationException" nillable="true" type="tns:CommunicationException" />
+  <xs:complexType name="FaultException.FaultCodeData">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="MultisiteSkillSelectionDto" nillable="true" type="tns:MultisiteSkillSelectionDto" />
+      <xs:element name="name" nillable="true" type="xs:string" />
+      <xs:element name="ns" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfMultisiteSkillSelectionDto" nillable="true" type="tns:ArrayOfMultisiteSkillSelectionDto" />
-  <xs:complexType name="MultisiteSkillSelectionDto">
+  <xs:element name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
+  <xs:complexType name="ArrayOfFaultException.FaultCodeData">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ChildSkillMapping" nillable="true" type="tns:ArrayOfChildSkillMappingDto" />
-      <xs:element xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="MultisiteSkill" nillable="true" type="q4:SkillDto" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="MultisiteSkillSelectionDto" nillable="true" type="tns:MultisiteSkillSelectionDto" />
-  <xs:complexType name="ArrayOfChildSkillMappingDto">
+  <xs:element name="ArrayOfFaultException.FaultCodeData" nillable="true" type="tns:ArrayOfFaultException.FaultCodeData" />
+  <xs:complexType name="FaultException.FaultReasonData">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ChildSkillMappingDto" nillable="true" type="tns:ChildSkillMappingDto" />
+      <xs:element name="text" nillable="true" type="xs:string" />
+      <xs:element name="xmlLang" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfChildSkillMappingDto" nillable="true" type="tns:ArrayOfChildSkillMappingDto" />
-  <xs:complexType name="ChildSkillMappingDto">
+  <xs:element name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
+  <xs:complexType name="ArrayOfFaultException.FaultReasonData">
     <xs:sequence>
-      <xs:element xmlns:q5="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="SourceSkill" nillable="true" type="q5:SkillDto" />
-      <xs:element xmlns:q6="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="TargetSkill" nillable="true" type="q6:SkillDto" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ChildSkillMappingDto" nillable="true" type="tns:ChildSkillMappingDto" />
-  <xs:complexType name="EmployPersonCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element xmlns:q7="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="Period" nillable="true" type="q7:DateOnlyPeriodDto" />
-          <xs:element xmlns:q8="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="Person" nillable="true" type="q8:PersonDto" />
-          <xs:element xmlns:q9="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonContract" nillable="true" type="q9:PersonContractDto" />
-          <xs:element xmlns:q10="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="Team" nillable="true" type="q10:TeamDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="EmployPersonCommandDto" nillable="true" type="tns:EmployPersonCommandDto" />
-  <xs:complexType name="CreatePayrollExportCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element xmlns:q11="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="PayrollExportDto" nillable="true" type="q11:PayrollExportDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CreatePayrollExportCommandDto" nillable="true" type="tns:CreatePayrollExportCommandDto" />
-  <xs:complexType name="DenormalizeNotificationCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DenormalizeNotificationCommandDto" nillable="true" type="tns:DenormalizeNotificationCommandDto" />
-  <xs:complexType name="ChangePersonEmploymentCommandDto">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:CommandDto">
-        <xs:sequence>
-          <xs:element xmlns:q12="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="ExternalLogOn" nillable="true" type="q12:ArrayOfExternalLogOnDto" />
-          <xs:element minOccurs="0" name="Note" nillable="true" type="xs:string" />
-          <xs:element xmlns:q13="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="Period" nillable="true" type="q13:DateOnlyPeriodDto" />
-          <xs:element xmlns:q14="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="Person" nillable="true" type="q14:PersonDto" />
-          <xs:element xmlns:q15="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="PersonContract" nillable="true" type="q15:PersonContractDto" />
-          <xs:element xmlns:q16="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="PersonSkillPeriodCollection" nillable="true" type="q16:ArrayOfPersonSkillPeriodDto" />
-          <xs:element xmlns:q17="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Team" nillable="true" type="q17:TeamDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ChangePersonEmploymentCommandDto" nillable="true" type="tns:ChangePersonEmploymentCommandDto" />
-  <xs:complexType name="CommandResultDto">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="AffectedId" nillable="true" type="ser:guid" />
-      <xs:element minOccurs="0" name="AffectedItems" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="CommandResultDto" nillable="true" type="tns:CommandResultDto" />
+  <xs:element name="ArrayOfFaultException.FaultReasonData" nillable="true" type="tns:ArrayOfFaultException.FaultReasonData" />
 </xs:schema>

@@ -777,6 +777,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                     break;
             }
 
+            _filteredPeopleHolder.LoadRuleSetBag();
+            _filteredPeopleHolder.LoadBudgetGroup();
             _gridConstructor.BuildGridView(viewType);
 
             //why isn't this in the panel?
@@ -1546,6 +1548,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             //Load all other views relavant references.
 			if (KillMode) return;
             LoadPeopleAdminReferences();
+            _filteredPeopleHolder.LoadRuleSetBag();
+            _filteredPeopleHolder.LoadBudgetGroup();
             
         }
 
@@ -1564,8 +1568,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             StateHolder.LoadContracts(_filteredPeopleHolder);
 
             // Loads rule set bags (to show on rule set bag combo on the grid).
-            _filteredPeopleHolder.LoadRuleSetBag();
-            _filteredPeopleHolder.LoadBudgetGroup();
+            //_filteredPeopleHolder.LoadRuleSetBag();
+            //_filteredPeopleHolder.LoadBudgetGroup();
         }
 
         private void toolStripComboBoxExTrackerDescription_SelectedIndexChanged(object sender, EventArgs e)

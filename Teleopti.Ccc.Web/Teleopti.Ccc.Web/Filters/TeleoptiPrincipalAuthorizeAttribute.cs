@@ -39,6 +39,11 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
+			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
+			{
+				base.HandleUnauthorizedRequest(filterContext);
+				return;
+			}
 			var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
 			filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { area = targetArea, controller = "Authentication", action = "Index" }));
 		}

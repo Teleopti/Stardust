@@ -27,10 +27,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Resources.Culture = UserTestData.PersonWindowsUser.PermissionInformation.Culture();
 		}
 
+		[When(@"I browse the internet")]
+		public void WhenIBrowseTheInternet()
+		{
+			Navigation.GotoTheInternet();
+		}
+
 		[When(@"I browse to an application page")]
 		public void WhenIBrowseToAnApplicationPage()
 		{
-			Navigation.GotoAnApplicationPage();
+			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
 
 		[When(@"I browse to the site home page")]

@@ -11,6 +11,7 @@
 					.attr("id", select.attr('id') + '-input')
 					.val(value)
 					.width(width)
+					.addClass(select.attr('class'))
 					.autocomplete({
 						delay: 0,
 						minLength: 0,

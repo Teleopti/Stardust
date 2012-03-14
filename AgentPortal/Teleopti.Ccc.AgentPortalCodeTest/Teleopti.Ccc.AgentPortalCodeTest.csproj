@@ -186,6 +186,7 @@
     <Compile Include="AgentPreference\ExtendedPreferenceModelTest.cs" />
     <Compile Include="AgentPreference\PreferencePresenterTest.cs" />
     <Compile Include="AgentSchedule\LegendsTest.cs" />
+    <Compile Include="AgentStudentAvailability\StudentAvailabilityModelTest.cs" />
     <Compile Include="Common\AbsenceTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

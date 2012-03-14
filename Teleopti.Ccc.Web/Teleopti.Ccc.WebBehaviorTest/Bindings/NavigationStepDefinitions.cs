@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var userName = UserFactory.User().MakeUser();
 			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
 				Navigation.GotoGlobalSignInPage();
-			var page = (SignInPageBase) Pages.Pages.Current;
-			page.SignInApplication(userName, TestData.CommonPassword);
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
 		[When(@"I view my week schedule")]
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			var userName = UserFactory.User().MakeUser();
 			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 			Navigation.GotoWeekSchedulePage();
 		}
 
@@ -40,8 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			var userName = UserFactory.User().MakeUser();
 			Navigation.GotoGlobalSignInPage();
-			var page = Browser.Current.Page<SignInPage>();
-			page.SignInApplication(userName, TestData.CommonPassword);
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 			Navigation.GotoPreference();
 		}
 

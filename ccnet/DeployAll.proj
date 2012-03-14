@@ -126,8 +126,15 @@
 	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
+  
+  <Target Name="MoveToKanbox" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
+	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
 
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;UploadRoot;UploadNew">
+	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(CCNetProject).zip&quot;"/>
+  </Target>
+
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
     <Message Text="Calling upload target"/>
   </Target>
   
@@ -140,8 +147,15 @@
     <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
     <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
   </Target>
+  
+  <Target Name="DeletePBIMSI" Condition="'$(FullBuild)' == 'No'">
+	<Message Text="Deleting PBIMSI folders to get new ones"/>
+	<Exec Command="rd &quot;$(DeployPath)&quot; /Q /S"/>
+	<Exec Command="rd &quot;$(MSIPath)&quot; /Q /S"/>
+  </Target>
+  
 			
-	<Target Name="AllFilesIncluded">
+	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
 		<ItemGroup>
 
 
@@ -386,28 +400,31 @@
 			  PropertyName="BranchVersion" />
 		</ReadLinesFromFile>
 		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
-		<!--
-		<TfsVersion TfsLibraryLocation="$(TfsLibraryLocation)" LocalPath="$(CCNetWorkingDirectory)">
-			<Output TaskParameter="Changeset" PropertyName="Revision"/>
-		</TfsVersion>
-		<Message Text="TFS ChangeSet: $(Revision)" Importance="high"/>
-		-->
+
 		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
 		<Message Text="HG Revision: $(Revision)" Importance="high"/>
 		
-		<PropertyGroup>
+		<PropertyGroup Condition="'$(FullBuild)' == 'No'">
+			<CCCVersion>$(CCCMajorMinor).0.0</CCCVersion>
+			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
+			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
+		</PropertyGroup>
+		
+		<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
 			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
 			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
 			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 		</PropertyGroup>
+		
+		
+		
 		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
 		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
 
 	</Target>
-
-
+	
 
 	<!--Enable this target to get version on all assemblies-->
 	<Target Name="UpdateAssemblyInfos" Inputs="@(AssemblyInfos)" Outputs="%(Identity).Dummy" DependsOnTargets="GetVersion">

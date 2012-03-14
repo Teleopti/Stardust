@@ -322,6 +322,7 @@
     <Compile Include="LogOn\WindowsDataSourceFromToken.cs" />
     <Compile Include="LogOn\WindowsTokenAuthenticator.cs" />
     <Compile Include="LogOn\WindowsUserFromToken.cs" />
+    <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAgentPortalSettingsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetBusinessUnitByIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllPayrollExportsQueryHandler.cs" />
@@ -336,6 +337,7 @@
     <Compile Include="QueryHandler\GetTeamByIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByEmploymentNumberQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />
     <Compile Include="QueryHandler\IHandleQuery.cs" />
     <Compile Include="QueryHandler\IInvokeQuery.cs" />
     <Compile Include="QueryHandler\InvokeQuery.cs" />
