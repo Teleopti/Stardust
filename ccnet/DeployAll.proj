@@ -16,7 +16,6 @@
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
 		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
-		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
@@ -63,6 +62,10 @@
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
 	</ItemGroup>
 
+	<PropertyGroup>
+	    <!--override, needs to be done after imports I think...-->
+		<DoCodeAnalysis>false</DoCodeAnalysis>
+	</PropertyGroup>
 
 	<ItemGroup>
 
