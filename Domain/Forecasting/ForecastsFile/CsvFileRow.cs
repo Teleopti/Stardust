@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
@@ -6,9 +8,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
     {
         string LineText { get; set; }
     }
-
-    public class CsvFileRow : List<string>, IFileRow
+    
+    [Serializable]
+    public class CsvFileRow : List<string>, IFileRow, ICloneable
     {
         public string LineText { get; set; }
+        
+        public object Clone()
+        {
+            return this.Select(item => item.Clone()).ToList();
+        }
     }
 }

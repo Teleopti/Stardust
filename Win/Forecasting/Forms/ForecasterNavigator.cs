@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private TreeNode _lastContextMenuNode;
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
+	    private readonly IImportForecastsRepository _importForecastsRepository;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -81,11 +82,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		}
 
-        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory)
+        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory, IImportForecastsRepository importForecastsRepository)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
+            _importForecastsRepository = importForecastsRepository;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1214,9 +1216,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void importForecast(TreeNode node)
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));
-            var s = (ISkill)node.Tag;
+            var skill = (ISkill)node.Tag;
 
-            using (var impForecast = new ImportForecastForm(s, _repositoryFactory, _unitOfWorkFactory))
+            using (var impForecast = new ImportForecastForm(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
             {
                 impForecast.ShowDialog(this);
             }

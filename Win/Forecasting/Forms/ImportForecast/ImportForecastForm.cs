@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
 using System.Text;
 using System.Windows.Forms;
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
-            var fileContent = new StringBuilder();
+            var fileContent = new List<CsvFileRow>();
             using (var stream = new StreamReader(textBoxImportFileName.Text))
             {
                 var reader = new CsvFileReader(stream);
@@ -120,7 +122,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                         while (reader.ReadNextRow(row))
                         {
                             validateRowByRow(validators, row);
-                            fileContent.Append(row.LineText + Environment.NewLine);
+                            var rowToBeSave = new CsvFileRow();
+                            rowToBeSave.AddRange(row);
+                            fileContent.Add(rowToBeSave);
                             row.Clear();
                             rowNumber++;
                         }
@@ -162,12 +166,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             }
         }
 
-        private Guid? saveFileToServer(StringBuilder fileContent)
+        private Guid? saveFileToServer(IList<CsvFileRow> fileContent)
         {
             Guid? savedFileId = null;
             _gracefulHandler.AttemptDatabaseConnectionDependentAction(
-                () =>{
-                        savedFileId = _presenter.SaveForecastFile(textBoxImportFileName.Text, Encoding.UTF8.GetBytes(fileContent.ToString()));
+                () => {
+                        IFormatter formatter = new BinaryFormatter();
+                        byte[] serializedValue;
+                        using (var stream = new MemoryStream())
+                        {
+                            formatter.Serialize(stream, fileContent);
+                            serializedValue = stream.GetBuffer();
+                        }
+                        savedFileId = _presenter.SaveForecastFile(textBoxImportFileName.Text, serializedValue);
                     });
             return savedFileId;
         }

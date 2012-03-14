@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
@@ -22,15 +26,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
+        private readonly IImportForecastsRepository _importForecastsRepository;
         private readonly IJobResultFeedback _feedback;
         private readonly IMessageBroker _messageBroker;
         private readonly IServiceBus _serviceBus;
 
-        public ImportForecastsFileToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
+        public ImportForecastsFileToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,
+            ISkillRepository skillRepository,
+            IJobResultRepository jobResultRepository,
+            IImportForecastsRepository importForecastsRepository,
+            IJobResultFeedback feedback,
+            IMessageBroker messageBroker,
+            IServiceBus serviceBus)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _skillRepository = skillRepository;
             _jobResultRepository = jobResultRepository;
+            _importForecastsRepository = importForecastsRepository;
             _feedback = feedback;
             _messageBroker = messageBroker;
             _serviceBus = serviceBus;
@@ -41,31 +53,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             ForecastsAnalyzeCommandResult commandResult;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                //var jobResult = _jobResultRepository.Get(message.JobId);
-                //LazyLoadingManager.Initialize(jobResult.Details);
-
-                //if (jobResult.FinishedOk)
-                //{
-                //    Logger.InfoFormat("The forecasts import with job id {0} was already processed.", message.JobId);
-                //    return;
-                //}
-
-                //_feedback.SetJobResult(jobResult, _messageBroker);
-                //_feedback.ReportProgress(1, "Starting import...");
-
                 var targetSkill = _skillRepository.Get(message.TargetSkillId);
                 if (targetSkill == null)
                 {
-                    //_feedback.Error("Invalid skill id in the message.");
                     endProcessing(unitOfWork);
                     return;
                 }
                 var timeZone = targetSkill.TimeZone;
-                
-                using (var stream = new StreamReader(@"c:\temp\test.csv"))
+                var forecastFile = _importForecastsRepository.Get(message.JobId);
+                var formatter = new BinaryFormatter();
+                IList<CsvFileRow> fileContent;
+                using (var stream = new MemoryStream(forecastFile.FileContent))
                 {
-                    var reader = new CsvFileReader(stream);
-                    var provider = new ForecastsFileContentProvider(reader, timeZone);
+                    var tempObj = formatter.Deserialize(stream);
+                    fileContent = tempObj as List<CsvFileRow>;
+                    if (fileContent == null)
+                    {
+                        endProcessing(unitOfWork);
+                        return;
+                    }
+                }
+
+                var provider = new ForecastsFileContentProvider(fileContent, timeZone);
                     provider.LoadContent();
                     var analyzeCommand = new ForecastsAnalyzeCommand(provider.Forecasts);
                     commandResult = analyzeCommand.Execute();
@@ -75,7 +84,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                         endProcessing(unitOfWork);
                         return;
                     }
-                }
             }
 
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
@@ -110,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
     public class ForecastsFileContentProvider
     {
-        private readonly CsvFileReader _reader;
+        private readonly IList<CsvFileRow> _fileContent;
         private readonly ICccTimeZoneInfo _timeZone;
         private readonly ICollection<IForecastsFileRow> _forecasts = new List<IForecastsFileRow>();
 
@@ -119,15 +127,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             get { return _forecasts; }
         }
 
-        public ForecastsFileContentProvider(CsvFileReader reader, ICccTimeZoneInfo timeZone)
+        public ForecastsFileContentProvider(IList<CsvFileRow> fileContent, ICccTimeZoneInfo timeZone)
         {
-            _reader = reader;
+            _fileContent = fileContent;
             _timeZone = timeZone;
         }
 
         public void LoadContent()
         {
-            var row = new CsvFileRow();
+            var validators = setupForecastsFileValidators();
+            _fileContent.ForEach(row =>
+                                     {
+                                         if (row.Count < 6 || row.Count > 7)
+                                         {
+                                             throw new ValidationException(
+                                                 "There are more or less columns than expected.");
+                                         }
+                                         for (var i = 0; i < row.Count; i++)
+                                         {
+                                             if (!validators[i].Validate(row[i]))
+                                                 throw new ValidationException(validators[i].ErrorMessage);
+                                         }
+                                         _forecasts.Add(ForecastsFileRowCreator.Create(row, _timeZone));
+                                     });
+        }
+
+        private static List<IForecastsFileValidator> setupForecastsFileValidators()
+        {
             var validators = new List<IForecastsFileValidator>
                                  {
                                      new ForecastsFileSkillNameValidator(),
@@ -138,21 +164,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                      new ForecastsFileDoubleValueValidator(),
                                      new ForecastsFileDoubleValueValidator()
                                  };
-
-            while (_reader.ReadNextRow(row))
-            {
-                if (row.Count < 6 || row.Count > 7)
-                {
-                    throw new ValidationException("There are more or less columns than expected.");
-                }
-                for (var i = 0; i < row.Count; i++)
-                {
-                    if (!validators[i].Validate(row[i]))
-                        throw new ValidationException(validators[i].ErrorMessage);
-                }
-                _forecasts.Add(ForecastsFileRowCreator.Create(row, _timeZone));
-                row.Clear();
-            }
+            return validators;
         }
     }
 

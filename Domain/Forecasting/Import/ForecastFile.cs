@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public class ForecastFile : AggregateRootWithBusinessUnit, IForecastFile
     {
+        private readonly byte[] _fileContent;
+        private readonly string _fileName;
 
-        private byte[] _fileContent;
-        private string _fileName;
-
-        protected ForecastFile()
-        {
-        }
+        protected ForecastFile(){}
 
         public ForecastFile(string filename , byte[] fileContent)
         {
