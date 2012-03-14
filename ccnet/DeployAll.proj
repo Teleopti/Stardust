@@ -16,7 +16,6 @@
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
 		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
-		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
@@ -28,6 +27,7 @@
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
+		<ServerRepo>http://atom:5000/$(Repo)</ServerRepo>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -63,6 +63,10 @@
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
 	</ItemGroup>
 
+	<PropertyGroup>
+	    <!--override, needs to be done after imports I think...-->
+		<DoCodeAnalysis>false</DoCodeAnalysis>
+	</PropertyGroup>
 
 	<ItemGroup>
 
@@ -625,4 +629,15 @@
     <Message Text="Error while building new release. Please check build logs for details!"/>
   </Target>
 
+  <Target Name="TagChangeset" DependsOnTargets="GetVersion">
+  	<Message Text="Setting tag $(CCCVersion) on tip of release branch $(branch)"/>
+	<exec command="hg update -r &quot;$(branch)&quot;" />
+	<exec command="hg revert -a"/>
+	<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
+  </Target>
+  <Target Name="PushTag">
+  	<exec command="hg revert -a"/>
+  	<exec command="hg fetch $(ServerRepo)" /> 
+	<exec command="hg push $(ServerRepo)"/>
+  </Target>
 </Project>
