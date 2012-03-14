@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
@@ -33,9 +34,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
         }
 
 
-        public void SaveForecastFile(string fileName, byte[] fileContent)
+        public Guid SaveForecastFile(string fileName, byte[] fileContent)
         {
-            _model.SaveForecastFileInDb(fileName, fileContent);
+            return _model.SaveForecastFileInDb(fileName, fileContent);
+        }
+
+        public IForecastFile GetForecastFile (Guid id)
+        {
+            return _model.GetForecastFileFromDb(id);
         }
     }
 }

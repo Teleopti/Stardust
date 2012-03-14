@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -36,15 +38,44 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             return _skill.Name;
         }
 
-        public void SaveForecastFileInDb(string fileName, byte[] fileContent)
+        public Guid SaveForecastFileInDb(string fileName, byte[] fileContent)
         {
+            Guid temp = new Guid();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                var forecastFile = new ForecastFile(fileName, fileContent);
                var importForecastRepository = new ImportForecastRepository(uow);
                importForecastRepository.Add(forecastFile);
                IEnumerable<IRootChangeInfo> savedItem = uow.PersistAll();
+               var item = savedItem.FirstOrDefault();
+               if (item != null)temp = extractId(item.Root);
+
             }
+            return temp;
+        }
+
+        public IForecastFile GetForecastFileFromDb(Guid id)
+        {
+            IForecastFile forecastFile;
+            
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var importForecastRepository = new ImportForecastRepository(uow);
+                forecastFile = importForecastRepository.LoadForecastFileFromDb(id);
+            }
+
+            return forecastFile;
+        }
+
+        private Guid extractId(object root)
+        {
+            var entity = root as IEntity;
+            if (entity != null) return entity.Id.GetValueOrDefault();
+
+            var custom = root as ICustomChangedEntity;
+            if (custom != null) return custom.Id.GetValueOrDefault();
+
+            return Guid.Empty;
         }
     }
 }

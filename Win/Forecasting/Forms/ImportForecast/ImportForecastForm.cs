@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ClientProxies;
@@ -150,7 +151,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                                        "ValidationError");
                 }
 
-                _presenter.SaveForecastFile(textBoxImportFileName.Text,Encoding.UTF8.GetBytes(fileContent.ToString()));
+                Guid temp = _presenter.SaveForecastFile(textBoxImportFileName.Text,Encoding.UTF8.GetBytes(fileContent.ToString()));
+
+                IForecastFile test = _presenter.GetForecastFile(temp);
+                
                 var dto = new ImportForecastsFileCommandDto
                 {
                     ImportForecastsMode = getImportForecastOption(),
