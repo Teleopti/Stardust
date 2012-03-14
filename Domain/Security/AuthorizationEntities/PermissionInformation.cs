@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             else culture = null;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argument")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
         public CultureInfo Culture()
         {
             if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture;
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             {
                 return CultureInfo.GetCultureInfo(culture.Value);
             }
-            catch (ArgumentException argumentException)
+            catch (ArgumentException)
             {
                 return Thread.CurrentThread.CurrentCulture;
             }
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             {
                 return CultureInfo.GetCultureInfo(uiCulture.Value);
             }
-            catch (ArgumentException argumentException)
+            catch (ArgumentException)
             {
                 return Thread.CurrentThread.CurrentUICulture;
             }
