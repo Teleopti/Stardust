@@ -135,6 +135,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
             Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value = new string('t', 2002);
         }
 
+		[When(@"I input too long subject request values")]
+		public void WhenIInputTooLongSubjectRequestValues()
+		{
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "01234567890123456789012345678901234567890123456789012345678901234567890123456789#";
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+		}
+
 
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
@@ -167,6 +178,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
             EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.Exists, Is.True);
             EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.MessageTooLong));
         }
+
+		[Then(@"I should see texts describing too long subject error")]
+		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.TheNameIsTooLong));
+		}
 
 
 		[Then(@"I should not see the add text request button")]
