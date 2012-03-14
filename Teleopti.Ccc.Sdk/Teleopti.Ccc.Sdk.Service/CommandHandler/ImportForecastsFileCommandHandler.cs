@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
             {
                 JobId = command.UploadedFileId,
                 TargetSkillId = command.TargetSkillId,
-                OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(
-                    Guid.Empty),
+                OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(Guid.Empty),
                 BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
                 Datasource = identity.DataSource.Application.Name,
                 Timestamp = DateTime.UtcNow,

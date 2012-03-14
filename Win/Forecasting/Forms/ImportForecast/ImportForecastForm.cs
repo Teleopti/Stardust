@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                                 if (!validators[i].Validate(row[i]))
                                     throw new ValidationException(validators[i].ErrorMessage);
                             }
-                            fileContent.Append(row.LineText);
+                            fileContent.Append(row.LineText + Environment.NewLine);
                             row.Clear();
                             rowIndex++;
                         }
