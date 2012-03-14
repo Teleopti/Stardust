@@ -6,11 +6,12 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 ::Get input
-SET SiteName=%1
-SET SitePath=%2
+SET SiteName=%~1
+SET CCC7DB=%~2
+SET AnalyticsDB=%~3
+
 SET DefaultSite="Default Web Site"
 SET DefaultSiteOnly=Default Web Site
-
 
 IF "%SiteName%"=="" CALL :GetInput
 
@@ -20,9 +21,7 @@ ping 127.0.0.1 -n 3 > NUL
 EXIT
 )
 
-IF "%SitePath%"=="" (
 SET SitePath=C:\inetpub\wwwroot\%SiteName%
-)
 
 ::Set variables
 SET AppName=%SiteName%
@@ -50,7 +49,10 @@ powershell /file "%ROOTDIR%\CreateIISWebSiteAndApp.ps1" %Sitepath% %DefaultSite%
 XCOPY "%ROOTDIR%\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web" "%Sitepath%" /Y /R /S
 ::DEL /Q excluded.txt
 
-::note: ON CCNet builds the Nhib file will be deployed by test projects via settings in intratest.ini
+::Copy template nhib and replace databases
+COPY "%ROOTDIR%\WebTest.nhib.xml.template" "%Sitepath%\bin\WebTest.nhib.xml"
+cscript "%ROOTDIR%\replace.vbs" $(CCC7DB) %CCC7DB% "%Sitepath%\bin\WebTest.nhib.xml"
+cscript "%ROOTDIR%\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%Sitepath%\bin\WebTest.nhib.xml"
 
 ::Done
 CLS
