@@ -36,8 +36,8 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 	}
 
 	function _setupError(options) {
-		
-		options.statusCode401 = options.statusCode401 || function () { window.location.href = '/'; };
+
+		options.statusCode401 = options.statusCode401 || function () { window.location.href = _settings.baseUrl; };
 
 		var errorCallback = options.error;
 
