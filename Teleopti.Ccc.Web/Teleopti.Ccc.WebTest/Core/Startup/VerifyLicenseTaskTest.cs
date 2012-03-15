@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var dataSource = mocks.DynamicMock<IDataSource>();
 			var dataSources = new List<IDataSource> { dataSource };
 			var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			var licenseVerifier = new LicenseVerifier(target, uowFactory, null, null);
+			var licenseVerifier = new LicenseVerifier(target, uowFactory, null);
 
 			using (mocks.Record())
 			{

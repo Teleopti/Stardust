@@ -190,6 +190,8 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\ILicenseStatus.cs" />
+    <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
@@ -712,6 +714,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\ILicenseService.cs" />
+    <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />

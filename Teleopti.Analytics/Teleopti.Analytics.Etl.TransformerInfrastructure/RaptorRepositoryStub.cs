@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -642,6 +643,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         public int FillFactRequestedDaysMart(DateTimePeriod period)
         {
             return 0;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+        public ILicenseStatusUpdater LicenseStatusUpdater
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public DateTime GetMaxDateInDimDate()
