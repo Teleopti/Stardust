@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 						;
 				},
 				error: function(r) {
-					if (r.status == 401) {
+					if (r.status == 401 || r.status == 403) {
 						$('#page')
 							.append('Cookie is expired!')
 							;

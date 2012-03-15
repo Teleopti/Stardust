@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
 			{
-				base.HandleUnauthorizedRequest(filterContext);
+				filterContext.Result = new HttpStatusCodeResult(403);
 				return;
 			}
 			var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
