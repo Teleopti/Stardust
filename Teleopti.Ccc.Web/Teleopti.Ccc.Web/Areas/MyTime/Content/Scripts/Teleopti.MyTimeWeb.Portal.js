@@ -194,6 +194,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	return {
 		Init: function (settings) {
 			Teleopti.MyTimeWeb.Ajax.Init(settings);
+			Teleopti.MyTimeWeb.Common.Init(settings);
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();
