@@ -75,16 +75,18 @@ namespace Teleopti.Ccc.WebTest.Filters
 		}
 
 		[Test]
-		public void ShouldReturnHttpUnauthorizedResultWhenAjax()
+		public void ShouldReturnHttp403ForbiddenResultWhenAjax()
 		{
 			var target = new TeleoptiPrincipalAuthorizeAttribute();
 			var filterTester = new FilterTester();
 			filterTester.IsAjaxRequest();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
-			var result = filterTester.InvokeFilter(target);
+			var result = filterTester.InvokeFilter(target) as HttpStatusCodeResult;
 
-			result.Should().Be.OfType<HttpUnauthorizedResult>();
+			result.StatusCode.Should().Be(403); 
+			// 403: forbidden.
+			// 401 has strange behavior on iis7/ie/intranet (or something) and will display a dialog even on ajax requests!
 		}
 		
 	}

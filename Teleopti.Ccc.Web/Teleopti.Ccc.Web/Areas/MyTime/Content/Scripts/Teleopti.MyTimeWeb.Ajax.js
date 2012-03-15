@@ -38,6 +38,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 	function _setupError(options) {
 
 		options.statusCode401 = options.statusCode401 || function () { window.location.href = _settings.baseUrl; };
+		options.statusCode403 = options.statusCode403 || function () { window.location.href = _settings.baseUrl; };
 
 		var errorCallback = options.error;
 
@@ -48,6 +49,10 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 			}
 			if (options.statusCode401 && jqXHR && jqXHR.status == 401) {
 				options.statusCode401(jqXHR, textStatus, errorThrown);
+				return;
+			}
+			if (options.statusCode403 && jqXHR && jqXHR.status == 403) {
+				options.statusCode403(jqXHR, textStatus, errorThrown);
 				return;
 			}
 			if (options.statusCode404 && jqXHR && jqXHR.status == 404) {
