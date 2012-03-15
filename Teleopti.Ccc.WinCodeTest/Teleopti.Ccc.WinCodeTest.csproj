@@ -603,6 +603,7 @@
     <Compile Include="Scheduler\Reporting\StringWidthHandlerTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestSelectionChangedTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestViewModelTest.cs" />
+    <Compile Include="Scheduler\Requests\OldRequestViewPresenterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestAuthorizationTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelFilterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelIsEditableSpecificationTest.cs" />
