@@ -258,7 +258,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
             using (var unitOfWork = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var persons = _model.Meeting.MeetingPersons.Select(m => m.Person);
-                unitOfWork.Reassociate(persons);
+                //Reload So all data is there
+                persons = RepositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(persons);
+                //unitOfWork.Reassociate(persons);
                 var checker = new MeetingParticipantPermittedChecker();
                 if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, TeleoptiPrincipal.Current.PrincipalAuthorization))
                     return;
