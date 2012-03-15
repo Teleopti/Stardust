@@ -198,10 +198,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
 			TestData.AgentRoleWithoutMobileReports = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMobileReports", null);
 			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
-			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "AgentRoleWithoutResReportServiceLevelAndAgentsReady", null);
-			TestData.AdministratorRoleWithEveryoneData =
-				ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
-			
+			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoServiceLevelAndAgentsReady", null);
+			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
 
 			var test = new AvailableData();
 			test.AddAvailableSite(TestData.AnotherSite);
@@ -427,7 +425,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
 			};
 
-			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences = new WorkflowControlSet("Published 100 days, Preference open, allowed standard preferences")
+			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences = new WorkflowControlSet("Published 100 days, Pref. open, Allow std.pref.")
 			{
 				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
 				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
