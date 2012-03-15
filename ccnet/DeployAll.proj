@@ -27,7 +27,7 @@
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
-		<ServerRepo>http://atom:5000/$(Repo)</ServerRepo>
+		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
