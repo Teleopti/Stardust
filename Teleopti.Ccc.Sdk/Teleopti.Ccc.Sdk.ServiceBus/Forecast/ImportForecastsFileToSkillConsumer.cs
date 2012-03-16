@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -53,9 +53,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             ForecastsAnalyzeCommandResult commandResult;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
+                var jobResult = _jobResultRepository.Get(message.JobId);
+                LazyLoadingManager.Initialize(jobResult.Details);
+
+                if (jobResult.FinishedOk)
+                {
+                    Logger.InfoFormat("The import forecasts with job id {0} was already processed.", message.JobId);
+                    return;
+                }
+
+                _feedback.SetJobResult(jobResult, _messageBroker);
+                _feedback.ReportProgress(1, "Starting import...");
+
                 var targetSkill = _skillRepository.Get(message.TargetSkillId);
                 if (targetSkill == null)
                 {
+                    unitOfWork.Clear();
+                    unitOfWork.Merge(jobResult);
+                    _feedback.Error("The specified skill is not exist.");
+                    _feedback.ReportProgress(0, ImportErrorMessage);
                     endProcessing(unitOfWork);
                     return;
                 }
@@ -69,23 +85,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     fileContent = tempObj as List<CsvFileRow>;
                     if (fileContent == null)
                     {
+                        unitOfWork.Clear();
+                        unitOfWork.Merge(jobResult);
+                        _feedback.Error("The uploaded file is empty.");
+                        _feedback.ReportProgress(0, ImportErrorMessage);
                         endProcessing(unitOfWork);
                         return;
                     }
                 }
-
+                _feedback.ReportProgress(1, "Analyzing file content...");
                 var provider = new ForecastsFileContentProvider(fileContent, timeZone);
-                    provider.LoadContent();
-                    var analyzeCommand = new ForecastsAnalyzeCommand(provider.Forecasts);
-                    commandResult = analyzeCommand.Execute();
-                    if (!commandResult.Succeeded)
-                    {
-                        _feedback.Error(commandResult.ErrorMessage);
-                        endProcessing(unitOfWork);
-                        return;
-                    }
+                provider.LoadContent();
+                var analyzeCommand = new ForecastsAnalyzeCommand(provider.Forecasts);
+                commandResult = analyzeCommand.Execute();
+                if (!commandResult.Succeeded)
+                {
+                    _feedback.Error(commandResult.ErrorMessage);
+                    _feedback.ReportProgress(0, ImportErrorMessage);
+                    endProcessing(unitOfWork);
+                    return;
+                }
+                _feedback.ReportProgress(2, "Analyzing file content done.");
             }
-
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
             foreach (var date in commandResult.Period.DayCollection())
             {
@@ -105,8 +126,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     ImportMode = message.ImportMode
                 });
             }
+            var incremental = (int)Math.Floor(93.0/listOfMessages.Count);
+            listOfMessages.ForEach(m => m.IncreaseProgressBy = incremental);
+            listOfMessages.Last().IncreaseProgressBy = 93 - incremental*(listOfMessages.Count - 1);
             listOfMessages.ForEach(m => _serviceBus.Send(m));
             _unitOfWorkFactory = null;
+        }
+
+        private static string ImportErrorMessage
+        {
+            get { return string.Format(CultureInfo.InvariantCulture, "An error occurred while running import forecasts."); }
         }
 
         private void endProcessing(IUnitOfWork unitOfWork)
@@ -179,7 +208,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         public ForecastsAnalyzeCommandResult Execute()
         {
-            var result = new ForecastsAnalyzeCommandResult {ForecastFileDictionary = new ForecastFileDictionary()};
+            var result = new ForecastsAnalyzeCommandResult { ForecastFileDictionary = new ForecastFileDictionary() };
             var firstRow = _forecasts.First();
             var intervalLengthTicks = firstRow.LocalDateTimeTo.Subtract(firstRow.LocalDateTimeFrom).Ticks;
             var skillName = firstRow.SkillName;

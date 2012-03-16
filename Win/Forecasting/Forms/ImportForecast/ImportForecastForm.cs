@@ -111,12 +111,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             var fileContent = new List<CsvFileRow>();
             using (var stream = new StreamReader(textBoxImportFileName.Text))
             {
-                var reader = new CsvFileReader(stream);
-                var row = new CsvFileRow();
                 var rowNumber = 1;
-                var validators = setUpForecastsFileValidators();
                 try
                 {
+                    if (stream.Peek() == -1) throw new ValidationException("File is empty.");
+                    var reader = new CsvFileReader(stream);
+                    var row = new CsvFileRow();
+                    var validators = setUpForecastsFileValidators();
+                    
                     using (PerformanceOutput.ForOperation("Validate forecasts import file."))
                     {
                         while (reader.ReadNextRow(row))
@@ -129,26 +131,29 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                             rowNumber++;
                         }
                     }
-                    MessageBoxAdv.Show("Validation succeeded.");
                 }
                 catch (ValidationException exception)
                 {
-                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message),"ValidationError");
+                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), "ValidationError");
                 }
+                var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid() });
+                statusDialog.Show(this);
+                statusDialog.SetProgress(1);
+                statusDialog.SetMessage("Uploading file:" + textBoxImportFileName.Text + " to server...");
                 var savedFileId = saveFileToServer(fileContent);
                 if (savedFileId == null)
                 {
                     MessageBoxAdv.Show("Error occured when trying to import file.");
                     return;
                 }
+                statusDialog.SetProgress(2);
+                statusDialog.SetMessage(textBoxImportFileName.Text + " uploaded.");
                 var dto = new ImportForecastsFileCommandDto
                 {
                     ImportForecastsMode = getImportForecastOption(),
                     UploadedFileId = savedFileId.GetValueOrDefault(),
                     TargetSkillId = _skill.Id.GetValueOrDefault()
                 };
-                var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
-                statusDialog.Show(this);
                 statusDialog.SetJobStatusId(executeCommand(dto));
             }
         }
@@ -212,15 +217,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             }
             catch (TimeoutException timeoutException)
             {
-                Logger.Error("Import forecasts command can't reach Sdk due to a timeout.", timeoutException);
+                Logger.Error(string.Concat(commandDto.GetType(), " can't reach Sdk due to a timeout."), timeoutException);
             }
             catch (CommunicationException exception)
             {
-                Logger.Error("Import forecasts command can't reach Sdk.", exception);
+                Logger.Error(string.Concat(commandDto.GetType(), " can't reach Sdk."), exception);
             }
             catch (Exception exception)
             {
-                Logger.Error("Import forecasts command notification error.", exception);
+                Logger.Error(string.Concat(commandDto.GetType(), " notification error."), exception);
             }
             finally
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -139,6 +138,5 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	public class JobStatusModel
 	{
 		public Guid JobStatusId { get; set; }
-        public CommandDto CommandDto { get; set; }
 	}
 }

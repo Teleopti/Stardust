@@ -1142,9 +1142,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                             {
                                 pages.SaveSettings();
                                 var statusDialog =
-                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty});
                                 statusDialog.Show(this);
-                                statusDialog.SetJobStatusId(executeExportCommand(dto));
+                                statusDialog.SetJobStatusId(executeCommand(dto));
                             }
                             catch (OptimisticLockException)
                             {
@@ -1161,8 +1161,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private Guid? executeExportCommand(CommandDto commandDto)
+        private Guid? executeCommand(CommandDto commandDto)
         {
             var sdkAuthentication = new SdkAuthentication();
             sdkAuthentication.SetSdkAuthenticationHeader();
@@ -1176,15 +1175,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             catch (TimeoutException timeoutException)
             {
-                _logger.Error("Export multisite skill to skill command can't reach Sdk due to a timeout.", timeoutException);
+                _logger.Error(string.Concat(commandDto.GetType()," can't reach Sdk due to a timeout."), timeoutException);
             }
             catch (CommunicationException exception)
             {
-                _logger.Error("Export multisite skill to skill command can't reach Sdk.", exception);
+                _logger.Error(string.Concat(commandDto.GetType(), " can't reach Sdk."), exception);
             }
             catch (Exception exception)
             {
-                _logger.Error("Export multisite skill to skill command notification error.", exception);
+                _logger.Error(string.Concat(commandDto.GetType()," notification error."), exception);
             }
             finally
             {

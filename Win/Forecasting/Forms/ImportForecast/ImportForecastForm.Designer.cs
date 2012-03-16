@@ -35,7 +35,7 @@
             this.lblSkillNameColon = new System.Windows.Forms.Label();
             this.txtSkillName = new System.Windows.Forms.Label();
             this.gradientPanelImportForecast = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAdvClose = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonAdvImport = new Syncfusion.Windows.Forms.ButtonAdv();
             this.lblImportFileName = new System.Windows.Forms.Label();
             this.textBoxImportFileName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
@@ -76,7 +76,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.03279F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.96721F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 185F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 187F));
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblSkillNameColon, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtSkillName, 1, 0);
@@ -104,7 +104,7 @@
             // radioButtonImportStaffing
             // 
             this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(304, 28);
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(302, 28);
             this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
             this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
             this.radioButtonImportStaffing.TabIndex = 1;
@@ -145,7 +145,7 @@
             this.gradientPanelImportForecast.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelImportForecast.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tableLayoutPanel1.SetColumnSpan(this.gradientPanelImportForecast, 3);
-            this.gradientPanelImportForecast.Controls.Add(this.buttonAdvCancel);
+            this.gradientPanelImportForecast.Controls.Add(this.buttonAdvClose);
             this.gradientPanelImportForecast.Controls.Add(this.buttonAdvImport);
             this.gradientPanelImportForecast.ForeColor = System.Drawing.SystemColors.ControlText;
             this.gradientPanelImportForecast.Location = new System.Drawing.Point(0, 106);
@@ -154,17 +154,17 @@
             this.gradientPanelImportForecast.Size = new System.Drawing.Size(487, 36);
             this.gradientPanelImportForecast.TabIndex = 1;
             // 
-            // buttonAdvCancel
+            // buttonAdvClose
             // 
-            this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonAdvCancel.Location = new System.Drawing.Point(375, 7);
-            this.buttonAdvCancel.Name = "buttonAdvCancel";
-            this.buttonAdvCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-            this.buttonAdvCancel.Size = new System.Drawing.Size(87, 23);
-            this.buttonAdvCancel.TabIndex = 1;
-            this.buttonAdvCancel.Text = "xxCancel";
-            this.buttonAdvCancel.UseVisualStyle = true;
+            this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonAdvClose.Location = new System.Drawing.Point(375, 7);
+            this.buttonAdvClose.Name = "buttonAdvClose";
+            this.buttonAdvClose.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+            this.buttonAdvClose.Size = new System.Drawing.Size(87, 23);
+            this.buttonAdvClose.TabIndex = 1;
+            this.buttonAdvClose.Text = "xxClose";
+            this.buttonAdvClose.UseVisualStyle = true;
             // 
             // buttonAdvImport
             // 
@@ -198,7 +198,7 @@
             this.textBoxImportFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxImportFileName.Location = new System.Drawing.Point(117, 80);
             this.textBoxImportFileName.Name = "textBoxImportFileName";
-            this.textBoxImportFileName.Size = new System.Drawing.Size(181, 20);
+            this.textBoxImportFileName.Size = new System.Drawing.Size(179, 20);
             this.textBoxImportFileName.TabIndex = 3;
             // 
             // buttonAdvBrowseFile
@@ -207,7 +207,7 @@
             this.buttonAdvBrowseFile.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvBrowseFile.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvBrowseFile.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(304, 80);
+            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(302, 80);
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 4;
@@ -218,7 +218,7 @@
             // radioButtonImportWLAndStaffing
             // 
             this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(304, 53);
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(302, 53);
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
             this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 2;
@@ -229,7 +229,7 @@
             // 
             this.radioButtonImportWorkload.AutoSize = true;
             this.radioButtonImportWorkload.Checked = true;
-            this.radioButtonImportWorkload.Location = new System.Drawing.Point(304, 3);
+            this.radioButtonImportWorkload.Location = new System.Drawing.Point(302, 3);
             this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
             this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
             this.radioButtonImportWorkload.TabIndex = 0;
@@ -268,7 +268,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.CancelButton = this.buttonAdvCancel;
+            this.CancelButton = this.buttonAdvClose;
             this.ClientSize = new System.Drawing.Size(499, 183);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.ribbonControlAdvFixed1);
@@ -300,7 +300,7 @@
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvBrowseFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelImportForecast;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvClose;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvImport;
         private System.Windows.Forms.RadioButton radioButtonImportWorkload;
         private System.Windows.Forms.RadioButton radioButtonImportWLAndStaffing;
