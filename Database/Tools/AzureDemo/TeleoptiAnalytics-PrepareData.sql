@@ -7,31 +7,40 @@ set ansi_nulls on
 set concat_null_yields_null on
 set cursor_close_on_commit off
 
-	-- Delete data from bridge and other tables
-	DELETE FROM mart.bridge_queue_workload
-	DELETE FROM mart.bridge_skillset_skill
-	DELETE FROM mart.permission_report
-	DELETE FROM mart.scorecard_kpi
-	DELETE FROM dbo.aspnet_Membership
-	DELETE FROM dbo.aspnet_Users
-	DELETE FROM mart.bridge_acd_login_person
-	DELETE FROM mart.bridge_group_page_person
-	TRUNCATE TABLE mart.bridge_time_zone
-	
-    -- Delete data from fact tables
-	TRUNCATE TABLE mart.fact_schedule
-	TRUNCATE TABLE mart.fact_queue
-	TRUNCATE TABLE mart.fact_forecast_workload
-	TRUNCATE TABLE mart.fact_schedule_forecast_skill
-	TRUNCATE TABLE mart.fact_agent
-	TRUNCATE TABLE mart.fact_agent_queue
-	TRUNCATE TABLE mart.fact_kpi_targets_team
-	TRUNCATE TABLE mart.fact_schedule_deviation
-	TRUNCATE TABLE mart.fact_schedule_day_count
-	TRUNCATE TABLE mart.fact_schedule_preference
+-- Delete data from bridge and other tables
+DELETE FROM mart.bridge_queue_workload
+DELETE FROM mart.bridge_skillset_skill
+DELETE FROM mart.permission_report
+DELETE FROM mart.scorecard_kpi
+DELETE FROM dbo.aspnet_Membership
+DELETE FROM dbo.aspnet_Users
+DELETE FROM mart.bridge_acd_login_person
+DELETE FROM mart.bridge_group_page_person
+TRUNCATE TABLE mart.bridge_time_zone
 
-	--this unused time zone makes ETL to load bridge_time_zone over and over again
-	delete from mart.dim_time_zone where time_zone_code = 'GMT Standard Time'
+-- Delete data from fact tables
+TRUNCATE TABLE mart.fact_schedule
+TRUNCATE TABLE mart.fact_queue
+TRUNCATE TABLE mart.fact_forecast_workload
+TRUNCATE TABLE mart.fact_schedule_forecast_skill
+TRUNCATE TABLE mart.fact_agent
+TRUNCATE TABLE mart.fact_agent_queue
+TRUNCATE TABLE mart.fact_kpi_targets_team
+TRUNCATE TABLE mart.fact_schedule_deviation
+TRUNCATE TABLE mart.fact_schedule_day_count
+TRUNCATE TABLE mart.fact_schedule_preference
+
+--this unused time zone makes ETL to load bridge_time_zone over and over again
+delete from mart.dim_time_zone where time_zone_code = 'GMT Standard Time'
+
+--Insert ETL properties
+DELETE [mart].[sys_configuration]
+exec mart.sys_configuration_save @key=N'Culture',@value=1053
+exec mart.sys_configuration_save @key=N'IntervalLengthMinutes',@value=15
+exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standard Time'
+
+--Delete All old schedules
+EXEC mart.etl_job_delete_schedule_All
 
 --update MsgBroker
 update [msg].configuration
@@ -43,11 +52,11 @@ set Address='teleopticcc-demo.cloudapp.net'
 where AddressId= 1
 
 update msg.configuration
-set ConfigurationValue='9080'
+set ConfigurationValue='10000'
 where ConfigurationId = 1
 
 update msg.Address
-set Port='9090'
+set Port='10000'
 where AddressId= 1
 
 --Get Agg Data into Analytics

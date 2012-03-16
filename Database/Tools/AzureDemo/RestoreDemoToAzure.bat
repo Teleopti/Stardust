@@ -1,14 +1,9 @@
 @ECHO off
 COLOR A
 SET version=%1
-
-IF "%version%"=="" SET ERRORLEV=1 & GOTO :error
-
-::-------------
 set /A ERRORLEV=0
 set SOURCEUSER=bcpUser
 set SOURCEPWD=abc123456
-
 set PREVIOUSBUILD=\\hebe\Installation\PreviousBuilds
 set DESTSERVER=s8v4m110k9.database.windows.net
 set DESTSERVERPREFIX=s8v4m110k9
@@ -19,14 +14,19 @@ set SRCANALYTICS=TeleoptiAnalytics_Demo
 set DESTCCC7=Demo_TeleoptiCCC7
 set SRCCCC7=TeleoptiCCC7_Demo
 set SRCAGG=TeleoptiCCC7Agg_Demo
-
 set AZUREADMINUSER=teleopti
 set AZUREADMINPWD=T3l30pt1
-
-::--------------
 set workingdir=c:\temp\AzureRestore
-SET ROOTDIR=%~dp0
-SET ROOTDIR=%ROOTDIR:~0,-1%
+set ROOTDIR=%~dp0
+set ROOTDIR=%ROOTDIR:~0,-1%
+
+IF "%version%"=="" (
+SET /P version=Provide exact CCC version to copy to SQL Azure: 
+)
+
+IF "%version%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF NOT EXIST "%PREVIOUSBUILD%\%version%" SET ERRORLEV=33 & GOTO :error
 
 ::--------
 ::Get source files for this version
@@ -196,7 +196,7 @@ IF %ERRORLEV% EQU 29 ECHO Error applying Crosss DB views
 IF %ERRORLEV% EQU 30 ECHO Error adding ETL Stuff to Azure
 IF %ERRORLEV% EQU 31 ECHO Error running Azure Analytics: AzureAnalyticsPreBcp.sql
 IF %ERRORLEV% EQU 32 ECHO Error running Azure Analytics: AzureAnalyticsPostBcp.sql
-
+IF %ERRORLEV% EQU 33 ECHO The Provided version is not built yet & EXPLORER "%PREVIOUSBUILD%\%version%"
 
 ECHO.
 ECHO --------
