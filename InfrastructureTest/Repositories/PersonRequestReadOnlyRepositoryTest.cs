@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [TestFixture, Category("LongRunning")]
     public class PersonRequestReadOnlyRepositoryTest : DatabaseTest
     {
-        private IPersonRequestReadOnlyRepository _target;
+        private IRequestHistoryReadOnlyRepository _target;
 
         [Test]
         public void ShouldLoadRequestWithoutCrash()
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             UnitOfWork.PersistAll();
             SkipRollback();
 
-            _target = new PersonRequestReadOnlyRepository(UnitOfWorkFactory.Current);
+            _target = new RequestHistoryReadOnlyRepository(UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork());
             var result = _target.LoadOnPerson(new Guid(),1, 10 );
             Assert.That(result.Count, Is.EqualTo(0));
         }

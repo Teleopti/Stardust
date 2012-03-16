@@ -7829,7 +7829,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                 allowanceView.Show(this);
             }
         }
-   
+
+        private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
+        {
+            var id = new Guid();
+            var defaultRequest = _requestView.SelectedAdapters().Count > 0
+                                     ? _requestView.SelectedAdapters().First().PersonRequest
+                                     : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+            if (defaultRequest != null)
+                id = defaultRequest.Person.Id.Value;
+
+            var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();
+            presenter.ShowHistory(id, _schedulerState.FilteredPersonDictionary.Values);
+        }
+
         private void toolStripExTags_SizeChanged(object sender, EventArgs e)
         {
             toolStripSplitButtonChangeTag.Width = toolStripComboBoxAutoTag.Width;

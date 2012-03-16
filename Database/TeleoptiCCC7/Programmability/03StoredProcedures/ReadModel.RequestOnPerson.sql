@@ -3,7 +3,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].
 DROP PROCEDURE [ReadModel].[RequestOnPerson]
 GO
 
--- exec [ReadModel].RequestOnPerson '4A7A2ACE-436A-4A47-96FF-9CC300CE6ACF', 1, 10
+-- exec [ReadModel].RequestOnPerson '4A7A2ACE-436A-4A47-96FF-9CC300CE6ACF', 1, 11
 -- =============================================
 -- Author:		Ola
 -- Create date: 2012-03-15
@@ -43,7 +43,7 @@ SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNu
 a.Name AS Info, 'ABS' as RequestType, 0 as ShiftTradeStatus, 
 p2.FirstName as SavedByFirstName  , p2.LastName AS SavedByLastName, p2.EmploymentNumber as SavedByEmploymentNumber
 FROM PersonRequest pr INNER JOIN Person p
-ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus <> 0
+ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
 INNER JOIN Person p2 ON p2.Id = pr.UpdatedBy
 INNER JOIN AbsenceRequest ar ON ar.Request = r.Id
@@ -55,7 +55,7 @@ UNION
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
 '', 'TEXT' as RequestType, 0 as ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber
 FROM PersonRequest pr INNER JOIN Person p
-ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus <> 0
+ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
 INNER JOIN Person p2 ON p2.Id = pr.UpdatedBy
 INNER JOIN TextRequest tr ON tr.Request = r.Id
@@ -66,7 +66,7 @@ UNION
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
 '' , 'TRADE' as RequestType, ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber
 FROM PersonRequest pr INNER JOIN Person p
-ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus <> 0
+ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
 INNER JOIN Person p2 ON p2.Id = pr.UpdatedBy
 INNER JOIN ShiftTradeRequest tr ON tr.Request = r.Id

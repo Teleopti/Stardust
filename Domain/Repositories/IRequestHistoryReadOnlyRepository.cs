@@ -3,19 +3,20 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    public interface IPersonRequestReadOnlyRepository
+    public interface IRequestHistoryReadOnlyRepository
     {
-        IList<IPersonRequestLightWeight> LoadOnPerson(Guid personId, int startRow, int endRow);
+        IList<IRequestHistoryLightWeight> LoadOnPerson(Guid personId, int startRow, int endRow);
     }
 
-    public interface IPersonRequestLightWeight
+    public interface IRequestHistoryLightWeight
     {
+        int TotalCount { get; set; }
          Guid Id { get; set; }
          DateTime StartDateTime { get; set; }
          DateTime EndDateTime { get; set; }
          string FirstName { get; set; }
          string LastName { get; set; }
-         string EmplyomentNumber { get; set; }
+         string EmploymentNumber { get; set; }
          int RequestStatus { get; set; }
          string Subject { get; set; }
          string Message { get; set; }
@@ -25,7 +26,11 @@ namespace Teleopti.Ccc.Domain.Repositories
          int ShiftTradeStatus { get; set; }
          string SavedByFirstName { get; set; }
          string SavedByLastName { get; set; }
-         string SavedByEmplyomentNumber { get; set; }
+         string SavedByEmploymentNumber { get; set; }
+         Int64 RowNumber { get; set; }
+         string RequestStatusText { get; }
+         string RequestTypeText { get; }
+        
     }
     
 }
