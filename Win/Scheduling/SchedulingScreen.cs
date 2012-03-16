@@ -1132,7 +1132,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			cancelAllBackgroundWorkers();
 
-			if (_forceClose)
+			if (_forceClose || _schedulerState == null)
 				return;
 
 			int res = checkIfUserWantsToSaveUnsavedData();
@@ -6496,110 +6496,177 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlersOff()
 		{
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
-			_schedulerMessageBrokerHandler.StopListen();
-			_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= _schedulerMessageBrokerHandler_RequestDeletedFromBroker;
-			_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker;
 
-			_schedulerMessageBrokerHandler.Dispose();
-			_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
-			_requestPresenter = null; // referens till SchedulingScreen
+            if (_schedulerMessageBrokerHandler != null)
+            {
+                _schedulerMessageBrokerHandler.StopListen();
+                _schedulerMessageBrokerHandler.RequestDeletedFromBroker -=
+                    _schedulerMessageBrokerHandler_RequestDeletedFromBroker;
+                _schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -=
+                    _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker;
+
+                _schedulerMessageBrokerHandler.Dispose();
+                _schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
+            }
+
+		    _requestPresenter = null; // referens till SchedulingScreen
 			_optimizationHelperWin = null;
 
-			backgroundWorkerLoadData.DoWork -= backgroundWorkerLoadData_DoWork;
-			backgroundWorkerLoadData.RunWorkerCompleted -= backgroundWorkerLoadData_RunWorkerCompleted;
-			backgroundWorkerLoadData.ProgressChanged -= backgroundWorkerLoadData_ProgressChanged;
+            if (backgroundWorkerLoadData != null)
+            {
+                backgroundWorkerLoadData.DoWork -= backgroundWorkerLoadData_DoWork;
+                backgroundWorkerLoadData.RunWorkerCompleted -= backgroundWorkerLoadData_RunWorkerCompleted;
+                backgroundWorkerLoadData.ProgressChanged -= backgroundWorkerLoadData_ProgressChanged;
+            }
 
-			_backgroundWorkerDelete.DoWork -= _backgroundWorkerDelete_DoWork;
-			_backgroundWorkerDelete.RunWorkerCompleted -= _backgroundWorkerDelete_RunWorkerCompleted;
+            if (_backgroundWorkerDelete != null)
+            {
+                _backgroundWorkerDelete.DoWork -= _backgroundWorkerDelete_DoWork;
+                _backgroundWorkerDelete.RunWorkerCompleted -= _backgroundWorkerDelete_RunWorkerCompleted;
+            }
 
-			_backgroundWorkerResourceCalculator.DoWork -= _backgroundWorkerResourceCalculator_DoWork;
-			_backgroundWorkerResourceCalculator.ProgressChanged -= _backgroundWorkerResourceCalculator_ProgressChanged;
-			_backgroundWorkerResourceCalculator.RunWorkerCompleted -= _backgroundWorkerResourceCalculator_RunWorkerCompleted;
+            if (_backgroundWorkerResourceCalculator != null)
+            {
+                _backgroundWorkerResourceCalculator.DoWork -= _backgroundWorkerResourceCalculator_DoWork;
+                _backgroundWorkerResourceCalculator.ProgressChanged -=
+                    _backgroundWorkerResourceCalculator_ProgressChanged;
+                _backgroundWorkerResourceCalculator.RunWorkerCompleted -=
+                    _backgroundWorkerResourceCalculator_RunWorkerCompleted;
+            }
 
-			_backgroundWorkerValidatePersons.RunWorkerCompleted -= _backgroundWorkerValidatePersons_RunWorkerCompleted;
-			_backgroundWorkerValidatePersons.DoWork -= _backgroundWorkerValidatePersons_DoWork;
+            if (_backgroundWorkerValidatePersons != null)
+            {
+                _backgroundWorkerValidatePersons.RunWorkerCompleted -=
+                    _backgroundWorkerValidatePersons_RunWorkerCompleted;
+                _backgroundWorkerValidatePersons.DoWork -= _backgroundWorkerValidatePersons_DoWork;
+            }
 
-			_backgroundWorkerScheduling.DoWork -= _backgroundWorkerScheduling_DoWork;
-			_backgroundWorkerScheduling.ProgressChanged -= _backgroundWorkerScheduling_ProgressChanged;
-			_backgroundWorkerScheduling.RunWorkerCompleted -= _backgroundWorkerScheduling_RunWorkerCompleted;
+            if (_backgroundWorkerScheduling != null)
+            {
+                _backgroundWorkerScheduling.DoWork -= _backgroundWorkerScheduling_DoWork;
+                _backgroundWorkerScheduling.ProgressChanged -= _backgroundWorkerScheduling_ProgressChanged;
+                _backgroundWorkerScheduling.RunWorkerCompleted -= _backgroundWorkerScheduling_RunWorkerCompleted;
+            }
 
-			_backgroundWorkerOptimization.DoWork -= _backgroundWorkerOptimization_DoWork;
-			_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
+            if (_backgroundWorkerOptimization != null)
+            {
+                _backgroundWorkerOptimization.DoWork -= _backgroundWorkerOptimization_DoWork;
+                _backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
+            }
 
-			if (SchedulerState != null && SchedulerState.Schedules != null)
+		    if (SchedulerState != null && SchedulerState.Schedules != null)
 				SchedulerState.Schedules.PartModified -= _schedules_PartModified;
 			if (SchedulerState != null && SchedulerState.SchedulingResultState != null)
 				SchedulerState.SchedulingResultState.ResourcesChanged -= _optimizationHelper_ResourcesChanged;
 
-			_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
-			schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
-			_grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
-			_grid.GotFocus -= grid_GotFocus;
-			_grid.SelectionChanged -= grid_SelectionChanged;
-			_grid.StartAutoScrolling -= _grid_StartAutoScrolling;
-			_grid.ScrollControlMouseUp -= _grid_ScrollControlMouseUp;
-			//_restrictionView.RestrictionGrid.SelectionChanged -= grid_SelectionChanged;
-			_grid.Click -= grid_Click;
-			wpfShiftEditor1.ShiftUpdated -= wpfShiftEditor1_ShiftUpdated;
-			wpfShiftEditor1.CommitChanges -= wpfShiftEditor1_CommitChanges;
-			wpfShiftEditor1.EditMeeting -= wpfShiftEditor1_EditMeeting;
-			wpfShiftEditor1.RemoveParticipant -= wpfShiftEditor1_RemoveParticipant;
-			wpfShiftEditor1.DeleteMeeting -= wpfShiftEditor1_DeleteMeeting;
-			wpfShiftEditor1.CreateMeeting -= wpfShiftEditor1_CreateMeeting;
+            if(_schedulerMeetingHelper != null) _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
+            if (schedulerSplitters1 != null) schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
+            if (_grid != null)
+            {
+                _grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
+                _grid.GotFocus -= grid_GotFocus;
+                _grid.SelectionChanged -= grid_SelectionChanged;
+                _grid.StartAutoScrolling -= _grid_StartAutoScrolling;
+                _grid.ScrollControlMouseUp -= _grid_ScrollControlMouseUp;
 
-			wpfShiftEditor1.AddAbsence -= wpfShiftEditor_AddAbsence;
-			wpfShiftEditor1.AddActivity -= wpfShiftEditor_AddActivity;
-			wpfShiftEditor1.AddOvertime -= wpfShiftEditor_AddOvertime;
-			wpfShiftEditor1.AddPersonalShift -= wpfShiftEditor_AddPersonalShift;
+                //_restrictionView.RestrictionGrid.SelectionChanged -= grid_SelectionChanged;
+                _grid.Click -= grid_Click;
+            }
 
-			restrictionEditor.RestrictionChanged -= restrictionEditor_RestrictionChanged;
-			notesEditor.NotesChanged -= notesEditor_NotesChanged;
-			notesEditor.PublicNotesChanged -= notesEditor_PublicNotesChanged;
+            if (wpfShiftEditor1 != null)
+            {
+                wpfShiftEditor1.ShiftUpdated -= wpfShiftEditor1_ShiftUpdated;
+                wpfShiftEditor1.CommitChanges -= wpfShiftEditor1_CommitChanges;
+                wpfShiftEditor1.EditMeeting -= wpfShiftEditor1_EditMeeting;
+                wpfShiftEditor1.RemoveParticipant -= wpfShiftEditor1_RemoveParticipant;
+                wpfShiftEditor1.DeleteMeeting -= wpfShiftEditor1_DeleteMeeting;
+                wpfShiftEditor1.CreateMeeting -= wpfShiftEditor1_CreateMeeting;
+
+                wpfShiftEditor1.AddAbsence -= wpfShiftEditor_AddAbsence;
+                wpfShiftEditor1.AddActivity -= wpfShiftEditor_AddActivity;
+                wpfShiftEditor1.AddOvertime -= wpfShiftEditor_AddOvertime;
+                wpfShiftEditor1.AddPersonalShift -= wpfShiftEditor_AddPersonalShift;
+            }
+
+            if(restrictionEditor != null) restrictionEditor.RestrictionChanged -= restrictionEditor_RestrictionChanged;
+
+            if (notesEditor != null)
+            {
+                notesEditor.NotesChanged -= notesEditor_NotesChanged;
+                notesEditor.PublicNotesChanged -= notesEditor_PublicNotesChanged;
+            }
 
 
-			if (_requestView != null)
+		    if (_requestView != null)
 			{
 				_requestView.PropertyChanged -= _requestView_PropertyChanged;
 			}
-			_skillDayGridControl.GotFocus -= skillDayGridControl_GotFocus;
-			_skillIntradayGridControl.GotFocus -= skillIntradayGridControl_GotFocus;
 
-			_skillDayGridControl.SelectionChanged -= skillDayGridControl_SelectionChanged;
-			_skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
+            if(_skillDayGridControl != null) _skillDayGridControl.GotFocus -= skillDayGridControl_GotFocus;
+			if(_skillIntradayGridControl != null) _skillIntradayGridControl.GotFocus -= skillIntradayGridControl_GotFocus;
 
-			_gridrowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettings_LineInChartSettingsChanged;
-			_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSetting_LineInChartEnabledChanged;
-			_chartControlSkillData.ChartRegionMouseEnter -= chartControlSkillData_ChartRegionMouseEnter;
-			_chartControlSkillData.ChartRegionMouseHover -= chartControlSkillData_ChartRegionMouseHover;
-			_chartControlSkillData.ChartRegionClick -= chartControlSkillData_ChartRegionClick;
+            if (_skillDayGridControl != null) _skillDayGridControl.SelectionChanged -= skillDayGridControl_SelectionChanged;
+            if (_skillIntradayGridControl != null) _skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
 
-			_clipboardControl.CutSpecialClicked -= _clipboardControl_CutSpecialClicked;
-			_clipboardControl.CutClicked -= _clipboardControl_CutClicked;
+            if (_gridrowInChartSettingButtons != null)
+            {
+                _gridrowInChartSettingButtons.LineInChartSettingsChanged -=
+                    gridlinesInChartSettings_LineInChartSettingsChanged;
+                _gridrowInChartSettingButtons.LineInChartEnabledChanged -=
+                    gridrowInChartSetting_LineInChartEnabledChanged;
+            }
 
-			_clipboardControl.PasteSpecialClicked -= _clipboardControl_PasteSpecialClicked;
-			_clipboardControl.PasteClicked -= _clipboardControl_PasteClicked;
+            if (_chartControlSkillData != null)
+            {
+                _chartControlSkillData.ChartRegionMouseEnter -= chartControlSkillData_ChartRegionMouseEnter;
+                _chartControlSkillData.ChartRegionMouseHover -= chartControlSkillData_ChartRegionMouseHover;
+                _chartControlSkillData.ChartRegionClick -= chartControlSkillData_ChartRegionClick;
+            }
 
-			_clipboardControl.CopySpecialClicked -= _clipboardControl_CopySpecialClicked;
-			_clipboardControl.CopyClicked -= _clipboardControl_CopyClicked;
+            if (_clipboardControl != null)
+            {
+                _clipboardControl.CutSpecialClicked -= _clipboardControl_CutSpecialClicked;
+                _clipboardControl.CutClicked -= _clipboardControl_CutClicked;
 
-			_undoRedo.ChangedHandler -= undoRedo_Changed;
+                _clipboardControl.PasteSpecialClicked -= _clipboardControl_PasteSpecialClicked;
+                _clipboardControl.PasteClicked -= _clipboardControl_PasteClicked;
 
-			contextMenuViews.Opened -= contextMenuViews_Opened;
-			contextMenuViews.Opening -= contextMenuViews_Opening;
+                _clipboardControl.CopySpecialClicked -= _clipboardControl_CopySpecialClicked;
+                _clipboardControl.CopyClicked -= _clipboardControl_CopyClicked;
+            }
 
-			#region eventaggregator
-			_eventAggregator.GetEvent<GenericEvent<HandlePersonRequestSelectionChanged>>().Unsubscribe(requestSelectionChanged);
-			_eventAggregator.GetEvent<GenericEvent<ShowRequestDetailsView>>().Unsubscribe(showRequestDetailsView);
-			_eventAggregator.GetEvent<GenericEvent<ApproveRequestFromRequestDetailsView>>().Unsubscribe(approveRequestFromRequestDetailsView);
-			_eventAggregator.GetEvent<GenericEvent<DenyRequestFromRequestDetailsView>>().Unsubscribe(denyRequestFromRequestDetailsView);
-			_eventAggregator.GetEvent<GenericEvent<ReplyRequestFromRequestDetailsView>>().Unsubscribe(replyRequestFromRequestDetailsView);
-			_eventAggregator.GetEvent<GenericEvent<ReplyAndApproveRequestFromRequestDetailsView>>().Unsubscribe(replyAndApproveRequestFromRequestDetailsView);
-			_eventAggregator.GetEvent<GenericEvent<ReplyAndDenyRequestFromRequestDetailsView>>().Unsubscribe(replyAndDenyRequestFromRequestDetailsView);
-			#endregion
+            if(_undoRedo != null) _undoRedo.ChangedHandler -= undoRedo_Changed;
+
+            if (contextMenuViews != null)
+            {
+                contextMenuViews.Opened -= contextMenuViews_Opened;
+                contextMenuViews.Opening -= contextMenuViews_Opening;
+            }
+
+            if (_eventAggregator != null)
+            {
+                #region eventaggregator
+
+                _eventAggregator.GetEvent<GenericEvent<HandlePersonRequestSelectionChanged>>().Unsubscribe(
+                    requestSelectionChanged);
+                _eventAggregator.GetEvent<GenericEvent<ShowRequestDetailsView>>().Unsubscribe(showRequestDetailsView);
+                _eventAggregator.GetEvent<GenericEvent<ApproveRequestFromRequestDetailsView>>().Unsubscribe(
+                    approveRequestFromRequestDetailsView);
+                _eventAggregator.GetEvent<GenericEvent<DenyRequestFromRequestDetailsView>>().Unsubscribe(
+                    denyRequestFromRequestDetailsView);
+                _eventAggregator.GetEvent<GenericEvent<ReplyRequestFromRequestDetailsView>>().Unsubscribe(
+                    replyRequestFromRequestDetailsView);
+                _eventAggregator.GetEvent<GenericEvent<ReplyAndApproveRequestFromRequestDetailsView>>().Unsubscribe(
+                    replyAndApproveRequestFromRequestDetailsView);
+                _eventAggregator.GetEvent<GenericEvent<ReplyAndDenyRequestFromRequestDetailsView>>().Unsubscribe(
+                    replyAndDenyRequestFromRequestDetailsView);
+
+                #endregion
+            }
 		}
 
         private void requestSelectionChanged(EventParameters<HandlePersonRequestSelectionChanged> eventParameters)
@@ -6912,12 +6979,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_schedulerState = null;
 			_schedulerMeetingHelper = null;
-			wpfShiftEditor1.LoadSchedulePart(null);
-			notesEditor.LoadNote(null);
-			wpfShiftEditor1.Unload();
+
+            if (wpfShiftEditor1 != null) wpfShiftEditor1.LoadSchedulePart(null);
+            if (notesEditor != null) notesEditor.LoadNote(null);
+            if (wpfShiftEditor1 != null) wpfShiftEditor1.Unload();
 			wpfShiftEditor1 = null;
 
-			_undoRedo.Clear();
+			if(_undoRedo != null) _undoRedo.Clear();
 
 			restrictionEditor = null;
 			notesEditor = null;
@@ -6927,18 +6995,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_singleAgentRestrictionPresenter = null;
 			}
 
-			_elementHostRequests.Child = null;
-			_grid.ContextMenu = null;
-			contextMenuViews.Dispose();
+			if(_elementHostRequests != null && _elementHostRequests.Child != null) _elementHostRequests.Child = null;
+			if(_grid != null) _grid.ContextMenu = null;
+			if(contextMenuViews != null) contextMenuViews.Dispose();
 
-			schedulerSplitters1.Dispose();
-			((ICachingComponent)_ruleSetProjectionService).Invalidate();
+			if(schedulerSplitters1 != null) schedulerSplitters1.Dispose();
+			if(_ruleSetProjectionService != null) ((ICachingComponent)_ruleSetProjectionService).Invalidate();
 
 			if (!Disposing)
 			{
-				_dockingManager.DockStateChanged -= dockStateChanged;
-				_dockingManager.DockVisibilityChanged -= dockVisibilityChanged;
-				Dispose(true);
+                if (_dockingManager != null)
+                {
+                    _dockingManager.DockStateChanged -= dockStateChanged;
+                    _dockingManager.DockVisibilityChanged -= dockVisibilityChanged;
+                }
+			    Dispose(true);
 			}
 		}
 
