@@ -147,6 +147,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         }
 
         [Test]
+        public void ShouldNotDeleteDayOffUnderFullDayAbsence()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_part3.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Twice();
+                Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence).Repeat.Twice();
+
+                Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();
+
+
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
+                Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+
+                Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
+            }
+
+            using (_mocks.Playback())
+            {
+                _deleteOption.Default = true;
+
+                _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
+            }
+        }
+
+        [Test]
         public void VerifyDeleteFullDayAbsence()
         {
             using (_mocks.Record())
