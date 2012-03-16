@@ -536,7 +536,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     realWorkloadDay.Workload.TryFindTemplateByName(TemplateTarget.Workload, templateName) as IWorkloadDayTemplate;
                 if (workloadDayTemplate != null)
                 {
-                    if (workloadDayTemplate.OpenForWork.IsOpen && !realWorkloadDay.OpenForWork.IsOpen)
+                    if (!workloadDayTemplate.OpenForWork.IsOpen && realWorkloadDay.OpenForWork.IsOpen)
                         TaskOwnerDayGridHelper.ResetClosedDay(realWorkloadDay);
                     if (!_turnOffUpdate) realWorkloadDay.Lock();
                     realWorkloadDay.ApplyTemplate(workloadDayTemplate);
