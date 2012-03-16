@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -262,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
 			_target.CreateAndAddNote(text);
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
-			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].ScheduleNote);
+			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].GetScheduleNote(new NoFormatting()));
 		}
 
 		[Test]
@@ -1111,7 +1112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 
 			//paste from wintertime to day of change to summertime("W. Europe Standard Time")
-			expectedDiff = new TimeSpan(4, 23, 0, 0);
+			expectedDiff = new TimeSpan(5, 0, 0, 0);
 			testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 23));
 			testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 28));
 			diff = testDestination.CalculatePeriodOffset(testSource.Period);

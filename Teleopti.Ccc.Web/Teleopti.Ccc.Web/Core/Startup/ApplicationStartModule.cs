@@ -72,9 +72,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			                                       	{
 			                                       		if (!HasStartupError)
 			                                       		{
-			                                       			DependencyResolver.Current
+			                                       			var requestContextInitializer = DependencyResolver
+																.Current
 			                                       				.GetService<IRequestContextInitializer>()
-			                                       				.AttachPrincipalForAuthenticatedUser();
+																;
+															requestContextInitializer.AttachPrincipalForAuthenticatedUser();
 			                                       		}
 			                                       	};
 

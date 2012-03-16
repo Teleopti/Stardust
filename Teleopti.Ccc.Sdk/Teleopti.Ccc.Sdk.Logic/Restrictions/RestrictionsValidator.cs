@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
         IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod, 
             DateOnlyPeriod schedulePeriod, ISchedulingResultStateHolder stateHolder,
             int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget, IPerson person, int mustHave,
-            int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality);
+            int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality, bool useStudentAvailability);
         }
 
     public class RestrictionsValidator : IRestrictionsValidator
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod, 
             DateOnlyPeriod schedulePeriod, ISchedulingResultStateHolder stateHolder, 
-            int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget, 
-            IPerson person, int mustHave, int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality) //, IActivityRepository activityRepository)
+            int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget,
+            IPerson person, int mustHave, int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality, bool useStudentAvailability) //, IActivityRepository activityRepository)
         {
             if(stateHolder == null)
                 throw new ArgumentNullException("stateHolder");
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                                                                      UseRotations = false,
                                                                      UsePreferences = true,
                                                                      UseAvailability = true,
-                                                                     UseStudentAvailability = false,
+                                                                     UseStudentAvailability = useStudentAvailability,
                                                                      UsePreferencesMustHaveOnly = false
                                                                  });
                 personPeriod = person.Period(dateOnly);

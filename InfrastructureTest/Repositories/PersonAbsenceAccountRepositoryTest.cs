@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -82,6 +83,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, result[person1].Count());
             Assert.AreEqual(1, result[person2].Count());
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[person1].Find(abs).AccountCollection()));
+        }
+
+        [Test]
+        public void ShouldFindByUsers()
+        {
+            var person1 = createPersonInDb();
+            var person2 = createPersonInDb();
+            var abs = createAbsenceInDb();
+            var paAcc1 = new PersonAbsenceAccount(person1, abs);
+            var paAcc2 = new PersonAbsenceAccount(person2, abs);
+            paAcc1.Add(new AccountTime(new DateOnly(2000, 1, 1)));
+            paAcc2.Add(new AccountTime(new DateOnly(2000, 1, 1)));
+            paAcc2.Add(new AccountTime(new DateOnly(2001, 1, 1)));
+
+
+            PersistAndRemoveFromUnitOfWork(paAcc1);
+            PersistAndRemoveFromUnitOfWork(paAcc2);
+
+            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            IList<IPerson> persons = new List<IPerson> {person1};
+            var result = rep.FindByUsers(persons);
+            Assert.AreEqual(1, result[person1].Count());
+            Assert.AreEqual(false, result.ContainsKey(person2));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(result[person1].Find(abs).AccountCollection()));    
         }
 
 

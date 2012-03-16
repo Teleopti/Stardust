@@ -125,6 +125,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
         {
             ClearValidationErrors();
             var valid = true;
+
+          
             if (!_view.StartTimeLimitation.HasValue && _view.EndTimeLimitation.HasValue)
             {
                 var errorMessage = Resources.MustSpecifyValidTime;
@@ -136,6 +138,13 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
                 var errorMessage = Resources.MustSpecifyValidTime;
                 _view.EndTimeLimitationErrorMessage = errorMessage;
                 valid = false;
+            }
+            else if(!_view.StartTimeLimitation.HasValue && !_view.EndTimeLimitation.HasValue)
+            {
+                var errorMessage = Resources.MustSpecifyValidTime;
+                _view.StartTimeLimitationErrorMessage = errorMessage;
+                _view.EndTimeLimitationErrorMessage = errorMessage;
+                valid = false;    
             }
 
             if (!_view.SecondStartTimeLimitation.HasValue && _view.SecondEndTimeLimitation.HasValue)
@@ -149,6 +158,13 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
                 var errorMessage = Resources.MustSpecifyValidTime;
                 _view.SecondEndTimeLimitationErrorMessage = errorMessage;
                 valid = false;
+            }
+            else if(!_view.SecondStartTimeLimitation.HasValue && !_view.EndTimeLimitation.HasValue)
+            {
+                var errorMessage = Resources.MustSpecifyValidTime;
+                _view.SecondStartTimeLimitationErrorMessage = errorMessage;
+                _view.SecondEndTimeLimitationErrorMessage = errorMessage;
+                valid = false;    
             }
             return valid;
         }

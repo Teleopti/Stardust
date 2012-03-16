@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -46,9 +47,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.IsNotNull(_target.Organizer);
             Assert.IsTrue(_target.MeetingPersons.Count() == 1);
             Assert.AreEqual(_target, _meetingPerson.Parent);
-            Assert.IsTrue(_target.Subject == _subject);
-            Assert.IsTrue(_target.Location == _location);
-            Assert.IsTrue(_target.Description == _description);
+			Assert.IsTrue(_target.GetSubject(new NoFormatting()) == _subject);
+			Assert.IsTrue(_target.GetLocation(new NoFormatting()) == _location);
+			Assert.IsTrue(_target.GetDescription(new NoFormatting()) == _description);
             Assert.AreSame(_activity, _target.Activity);
             Assert.AreSame(_scenario, _target.Scenario);
             Assert.AreEqual(_target.StartDate,_target.GetRecurringDates()[0]);
@@ -76,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _target.EndTime = new TimeSpan(9, 0, 0);
 
             Assert.IsNotNull(_target.Organizer);
-            Assert.IsTrue(_target.Subject == "su");
-            Assert.IsTrue(_target.Location == "lo");
-            Assert.IsTrue(_target.Description == "de");
+			Assert.IsTrue(_target.GetSubject(new NoFormatting()) == "su");
+			Assert.IsTrue(_target.GetLocation(new NoFormatting()) == "lo");
+			Assert.IsTrue(_target.GetDescription(new NoFormatting()) == "de");
             Assert.AreSame(activity, _target.Activity);
 
             Assert.AreEqual(_target.StartTime, new TimeSpan(8, 0, 0));

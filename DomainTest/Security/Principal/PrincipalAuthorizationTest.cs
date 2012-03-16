@@ -171,6 +171,71 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
         }
 
+		[Test]
+		public void ShouldHandleTerminalDateProperlyWhenGettingPermittedPeriods()
+		{
+			applicationFunction = new ApplicationFunction(Function);
+			var today = DateOnly.Today;
+			var otherPerson = PersonFactory.CreatePerson();
+			var site = SiteFactory.CreateSiteWithOneTeam();
+
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
+			otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
+			person.TerminalDate = today;
+
+			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
+			organisationMembership = principal.Organisation;
+			principalAuthorization = new PrincipalAuthorization(principal);
+
+			PrepareClaims();
+
+			using (mocks.Record())
+			{
+				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-15), otherPerson)).Return(true);
+				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-10), otherPerson)).Return(true);
+			}
+			using (mocks.Playback())
+			{
+				var result = principalAuthorization.PermittedPeriods(applicationFunction,
+																	 new DateOnlyPeriod(today.AddDays(-15),
+																						today.AddDays(2)), otherPerson);
+				result.Count().Should().Be.EqualTo(2);
+				result.Contains(new DateOnlyPeriod(today.AddDays(-15), today.AddDays(-11))).Should().Be.True();
+				result.Contains(new DateOnlyPeriod(today.AddDays(-10), today)).Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldHandlePermittedPeriodsOutsideIntervals()
+		{
+			applicationFunction = new ApplicationFunction(Function);
+			var today = DateOnly.Today;
+			var otherPerson = PersonFactory.CreatePerson();
+			var site = SiteFactory.CreateSiteWithOneTeam();
+
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
+			otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
+
+			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
+			organisationMembership = principal.Organisation;
+			principalAuthorization = new PrincipalAuthorization(principal);
+
+			PrepareClaims();
+
+			using (mocks.Record())
+			{
+				Expect.Call(authorizeAvailableData.Check(organisationMembership, today, otherPerson)).Return(true);
+			}
+			using (mocks.Playback())
+			{
+				var result = principalAuthorization.PermittedPeriods(applicationFunction,
+																	 new DateOnlyPeriod(today,
+																						today.AddDays(2)), otherPerson);
+				result.Count().Should().Be.EqualTo(1);
+				result.Contains(new DateOnlyPeriod(today, today.AddDays(2))).Should().Be.True();
+			}
+		}
+
         private void PrepareClaims()
         {
             principal.AddClaimSet(

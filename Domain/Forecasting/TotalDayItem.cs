@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private TimeSpan _comparisonAverageAfterWorkTime;
         private ITaskOwner _taskOwner;
         private double _dayTrendFactor;
+        
 
         /// <summary>
         /// Sets the comparison values.
@@ -45,11 +46,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (afterTalkTimeIndex != 0 && taskOwner.AverageAfterTaskTime.Ticks!=0)
                 _comparisonAverageAfterWorkTime = new TimeSpan((long)(taskOwner.AverageAfterTaskTime.Ticks / afterTalkTimeIndex));
 
+            
             _dayTrendFactor = dayTrendFactor;
             _taskOwner = taskOwner;
             TaskIndex = taskIndex * dayTrendFactor;
             _talkTimeIndex = talkTimeIndex;
             _afterTalkTimeIndex = afterTalkTimeIndex;
+            
         }
 
         public void SetComparisonValues(ITaskOwner taskOwner, double taskIndex, double talkTimeIndex, double afterTalkTimeIndex)
@@ -70,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskIndex; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                //if (!_taskOwner.IsClosed || _wl.Workload.Skill.SkillType.Description.Name == "SkillTypeEmail")
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _taskIndex = value;
                     _taskOwner.Tasks = _taskIndex*_comparisonTasks;
@@ -90,7 +94,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public bool WorkloadDayIsClosed
         {
-            get { return _taskOwner.IsClosed; }
+            //get { return _taskOwner.IsClosed.IsOpenForIncomingWork; }
+            get { return !_taskOwner.OpenForWork.IsOpen; }  // need to test it .
         }
 
         /// <summary>
@@ -119,10 +124,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _talkTimeIndex; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                //if (!_taskOwner.IsClosed || _wl.Workload.Skill.SkillType.ForecastSource == ForecastSource.Email)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _talkTimeIndex = value;
-                    _taskOwner.AverageTaskTime = new TimeSpan((long) (_talkTimeIndex*_comparisonAverageTalkTime.Ticks));
+                    _taskOwner.AverageTaskTime =
+                        new TimeSpan((long) (_talkTimeIndex*_comparisonAverageTalkTime.Ticks));
                 }
             }
         }
@@ -140,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _afterTalkTimeIndex; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _afterTalkTimeIndex = value;
                     _taskOwner.AverageAfterTaskTime =
@@ -162,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwner.Tasks; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _taskOwner.Tasks = value;
                     if (_comparisonTasks != 0)
@@ -184,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwner.AverageTaskTime; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _taskOwner.AverageTaskTime = value;
                     if (_comparisonAverageTalkTime.Ticks != 0)
@@ -206,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskOwner.AverageAfterTaskTime; }
             set
             {
-                if (!_taskOwner.IsClosed)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
                 {
                     _taskOwner.AverageAfterTaskTime = value;
                     if (_comparisonAverageAfterWorkTime.Ticks != 0)

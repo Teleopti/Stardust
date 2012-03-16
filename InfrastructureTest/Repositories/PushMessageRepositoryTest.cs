@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void VerifyAggregateGraphProperties(IPushMessage loadedAggregateFromDatabase)
         {
             IPushMessage pushMessage = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(pushMessage.Message,loadedAggregateFromDatabase.Message);
-            Assert.AreEqual(pushMessage.Title,loadedAggregateFromDatabase.Title);
+            Assert.AreEqual(pushMessage.GetMessage(new NoFormatting()),loadedAggregateFromDatabase.GetMessage(new NoFormatting()));
+            Assert.AreEqual(pushMessage.GetTitle(new NoFormatting()),loadedAggregateFromDatabase.GetTitle(new NoFormatting()));
             Assert.AreEqual(pushMessage.Sender,loadedAggregateFromDatabase.Sender);
             Assert.AreEqual(pushMessage.ReplyOptions,loadedAggregateFromDatabase.ReplyOptions);
             Assert.AreEqual(pushMessage.AllowDialogueReply, loadedAggregateFromDatabase.AllowDialogueReply);

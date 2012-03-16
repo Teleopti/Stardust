@@ -109,12 +109,11 @@ Teleopti.MyTimeWeb.Request.TextRequest = (function ($) {
 
 	function _addTextRequest() {
 		var formData = _getFormData();
-		$.ajax({
+		$.myTimeAjax({
 			url: "Requests/TextRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "POST",
-			cache: false,
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
 				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);

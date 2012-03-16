@@ -49,20 +49,13 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
-		$.ajax({
-			url: "StudentAvailability/StudentAvailability" + addressSuffix,
-			type: type,
-			cache: false,
-			data: reqData,
-			success: successCallback
-		}).error(function (e, status) {
-			//if not found - do nothing
-			if (e.status != 404) {
-				$('#body-inner').html('<h2 class="error">Error: ' + e.status + '</h2><div style="fullheight" />');
-				Teleopti.MyTimeWeb.Common.AjaxFailed(e, null, status);
-			}
-		});
-
+		$.myTimeAjax({
+				url: "StudentAvailability/StudentAvailability" + addressSuffix,
+				type: type,
+				data: reqData,
+				success: successCallback,
+				statusCode404: function() { }
+			});
 	}
 
 	function _updateDayAndCloseEditSection(data) {

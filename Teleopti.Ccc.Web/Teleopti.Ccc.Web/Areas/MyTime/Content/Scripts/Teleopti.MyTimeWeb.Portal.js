@@ -58,35 +58,37 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		$('.selected-date-period').css({ opacity: 1 });
 	}
 
-	function _checkLogin(htmlDom) {
-		return (htmlDom.indexOf('<section id="page-signin">') > -1);
-	}
-
 	function _datePickerPartsToFixedDate(year, month, day) {
 		return jQuery.map([parseInt(year), 1 + parseInt(month), parseInt(day)], function (val) { return (val < 10 ? '0' : '') + val.toString(); }).join('-');
 	}
 
 	function _attachAjaxEvents() {
-		$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-			if (options.url.indexOf('http://') == -1)
-				options.url = _settings.baseUrl + options.url;
-		});
 		$('#loading')
 			.hide()  // hide it initially
 			.ajaxStart(function () {
 				var bodyInner = $('#body-inner');
-				$(this).css({
-					'width': $(bodyInner).width(),
-					'height': $(bodyInner).height() + 10
-				}).show();
-				$('img', this).css({
-					'top': 50 + $(window).scrollTop()
-				});
-				$('.toolbar-inner button.icon[disabled!="disabled"]').attr('disabled', 'disabled').addClass('ajax-disabled');
+				$(this)
+					.css({
+						'width': $(bodyInner).width(),
+						'height': $(bodyInner).height() + 10
+					})
+					.show()
+					;
+				$('img', this)
+					.css({
+						'top': 50 + $(window).scrollTop()
+					});
+				$('.toolbar-inner button.icon[disabled!="disabled"]')
+					.attr('disabled', 'disabled')
+					.addClass('ajax-disabled')
+					;
 			})
 			.ajaxStop(function () {
 				$(this).hide();
-				$('.toolbar-inner button.icon.ajax-disabled').removeAttr('disabled').removeClass('ajax-disabled');
+				$('.toolbar-inner button.icon.ajax-disabled')
+					.removeAttr('disabled')
+					.removeClass('ajax-disabled')
+					;
 			});
 	}
 
@@ -175,29 +177,24 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _loadContent(hashInfo) {
-		var baseUrl = _settings.baseUrl;
 		_disablePortalControls();
-		$.ajax({
+		$.myTimeAjax({
 			url: hashInfo.hash,
-			cache: false,
+			global: true,
 			success: function (html) {
-				if (_checkLogin(html)) {
-					location.href = baseUrl || '/';
-				}
-
 				$('#body-inner').html(html);
 				var partialFn = _partialViewInitCallback[hashInfo.actionHash];
 				if ($.isFunction(partialFn))
 					partialFn();
 			}
-		}).error(function (e, status) {
-			$('#body-inner').html('<h2>Error: ' + e.status + '</h2>');
-			Teleopti.MyTimeWeb.Common.AjaxFailed(e, null, status);
-		});
+		})
+			;
 	}
 
 	return {
 		Init: function (settings) {
+			Teleopti.MyTimeWeb.Ajax.Init(settings);
+			Teleopti.MyTimeWeb.Common.Init(settings);
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();
@@ -232,7 +229,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					}
 				});
 
-				range.find('.datepicker').datepicker('setDate', common.ParseToDate(periodData.Date));
+				range.find('.datepicker')
+					.datepicker('setDate', common.ParseToDate(periodData.Date));
 
 				var nextPeriod = periodData.PeriodNavigation.NextPeriod;
 				var prevPeriod = periodData.PeriodNavigation.PrevPeriod;
@@ -241,11 +239,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 				range.find('span').html(periodData.Display);
 				range.find('button:first')
+					.unbind('click')
 					.click(function () {
 						_navigateTo(actionPrefix + urlPrevPeriod + actionSuffix);
 					})
 					;
 				range.find('button:last')
+					.unbind('click')
 					.click(function () {
 						_navigateTo(actionPrefix + urlNextPeriod + actionSuffix);
 					})

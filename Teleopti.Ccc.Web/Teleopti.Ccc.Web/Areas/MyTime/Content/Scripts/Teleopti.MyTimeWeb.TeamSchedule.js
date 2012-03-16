@@ -30,7 +30,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		$('select.ui-selectbox-init')
 			.removeClass('ui-selectbox-init')
 			.selectbox({
-				source: "TeamSchedule/Teams",
+				source: "MyTime/TeamSchedule/Teams",
 				changed: function (event, item) {
 					var teamId = item.item.value;
 					_navigateTo(_currentFixedDate(), teamId);
@@ -45,7 +45,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
 		var selectbox = $('#TeamSchedule-TeamPicker-select');
 		selectbox.selectbox({
-			source: "TeamSchedule/Teams/" + _currentUrlDate()
+			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
 		});
 		selectbox.selectbox('refresh', function () {
 			if (selectbox.selectbox('selectableOptions').length < 2)

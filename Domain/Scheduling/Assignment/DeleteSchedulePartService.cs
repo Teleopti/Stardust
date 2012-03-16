@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     clonePart.DeleteMainShift(clonePart);
                 if (view == SchedulePartView.PersonalShift)
                     clonePart.DeletePersonalStuff();
-                if (view == SchedulePartView.DayOff || view == SchedulePartView.ContractDayOff)
+                if (view == SchedulePartView.DayOff || view == SchedulePartView.ContractDayOff  && clonePart.SignificantPartForDisplay() != SchedulePartView.FullDayAbsence)
                     clonePart.DeleteDayOff();
                 if (view == SchedulePartView.FullDayAbsence || view == SchedulePartView.ContractDayOff)
                     clonePart.DeleteFullDayAbsence(clonePart);

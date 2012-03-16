@@ -108,6 +108,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor); newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
 				}
             }
+            
+            //if (isOpen() && tasks > 0)
             if (isOpenForIncomingWork() && tasks > 0)
             {
                 CampaignTasks = campaignTasks;
@@ -123,6 +125,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 workloadDayTemplate.Workload) {UpdatedDate = workloadDayTemplate.UpdatedDate};
 
         	//Apply the original volumes
+            //if (workloadDayTemplate.IsClosed.IsOpen)
             if (isOpenForIncomingWork())
             {
                 if (tasks > 0)
@@ -147,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private bool isOpenForIncomingWork()
         {
-            return !IsClosed || IsEmailWorkload;
+            return OpenForWork.IsOpenForIncomingWork;
         }
 
         private double TaskTimeFactorTaskTime(IWorkloadDayTemplate workloadDayTemplate)

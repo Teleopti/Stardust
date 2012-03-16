@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		{
 			// Move these to appSettings or create own configsection
 			AuthenticationCookieDomain = FormsAuthentication.CookieDomain;
-			AuthenticationCookieExpirationTimeSpan = new TimeSpan(0,30,0);
+			AuthenticationCookieExpirationTimeSpan = new TimeSpan(0, 30, 0);
 			AuthenticationCookieName = FormsAuthentication.FormsCookieName;
 			AuthenticationCookiePath = FormsAuthentication.FormsCookiePath;
 			AuthenticationCookieSlidingExpiration = FormsAuthentication.SlidingExpiration;

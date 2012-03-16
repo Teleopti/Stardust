@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.Tracking;
@@ -77,8 +78,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(UserTexts.Resources.RequestTypeAbsence, _personRequestViewModel.RequestType);
             Assert.IsTrue(_personRequestViewModel.IsPending);
             Assert.AreEqual(_source.Request.GetDetails(CultureInfo.CurrentCulture), _personRequestViewModel.Details);
-            Assert.AreEqual(_source.Subject, _personRequestViewModel.Subject);
-            Assert.AreEqual(_source.Message, _personRequestViewModel.Message);
+			Assert.AreEqual(_source.GetSubject(new NoFormatting()), _personRequestViewModel.GetSubject(new NoFormatting()));
+			Assert.AreEqual(_source.GetMessage(new NoFormatting()), _personRequestViewModel.GetMessage(new NoFormatting()));
             Assert.AreEqual(_source.UpdatedOn, _personRequestViewModel.LastUpdated);
             Assert.AreEqual(_source.Request.Period.StartDateTime,_personRequestViewModel.FirstDateInRequest);
             Assert.IsFalse(_personRequestViewModel.CausesBrokenBusinessRule);

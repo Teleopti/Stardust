@@ -235,17 +235,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyIsClosedWorks()
         {
-            Assert.IsFalse(_skillDay.IsClosed);
+            //Assert.IsFalse(_skillDay.IsClosed);
+            Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
             foreach (WorkloadDay workloadDay in _skillDay.WorkloadDayCollection)
             {
                 workloadDay.Close();
             }
-            Assert.IsTrue(_skillDay.IsClosed);
+            //Assert.IsTrue(_skillDay.IsClosed);
+            Assert.IsFalse(_skillDay.OpenForWork.IsOpen);
             foreach (WorkloadDay workloadDay in _skillDay.WorkloadDayCollection)
             {
                 workloadDay.MakeOpen24Hours();
             }
-            Assert.IsFalse(_skillDay.IsClosed);
+            //Assert.IsFalse(_skillDay.IsClosed);
+            Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
         }
 
         /// <summary>

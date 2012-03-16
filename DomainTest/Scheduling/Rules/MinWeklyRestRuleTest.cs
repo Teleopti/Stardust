@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Time;
@@ -478,6 +479,104 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Assert.AreEqual(0, ret.Count());
 			}
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldNotUseSameWeeklyRestOnTwoWeeks()
+        {
+            var maxTimePerWeek = new TimeSpan(40, 0, 0);
+            var nightlyRest = new TimeSpan(8, 0, 0);
+            // four days weekly rest
+            var weeklyRest = TimeSpan.FromHours(36);
+            _contract = new Contract("for test")
+                        	{
+                        		WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek,
+                        		                                          nightlyRest,
+                        		                                          weeklyRest)
+                        	};
+        	//var person = _mocks.StrictMock<IPerson>();
+            var person = new Person();
+            person.PermissionInformation.SetDefaultTimeZone(_timeZone);
+            person.AddPersonPeriod(new PersonPeriod(new DateOnly(2010, 1, 1), _personContract, new Team()));
+            var range = _mocks.StrictMock<IScheduleRange>();
+            var dic = new Dictionary<IPerson, IScheduleRange> { { person, range } };
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+
+            var lstOfDays = new List<IScheduleDay> { scheduleDay, scheduleDay2 };
+
+            var weekPeriod = new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29);
+            var weekPeriod2 = new DateOnlyPeriod(2010, 8, 30, 2010, 9, 5);
+            var personWeek = new PersonWeek(person, weekPeriod);
+            var personWeek2 = new PersonWeek(person, weekPeriod2);
+
+            var personWeeks = new List<PersonWeek> { personWeek, personWeek2 };
+            var oldResponses = new List<IBusinessRuleResponse>();
+            
+            var day0Hours = _mocks.StrictMock<IScheduleDay>();
+            var day1 = _mocks.StrictMock<IScheduleDay>();
+
+            var emptyPersonAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
+
+            var scheduledDayLayerCollectionPeriod = new DateTimePeriod(new DateTime(2010, 8, 22, 6, 0, 0, DateTimeKind.Utc),
+                                                          new DateTime(2010, 8, 22, 18, 0, 0, DateTimeKind.Utc));
+            
+
+			var personAss = _mocks.StrictMock<IPersonAssignment>();
+            
+            var scheduledPersonAssCol = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss });
+            
+            using (_mocks.Record())
+            {
+                Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays, true)).Return(
+                    personWeeks);
+                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses).Repeat.Any();
+ 
+                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Any();
+                Expect.Call(_personContract.Contract).Return(_contract).Repeat.Twice();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 22))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 23))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 24))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 25))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 26))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 27))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 28))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 29))).Return(day0Hours).Repeat.Twice();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 30))).Return(day1).Repeat.Twice();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 8, 31))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 1))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 2))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 3))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 4))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 5))).Return(day1);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 9, 6))).Return(day1);
+
+                Expect.Call(day0Hours.PersonAssignmentCollection()).Return(emptyPersonAssCol).Repeat.Twice();
+                Expect.Call(day1.PersonAssignmentCollection()).Return(scheduledPersonAssCol).Repeat.AtLeastOnce();
+
+                mockShift(personAss, scheduledDayLayerCollectionPeriod, WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(1)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(2)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(3)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(4)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(5)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(6)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(8)), WorkTimeOptions.Start);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(8)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(9)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(10)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(11)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(12)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(13)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(14)), WorkTimeOptions.Both);
+                mockShift(personAss, scheduledDayLayerCollectionPeriod.MovePeriod(TimeSpan.FromDays(15)), WorkTimeOptions.Both);
+
+            }
+            using (_mocks.Playback())
+            {
+                var ret = _target.Validate(dic, lstOfDays);
+                Assert.AreEqual(7, ret.Count());
+            }
+        }
 		
 		private enum WorkTimeOptions
 		{

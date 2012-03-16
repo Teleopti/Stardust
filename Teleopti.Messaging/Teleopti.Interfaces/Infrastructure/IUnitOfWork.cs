@@ -151,11 +151,5 @@ namespace Teleopti.Interfaces.Infrastructure
         /// </remarks>
         void Flush();
 
-		///<summary>
-		///</summary>
-		///<param name="moduleUsedForPersist"></param>
-		///<param name="licenseChecker"></param>
-		///<returns></returns>
-		IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist, ICheckLicenseAtPersist licenseChecker);
     }
 }

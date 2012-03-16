@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
@@ -10,9 +11,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override PushMessageDto DomainEntityToDto(IPushMessage entity)
         {
-            PushMessageDto dto = new PushMessageDto();
-            dto.Title = entity.Title;
-            dto.Message = entity.Message;
+        	var normalizeText = new NormalizeText();
+			PushMessageDto dto = new PushMessageDto();
+			dto.Title = entity.GetTitle(normalizeText);
+            dto.Message = entity.GetMessage(normalizeText);
             dto.AllowDialogueReply = entity.AllowDialogueReply;
             dto.Sender = PersonAssembler.DomainEntityToDto(entity.Sender);
             dto.ReplyOptions.Clear();

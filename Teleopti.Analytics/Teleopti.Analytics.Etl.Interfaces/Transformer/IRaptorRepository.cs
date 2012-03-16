@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 {
@@ -200,5 +201,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
     	int FillFactRequestMart(DateTimePeriod period);
     	int PerformPurge();
         int FillFactRequestedDaysMart(DateTimePeriod period);
+        ILicenseStatusUpdater LicenseStatusUpdater { get; }
     }
 }

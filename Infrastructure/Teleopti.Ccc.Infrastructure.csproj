@@ -159,11 +159,12 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=3.3.0.3001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.3.3.0-CR1\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
-      <HintPath>..\nhibernateAddons\Envers\NHibernate.Envers.dll</HintPath>
+    <Reference Include="NHibernate.Envers">
+      <HintPath>..\packages\NHibernate.Envers.1.1.0-CR1\lib\Net35\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -185,6 +186,9 @@
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
+    <Compile Include="Licensing\LicenseStatusRepositories.cs" />
+    <Compile Include="Licensing\LicenseStatusUpdater.cs" />
+    <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
@@ -243,9 +247,6 @@
     <Compile Include="NHibernateConfiguration\VersionStateRollbackInterceptor.cs" />
     <Compile Include="NHibernateConfiguration\XmlType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Licensing\CheckLicenseForPerson.cs" />
-    <Compile Include="Licensing\CheckLicenseAtPersist.cs" />
-    <Compile Include="Licensing\ICheckLicenseForRootType.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsException.cs" />
     <Compile Include="Licensing\InvalidLicenseException.cs" />
     <Compile Include="Licensing\IXmlLicense.cs" />
@@ -287,6 +288,8 @@
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
+    <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepository.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepository.cs" />

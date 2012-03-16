@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 var tasks = statisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period).ToList();
                 new Statistic(workload).Match(workloadDays, tasks);
                 foreach (var workloadDay in workloadDays)
-                    workloadDay.OpenTaskPeriodList.ForEach(x => statisticTasks.Add(x.StatisticTask));
+                    statisticTasks.AddRange(workloadDay.OpenTaskPeriodList.Select(t => t.StatisticTask));
             }
 
             var activeAgentCounts = (IList<IActiveAgentCount>)statisticRepository.LoadActiveAgentCount(skill, period);

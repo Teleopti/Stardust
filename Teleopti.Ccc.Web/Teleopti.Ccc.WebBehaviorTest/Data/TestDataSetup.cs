@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -196,10 +198,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
 			TestData.AgentRoleWithoutMobileReports = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMobileReports", null);
 			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
-			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "AgentRoleWithoutResReportServiceLevelAndAgentsReady", null);
-			TestData.AdministratorRoleWithEveryoneData =
-				ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
-			
+			TestData.AgentRoleWithoutResReportServiceLevelAndAgentsReady = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoServiceLevelAndAgentsReady", null);
+			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
 
 			var test = new AvailableData();
 			test.AddAvailableSite(TestData.AnotherSite);
@@ -344,9 +344,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateScenario(IUnitOfWork unitOfWork)
 		{
 			TestData.Scenario = ScenarioFactory.CreateScenarioAggregate("Default", true, false);
+			TestData.SecondScenario = ScenarioFactory.CreateScenarioAggregate("Default", true, false);
+
+			TestData.SecondScenario.SetBusinessUnit(TestData.SecondBusinessUnit);
 
 			var scenarioRepository = new ScenarioRepository(unitOfWork);
 			scenarioRepository.Add(TestData.Scenario);
+			scenarioRepository.Add(TestData.SecondScenario);
 		}
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)
@@ -421,7 +425,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
 			};
 
-			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences = new WorkflowControlSet("Published 100 days, Preference open, allowed standard preferences")
+			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences = new WorkflowControlSet("Published 100 days, Pref. open, Allow std.pref.")
 			{
 				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
 				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
@@ -523,6 +527,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static DateTime FirstDayOfAnyWeekInCurrentMonth(CultureInfo culture)
 		{
 			return FirstDayOfCurrentWeek(culture).Month == DateTime.Now.Month ? FirstDayOfCurrentWeek(culture) : FirstDayOfNextWeek(culture);
+		}
+
+	}
+
+	public static class Extensions
+	{
+
+		public static void SetBusinessUnit(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
+		{
+			var type = typeof(AggregateRootWithBusinessUnit);
+			var privateField = type.GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance);
+			privateField.SetValue(aggregateRootWithBusinessUnit, businessUnit);
 		}
 
 	}

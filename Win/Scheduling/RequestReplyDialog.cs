@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (list.Count == 1)
             {
                 textBoxMessage.Visible = true;
-                textBoxMessage.Text = list[0].Message;
+                textBoxMessage.Text = list[0].GetMessage(new NoFormatting());
             }
             else if (list.Count > 1)
             {

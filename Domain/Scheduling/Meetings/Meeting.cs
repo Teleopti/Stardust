@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		private IActivity _activity;
 		private IList<IRecurrentMeetingOption> meetingRecurrenceOptions = new List<IRecurrentMeetingOption>(1);
 		private ICccTimeZoneInfo _timeZoneCache;
-		private readonly NormalizeText _normalizeText = new NormalizeText();
 		private string _timeZone;
 		private Guid _originalMeetingId;
 		private readonly IChangeTracker<IMeeting> _meetingChangeTracker = new MeetingChangeTracker();
@@ -37,9 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			_meetingChangeTracker.TakeSnapshot(this);
 			_organizer = organizer;
 			_meetingPersons = new HashedSet<IMeetingPerson>();
-			_subject = _normalizeText.Normalize(subject);
-			_location = _normalizeText.Normalize(location);
-			_description = _normalizeText.Normalize(description);
+			_subject = subject;
+			_location = location;
+			_description = description;
 			_activity = activity;
 			_scenario = scenario;
 			_timeZoneCache = organizer.PermissionInformation.DefaultTimeZone();
@@ -93,32 +92,53 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual string Subject
 		{
-			get { return _subject; }
 			set
 			{
 				verifyLastKnownStateIsSet();
-				_subject = _normalizeText.Normalize(value);
+				_subject = value;
 			}
+		}
+
+		public virtual string GetSubject(ITextFormatter formatter)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_subject);
 		}
 
 		public virtual string Location
 		{
-			get { return _location; }
 			set
 			{
 				verifyLastKnownStateIsSet();
-				_location = _normalizeText.Normalize(value);
+				_location = value;
 			}
+		}
+
+		public virtual string GetLocation(ITextFormatter formatter)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_location);
 		}
 
 		public virtual string Description
 		{
-			get { return _description; }
 			set
 			{
 				verifyLastKnownStateIsSet();
-				_description = _normalizeText.Normalize(value);
+				_description = value;
 			}
+		}
+
+		public virtual string GetDescription(ITextFormatter formatter)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_description);
 		}
 
 		public virtual ICccTimeZoneInfo TimeZone

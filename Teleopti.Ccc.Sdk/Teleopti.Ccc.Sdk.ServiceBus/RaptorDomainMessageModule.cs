@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
             	var licenseVerifier = new LicenseVerifier(new LicenseFeedback(), unitOfWorkFactory,
-            	                                          new PersonRepository(unitOfWorkFactory),
             	                                          new LicenseRepository(unitOfWorkFactory));
                 var licenseService = licenseVerifier.LoadAndVerifyLicense();
                 if (licenseService == null)

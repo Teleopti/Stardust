@@ -29,10 +29,12 @@
 
 .ui-splitbutton-menu li
 {
-	position: relative;	
+	position: relative;
+	white-space: nowrap;
 }
 .ui-splitbutton-menu-text
 {
+	padding-right: 23px;
 }
 .ui-splitbutton-menu-icon-secondary
 {

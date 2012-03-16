@@ -533,7 +533,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             if (taskOwnerDay != null)
             {
-                if (taskOwnerDay.IsClosed)
+                if (!taskOwnerDay.OpenForWork.IsOpen)
                 {
                     gridStyleInfo.TextColor = ColorFontClosedCell;
                     gridStyleInfo.Font.FontStyle = FontClosedCell;

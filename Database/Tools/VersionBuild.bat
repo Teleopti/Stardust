@@ -57,8 +57,8 @@ hg commit -m "Automated database build: %SYSTEMVERSION%"
 set myError=%errorlevel%
 )
 
-::push changes
-hg push
+::no push of changes here...
+::hg push
 
 if %myError% NEQ 0 GOTO:error
 

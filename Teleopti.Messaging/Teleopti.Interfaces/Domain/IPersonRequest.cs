@@ -39,7 +39,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the message.
         /// </summary>
         /// <value>The message.</value>
-        string Message { get;}
+        string GetMessage(ITextFormatter formatter);
 
         /// <summary>
         /// Gets or sets the request.
@@ -51,7 +51,14 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the subject of the message.
         /// </summary>
         /// <value>The subject.</value>
-        string Subject { get; set; }
+        string Subject { set; }
+
+    	/// <summary>
+    	/// Get the formatted subject
+    	/// </summary>
+    	/// <param name="formatter"></param>
+    	/// <returns></returns>
+    	string GetSubject(ITextFormatter formatter);
 
         /// <summary>
         /// Gets a value indicating whether this instance is editable.

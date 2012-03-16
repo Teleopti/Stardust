@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
 
-            using(_mocks.Record())
+            using (_mocks.Record())
             {
                 Expect.Call(personRepository.NumberOfActiveAgents()).Return(10);
                 Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());

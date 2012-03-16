@@ -1,7 +1,7 @@
 @ECHO off
-SET ServiceName=%1
-SET ExePath=%2
-SET ExeName=%3
+SET ServiceName=%~1
+SET ExePath=%~2
+SET ExeName=%~3
 
 ::IF Exists: Try to un-install
 ECHO "%~dp0ETLNightlyBuild-UnInstallSvc.cmd" "%ServiceName%" "%ExePath%" %ExeName%

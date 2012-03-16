@@ -241,3 +241,9 @@ Scenario: Show error message when acces to my team but no own team
 	Given I am an agent in no team with access to my team
 	When I view team schedule
 	Then I should see a user-friendly message explaining I dont have anything to view
+
+Scenario: Show friendly message when after leaving date
+	Given I am an agent in a team that leaves tomorrow
+	And I am viewing team schedule for today
+	When I click the next day button
+	Then I should see a user-friendly message explaining I dont have anything to view

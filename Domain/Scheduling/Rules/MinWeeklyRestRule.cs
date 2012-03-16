@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var responseList = new HashSet<IBusinessRuleResponse>();
             var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays,true);
-
+            
             foreach (PersonWeek personWeek in personWeeks)
             {
                 var person = personWeek.Person;
@@ -114,7 +114,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				if(nextStartDateTime != null)
 				{
 					if ((nextStartDateTime - endOfPeriodBefore) >= weeklyRest)
-						return true;
+					{                   
+                        // the majority must be in this week
+                        if (endOfPeriodBefore.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate)
+					    return true;
+					}
 					var end = _workTimeStartEndExtractor.WorkTimeEnd(proj);
 					if(end.HasValue)
 						endOfPeriodBefore = end.Value;
