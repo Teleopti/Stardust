@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     gridExcelTipStyleProperties.ExcelTipText = annotatable.Annotation;
                 }
             }
-            else if (taskOwner.OpenForWork.IsOpen)
+            else if (!taskOwner.OpenForWork.IsOpen)
             {
                 gridStyleInfo.TextColor = ColorFontClosedCell;
                 gridStyleInfo.Font.FontStyle = FontClosedCell;
