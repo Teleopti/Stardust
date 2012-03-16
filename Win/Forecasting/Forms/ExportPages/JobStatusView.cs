@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 				return;
 			}
 
-			if (progressBar1.Value+percentage<=progressBar1.Maximum)
-			{
-				progressBar1.Value += percentage;
-			}
+            if (progressBar1.Value + percentage <= progressBar1.Maximum)
+            {
+                progressBar1.Value += percentage;
+            }
 		}
 
 		public void SetMessage(string message)
@@ -61,7 +61,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	    {
             Presenter.SetJobStatusId(id);
 	    }
-        
+
+	    public void ChangeMaximumProgressValue(int percentage)
+	    {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<int>(ChangeMaximumProgressValue), percentage);
+                return;
+            }
+
+	        progressBar1.Maximum = percentage;
+	    }
+
 	    private void ReleaseManagedResources()
 		{
 			Presenter.Dispose();
@@ -100,6 +111,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			{
 				_view.SetProgress(item.Percentage);
 				_view.SetMessage(item.Message);
+                if (item.TotalPercentage.HasValue)
+                    _view.ChangeMaximumProgressValue(item.TotalPercentage.Value);
 			}
 		}
 		
@@ -133,6 +146,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		void SetProgress(int percentage);
 		void SetMessage(string message);
         void SetJobStatusId(Guid? id);
+	    void ChangeMaximumProgressValue(int percentage);
 	}
 
 	public class JobStatusModel

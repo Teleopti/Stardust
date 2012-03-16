@@ -1,4 +1,6 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using System.Globalization;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -35,12 +37,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
+                var jobResult = _jobResultRepository.Get(message.JobId);
+                var targetSkill = _skillRepository.Get(message.TargetSkillId);
+                _feedback.SetJobResult(jobResult, _messageBroker);
+                _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Open and split target skill {0} on {1}.",
+                                                       targetSkill.Name, message.Date));
+                _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Open and split target skill {0} on {1}.",
+                                                       targetSkill.Name, message.Date));
                 using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
                 {
-                    var targetSkill = _skillRepository.Get(message.TargetSkillId);
                     var openHours = new TimePeriod(message.StartOpenHour, message.EndOpenHour);
                     var dateOnly = new DateOnly(message.Date);
+                    try { 
                     _command.Execute(targetSkill, new DateOnlyPeriod(dateOnly, dateOnly), new[] {openHours});
+                    }
+                    catch (Exception exception)
+                    {
+                        unitOfWork.Clear();
+                        unitOfWork.Merge(jobResult);
+                        _feedback.Error("An error occurred while running import.", exception);
+                        _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
+                        endProcessing(unitOfWork);
+                        return;
+                    }
+                    _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Open and split target skill {0} on {1} done.",
+                                                           targetSkill.Name, message.Date));
                     endProcessing(unitOfWork);
                 }
             }

@@ -12,6 +12,11 @@ namespace Teleopti.Interfaces.Messages.General
         /// The Id of the job this message will feed with updates.
         ///</summary>
         public Guid JobId { get; set; }
+        
+        ///<summary>
+        ///  The Id of the job this message will feed with updates.
+        ///</summary>
+        public Guid JobResultId { get; set; }
 
         public override Guid Identity
         {
@@ -52,10 +57,5 @@ namespace Teleopti.Interfaces.Messages.General
         /// Mode of importing forecasts
         /// </summary>
         public ImportForecastsMode ImportMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the step to increase progress by.
-        /// </summary>
-        public int IncreaseProgressBy { get; set; }
     }
 }

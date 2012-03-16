@@ -12,35 +12,53 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     {
         private IMessageBroker _messageBroker;
         private IJobResult _jobResult;
-        private JobResultProgressEncoder _payrollResultProgressEncoder;
+        private JobResultProgressEncoder _jobResultProgressEncoder;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(JobResultFeedback));
 
         public void SetJobResult(IJobResult jobResult,IMessageBroker messageBroker)
         {
         	_messageBroker = messageBroker;
             _jobResult = jobResult;
-			_payrollResultProgressEncoder = new JobResultProgressEncoder();
+			_jobResultProgressEncoder = new JobResultProgressEncoder();
         }
-        
+
+        public void ChangeTotalProgress(int totalPercentage)
+        {
+            var jobResultProgress = new JobResultProgress
+            {
+                Message = string.Empty,
+                Percentage = 0,
+                JobResultId = _jobResult.Id.GetValueOrDefault(),
+                TotalPercentage = totalPercentage
+            };
+            var binaryData = _jobResultProgressEncoder.Encode(jobResultProgress);
+            sendMessage(binaryData);
+        }
+
         public void ReportProgress(int percentage, string information)
         {
-            var payrollExportProgress = new JobResultProgress
+            var jobResultProgress = new JobResultProgress
                                             {
                                                 Message = information,
                                                 Percentage = percentage,
                                                 JobResultId = _jobResult.Id.GetValueOrDefault()
                                             };
-            var binaryData =
-                _payrollResultProgressEncoder.Encode(payrollExportProgress);
+            var binaryData = _jobResultProgressEncoder.Encode(jobResultProgress);
+            sendMessage(binaryData);
+        }
+
+        private void sendMessage(byte[] binaryData)
+        {
             using (new MessageBrokerSendEnabler())
             {
                 if (MessageBrokerIsRunning())
                 {
-                    _messageBroker.SendEventMessage(DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty, typeof(IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
+                    _messageBroker.SendEventMessage(DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+                                                    typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
                 }
                 else
                 {
-                    Logger.Warn("Job export progress could not be sent because the message broker is unavailable.");
+                    Logger.Warn("Job progress could not be sent because the message broker is unavailable.");
                 }
             }
         }
@@ -99,7 +117,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             if (disposing)
             {
                 _messageBroker = null;
-                _payrollResultProgressEncoder = null;
+                _jobResultProgressEncoder = null;
                 _jobResult = null;
             }
         }

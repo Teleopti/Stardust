@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
-using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
@@ -108,8 +107,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
+            buttonAdvImport.Enabled = false;
             var fileContent = new List<CsvFileRow>();
-            using (var stream = new StreamReader(textBoxImportFileName.Text))
+            using (var stream = new StreamReader(UploadFileName))
             {
                 var rowNumber = 1;
                 try
@@ -139,15 +139,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                 var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid() });
                 statusDialog.Show(this);
                 statusDialog.SetProgress(1);
-                statusDialog.SetMessage("Uploading file:" + textBoxImportFileName.Text + " to server...");
+                statusDialog.SetMessage("Uploading file:" + UploadFileName + " to server...");
                 var savedFileId = saveFileToServer(fileContent);
                 if (savedFileId == null)
                 {
                     MessageBoxAdv.Show("Error occured when trying to import file.");
                     return;
                 }
+                statusDialog.SetJobStatusId(savedFileId);
                 statusDialog.SetProgress(2);
-                statusDialog.SetMessage(textBoxImportFileName.Text + " uploaded.");
+                statusDialog.SetMessage(UploadFileName + " uploaded.");
+                statusDialog.SetProgress(1);
+                statusDialog.SetMessage("Validating...");
                 var dto = new ImportForecastsFileCommandDto
                 {
                     ImportForecastsMode = getImportForecastOption(),
@@ -156,6 +159,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                 };
                 statusDialog.SetJobStatusId(executeCommand(dto));
             }
+        }
+
+        private string UploadFileName
+        {
+            get { return textBoxImportFileName.Text; }
         }
 
         private static void validateRowByRow(IList<IForecastsFileValidator> validators, IList<string> row)
@@ -232,6 +240,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                 ((IDisposable)proxy).Dispose();
             }
             return null;
+        }
+
+        private void textBoxImportFileNameTextChanged(object sender, EventArgs e)
+        {
+            if (File.Exists(UploadFileName))
+                buttonAdvImport.Enabled = true;
         }
     }
 }

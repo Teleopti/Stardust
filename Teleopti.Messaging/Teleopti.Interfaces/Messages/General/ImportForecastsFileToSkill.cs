@@ -18,6 +18,11 @@ namespace Teleopti.Interfaces.Messages.General
         }
 
         /// <summary>
+        /// The id of the uploaded file.
+        /// </summary>
+        public Guid UploadedFileId { get; set; }
+
+        /// <summary>
         /// The target skill to be imported to
         /// </summary>
         public Guid TargetSkillId { get; set; }

@@ -76,7 +76,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.03279F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.96721F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 187F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 188F));
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblSkillNameColon, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtSkillName, 1, 0);
@@ -104,7 +104,7 @@
             // radioButtonImportStaffing
             // 
             this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(302, 28);
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(301, 28);
             this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
             this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
             this.radioButtonImportStaffing.TabIndex = 1;
@@ -131,7 +131,7 @@
             this.txtSkillName.BackColor = System.Drawing.Color.Transparent;
             this.txtSkillName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSkillName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtSkillName.Location = new System.Drawing.Point(117, 6);
+            this.txtSkillName.Location = new System.Drawing.Point(116, 6);
             this.txtSkillName.Name = "txtSkillName";
             this.txtSkillName.Size = new System.Drawing.Size(0, 13);
             this.txtSkillName.TabIndex = 1;
@@ -177,6 +177,7 @@
             this.buttonAdvImport.TabIndex = 0;
             this.buttonAdvImport.Text = "xxImport";
             this.buttonAdvImport.UseVisualStyle = true;
+            this.buttonAdvImport.Enabled = false;
             this.buttonAdvImport.Click += new System.EventHandler(this.buttonAdvImportClick);
             // 
             // lblImportFileName
@@ -196,10 +197,11 @@
             // 
             this.textBoxImportFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxImportFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxImportFileName.Location = new System.Drawing.Point(117, 80);
+            this.textBoxImportFileName.Location = new System.Drawing.Point(116, 80);
             this.textBoxImportFileName.Name = "textBoxImportFileName";
             this.textBoxImportFileName.Size = new System.Drawing.Size(179, 20);
             this.textBoxImportFileName.TabIndex = 3;
+            this.textBoxImportFileName.TextChanged += new System.EventHandler(this.textBoxImportFileNameTextChanged);
             // 
             // buttonAdvBrowseFile
             // 
@@ -207,7 +209,7 @@
             this.buttonAdvBrowseFile.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvBrowseFile.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvBrowseFile.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(302, 80);
+            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(301, 80);
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 4;
@@ -218,7 +220,7 @@
             // radioButtonImportWLAndStaffing
             // 
             this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(302, 53);
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(301, 53);
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
             this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 2;
@@ -229,7 +231,7 @@
             // 
             this.radioButtonImportWorkload.AutoSize = true;
             this.radioButtonImportWorkload.Checked = true;
-            this.radioButtonImportWorkload.Location = new System.Drawing.Point(302, 3);
+            this.radioButtonImportWorkload.Location = new System.Drawing.Point(301, 3);
             this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
             this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
             this.radioButtonImportWorkload.TabIndex = 0;
@@ -241,7 +243,7 @@
             // 
             this.labelWorkloadName.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelWorkloadName.AutoSize = true;
-            this.labelWorkloadName.Location = new System.Drawing.Point(117, 31);
+            this.labelWorkloadName.Location = new System.Drawing.Point(116, 31);
             this.labelWorkloadName.Name = "labelWorkloadName";
             this.labelWorkloadName.Size = new System.Drawing.Size(0, 13);
             this.labelWorkloadName.TabIndex = 10;
