@@ -1027,6 +1027,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(4, destination.PersonAbsenceCollection().Count);
 		}
 
+        [Test]
+        public void ShouldPasteAbsenceFromSourceWithContractDayOff()
+        {
+            SetupForMergeTests();
+
+            var absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
+
+            using (_mocks.Record())
+            {
+                Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
+            }
+
+            //add absences, assignment to source
+            source.Add(personAbsenceSource);
+            source.Add(personAbsenceSource2);
+            source.Add(personAssignmentSource);
+
+            //add dayoff, absence, assignment to destination
+            destination.Add(personDayOffDest);
+            destination.Add(personAbsenceDest);
+            destination.Add(personAssignmentDest);
+
+            //merge
+            ((ExtractedSchedule)source).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
+
+            Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+            destination.Merge(source, false);
+            Assert.AreEqual(2, destination.PersonAbsenceCollection().Count);
+        }
+
 		[Test]
 		public void VerifyMergeAbsence()
 		{
