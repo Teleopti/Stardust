@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
+using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.TextRequests))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.TextRequests))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 

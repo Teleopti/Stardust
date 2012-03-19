@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			signInBusinessUnitModel.DataSourceName = "arne weise";
 			signInBusinessUnitModel.PersonId = Guid.NewGuid();
+			signInBusinessUnitModel.AuthenticationType = (int)AuthenticationTypeOption.Windows;
 
 			using (mocks.Record())
 			{
@@ -74,10 +75,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			signInBusinessUnitModel.DataSourceName = "Datasource";
 			signInBusinessUnitModel.PersonId = Guid.NewGuid();
+			signInBusinessUnitModel.AuthenticationType = (int)AuthenticationTypeOption.Application;
 
 			using (mocks.Record())
 			{
-				Expect.Call(() => logon.LogOn(signInBusinessUnitModel.BusinessUnitId, signInBusinessUnitModel.DataSourceName, signInBusinessUnitModel.PersonId, AuthenticationTypeOption.Unknown)).Throw(
+				Expect.Call(() => logon.LogOn(signInBusinessUnitModel.BusinessUnitId, signInBusinessUnitModel.DataSourceName, signInBusinessUnitModel.PersonId, AuthenticationTypeOption.Application)).Throw(
 					new PermissionException("Permission Exception"));
 			}
 			using (mocks.Playback())
