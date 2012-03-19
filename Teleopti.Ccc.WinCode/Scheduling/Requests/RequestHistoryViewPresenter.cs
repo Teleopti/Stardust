@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         private void LoadRequests(RequestHistoryPage historyPage)
         {
+            _requestHistoryView.ShowRequestDetails("");
             var size = _requestHistoryView.PageSize;
             if (historyPage.Equals(RequestHistoryPage.First))
                 _requestHistoryView.StartRow = 1;

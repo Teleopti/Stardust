@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldLoadRequestOnPersonChange()
         {
+            Expect.Call(() => _requestHistoryView.ShowRequestDetails(""));
             Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_loadRequestHistoryCommand.Execute);
             Expect.Call(_requestHistoryView.StartRow = 1);
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldLoadRequestOnNextPage()
         {
+            Expect.Call(() => _requestHistoryView.ShowRequestDetails(""));
             Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_loadRequestHistoryCommand.Execute);
             Expect.Call(_requestHistoryView.StartRow).Return(1);
@@ -86,6 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldLoadRequestOnPreviousPage()
         {
+            Expect.Call(() => _requestHistoryView.ShowRequestDetails(""));
             Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_loadRequestHistoryCommand.Execute);
             Expect.Call(_requestHistoryView.StartRow).Return(101);
@@ -114,6 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void ShouldShowErrorOnDataSourceException()
         {
             var err = new DataSourceException();
+            Expect.Call(() => _requestHistoryView.ShowRequestDetails(""));
             Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_requestHistoryView.StartRow = 1);
             Expect.Call(_loadRequestHistoryCommand.Execute).Throw(err);
