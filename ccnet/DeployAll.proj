@@ -114,8 +114,8 @@
 	
 	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
 		<Message Text="Building Azure packages ..." Importance="high" />
-		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
-		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
 		<Message Text="Building Azure packages . Done!" Importance="high" />
 	</Target>
 	

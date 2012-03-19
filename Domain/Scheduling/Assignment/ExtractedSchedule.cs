@@ -271,6 +271,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 case SchedulePartView.DayOff:
                     if (isDelete) DeleteDayOff(); else MergeDayOff(source); break;
 
+                case SchedulePartView.ContractDayOff:
+                    if (source.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+                    {
+                        if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source);
+                    }
+                    break;
+
                 case SchedulePartView.FullDayAbsence:
                     if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source); break;
 

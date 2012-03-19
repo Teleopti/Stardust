@@ -2,14 +2,12 @@
 
 ::The path to this file
 SET WISEDIR=%~dp0
+SET /A ERRORLEV=0
 
 ::Get CCNet input
 SET Version=%1
 SET ProductId=%2
 SET OUTDIR=%3
-
-::Re-set errorlevel
-SET errorlevel=0
 
 ::Get the number of input params
 SET /a argc=0
@@ -52,13 +50,11 @@ IF EXIST "%WISEDIR%\Machines\%COMPUTERNAME%.bat" (
 ECHO Setting machine config
 CALL "%WISEDIR%\Machines\%COMPUTERNAME%.bat"
 ) ELSE (
-ECHO Could not find file for  machine config
-SET ERRORLEVEL=99
-GOTO EOF
+SET ERRORLEV=2
+GOTO error
 )
 IF %errorlevel% NEQ 0 (
-ECHO Failed to create machine config
-SET ERRORLEVEL=99
+SET ERRORLEV=3
 GOTO EOF
 )
 
@@ -79,9 +75,8 @@ SUBST %WISEDRIVELETTER% /D
 
 ::SUBST - create virtual driveletter
 IF EXIST %WISEDRIVELETTER% (
-ECHO Drive %WISEDRIVELETTER%  probably exist as fixed drive letter. Abort!
-SET ERRORLEVEL=99
-EXIT %ERRORLEVEL%
+SET ERRORLEVEL=4
+GOTO error
 ) ELSE (
 ECHO Adding new virtual driveletter:
 ECHO SUBST %WISEDRIVELETTER% %WORKINGDIR%
@@ -277,16 +272,11 @@ ECHO Be aware of WISE popups!
 ECHO Remember to mark: Exlude all, for assembly referencies that WISE finds
 ECHO --------------------------------------------------------------------
 
-::reset ERRORLEVEL
-SET ERRORLEVEL=0
-
 ::Compile
 IF %ProductId%==0 (
 SET ProductId=3
 CALL "%WISEDIR%\CompileWise.bat"
 SET ProductId=4
-CALL "%WISEDIR%\CompileWise.bat"
-SET ProductId=5
 CALL "%WISEDIR%\CompileWise.bat"
 SET ProductId=2
 CALL "%WISEDIR%\CompileWise.bat"
@@ -295,22 +285,39 @@ CALL "%WISEDIR%\CompileWise.bat"
 ) ELSE (
 CALL "%WISEDIR%\CompileWise.bat"
 )
-IF %ERRORLEVEL% NEQ 0 GOTO Error
+IF %ERRORLEVEL% NEQ 0 (
+SET ERRORLEV=1
+GOTO Error
+)
+
+::IF %ProductId%==5 CALL "K:\Src\Azure\BuildAzurePackages.bat"
+IF %ProductId%==5 CALL "%WISEDIR%\..\Azure\BuildAzurePackages.bat"
+SET ERRORLEV=%errorlevel% 
+IF %ERRORLEV% NEQ 0 GOTO error
+
 
 ECHO All products done, check files in out dir
 IF %Silent%==0 EXPLORER "%OUTDIR%"
 GOTO EOF
 
-:VersionExist
-ECHO Sorry I'm in silent mode. Abort!
-SET ERRORLEVEL=99
-GOTO EOF
-
 :Error
-ECHO ProductId=%ProductId% did not compile!
-SET ERRORLEVEL=99
-GOTO EOF
+COLOR C
+ECHO.
+ECHO --------
+IF %ERRORLEV% NEQ 0 ECHO Errors found!
+IF %ERRORLEV% EQU 1 ECHO ECHO ProductId=%ProductId% did not compile!
+IF %ERRORLEV% EQU 2 ECHO Could not find file for machine config on computer: %COMPUTERNAME%
+IF %ERRORLEV% EQU 3 ECHO Failed to create machine config
+IF %ERRORLEV% EQU 4 ECHO Drive %WISEDRIVELETTER% probably exist as fixed drive letter. Abort!
+IF %ERRORLEV% EQU 101 (ECHO Azure compile failed) ELSE (ECHO Unknown error code, ERRORLEV is %ERRORLEV%)
+ECHO.
+ECHO --------
+GOTO :EOF
+
+:Finish
+CD "%WISEDIR%"
+GOTO :EOF
 
 :EOF
 IF %Silent%==0 PAUSE
-EXIT %ERRORLEVEL%
+EXIT /b %ERRORLEV%
