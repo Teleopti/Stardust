@@ -6,24 +6,24 @@
 Scenario: Stay signed in after server restart
 	Given I am signed in
 	Then I should be signed in
-	When I browse the internet
+	When I navigate the internet
 	And the server restarts
-	And I browse to an application page
+	And I navigate to an application page
 	Then I should be signed in
 
 Scenario: Signed out when cookie expires while I browse the internet
 	Given I am signed in
 	Then I should be signed in
 	When my cookie expires
-	And I browse the internet
-	And I browse to an application page
+	And I navigate the internet
+	And I navigate to an application page
 	Then I should not be signed in
 
 Scenario: Signed out when cookie expires while I have the browser open
 	Given I am signed in
 	Then I should be signed in
 	When my cookie expires
-	And I browse to an application page
+	And I navigate to an application page
 	Then I should not be signed in
 
 Scenario: Signed out when saving preference when cookie is expired

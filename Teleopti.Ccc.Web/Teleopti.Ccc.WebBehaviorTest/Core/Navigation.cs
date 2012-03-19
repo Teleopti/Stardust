@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoToWithPossibleLongApplicationStartTime("MyTime#Preference/Index");
+			GoToWithPossibleLongApplicationStartTime("MyTime/Schedule/Week");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 

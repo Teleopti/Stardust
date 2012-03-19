@@ -27,34 +27,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Resources.Culture = UserTestData.PersonWindowsUser.PermissionInformation.Culture();
 		}
 
-		[When(@"I browse the internet")]
-		public void WhenIBrowseTheInternet()
-		{
-			Navigation.GotoTheInternet();
-		}
-
-		[When(@"I browse to an application page")]
-		public void WhenIBrowseToAnApplicationPage()
-		{
-			Navigation.GotoAnApplicationPageOutsidePortal();
-		}
-
-		[When(@"I browse to the site home page")]
-		public void WhenIBrowseToTheSiteHomePage()
-		{
-			Navigation.GotoSiteHomePage();
-		}
-
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
-			Assert.That(() => Browser.Current.Link("signout").Exists, Is.True.After(5000, 10));
+			EventualAssert.That(() => Pages.Pages.CurrentPortalPage.SignOutLink.Exists, Is.True);
 		}
 
 		[Then(@"I should be redirected to the sign in page")]
 		public void ThenIShouldBeRedirectedToTheSignInPage()
 		{
-			Assert.That(() => Browser.Current.Url, Is.StringContaining("Authentication/SignIn").After(5000, 10));
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Authentication/SignIn"));
 		}
 
 	}

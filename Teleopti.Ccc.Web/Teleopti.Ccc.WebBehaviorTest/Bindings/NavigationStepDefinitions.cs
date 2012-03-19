@@ -81,5 +81,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Navigation.GotoTeamSchedule();
 		}
+
+		[When(@"I navigate the internet")]
+		public void WhenIBrowseTheInternet()
+		{
+			Navigation.GotoTheInternet();
+		}
+
+		[When(@"I navigate to an application page")]
+		public void WhenIBrowseToAnApplicationPage()
+		{
+			Navigation.GotoAnApplicationPageOutsidePortal();
+		}
+
+		[When(@"I navigate to the site home page")]
+		public void WhenIBrowseToTheSiteHomePage()
+		{
+			Navigation.GotoSiteHomePage();
+		}
+
 	}
 }
