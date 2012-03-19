@@ -1,7 +1,8 @@
 @ECHO off
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-7%
-SET MsbuildProj=ccnet\Raptor2.proj
+SET MsbuildProjRaptor2=ccnet\Raptor2.proj
+SET MsbuildProjNightlyBuild=ccnet\NightlyBuild.proj
 SET CCNetWorkingDirectory=%ROOTDIR%
 SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 
@@ -20,11 +21,16 @@ IF ERRORLEVEL 1 SET CCNetProject=NightlyBuild
 IF ERRORLEVEL 2 SET CCNetProject=RaptorMain
 ECHO.
 
-
-PAUSE
 ::Run Build
-ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
-"%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProj%"
+IF "%CCNetProject%"=="RaptorMain" (
+ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjRaptor2%"
+"%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjRaptor2%"
+)
+
+IF "%CCNetProject%"=="NightlyBuild" (
+ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjNightlyBuild%"
+"%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjNightlyBuild%"
+)
 
 ECHO.
 ECHO reverting updated checked in config files ...

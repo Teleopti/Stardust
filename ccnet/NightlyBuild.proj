@@ -111,9 +111,10 @@
 		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
 		
 		<Message Text="Applying data update via Teleopti.Support.Security.exe ..." Importance="high" />
-		<Exec Command ="%22$Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE"/>
-		<Exec Command ="%22$Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -FM -EE"/>
-		<Exec Command ="%22$Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -PU -EE"/>
+		<Message Text="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE" Importance="high" />
+		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE"/>
+		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -FM -EE"/>
+		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -PU -EE"/>
 		
 		<Message Text="Databases patched and data updated" Importance="high" />
 	</Target>
