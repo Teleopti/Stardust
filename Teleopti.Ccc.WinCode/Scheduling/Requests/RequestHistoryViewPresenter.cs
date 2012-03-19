@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private readonly IEventAggregator _eventAggregator;
         private readonly ICommonAgentNameProvider _commonAgentNameProvider;
         private readonly ILoadRequestHistoryCommand _loadRequestHistoryCommand;
+        private IRequestHistoryLightWeight _lastHistory;
 
         public RequestHistoryViewPresenter(IRequestHistoryView requestHistoryView, IEventAggregator eventAggregator, 
             ICommonAgentNameProvider commonAgentNameProvider, ILoadRequestHistoryCommand loadRequestHistoryCommand)
@@ -27,6 +29,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             
             _loadRequestHistoryCommand = loadRequestHistoryCommand;
             _eventAggregator.GetEvent<RequestHistoryPageChanged>().Subscribe(LoadRequests);
+            _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Subscribe(SetRequestDetails);
+        }
+
+        private void SetRequestDetails(IRequestHistoryLightWeight obj)
+        {
+            if(_lastHistory.Equals(obj)) return;
+            _lastHistory = obj;
+            var details = obj.RequestTypeText + Environment.NewLine;
+            details = details + obj.Subject + Environment.NewLine + Environment.NewLine;
+
+            details = details + obj.Info + Environment.NewLine;
+            details = details + obj.Dates + Environment.NewLine + Environment.NewLine;
+
+            details = details + obj.RequestStatusText + Environment.NewLine;
+            details = details + obj.LastUpdatedDateTime + ' ' + obj.SavedByFirstName + ' ' + obj.SavedByLastName + Environment.NewLine + Environment.NewLine;
+            
+            details = details + obj.Message + Environment.NewLine;
+            
+            _requestHistoryView.ShowRequestDetails(details);
         }
 
         private void LoadRequests(RequestHistoryPage historyPage)

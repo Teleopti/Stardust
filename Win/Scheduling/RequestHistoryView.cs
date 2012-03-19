@@ -44,21 +44,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             listViewRequests.Items.AddRange(listViewItems);
         }
 
-        public IRequestHistoryLightWeight SelectedRequest
-        {
-            get
-            {
-                if (listViewRequests.SelectedItems.Count == 0)
-                    return null;
-                return listViewRequests.SelectedItems[0] as IRequestHistoryLightWeight;
-            } 
-        }
-
         public int TotalCount { set; get; }
 
         public int PageSize
         {
-            get { return 50:}
+            get { return 50; }
         }
 
         public void ShowRequestDetails(string details)
@@ -103,6 +93,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void ButtonAdvPreviousClick(object sender, EventArgs e)
         {
             _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
+        }
+
+        private void listViewRequests_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IRequestHistoryLightWeight selected = null;
+            if (listViewRequests.FocusedItem != null)
+                selected = listViewRequests.FocusedItem.Tag as IRequestHistoryLightWeight;
+            _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(selected);
         }
     }
 }

@@ -3,7 +3,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].
 DROP PROCEDURE [ReadModel].[RequestOnPerson]
 GO
 
--- exec [ReadModel].RequestOnPerson '4A7A2ACE-436A-4A47-96FF-9CC300CE6ACF', 1, 11
+-- exec [ReadModel].RequestOnPerson '4A7A2ACE-436A-4A47-96FF-9CC300CE6ACF', 1, 51
 -- =============================================
 -- Author:		Ola
 -- Create date: 2012-03-15
@@ -35,13 +35,14 @@ CREATE TABLE #result(
 	[ShiftTradeStatus] [int] NOT NULL,
 	[SavedByFirstName] [nvarchar](100) NOT NULL,
 	[SavedByLastName] [nvarchar](100) NOT NULL,
-	[SavedByEmploymentNumber] [nvarchar](100) NOT NULL
+	[SavedByEmploymentNumber] [nvarchar](100) NOT NULL,
+	[LastUpdatedDateTime] [datetime] NOT NULL
 )
 
 INSERT INTO #result
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
 a.Name AS Info, 'ABS' as RequestType, 0 as ShiftTradeStatus, 
-p2.FirstName as SavedByFirstName  , p2.LastName AS SavedByLastName, p2.EmploymentNumber as SavedByEmploymentNumber
+p2.FirstName as SavedByFirstName  , p2.LastName AS SavedByLastName, p2.EmploymentNumber as SavedByEmploymentNumber, pr.UpdatedOn 
 FROM PersonRequest pr INNER JOIN Person p
 ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
@@ -53,7 +54,7 @@ WHERE p.Id = @person
 UNION
 
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
-'', 'TEXT' as RequestType, 0 as ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber
+'', 'TEXT' as RequestType, 0 as ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber , pr.UpdatedOn 
 FROM PersonRequest pr INNER JOIN Person p
 ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
@@ -64,7 +65,7 @@ WHERE p.Id = @person
 UNION
 
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
-'' , 'TRADE' as RequestType, ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber
+'' , 'TRADE' as RequestType, ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber, pr.UpdatedOn 
 FROM PersonRequest pr INNER JOIN Person p
 ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id

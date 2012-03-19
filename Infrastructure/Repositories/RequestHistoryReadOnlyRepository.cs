@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public string SavedByFirstName { get; set; }
         public string SavedByLastName { get; set; }
         public string SavedByEmploymentNumber { get; set; }
+        public DateTime LastUpdatedDateTime { get; set; }
         public Int64 RowNumber { get; set; }
 
         public string RequestStatusText
@@ -72,6 +73,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     return UserTexts.Resources.RequestTypeAbsence;
 
                 return UserTexts.Resources.RequestTypeShiftTrade;
+            }
+        }
+
+        public string Dates
+        {
+            get
+            {
+                var delimiter = " - ";
+                if (RequestType == "TRADE")
+                    delimiter = " ; ";
+                return StartDateTime.ToLocalTime() + delimiter + EndDateTime.ToLocalTime();
             }
         }
     }

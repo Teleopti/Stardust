@@ -27,10 +27,11 @@ namespace Teleopti.Ccc.Domain.Repositories
          string SavedByFirstName { get; set; }
          string SavedByLastName { get; set; }
          string SavedByEmploymentNumber { get; set; }
+         DateTime LastUpdatedDateTime { get; set; }
          Int64 RowNumber { get; set; }
          string RequestStatusText { get; }
          string RequestTypeText { get; }
-        
+         string Dates { get; }
     }
     
 }
