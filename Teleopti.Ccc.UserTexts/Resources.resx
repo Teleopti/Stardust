@@ -10523,4 +10523,10 @@ These options are activated:
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>The person's roles</value>
   </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>Request History</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>View History</value>
+  </data>
 </root>

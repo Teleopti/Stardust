@@ -10214,4 +10214,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>Personens roller</value>
   </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>Förfrågningshistorik</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>Visa historik</value>
+  </data>
 </root>
