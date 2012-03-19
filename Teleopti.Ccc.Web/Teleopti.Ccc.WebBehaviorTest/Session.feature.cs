@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Session handling", "In order to be able to work with the application\r\nAs an agent\r\nI want the applica" +
-                    "tion to handle my login session approprietly", GenerationTargetLanguage.CSharp, ((string[])(null)));
+					"tion to handle my login session approprietly", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         

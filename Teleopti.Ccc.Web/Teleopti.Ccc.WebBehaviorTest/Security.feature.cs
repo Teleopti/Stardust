@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Site security", "In order to protect my information\r\nAs a user that is not signed in\r\nI want to ma" +
-                    "ke sure I cant access the site", GenerationTargetLanguage.CSharp, ((string[])(null)));
+					"ke sure I cant access the site", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
