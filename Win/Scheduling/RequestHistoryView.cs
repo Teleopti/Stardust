@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -78,6 +81,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void SetPreviousEnabledState(bool enabled)
         {
             buttonAdvPrevious.Enabled = enabled;
+        }
+
+        public void ShowDataSourceException(DataSourceException dataSourceException)
+        {
+            using (var view = new SimpleExceptionHandlerView(dataSourceException,
+                                                                    Resources.RequestHistory,
+                                                                    Resources.ServerUnavailable))
+            {
+                view.ShowDialog();
+            }
         }
 
         private void ComboBoxAdvPersonsSelectedIndexChanged(object sender, EventArgs e)

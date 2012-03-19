@@ -61,8 +61,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             if (historyPage.Equals(RequestHistoryPage.Previous))
                 _requestHistoryView.StartRow = _requestHistoryView.StartRow - size;
 
-            _loadRequestHistoryCommand.Execute();
-
+            try
+            {
+                _loadRequestHistoryCommand.Execute();
+            }
+            catch (Infrastructure.Foundation.DataSourceException e)
+            {
+                _requestHistoryView.ShowDataSourceException(e);
+                return;
+            }
             UpdateNextPreviousState(size);
         }
 

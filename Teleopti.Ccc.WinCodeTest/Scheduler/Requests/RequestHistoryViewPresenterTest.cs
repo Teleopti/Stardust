@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
@@ -106,6 +107,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _mocks.ReplayAll();
             _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(history);
             _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(history);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldShowErrorOnDataSourceException()
+        {
+            var err = new DataSourceException();
+            Expect.Call(_requestHistoryView.PageSize).Return(50);
+            Expect.Call(_requestHistoryView.StartRow = 1);
+            Expect.Call(_loadRequestHistoryCommand.Execute).Throw(err);
+            Expect.Call(() => _requestHistoryView.ShowDataSourceException(err));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.First);
             _mocks.VerifyAll();
         }
     }

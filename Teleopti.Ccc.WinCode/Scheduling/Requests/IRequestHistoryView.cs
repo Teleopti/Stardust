@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 {
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preselectedPerson);
         void SetNextEnabledState(bool enabled);
         void SetPreviousEnabledState(bool enabled);
+        void ShowDataSourceException(DataSourceException dataSourceException);
     }
 
     public interface IRequestPerson
