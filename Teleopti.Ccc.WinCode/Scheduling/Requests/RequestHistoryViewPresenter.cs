@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 {
     public interface IRequestHistoryViewPresenter
     {
-        void ShowHistory(Guid preSelectedPerson, ICollection<IPerson> filteredPersons);
+        void ShowHistory(Guid preselectedPerson, ICollection<IPerson> filteredPersons);
     }
     public class RequestHistoryViewPresenter : IRequestHistoryViewPresenter
     {
@@ -18,8 +18,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private readonly IEventAggregator _eventAggregator;
         private readonly ICommonAgentNameProvider _commonAgentNameProvider;
         private readonly ILoadRequestHistoryCommand _loadRequestHistoryCommand;
-        private IRequestHistoryLightWeight _lastHistory;
+        private IRequestHistoryLightweight _lastHistory;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public RequestHistoryViewPresenter(IRequestHistoryView requestHistoryView, IEventAggregator eventAggregator, 
             ICommonAgentNameProvider commonAgentNameProvider, ILoadRequestHistoryCommand loadRequestHistoryCommand)
         {
@@ -32,9 +33,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Subscribe(SetRequestDetails);
         }
 
-        private void SetRequestDetails(IRequestHistoryLightWeight obj)
+        private void SetRequestDetails(IRequestHistoryLightweight obj)
         {
-            if(_lastHistory.Equals(obj)) return;
+            if(_lastHistory != null &&  _lastHistory.Equals(obj)) return;
             _lastHistory = obj;
             var details = obj.RequestTypeText + Environment.NewLine;
             details = details + obj.Subject + Environment.NewLine + Environment.NewLine;
@@ -71,14 +72,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             _requestHistoryView.SetPreviousEnabledState(_requestHistoryView.StartRow > 1);
         }
 
-        public void ShowHistory(Guid preSelectedPerson, ICollection<IPerson> filteredPersons)
+        public void ShowHistory(Guid preselectedPerson, ICollection<IPerson> filteredPersons)
         {
             ICollection<IRequestPerson> persons = filteredPersons.Select(person => new RequestPerson
                                                                                        {
                                                                                            Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person), Id = person.Id.Value
                                                                                        }).Cast<IRequestPerson>().ToList();
 
-            _requestHistoryView.FillPersonCombo(persons, preSelectedPerson);
+            _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
             _requestHistoryView.ShowForm();
         }
 

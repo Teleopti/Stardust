@@ -16,20 +16,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        public IList<IRequestHistoryLightWeight> LoadOnPerson(Guid personId, int startRow, int endRow)
+        public IList<IRequestHistoryLightweight> LoadOnPerson(Guid personId, int startRow, int endRow)
         {
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
                 "exec [ReadModel].[RequestOnPerson] @person=:person, @start_row =:start_row, @end_row=:end_row")
                 .SetGuid("person", personId)
                 .SetInt32("start_row", startRow)
                 .SetInt32("end_row", endRow)
-                .SetResultTransformer(Transformers.AliasToBean(typeof(RequestHistoryLightWeight)))
+                .SetResultTransformer(Transformers.AliasToBean(typeof(RequestHistoryLightweight)))
                 .SetReadOnly(true)
-                .List<IRequestHistoryLightWeight>();     
+                .List<IRequestHistoryLightweight>();     
         }
     }
 
-    public class RequestHistoryLightWeight: IRequestHistoryLightWeight
+    public class RequestHistoryLightweight: IRequestHistoryLightweight
     {
         public int TotalCount { get; set; }
         public Guid Id { get; set; }

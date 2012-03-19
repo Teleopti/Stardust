@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         [Test]
-        public void ShouldGetSettingFromRepositoryOneTime()
+        public void ShouldGetSettingFromRepositoryOnetime()
         {
             var uow = _mocks.StrictMock<IUnitOfWork>();
             var rep = _mocks.StrictMock<ISettingDataRepository>();

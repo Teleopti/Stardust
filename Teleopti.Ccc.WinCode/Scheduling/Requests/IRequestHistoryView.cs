@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         int PageSize { get; }
         void ShowRequestDetails(string details);
         void ShowForm();
-        void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preSelectedPerson);
+        void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preselectedPerson);
         void SetNextEnabledState(bool enabled);
         void SetPreviousEnabledState(bool enabled);
     }

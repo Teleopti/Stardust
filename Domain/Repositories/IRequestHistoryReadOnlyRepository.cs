@@ -5,10 +5,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
     public interface IRequestHistoryReadOnlyRepository
     {
-        IList<IRequestHistoryLightWeight> LoadOnPerson(Guid personId, int startRow, int endRow);
+        IList<IRequestHistoryLightweight> LoadOnPerson(Guid personId, int startRow, int endRow);
     }
 
-    public interface IRequestHistoryLightWeight
+    public interface IRequestHistoryLightweight
     {
         int TotalCount { get; set; }
          Guid Id { get; set; }

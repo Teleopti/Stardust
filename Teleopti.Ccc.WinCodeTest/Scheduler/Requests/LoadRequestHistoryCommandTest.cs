@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Expect.Call(_requestHistoryView.SelectedPerson).Return(guid);
             
             Expect.Call(_repositoryFactory.CreateRequestHistoryReadOnlyRepository(uow)).Return(rep);
-            Expect.Call(rep.LoadOnPerson(guid, 1, 51)).Return(new List<IRequestHistoryLightWeight>{new RequestHistoryLightWeight{TotalCount = 5}});
+            Expect.Call(rep.LoadOnPerson(guid, 1, 51)).Return(new List<IRequestHistoryLightweight>{new RequestHistoryLightweight{TotalCount = 5}});
             Expect.Call(() => _requestHistoryView.TotalCount = 5);
             Expect.Call(() => _requestHistoryView.FillRequestList(new ListViewItem[0])).IgnoreArguments();
             Expect.Call(uow.Dispose);

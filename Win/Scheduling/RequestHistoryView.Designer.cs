@@ -196,7 +196,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "RequestHistoryView";
-            this.Text = "xxRequestHistoryView";
+            this.Text = "xxRequestHistory";
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvPersons)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

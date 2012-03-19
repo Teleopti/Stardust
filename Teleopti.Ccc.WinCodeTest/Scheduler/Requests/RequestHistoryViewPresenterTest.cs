@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
@@ -94,6 +95,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Expect.Call(() => _requestHistoryView.SetPreviousEnabledState(true));
             _mocks.ReplayAll();
             _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldSetDetailsOnView()
+        {
+            var history = new RequestHistoryLightweight();
+            Expect.Call(() => _requestHistoryView.ShowRequestDetails("")).IgnoreArguments();
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(history);
+            _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(history);
             _mocks.VerifyAll();
         }
     }

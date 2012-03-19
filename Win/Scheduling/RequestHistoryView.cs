@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 
-        public void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preSelectedPerson)
+        public void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preselectedPerson)
         {
             comboBoxAdvPersons.ValueMember = "Id";
             comboBoxAdvPersons.DisplayMember = "Name";
             comboBoxAdvPersons.DataSource = persons;
-            comboBoxAdvPersons.SelectedValue = preSelectedPerson;
+            comboBoxAdvPersons.SelectedValue = preselectedPerson;
         }
 
         public void SetNextEnabledState(bool enabled)
@@ -97,9 +97,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void listViewRequests_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IRequestHistoryLightWeight selected = null;
+            IRequestHistoryLightweight selected = null;
             if (listViewRequests.FocusedItem != null)
-                selected = listViewRequests.FocusedItem.Tag as IRequestHistoryLightWeight;
+                selected = listViewRequests.FocusedItem.Tag as IRequestHistoryLightweight;
             _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(selected);
         }
     }
