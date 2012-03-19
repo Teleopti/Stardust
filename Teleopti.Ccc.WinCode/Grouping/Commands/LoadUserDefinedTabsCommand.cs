@@ -56,8 +56,11 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             {
                 if (toNode.PersonId != new Guid())
                 {
-                    if (!auth.IsPermitted(_applicationFunction.FunctionPath, date, toNode))
-                        toRemove.Add(toNode);
+                    if (_applicationFunction != null)
+                    {
+                        if (!auth.IsPermitted(_applicationFunction.FunctionPath, date, toNode))
+                            toRemove.Add(toNode);
+                    }
                 }
             }
             foreach (var personSelectorOrganization in toRemove)
