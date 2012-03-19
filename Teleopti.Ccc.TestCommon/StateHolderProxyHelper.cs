@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.TestCommon
 
             var principal = new TeleoptiPrincipalForTest(new TeleoptiIdentity("test user", dataSource,
                                                                                   businessUnit,
-                                                                                  WindowsIdentity.GetCurrent()),
+                                                                                  WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application),
                                                              loggedOnPerson);
             principal.SetPrincipalAuthorization(new PrincipalAuthorizationWithFullPermission());
 

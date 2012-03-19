@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		private static IPrincipalAuthorization SetupPrincipalAuthorization()
 		{
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null), new Person());
+			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
 			principalForTest.SetPrincipalAuthorization(principalAuthorization);
 			Thread.CurrentPrincipal = principalForTest;
 			return principalAuthorization;

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 							sessionSpecificDataProvider,
 							ruleToPrincipalCommand);
 	    	principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
-	    	var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null,null,null), new Person());
+			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
 			principalForTest.SetPrincipalAuthorization(principalAuthorization);
 	    	Thread.CurrentPrincipal = principalForTest;
 		}
@@ -77,13 +77,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-			    Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.Store(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId);
+				target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Unknown);
 			}
 		}
 
@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Application));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<PermissionException>(() => 
-					target.LogOn(buId, dataSourceName, personId));
+				Assert.Throws<PermissionException>(() =>
+					target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Application));
 			}
 		}
 	}

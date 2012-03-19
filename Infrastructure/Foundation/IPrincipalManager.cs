@@ -2,8 +2,8 @@
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-    public interface IPrincipalManager
-    {
-        void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit);
-    }
+	public interface IPrincipalManager
+	{
+		void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType);
+	}
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 	    	_roleToPrincipalCommand = roleToPrincipalCommand;
 		}
 
-		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId)
+		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 			using(var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
-				_logOnOff.LogOn(dataSource, person, businessUnit);
+				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
 				var principal = (TeleoptiPrincipal) Thread.CurrentPrincipal;
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 				checkWebPermission(principal, person);
 			}
 
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, authenticationType);
 			_sessionSpecificDataProvider.Store(sessionSpecificData);
 		}
 
