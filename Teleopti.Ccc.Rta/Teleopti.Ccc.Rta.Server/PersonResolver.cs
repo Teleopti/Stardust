@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Rta.Server
             var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn);
 			if (string.IsNullOrEmpty(logOn))
 			{
-				lookupKey = dataSourceId.ToString(CultureInfo.InvariantCulture);
+				lookupKey = string.Empty;
 			}
 
 			IDictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary;
