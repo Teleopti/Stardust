@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -43,20 +42,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 {
                     unitOfWork.Clear();
                     unitOfWork.Merge(jobResult);
-                    _feedback.Error("Skill does not exist.");
+                    _feedback.Error(string.Format("Skill with Id:{0} does not exist.", message.TargetSkillId));
                     _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
                     endProcessing(unitOfWork);
                     return;
                 }
                 
                 _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1}.",
-                                             skill.Name, message.Date.ToShortDateString()));
+                                             skill.Name, message.Date));
                 _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Importing forecasts to skill: {0} on {1}.",
-                                                      skill.Name, message.Date.ToShortDateString()));
+                                                      skill.Name, message.Date));
                 using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
                 {
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
                     try
                     {
                         _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
@@ -70,10 +67,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                         endProcessing(unitOfWork);
                         return;
                     }
-                    stopwatch.Stop();
-                    _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Processing import for skill {0} on {1} took {2}.", skill.Name, message.Date.ToShortDateString(), stopwatch.Elapsed));
                     _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1} succeeded.",
-                                                      skill.Name, message.Date.ToShortDateString()));
+                                                      skill.Name, message.Date));
                     jobResult.FinishedOk = true;
                     endProcessing(unitOfWork);
                 }
