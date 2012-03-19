@@ -80,10 +80,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
+                return StartDateTime.ToLocalTime() + Delimiter + EndDateTime.ToLocalTime();
+            }
+        }
+
+        public string ShortDates
+        {
+            get
+            {
+                return StartDateTime.ToLocalTime().ToShortDateString() + Delimiter + EndDateTime.ToLocalTime().ToShortDateString();
+            }
+        }
+
+        private string Delimiter
+        {
+            get
+            {
                 var delimiter = " - ";
                 if (RequestType == "TRADE")
                     delimiter = " ; ";
-                return StartDateTime.ToLocalTime() + delimiter + EndDateTime.ToLocalTime();
+                return delimiter;
             }
         }
     }

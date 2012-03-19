@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Repositories
          string RequestStatusText { get; }
          string RequestTypeText { get; }
          string Dates { get; }
+        string ShortDates { get; }
     }
     
 }

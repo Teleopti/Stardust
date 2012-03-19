@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 {
                     var item = new ListViewItem(request.RequestTypeText) { Tag = request };
                     item.SubItems.Add(request.RequestStatusText);
-                    item.SubItems.Add(request.StartDateTime.ToShortDateString());
+                    item.SubItems.Add(request.ShortDates);
                     list.Add(item);
                 }
                 _requestHistoryView.FillRequestList(list.ToArray());
