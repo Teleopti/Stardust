@@ -25,17 +25,19 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             StateHolder.Instance.State.ClearSession();
         }
 
-        /// <summary>
-        /// Logs on the system.
-        /// </summary>
-        /// <param name="dataSource">The uow factory.</param>
-        /// <param name="loggedOnUser">The logged on user.</param>
-        /// <param name="businessUnit">The business unit.</param>
-        public void LogOn(IDataSource dataSource,
+    	/// <summary>
+    	/// Logs on the system.
+    	/// </summary>
+    	/// <param name="dataSource">The uow factory.</param>
+    	/// <param name="loggedOnUser">The logged on user.</param>
+    	/// <param name="businessUnit">The business unit.</param>
+    	/// <param name="teleoptiAuthenticationType">Win or form authentication?</param>
+    	public void LogOn(IDataSource dataSource,
                           IPerson loggedOnUser,
-                          IBusinessUnit businessUnit)
+                          IBusinessUnit businessUnit,
+								AuthenticationTypeOption teleoptiAuthenticationType)
         {
-            _principalManager.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
+            _principalManager.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
             
             SessionData sessionData = new SessionData();
             StateHolder.Instance.State.SetSessionData(sessionData);

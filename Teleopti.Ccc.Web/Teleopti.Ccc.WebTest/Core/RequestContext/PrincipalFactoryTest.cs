@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 				identity.DataSource.Should().Be.SameInstanceAs(dataSource);
 				identity.BusinessUnit.Should().Be.SameInstanceAs(businessUnit);
 				identity.WindowsIdentity.Name.Should().Be.EqualTo(WindowsIdentity.GetCurrent().Name);
+				identity.TeleoptiAuthenticationType.Should().Be.EqualTo(sessData.AuthenticationType);
 			}
 		}
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData createSessionData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid());
+			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid(), AuthenticationTypeOption.Windows);
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid());
+			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid(), AuthenticationTypeOption.Application);
 		}
 
 		[SetUp]

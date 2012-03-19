@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 
-	    public PrincipalFactory(IDataSourcesProvider dataSourcesProvider, 
-								ISessionSpecificDataProvider sessionSpecificDataProvider, 
-								IRepositoryFactory repositoryFactory, 
-								IRoleToPrincipalCommand roleToPrincipalCommand)
+		public PrincipalFactory(IDataSourcesProvider dataSourcesProvider,
+							  ISessionSpecificDataProvider sessionSpecificDataProvider,
+							  IRepositoryFactory repositoryFactory,
+							  IRoleToPrincipalCommand roleToPrincipalCommand)
 		{
 			_dataSourcesProvider = dataSourcesProvider;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -35,24 +35,24 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		{
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(sessionData.DataSourceName);
 
-		    TeleoptiPrincipal principal;
-		    using(var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			TeleoptiPrincipal principal;
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(sessionData.PersonId);
 				if (person == null)
 					return null;
 
-                var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
-                IBusinessUnit businessUnit = buRep.Get(sessionData.BusinessUnitId);
+				var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
+				IBusinessUnit businessUnit = buRep.Get(sessionData.BusinessUnitId);
 
-				var teleoptiIdentity = new TeleoptiIdentity(person.Name.ToString(), dataSource, businessUnit, WindowsIdentity.GetCurrent());
-			    principal = new TeleoptiPrincipal(teleoptiIdentity, person);
-			    _roleToPrincipalCommand.Execute(principal, uow, personRep);
-				
+				var teleoptiIdentity = new TeleoptiIdentity(person.Name.ToString(), dataSource, businessUnit, WindowsIdentity.GetCurrent(), sessionData.AuthenticationType);
+				principal = new TeleoptiPrincipal(teleoptiIdentity, person);
+				_roleToPrincipalCommand.Execute(principal, uow, personRep);
+
 			}
 
-            return principal;
+			return principal;
 		}
 	}
 }

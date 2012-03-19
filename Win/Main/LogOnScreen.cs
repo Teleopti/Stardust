@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Win.Main
         {
             _choosenDataSource = dataSourceContainer;
 
-            _principalManager.SetCurrentPrincipal(_choosenDataSource.User,_choosenDataSource.DataSource,null);
+            _principalManager.SetCurrentPrincipal(_choosenDataSource.User,_choosenDataSource.DataSource,null, dataSourceContainer.AuthenticationTypeOption);
             return true;
         }
 
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.Win.Main
 
             businessUnit = provider.LoadHierarchyInformation(businessUnit);
 
-            _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
+            _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, dataSourceContainer.AuthenticationTypeOption);
 
             StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _authenticationType;
 

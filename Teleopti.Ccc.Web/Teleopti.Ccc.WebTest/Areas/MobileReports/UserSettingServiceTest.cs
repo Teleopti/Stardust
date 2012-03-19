@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WebTest.Areas.MobileReports
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 {
 	using System;
 
@@ -84,7 +86,7 @@
 				this._person = person;
 				this._principalForTest =
 					new TeleoptiPrincipalForTest(
-						new TeleoptiIdentity(this._person.Name.ToString(), null, this._businessUnit, null), this._person);
+						new TeleoptiIdentity(this._person.Name.ToString(), null, this._businessUnit, null, AuthenticationTypeOption.Unknown), this._person);
 			}
 
 			public TeleoptiPrincipal Current()

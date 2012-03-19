@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
             selectedDataSource.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit);
 
-            _logOnOff.LogOn(selectedDataSource.DataSource,selectedDataSource.User,businessUnit);
+            _logOnOff.LogOn(selectedDataSource.DataSource,selectedDataSource.User,businessUnit, selectedDataSource.AuthenticationTypeOption);
 
             var unitOfWorkFactory = selectedDataSource.DataSource.Application;
             var licenseVerifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));

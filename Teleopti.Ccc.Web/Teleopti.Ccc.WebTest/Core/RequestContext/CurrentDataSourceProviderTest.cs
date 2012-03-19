@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldReturnCurrentDataSource()
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", dataSource, null, null), new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", dataSource, null, null, AuthenticationTypeOption.Unknown), new Person());
 
 			currentPrincipalProvider.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
