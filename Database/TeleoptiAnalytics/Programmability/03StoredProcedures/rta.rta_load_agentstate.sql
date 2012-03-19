@@ -11,6 +11,7 @@ GO
 --
 --				2010-03-24	DJ		Use JOIN instead of IN, add WITH(NOLOCK)
 --				2010-12-20  AF		Only latest snapshot. Will limit use of total alarm time in RTA...
+--				2012-03-19  Robin	Exclude people in selection that only exists in earlier snapshots.
 -- =============================================
 --EXEC [RTA].[rta_load_agentstate] '2010-12-19 23:00:00','2010-12-20 23:00:00','2001,2002,0063,2000,0019,0068,0085,0202,0238,2003'
 CREATE PROCEDURE [RTA].[rta_load_agentstate]
@@ -55,6 +56,14 @@ BEGIN
 					AND EAS2.PlatformTypeId = EAS.PlatformTypeId
 					AND EAS2.DataSourceId = EAS.DataSourceId
 					AND EAS2.TimestampValue > EAS.TimestampValue
+					AND EAS2.IsSnapshot = 1
+					)
+	AND NOT EXISTS (SELECT 1
+					FROM RTA.ExternalAgentState EAS2 WITH(NOLOCK)
+					WHERE EAS.IsSnapshot = 1 
+					AND EAS2.PlatformTypeId = EAS.PlatformTypeId
+					AND EAS2.DataSourceId = EAS.DataSourceId
+					AND EAS2.BatchId > EAS.BatchId
 					AND EAS2.IsSnapshot = 1
 					)
     ORDER BY BatchId, TimestampValue, LogOn DESC;
