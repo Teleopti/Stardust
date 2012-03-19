@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IOpenAndSplitSkillCommand _command;
         private readonly ISkillRepository _skillRepository;
-        private IJobResultRepository _jobResultRepository;
+        private readonly IJobResultRepository _jobResultRepository;
         private readonly IJobResultFeedback _feedback;
-        private IMessageBroker _messageBroker;
+        private readonly IMessageBroker _messageBroker;
         private readonly IServiceBus _serviceBus;
 
         public OpenAndSplitTargetSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)

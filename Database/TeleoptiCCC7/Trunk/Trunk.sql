@@ -34,7 +34,7 @@ CREATE TABLE [dbo].[ForecastFile](
 	[FileName] [nvarchar](255) NULL,
 	[FileContent] [varbinary](MAX) NULL,
 	[BusinessUnit] [uniqueidentifier] NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ForecastFile]PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
