@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -42,7 +43,28 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			}
 		}
 
-		private static void setTargetBusinessUnit(ISkillDay skillDay, IBusinessUnit businessUnit)
+	    public void Execute(ISkill skill, DateOnlyPeriod period, IList<TimePeriod> openHoursList)
+	    {
+            var scenario = _scenarioProvider.DefaultScenario(skill.BusinessUnit);
+            var skillDays = _skillDayRepository.FindRange(period, skill, scenario);
+            var allSkillDays = _skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, true);
+
+            var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(allSkillDays, skill.WorkloadCollection.First());
+            foreach (var workloadDayBase in workloadDays)
+            {
+                workloadDayBase.ChangeOpenHours(openHoursList);
+                workloadDayBase.SplitTemplateTaskPeriods(workloadDayBase.TaskPeriodList.ToList());
+                var skillDay = workloadDayBase.Parent as ISkillDay;
+                if (skillDay != null)
+                {
+                    skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
+
+                    setTargetBusinessUnit(skillDay, skill.BusinessUnit);
+                }
+            }
+	    }
+
+	    private static void setTargetBusinessUnit(ISkillDay skillDay, IBusinessUnit businessUnit)
 		{
 			typeof(AggregateRootWithBusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
 				skillDay, businessUnit);

@@ -227,6 +227,14 @@
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\SkillExportCombination.cs" />
     <Compile Include="Forecasting\Export\SkillExportSelection.cs" />
+    <Compile Include="Forecasting\ForecastsFile\CsvFileReader.cs" />
+    <Compile Include="Forecasting\ForecastsFile\CsvFileWriter.cs" />
+    <Compile Include="Forecasting\ForecastsFile\CsvFileRow.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileRow.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
+    <Compile Include="Forecasting\Import\ForecastFile.cs" />
+    <Compile Include="Forecasting\Import\IForecastFile.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />
@@ -1628,6 +1636,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\LicenseStatus.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

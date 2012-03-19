@@ -1,0 +1,89 @@
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
+using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Messages.General;
+
+namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+{
+    public class ImportForecastsToSkillConsumer : ConsumerOf<ImportForecastsToSkill>
+    {
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
+        private readonly ISkillRepository _skillRepository;
+        private readonly IJobResultRepository _jobResultRepository;
+        private readonly IJobResultFeedback _feedback;
+        private readonly IMessageBroker _messageBroker;
+
+        public ImportForecastsToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker)
+        {
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _saveForecastToSkillCommand = saveForecastToSkillCommand;
+            _skillRepository = skillRepository;
+            _jobResultRepository = jobResultRepository;
+            _feedback = feedback;
+            _messageBroker = messageBroker;
+        }
+
+        public void Consume(ImportForecastsToSkill message)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var jobResult = _jobResultRepository.Get(message.JobId);
+                var skill = _skillRepository.Get(message.TargetSkillId);
+                _feedback.SetJobResult(jobResult, _messageBroker);
+                if (skill == null)
+                {
+                    unitOfWork.Clear();
+                    unitOfWork.Merge(jobResult);
+                    _feedback.Error("Skill does not exist.");
+                    _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
+                    endProcessing(unitOfWork);
+                    return;
+                }
+                
+                _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1}.",
+                                             skill.Name, message.Date.ToShortDateString()));
+                _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Importing forecasts to skill: {0} on {1}.",
+                                                      skill.Name, message.Date.ToShortDateString()));
+                using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    try
+                    {
+                        _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
+                    }
+                    catch (Exception exception)
+                    {
+                        unitOfWork.Clear();
+                        unitOfWork.Merge(jobResult);
+                        _feedback.Error("An error occurred while running import.", exception);
+                        _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
+                        endProcessing(unitOfWork);
+                        return;
+                    }
+                    stopwatch.Stop();
+                    _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Processing import for skill {0} on {1} took {2}.", skill.Name, message.Date.ToShortDateString(), stopwatch.Elapsed));
+                    _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1} succeeded.",
+                                                      skill.Name, message.Date.ToShortDateString()));
+                    jobResult.FinishedOk = true;
+                    endProcessing(unitOfWork);
+                }
+            }
+        }
+
+        private void endProcessing(IUnitOfWork unitOfWork)
+        {
+            unitOfWork.PersistAll();
+            _feedback.Dispose();
+        }
+    }
+}

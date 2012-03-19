@@ -39,6 +39,7 @@ using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
+using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private TreeNode _lastContextMenuNode;
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
+	    private readonly IImportForecastsRepository _importForecastsRepository;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -80,11 +82,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		}
 
-        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory)
+        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory, IImportForecastsRepository importForecastsRepository)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
+            _importForecastsRepository = importForecastsRepository;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -424,6 +427,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
+
+        
 
 		private ISkillType getSkillType(TreeNode node)
 		{
@@ -1137,9 +1142,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                             {
                                 pages.SaveSettings();
                                 var statusDialog =
-                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty, CommandDto = dto });
+                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty});
                                 statusDialog.Show(this);
-                                statusDialog.SetJobStatusId(executeExportCommand(dto));
+                                statusDialog.SetJobStatusId(executeCommand(dto));
                             }
                             catch (OptimisticLockException)
                             {
@@ -1156,8 +1161,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private Guid? executeExportCommand(CommandDto commandDto)
+        private Guid? executeCommand(CommandDto commandDto)
         {
             var sdkAuthentication = new SdkAuthentication();
             sdkAuthentication.SetSdkAuthenticationHeader();
@@ -1171,15 +1175,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             catch (TimeoutException timeoutException)
             {
-                _logger.Error("Export multisite skill to skill command can't reach Sdk due to a timeout.", timeoutException);
+                _logger.Error(string.Concat(commandDto.GetType()," can't reach Sdk due to a timeout."), timeoutException);
             }
             catch (CommunicationException exception)
             {
-                _logger.Error("Export multisite skill to skill command can't reach Sdk.", exception);
+                _logger.Error(string.Concat(commandDto.GetType(), " can't reach Sdk."), exception);
             }
             catch (Exception exception)
             {
-                _logger.Error("Export multisite skill to skill command notification error.", exception);
+                _logger.Error(string.Concat(commandDto.GetType()," notification error."), exception);
             }
             finally
             {
@@ -1206,6 +1210,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     view.ShowDialog(this);
                 }
             });
-	    }
+        }
+
+        private void importForecast(TreeNode node)
+        {
+            node = findAncestorNodeOfType(node, typeof(ISkill));
+            var skill = (ISkill)node.Tag;
+
+            using (var impForecast = new ImportForecastForm(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
+            {
+                impForecast.ShowDialog(this);
+            }
+        }
+
+        private void toolStripMenuItemSkillsImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastContextMenuNode);
+        }
+
+        private void toolStripMenuItemActionSkillImportForecast_Click(object sender, EventArgs e)
+        {
+            importForecast(_lastActionNode);
+        }
 	}
 }

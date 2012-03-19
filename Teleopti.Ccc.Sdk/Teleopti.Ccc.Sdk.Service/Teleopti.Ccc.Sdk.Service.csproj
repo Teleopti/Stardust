@@ -242,6 +242,7 @@
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\DenormalizeNotificationCommandHandler.cs" />
     <Compile Include="CommandHandler\DenormalizeScheduleCommandHandler.cs" />
+    <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\EmployPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
