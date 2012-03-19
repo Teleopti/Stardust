@@ -36,11 +36,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        public int StartRow
-        {
-            get { return 1; }
-        }
-
+        public int StartRow { get; set; }
+        
         public void FillRequestList(ListViewItem[] listViewItems)
         {
             listViewRequests.Items.Clear();
@@ -49,12 +46,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public IRequestHistoryLightWeight SelectedRequest
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                if (listViewRequests.SelectedItems.Count == 0)
+                    return null;
+                return listViewRequests.SelectedItems[0] as IRequestHistoryLightWeight;
+            } 
+        }
+
+        public int TotalCount { set; get; }
+
+        public int PageSize
+        {
+            get { return 50:}
         }
 
         public void ShowRequestDetails(string details)
         {
-            throw new NotImplementedException();
+            textBox1.Text = details;
         }
 
         public void ShowForm()
@@ -71,10 +80,29 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAdvPersons.SelectedValue = preSelectedPerson;
         }
 
+        public void SetNextEnabledState(bool enabled)
+        {
+            buttonAdvNext.Enabled = enabled;
+        }
+
+        public void SetPreviousEnabledState(bool enabled)
+        {
+            buttonAdvPrevious.Enabled = enabled;
+        }
+
         private void ComboBoxAdvPersonsSelectedIndexChanged(object sender, EventArgs e)
         {
-            _eventAggregator.GetEvent<RequestHistoryPersonChanged>().Publish("");
-            
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.First);
+        }
+
+        private void ButtonAdvNextClick(object sender, EventArgs e)
+        {
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Next);
+        }
+
+        private void ButtonAdvPreviousClick(object sender, EventArgs e)
+        {
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
         }
     }
 }

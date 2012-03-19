@@ -863,7 +863,7 @@
     <Compile Include="Scheduling\IViewModelIsValid.cs" />
     <Compile Include="Scheduling\Requests\IRequestHistoryView.cs" />
     <Compile Include="Scheduling\Requests\LoadRequestHistoryCommand.cs" />
-    <Compile Include="Scheduling\Requests\RequestHistoryPersonChanged.cs" />
+    <Compile Include="Scheduling\Requests\RequestHistoryPageChanged.cs" />
     <Compile Include="Scheduling\Requests\RequestHistoryRequestChanged.cs" />
     <Compile Include="Scheduling\Requests\RequestHistoryViewPresenter.cs" />
     <Compile Include="Scheduling\ScheduleNavigatorPresenter.cs" />

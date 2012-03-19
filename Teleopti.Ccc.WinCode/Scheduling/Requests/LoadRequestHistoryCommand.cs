@@ -29,7 +29,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             {
                 Guid selectedPerson = _requestHistoryView.SelectedPerson;
                 int startRow = _requestHistoryView.StartRow;
-                var requests = _repositoryFactory.CreateRequestHistoryReadOnlyRepository(uow).LoadOnPerson(selectedPerson, startRow, startRow + 50);
+                int pageSize = _requestHistoryView.PageSize;
+                _requestHistoryView.TotalCount = 0;
+                var requests = _repositoryFactory.CreateRequestHistoryReadOnlyRepository(uow).LoadOnPerson(selectedPerson, startRow, startRow + pageSize);
+                if (requests.Count > 0)
+                    _requestHistoryView.TotalCount = requests[0].TotalCount;
                 //skapa listviewitems
                 var list = new List<ListViewItem>();
                 foreach (var request in requests)

@@ -53,9 +53,48 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldLoadRequestOnPersonChange()
         {
+            Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_loadRequestHistoryCommand.Execute);
+            Expect.Call(_requestHistoryView.StartRow = 1);
+            Expect.Call(_requestHistoryView.StartRow).Return(1).Repeat.AtLeastOnce();
+            Expect.Call(() => _requestHistoryView.SetNextEnabledState(false));
+            Expect.Call(_requestHistoryView.TotalCount).Return(40);
+            Expect.Call(() => _requestHistoryView.SetPreviousEnabledState(false));
             _mocks.ReplayAll();
-            _eventAggregator.GetEvent<RequestHistoryPersonChanged>().Publish("");
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.First);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldLoadRequestOnNextPage()
+        {
+            Expect.Call(_requestHistoryView.PageSize).Return(50);
+            Expect.Call(_loadRequestHistoryCommand.Execute);
+            Expect.Call(_requestHistoryView.StartRow).Return(1);
+            Expect.Call(_requestHistoryView.StartRow = 51);
+            Expect.Call(_requestHistoryView.StartRow).Return(51).Repeat.Twice();
+            Expect.Call(() => _requestHistoryView.SetNextEnabledState(false));
+            Expect.Call(_requestHistoryView.TotalCount).Return(90);
+            Expect.Call(() => _requestHistoryView.SetPreviousEnabledState(true));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Next);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldLoadRequestOnPreviousPage()
+        {
+            Expect.Call(_requestHistoryView.PageSize).Return(50);
+            Expect.Call(_loadRequestHistoryCommand.Execute);
+            Expect.Call(_requestHistoryView.StartRow).Return(101);
+            Expect.Call(_requestHistoryView.StartRow = 51);
+            Expect.Call(_requestHistoryView.StartRow).Return(51).Repeat.Twice();
+            Expect.Call(() => _requestHistoryView.SetNextEnabledState(true));
+            Expect.Call(_requestHistoryView.TotalCount).Return(120);
+            Expect.Call(() => _requestHistoryView.SetPreviousEnabledState(true));
+            _mocks.ReplayAll();
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
+            _mocks.VerifyAll();
         }
     }
 

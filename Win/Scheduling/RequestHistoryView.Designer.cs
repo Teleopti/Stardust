@@ -60,6 +60,7 @@
             this.comboBoxAdvPersons.Size = new System.Drawing.Size(259, 24);
             this.comboBoxAdvPersons.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvPersons.TabIndex = 0;
+            this.comboBoxAdvPersons.Text = "Banaggg";
             this.comboBoxAdvPersons.ValueMember = "Id";
             this.comboBoxAdvPersons.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAdvPersonsSelectedIndexChanged);
             // 
@@ -71,6 +72,8 @@
             this.columnHeader3});
             this.listViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewRequests.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.listViewRequests.FullRowSelect = true;
+            this.listViewRequests.HideSelection = false;
             this.listViewRequests.Location = new System.Drawing.Point(10, 47);
             this.listViewRequests.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.listViewRequests.Name = "listViewRequests";
@@ -151,6 +154,7 @@
             this.buttonAdvNext.TabIndex = 1;
             this.buttonAdvNext.Text = ">";
             this.buttonAdvNext.UseVisualStyle = true;
+            this.buttonAdvNext.Click += new System.EventHandler(this.ButtonAdvNextClick);
             // 
             // buttonAdvPrevious
             // 
@@ -163,6 +167,7 @@
             this.buttonAdvPrevious.TabIndex = 0;
             this.buttonAdvPrevious.Text = "<";
             this.buttonAdvPrevious.UseVisualStyle = true;
+            this.buttonAdvPrevious.Click += new System.EventHandler(this.ButtonAdvPreviousClick);
             // 
             // textBox1
             // 

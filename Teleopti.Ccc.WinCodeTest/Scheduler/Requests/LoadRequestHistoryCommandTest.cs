@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -35,10 +36,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             var guid = Guid.NewGuid();
             var rep = _mocks.StrictMock<IRequestHistoryReadOnlyRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
-            Expect.Call(_requestHistoryView.SelectedPerson).Return(guid);
             Expect.Call(_requestHistoryView.StartRow).Return(1);
+            Expect.Call(_requestHistoryView.PageSize).Return(50);
+            Expect.Call(() => _requestHistoryView.TotalCount = 0);
+            Expect.Call(_requestHistoryView.SelectedPerson).Return(guid);
+            
             Expect.Call(_repositoryFactory.CreateRequestHistoryReadOnlyRepository(uow)).Return(rep);
-            Expect.Call(rep.LoadOnPerson(guid, 1, 51)).Return(new List<IRequestHistoryLightWeight>());
+            Expect.Call(rep.LoadOnPerson(guid, 1, 51)).Return(new List<IRequestHistoryLightWeight>{new RequestHistoryLightWeight{TotalCount = 5}});
+            Expect.Call(() => _requestHistoryView.TotalCount = 5);
             Expect.Call(() => _requestHistoryView.FillRequestList(new ListViewItem[0])).IgnoreArguments();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();

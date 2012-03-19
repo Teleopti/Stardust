@@ -26,12 +26,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             _commonAgentNameProvider = commonAgentNameProvider;
             
             _loadRequestHistoryCommand = loadRequestHistoryCommand;
-            _eventAggregator.GetEvent<RequestHistoryPersonChanged>().Subscribe(loadRequests);
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Subscribe(LoadRequests);
         }
 
-        private void loadRequests(string obj)
+        private void LoadRequests(RequestHistoryPage historyPage)
         {
+            var size = _requestHistoryView.PageSize;
+            if (historyPage.Equals(RequestHistoryPage.First))
+                _requestHistoryView.StartRow = 1;
+            if (historyPage.Equals(RequestHistoryPage.Next))
+                _requestHistoryView.StartRow = _requestHistoryView.StartRow + size;
+            if (historyPage.Equals(RequestHistoryPage.Previous))
+                _requestHistoryView.StartRow = _requestHistoryView.StartRow - size;
+
             _loadRequestHistoryCommand.Execute();
+
+            UpdateNextPreviousState(size);
+        }
+
+        private void UpdateNextPreviousState(int size)
+        {
+            _requestHistoryView.SetNextEnabledState(_requestHistoryView.StartRow + size < _requestHistoryView.TotalCount);
+            _requestHistoryView.SetPreviousEnabledState(_requestHistoryView.StartRow > 1);
         }
 
         public void ShowHistory(Guid preSelectedPerson, ICollection<IPerson> filteredPersons)
