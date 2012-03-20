@@ -1,6 +1,7 @@
 ﻿
 .preference 
 {
+	overflow: hidden;
 }
 
 .calendarview-week li.modified div.day-content
