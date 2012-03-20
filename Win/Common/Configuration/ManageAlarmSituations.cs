@@ -63,22 +63,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void LoadControl()
         {
-            var backgroundWorkerLoadData = new BackgroundWorker();
-
-            // Call SetupDayView after OnLoad since
-            // _scheduleView.LoadScheduleViewGrid calls 
-            // grid.Model.ColWidths.ResizeToFit which only works when
-            // the grid is alive.
-            backgroundWorkerLoadData.RunWorkerCompleted += SetupManageAlarmSituation;
-            backgroundWorkerLoadData.RunWorkerAsync();
-        }
-
-        void SetupManageAlarmSituation(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _view = new ManageAlarmSituationView(teleoptiGridControl1);
-            _view.Presenter = new ManageAlarmSituationPresenter(new AlarmTypeRepository(_uow), new RtaStateGroupRepository(_uow), new ActivityRepository(_uow), new StateGroupActivityAlarmRepository(_uow), StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging,_view);
-            _view.LoadGrid();
-        }
+			_view = new ManageAlarmSituationView(teleoptiGridControl1);
+			_view.Presenter = new ManageAlarmSituationPresenter(new AlarmTypeRepository(_uow), new RtaStateGroupRepository(_uow), new ActivityRepository(_uow), new StateGroupActivityAlarmRepository(_uow), StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, _view);
+			_view.LoadGrid();
+		}
 
         public TreeFamily TreeFamily()
         {
