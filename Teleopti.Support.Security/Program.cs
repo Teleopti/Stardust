@@ -13,11 +13,13 @@
 
             if (!commandLineArgument.ForecasterMode &&
                 !commandLineArgument.PersonUpdateMode &&
-                !commandLineArgument.PasswordEncryptionMode)
+                !commandLineArgument.PasswordEncryptionMode &&
+                !commandLineArgument.LicenseStatusMode)
             {
                 forecasterDateAdjustment.Execute(commandLineArgument);
                 passwordEncryption.Execute(commandLineArgument);
                 PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+                LicenseStatusChecker.Execute(commandLineArgument);
                 return;
             }
 
@@ -30,7 +32,8 @@
             if (commandLineArgument.PasswordEncryptionMode)
                 passwordEncryption.Execute(commandLineArgument);
 
-            LicenseStatusChecker.Execute(commandLineArgument);
+            if (commandLineArgument.LicenseStatusMode)
+                LicenseStatusChecker.Execute(commandLineArgument);
         }
     }
 }

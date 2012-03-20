@@ -15,6 +15,7 @@ namespace Teleopti.Support.Security
         private bool _forecasterMode;
         private bool _personUpdateMode;
         private bool _passwordEncryptionMode;
+        private bool _licenseStatusMode;
 
         public CommandLineArgument(string[] argumentCollection)
         {
@@ -35,6 +36,11 @@ namespace Teleopti.Support.Security
         public bool PasswordEncryptionMode
         {
             get { return _passwordEncryptionMode; }
+        }
+
+        public bool LicenseStatusMode
+        {
+            get { return _licenseStatusMode; }
         }
 
         public string DestinationServer
@@ -115,6 +121,9 @@ namespace Teleopti.Support.Security
                         break;
                     case "-PE":
                         _passwordEncryptionMode = true;
+                        break;
+                    case "-LS":
+                        _licenseStatusMode = true;
                         break;
                 }
             }
