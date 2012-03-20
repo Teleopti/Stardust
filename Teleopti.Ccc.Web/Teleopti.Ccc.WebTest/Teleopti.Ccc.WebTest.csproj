@@ -145,7 +145,7 @@
     <Compile Include="Controllers\PreferenceControllerTest.cs" />
     <Compile Include="Controllers\RequestsControllerTest.cs" />
     <Compile Include="Core\DatePatternConverterTest.cs" />
-    <Compile Include="Core\Portal\LayoutBaseHtmlHelperTest.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseHtmlHelperTest.cs" />
     <Compile Include="TestHtmlHelperBuilder.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="StubbingControllerBuilder.cs" />
