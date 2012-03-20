@@ -343,9 +343,9 @@
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\properties\**\*.*"
 	/>
 
-			<!-- SDK -->
-			<SDK
-			Include=
+	<!-- SDK -->
+	<SDK
+	Include=
 	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.asax;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.svc;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\**\*.notinuse;
@@ -392,6 +392,18 @@
 			Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\CheckPreRequisites.exe;
 	$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\p_raptor_run_before_conversion.sql" />
 
+			<!-- Broker -->
+			<Broker
+			Include=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\*.*"
+			Exclude=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\obj\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\properties\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\*.csproj;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\*.cs;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\Web.Debug.config;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\Web.Release.config"
+			/>
 		</ItemGroup>
 	</Target>
 
@@ -590,8 +602,11 @@
 			  DestinationFiles="@(DemoDatabase->'$(DeployPath)\DemoDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(ForecastDatabase)"
 		  DestinationFiles="@(ForecastDatabase->'$(DeployPath)\ForecastDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		 <Copy SourceFiles="@(Broker)"
+		  DestinationFiles="@(Broker->'$(DeployPath)\Broker\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"
-			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm" />
+			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm"
+			/>
 
 		<!-- Content outside WISE => copy straight to MSI-folder-->
 		<Message Importance="high" Text="make folder ..."/>
