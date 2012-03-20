@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Globalization;
+using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule;
@@ -20,6 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		public static LayoutBaseHtmlHelper LayoutBase(this HtmlHelper htmlHelper)
 		{
 			return new LayoutBaseHtmlHelper(htmlHelper);
+		}
+
+		public static string HtmlStyleLeft(this HtmlHelper htmlHelper)
+		{
+			return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "right" : "left";
 		}
 
 		//public static string MixColor(this HtmlHelper htmlHelper, string colorString, int add)
