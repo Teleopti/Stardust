@@ -10220,4 +10220,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ViewHistory" xml:space="preserve">
     <value>Visa historik</value>
   </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>Kontraktstid stigande</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>Kontraktstid sjunkande</value>
+  </data>
 </root>

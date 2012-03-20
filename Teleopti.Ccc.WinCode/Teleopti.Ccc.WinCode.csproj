@@ -888,6 +888,8 @@
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportGraphicalDrawTimeLine.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayGraphicalToPdfManager.cs" />
     <Compile Include="Scheduling\ScheduleReporting\StringWidthHandler.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByContractTimeDescendingCommand.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortByContractTimeAscendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\IScheduleSortCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\NoSortCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\ScheduleSortCommandBase.cs" />
