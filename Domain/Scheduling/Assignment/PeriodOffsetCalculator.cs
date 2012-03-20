@@ -71,9 +71,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             ICccTimeZoneInfo sourceTimeZone = source.TimeZone;
             ICccTimeZoneInfo targetTimeZone = target.TimeZone;
 
-            var milliVanilli = 1;
-            if (targetShiftPeriod.StartDateTime.Month < 7) // spring, could be change to daylight
-                milliVanilli = -1;
+            if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
+                return TimeSpan.FromHours(0);
+            var milliVanilli = -1;
+            if (targetShiftPeriod.StartDateTime < sourceShiftPeriod.StartDateTime && targetShiftPeriod.StartDateTime.Month < 7) // spring, could be change to daylight
+                milliVanilli = 1;
+            if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
+                milliVanilli = 0;
             TimeSpan sourceDaylightOffset =
                 sourceTimeZone.GetUtcOffset(sourceShiftPeriod.LocalStartDateTime).Subtract(sourceTimeZone.BaseUtcOffset);
             TimeSpan targetDaylightOffset =
