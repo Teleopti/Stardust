@@ -9,20 +9,26 @@
 USE TeleoptiCCC7
 -------
 -- Do they ahve _any_ maint? => Check our biggest table
+
 select index_level, page_count,avg_fragmentation_in_percent, avg_page_space_used_in_percent, si.name
 from sys.dm_db_index_physical_stats(db_id(),object_id('dbo.mainShiftActivityLayer'),null,null,'detailed') ps
 inner join sys.indexes si
 	on ps.object_id = si.object_id
 	and ps.index_id = si.index_id
-
---avg_fragmentation_in_percent > 30 => Rebuild Index!
-
+-- What does this mean?
+-- Focus on leave level of the data pages => index_level = 0
+-- If the avg_fragmentation_in_percent value is > 5% Then we start suffer from fragmentation
+-- reorganize the index when "avg_fragmentation_in_percent" is > 5% but < 30%
+-- rebuild the index when "avg_fragmentation_in_percent" > 30% 
+-- Rebuild = more thorough defragmentation
+ 
+ 
 --Old school
 DBCC SHOWCONTIG('mainShiftActivityLayer')
 
 -- Scan Density [Best Count:Actual Count]
 -- Below than 90% is considered harming
--- Below than 80% is realy bad
+-- Below than 80% is bad
 --revert to master
 use master
 ---------
