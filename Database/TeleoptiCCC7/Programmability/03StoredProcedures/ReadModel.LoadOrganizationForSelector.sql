@@ -61,7 +61,7 @@ IF @type = 'Organization' BEGIN
 	SELECT Person.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
 	FROM PersonPeriodWithEndDate pp
 	INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team AND Team.IsDeleted = 0  
 	INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu
 	
@@ -74,7 +74,7 @@ IF @type = 'Organization' BEGIN
 		FROM  Person 
 		WHERE Id NOT IN (SELECT PersonId FROM #result)
 		AND Id NOT IN (SELECT * FROM #otherBU)
-		AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+		AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		AND IsDeleted = 0 AND BuiltIn = 0
 
 	END
@@ -109,7 +109,7 @@ IF @type = 'Organization' BEGIN
 	FirstName, LastName, EmploymentNumber  
 	FROM Person p
 	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	INNER JOIN Contract c ON pp.Contract = c.Id AND c.IsDeleted = 0
@@ -123,7 +123,7 @@ IF @type = 'Organization' BEGIN
 	FirstName, LastName, EmploymentNumber  
 	FROM Person p
 	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	INNER JOIN ContractSchedule c ON pp.ContractSchedule = c.Id AND c.IsDeleted = 0
@@ -137,7 +137,7 @@ IF @type = 'PartTimePercentage' BEGIN
 	FirstName, LastName, EmploymentNumber   
 	FROM Person p
 	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	INNER JOIN PartTimePercentage c ON pp.PartTimePercentage = c.Id AND c.IsDeleted = 0
@@ -154,7 +154,7 @@ IF @type = 'Note' BEGIN
 	SELECT DISTINCT p.Id, null, null, null ,Note,  
 	FirstName, LastName, EmploymentNumber  
 	FROM Person p
-	WHERE ISNULL(TerminalDate, '2100-01-01') > @ondate
+	WHERE ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	AND Id NOT IN (SELECT * FROM #otherBUpersons) -- om folk byter BU blir detta problem
 	AND p.IsDeleted = 0
 	AND Note <> ''
@@ -168,7 +168,7 @@ IF @type = 'Note' BEGIN
 	FirstName, LastName, EmploymentNumber  
 	FROM Person p 
 	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	INNER JOIN RuleSetBag c ON pp.RuleSetBag = c.Id AND c.IsDeleted = 0 
@@ -182,7 +182,7 @@ IF @type = 'Note' BEGIN
 	FirstName, LastName, EmploymentNumber  
 	FROM Person p
 	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
-	AND ISNULL(TerminalDate, '2100-01-01') > @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
