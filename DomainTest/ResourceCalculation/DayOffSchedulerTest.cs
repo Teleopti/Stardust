@@ -222,6 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			    Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
                 Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_part1)).Return(true);
 			    Expect.Call(_contractSchedule.IsWorkday(_period.StartDate, _date1)).Return(false);
+                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_part1, _schedulingOptions)).Return(null);
 			    Expect.Call(() => _part1.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_part1));
 			}
@@ -247,6 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
                 Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_part1)).Return(true);
                 Expect.Call(_contractSchedule.IsWorkday(_period.StartDate, _date1)).Return(false);
+                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_part1, _schedulingOptions)).Return(null);
                 Expect.Call(() => _part1.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_part1)).Throw(new DayOffOutsideScheduleException());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
@@ -276,6 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
                 Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_part1)).Return(true);
                 Expect.Call(_contractSchedule.IsWorkday(_period.StartDate, _date1)).Return(false);
+			    Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_part1, _schedulingOptions)).Return(null);
                 Expect.Call(() => _part1.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_part1));
 			}
@@ -379,6 +382,37 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
                 Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_part1)).Return(true);
                 Expect.Call(_contractSchedule.IsWorkday(_period.StartDate, _date1)).Return(true);
+            }
+
+            using (_mocks.Playback())
+            {
+                _target.DayOffScheduling(new List<IScheduleDay> { _part1 }, new List<DateOnly> { _date1 }, new List<IPerson> { _person }, _schedulePartModifyAndRollbackService);
+            }
+        }
+
+        [Test]
+        public void ShouldNotAddContractDayOffWhenRestrictionWorkday()
+        {
+            var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+                                                                                  new EndTimeLimitation(),
+                                                                                  new WorkTimeLimitation(TimeSpan.FromHours(5), TimeSpan.FromHours(9))
+                                                                                  , null, null, null,
+                                                                                  new List<IActivityRestriction>());
+            using (_mocks.Record())
+            {
+                commonMocks();
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_schedules).Repeat.AtLeastOnce();
+                Expect.Call(_schedules[_person]).Return(_range).Repeat.AtLeastOnce();
+                Expect.Call(_range.ScheduledDay(_date1)).Return(_part1).Repeat.AtLeastOnce();
+                Expect.Call(_part1.IsScheduled()).Return(false).Repeat.Any();
+                Expect.Call(_schedulePeriod.IsValid).Return(true);
+                Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
+                int x;
+                int y;
+                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
+                Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_part1)).Return(true);
+                Expect.Call(_contractSchedule.IsWorkday(_period.StartDate, _date1)).Return(false);
+                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_part1, _schedulingOptions)).Return(effectiveRestriction).Repeat.Twice();
             }
 
             using (_mocks.Playback())
