@@ -1205,7 +1205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			using (
 				var options =
-					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences,
+					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
 														   _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState),
 														   _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
@@ -4134,7 +4134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 				IList<IGroupPage> groupPages = _cachedGroupPages;
-				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences,
+				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
 																			_schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages,
 																			 _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
@@ -4180,7 +4180,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IList<IGroupPage> groupPages = _cachedGroupPages;
 
 				using (var options =
-					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
+					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules, _schedulerState.CommonStateHolder.ShiftCategories,
 						false, false, groupPages, _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
 				{
 					options.Height = 600;

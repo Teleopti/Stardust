@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     {
 
         private readonly ISchedulingOptions _schedulingOptions;
-        private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
         private readonly IList<IShiftCategory> _shiftCategories;
         private readonly IDayOffPlannerRules _dayOffPlannerRules;
         private readonly bool _backToLegal;
@@ -21,15 +20,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _reschedule;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public SchedulingSessionPreferencesDialog(IOptimizerOriginalPreferences optimizerOriginalPreferences, IList<IShiftCategory> shiftCategories,
+        public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDayOffPlannerRules dayOffPlannerRules, IList<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, SchedulingScreenSettings currentSchedulingScreenSettings,
             IList<IScheduleTag> scheduleTags)
             : this()
         {
-            
-            _optimizerOriginalPreferences = optimizerOriginalPreferences;
-            _schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
-            _dayOffPlannerRules = _optimizerOriginalPreferences.DayOffPlannerRules;
+            _schedulingOptions = schedulingOptions;
+            _dayOffPlannerRules = dayOffPlannerRules;
             _shiftCategories = shiftCategories;
             _reschedule = reschedule;
             
