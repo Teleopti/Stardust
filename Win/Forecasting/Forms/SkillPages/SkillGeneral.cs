@@ -134,14 +134,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             intervalLengths.Add(new IntervalLengthItem(15));
             intervalLengths.Add(new IntervalLengthItem(30));
             intervalLengths.Add(new IntervalLengthItem(60));
-            intervalLengths.Add(new IntervalLengthItem(120));
-            intervalLengths.Add(new IntervalLengthItem(180));
-            intervalLengths.Add(new IntervalLengthItem(240));
-            intervalLengths.Add(new IntervalLengthItem(360));
-            intervalLengths.Add(new IntervalLengthItem(480));
-            intervalLengths.Add(new IntervalLengthItem(720));
-            intervalLengths.Add(new IntervalLengthItem(1440));
-
 
             comboBoxAdvIntervalLength.DataSource = intervalLengths;
             comboBoxAdvIntervalLength.DisplayMember = "Text";
