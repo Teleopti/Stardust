@@ -4272,7 +4272,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(scheduleDays, _schedulerState.SchedulingResultState, _container);
             if (matrixList.Count == 0)
                 return;
-            
+
+
+		    var allScheduleDays = new List<IScheduleDay>();
+
+		    foreach (var scheduleMatrixPro in matrixList)
+		    {
+                allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());   
+		    }
+
+            var matrixListAll = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container);
+
             _undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
 			//Extend period with 10 days to handle block scheduling
@@ -4297,11 +4307,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 							if (_optimizerOriginalPreferences.SchedulingOptions.UseGroupScheduling)
 							{
 
-								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays);
+								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll);
 							}
 							else
 							{
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, true, preferences.SchedulingOptions, _backgroundWorkerScheduling);
+                                _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, preferences.SchedulingOptions, _backgroundWorkerScheduling);
 							}
 
 							break;
@@ -4316,7 +4326,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							if (period.StartDate == DateOnly.MinValue) break;
 
 
-							_scheduleOptimizerHelper.BlockSchedule(scheduleDays,_backgroundWorkerScheduling);
+							_scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling);
 							break;
 						}
 				}
@@ -7081,6 +7091,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			writeProtectSchedule();
 		}
+
+        private void ToolstripMenuRemoveWriteProtectionMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection)) return;
+            Cursor = Cursors.WaitCursor;
+
+            var removeCommand = new WriteProtectionRemoveCommand(_scheduleView.SelectedSchedules(), _modifiedWriteProtections);
+            removeCommand.Execute();
+            GridHelper.GridlockWriteProtected(_grid, LockManager);
+
+            Refresh();
+            refreshSelection();
+            Cursor = Cursors.Default;    
+        }
 
 		private void writeProtectSchedule()
 		{

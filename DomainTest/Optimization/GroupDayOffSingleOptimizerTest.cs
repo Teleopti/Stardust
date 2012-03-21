@@ -300,8 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(true);
             Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).
                 Return(true);
-            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson)).Return(false);
-            //Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson, _allScheduleMatrixes)).Return(false);
 
             _mocks.ReplayAll();
             Assert.That(_target.Execute(_activeScheduleMatrix, _allScheduleMatrixes), Is.False);
@@ -342,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Return(true);
             Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).
                 Return(true);
-            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson)).Return(true);
+            Expect.Call(_groupSchedulingService.ScheduleOneDay(_dayOffToRemove, _groupPerson, _allScheduleMatrixes)).Return(true);
             
 
             _mocks.ReplayAll();
