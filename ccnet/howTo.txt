@@ -320,3 +320,15 @@ Keep comments here, in case we need to enabled it again ...
 //
 //note3: On some machines, you need to "Update the Package Data" => packages.xml under "v7.0A" rather then "v6.0A"
 
+
+---------------------
+Enable hg fetch extension
+---------------------
+On the ccnet machine setting "tags" on repositories, hg extension "fetch" needs to be enabled.
+The easiest way to do this is to add...
+[extensions]
+fetch =  
+...to the file %USERPROFILE%\mercurial.ini.
+(If the ini file does not exist, you can add it)
+Currently the ccnet service is running as TfsIntegration.
+To verify it has been enabled correctly, run "hg help extensions"
