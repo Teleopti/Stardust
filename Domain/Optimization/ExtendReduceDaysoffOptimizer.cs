@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 changedDayOff.CurrentSchedule = sourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 
-                IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(sourceMatrix);  //resource calculation is done automaticaly
+                IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(sourceMatrix, schedulingOptions);  //resource calculation is done automaticaly
 
                 if (rescheduleWhiteSpots(new[] { changedDayOff }, illegalDays, sourceMatrix, _originalStateContainerForTagChange, schedulingOptions))
                     success = true;
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             changed.CurrentSchedule = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
             resourceCalculateMovedDays(new[] { changed });
 
-            IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(_matrixConverter.SourceMatrix);  //resource calculation is done automaticaly
+            IEnumerable<DateOnly> illegalDays = removeIllegalWorkTimeDays(_matrixConverter.SourceMatrix, schedulingOptions);  //resource calculation is done automaticaly
 
             if (!rescheduleWhiteSpots(new List<changedDay>(), illegalDays, _matrixConverter.SourceMatrix, _originalStateContainerForTagChange, schedulingOptions))
                 return false;
@@ -267,9 +267,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix)
+        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            _workTimeBackToLegalStateService.Execute(matrix);
+            _workTimeBackToLegalStateService.Execute(matrix, schedulingOptions);
             IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
             //resource calculate removed days
             foreach (DateOnly dateOnly in removedIllegalDates)

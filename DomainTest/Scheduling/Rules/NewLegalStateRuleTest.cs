@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private IScheduleMatrixListCreator _scheduleMatrixListCreator;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -29,12 +30,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _matrixList = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_scheduleMatrixListCreator = _mocks.StrictMock<IScheduleMatrixListCreator>();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         }
 
         [Test]
         public void ShouldCreateNewLegalStateRule()
         {
-			_rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator);
+            _rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator, _schedulingOptions);
             
             Assert.IsNotNull(_rule);
             Assert.AreEqual("",_rule.ErrorMessage);
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [Test]
         public void ShouldReturnEmptyResponseListWhenInLegalState()
         {
-			_rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator);
+            _rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator, _schedulingOptions);
 
             var person = _mocks.StrictMock<IPerson>();
             var range = _mocks.StrictMock<IScheduleRange>();
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                     new List<IBusinessRuleResponse>());
                 Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
-                Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_scheduleMatrixPro)).Return(true);
+                Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_scheduleMatrixPro, _schedulingOptions)).Return(true);
             }
 
             using(_mocks.Playback())
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnResponseForEverydayInPeriodWhenNotInLegalState()
         {
-			_rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator);
+            _rule = new NewLegalStateRule(_scheduleMatrixListCreator, _workShiftMinMaxCalculator, _schedulingOptions);
 
             var person = _mocks.StrictMock<IPerson>();
             var range = _mocks.StrictMock<IScheduleRange>();
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                     new List<IBusinessRuleResponse>());
                 Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{scheduleDayPro1, scheduleDayPro2})).Repeat.Twice();
-                Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_scheduleMatrixPro)).Return(false);
+                Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_scheduleMatrixPro, _schedulingOptions)).Return(false);
                 Expect.Call(scheduleDayPro1.Day).Return(dateOnly1).Repeat.Twice();
                 Expect.Call(scheduleDayPro2.Day).Return(dateOnly2).Repeat.Twice();
                 Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();

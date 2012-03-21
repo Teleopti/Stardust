@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             using (PerformanceOutput.ForOperation("Day off optimization for " + agent))
             {
-
                 // note that we do not change the order of the decisionmakers
                 if (_decisionMakers.Any(runDayOffOptimizer))
                     return true;

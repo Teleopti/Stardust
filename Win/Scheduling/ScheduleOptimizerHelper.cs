@@ -418,12 +418,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (schedulerStateHolder == null) throw new ArgumentNullException("schedulerStateHolder");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
             foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
                     new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
                 IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(scheduleMatrix, schedulePartModifyAndRollbackService, _container);
-                workShiftBackToLegalStateServicePro.Execute(scheduleMatrix);
+                workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions);
 
                 backgroundWorker.ReportProgress(1);
             }

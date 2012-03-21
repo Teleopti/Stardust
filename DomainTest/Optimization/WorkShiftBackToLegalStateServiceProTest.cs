@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private IWorkShiftBackToLegalStateStep _workShiftBackToLegalStateStep;
         private IScheduleMatrixPro _matrix;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _workShiftBackToLegalStateStep = _mocks.StrictMock<IWorkShiftBackToLegalStateStep>();
             _target = new WorkShiftBackToLegalStateServicePro(_workShiftBackToLegalStateStep, _workShiftMinMaxCalculator);
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         }
 
         [Test]
@@ -33,14 +35,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
-                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix))
+                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(false);
                 Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix))
                     .Return(null);
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.Execute(_matrix));
+                Assert.IsFalse(_target.Execute(_matrix, _schedulingOptions));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(0, _target.RemovedDays.Count);
             }
@@ -54,14 +56,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
-                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix))
+                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(true);
-                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix))
+                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(0);
             }
             using(_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix));
+                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(0, _target.RemovedDays.Count);
             }
@@ -75,11 +77,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
-                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix))
+                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(true);
-                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix))
+                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(-1);
-                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix))
+                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(0);
 
                 Expect.Call(_workShiftBackToLegalStateStep.ExecutePeriodStep(true, _matrix))
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix));
+                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(1, _target.RemovedDays.Count);
                 Assert.AreEqual(DateOnly.MaxValue, _target.RemovedDays[0]);
@@ -103,11 +105,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.WeekCount(_matrix))
                     .Return(1);
-                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix))
+                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(false);
-                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix))
+                Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(true);
-                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix))
+                Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(0);
 
                 Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix))
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix));
+                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(1, _target.RemovedDays.Count);
                 Assert.AreEqual(DateOnly.MaxValue, _target.RemovedDays[0]);

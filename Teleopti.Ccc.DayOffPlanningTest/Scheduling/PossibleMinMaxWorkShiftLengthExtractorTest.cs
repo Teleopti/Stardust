@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             _ruleSetProjectionService = new RuleSetProjectionService(new ShiftCreatorService());
             _schedulingOptions = new SchedulingOptions();
 
-            _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _ruleSetProjectionService, _schedulingOptions);
+            _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _ruleSetProjectionService);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(7), TimeSpan.FromHours(9)), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix));
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(7), TimeSpan.FromHours(9)), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions));
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			{
 				for (int i = 0; i < 7; i++)
 				{
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix));
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions));
 				}
 			}
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             {
                 for (int i = 0; i < 1; i++)
                 {
-                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8)).Maximum, _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix).Maximum);
+                    Assert.AreEqual(new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(8)).Maximum, _target.PossibleLengthsForDate(new DateOnly(2010, 8, 2).AddDays(i), _matrix, _schedulingOptions).Maximum);
                 }
             }
         }

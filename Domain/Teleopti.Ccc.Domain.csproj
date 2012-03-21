@@ -1189,7 +1189,6 @@
     <None Include="Forecasting\WorkloadDayTemplates.cd" />
     <None Include="ResourceCalculation\FurnessEvaluatorDiagram.cd" />
     <None Include="Scheduling\Assignment\ScheduleStuff.cd" />
-    <None Include="Scheduling\Restrictions\Restrictions.cd" />
     <None Include="Scheduling\TimeLayer\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>

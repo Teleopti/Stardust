@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
         private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
-        private ILockableBitArray _workingBitArray;
 
 
         public DayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
@@ -34,14 +33,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             writeToLogDayOffOptimizationInProgressOnCurrentAgent(matrix);
 
             ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
+            ILockableBitArray workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            _workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
-
-            bool decisionMakerFoundDays = _decisionMaker.Execute(_workingBitArray, _scheduleResultDataExtractor.Values());
+            bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, _scheduleResultDataExtractor.Values());
             if (!decisionMakerFoundDays)
                 return false;
             bool decisionMakerChoiceResultedInBetterPeriod =
-                _dayOffDecisionMakerExecuter.Execute(_workingBitArray, originalArray, matrix, originalStateContainer, true, true);
+                _dayOffDecisionMakerExecuter.Execute(workingBitArray, originalArray, matrix, originalStateContainer, true, true);
             return decisionMakerChoiceResultedInBetterPeriod;
         }
 

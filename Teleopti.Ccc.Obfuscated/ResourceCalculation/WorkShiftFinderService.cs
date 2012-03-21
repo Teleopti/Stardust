@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 if (_shiftList.Count == 0)
                     return null;
 
-            	MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix);
+            	MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, _schedulingOptions);
 
                 if (!allowedMinMax.HasValue)
                 {

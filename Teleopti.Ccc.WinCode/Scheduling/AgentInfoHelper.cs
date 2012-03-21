@@ -233,10 +233,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(new RestrictionExtractor(_stateHolder),
                                                                             _matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
-            setMinMaxData(schedulingOptions);
+            setMinMaxData();
         }
 
-        private void setMinMaxData(ISchedulingOptions schedulingOptions)
+        private void setMinMaxData()
         {
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
                        new SchedulePeriodTargetTimeTimeCalculator(); //Out
@@ -244,18 +244,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
 
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-                new PossibleMinMaxWorkShiftLengthExtractor( restrictionExtractor, _ruleSetProjectionService, schedulingOptions);
+                new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _ruleSetProjectionService);
 
             IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =
-                new WorkShiftMinMaxCalculator( possibleMinMaxWorkShiftLengthExtractor,
+                new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
                                               schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
             //TODO kan plockas från AutoFac istället
-            _periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix);
-            _weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix);
+            _periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
+            _weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
 
 
-            _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix);
+            _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
         }
 
         private void setCurrentScheduled()
