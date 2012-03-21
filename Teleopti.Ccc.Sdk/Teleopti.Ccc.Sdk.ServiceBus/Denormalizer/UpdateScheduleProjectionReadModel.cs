@@ -8,12 +8,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScheduleChangedNotification _scheduleChangedNotification;
 		private bool _skipDelete;
 
-		public UpdateScheduleProjectionReadModel(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleRepository scheduleRepository)
+		public UpdateScheduleProjectionReadModel(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleRepository scheduleRepository, IScheduleChangedNotification scheduleChangedNotification)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 			_scheduleRepository = scheduleRepository;
+			_scheduleChangedNotification = scheduleChangedNotification;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -39,9 +41,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			dateOnlyPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 			foreach (var scheduleDay in schedule[person].ScheduledDayCollection(dateOnlyPeriod))
 			{
+				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+
+				_scheduleChangedNotification.Notify(scenario,person,date);
+				
 				foreach (var layer in scheduleDay.ProjectionService().CreateProjection())
 				{
-					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(scheduleDay.DateOnlyAsPeriod.DateOnly, scenario, personId, layer);
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, scenario, personId, layer);
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Remoting;
 using System.Threading;
-using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Interfaces.Domain;
@@ -77,7 +76,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
                     StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
                     StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
                     StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
-                    StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
                 }
                 catch (RemotingException exp)
                 {
@@ -100,8 +98,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 					{
 						workflowControlSetId = new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.Id);
 					}
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPersistableScheduleData));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IMeetingChangedEntity));
+					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, workflowControlSetId, typeof(IWorkflowControlSet));
                 }
@@ -122,22 +119,17 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 				return true;
 			}
 
-        	if (eventMessage.Message.ReferenceObjectId ==
+			if (eventMessage.Message.ReferenceObjectId ==
 				 new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id))
-            {
-                if (typeof(IPersistableScheduleData).IsAssignableFrom(eventMessage.Message.InterfaceType) ||
-					typeof(IMeetingChangedEntity).IsAssignableFrom(eventMessage.Message.InterfaceType))
-                {
-                    if (eventMessage.Message.DomainUpdateType != DomainUpdateType.NotApplicable)
-                    {
-                        var instance = AgentScheduleStateHolder.Instance();
-                        DateTimePeriod asmPeriod = new DateTimePeriod(instance.ScheduleMessengerPeriod.UtcStartTime, instance.ScheduleMessengerPeriod.UtcEndTime);
-                        DateTimePeriod messagePeriod = new DateTimePeriod(DateTime.SpecifyKind(eventMessage.Message.EventStartDate, DateTimeKind.Utc), DateTime.SpecifyKind(eventMessage.Message.EventEndDate, DateTimeKind.Utc));
-                        return asmPeriod.Intersect(messagePeriod);
-                    }
-                }
-            }
-            return false;
+			{
+				if (typeof (IScheduleChangedInDefaultScenario).IsAssignableFrom(eventMessage.Message.InterfaceType))
+				{
+					return eventMessage.Message.EventStartDate <= DateTime.Today.AddDays(1) &&
+					       eventMessage.Message.EventEndDate >= DateTime.Today;
+				}
+			}
+
+        	return false;
         }
 
 		private static bool scheduleWasNotPublishedBefore()

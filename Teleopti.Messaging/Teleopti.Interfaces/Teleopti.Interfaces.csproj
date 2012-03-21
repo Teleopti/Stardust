@@ -625,6 +625,7 @@
     <Compile Include="Domain\ModifyEventArgs.cs" />
     <Compile Include="Domain\PeriodValueCalculationMethodOption.cs" />
     <Compile Include="Domain\ExternalAgentState.cs" />
+    <Compile Include="Domain\ScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\ScheduleModifier.cs" />
     <Compile Include="Domain\SchedulePartView.cs" />
     <Compile Include="Domain\ScheduleVisibleReasons.cs" />

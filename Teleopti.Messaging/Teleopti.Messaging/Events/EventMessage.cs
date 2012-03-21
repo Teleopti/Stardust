@@ -541,11 +541,9 @@ namespace Teleopti.Messaging.Events
             info.AddValue("DomainObjectId", _domainObjectId, _domainObjectId.GetType());
             info.AddValue("DomainObjectType", _domainObjectType, _domainObjectType.GetType());
             info.AddValue("DomainUpdateType", _domainUpdateType, _domainUpdateType.GetType());
-            info.AddValue("DomainObject", _domainObject, _domainObject.GetType());
+            info.AddValue("DomainObject", _domainObject, typeof(byte[]));
             info.AddValue("ChangedBy", _changedBy, _changedBy.GetType());
             info.AddValue("ChangedDateTime", _changedDateTime, _changedDateTime.GetType());           
         }
-
-
     }
 }

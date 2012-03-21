@@ -363,26 +363,6 @@ namespace Teleopti.Messaging.Server
             }
         }
 
-
-        /// <summary>
-        /// Registers the filter.
-        /// </summary>
-        /// <param name="subscriberId">The subscriber id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        public IEventFilter RegisterFilter(Guid subscriberId, Guid domainObjectId, string domainObjectType, DateTime startDate, DateTime endDate, string userName)
-        {
-            return RegisterFilter(subscriberId, domainObjectId, domainObjectType, domainObjectId, domainObjectType, startDate, endDate, userName);
-        }
-
         /// <summary>
         /// Registers the filter.
         /// </summary>
@@ -437,28 +417,6 @@ namespace Teleopti.Messaging.Server
             mapper.UnregisterFilter(filterId);
         }
 
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="processId">The process id.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="packageSize">Size of the package.</param>
-        /// <param name="isHeartbeat">if set to <c>true</c> [is heartbeat].</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2009-03-29
-        /// </remarks>
         public void SendEventMessage(DateTime eventStartDate,
                                         DateTime eventEndDate,
                                         Int32 userId,
@@ -466,39 +424,22 @@ namespace Teleopti.Messaging.Server
                                         Guid moduleId,
                                         Int32 packageSize,
                                         bool isHeartbeat,
+										Guid referenceObjectId, 
+										string referenceObjectType, 
                                         Guid domainObjectId,
                                         string domainObjectType,
                                         DomainUpdateType updateType,
                                         string userName)
         {
             IDomainObjectFactory factory = new DomainObjectFactory();
-            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType, userName);
+            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, userName);
             CustomThreadPool.QueueUserWorkItem(SendAsync, eventMessage);
         }
 
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="userId">The user id.</param>
-        /// <param name="processId">The process id.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="packageSize">Size of the package.</param>
-        /// <param name="isHeartbeat">if set to <c>true</c> [is heartbeat].</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Int32 userId, Int32 processId, Guid moduleId, Int32 packageSize, bool isHeartbeat, Guid domainObjectId, string domainObjectType, DomainUpdateType updateType, byte[] domainObject, string userName)
+		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Int32 userId, Int32 processId, Guid moduleId, Int32 packageSize, bool isHeartbeat, Guid referenceObjectId, string referenceObjectType, Guid domainObjectId, string domainObjectType, DomainUpdateType updateType, byte[] domainObject, string userName)
         {
             IDomainObjectFactory factory = new DomainObjectFactory();
-            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType, domainObject, userName);
+            IEventMessage eventMessage = factory.CreateEventMessage(eventStartDate, eventEndDate, userId, processId, moduleId, packageSize, isHeartbeat, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject, userName);
             CustomThreadPool.QueueUserWorkItem(SendAsync, eventMessage);
         }
 
