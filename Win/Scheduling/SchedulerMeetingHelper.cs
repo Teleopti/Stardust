@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 foreach (IPersonMeeting personMeeting in personMeetings)
                 {
                     var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.Value);
+                    if (meeting == null) // recurrent already deleted
+                        continue;
                     meeting.RemovePerson(personMeeting.Person);
                     if (meeting.MeetingPersons.Count() == 0)
                         meetingRepository.Remove(meeting);
