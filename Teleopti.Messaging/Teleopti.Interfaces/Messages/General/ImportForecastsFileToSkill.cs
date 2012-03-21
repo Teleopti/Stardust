@@ -12,6 +12,9 @@ namespace Teleopti.Interfaces.Messages.General
         ///</summary>
         public Guid JobId { get; set; }
 
+        /// <summary>
+        /// The identity of this message.
+        /// </summary>
         public override Guid Identity
         {
             get { return JobId; }
