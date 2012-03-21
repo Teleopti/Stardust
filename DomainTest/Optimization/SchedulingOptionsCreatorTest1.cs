@@ -133,39 +133,39 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_schedulingOptions.UsePreferences);
         }
 
-        [Test]
-        public void VerifyMustHaves()
-        {
-            //_optimizationPreferences.General.UseMustHaves = true;
-            //_optimizationPreferences.General.MustHavesValue = 1;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsTrue(_schedulingOptions.UsePreferences);
+        //[Test]
+        //public void VerifyMustHaves()
+        //{
+        //    //_optimizationPreferences.General.UseMustHaves = true;
+        //    //_optimizationPreferences.General.MustHavesValue = 1;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsTrue(_schedulingOptions.UsePreferences);
 
-            //_optimizationPreferences.General.UseMustHaves = true;
-            //_optimizationPreferences.General.MustHavesValue = 0.8;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        //    //_optimizationPreferences.General.UseMustHaves = true;
+        //    //_optimizationPreferences.General.MustHavesValue = 0.8;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
 
-            //_optimizationPreferences.General.UseMustHaves = true;
-            //_optimizationPreferences.General.MustHavesValue = 0;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        //    //_optimizationPreferences.General.UseMustHaves = true;
+        //    //_optimizationPreferences.General.MustHavesValue = 0;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
 
-            //_optimizationPreferences.General.UseMustHaves = false;
-            //_optimizationPreferences.General.MustHavesValue = 1;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        //    //_optimizationPreferences.General.UseMustHaves = false;
+        //    //_optimizationPreferences.General.MustHavesValue = 1;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
 
-            //_optimizationPreferences.General.UseMustHaves = false;
-            //_optimizationPreferences.General.MustHavesValue = 0.8;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        //    //_optimizationPreferences.General.UseMustHaves = false;
+        //    //_optimizationPreferences.General.MustHavesValue = 0.8;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
 
-            //_optimizationPreferences.General.UseMustHaves = false;
-            //_optimizationPreferences.General.MustHavesValue = 0;
-            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-            //Assert.IsFalse(_schedulingOptions.UsePreferences);
-        }
+        //    //_optimizationPreferences.General.UseMustHaves = false;
+        //    //_optimizationPreferences.General.MustHavesValue = 0;
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        //}
 
         [Test]
         public void VerifyRotations()
