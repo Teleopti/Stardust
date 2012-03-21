@@ -310,7 +310,7 @@ sup { vertical-align: super; font-size: smaller; }
 .col-1{ width: 975px; }
 .col-2{ width: 480px; }
 .col-3{ width: 320px; }
-.col-2-3{width: 640px;}
+.col-2-3{width: 708px;}
 .col-4{ width: 240px; }
 .col-5{ width: 192px; }
 .col-6{ width: 160px; }
@@ -352,7 +352,7 @@ html.full-height #push{
 	 position: absolute;
 	 right: 0;
 	 top: 78px;
- 	z-index: 1000;
+	z-index: 1000;
 }
 .ie7  #loading{left: 50%; margin-left: -483px;}
 
@@ -456,36 +456,66 @@ button.icon-left{padding-left: 35px;}
 
 /*** ToolTip ***/
 .tooltip{position: relative;}
-.tooltip-container{
-	position: absolute;
-	bottom: 4px;
-	left: -37px;
-	z-index: 1000;
-}
-.tooltip-top, .tooltip-content, .tooltip-bottom{background-image: url(../Images/tooltip_bg_sprite.png); background-color: transparent; background-repeat: no-repeat; width: 198px; }
-.tooltip-top{ background-position: 0 0; height: 3px;}
-.tooltip-content{
-	background-position: -198px 0; 
-	background-repeat: repeat-y;
-	/*color: #21708c;*/
+
+.ui-tooltip-custom .ui-tooltip-titlebar,
+.ui-tooltip-custom .ui-tooltip-content{
+	border-color: rgb(241,241,241);
+	background-color: rgba(241,241,241,0.9);
+	color: #010101;
 	font-size: 10px;
 	line-height: 12px;
-	padding: 0 5px;
+	padding: 1px 4px;
 	text-align: left;
 	word-wrap: break-word;
 }
-.tooltip-bottom{background-position: 0 -3px; height: 51px;}
 
-.tooltip-container dl dt{
+.ui-tooltip-custom .ui-tooltip-titlebar{
+	background-color: rgba(241,241,241,0.9);
+}
+
+.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie7 .ui-tooltip-custom .ui-tooltip-content,
+.ie8 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie8 .ui-tooltip-custom .ui-tooltip-content{
+	border-color: rgb(241,241,241);
+	background-color: rgb(241,241,241);
+	color: #010101;
+	font-size: 10px;
+	line-height: 12px;
+	padding: 1px 4px;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+.ie7 .ui-tooltip-custom .ui-tooltip-titlebar,
+.ie8 .ui-tooltip-custom .ui-tooltip-titlebar{
+	background-color: rgb(241,241,241);
+}
+
+.ui-tooltip-custom .ui-tooltip-icon{
+	border-color: #CCC;
+	background: #F1F1F1;
+	color: #777;
+}
+	
+.ui-tooltip-custom .ui-tooltip-titlebar .ui-state-hover{
+	border-color: #AAA;
+	color: #111;
+}
+	
+.ui-tooltip-custom dl dt{
 	clear: left;
 	color: #010101;
 	font-weight: bold;
 	float:left;
-	margin-bottom: 5px;
-	width: 50px;	
+	margin-bottom: 5px;	
 }
-.tooltip-container dl dd{float: left; margin-bottom: 5px; width: 140px;}
 
+.ui-tooltip-custom dl dd {
+	float: left;
+	margin-bottom: 5px;
+	margin-left: 4px;
+}
 
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}
@@ -617,7 +647,7 @@ header {
 	 height: 35px; 
 	 padding-left: 3px; 
 }
-#toolbar-right{width: 321px;}
+#toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
 .date-range-selector{padding-right: 19px;}
@@ -678,6 +708,11 @@ header {
 	padding-left: 10px;
 	padding-bottom: 10px;
 }
+.edit-module-element label {
+	margin-bottom: 5px;
+	display: block;
+}
+
 .edit-button-bar
 {
 	padding: 10px;
@@ -689,11 +724,11 @@ header {
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-.edit-module .ui-autocomplete-input {
+.edit-module input.ui-autocomplete-input {
 	height: 16px;
 	float: left;
 }
-.ie9 .edit-module .ui-autocomplete-input {
+.ie9 .edit-module input.ui-autocomplete-input {
 	height: 15px;
 	float: left;
 }
@@ -704,6 +739,18 @@ header {
 .time-input
 {
 	width: 8.5em;
+}
+select.time-input
+{
+    width: 110px;
+}
+.rtl select.time-input
+{
+    width: 80px;
+}
+.rtl .time-input
+{
+    padding-right: 20px;
 }
 .edit-module-inner button.ui-button-icon-only {
 	height: 20px; 
@@ -817,149 +864,10 @@ header {
 	font-family: Verdana;
 	font-size: 11px;
 }
-.weekview-day li:first-child, .weekdays li{
-	color: #fff; 
-	line-height: 18px; 
-	text-transform: uppercase; 
-	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-}
-.weekview-day li:first-child, .weekview-day li.second, .weekdays li, .calendarview-week li .day-header{
-	 background-color: transparent;
-	 font-size: 11px;
-	 min-height: 19px;
-	 padding: 0; 
-}
-.weekview-day li.second, .calendarview-week li .day-header{color: #2b90b3; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
-
-.body-weekview-inner ul.today, .body-weekview-inner ul.ui-selected, .calendarview-week li.today, .calendarview-week li.ui-selected{
-	 background-image: url(../Images/view_ul_states_sprite.png);
-	 background-color: #f8f8f8;
-	 background-repeat: repeat-x;
-}
 
 
-/*** Week view ***/
-.body-weekview{background: #f8f8f8 url(../Images/view_repeater_bg.png) bottom left repeat-y;}
-.body-weekview-inner{background: transparent url(../Images/view_top_bg.png) top left no-repeat; font-size: 0;}
-.body-weekview-inner ul.today{background-position: 0 0; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
-
-.body-weekview-inner ul.ui-selected{background-position: 0 -2000px;}
-.body-weekview-inner ul:first-child{margin-left: 19px;}
-
-.weekview-day{
-	 border-left: 1px solid #f9f9f9;
-	 border-right: 1px solid #dfdfdf;
-	 display: inline-block;
-	 font-size: 12px;
-	 list-style: none;
-	 line-height: 19px;
-	 margin: 0; 
-	 padding: 0; 
-	 text-align: center;
-	 vertical-align: top;
-	 width: 133px;
-}
-.ie7 .weekview-day{display: block; float: left;} /* IE7 inline-block fix */
-
-.rgba .weekview-day{
-	 border-left: 1px solid rgba(255, 255, 255, 0.7);
-	 border-right: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.weekview-day li{
-	 border-top: 1px solid  #f9f9f9;
-	 border-bottom: 1px solid #dfdfdf;
-	 min-height: 45px;
-}
-.rgba .weekview-day li{
-	 border-top: 1px solid rgba(255, 255, 255, 0.5);
-	 border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.weekview-day .comment-day 
-{
-	padding-bottom: 15px;
-}
-.weekview-day .icon.comment-day 
-{
-	background: transparent url(../Images/icon_sprite.png) -163px -4px no-repeat;
-	left: -4px;
-	top: 14px;
-	height: 16px;
-	width: 4px;
-}
-
-.weekview-day li:first-child, .weekview-day li.second{ border: 0px; cursor: pointer;}
-
-.weekview-day li:first-child div, .weekview-day li.second div{padding: 0; border-left-width: 0; border-right-width: 0;}
-
-.weekview-day.second{background: transparent url(../Images/date_field_bg.gif) top left repeat-x;}
-.weekview-day li.third{border-top: 0px;}
-.weekview-day li.empty{border-top-color: transparent; border-bottom-color: transparent;}
-.weekview-day > li > div {
-	padding: 10px 5px; 
-	border-left-style: solid; 
-	border-left-width: 8px; 
-	border-left-color: transparent;
-}
-.weekview-day li div.meeting {
-	bottom: 10px;
-	height: 18px;
-	right: -2px;
-	margin-left: 5px;
-}
-.ie7 .weekview-day li div.meeting{margin-left: 0px;}
 
 
-/*** Calendar view ***/
-.body-calendarview{background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;}
-.body-calendarview-inner{background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;}
-
-.weekdays li, .calendarview-week li{
-	border-left: 1px solid #f9f9f9;
-	 border-right: 1px solid #dfdfdf;
-}
-.rgba .weekdays li, .rgba .calendarview-week li{
-	 border-left: 1px solid rgba(255, 255, 255, 0.7);
-	 border-right: 1px solid rgba(0, 0, 0, 0.15);
-}
-.calendarview-week li:first-child{border-left-color: transparent; color: #fff; font-size: 11px; text-align: center; width: 38px;}
-.calendarview-week li:first-child > div{margin-top: 58px; padding-bottom: 0px;}
-.weekdays{font-size: 0; padding-left: 40px;}
-.weekdays li{
-	font-size: 11px;
-	display: inline-block;
-	list-style-type: none; 
-	text-align: center;
-	width: 130px;
-}
-.ie7 .weekdays li{zoom: 1; display: inline;} /* IE7 inline-block fix */
-
-.calendarview-week{ background: transparent url(../Images/calendarview_week_wide_bg.png) top left no-repeat; padding-left: 0px; font-size: 0; }
-.body-calendarview-inner ul:nth-child(2){background-image: none;}
-.calendarview-week li{
-	font-size: 12px;
-	display: inline-block;
-	min-height: 115px;
-	vertical-align: top;
-	width: 130px;
-}
-.ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
-
-.calendarview-week li div.day-content{padding: 10px 5px; border-left-style: solid; border-left-width: 8px; border-left-color: transparent;}
-
-.calendarview-week .today{background-position: 0 -1600px; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
-.calendarview-week .ui-selected{background-position: 0 -2019px;}
-.calendarview-week li .day-header{background-color: #c7dfe7; line-height: 19px; min-height: 19px;}
-.calendarview-week .today .day-header{background-color: #a8cfdd;}
-
-.calendarview-week li.non-editable{background-color: #eaeaea;}
-.calendarview-week li.non-editable .day-content{background-color: #eaeaea; color: #797979;}
-
-.calendarview-week li .day-content{text-align: center; min-height: 66px;}
-.calendarview-week li .day-content span{min-height: 15px;}
-
-.calendarview-week li.unvalidated{ font-style: italic;}
 
 /*** Footer ***/
 footer p
@@ -1107,93 +1015,44 @@ footer p
 	z-index: 599
 }
 
-.request-body-inner ol
-{
-	list-style: none;
-	margin-left: 0em;
-	margin-right: 0em;
-}
-.request-list 
-{
-	width: 483px;
-}
-.request-body-inner .request-item
-{
-	padding-top: 0.5em;
-	padding-bottom: 0.8em;
-	padding-left: 1.8em;
-	padding-right: 1.8em;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	background: #f8f8f8;
-	margin-top: 0.1em;
-	margin-bottom: 0.1em;
-}
-.request-body-inner .friendly-message {
-	width: 433px;
-}
-.request-body-inner .loading
-{
-	height: 5em;
-}
-.request-body-inner .arrow-down
-{
-	height: 5em;
-}
-
-.no-rgba .request-body-inner li {
-	 border: 1px solid #dfdfdf;
-}
-.request-body-inner .request-subject {
-}
-.request-body-inner .request-details 
-{
-	font-size: smaller;
-}
-.request-body-inner .request-caption 
-{
-	color: #B0B0B0;
-	font-style: italic;
-	font-size: xx-small;
-}
-.request-body-inner .request-text 
-{
-	padding-top: 0.3em;
-}
 
 .template
 {
 	display: none;
 }
 
-.striped 
-{
-	background-image: url(../Images/stripe.png);
-	
-	/* Until IE supports gradites for real
 
-	-webkit-background-size: 6px 6px;
-	background-image: -webkit-linear-gradient(-45deg, 
-			rgba(0, 0, 0, .5) 0%, 
-			rgba(0, 0, 0, .5) 10%, 
-			transparent 10%, 
-			transparent 50%, 
-			rgba(0, 0, 0, .5) 50%, 
-			rgba(0, 0, 0, .5) 60%, 
-			transparent 60%, 
-			transparent 100%)*/
-}
-
-.ie7 .striped
+/*
+Personal drop down menu
+*/
+.dropdown a, .dropdown a:visited
 {
-	background-image: url(../Images/stripe.png);	
+	text-decoration: none;
+	outline: none;
+	font-size: 11px;
 }
-
-.ie8 .striped
+.dropdown dd
 {
-	background-image: url(../Images/stripe.png);	
+	position: relative;
 }
-
-.ie9 .striped
+.dropdown dt span
 {
-	background-image: url(../Images/stripe.png);
+	cursor: pointer;
 }
+.dropdown dd ul
+{
+	background: #f8f8f8 none repeat scroll 0 0;
+	display: none;
+	position: absolute;
+	top: 2px;
+	width: 232px;
+	list-style: none;
+}
+.dropdown dd ul li a
+{
+	display: block;
+	text-align: left;
+}
+/*
+End personal drop down menu
+*/

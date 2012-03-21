@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification)
         {
             IList<IAbsenceRequestValidator> validatorList = new List<IAbsenceRequestValidator>
-                                                                {PersonAccountValidator, StaffingThresholdValidator};
+                                                                { PersonAccountValidator, StaffingThresholdValidator};
             foreach (IAbsenceRequestValidator requestValidator in validatorList)
             {
                 requestValidator.SchedulingResultStateHolder = schedulingResultStateHolder;

@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
     public class PrincipalManager : IPrincipalManager
     {
-        public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
+		 public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
         {
             var teleoptiPrincipal =
                 new TeleoptiPrincipal(new TeleoptiIdentity(loggedOnUser ==null ? string.Empty : loggedOnUser.Name.ToString(), dataSource, businessUnit,
-                                                           WindowsIdentity.GetCurrent()), loggedOnUser);
+                                                           WindowsIdentity.GetCurrent(), teleoptiAuthenticationType), loggedOnUser);
 
             var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
             if (currentPrincipal == null)

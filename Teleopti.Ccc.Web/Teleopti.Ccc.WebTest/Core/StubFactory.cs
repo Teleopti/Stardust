@@ -5,6 +5,7 @@ using System.Drawing;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -54,6 +55,11 @@ namespace Teleopti.Ccc.WebTest.Core
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment)
 		{
 			return ScheduleDayStub(date, significantPartToDisplay, null, personAssignment, null, null);
+		}
+
+		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAbsence personAbsence)
+		{
+			return ScheduleDayStub(date, significantPartToDisplay, new[] {personAbsence});
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
@@ -110,10 +116,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 		public IPersonAbsence PersonAbsenceStub() { return PersonAbsenceStub(new DateTimePeriod()); }
 
-		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period)
+		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period) { return PersonAbsenceStub(period, AbsenceLayerStub()); }
+
+		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period, IAbsenceLayer absenceLayer)
 		{
 			var id = Guid.NewGuid();
-			var absenceLayer = AbsenceLayerStub();
 			var personAbsence = MockRepository.GenerateStub<IPersonAbsence>();
 			personAbsence.Stub(x => x.Id).Return(id);
 			personAbsence.Stub(x => x.Layer).Return(absenceLayer);
@@ -121,46 +128,53 @@ namespace Teleopti.Ccc.WebTest.Core
 			return personAbsence;
 		}
 
-		public IAbsenceLayer AbsenceLayerStub()
+		public IAbsenceLayer AbsenceLayerStub() { return AbsenceLayerStub(AbsenceStub()); }
+
+		public IAbsenceLayer AbsenceLayerStub(IAbsence absence)
 		{
-			var absence = AbsenceStub();
 			var absenceLayer = MockRepository.GenerateStub<IAbsenceLayer>();
 			absenceLayer.Payload = absence;
 			return absenceLayer;
 		}
 
-		public IAbsence AbsenceStub()
+		public IAbsence AbsenceStub() { return AbsenceStub(Color.Green); }
+
+		public IAbsence AbsenceStub(Color color)
 		{
 			var absence = MockRepository.GenerateStub<IAbsence>();
 			absence.Description = new Description(Guid.NewGuid().ToString());
-			absence.DisplayColor = Color.Green;
+			absence.DisplayColor = color;
 			absence.Stub(x => x.ConfidentialDisplayColor(Arg<IPerson>.Is.Anything)).Return(Color.Gray);
 			return absence;
 		}
 
-		public IPersonAssignment PersonAssignmentStub(DateTimePeriod dateTimePeriod)
+		public IPersonAssignment PersonAssignmentStub(DateTimePeriod dateTimePeriod) { return PersonAssignmentStub(dateTimePeriod, MainShiftStub()); }
+
+		public IPersonAssignment PersonAssignmentStub(DateTimePeriod dateTimePeriod, IMainShift mainShift)
 		{
-			var mainShift = MainShiftStub();
 			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
 			personAssignment.Stub(x => x.MainShift).Return(mainShift);
 			personAssignment.Stub(x => x.Period).Return(dateTimePeriod);
 			return personAssignment;
 		}
 
-		public IMainShift MainShiftStub()
+		public IMainShift MainShiftStub() { return MainShiftStub(ShiftCategoryStub()); }
+
+		public IMainShift MainShiftStub(IShiftCategory shiftCategory)
 		{
-			var shiftCategory = ShiftCategoryStub();
 			var mainShift = MockRepository.GenerateStub<IMainShift>();
 			mainShift.ShiftCategory = shiftCategory;
 			return mainShift;
 		}
 
-		public IShiftCategory ShiftCategoryStub()
+		public IShiftCategory ShiftCategoryStub() { return ShiftCategoryStub(Color.Black); }
+
+		public IShiftCategory ShiftCategoryStub(Color color)
 		{
 			var id = Guid.NewGuid();
 			var shiftCategory = MockRepository.GenerateStub<IShiftCategory>();
 			shiftCategory.Stub(x => x.Id).Return(id);
-			shiftCategory.DisplayColor = Color.Black;
+			shiftCategory.DisplayColor = color;
 			return shiftCategory;
 		}
 
@@ -210,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		public IPublicNote PublicNoteStub()
 		{
 			var publicNote = MockRepository.GenerateStub<IPublicNote>();
-			publicNote.Stub(x => x.ScheduleNote).Return("a note");
+			publicNote.Stub(x => x.GetScheduleNote(new NoFormatting())).Return("a note");
 			return publicNote;
 		}
 	}

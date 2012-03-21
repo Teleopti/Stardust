@@ -59,17 +59,8 @@ namespace Teleopti.Messaging.Client
             get { return (_brokerService != null ? true : false); }
         }
 
-        /// <summary>
-        /// Sends the RTA data.
-        /// </summary>
-        /// <param name="personId">The person id.</param>
-        /// <param name="externalAgentState">State of the external agent.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 10/06/2010
-        /// </remarks>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public void SendRtaData(Guid personId, IExternalAgentState externalAgentState)
+		public void SendRtaData(Guid personId, Guid businessUnitId, IExternalAgentState externalAgentState)
         {
             if (_brokerService != null)
             {
@@ -111,21 +102,8 @@ namespace Teleopti.Messaging.Client
             }
         }
 
-        /// <summary>
-        /// Sends the event message with the following arguments:
-        /// </summary>
-        /// <param name="floor">The floor.</param>
-        /// <param name="ceiling">The ceiling.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainInterfaceType">Type of the domain interface.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 12/06/2010
-        /// </remarks>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId)
         {
             if (_brokerService != null)
             {

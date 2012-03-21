@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void Transform(IEnumerable<IPersonRequest> rootList, int intervalsPerDay, DataTable table)
-		{
+        {
             InParameter.NotNull("rootList", rootList);
             InParameter.NotNull("table", table);
             
@@ -33,11 +33,14 @@ namespace Teleopti.Analytics.Etl.Transformer
                             ToList();
                 }
 
+                var requestInfo = (IChangeInfo) personRequest;
+                var requestCreatedOn = requestInfo.CreatedOn;
+                DateTime convertedTimeFromUtc = personTimeZone.ConvertTimeFromUtc(requestCreatedOn.GetValueOrDefault(), personTimeZone);
+
                 foreach (var dateOnly in dayCollection)
                 {
                     DataRow row = table.NewRow();
-                    row["date_from"] = personTimeZone.ConvertTimeToUtc(dateOnly, personTimeZone);
-                    row["interval_from_id"] = new IntervalBase(personTimeZone.ConvertTimeToUtc(dateOnly, personTimeZone), 96).Id;
+            
                     row["request_code"] = personRequest.Id;
                     row["person_code"] = personRequest.Person.Id;
                     
@@ -57,9 +60,12 @@ namespace Teleopti.Analytics.Etl.Transformer
                     if (personRequest.IsDenied)
                         row["request_status_code"] = 2;
 
-                    row["date_from_local"] = dateOnly.Date;
+                    row["request_date"] = dateOnly.Date;
+                    row["application_datetime"] = convertedTimeFromUtc;
+                    row["request_startdate"] = numOfDays.StartDate.Date;
+                    row["request_enddate"] = numOfDays.EndDate.Date;
                     row["business_unit_code"] = personRequest.BusinessUnit.Id;
-                    
+
                     row["request_day_count"] = 1;
                     row["request_start_date_count"] = dateOnly == numOfDays.StartDate ? 1 : 0;
                     row["datasource_id"] = 1;

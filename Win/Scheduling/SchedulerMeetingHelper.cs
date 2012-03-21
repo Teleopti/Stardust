@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 scheduleViewBase.ShowConfirmationMessage(
                     string.Format(CultureInfo.CurrentUICulture,
                                   UserTexts.Resources.AreYouSureYouWantToDeleteMeeting,
-                                  meetingToRemove.Subject), UserTexts.Resources.Meeting);
+                                  meetingToRemove.GetSubject(new NoFormatting())), UserTexts.Resources.Meeting);
 
             if (result != DialogResult.Yes) return;
 

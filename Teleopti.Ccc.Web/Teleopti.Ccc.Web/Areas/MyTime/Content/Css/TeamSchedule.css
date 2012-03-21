@@ -28,6 +28,10 @@
 	top: 5px;
 	bottom: 0px;
 }
+.rtl .teamschedule-timeline {
+	left: auto;
+	right: 0px;
+}
 .teamschedule-timeline-spacer {
 	width: 125px;
 }
@@ -40,6 +44,10 @@
 	font-size: 8px;
 	border-left: 1px solid rgba(0, 0, 0, 0.15);
 }
+.rtl .teamschedule-timeline-time {
+	border-left: none;
+	border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
 .teamschedule-timeline-label 
 {
 	padding: 1px;
@@ -50,7 +58,10 @@
 	left: -10px;
 	position: relative;
 }
-
+.rtl .teamschedule-timeline-label {
+	left: auto;
+	right: -10px;
+}
 .teamschedule-timeline-time.minute .teamschedule-timeline-label
 {
 	display: none;
@@ -59,7 +70,6 @@
 .teamschedule-agents {
 	width: 100%;
 	position: relative;
-	z-index: 499;
 }
 .teamschedule-agent 
 {
@@ -69,6 +79,7 @@
 	width: 100%;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 	vertical-align: bottom;
+	z-index: 99;
 }
 .teamschedule-agent-name 
 {
@@ -96,19 +107,24 @@
 	position: absolute;
 	left: 125px;
 }
+.rtl .teamschedule-agent-schedule
+{
+	left: auto;
+	right: 125px;
+}
 
-.layer 
+.teamschedule .layer 
 {
 	vertical-align: bottom;
 	height: 19px;
 	border-radius: 2px;
 }
 
-.gradient {
+.teamschedule .gradient {
 	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
 } 
 
-.dayoff 
+.teamschedule .dayoff 
 {
 	margin-left: 5px;
 	width: 824px;
@@ -117,10 +133,11 @@
 	text-align: center;
 	height: 18px;
 	border-radius: 2px;
-	
-	background-image: url(../Images/stripe.png);
-	
-	background-color: beige;
+}
+.rtl .teamschedule .dayoff
+{
+	margin-left: auto;
+	margin-right: 5px;
 }
 
 #TeamScheduleDateRangeSelector.date-range-selector .datepicker{

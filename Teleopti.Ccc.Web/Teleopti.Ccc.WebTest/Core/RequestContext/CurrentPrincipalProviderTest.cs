@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
-			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity(person.Name.ToString(), null, null, null),
+			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity(person.Name.ToString(), null, null, null, AuthenticationTypeOption.Unknown),
 			                                                    person);
 
 			Thread.CurrentPrincipal = principalForTest;

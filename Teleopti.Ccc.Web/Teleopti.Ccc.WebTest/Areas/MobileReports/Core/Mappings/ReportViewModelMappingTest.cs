@@ -7,12 +7,14 @@ using Teleopti.Ccc.Domain.WebReport;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
+using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 {
+	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+
 	[TestFixture]
 	public class ReportViewModelMappingTest
 	{
@@ -39,18 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 		#endregion
 
 		[Test]
-		public void ShouldCallTextTranslationWhenMappingDefinedReportsToReportsSelectionViewModel()
-		{
-			/*
-			var reportSelectionViewModel = Mapper.Map<Def, ReportSelectionViewModel>(source);
-
-			reportSelectionViewModel.ReportId.Should().Be.EqualTo(source.ReportId);
-			reportSelectionViewModel.ReportName.Should().Be.EqualTo(nameLookup);
-			 * */
-		}
-
-
-		[Test]
 		public void ShouldConfigureCorrectly()
 		{
 			Mapper.AssertConfigurationIsValid();
@@ -63,7 +53,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Mappings
 			             	{
 			             		FunctionCode = "aRptFunction",
 			             		ReportId = "id",
-			             		ReportName = "name",
 			             		ReportNameResourceKey = "resourceKey"
 			             	};
 

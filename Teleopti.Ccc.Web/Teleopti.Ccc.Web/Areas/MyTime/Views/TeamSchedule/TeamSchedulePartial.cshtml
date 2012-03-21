@@ -1,21 +1,23 @@
 ﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamScheduleViewModel
 @{
 	Layout = null;
 	const int scheduleWidth = 835;
+	var left = Html.HtmlStyleLeft();
 }
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<div class="body-teamschedule-inner">
 		
 		<div class="teamschedule relative ui-corner-all">
-			
+
 			<div class="teamschedule-timeline absolute">
 				<div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
 				<ul class="teamschedule-timeline-times floatleft relative">
 					@foreach (var time in Model.TimeLine)
 					{
-						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
+						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
 							<div class="teamschedule-timeline-label ui-corner-all" title="@time.LongTime">@time.ShortTime</div>
 						</li>
 					}
@@ -41,9 +43,9 @@
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
 									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? "striped" : "gradient")" data-mytime-activity="@layer.ActivityName" data-mytime-start-time="@layer.StartTime" data-mytime-end-time="@layer.EndTime"
+									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@layer.ActivityName" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 											style="width: @(widthPixel)px;
-												left: @(leftPixel)px;
+												@left: @(leftPixel)px;
 												background-color: @layer.Color;
 												@(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
 								}

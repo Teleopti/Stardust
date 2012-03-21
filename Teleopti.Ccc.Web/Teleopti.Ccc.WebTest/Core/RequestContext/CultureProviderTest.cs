@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(testLcid));
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(testLcid));
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
 			return principal;
 		}
 

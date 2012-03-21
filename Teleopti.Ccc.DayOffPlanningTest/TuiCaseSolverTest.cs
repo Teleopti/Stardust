@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(MinMaxNumberOfResult.ToMany, _target.ResolvableState());
         }
 
-        [Test]
+		[Test, Ignore("Remove this test due to bug 18662")]
         public void VerifySetToManyBackToLegalState()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
-        [Test]
+		[Test, Ignore("Remove this test due to bug 18662")]
         public void VerifySetToManyBackToLegalState2()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
-        [Test]
+		[Test, Ignore("Remove this test due to bug 18662")]
         public void VerifySetToManyBackToLegalState3()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsFalse(_target.SetToManyBackToLegalState());
         }
 
-        [Test]
+		[Test, Ignore("Remove this test due to bug 18662")]
         public void VerifySetToManyBackToLegalState4()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);

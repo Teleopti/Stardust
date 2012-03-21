@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -262,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
 			_target.CreateAndAddNote(text);
 			Assert.IsTrue(((IList<INote>)_target.NoteCollection()).Count == 1);
-			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].ScheduleNote);
+			Assert.AreEqual(text, ((IList<INote>)_target.NoteCollection())[0].GetScheduleNote(new NoFormatting()));
 		}
 
 		[Test]
@@ -1027,6 +1028,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(4, destination.PersonAbsenceCollection().Count);
 		}
 
+        [Test]
+        public void ShouldPasteAbsenceFromSourceWithContractDayOff()
+        {
+            SetupForMergeTests();
+
+            var absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
+
+            using (_mocks.Record())
+            {
+                Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
+            }
+
+            //add absences, assignment to source
+            source.Add(personAbsenceSource);
+            source.Add(personAbsenceSource2);
+            source.Add(personAssignmentSource);
+
+            //add dayoff, absence, assignment to destination
+            destination.Add(personDayOffDest);
+            destination.Add(personAbsenceDest);
+            destination.Add(personAssignmentDest);
+
+            //merge
+            ((ExtractedSchedule)source).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
+
+            Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+            destination.Merge(source, false);
+            Assert.AreEqual(2, destination.PersonAbsenceCollection().Count);
+        }
+
 		[Test]
 		public void VerifyMergeAbsence()
 		{
@@ -1111,7 +1142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 
 			//paste from wintertime to day of change to summertime("W. Europe Standard Time")
-			expectedDiff = new TimeSpan(4, 23, 0, 0);
+			expectedDiff = new TimeSpan(5, 0, 0, 0);
 			testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 23));
 			testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 28));
 			diff = testDestination.CalculatePeriodOffset(testSource.Period);

@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         /// <value>The report id.</value>
         [DataMember]
+        [Obsolete("This will be removed, the Id is now a Guid and on the Id property")]
         public int ReportId{ get; set; }
 
         /// <summary>
@@ -35,5 +37,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// <value>The target frame.</value>
         [DataMember]
         public string TargetFrame { get; set; }
+
     }
 }

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Net.Sockets;
 using log4net;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
@@ -63,12 +64,15 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                     messageSender.InstantiateBrokerService();
                 if (messageSender.IsAlive)
                 {
+                	var identity = (TeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
                     messageSender.SendData(JobCategoryDatePeriod.StartDateUtcFloor,
                                            JobCategoryDatePeriod.EndDateUtcCeiling,
                                            Guid.NewGuid(),
                                            Guid.Empty,
                                            typeof (IStatisticTask),
-                                           DomainUpdateType.Insert);
+                                           DomainUpdateType.Insert,
+										   identity.DataSource.DataSourceName,
+										   identity.BusinessUnit.Id.GetValueOrDefault());
                 }
             }
             catch (BrokerNotInstantiatedException exception)

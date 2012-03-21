@@ -74,9 +74,11 @@
 						response(select.children("option").map(function () {
 							var text = $(this).text();
 							var value = $(this).val();
+							var cssClass = $(this).attr('class');
 							return {
 								label: text,
 								value: value,
+								cssClass: cssClass,
 								option: this
 							};
 						}));
@@ -88,13 +90,30 @@
 			menu.data("autocomplete")._renderItem = function (ul, item) {
 				if (item.value == "-")
 					return $('<li></li>')
+						.addClass(item.cssClass)
 						.addClass('ui-splitbutton-menu-splitter')
 						.append($('<div>'))
-						.appendTo(ul);
+						.appendTo(ul)
+						;
+
+				var text = $('<span>')
+					.addClass('ui-splitbutton-menu-text')
+					.text(item.label)
+					;
+				var secondaryIcon = $("<span>")
+					.addClass('ui-splitbutton-menu-icon-secondary')
+					.addClass('ui-corner-all')
+					;
+				var itemButton = $("<a></a>")
+					.append(text)
+					.append(secondaryIcon)
+					;
 				return $("<li></li>")
+					.addClass(item.cssClass)
 					.data("item.autocomplete", item)
-					.append($("<a></a>").text(item.label))
-					.appendTo(ul);
+					.append(itemButton)
+					.appendTo(ul)
+					;
 			};
 
 		},

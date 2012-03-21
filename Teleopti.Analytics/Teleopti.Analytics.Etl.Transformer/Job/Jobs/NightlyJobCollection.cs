@@ -1,16 +1,17 @@
 using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 
+
 namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class NightlyJobCollection : List<IJobStep>
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public NightlyJobCollection(IJobParameters jobParameters)
         {
+            Add(new LicenseCheckJobStep(jobParameters));
             // CLEANUP
             Add(new DimPersonDeleteJobStep(jobParameters));     // BU independent
             Add(new DimPersonTrimJobStep(jobParameters));     // BU independent
@@ -90,8 +91,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
             Add(new FactScheduleDeviationJobStep(jobParameters));
             Add(new FactKpiTargetTeamJobStep(jobParameters));
-            Add(new PermissionReportJobStep(jobParameters));
             Add(new FactRequestJobStep(jobParameters));
+            Add(new FactRequestedDaysJobStep(jobParameters));
+            Add(new PermissionReportJobStep(jobParameters));
+            
             // If PM is installed then show PM job steps
             if (jobParameters.IsPmInstalled)
             {

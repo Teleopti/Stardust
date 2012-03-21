@@ -35,8 +35,8 @@ _ReSharper*/
 TeleOpti.Messaging.Bin/
 
 # teleopti things
-.orig
-.rej
+*.orig
+*.rej
 packages/
 *.stub
 *.vssscc
@@ -47,3 +47,11 @@ packages/
 *.esent
 *.chk
 *.nhib.xml
+*.ncov
+*Test.xml
+symbolmodule.xml
+Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.Config
+*[Tt]est.dll.[Cc]onfig
+*.ncov.bkp
+Teleopti.Ccc.Rta/Teleopti.Ccc.Rta.WebService/RtaWebService.log.1
+PBI 18157.sln

@@ -80,7 +80,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _addTextRequest() {
 		var formData = _getFormData();
-		$.ajax({
+		$.myTimeAjax({
 			url: "Requests/TextRequest",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -137,7 +137,11 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		var date = Date.parse(inputDate);
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
 		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
+//		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
+		var title = textRequestCount.attr('title');
+		if (title == undefined)
+			return;
+		var newTitle = title.replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
 		textRequestCount.attr('title', newTitle);
 		textRequestCount
 			.show()

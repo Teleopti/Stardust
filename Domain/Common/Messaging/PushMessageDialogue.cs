@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         private readonly IPushMessage _pushMessage;
         private readonly IPerson _receiver;
         private readonly IList<IDialogueMessage> _dialogueMessages;
-        private readonly NormalizeText _normalizeText = new NormalizeText();
         private bool _isReplied;
         private string _reply = _defaultReply;
 
@@ -55,11 +54,11 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             {
                 if (_pushMessage.TranslateMessage)
                 {
-                   string ret = UserTexts.Resources.ResourceManager.GetString(_pushMessage.Message,
+                   string ret = UserTexts.Resources.ResourceManager.GetString(_pushMessage.GetMessage(new NoFormatting()),
                                                                   Receiver.PermissionInformation.UICulture());
                     if (!string.IsNullOrEmpty(ret)) return ret;
                 }
-                return _pushMessage.Message;
+                return _pushMessage.GetMessage(new NoFormatting());
             }
         }
 
@@ -69,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             if (!_pushMessage.AllowDialogueReply)
                 throw new ArgumentException("No text replies are allowed for this message.", "message");
 
-            message = _normalizeText.Normalize(message);
             var messageToAdd = new DialogueMessage(message, sender);
             messageToAdd.SetParent(this);
             _dialogueMessages.Add(messageToAdd);
@@ -87,16 +85,24 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             get { return Receiver; }
         }
 
-        public virtual string Reply
+		protected virtual string Reply
+    	{
+    		get { return _reply; }
+    	}
+
+        public virtual string GetReply(ITextFormatter formatter)
         {
-            get { return _reply; }
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_reply);
         }
 
         public virtual void SetReply(string reply)
         {
             if (PushMessage.CheckReply(reply) && !IsReplied)
             {
-                _reply = _normalizeText.Normalize(reply);
+                _reply = reply;
                 _isReplied = true;
             }
         }

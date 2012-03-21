@@ -24,7 +24,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I navigate to Mobile Reports")]
 		public void WhenINavigateToMobileReposrts()
 		{
-			Navigation.GotoMobileReportsSignInPage();
+			Navigation.GotoMobileReportsSignInPage(string.Empty);
+		}
+
+		[When(@"I navigate to the site's root mobile signin page")]
+		public void WhenINavigateToTheSiteSRootMobileSigninPage()
+		{
+			Navigation.GotoGlobalMobileSignInPage();
+		}
+
+		[Then(@"I should see the mobile global menu")]
+		public void ThenIShouldSeeTheMobileGlobalMenu()
+		{
+			// The user should endup if mobile device detected. Mark this as pending..?
+			// ScenarioContext.Current.Pending();
+			Navigation.GotoGlobalMobileMenuPage();
+
+			EventualAssert.That(() => Pages.Pages.MobileGlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
 		}
 
 		[Then(@"I should see the global sign in page")]
@@ -44,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.MobileSignInPage.ApplicationSignIn.Exists, Is.True);
-			Browser.Current.Url.Should().EndWith("/MobileReports/Authentication/SignIn");
+			Browser.Current.Url.Should().Contain("/MobileReports/Authentication/SignIn");
 		}
 
 		[Then(@"I should see the global menu")]
@@ -65,7 +81,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see Mobile Reports")]
 		public void ThenIShouldSeeMobileReports()
 		{
-			EventualAssert.That(() => Pages.Pages.MobileReportsPage.HomeViewContainer.DisplayVisible(), Is.True);
+			// Settings is Now preferred "home"
+			EventualAssert.That(() => Pages.Pages.MobileReportsPage.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
 	}
 }

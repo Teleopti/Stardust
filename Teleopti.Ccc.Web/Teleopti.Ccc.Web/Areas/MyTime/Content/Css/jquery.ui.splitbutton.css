@@ -27,6 +27,23 @@
 	white-space: nowrap;
 }
 
+.ui-splitbutton-menu li
+{
+	position: relative;
+	white-space: nowrap;
+}
+.ui-splitbutton-menu-text
+{
+	padding-right: 23px;
+}
+.ui-splitbutton-menu-icon-secondary
+{
+	position: absolute;
+	right: 4px;
+	width: 18px;
+	height: 18px;
+}
+
 .ui-splitbutton-menu .ui-splitbutton-menu-splitter 
 {
 	padding: 5px;

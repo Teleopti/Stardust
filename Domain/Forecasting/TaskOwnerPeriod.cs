@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         private IList<ITaskOwner> TaskOwnerDayOpenCollection()
         {
-            return _taskOwnerDayCollection.Where(wd => !wd.IsClosed).ToList();
+            return _taskOwnerDayCollection.Where(wd => wd.OpenForWork.IsOpen).ToList();
         }
 
         /// <summary>
@@ -754,9 +754,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public virtual bool IsClosed
+        public virtual IOpenForWork OpenForWork
         {
-            get { return _taskOwnerDayCollection.All(wd => wd.IsClosed); }
+            //get { return _taskOwnerDayCollection.All(wd => wd.IsClosed); }
+            get
+            {
+                return new OpenForWork()
+                {
+                    IsOpenForIncomingWork =
+                        _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork),
+                    IsOpen = _taskOwnerDayCollection.Any(wd=>wd.OpenForWork.IsOpen)
+                };
+            }
         }
 
         /// <summary>
@@ -1069,7 +1078,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void checkIfIsClosed()
         {
-            if (IsClosed) 
+            if (!OpenForWork.IsOpen) 
                 throw new InvalidOperationException("Workload day must be open.");
         }
 

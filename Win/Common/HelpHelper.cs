@@ -114,12 +114,12 @@ namespace Teleopti.Ccc.Win.Common
 
 		private string GetUrl(string formName, IHelpContext control)
 		{
-			string topic = GetTopic(formName, control);
+			var topic = GetTopic(formName, control);
 			topic = HttpUtility.UrlEncode(topic);
-            var org = string.Concat(_http, _helpLang, _prefix, topic, _suffix);
-            var underScore = org.Replace(".", "_");
-            return underScore.Replace("_htm", ".htm");
-        }
+			topic = topic.Replace(".", "_");
+			var url = string.Concat(_http, _helpLang, _prefix, topic, _suffix);
+			return url;
+		}
 		private string GetOnlineUrl(string formName, IHelpContext control)
 		{
 			string topic = GetTopicUrlOnline(formName, control);

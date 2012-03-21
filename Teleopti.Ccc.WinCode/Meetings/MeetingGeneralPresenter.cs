@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 activities = RepositoryFactory.CreateActivityRepository(unitOfWork).LoadAllSortByName();
             }
 			_view.SetActivityList(activities);
+			SetActivity(activities.FirstOrDefault());
 			UpdateView();
             
         }
@@ -142,9 +144,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			_view.SetStartTime(_model.StartTime);
 			_view.SetEndTime(_model.EndTime);
 			_view.SetRecurringEndDate(_model.RecurringEndDate);
-			_view.SetSubject(_model.Subject);
-			_view.SetLocation(_model.Location);
-			_view.SetDescription(_model.Description);
+			_view.SetSubject(_model.GetSubject(new NoFormatting()));
+			_view.SetLocation(_model.GetLocation(new NoFormatting()));
+			_view.SetDescription(_model.GetDescription(new NoFormatting()));
 		}
 
 	    public void CancelAllLoads()

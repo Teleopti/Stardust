@@ -306,11 +306,6 @@ namespace Teleopti.Messaging.Client
             get { return (Initialized == 0 ? true : false); }
         }
 
-        public string ServicePath
-        {
-            get { return BrokerService.ServicePath; }
-        }
-
         protected long RestartTime
         {
             get { return _restartTime; }

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -25,15 +26,19 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPreferenceProvider preferenceProvider;
 		private IPerson person;
-		private IPreferenceFeedbackProvider _preferenceFeedbackProvider;
+		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
+		private IScheduleProvider scheduleProvider;
+		private IProjectionProvider projectionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			_preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
-
+			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
+			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
+ 
 			person = new Person
 			         	{
 			         		WorkflowControlSet = new WorkflowControlSet(null)
@@ -48,10 +53,12 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new PreferenceDomainDataMappingProfile(
-					Resolver.Of(() => virtualScheduleProvider),
-					Resolver.Of(() => preferenceProvider),
-					Resolver.Of(() => loggedOnUser),
-					Resolver.Of(() => _preferenceFeedbackProvider)
+					Depend.On(virtualScheduleProvider),
+					Depend.On(preferenceProvider),
+					Depend.On(loggedOnUser),
+					Depend.On(preferenceFeedbackProvider),
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider)
 					)));
 		}
 
@@ -123,11 +130,83 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var workTimeMinMax = new WorkTimeMinMax();
 
 			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			_preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
 
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.Days.Single().WorkTimeMinMax.Should().Be(workTimeMinMax);
 		}
+
+		[Test]
+		public void ShouldMapScheduleDay()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] {scheduleDay});
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().ScheduleDay.Should().Be(scheduleDay);
+		}
+
+		[Test]
+		public void ShouldMapProjection()
+		{
+			var stubs = new StubFactory();
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			var projection = stubs.ProjectionStub();
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().Projection.Should().Be.SameInstanceAs(projection);
+		}
+
+		[Test]
+		public void ShouldNotMapScheduleDayAndProjectionIfNotScheduled()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.Days.Single().ScheduleDay.Should().Be.Null();
+			result.Days.Single().Projection.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapColorSource()
+		{
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			var projection = new StubFactory().ProjectionStub();
+			var preferenceDay = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
+
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(period)).Return(new[] {preferenceDay});
+			
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
+			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
+			result.ColorSource.PreferenceDays.Single().Should().Be(preferenceDay);
+			result.ColorSource.WorkflowControlSet.Should().Be(person.WorkflowControlSet);
+		}
+
 	}
 }

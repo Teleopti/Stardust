@@ -23,6 +23,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		new ScenarioContextLazy<MobileReportsPage>(() => Browser.Current.Page<MobileReportsPage>());
 		public static MobileReportsPage MobileReportsPage { get { return _mobileReportsPage.Value; } }
 
+		private static readonly ScenarioContextLazy<MobileGlobalMenuPage> _mobileGlobalMenuPage =
+		new ScenarioContextLazy<MobileGlobalMenuPage>(() => Browser.Current.Page<MobileGlobalMenuPage>());
+		public static MobileGlobalMenuPage MobileGlobalMenuPage { get { return _mobileGlobalMenuPage.Value; } }
+		
 		private static readonly ScenarioContextLazy<RequestsPage> _requestsPage =
 			new ScenarioContextLazy<RequestsPage>(() => Browser.Current.Page<RequestsPage>());
 		public static RequestsPage RequestsPage { get { return _requestsPage.Value; } }
@@ -35,14 +39,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<TeamSchedulePage>(() => Browser.Current.Page<TeamSchedulePage>());
 		public static TeamSchedulePage TeamSchedulePage { get { return _teamSchedulePage.Value; } }
 
-		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } set { ScenarioContext.Current.Value(value); } }
+		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } }
 
+		public static void NavigatingTo(WatiN.Core.Page page)
+		{
+			if (page is ISignInPage)
+				CurrentSignInPage = page as ISignInPage;
+			ScenarioContext.Current.Value(page);
+		}
+
+		public static PortalPage CurrentPortalPage { get { return Current as PortalPage; } }
 		public static IDeleteButton CurrentDeleteButton { get { return Current as IDeleteButton; } }
 		public static IOkButton CurrentOkButton { get { return Current as IOkButton; } }
 		public static ICancelButton CurrentCancelButton { get { return Current as ICancelButton; } }
 		public static IDateRangeSelector CurrentDateRangeSelector { get { return Current as IDateRangeSelector; } }
 		public static IEditTextRequestPage CurrentEditTextRequestPage { get { return Current as IEditTextRequestPage; } }
 
-		
+		public static ISignInPage CurrentSignInPage { get { return ScenarioContext.Current.Value<ISignInPage>(); } set { ScenarioContext.Current.Value(value); } }
+
 	}
 }

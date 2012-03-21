@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			foreach (var skill in budgetGroup.SkillCollection)
 			{
 				listBoxSkills.Items.Remove(skill);
-				listBoxAddedSkills.Items.Add(skill);
+                if (skill is IMultisiteSkill) continue;
+                listBoxAddedSkills.Items.Add(skill);
 			}
 		}
 
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var repFac = new RepositoryFactory();
-				var skills = repFac.CreateSkillRepository(uow).LoadAll();
+			    var skills = repFac.CreateSkillRepository(uow).FindAllWithoutMultisiteSkills();
 				listBoxSkills.Items.AddRange(skills.ToArray());
 			}
 		}

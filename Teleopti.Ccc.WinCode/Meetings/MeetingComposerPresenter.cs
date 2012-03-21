@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder,DateOnly startDate, IEnumerable<IPerson> participants )
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
-                                        schedulerStateHolder.CommonStateHolder.Activities.FirstOrDefault(), startDate, participants,
+										schedulerStateHolder.CommonStateHolder.ActiveActivities.FirstOrDefault(), startDate, participants,
                                         schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo);
         }
 
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             string messageTobeDisplayed = string.Empty;
 
-            if (string.IsNullOrEmpty(_model.Subject))
+            if (string.IsNullOrEmpty(_model.GetSubject(new NoFormatting())))
             {
                 messageTobeDisplayed = UserTexts.Resources.MeetingSubjectRequired;
             }
@@ -257,7 +258,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
             using (var unitOfWork = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var persons = _model.Meeting.MeetingPersons.Select(m => m.Person);
-                unitOfWork.Reassociate(persons);
+                //Reload So all data is there
+                persons = RepositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(persons);
+                //unitOfWork.Reassociate(persons);
                 var checker = new MeetingParticipantPermittedChecker();
                 if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, TeleoptiPrincipal.Current.PrincipalAuthorization))
                     return;

@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		private readonly IWorkload _workload;
 		private readonly WorkloadDayTemplatesDetailView _owner;
 		private readonly int _templateIndex;
-		private readonly IDictionary<DateOnly, bool> _filteredDates = new Dictionary<DateOnly, bool>();
+        private readonly IFilteredData _filteredDates = new FilteredData();
 	    private WorkloadDayTemplateFilterStatus _filterStatus;
 	    private WorkloadDayTemplate _workloadDayTemplate;
 	    private IList<IWorkloadDayBase> _workloadDaysForTemplatesWithStatistics;
 	    private FilterDataDetailView _detailView;
 
-	    public FilterDataView(IWorkload workload, WorkloadDayTemplatesDetailView owner, int templateIndex, IEnumerable<KeyValuePair<DateOnly, bool>> filteredDates)
+        public FilterDataView(IWorkload workload, WorkloadDayTemplatesDetailView owner, int templateIndex, IFilteredData filteredDates)
 		{
 			_workload = workload;
 			_owner = owner;
@@ -43,18 +43,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             Reload();
         }
 
-		private void InitializeFilteredDates(IEnumerable<KeyValuePair<DateOnly, bool>> filteredDates)
+        private void InitializeFilteredDates(IFilteredData filteredDates)
 		{
 			if (filteredDates == null) throw new ArgumentNullException("filteredDates");
-			foreach (var date in filteredDates)
-			{
-				var key = date.Key;
-				var value = date.Value;
-				if (!_filteredDates.ContainsKey(key))
-					_filteredDates.Add(key, value);
-				else
-					_filteredDates[key] = value;
-			}
+			_filteredDates.Merge(filteredDates);
 		}
 	
 		private void btnOk_Click(object sender, EventArgs e)
@@ -70,7 +62,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
 		public void NotifyWorkloadDayFilterChanged(DateOnly filteredDate, bool checkValue)
 		{
-			_filteredDates[filteredDate] = checkValue;
+			_filteredDates.AddOrUpdate(filteredDate, checkValue);
 		}
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -105,9 +97,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             foreach (var workloadDay in visibleWorkloadDays)
             {
                 var currentDate = workloadDay.CurrentDate;
-                if (!_filteredDates.ContainsKey(currentDate)) _filteredDates.Add(currentDate, true);
+                if(!_filteredDates.Contains(currentDate)) _filteredDates.AddOrUpdate(currentDate, true);
                 workloadDayDaysWithFilterStatus.Add(new WorkloadDayWithFilterStatus(workloadDay,
-                                                                                    _filteredDates[currentDate],
+                                                                                    _filteredDates.FilteredDates[currentDate],
                                                                                     this));
             }
             _filterStatus = new WorkloadDayTemplateFilterStatus

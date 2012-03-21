@@ -230,8 +230,8 @@ namespace Teleopti.Analytics.Parameters
             //_ButtonMoveAllBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
 
             // Doubleclick one item in the list to move it to the other
-            _listBox.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOne.ClientID + ")");
-            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOneBack.ClientID + ")");
+            _listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
+            _listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
 
 			// Label
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
@@ -268,7 +268,7 @@ namespace Teleopti.Analytics.Parameters
 			// Knappar
 			//writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "10%");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:10px 5px 10px 5px");
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:middle");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style,"align:center");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.Write("<Br/>");
 			_buttonMoveAll.RenderControl(writer);			
@@ -413,17 +413,17 @@ namespace Teleopti.Analytics.Parameters
 				
 				function changepic(button,pic) 
 				{
-					var theform = document.aspnetForm.all(button);
+					var theform = document.getElementById(button);
 					theform.src=pic;
 				}
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
-					var lstFrom = document.aspnetForm.all(ListFrom);
-					var lstTo = document.aspnetForm.all(ListTo);
-					var lstVal = document.aspnetForm.all(ListVal);
-					var txtVal = document.aspnetForm.all(TextVal);
-					var txtText = document.aspnetForm.all(TextText);
+					var lstFrom = document.getElementById(ListFrom);
+					var lstTo = document.getElementById(ListTo);
+					var lstVal = document.getElementById(ListVal);
+					var txtVal = document.getElementById(TextVal);
+					var txtText = document.getElementById(TextText);
 
 					for (i=0;i<lstFrom.length;i++)
 					{
@@ -453,7 +453,7 @@ namespace Teleopti.Analytics.Parameters
 				}
                 function callMoveOneButton(buttonId)
                 {
-                    var btnMoveOnlyOne = document.aspnetForm.all(buttonId);
+                    var btnMoveOnlyOne = document.getElementById(buttonId);
                     buttonId.click();
                 }
                 -->

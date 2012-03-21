@@ -212,16 +212,16 @@ namespace Teleopti.Analytics.Parameters
 			//if (Dependent.Count > 0)
 			//    submitOrNo = "Yes";
 
-			_buttonMoveOne.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveOne.Attributes.Add("onclick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
 
-			_buttonMoveAll.Attributes.Add("onClick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveAll.Attributes.Add("onclick", "moveListItem('" + _listBox.ClientID + "','" + _listBox2.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
 
-			_buttonMoveOneBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveOneBack.Attributes.Add("onclick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',0 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
 
-			_buttonMoveAllBack.Attributes.Add("onClick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
+			_buttonMoveAllBack.Attributes.Add("onclick", "moveListItem('" + _listBox2.ClientID + "','" + _listBox.ClientID + "',1 ,'" + _listBox2.ClientID + "','" + _textBox.ClientID + "','" + _textBoxText.ClientID + "','" + submitOrNo + "')");
 
-			_listBox.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOne.ClientID + ")");
-			_listBox2.Attributes.Add("ondblclick", "callMoveOneButton(" + _buttonMoveOneBack.ClientID + ")");
+			_listBox.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOne.ClientID + "')");
+			_listBox2.Attributes.Add("ondblclick", "callMoveOneButton('" + _buttonMoveOneBack.ClientID + "')");
 
 			// Label
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
@@ -406,18 +406,18 @@ namespace Teleopti.Analytics.Parameters
 				
 				function changepic(button,pic) 
 				{
-					var theform = document.aspnetForm.all(button);
+					var theform = document.getElementById(button);
 					theform.src=pic;
 				}
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
-					var lstFrom = document.aspnetForm.all(ListFrom);
-					var lstTo = document.aspnetForm.all(ListTo);
-					var lstVal = document.aspnetForm.all(ListVal);
-					var txtVal = document.aspnetForm.all(TextVal);
-					var txtText = document.aspnetForm.all(TextText);
-
+					var lstFrom = document.getElementById(ListFrom);
+					var lstTo = document.getElementById(ListTo);
+					var lstVal = document.getElementById(ListVal);
+					var txtVal = document.getElementById(TextVal);
+					var txtText = document.getElementById(TextText);
+                    
 					for (i=0;i<lstFrom.length;i++)
 					{
 						if ((lstFrom[i].selected) || (Type ==1))
@@ -446,7 +446,7 @@ namespace Teleopti.Analytics.Parameters
 				}
                 function callMoveOneButton(buttonId)
                 {
-                    var btnMoveOnlyOne = document.aspnetForm.all(buttonId);
+                    var btnMoveOnlyOne = document.getElementById(buttonId);
                     buttonId.click();
                 }
                 -->

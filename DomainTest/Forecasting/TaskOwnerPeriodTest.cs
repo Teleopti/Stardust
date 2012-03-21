@@ -674,11 +674,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             target.Add(workloadDay);
 
-            Assert.IsFalse(target.IsClosed);
+            //Assert.IsFalse(target.IsClosed);
+            Assert.IsTrue(target.OpenForWork.IsOpen);
             workloadDay.Close();
-            Assert.IsTrue(target.IsClosed);
+            //Assert.IsTrue(target.IsClosed);
+            Assert.IsFalse(target.OpenForWork.IsOpen);
             workloadDay.MakeOpen24Hours();
-            Assert.IsFalse(target.IsClosed);
+            //Assert.IsFalse(target.IsClosed);
+            Assert.IsTrue(target.OpenForWork.IsOpen);
         }
 
         /// <summary>

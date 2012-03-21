@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -6,8 +7,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
@@ -21,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -60,14 +63,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldRetrieveShiftCategoriesIntoPreferenceSplitButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
-			var shiftCategory = new ShiftCategory("Test");
+			var shiftCategory = new ShiftCategory("Test") {DisplayColor = Color.Pink};
 			shiftCategory.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
 
-			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -78,21 +79,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                             select t as ToolBarSplitButton)
 				.Single();
 
-			preferenceSplitButton.PreferenceOptions.Single().Value.Should().Be(shiftCategory.Id.ToString());
-			preferenceSplitButton.PreferenceOptions.Single().Text.Should().Be(shiftCategory.Description.Name);
+			preferenceSplitButton.Options.Single().Value.Should().Be(shiftCategory.Id.ToString());
+			preferenceSplitButton.Options.Single().Text.Should().Be(shiftCategory.Description.Name);
+			preferenceSplitButton.Options.Single().Style.Name.Should().Be(shiftCategory.DisplayColor.ToStyleClass());
+			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(shiftCategory.DisplayColor.ToHtml());
 		}
 
 		[Test]
 		public void ShouldRetrieveAbsencesIntoPreferenceSplitButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
-			var absence = new Absence { Description = new Description("Test") };
+			var absence = new Absence {Description = new Description("Test"), DisplayColor = Color.Plum};
 			absence.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
 
-			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -103,21 +104,21 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                             select t as ToolBarSplitButton)
 				.Single();
 
-			preferenceSplitButton.PreferenceOptions.Single().Value.Should().Be(absence.Id.ToString());
-			preferenceSplitButton.PreferenceOptions.Single().Text.Should().Be(absence.Description.Name);
+			preferenceSplitButton.Options.Single().Value.Should().Be(absence.Id.ToString());
+			preferenceSplitButton.Options.Single().Text.Should().Be(absence.Description.Name);
+			preferenceSplitButton.Options.Single().Style.Name.Should().Be(absence.DisplayColor.ToStyleClass());
+			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(absence.DisplayColor.ToHtml());
 		}
 
 		[Test]
 		public void ShouldRetrieveDayOffsIntoPreferenceSplitButton()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			var preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
-			var dayOff = new DayOffTemplate(new Description("Test"));
+			var dayOff = new DayOffTemplate(new Description("Test")) {DisplayColor = Color.Purple};
 			dayOff.SetId(Guid.NewGuid());
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
 
-			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(new FakePermissionProvider(), preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -128,8 +129,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                             select t as ToolBarSplitButton)
 				.Single();
 
-			preferenceSplitButton.PreferenceOptions.Single().Value.Should().Be(dayOff.Id.ToString());
-			preferenceSplitButton.PreferenceOptions.Single().Text.Should().Be(dayOff.Description.Name);
+			preferenceSplitButton.Options.Single().Value.Should().Be(dayOff.Id.ToString());
+			preferenceSplitButton.Options.Single().Text.Should().Be(dayOff.Description.Name);
+			preferenceSplitButton.Options.Single().Style.Name.Should().Be(dayOff.DisplayColor.ToStyleClass());
+			preferenceSplitButton.Options.Single().Style.ColorHex.Should().Be(dayOff.DisplayColor.ToHtml());
 		}
 
 		[Test]
@@ -141,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			preferenceOptionsProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { new ShiftCategory(" ") });
 			preferenceOptionsProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { new DayOffTemplate(new Description()) });
 
-			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, preferenceOptionsProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -152,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			                             select t as ToolBarSplitButton)
 				.Single();
 
-			preferenceSplitButton.PreferenceOptions.ElementAt(1).Should().Be.OfType<SplitButtonSplitter>();
+			preferenceSplitButton.Options.ElementAt(1).Should().Be.OfType<SplitButtonSplitter>();
 		}
 
 		[Test]
@@ -160,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<ICurrentPrincipalProvider>());
 
 			var result = target.CreatePortalViewModel();
 

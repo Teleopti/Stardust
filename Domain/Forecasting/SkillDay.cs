@@ -676,7 +676,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private IEnumerable<IWorkloadDay> workloadDayOpenCollection()
         {
-            return _workloadDayCollection.Where(wd => !wd.IsClosed).ToList();
+            return _workloadDayCollection.Where(wd => wd.OpenForWork.IsOpen).ToList();
         }
 
 
@@ -1104,12 +1104,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public virtual bool IsClosed
+        public virtual IOpenForWork OpenForWork
         {
             get
             {
-                return _workloadDayCollection.All(wd => wd.IsClosed) &&
-                       SkillStaffPeriodCollection.Count == 0;
+                //return _workloadDayCollection.All(wd => wd.IsClosed) &&
+                  //     SkillStaffPeriodCollection.Count == 0;
+                return new OpenForWork()
+                {
+                    IsOpenForIncomingWork = _workloadDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork),
+                    IsOpen =  !(_workloadDayCollection.All(wd => !wd.OpenForWork.IsOpen) && SkillStaffPeriodCollection.Count == 0)
+                    //IsOpen = _workloadDayCollection.Any(wd => wd.IsClosed.IsOpen) || SkillStaffPeriodCollection.Count > 0
+                };
+
             }
         }
 

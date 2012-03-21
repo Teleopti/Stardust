@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid());
+			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid(), AuthenticationTypeOption.Application);
 		}
 
 		[SetUp]
@@ -82,6 +82,19 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			result.PersonId.Should().Be.EqualTo(sessionSpecificData.PersonId);
 			result.BusinessUnitId.Should().Be.EqualTo(sessionSpecificData.BusinessUnitId);
 			result.DataSourceName.Should().Be.EqualTo(sessionSpecificData.DataSourceName);
+		}
+
+		[Test]
+		public void ShouldExpireCookie()
+		{
+			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
+			target.Store(sessionSpecificData);
+
+			target.Grab().Should().Not.Be.Null();
+
+			target.ExpireCookie();
+
+			target.Grab().Should().Be.Null();
 		}
 	}
 }

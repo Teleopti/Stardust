@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                     IDataSource datasource = null;
                     string userName = headerData.UserName;
                     var teleoptiPolicies = new List<IAuthorizationPolicy>();
+                	AuthenticationTypeOption teleoptiAuthenticationType = AuthenticationTypeOption.Application;
                     if (!headerData.UseWindowsIdentity && !string.IsNullOrEmpty(headerData.UserName))
                     {
                         var customToken = new CustomUserNameSecurityToken(headerData.UserName, headerData.Password,
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                     if (headerData.UseWindowsIdentity)
                     {
                         windowsIdentity = GetWindowsIdentity(operationContext);
-                        if (windowsIdentity != null)
+								teleoptiAuthenticationType = AuthenticationTypeOption.Windows;
+                    		if (windowsIdentity != null)
                             {
                                 using (var token = new CustomWindowsSecurityToken(windowsIdentity, headerData.DataSource, businessUnitId))
                                 {
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                                 }
                             }
                     }
-                    var identity = new TeleoptiIdentity(userName, datasource, businessUnit, windowsIdentity);
+                    var identity = new TeleoptiIdentity(userName, datasource, businessUnit, windowsIdentity, teleoptiAuthenticationType);
                     foreach (TeleoptiPrincipalAuthorizationPolicy authorizationPolicy in teleoptiPolicies)
                     {
                         authorizationPolicy.Identity = identity;

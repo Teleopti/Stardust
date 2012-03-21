@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
         [SetUp]
         public void Setup()
         {
+        	var nu = DateTime.UtcNow;
             _listener = new PropertyChangedListener();
             _target = new TimelineControlViewModel(null,new CreateLayerViewModelService());
-            _nowPeriod = new DateTimePeriod(DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)),DateTime.UtcNow.AddHours(1));
+            _nowPeriod = new DateTimePeriod(nu.Subtract(TimeSpan.FromHours(1)),nu.AddHours(1));
             _newPeriod = _nowPeriod.MovePeriod(TimeSpan.FromHours(1));
         }
 

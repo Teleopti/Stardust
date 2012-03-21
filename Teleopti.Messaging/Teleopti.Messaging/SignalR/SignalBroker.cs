@@ -60,7 +60,8 @@ namespace Teleopti.Messaging.SignalR
 						StartDate = Subscription.DateToString(eventStartDate),
 						EndDate = Subscription.DateToString(eventEndDate),
 						DomainId = Subscription.IdToString(domainObjectId),
-						DomainType = type.AssemblyQualifiedName,
+						DomainType = type.Name,
+						DomainQualifiedType =  type.AssemblyQualifiedName,
 						DomainReferenceId = Subscription.IdToString(referenceObjectId),
 						DomainReferenceType =
 							(referenceObjectType == null)
@@ -82,31 +83,6 @@ namespace Teleopti.Messaging.SignalR
 			_proxy.Invoke("NotifyClients", (Notification)state);
 		}
 
-		public void SendEventMessage(Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, Guid.Empty, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, DomainUpdateType.NotApplicable, null);
-		}
-
-		public void SendEventMessage(Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, Guid.Empty, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
-		}
-
-		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, null);
-		}
-
 		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
 			SendEventMessage(eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
@@ -123,53 +99,34 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public void SendEventMessage(Guid domainObjectId, Type domainObjectType)
-		{
-			SendEventMessage(domainObjectId, domainObjectType, DomainUpdateType.NotApplicable);
-		}
-
-		public void SendEventMessage(Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(Guid.Empty, domainObjectId, domainObjectType, updateType);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
-		{
-			SendEventMessage(moduleId, domainObjectId, domainObjectType, updateType, null);
-		}
-
-		public void SendEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			SendEventMessage(Consts.MinDate, Consts.MaxDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
-		}
-
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, domainObjectType);
+			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType,Consts.MinDate,Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, domainObjectId, null, domainObjectType);
+			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, Consts.MinDate,
+			                          Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
-			RegisterEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, Guid.Empty, domainObjectType);
+			registerEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, null, domainObjectId, domainObjectType, startDate, endDate);
+			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		private void registerEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
 			if (!domainObjectType.IsInterface)
@@ -177,9 +134,9 @@ namespace Teleopti.Messaging.SignalR
 
 			var subscription = new Subscription
 			{
-				DomainId = Subscription.IdToString(domainObjectId),
-				DomainType = domainObjectType.AssemblyQualifiedName,
-				DomainReferenceId = Subscription.IdToString(referenceObjectId),
+				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
+				DomainType = domainObjectType.Name,
+				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
 				DomainReferenceType =
 					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
@@ -190,32 +147,17 @@ namespace Teleopti.Messaging.SignalR
 
 			EventSignal<object> result = _proxy.Invoke("AddSubscription", subscription);
 			result.Finished += (sender, e) =>
-			                   	{
-			                   		var route = subscription.Route();
+			{
+				var route = subscription.Route();
 
-									IList<SubscriptionWithHandler> handlers;
-									if (!_subscriptionHandlers.TryGetValue(route, out handlers))
-									{
-										handlers = new List<SubscriptionWithHandler>();
-										_subscriptionHandlers.Add(route, handlers);
-									}
-									handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription});
-			                   	};
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType)
-		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, null, Guid.Empty, domainObjectType);
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType)
-		{
-			RegisterEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, Consts.MinDate, Consts.MaxDate);
-		}
-
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			RegisterEventSubscription(eventMessageHandler, Guid.Empty, referenceObjectType, Guid.Empty, domainObjectType, startDate, endDate);
+				IList<SubscriptionWithHandler> handlers;
+				if (!_subscriptionHandlers.TryGetValue(route, out handlers))
+				{
+					handlers = new List<SubscriptionWithHandler>();
+					_subscriptionHandlers.Add(route, handlers);
+				}
+				handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
+			};
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -283,21 +225,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				DomainObject = domainObject,
-				EventStartDate = Consts.MinDate,
-				EventEndDate = Consts.MaxDate
-			};
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
@@ -325,38 +252,6 @@ namespace Teleopti.Messaging.SignalR
 				EventEndDate = eventEndDate,
 				ReferenceObjectId = referenceObjectId,
 				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
-			};
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				EventStartDate = eventStartDate,
-				EventEndDate = eventEndDate,
-				DomainObject = domainObject
-			};
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
-		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			return new EventMessage
-			{
-				ModuleId = moduleId,
-				DomainObjectId = domainObjectId,
-				DomainObjectType = domainObjectType.AssemblyQualifiedName,
-				DomainUpdateType = updateType,
-				EventStartDate = eventStartDate,
-				EventEndDate = eventEndDate,
-				ReferenceObjectId = referenceObjectId,
-				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
-				DomainObject = domainObject
 			};
 		}
 
@@ -437,7 +332,7 @@ namespace Teleopti.Messaging.SignalR
 			var d = ((JObject)obj[0]).ToObject<Notification>();
 			
 			var message = new EventMessage();
-			message.InterfaceType = Type.GetType(d.DomainType, false, true);
+			message.InterfaceType = Type.GetType(d.DomainQualifiedType, false, true);
 			message.DomainObjectType = d.DomainType;
 			message.DomainObjectId = d.DomainIdAsGuid();
 			message.ModuleId = d.ModuleIdAsGuid();
@@ -453,7 +348,7 @@ namespace Teleopti.Messaging.SignalR
 				message.DomainObject = Encoding.UTF8.GetBytes(domainObject);
 			}
 
-			InvokeEventHandlers(message, d.Route());
+			InvokeEventHandlers(message, d.Routes());
 		}
 
 		public void StopMessageBroker()
@@ -493,11 +388,6 @@ namespace Teleopti.Messaging.SignalR
 		public bool IsInitialized
 		{
 			get { return _proxy != null; }
-		}
-
-		public string ServicePath
-		{
-			get { return string.Empty; }
 		}
 
 		public event EventHandler<EventMessageArgs> EventMessageHandler;
@@ -549,26 +439,21 @@ namespace Teleopti.Messaging.SignalR
 		{
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void InvokeEventHandlers(EventMessage eventMessage, string route)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public void InvokeEventHandlers(EventMessage eventMessage, string[] routes)
 		{
-			IList<SubscriptionWithHandler> reference;
-			if (_subscriptionHandlers.TryGetValue(route, out reference))
+			foreach (var route in routes)
 			{
-				foreach (var subscriptionWithHandler in reference)
+				IList<SubscriptionWithHandler> reference;
+				if (_subscriptionHandlers.TryGetValue(route, out reference))
 				{
-					if ((subscriptionWithHandler.Subscription.DomainIdAsGuid() == Guid.Empty ||
-					 subscriptionWithHandler.Subscription.DomainIdAsGuid() == eventMessage.DomainObjectId) &&
-					(subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == Guid.Empty ||
-					 subscriptionWithHandler.Subscription.DomainReferenceIdAsGuid() == eventMessage.DomainObjectId) &&
-					(string.IsNullOrEmpty(subscriptionWithHandler.Subscription.DomainReferenceType) ||
-					 (eventMessage.ReferenceObjectTypeCache != null &&
-					  Type.GetType(subscriptionWithHandler.Subscription.DomainReferenceType, false, true).IsAssignableFrom(
-						eventMessage.ReferenceObjectTypeCache))) &&
-					((subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-					  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)))
+					foreach (var subscriptionWithHandler in reference)
 					{
-						subscriptionWithHandler.Handler.Invoke(this,new EventMessageArgs(eventMessage));
+						if (subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
+						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)
+						{
+							subscriptionWithHandler.Handler.Invoke(this, new EventMessageArgs(eventMessage));
+						}
 					}
 				}
 			}

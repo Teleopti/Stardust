@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			var activityLayerInBottom = layerFactory.CreateShiftSetupLayer( ActivityFactory.CreateActivity("underliggande"),absencePeriod);
 			var absenceLayer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("Sick"), activityLayerInBottom, dateTimePeriod);
 
-			IVisualLayerCollection layerCollection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, new TimeSpan(7, 0, 0), new TimeSpan(17, 0, 0));
+			IVisualLayerCollection layerCollection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, new TimeSpan(7, 0, 0), new TimeSpan(17, 30, 0));
 			IVisualLayerCollection layerCollection2 = VisualLayerCollectionFactory.CreateForWorkShift(person2, new TimeSpan(6, 0, 0), new TimeSpan(16, 0, 0));
 			IVisualLayerCollection layerCollection3 = VisualLayerCollectionFactory.CreateForWorkShift(person3, new TimeSpan(5, 30, 0), new TimeSpan(15, 0, 0));
 			IVisualLayerCollection layerCollection4 = VisualLayerCollectionFactory.CreateForWorkShift(person4, new TimeSpan(10, 0, 0), new TimeSpan(12, 0, 0));
@@ -198,6 +198,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
                 Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
                 Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
 
-		}
+                _target = new SortByContractTimeAscendingCommand(_stateHolder);
+                _target.Execute(new DateOnly(2009, 1, 1));
+
+                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
+
+                _target = new SortByContractTimeDescendingCommand(_stateHolder);
+                _target.Execute(new DateOnly(2009, 1, 1));
+
+                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
+
+        }
     }
 }

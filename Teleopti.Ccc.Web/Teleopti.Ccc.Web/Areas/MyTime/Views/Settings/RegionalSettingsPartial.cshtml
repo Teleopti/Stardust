@@ -1,0 +1,18 @@
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
+@model SettingsViewModel
+@{
+	Layout = null;
+}
+<div id="settings" class="edit-module">
+	<div id="selectors" class="edit-module-inner">
+		<div class="edit-module-element">
+			<label>@Resources.Language</label>
+			@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+		</div>
+		<div class="edit-module-element pdt15">
+			<label>@Resources.DateFormat</label>
+			@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
+		</div>
+	</div>
+</div>

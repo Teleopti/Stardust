@@ -163,10 +163,10 @@
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.3.0-CR1\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
-      <HintPath>..\nhibernateAddons\Envers\NHibernate.Envers.dll</HintPath>
+    <Reference Include="NHibernate.Envers">
+      <HintPath>..\packages\NHibernate.Envers.1.1.0-CR1\lib\Net35\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
@@ -188,6 +188,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -215,6 +216,9 @@
     </Compile>
     <Compile Include="Foundation\SystemUserSpecificationTest.cs" />
     <Compile Include="Licensing\AgreementProviderTest.cs" />
+    <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />
+    <Compile Include="Licensing\LicenseStatusUpdaterTest.cs" />
+    <Compile Include="Licensing\LicenseStatusXmlTest.cs" />
     <Compile Include="Licensing\LicenseVerifierFactoryTest.cs" />
     <Compile Include="Licensing\LicenseVerifierTest.cs" />
     <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
@@ -248,8 +252,6 @@
     <Compile Include="NHibernateConfiguration\XmlTypeTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper\DatabaseTest.cs" />
-    <Compile Include="Licensing\CheckLicenseAtPersistTest.cs" />
-    <Compile Include="Licensing\CheckLicenseForPersonTest.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsExceptionTest.cs" />
     <Compile Include="Licensing\LicenseExpiredExceptionTest.cs" />
     <Compile Include="Licensing\LicenseMissingExceptionTest.cs" />
@@ -280,16 +282,19 @@
     <Compile Include="Repositories\AbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\ActivityRepositoryTest.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepositoryTest.cs" />
+    <Compile Include="Repositories\ApplicationRolePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditTest.cs" />
     <Compile Include="Repositories\Audit\RevisionListenerTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
+    <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\JobResultRepositoryTest.cs" />
     <Compile Include="Repositories\PeopleAndSkillLoaderDeciderForTeamLeaderModeTest.cs" />
     <Compile Include="Repositories\PersonAssignmentCascadeDeleteTest.cs" />
+    <Compile Include="Repositories\PersonFinderReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PersonSelectorReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PublicNoteRepositoryTest.cs" />
     <Compile Include="Repositories\AvailableDataRepositoryTest.cs" />

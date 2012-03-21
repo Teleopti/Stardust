@@ -10,9 +10,10 @@ GO
 -- EXEC [mart].[report_control_group_page_get] @report_id=13,@person_code='B0E35119-4661-4A1B-8772-9B5E015B2564',@language_id=1025,@bu_id='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 -- Change Log
 -- Date			Author	Description
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_control_group_page_get] 
-@report_id int,
+@report_id uniqueidentifier,
 @person_code uniqueidentifier, -- user 
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier,

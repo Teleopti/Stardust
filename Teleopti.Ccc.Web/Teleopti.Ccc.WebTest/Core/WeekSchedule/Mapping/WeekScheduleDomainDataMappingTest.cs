@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new WeekScheduleDomainDataMappingProfile(
-					Resolver.Of(() => scheduleProvider),
-					Resolver.Of(() => projectionProvider),
-					Resolver.Of(() => personRequestProvider),
-					Resolver.Of(() => userTimeZone)
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider),
+					Depend.On(personRequestProvider),
+					Depend.On(userTimeZone)
 					)));
 		}
 
@@ -155,6 +155,21 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+		}
+
+		[Test]
+		public void ShouldMapColorSource()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var projection = new StubFactory().ProjectionStub();
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(DateOnly.Today);
+
+			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
+			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
 		}
 	}
 }

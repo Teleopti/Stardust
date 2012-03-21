@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private IList<DateOnlyPeriod> _selectedHistoricTemplatePeriod;
         private IList<IOutlier> _outliers;
         private IDictionary<DateOnly, IOutlier> _outliersByWorkDate;
+        private readonly IFilteredData _filteredDates = new FilteredData();
 
         public ForecastWorkflowModel(IWorkload workload, IForecastWorkflowDataService dataService)
         {
@@ -135,9 +137,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 .ToList();
         }
 
-        public void ReloadFilteredWorkloadDayTemplates(IList<DateOnly> filteredDates)
+        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates)
         {
-            _dataService.ReloadFilteredWorkloadTemplates(_selectedHistoricTemplatePeriod, filteredDates, _workload);
+            _filteredDates.Merge(filteredDates);
+            _dataService.ReloadFilteredWorkloadTemplates(_selectedHistoricTemplatePeriod, _filteredDates.FilteredDateList(), _workload);
         }
 
         public void InitializeWorkloadDaysWithStatistics(IList<DateOnlyPeriod> periodList)
@@ -299,5 +302,50 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _dataService.EditOutlier(outlier);
             InitializeOutliers();
         }
+    }
+
+    public class FilteredData : IFilteredData
+    {
+        private readonly IDictionary<DateOnly, bool> _filteredDates = new Dictionary<DateOnly, bool>();
+        public IDictionary<DateOnly, bool> FilteredDates { get { return _filteredDates; } }
+
+        public bool Contains(DateOnly dateOnly)
+        {
+            return _filteredDates.ContainsKey(dateOnly);
+        }
+
+        public void AddOrUpdate(DateOnly dateOnly, bool included)
+        {
+            bool value;
+            if (_filteredDates.TryGetValue(dateOnly, out value))
+            {
+                _filteredDates[dateOnly] = included;
+            }
+            else
+                _filteredDates.Add(dateOnly, included);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public void Merge(IFilteredData filteredData)
+        {
+            InParameter.NotNull("filteredData", filteredData);
+            filteredData.FilteredDates.ForEach(f => AddOrUpdate(f.Key, f.Value));
+        }
+
+        public IList<DateOnly> FilteredDateList()
+        {
+            var filteredDates = new List<DateOnly>();
+            _filteredDates.ForEach(d => { if (!d.Value) filteredDates.Add(d.Key); });
+            return filteredDates;
+        }
+    }
+
+    public interface IFilteredData
+    {
+        IDictionary<DateOnly, bool> FilteredDates { get; }
+        bool Contains(DateOnly dateOnly);
+        void AddOrUpdate(DateOnly dateOnly, bool included);
+        void Merge(IFilteredData filteredData);
+        IList<DateOnly> FilteredDateList();
     }
 }

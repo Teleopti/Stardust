@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Interfaces.Domain;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 TupleItem comboItem = new TupleItem();
                 comboItem.ValueMember = meeting.BelongsToMeeting;
-                comboItem.Text = meeting.BelongsToMeeting.Subject + "  " + meeting.Period.LocalStartDateTime.ToShortTimeString() +
+                comboItem.Text = meeting.BelongsToMeeting.GetSubject(new NoFormatting()) + "  " + meeting.Period.LocalStartDateTime.ToShortTimeString() +
                     " - " + meeting.Period.LocalEndDateTime.ToShortTimeString();
                 comboBoxMeetings.Items.Add(comboItem);
             }

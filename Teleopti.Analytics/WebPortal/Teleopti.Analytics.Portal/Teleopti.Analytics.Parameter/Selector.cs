@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Parameters
     //ToolboxData("<{0}:Selector runat=server></{0}:Selector>")]
     public class Selector : WebControl, INamingContainer
     {
-        private int _reportId = 1000;
+        private Guid _reportId;
         private int _savedId = -1;
         private ValidationSummary _valSum;
         private IList<SqlParameter> _startParams = new List<SqlParameter>();
@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Parameters
             }
         }
 
-        public int ReportId
+        public Guid ReportId
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Parameters
         protected override void LoadViewState(object savedState)
         {
             base.LoadViewState(savedState);
-            var reportId = ViewState["ReportId"] as int?;
+            var reportId = ViewState["ReportId"] as Guid?;
             if (reportId.HasValue)
                 _reportId = reportId.Value;
         }
@@ -360,11 +360,12 @@ namespace Teleopti.Analytics.Parameters
                 {
                     IList<ParameterBase> dependent = new List<ParameterBase>();
 
-                    var dbId = (int)row.ItemArray[0];
+                    var dbId = (Guid)row.ItemArray[0];
                     var name = (string)row.ItemArray[1];
                     var resourceKey = (string)row.ItemArray[2];
                     string text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
-
+                    if (string.IsNullOrEmpty(text))
+                        text = resourceKey;
                     var defaultValue = (string)row.ItemArray[3];
                     var procName = (string)row.ItemArray[4];
                     var procParam = (string)row.ItemArray[9];
@@ -395,25 +396,25 @@ namespace Teleopti.Analytics.Parameters
 
                     ParameterBase dep;
 
-                    if ((int)row.ItemArray[5] != 0)
+                    if ((Guid)row.ItemArray[5] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[5].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[6] != 0)
+                    if ((Guid)row.ItemArray[6] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[6].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[7] != 0)
+                    if ((Guid)row.ItemArray[7] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[7].ToString());
                         dependent.Add(dep);
                         dep.AddDependent(ctrl);
                     }
-                    if ((int)row.ItemArray[8] != 0)
+                    if ((Guid)row.ItemArray[8] != new Guid())
                     {
                         dep = (ParameterBase)FindControl(row.ItemArray[8].ToString());
                         dependent.Add(dep);
@@ -495,7 +496,7 @@ namespace Teleopti.Analytics.Parameters
         protected override void AddAttributesToRender(HtmlTextWriter writer)
         {
             base.AddAttributesToRender(writer);
-            writer.AddStyleAttribute("cellPadding", "5px");
+            writer.AddStyleAttribute("cellpadding", "5px");
         }
 
         public Guid GroupPageCode

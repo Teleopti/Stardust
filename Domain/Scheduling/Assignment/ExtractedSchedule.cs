@@ -271,6 +271,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 case SchedulePartView.DayOff:
                     if (isDelete) DeleteDayOff(); else MergeDayOff(source); break;
 
+                case SchedulePartView.ContractDayOff:
+                    if (source.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+                    {
+                        if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source);
+                    }
+                    break;
+
                 case SchedulePartView.FullDayAbsence:
                     if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source); break;
 
@@ -621,9 +628,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private void MergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
         {
             IMainShift workingCopyOfMainShift = (IMainShift)source.AssignmentHighZOrder().MainShift.NoneEntityClone();
-
+            var sourceShiftPeriod = source.Period;
+            if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
+                sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
             IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
-            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges);
+            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
             workingCopyOfMainShift.LayerCollection.MoveAllLayers(periodOffset);
             DateTimePeriod period = source.Period.MovePeriod(periodOffset);
 

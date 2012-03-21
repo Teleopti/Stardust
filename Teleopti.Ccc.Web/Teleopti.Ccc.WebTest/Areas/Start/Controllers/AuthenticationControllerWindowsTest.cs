@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				viewModel.BusinessUnits.Select(x => x.Id.ToString()).Should().Have.SameValuesAs(businessUnitList.Select(x => x.Id.ToString()));
 				viewModel.SignIn.DataSourceName.Should().Be.EqualTo("datasource");
 				viewModel.SignIn.PersonId.Should().Be.EqualTo(person.Id);
+				viewModel.SignIn.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Windows);
 			}
 		}
 
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 					new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
 				Expect.Call(_businessUnitProvider.RetrieveBusinessUnitsForPerson(dataSource, person)).Return(new[] { businessUnit });
 
-				Expect.Call(() => _logOn.LogOn(businessUnit.Id.Value, dataSource.DataSourceName, person.Id.Value)).Throw(
+				Expect.Call(() => _logOn.LogOn(businessUnit.Id.Value, dataSource.DataSourceName, person.Id.Value, AuthenticationTypeOption.Windows)).Throw(
 					new PermissionException("Permission Exception"));
 
 			}

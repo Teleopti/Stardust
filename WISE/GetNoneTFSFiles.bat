@@ -9,6 +9,7 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7_Demo.bak" "%WISES
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\ReportViewer2010.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\Detect35SP1.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\SQLServerPerformance\SQLIO\" /D /Y
 
 ::WISE
 ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR

@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly IList<IContract> _contractList = new List<IContract>();
         private readonly ICollection<IContractSchedule> _contractScheduleColl = new List<IContractSchedule>();
+        private IPersonRepository _personRep;
 
         [SetUp]
         public void Setup()
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
+            _personRep = _mocks.StrictMock<IPersonRepository>();
             _person = PersonFactory.CreatePerson("organizer", "1");
             _requiredPerson = PersonFactory.CreatePerson("required", "2");
             _optionalPerson = PersonFactory.CreatePerson("optional", "3");
@@ -73,8 +75,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meeting.Subject = "my subject";
             _meeting.Location = "my location";
             _meeting.Description = "my description";
-            _model.AddParticipants(new List<ContactPersonViewModel> {new ContactPersonViewModel(_requiredPerson)},
-                                   new List<ContactPersonViewModel> {new ContactPersonViewModel(_optionalPerson)});
+            _model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(_requiredPerson) },
+                                   new List<ContactPersonViewModel> { new ContactPersonViewModel(_optionalPerson) });
 
             _requestedPeriod = new DateOnlyPeriod(_meeting.StartDate, _meeting.EndDate.AddDays(2)).ToDateTimePeriod(_meeting.TimeZone);
 
@@ -121,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             //Verify that database only is hit once
             setting = MeetingComposerPresenter.GetCommonNameDescriptionSetting(_unitOfWorkFactory, _repositoryFactory);
-            Assert.AreEqual(_commonNameDescriptionSetting,setting);
+            Assert.AreEqual(_commonNameDescriptionSetting, setting);
             _mocks.VerifyAll();
         }
 
@@ -143,7 +145,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                 .IgnoreArguments().Return(_commonNameDescriptionSetting);
             Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(schedulingResultStateHolder);
             unitOfWork.Dispose();
-            _view.ShowAddressBook(null,_model.StartDate);
+            _view.ShowAddressBook(null, _model.StartDate);
             LastCall.IgnoreArguments();
 
             _mocks.ReplayAll();
@@ -174,12 +176,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
                                                                                       });
-            _target = new MeetingComposerPresenter(_view,_model,schedulerStateHolder);
+            _target = new MeetingComposerPresenter(_view, _model, schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
             _mocks.ReplayAll();
-            Assert.AreEqual(_meeting.StartDate,_target.MinDate);
-            Assert.AreEqual(_meeting.EndDate.AddDays(2),_target.MaxDate);
+            Assert.AreEqual(_meeting.StartDate, _target.MinDate);
+            Assert.AreEqual(_meeting.EndDate.AddDays(2), _target.MaxDate);
             Assert.AreEqual(_model, _target.Model);
             _target.Initialize();
             _mocks.VerifyAll();
@@ -191,10 +193,10 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.DisableWhileLoadingStateHolder();
             _view.SetRecurrentMeetingActive(true);
             _view.StartLoadingStateHolder();
-            
+
             _mocks.ReplayAll();
-            _target = new MeetingComposerPresenterForTest(_view,_model,null,_unitOfWorkFactory,_repositoryFactory);
-            
+            _target = new MeetingComposerPresenterForTest(_view, _model, null, _unitOfWorkFactory, _repositoryFactory);
+
             Assert.AreEqual(new DateOnly(DateHelper.MinSmallDateTime), _target.MinDate);
             Assert.AreEqual(new DateOnly(DateHelper.MaxSmallDateTime), _target.MaxDate);
 
@@ -278,7 +280,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -287,7 +291,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             unitOfWork.Dispose();
 
             _view.Close();
-            _view.OnModificationOccurred(_model.Meeting,false);
+            _view.OnModificationOccurred(_model.Meeting, false);
 
             _mocks.ReplayAll();
             _target.SaveMeeting();
@@ -299,15 +303,17 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             _meeting.SetId(Guid.NewGuid());
 
-			var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
-			var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
+            var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
+            var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
-        	Expect.Call(meetingRepository.Load(_meeting.Id.Value)).Return(_meeting);
-			Expect.Call(unitOfWork.Merge(_model.Meeting)).Return(null);
+            Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
+            Expect.Call(meetingRepository.Load(_meeting.Id.Value)).Return(_meeting);
+            Expect.Call(unitOfWork.Merge(_model.Meeting)).Return(null);
             Expect.Call(unitOfWork.PersistAll(_target)).Return(new List<IRootChangeInfo>());
             unitOfWork.Dispose();
 
@@ -325,20 +331,22 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meeting.SetId(Guid.NewGuid());
 
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-			var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
+            var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
 
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
-			Expect.Call(meetingRepository.Load(_meeting.Id.Value)).Return(_meeting);
+            Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
+            Expect.Call(meetingRepository.Load(_meeting.Id.Value)).Return(_meeting);
             Expect.Call(unitOfWork.Merge(_model.Meeting)).Return(null);
             Expect.Call(unitOfWork.PersistAll(_target)).Throw(new OptimisticLockException());
             unitOfWork.Dispose();
 
             _view.Close();
-            _view.ShowErrorMessage("","");
+            _view.ShowErrorMessage("", "");
             LastCall.IgnoreArguments();
 
             _mocks.ReplayAll();
@@ -354,13 +362,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
-                Expect.Call(unitOfWork.Dispose);
-
+                Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+                Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson> { _person }).IgnoreArguments();
+                //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
                 Expect.Call(authorization.IsPermitted("", new DateOnly(), _person)).IgnoreArguments()
-                    .Return(false).Repeat.AtLeastOnce();
-                _view.ShowErrorMessage("", "");
-                LastCall.IgnoreArguments();
+                   .Return(false).Repeat.AtLeastOnce();
+                Expect.Call(unitOfWork.Dispose).IgnoreArguments();
+                Expect.Call(() => _view.ShowErrorMessage("", "")).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
@@ -377,7 +385,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -399,7 +409,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
 
             _model.Subject = "";
@@ -411,22 +423,24 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-		[Test]
-		public void VerifyCannotSaveNewMeetingWithNoValidActivity()
-		{
-			var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
-			Expect.Call(unitOfWork.Dispose);
+        [Test]
+        public void VerifyCannotSaveNewMeetingWithNoValidActivity()
+        {
+            var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(unitOfWork.Dispose);
 
-			_model.Activity = null;
-			_view.ShowErrorMessage("", "");
-			LastCall.IgnoreArguments();
+            _model.Activity = null;
+            _view.ShowErrorMessage("", "");
+            LastCall.IgnoreArguments();
 
-			_mocks.ReplayAll();
-			_target.SaveMeeting();
-			_mocks.VerifyAll();
-		}
+            _mocks.ReplayAll();
+            _target.SaveMeeting();
+            _mocks.VerifyAll();
+        }
 
         [Test]
         public void VerifyCannotSaveNewMeetingWithNoParticipants()
@@ -441,7 +455,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             _view.ShowErrorMessage("", "");
             LastCall.IgnoreArguments();
@@ -479,7 +495,37 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                                       _requiredPerson,
                                                                                                       _optionalPerson
                                                                                                   });
-            Assert.AreEqual(2,meetingViewModel.RequiredParticipants.Count);
+            Assert.AreEqual(2, meetingViewModel.RequiredParticipants.Count);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldUseAnActiveActivityAsDefaultActivityForMeeting()
+        {
+            var commonStateHolder = new CommonStateHolder();
+            commonStateHolder.ActiveActivities.Add(_activity);
+
+            Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
+            Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
+            Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(_commonNameDescriptionSetting);
+            Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder);
+
+            _mocks.ReplayAll();
+            MeetingViewModel meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(_person,
+
+
+                      _schedulerStateHolder,
+
+
+                      _model.StartDate,
+
+
+                      new List<IPerson>
+                                                                                                  {
+                                                                                                      _requiredPerson,
+                                                                                                      _optionalPerson
+                                                                                                  });
+            Assert.AreEqual(_activity.Id, meetingViewModel.Activity.Id);
             _mocks.VerifyAll();
         }
 
@@ -497,7 +543,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                       });
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
-            
+
             _view.SetRecurrentMeetingActive(true);
 
             using (_mocks.Ordered())
@@ -508,7 +554,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             }
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
+            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
+            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
+            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -520,9 +568,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view.OnModificationOccurred(_model.Meeting, false);
 
             _mocks.ReplayAll();
-            
+
             _target.Initialize();
-            
+
             Assert.IsTrue(_target.CanClose());
             _target.OnClose();
             Assert.IsTrue(_target.CanClose());
@@ -571,7 +619,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
     internal class MeetingComposerPresenterForTest : MeetingComposerPresenter
     {
-        public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+        public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder
+
+schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
             : base(view, model, schedulerStateHolder)
         {
             RepositoryFactory = repositoryFactory;

@@ -77,6 +77,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_SSL
+  Variable Name2=_PROP_VAR_
+  Variable Value2=MYSDKSSL
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=IISVERSION
   Variable Name2=_PROP_VAR_
   Variable Value2=MYIISVERSION
@@ -120,42 +129,42 @@ item: Remark
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Analytics v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Analytics v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Client v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Client v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" ContextHelp v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" ContextHelp v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" MyTime v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" MyTime v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" PMService v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" PMService v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" RTA v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" RTA v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" SDK v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" SDK v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" TeleoptiCCC v2.0 Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" TeleoptiCCC v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Remark
@@ -169,7 +178,7 @@ item: Remark
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Web v4.0 %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Web v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Remark

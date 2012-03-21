@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<ISkill,IList<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        IDictionary<ISkill, IList<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 	}
 
 	/// <summary>
@@ -60,8 +63,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public IDictionary<ISkill,IList<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
             if (skills == null || scenario==null) return new Dictionary<ISkill,IList<ISkillDay>>();
-
-            IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
+            
 		    var skillsToLoad = new List<ISkill>();
 		    foreach (var skill in skills)
 		    {
@@ -69,67 +71,93 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
                 skillsToLoad.Add(skill);
 		    }
-
-            // now we don't know the timezone stretch the period one day more in start and end
-		    var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
-            var testSkillDays = _skillDayRepository.FindRange(periodToLoad, skillsToLoad, scenario);
-
-            foreach (ISkill skill in skillsToLoad)
-            {
-                periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
-
-                var skillDays = testSkillDays.Where(testSkillDay => testSkillDay.Skill.Equals(skill)).OrderBy(s => s.CurrentDate).ToList();
-
-                IMultisiteSkill multisiteSkill = skill as IMultisiteSkill;
-                if (multisiteSkill!=null)
-                {
-                    IList<IMultisiteDay> multisiteDays =
-                        _multisiteDayRepository.FindRange(periodToLoad, multisiteSkill, scenario).ToList();
-                    MultisiteSkillDayCalculator multisiteCalculator = new MultisiteSkillDayCalculator(multisiteSkill,skillDays,multisiteDays,period);
-
-                    foreach (IChildSkill childSkill in multisiteSkill.ChildSkills)
-                    {
-                        multisiteCalculator.SetChildSkillDays(childSkill,
-                                                              _skillDayRepository.FindRange(periodToLoad, childSkill,
-                                                                                           scenario).OrderBy(
-                                                                  s => s.CurrentDate).ToList());
-                    }
-
-                    multisiteCalculator.InitializeChildSkills();
-                    
-                    calculators.Add(multisiteCalculator);
-                }
-                else
-                {
-                    calculators.Add(new SkillDayCalculator(skill, skillDays, period));
-                }
-                foreach (ISkillDay skillDay in skillDays)
-                {
-                    skillDay.RecalculateDailyTasks();
-                }
-            }
-
-            IDictionary<ISkill, IList<ISkillDay>> skillSkillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
-            foreach (ISkillDayCalculator calculator in calculators)
-            {
-                MultisiteSkillDayCalculator multisiteSkillDayCalculator = calculator as MultisiteSkillDayCalculator;
-                if (multisiteSkillDayCalculator!=null)
-                {
-                    foreach (IChildSkill childSkill in multisiteSkillDayCalculator.MultisiteSkill.ChildSkills)
-                    {
-						if(!skillSkillDayDictionary.ContainsKey(childSkill))
-							skillSkillDayDictionary.Add(childSkill,
-                                                    multisiteSkillDayCalculator.GetVisibleChildSkillDays(childSkill));
-                    }
-                }
-				if (!skillSkillDayDictionary.ContainsKey(calculator.Skill))
-					skillSkillDayDictionary.Add(calculator.Skill,calculator.SkillDays.ToList());
-            }
-
-            return skillSkillDayDictionary;
+            return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
         }
-	}
 
+        public IDictionary<ISkill, IList<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+        {
+            if (skills == null || scenario == null) return new Dictionary<ISkill, IList<ISkillDay>>();
+            var skillsToLoad = new List<ISkill>();
+            foreach (var skill in skills)
+            {
+                if (skill is IMultisiteSkill) throw new ArgumentException("Should have no multisite skill.");
+                var childSkill = skill as IChildSkill;
+                if (childSkill != null)
+                {
+                    var multisiteSkill = childSkill.ParentSkill;
+                    if (!skillsToLoad.Contains(multisiteSkill))
+                        skillsToLoad.Add(multisiteSkill);
+                    continue;
+                }
+                skillsToLoad.Add(skill);
+            }
+            return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
+        }
+
+	    private IDictionary<ISkill, IList<ISkillDay>> calculateSkillSkillDayDictionary(DateOnlyPeriod period, IScenario scenario, IList<ISkill> skillsToLoad)
+	    {
+	        IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
+	        // now we don't know the timezone stretch the period one day more in start and end
+	        var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
+	        var testSkillDays = _skillDayRepository.FindRange(periodToLoad, skillsToLoad, scenario);
+
+	        foreach (var skill in skillsToLoad)
+	        {
+	            periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
+
+	            var skillDays =
+	                testSkillDays.Where(testSkillDay => testSkillDay.Skill.Equals(skill)).OrderBy(s => s.CurrentDate).ToList();
+
+	            var multisiteSkill = skill as IMultisiteSkill;
+	            if (multisiteSkill != null)
+	            {
+	                IList<IMultisiteDay> multisiteDays =
+	                    _multisiteDayRepository.FindRange(periodToLoad, multisiteSkill, scenario).ToList();
+	                var multisiteCalculator = new MultisiteSkillDayCalculator(multisiteSkill, skillDays,
+	                                                                                                  multisiteDays, period);
+
+	                foreach (var childSkill in multisiteSkill.ChildSkills)
+	                {
+	                    multisiteCalculator.SetChildSkillDays(childSkill,
+	                                                          _skillDayRepository.FindRange(periodToLoad, childSkill,
+	                                                                                        scenario).OrderBy(
+	                                                                                            s => s.CurrentDate).ToList());
+	                }
+
+	                multisiteCalculator.InitializeChildSkills();
+
+	                calculators.Add(multisiteCalculator);
+	            }
+	            else
+	            {
+	                calculators.Add(new SkillDayCalculator(skill, skillDays, period));
+	            }
+	            foreach (ISkillDay skillDay in skillDays)
+	            {
+	                skillDay.RecalculateDailyTasks();
+	            }
+	        }
+
+	        IDictionary<ISkill, IList<ISkillDay>> skillSkillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+	        foreach (ISkillDayCalculator calculator in calculators)
+	        {
+	            var multisiteSkillDayCalculator = calculator as MultisiteSkillDayCalculator;
+	            if (multisiteSkillDayCalculator != null)
+	            {
+	                foreach (var childSkill in multisiteSkillDayCalculator.MultisiteSkill.ChildSkills)
+	                {
+	                    if (!skillSkillDayDictionary.ContainsKey(childSkill))
+	                        skillSkillDayDictionary.Add(childSkill,
+	                                                    multisiteSkillDayCalculator.GetVisibleChildSkillDays(childSkill));
+	                }
+	            }
+	            if (!skillSkillDayDictionary.ContainsKey(calculator.Skill))
+	                skillSkillDayDictionary.Add(calculator.Skill, calculator.SkillDays.ToList());
+	        }
+	        return skillSkillDayDictionary;
+	    }
+	}
+    
 	public class WorkloadDayHelper
 	{
         /// <summary>

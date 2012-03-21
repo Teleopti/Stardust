@@ -20,10 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
-		public void SelectPreferenceItemByText(string text)
+		public void SelectPreferenceItemByText(string text, bool wait)
 		{
-			PreferenceButton.Select(text);
+			if (wait)
+				PreferenceButton.SelectWait(text);
+			else
+				PreferenceButton.Select(text);
 		}
-
 	}
 }

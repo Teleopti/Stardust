@@ -190,9 +190,13 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\ILicenseStatus.cs" />
+    <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
+    <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />
     <Compile Include="Domain\IRestrictionsOverLimitDecider.cs" />
+    <Compile Include="Domain\IOpenForWork.cs" />
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
@@ -357,6 +361,7 @@
     <Compile Include="Domain\ISystemCheck.cs" />
     <Compile Include="Domain\IExtendedPreferenceTemplate.cs" />
     <Compile Include="Domain\IterationOperationOption.cs" />
+    <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
@@ -597,6 +602,7 @@
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
     <Compile Include="Domain\MultipleBool.cs" />
+    <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\OptimizationRestriction.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\PositiveTimeSpan.cs" />
@@ -709,6 +715,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\ILicenseService.cs" />
+    <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
@@ -915,7 +922,6 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Messages.ico" />

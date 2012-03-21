@@ -6,11 +6,11 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPublicNote : IExportToAnotherScenario
     {
-        /// <summary>
-        /// Gets the scheduleNote. Eg "Agent Kalle went home"
-        /// </summary>
-        /// <value>The scheduleNote.</value>
-        string ScheduleNote { get; }
+    	/// <summary>
+    	/// Gets the scheduleNote. Eg "Agent Kalle went home"
+    	/// </summary>
+    	/// <value>The scheduleNote.</value>
+    	string GetScheduleNote(ITextFormatter formatter);
 
         /// <summary>
         /// Gets the notes date.

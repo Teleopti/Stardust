@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private MasterActivityPresenter _presenter;
 		private bool _selecting;
-		 
+
+		public MasterActivitiesControl()
+		{
+			InitializeComponent();
+		}
+
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			IMasterActivityViewModel model = new MasterActivityViewModel(new ActivityRepository(value), new MasterActivityRepository(value));
@@ -40,7 +45,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			InitializeComponent();
 			SetTexts();
             autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
             autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             if (_workloadDayTemplate == null) return;
 
-            if (_workloadDayTemplate.IsClosed)
+            if (!_workloadDayTemplate.OpenForWork.IsOpen)
             {
                 CloseTemplate();
             }
@@ -220,13 +220,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _workloadDayTemplatesDetailView.ReloadWorkloadDayTemplates();
         }
 
-        private void ReloadFilteredWorkloadDayTemplates(IList<DateOnly> filteredDates)
+        private void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates)
         {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var statHelper = new StatisticHelper(new RepositoryFactory(), uow);
                 var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
-                wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex, filteredDates);
+                wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex, filteredDates.FilteredDateList());
             }
         }
 

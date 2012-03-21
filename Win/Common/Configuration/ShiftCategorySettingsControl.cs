@@ -232,6 +232,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void LoadSourceList()
         {
             var shiftCatList = ShiftCatReposiroty.LoadAll();
+			_shiftCatAdapterList.Clear();
 
             foreach (IShiftCategory category in shiftCatList)
             {

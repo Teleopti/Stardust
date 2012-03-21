@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		private void SetupPrincipal(IPerson person)
 		{
 			previousPrincipal = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
 		}
 
 		[Test]

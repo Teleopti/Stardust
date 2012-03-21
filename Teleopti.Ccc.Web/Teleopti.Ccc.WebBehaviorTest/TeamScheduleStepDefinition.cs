@@ -174,8 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the team-picker")]
 		public void IOpenTheTeamPicker()
 		{
-			Pages.Pages.TeamSchedulePage.TeamPicker.Button.EventualClick();
-			Pages.Pages.TeamSchedulePage.TeamPicker.Menu.WaitUntilDisplayed();
+			Pages.Pages.TeamSchedulePage.TeamPicker.Open();
 		}
 
 		[Then(@"I should see the team-picker with both teams")]
@@ -183,13 +182,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var myTeam = UserFactory.User().UserData<Team>().TheTeam.Description.Name;
 			var otherTeam = UserFactory.User().UserData<AnotherTeam>().TheTeam.Description.Name;
-			var expected = new[] {myTeam, otherTeam};
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
 
-			EventualAssert.That(() => picker.Exists, Is.True);
-			EventualAssert.That(() => picker.JQueryVisible(), Is.True);
-			EventualAssert.That(() => picker.DisplayVisible(), Is.True);
-			expected.ToList().ForEach(e => picker.Texts().Should().Contain(e));
+			AssertTeamPickerHasTeams(new[] {myTeam, otherTeam});
+		}
+
+		private static void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
+		{
+			var page = Pages.Pages.TeamSchedulePage;
+
+			EventualAssert.That(() => page.TeamPicker.Exists, Is.True);
+			EventualAssert.That(() => page.TeamPicker.JQueryVisible(), Is.True);
+			EventualAssert.That(() => page.TeamPicker.DisplayVisible(), Is.True);
+			teamNames.ToList().ForEach(e => EventualAssert.That(() => page.TeamPicker.Texts().Contains(e), Is.True));
 		}
 
 		[Then(@"the teams should be sorted alphabetically")]
@@ -219,7 +223,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-start-time").Should().Be(startTime);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(startTime);
 		}
 
 		[Then(@"The layer's end time attibute value should be (.*)")]
@@ -227,7 +231,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-end-time").Should().Be(endTime);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(endTime);
 		}
 
 		[Then(@"The layer's activity name attibute value should be (.*)")]
@@ -235,7 +239,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
-			layer.GetAttributeValue("data-mytime-activity").Should().Be(activityName);
+			layer.GetAttributeValue("tooltip-title").Should().Contain(activityName);
 		}
 
 		[Then(@"I should see a tooltip with the activty start time (.*)")]
@@ -250,24 +254,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheTeam_PickerWithTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			var expected = new[] { theOtherSitesTeam };
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
 
-			expected.ToList().ForEach(e => picker.Texts().Should().Contain(e));
+			AssertTeamPickerHasTeams(new[] {theOtherSitesTeam});
 		}
 
 		[Then(@"I should see the other site's team")]
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Button.InnerHtml, Contains.Substring(theOtherSitesTeam));
+			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.SelectedText, Contains.Substring(theOtherSitesTeam));
 		}
 
 		[Then(@"the team-picker should have my team selected")]
 		public void ThenTheTeam_PickerShouldHaveMyTeamSelected()
 		{
 			var myTeam = UserFactory.User().UserData<Team>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Button.InnerHtml, Contains.Substring(myTeam));
+			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.SelectedText, Contains.Substring(myTeam));
 		}
 
 		[Then(@"the team-picker should have the first of the other site's teams selected")]
@@ -288,6 +290,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(visible, Is.False);
 		}
 
+		[Then(@"I should see the team-picker")]
+		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
+		{
+			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
+
+			picker.Should().Not.Be.Null();
+		}
 
 
 		private static void AssertAgentIsDisplayed(string name)

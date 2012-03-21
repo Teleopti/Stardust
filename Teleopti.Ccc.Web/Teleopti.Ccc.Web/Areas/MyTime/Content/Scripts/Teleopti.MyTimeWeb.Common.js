@@ -1,7 +1,8 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.min.js" />
+/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/jquery.qtip.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -13,6 +14,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
+	var _settings = {};
+
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
@@ -68,7 +71,31 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	function _expireMyCookie() {
+		$.ajax({
+				url: _settings.startBaseUrl + 'Test/ExpireMyCookie',
+				global: false,
+				cache: false,
+				async: false,
+				success: function() {
+					$('#page')
+						.append('Cookie is expired!')
+						;
+				},
+				error: function(r) {
+					if (r.status == 401 || r.status == 403) {
+						$('#page')
+							.append('Cookie is expired!')
+							;
+					}
+				}
+			});
+	}
+
 	return {
+		Init: function (settings) {
+			_settings = settings;
+		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			$('#dialog-modal').attr('title', 'Ajax error: ' + title);
 			$('#dialog-modal').dialog({
@@ -100,6 +127,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		CloseEditSection: function (editSectionId) {
 			_closeEditSection(editSectionId);
+		},
+		ExpireMyCookie: function () {
+			_expireMyCookie();
 		}
 	};
 
@@ -130,31 +160,42 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		//Activating tooltip where available
 		ActivateTooltip: function () {
-			var _toolTip = '';
-			$('.tooltip').hover(function (e) {
-				_self = $(this);
-				_tooltip = $('<div></div>').addClass('tooltip-container').appendTo(_self);
-				_tooltipTop = $('<div></div>').addClass('tooltip-top').appendTo(_tooltip);
-				if (($(_self).data('mytime-subject') !== "" && $(_self).data('mytime-subject') !== undefined) && ($(_self).data('mytime-location') !== undefined)) {
-					_tooltipContent = $('<div><dl><dt>Subject: </dt><dd>' + $(_self).attr('data-mytime-subject') + '</dd><dt>Location: </dt><dd>' + $(_self).attr('data-mytime-location') + '</dd></dl></div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				else if (($(_self).data('mytime-activity') !== "" && $(_self).data('mytime-activity') !== undefined) && ($(_self).data('mytime-start-time') !== "" && $(_self).data('mytime-start-time') !== undefined) && ($(_self).data('mytime-end-time') !== "" && $(_self).data('mytime-end-time') !== undefined)) {
-					_tooltipContent = $('<div>' + $(_self).attr('data-mytime-activity') + '<br/>' + $(_self).attr('data-mytime-start-time') + ' - ' + $(_self).attr('data-mytime-end-time') + '</div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				else if ($(_self).data('mytime-tooltip') !== "" && $(_self).data('mytime-tooltip') !== undefined) {
-					_tooltipContent = $('<div>' + $(_self).attr('data-mytime-tooltip') + '</div>')
-								.addClass('tooltip-content')
-								.appendTo(_tooltip).parent().hide().fadeIn(500);
-				}
-				_tooltipBottom = $('<div></div>').addClass('tooltip-bottom').appendTo(_tooltip);
-				e.preventDefault();
 
-			}, function () {
-				$(_tooltip).fadeOut(100).remove();
+			$('.tooltip').each(function () {
+				$(this).qtip({
+					content: {
+						title: $(this).attr('tooltip-title'),
+						text: $(this).attr('tooltip-text')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse'
+					}
+				});
+			});
+
+			$('[title]').each(function () {
+				$(this).qtip({
+					content: {
+						text: $(this).attr('title')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse'
+					}
+				});
 			});
 		}
 

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
 			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("Start", "Authentication", "SignIn");
+			result.RouteValues.Values.Should().Have.SameValuesAs("Start", "Authentication", "Index");
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.AddRouteDataToken("area", "MyTime");
 
 			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("MyTime", "Authentication", "SignIn");
+			result.RouteValues.Values.Should().Have.SameValuesAs("MyTime", "Authentication", "Index");
 		}
 
 		[Test]
@@ -72,6 +72,21 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var result = filterTester.InvokeFilter(target);
 
 			result.Should().Be.OfType<ViewResult>();
+		}
+
+		[Test]
+		public void ShouldReturnHttp403ForbiddenResultWhenAjax()
+		{
+			var target = new TeleoptiPrincipalAuthorizeAttribute();
+			var filterTester = new FilterTester();
+			filterTester.IsAjaxRequest();
+			filterTester.IsUser(Thread.CurrentPrincipal);
+
+			var result = filterTester.InvokeFilter(target) as HttpStatusCodeResult;
+
+			result.StatusCode.Should().Be(403); 
+			// 403: forbidden.
+			// 401 has strange behavior on iis7/ie/intranet (or something) and will display a dialog even on ajax requests!
 		}
 		
 	}

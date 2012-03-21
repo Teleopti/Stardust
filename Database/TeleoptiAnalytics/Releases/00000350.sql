@@ -1,3 +1,9 @@
+PRINT 'The DB-release [7.1.350] will take some time to execute. Please be patient!'
+PRINT '...'
+GO
+WAITFOR DELAY '00:00:03'
+GO
+
 ----------------  
 --Name: Jonas n + David j
 --Date: 2012-01-04  + 2012-01-09

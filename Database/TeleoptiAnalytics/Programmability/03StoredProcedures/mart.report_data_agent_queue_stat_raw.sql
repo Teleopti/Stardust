@@ -21,6 +21,7 @@ GO
 --					2011-10-24 Change paramaters @group_page_group_id and @teamd_id to 
 --					@group_page_group_set and @team_set
 --					2012-01-09 Pass BU to ReportAgentsMultipleTeams
+-- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Agent Queue Statistics -  Raw
 -- =============================================
 -- exec mart.report_data_agent_queue_stat_raw @skill_set=N'-1,2,0,3,5,8,6,7,9,10,12',@workload_set=N'-1,0,1,6,7,2,8,4,11',@date_from='2009-02-02 00:00:00',@date_to='2009-02-08 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_id=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_id=N'5',@agent_code=N'00000000-0000-0000-0000-000000000002',@time_zone_id=N'0',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=15,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
@@ -40,7 +41,7 @@ CREATE PROCEDURE [mart].[report_data_agent_queue_stat_raw]
 @interval_to int,
 @time_zone_id int,
 @person_code uniqueidentifier ,
-@report_id int,
+@report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier
 AS

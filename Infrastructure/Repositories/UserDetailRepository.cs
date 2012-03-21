@@ -5,6 +5,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWork)
         {
         }
+
+    	public UserDetailRepository(IUnitOfWorkFactory unitOfWorkFactory)
+			: base(unitOfWorkFactory)
+    	{
+    	}
 
         public IUserDetail FindByUser(IPerson user)
         {
@@ -55,6 +61,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var userDetails = Session.CreateCriteria(typeof (UserDetail))
                 .SetFetchMode("Person", FetchMode.Join)
                 .List<IUserDetail>();
+
+            return userDetails.ToDictionary(userDetail => userDetail.Person);
+        }
+
+
+        public IDictionary<IPerson, IUserDetail> FindByUsers(IEnumerable<IPerson> persons)
+        {
+            var userDetails = new List<IUserDetail>();
+            foreach (var personBatch in persons.Batch(400))
+            {
+                userDetails.AddRange(Session.CreateCriteria(typeof(UserDetail))
+                        .SetFetchMode("Person", FetchMode.Join)
+                        .Add(Restrictions.In("Person", personBatch.ToArray()))
+                        .List<IUserDetail>());   
+            }
 
             return userDetails.ToDictionary(userDetail => userDetail.Person);
         }

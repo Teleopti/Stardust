@@ -1,0 +1,1 @@
+Basic.bat > result.txt
