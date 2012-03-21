@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IBusinessRuleResponse _businessRuleResponse;
         private IScheduleRange _scheduleRange;
         private IPerson _person;
-        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _businessRuleResponse = _mock.StrictMock<IBusinessRuleResponse>();
-            _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
         }
 
         [Test]
