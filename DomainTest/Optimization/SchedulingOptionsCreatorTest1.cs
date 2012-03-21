@@ -80,7 +80,222 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_schedulingOptions.OnlyShiftsWhenUnderstaffed);
         }
 
-        //[Test]
-        //public void ShouldSetMushHavesTrue
+        [Test]
+        public void VerifyPreferences()
+        {
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsTrue(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0.99;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = false;
+            _optimizationPreferences.General.PreferencesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = false;
+            _optimizationPreferences.General.PreferencesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            _optimizationPreferences.General.UsePreferences = false;
+            _optimizationPreferences.General.PreferencesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+        }
+
+        [Test]
+        public void VerifyMustHaves()
+        {
+            //_optimizationPreferences.General.UseMustHaves = true;
+            //_optimizationPreferences.General.MustHavesValue = 1;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsTrue(_schedulingOptions.UsePreferences);
+
+            //_optimizationPreferences.General.UseMustHaves = true;
+            //_optimizationPreferences.General.MustHavesValue = 0.8;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            //_optimizationPreferences.General.UseMustHaves = true;
+            //_optimizationPreferences.General.MustHavesValue = 0;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            //_optimizationPreferences.General.UseMustHaves = false;
+            //_optimizationPreferences.General.MustHavesValue = 1;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            //_optimizationPreferences.General.UseMustHaves = false;
+            //_optimizationPreferences.General.MustHavesValue = 0.8;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+
+            //_optimizationPreferences.General.UseMustHaves = false;
+            //_optimizationPreferences.General.MustHavesValue = 0;
+            //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            //Assert.IsFalse(_schedulingOptions.UsePreferences);
+        }
+
+        [Test]
+        public void VerifyRotations()
+        {
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsTrue(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0.99;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = false;
+            _optimizationPreferences.General.RotationsValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = false;
+            _optimizationPreferences.General.RotationsValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+
+            _optimizationPreferences.General.UseRotations = false;
+            _optimizationPreferences.General.RotationsValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseRotations);
+        }
+
+        [Test]
+        public void VerifyAvailabilities()
+        {
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsTrue(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.99;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.RotationDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = false;
+            _optimizationPreferences.General.AvailabilitiesValue = 1;
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = false;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+
+            _optimizationPreferences.General.UseAvailabilities = false;
+            _optimizationPreferences.General.AvailabilitiesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.AvailabilityDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UseAvailability);
+        }
+
+        [Test]
+        public void VerifyStudentAvailabilities()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.99;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = false;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = false;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+
+            _optimizationPreferences.General.UseStudentAvailabilities = false;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+        }
+
     }
 }

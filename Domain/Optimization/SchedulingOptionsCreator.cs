@@ -25,14 +25,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseGroupOptimizing = optimizationPreferences.Extra.UseTeams;
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
 
-            schedulingOptions.UseRotations = optimizationPreferences.General.UseRotations;
-            schedulingOptions.RotationDaysOnly = false; //???
-            schedulingOptions.UseAvailability = optimizationPreferences.General.UseAvailabilities;
-            schedulingOptions.AvailabilityDaysOnly = false;  //???
-            schedulingOptions.UseStudentAvailability = optimizationPreferences.General.UseStudentAvailabilities;
-            schedulingOptions.UsePreferences = optimizationPreferences.General.UsePreferences;
-            schedulingOptions.PreferencesDaysOnly = false;  //???
-            schedulingOptions.UsePreferencesMustHaveOnly = false;  //???
+
+            setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
+            setRotationsInSchedulingOptions(optimizationPreferences, schedulingOptions);
+            setAvailabilitiesInSchedulingOptions(optimizationPreferences, schedulingOptions);
+            setStudentAvailabilitiesInSchedulingOptions(optimizationPreferences, schedulingOptions);
+
             schedulingOptions.UseShiftCategoryLimitations = optimizationPreferences.General.UseShiftCategoryLimitations;
 
             // schedulingOptions.ShiftCategory
@@ -61,6 +59,46 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
             return schedulingOptions;
+        }
+
+        private static void setPreferencesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
+                                                              ISchedulingOptions schedulingOptions)
+        {
+            bool use = optimizationPreferences.General.UsePreferences;
+            double value = optimizationPreferences.General.PreferencesValue;
+
+            schedulingOptions.UsePreferencesMustHaveOnly = false; // always
+            schedulingOptions.PreferencesDaysOnly = false; // always
+            schedulingOptions.UsePreferences = use && value == 1d;            
+        }
+
+        private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
+                                                             ISchedulingOptions schedulingOptions)
+        {
+            bool use = optimizationPreferences.General.UseRotations;
+            double value = optimizationPreferences.General.RotationsValue;
+
+            schedulingOptions.RotationDaysOnly = false; // always
+            schedulingOptions.UseRotations = use && value == 1d;
+        }
+
+        private static void setAvailabilitiesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
+                                                     ISchedulingOptions schedulingOptions)
+        {
+            bool use = optimizationPreferences.General.UseAvailabilities;
+            double value = optimizationPreferences.General.AvailabilitiesValue;
+
+            schedulingOptions.AvailabilityDaysOnly = false; // always
+            schedulingOptions.UseAvailability = use && value == 1d;
+        }
+
+        private static void setStudentAvailabilitiesInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
+                                             ISchedulingOptions schedulingOptions)
+        {
+            bool use = optimizationPreferences.General.UseStudentAvailabilities;
+            double value = optimizationPreferences.General.StudentAvailabilitiesValue;
+
+            schedulingOptions.UseStudentAvailability = use && value == 1d;
         }
     }
 }

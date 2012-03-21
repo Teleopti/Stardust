@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // 
             this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.ribbonControlAdv1.QuickPanelVisible = false;
             this.ribbonControlAdv1.SelectedTab = null;
             this.ribbonControlAdv1.ShowLauncher = false;
+            this.ribbonControlAdv1.ShowMinimizeButton = false;
             this.ribbonControlAdv1.Size = new System.Drawing.Size(467, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
             this.ribbonControlAdv1.TabIndex = 2;
@@ -153,6 +155,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // schedulingSessionPreferencesPanel1
             // 
             this.schedulingSessionPreferencesPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.schedulingSessionPreferencesPanel1.BetweenDayOffVisible = true;
             this.schedulingSessionPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.schedulingSessionPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
             this.schedulingSessionPreferencesPanel1.Name = "schedulingSessionPreferencesPanel1";
@@ -160,9 +163,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = false;
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = false;
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyRotationDaysVisible = false;
+            this.schedulingSessionPreferencesPanel1.SchedulePeriodVisible = true;
             this.schedulingSessionPreferencesPanel1.ShiftCategoryVisible = false;
             this.schedulingSessionPreferencesPanel1.Size = new System.Drawing.Size(437, 640);
             this.schedulingSessionPreferencesPanel1.TabIndex = 5;
+            this.schedulingSessionPreferencesPanel1.UseBlockSchedulingVisible = true;
+            this.schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = true;
             // 
             // tabPageDayOffPlanningOptions
             // 
@@ -171,7 +177,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.tabPageDayOffPlanningOptions.Location = new System.Drawing.Point(4, 26);
             this.tabPageDayOffPlanningOptions.Name = "tabPageDayOffPlanningOptions";
             this.tabPageDayOffPlanningOptions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(443, 615);
+            this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(443, 646);
             this.tabPageDayOffPlanningOptions.TabIndex = 1;
             this.tabPageDayOffPlanningOptions.Text = "xxDayOffPlannerOptions";
             this.tabPageDayOffPlanningOptions.UseVisualStyleBackColor = true;
@@ -183,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
             this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-            this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(437, 609);
+            this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(186, 68);
             this.dayOffPreferencesPanel1.TabIndex = 5;
             this.dayOffPreferencesPanel1.StatusChanged += new System.EventHandler<System.EventArgs>(this.dayOffPreferencesPanel1_StatusChanged);
             // 

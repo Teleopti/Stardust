@@ -86,7 +86,7 @@ namespace Teleopti.Interfaces.Domain
         bool UsePreferences { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [use preferences must have].
+        /// Gets or sets a value indicating whether to use preferences must have].
         /// </summary>
         /// <value>
         /// 	<c>true</c> if [use preferences must have]; otherwise, <c>false</c>.
