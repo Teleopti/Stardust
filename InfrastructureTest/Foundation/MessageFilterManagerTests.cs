@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IJobResultProgress)));
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IJobResultProgress)].Count);
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IEventHeartbeat)].Count);
+            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IScheduleChangedInDefaultScenario)].Count);
         }
     }
 }

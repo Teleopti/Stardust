@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IScheduleRepository scheduleRepository;
 		private IPerson person;
 		private IScenario scenario;
+		private IScheduleChangedNotification scheduleChangedNotification;
 
 		[SetUp]
 		public void Setup()
@@ -26,10 +27,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			mocks = new MockRepository();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleChangedNotification = mocks.DynamicMock<IScheduleChangedNotification>();
 			scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-			target = new UpdateScheduleProjectionReadModel(scheduleProjectionReadOnlyRepository, scheduleRepository);
+			target = new UpdateScheduleProjectionReadModel(scheduleProjectionReadOnlyRepository, scheduleRepository, scheduleChangedNotification);
 		}
 
 		[Test]
