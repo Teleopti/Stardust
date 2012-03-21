@@ -130,7 +130,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
                     if (schedulePeriod.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDayPro.Day))
 		                continue;
+                    IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, _schedulingOptions);
 
+                    if (effectiveRestriction != null && effectiveRestriction.IsLimitedWorkday)
+                        continue;
+                    
                     try
                     {
                         part.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate);
