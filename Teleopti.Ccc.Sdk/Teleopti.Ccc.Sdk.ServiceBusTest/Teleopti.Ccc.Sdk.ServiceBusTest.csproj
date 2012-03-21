@@ -162,6 +162,8 @@
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillResolveTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillTest.cs" />
+    <Compile Include="Forecast\ForecastsAnalyzeCommandTest.cs" />
+    <Compile Include="Forecast\ForecastsFileContentProviderTest.cs" />
     <Compile Include="Forecast\OpenAndSplitChildSkillsResolveTest.cs" />
     <Compile Include="Forecast\OpenAndSplitChildSkillsTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />

@@ -25,6 +25,6 @@ namespace Teleopti.Interfaces.Domain
         ///<summary>
         /// The total percentage.
         ///</summary>
-        int? TotalPercentage { get; set; }
+        int TotalPercentage { get; set; }
     }
 }

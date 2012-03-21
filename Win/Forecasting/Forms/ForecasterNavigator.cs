@@ -1142,7 +1142,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                             {
                                 pages.SaveSettings();
                                 var statusDialog =
-                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.Empty});
+                                    new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid()});
                                 statusDialog.Show(this);
                                 statusDialog.SetJobStatusId(executeCommand(dto));
                             }
@@ -1161,7 +1161,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-        private Guid? executeCommand(CommandDto commandDto)
+        private Guid executeCommand(CommandDto commandDto)
         {
             var sdkAuthentication = new SdkAuthentication();
             sdkAuthentication.SetSdkAuthenticationHeader();
@@ -1189,7 +1189,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 ((IDisposable)proxy).Dispose();
             }
-            return null;
+            return Guid.Empty;
         }
 
         private static void initializeExportAcrossBusinessUnitsWizard(ExportMultisiteSkillToSkillCommandModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)

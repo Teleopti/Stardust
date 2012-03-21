@@ -16,13 +16,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public bool ReadNextRow(IFileRow row)
         {
             var line = _reader.ReadLine();
-            row.LineText = line;
             if (string.IsNullOrEmpty(line))
                 return false;
             var fields = line.Split(separator);
             for (var i = 0; i < fields.Count(); i++)
             {
-                row.Add(fields[i]);
+                row.Content.Add(fields[i]);
             }
             return row.Count > 0;
         }

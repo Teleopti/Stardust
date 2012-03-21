@@ -6,15 +6,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.ForecastsFile
     [TestFixture]
     public class CsvFileRowTest
     {
-        private readonly IFileRow _target = new CsvFileRow();
+        private IFileRow _target;
+        const string fileContent = "Insurance,20120301 12:45,20120301 13:00,17,179,0";
+        const string fileContentWithAgent = "Insurance,20120301 12:45,20120301 13:00,17,179,0,4.75";
 
         [Test]
-        public void ShouldHoldLineText()
+        public void ShouldConstructFromLineContent()
         {
-            const string fileContent = "Insurance,20120301 12:45,20120301 01:00,17,179,0,4.75";
-            _target.LineText = fileContent;
+            _target = new CsvFileRow(fileContent);
 
-            Assert.That(_target.LineText, Is.EqualTo(fileContent));
+            Assert.That(_target.ToString(), Is.EqualTo(fileContent));
+        }
+
+        [Test]
+        public void ShouldHaveCorrectCount()
+        {
+            var target = new CsvFileRow(fileContent);
+            var targetWithAgent = new CsvFileRow(fileContentWithAgent);
+
+            Assert.That(target.Count, Is.EqualTo(6));
+            Assert.That(targetWithAgent.Count, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void ShouldClearContent()
+        {
+            _target = new CsvFileRow(fileContent);
+            _target.Clear();
+
+            Assert.That(_target.Count, Is.EqualTo(0));
         }
     }
 }

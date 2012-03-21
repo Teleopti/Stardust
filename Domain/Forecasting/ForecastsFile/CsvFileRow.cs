@@ -1,22 +1,48 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public interface IFileRow : IList<string>
+    public interface IFileRow
     {
-        string LineText { get; set; }
+        IList<string> Content { get; }
+        int Count { get; }
+        void Clear();
     }
     
-    [Serializable]
-    public class CsvFileRow : List<string>, IFileRow, ICloneable
+    public class CsvFileRow : IFileRow
     {
-        public string LineText { get; set; }
-        
-        public object Clone()
+        private readonly IList<string> _content;
+        private const char separator = ',';
+
+        public CsvFileRow()
         {
-            return this.Select(item => item.Clone()).ToList();
+            _content = new List<string>();
+        }
+
+        public CsvFileRow(string lineText)
+        {
+            _content = new List<string>(lineText.Split(separator));
+        }
+
+        public IList<string> Content { get { return _content; } }
+
+        public void Clear()
+        {
+            _content.Clear();
+        }
+
+        public int Count { get { return _content.Count; } }
+
+        public override string ToString()
+        {
+            var line = new StringBuilder();
+            for (var i = 0; i < _content.Count-1; i++ )
+            {
+                line.Append(_content[i] + separator);
+            }
+            line.Append(_content[Count - 1]);
+            return line.ToString();
         }
     }
 }

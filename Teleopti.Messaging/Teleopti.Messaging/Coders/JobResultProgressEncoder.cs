@@ -49,8 +49,7 @@ namespace Teleopti.Messaging.Coders
             sb.Append(Consts.Separator);
             sb.Append(message);
             sb.Append(Consts.Separator);
-            if (item.TotalPercentage.HasValue)
-                sb.Append(Convert.ToString(item.TotalPercentage));
+            sb.Append(Convert.ToString(item.TotalPercentage));
 
             var encodedList = new List<byte>();
             encodedList.AddRange(_encoding.GetBytes(sb.ToString()));

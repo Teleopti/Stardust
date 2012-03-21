@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -79,19 +73,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public bool IsWorkloadImport
         {
             get { return radioButtonImportWorkload.Checked; }
-            set { radioButtonImportWorkload.Checked = value;}
         }
 
         public bool IsStaffingImport
         {
             get { return radioButtonImportStaffing.Checked; }
-            set { radioButtonImportStaffing.Checked = value; }
         }
 
         public bool IsStaffingAndWorkloadImport
         {
             get { return radioButtonImportWLAndStaffing.Checked; }
-            set { radioButtonImportWLAndStaffing.Checked = value; }
         }
 
         private ImportForecastsOptionsDto getImportForecastOption()
@@ -108,57 +99,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
             buttonAdvImport.Enabled = false;
-            var fileContent = new List<CsvFileRow>();
-            using (var stream = new StreamReader(UploadFileName))
+
+            _presenter.ValidateFile(UploadFileName);
+            var savedFileId = saveFileToServer();
+            var statusDialog = new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
+            statusDialog.Show(this);
+            statusDialog.SetProgress(1);
+            statusDialog.SetMessage("Uploading file:" + UploadFileName + " to server...");
+            if (savedFileId == Guid.Empty)
             {
-                var rowNumber = 1;
-                try
-                {
-                    if (stream.Peek() == -1) throw new ValidationException("File is empty.");
-                    var reader = new CsvFileReader(stream);
-                    var row = new CsvFileRow();
-                    var validators = setUpForecastsFileValidators();
-                    
-                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
-                    {
-                        while (reader.ReadNextRow(row))
-                        {
-                            validateRowByRow(validators, row);
-                            var rowToBeSave = new CsvFileRow();
-                            rowToBeSave.AddRange(row);
-                            fileContent.Add(rowToBeSave);
-                            row.Clear();
-                            rowNumber++;
-                        }
-                    }
-                }
-                catch (ValidationException exception)
-                {
-                    MessageBoxAdv.Show(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), "ValidationError");
-                }
-                var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid() });
-                statusDialog.Show(this);
-                statusDialog.SetProgress(1);
-                statusDialog.SetMessage("Uploading file:" + UploadFileName + " to server...");
-                var savedFileId = saveFileToServer(fileContent);
-                if (savedFileId == null)
-                {
-                    MessageBoxAdv.Show("Error occured when trying to import file.");
-                    return;
-                }
-                statusDialog.SetJobStatusId(savedFileId);
-                statusDialog.SetProgress(2);
-                statusDialog.SetMessage(UploadFileName + " uploaded.");
-                statusDialog.SetProgress(1);
-                statusDialog.SetMessage("Validating...");
-                var dto = new ImportForecastsFileCommandDto
-                {
-                    ImportForecastsMode = getImportForecastOption(),
-                    UploadedFileId = savedFileId.GetValueOrDefault(),
-                    TargetSkillId = _skill.Id.GetValueOrDefault()
-                };
-                statusDialog.SetJobStatusId(executeCommand(dto));
+                MessageBoxAdv.Show("Error occured when trying to import file.");
+                return;
             }
+            statusDialog.SetJobStatusId(savedFileId);
+            statusDialog.SetProgress(2);
+            statusDialog.SetMessage(UploadFileName + " uploaded.");
+            statusDialog.SetProgress(1);
+            statusDialog.SetMessage("Validating...");
+            var dto = new ImportForecastsFileCommandDto
+                          {
+                              ImportForecastsMode = getImportForecastOption(),
+                              UploadedFileId = savedFileId,
+                              TargetSkillId = _skill.Id.GetValueOrDefault()
+                          };
+            statusDialog.SetJobStatusId(executeCommand(dto));
         }
 
         private string UploadFileName
@@ -166,52 +130,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             get { return textBoxImportFileName.Text; }
         }
 
-        private static void validateRowByRow(IList<IForecastsFileValidator> validators, IList<string> row)
+        private Guid saveFileToServer()
         {
-            if (row.Count < 6 || row.Count > 7)
+            var savedFileId = Guid.Empty;
+            _gracefulHandler.AttemptDatabaseConnectionDependentAction(() =>
             {
-                throw new ValidationException("There are more or less columns than expected.");
-            }
-            for (var i = 0; i < row.Count; i++)
-            {
-                if (!validators[i].Validate(row[i]))
-                    throw new ValidationException(validators[i].ErrorMessage);
-            }
-        }
-
-        private Guid? saveFileToServer(IList<CsvFileRow> fileContent)
-        {
-            Guid? savedFileId = null;
-            _gracefulHandler.AttemptDatabaseConnectionDependentAction(
-                () => {
-                        IFormatter formatter = new BinaryFormatter();
-                        byte[] serializedValue;
-                        using (var stream = new MemoryStream())
-                        {
-                            formatter.Serialize(stream, fileContent);
-                            serializedValue = stream.GetBuffer();
-                        }
-                        savedFileId = _presenter.SaveForecastFile(textBoxImportFileName.Text, serializedValue);
-                    });
+                savedFileId = _presenter.SaveForecastFile();
+            });
             return savedFileId;
         }
 
-        private static List<IForecastsFileValidator> setUpForecastsFileValidators()
-        {
-            var validators = new List<IForecastsFileValidator>
-                                 {
-                                     new ForecastsFileSkillNameValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileIntegerValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator()
-                                 };
-            return validators;
-        }
-
-        private Guid? executeCommand(CommandDto commandDto)
+        private static Guid executeCommand(CommandDto commandDto)
         {
             var sdkAuthentication = new SdkAuthentication();
             sdkAuthentication.SetSdkAuthenticationHeader();
@@ -239,7 +168,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             {
                 ((IDisposable)proxy).Dispose();
             }
-            return null;
+            return Guid.Empty;
         }
 
         private void textBoxImportFileNameTextChanged(object sender, EventArgs e)

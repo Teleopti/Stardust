@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.TestCommon;
 
@@ -11,12 +7,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
     [TestFixture]
     public class ForecastFileTest
     {
-        [SetUp]
-        public void Setup()
-        {
-            
-        }
-
         [Test]
         public void ShouldHaveForecastFileName()
         {

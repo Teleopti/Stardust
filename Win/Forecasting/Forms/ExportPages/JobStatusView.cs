@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			labelDetail.Text = message;
 		}
 
-	    public void SetJobStatusId(Guid? id)
+	    public void SetJobStatusId(Guid id)
 	    {
             Presenter.SetJobStatusId(id);
 	    }
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			{
 				_view.SetProgress(item.Percentage);
 				_view.SetMessage(item.Message);
-                if (item.TotalPercentage.HasValue)
-                    _view.ChangeMaximumProgressValue(item.TotalPercentage.Value);
+                if (item.TotalPercentage!=100)
+                _view.ChangeMaximumProgressValue(item.TotalPercentage);
 			}
 		}
 		
@@ -132,12 +132,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			}
 		}
 
-        public void SetJobStatusId(Guid? id)
+        public void SetJobStatusId(Guid id)
 	    {
-            if(id == null)
+            if(id == Guid.Empty)
                 _view.SetMessage(UserTexts.Resources.CommunicationErrorEndPoint);
 	        else
-                _model.JobStatusId = id.GetValueOrDefault();
+                _model.JobStatusId = id;
 	    }
 	}
 

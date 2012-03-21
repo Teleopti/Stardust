@@ -3,10 +3,19 @@
 namespace Teleopti.Interfaces.Domain
 {
     ///<summary>
-    /// Progress information for a payroll export / background job.
+    /// Progress information for a export/import background job.
     ///</summary>
     public class JobResultProgress : IJobResultProgress
     {
+        /// <summary>
+        /// Represent info of job result progress
+        /// </summary>
+        /// <param name="totalPercentage">Total percentage with default value of 100</param>
+        public JobResultProgress(int totalPercentage = 100)
+        {
+            TotalPercentage = totalPercentage;
+        }
+
         ///<summary>
         /// The completed percentage.
         ///</summary>
@@ -25,6 +34,6 @@ namespace Teleopti.Interfaces.Domain
         ///<summary>
         /// The total percentage.
         ///</summary>
-        public int? TotalPercentage { get; set; }
+        public int TotalPercentage { get; set; }
     }
 }

@@ -45,10 +45,7 @@ namespace Teleopti.Messaging.Coders
             var payrollResultId = _encoding.GetString(framer.NextToken(source, newline));
             var percentage = _encoding.GetString(framer.NextToken(source, newline));
             var message = _encoding.GetString(framer.NextToken(source, newline));
-            var totalPercentageToken = framer.NextToken(source, newline);
-            string totalPercentage = null;
-            if (totalPercentageToken != null)
-                totalPercentage = _encoding.GetString(totalPercentageToken);
+            var totalPercentage = _encoding.GetString(framer.NextToken(source, newline));
 
             if (message == "-")
                 message = string.Empty;
@@ -57,10 +54,10 @@ namespace Teleopti.Messaging.Coders
                                         {
                                             Message = message,
                                             JobResultId = new Guid(payrollResultId),
-                                            Percentage = int.Parse(percentage, CultureInfo.InvariantCulture)
+                                            Percentage = int.Parse(percentage, CultureInfo.InvariantCulture),
+                                            TotalPercentage = int.Parse(totalPercentage, CultureInfo.InvariantCulture)
                                         };
-            if (totalPercentage != null)
-                jobResultProgress.TotalPercentage = int.Parse(totalPercentage, CultureInfo.InvariantCulture);
+               
             return jobResultProgress;
         }
 

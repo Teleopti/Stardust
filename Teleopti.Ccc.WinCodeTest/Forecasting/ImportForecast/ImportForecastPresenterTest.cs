@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
     public class ImportForecastPresenterTest
     {
         private MockRepository _mock;
-        private IImportForecast _view;
         private ImportForecastModel _model;
         private ImportForecastPresenter _target;
         private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -24,12 +23,12 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         public void Setup()
         {
             _mock = new MockRepository();
-            _view = _mock.DynamicMock<IImportForecast>();
+            _mock.DynamicMock<IImportForecast>();
             _unitOfWorkFactory = _mock.DynamicMock<IUnitOfWorkFactory>();
             _importForecastsRepository = _mock.DynamicMock<IImportForecastsRepository>();
             var tempSkill = SkillFactory.CreateSkill("test");
             _model = new ImportForecastModel(tempSkill, _unitOfWorkFactory, _importForecastsRepository);
-            _target = new ImportForecastPresenter(_view, _model);
+            _target = new ImportForecastPresenter(_model);
         }
 
         [Test]
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             var tempSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
             var tempModel = new ImportForecastModel(tempSkill, _unitOfWorkFactory, _importForecastsRepository);
-            _target = new ImportForecastPresenter(_view, tempModel);
+            _target = new ImportForecastPresenter(tempModel);
             _target.PopulateWorkloadList();
             Assert.IsNotEmpty(_target.WorkloadList.ToList());
         }

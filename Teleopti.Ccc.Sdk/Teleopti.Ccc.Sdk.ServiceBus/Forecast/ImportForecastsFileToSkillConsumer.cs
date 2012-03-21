@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting.Export;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -59,64 +57,57 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 }
                 var timeZone = targetSkill.TimeZone;
                 var forecastFile = _importForecastsRepository.Get(message.UploadedFileId);
-                var formatter = new BinaryFormatter();
-                IList<CsvFileRow> fileContent;
-                using (var stream = new MemoryStream(forecastFile.FileContent))
+                if (forecastFile == null)
                 {
-                    var tempObj = formatter.Deserialize(stream);
-                    fileContent = tempObj as List<CsvFileRow>;
-                    if (fileContent == null)
-                    {
-                        sendValidationError(message.JobId, "The uploaded file has no content.");
-                        return;
-                    }
+                    sendValidationError(message.JobId, "The uploaded file has no content.");
+                    return;
                 }
-                var provider = new ForecastsFileContentProvider(fileContent, timeZone);
-                provider.LoadContent();
-                var analyzeCommand = new ForecastsAnalyzeCommand(provider.Forecasts);
-                var commandResult = analyzeCommand.Execute();
+                var commandResult = new ForecastsFileContentProvider(forecastFile.FileContent, timeZone).Analyze();
                 if (!commandResult.Succeeded)
                 {
                     sendValidationError(message.JobId, string.Concat("Validation error! ", commandResult.ErrorMessage));
                     return;
                 }
 
-                var listOfMessages = new List<OpenAndSplitTargetSkill>();
-
                 var jobResult = _jobResultRepository.Get(message.JobId);
                 jobResult.Period = commandResult.Period;
                 var skill = _skillRepository.Get(message.TargetSkillId);
                 _feedback.SetJobResult(jobResult, _messageBroker);
-                _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...",
-                                             skill.Name));
-                _feedback.ReportProgress(0,
-                                         string.Format(CultureInfo.InvariantCulture,
-                                                       "Importing forecasts for skill {0}.", skill.Name));
+                _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", skill.Name));
+                _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
 
-                foreach (var date in commandResult.Period.DayCollection())
-                {
-                    var openHours = commandResult.WorkloadDayOpenHours.Get(date);
-                    listOfMessages.Add(new OpenAndSplitTargetSkill
-                                           {
-                                               BusinessUnitId = message.BusinessUnitId,
-                                               Datasource = message.Datasource,
-                                               JobId = message.JobId,
-                                               OwnerPersonId = message.OwnerPersonId,
-                                               Date = date,
-                                               Timestamp = message.Timestamp,
-                                               TargetSkillId = message.TargetSkillId,
-                                               StartOpenHour = openHours.StartTime,
-                                               EndOpenHour = openHours.EndTime,
-                                               Forecasts = commandResult.ForecastFileDictionary.Get(date),
-                                               ImportMode = message.ImportMode
-                                           });
-                }
-                _feedback.ChangeTotalProgress(4 + listOfMessages.Count*4);
+                var listOfMessages = generateMessages(message, commandResult);
+                _feedback.ChangeTotalProgress(4 + listOfMessages.Count * 4);
                 endProcessing(unitOfWork);
 
                 listOfMessages.ForEach(m => _serviceBus.Send(m));
             }
             _unitOfWorkFactory = null;
+        }
+
+        private IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
+                                             ForecastsAnalyzeCommandResult commandResult)
+        {
+            var listOfMessages = new List<OpenAndSplitTargetSkill>();
+            foreach (var date in commandResult.Period.DayCollection())
+            {
+                var openHours = commandResult.WorkloadDayOpenHours.Get(date);
+                listOfMessages.Add(new OpenAndSplitTargetSkill
+                                       {
+                                           BusinessUnitId = message.BusinessUnitId,
+                                           Datasource = message.Datasource,
+                                           JobId = message.JobId,
+                                           OwnerPersonId = message.OwnerPersonId,
+                                           Date = date,
+                                           Timestamp = message.Timestamp,
+                                           TargetSkillId = message.TargetSkillId,
+                                           StartOpenHour = openHours.StartTime,
+                                           EndOpenHour = openHours.EndTime,
+                                           Forecasts = commandResult.ForecastFileDictionary.Get(date),
+                                           ImportMode = message.ImportMode
+                                       });
+            }
+            return listOfMessages;
         }
 
         private void endProcessing(IUnitOfWork unitOfWork)
@@ -125,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _feedback.Dispose();
         }
 
-        private void sendValidationError( Guid jobId, string errorMessage)
+        private void sendValidationError(Guid jobId, string errorMessage)
         {
             var jobResultProgress = new JobResultProgress
             {
@@ -133,8 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 Percentage = 0,
                 JobResultId = jobId
             };
-            var binaryData = _jobResultProgressEncoder.Encode(jobResultProgress);
-            sendMessage(binaryData);
+            sendMessage(_jobResultProgressEncoder.Encode(jobResultProgress));
         }
 
         private void sendMessage(byte[] binaryData)

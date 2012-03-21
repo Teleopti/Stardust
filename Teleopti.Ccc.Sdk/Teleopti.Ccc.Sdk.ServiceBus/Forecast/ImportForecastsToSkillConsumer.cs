@@ -21,7 +21,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private readonly IJobResultFeedback _feedback;
         private readonly IMessageBroker _messageBroker;
 
-        public ImportForecastsToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker)
+        public ImportForecastsToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,
+            ISaveForecastToSkillCommand saveForecastToSkillCommand,
+            ISkillRepository skillRepository,
+            IJobResultRepository jobResultRepository,
+            IJobResultFeedback feedback,
+            IMessageBroker messageBroker)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveForecastToSkillCommand = saveForecastToSkillCommand;

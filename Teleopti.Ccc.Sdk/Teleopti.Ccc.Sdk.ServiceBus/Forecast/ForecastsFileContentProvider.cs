@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Interfaces.Domain;
@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public class ForecastsFileContentProvider
     {
-        private readonly IList<CsvFileRow> _fileContent;
-        private readonly ICccTimeZoneInfo _timeZone;
         private readonly ICollection<IForecastsFileRow> _forecasts = new List<IForecastsFileRow>();
 
         public ICollection<IForecastsFileRow> Forecasts
@@ -18,29 +16,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             get { return _forecasts; }
         }
 
-        public ForecastsFileContentProvider(IList<CsvFileRow> fileContent, ICccTimeZoneInfo timeZone)
+        public ForecastsFileContentProvider(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
-            _fileContent = fileContent;
-            _timeZone = timeZone;
+            loadContent(fileContent, timeZone);
         }
 
-        public void LoadContent()
+        private void loadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
             var validators = setupForecastsFileValidators();
-            _fileContent.ForEach(row =>
-                                     {
-                                         if (row.Count < 6 || row.Count > 7)
-                                         {
-                                             throw new ValidationException(
-                                                 "There are more or less columns than expected.");
-                                         }
-                                         for (var i = 0; i < row.Count; i++)
-                                         {
-                                             if (!validators[i].Validate(row[i]))
-                                                 throw new ValidationException(validators[i].ErrorMessage);
-                                         }
-                                         _forecasts.Add(ForecastsFileRowCreator.Create(row, _timeZone));
-                                     });
+            var rows = fileContent.ToString().Split('\n').Select(line => new CsvFileRow(line)).ToList();
+            rows.ForEach(row =>
+            {
+                if (!ForecastsFileRowCreator.IsFileColumnValid(row))
+                {
+                    throw new ValidationException("There are more or less columns than expected.");
+                }
+                for (var i = 0; i < row.Count; i++)
+                {
+                    if (!validators[i].Validate(row.Content[i]))
+                        throw new ValidationException(validators[i].ErrorMessage);
+                }
+                _forecasts.Add(ForecastsFileRowCreator.Create(row, timeZone));
+            });
         }
 
         private static List<IForecastsFileValidator> setupForecastsFileValidators()
@@ -56,6 +53,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                      new ForecastsFileDoubleValueValidator()
                                  };
             return validators;
+        }
+
+        public ForecastsAnalyzeCommandResult Analyze()
+        {
+            var analyzeCommand = new ForecastsAnalyzeCommand(Forecasts);
+            return analyzeCommand.Execute();
         }
     }
 }
