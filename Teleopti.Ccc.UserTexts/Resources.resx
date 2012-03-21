@@ -10529,4 +10529,10 @@ These options are activated:
   <data name="ViewHistory" xml:space="preserve">
     <value>View History</value>
   </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>Contract time ascending</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>Contract time descending</value>
+  </data>
 </root>

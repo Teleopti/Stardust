@@ -4482,6 +4482,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract time ascending.
+        /// </summary>
+        public static string ContractTimeAsc {
+            get {
+                return ResourceManager.GetString("ContractTimeAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contract time descending.
+        /// </summary>
+        public static string ContractTimeDesc {
+            get {
+                return ResourceManager.GetString("ContractTimeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contract time does not meet the target time.
         /// </summary>
         public static string ContractTimeDoesNotMeetTheTargetTime {
