@@ -20,15 +20,15 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             _weekCalculator = weekCalculator;
         }
 
-        public bool IsPeriodInLegalState(IScheduleMatrixPro matrix, ISchedulingOptions options)
+        public bool IsPeriodInLegalState(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            return (PeriodLegalStateStatus(matrix, options) == 0);
+            return (PeriodLegalStateStatus(matrix, schedulingOptions) == 0);
         }
 
-        public int PeriodLegalStateStatus(IScheduleMatrixPro matrix, ISchedulingOptions options)
+        public int PeriodLegalStateStatus(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            MinMax<TimeSpan> minMax = currentMinMax(null, matrix, options);
-            TimeSpan corr = calculateSumCorrection(null, matrix, WeekCount(matrix), options);
+            MinMax<TimeSpan> minMax = currentMinMax(null, matrix, schedulingOptions);
+            TimeSpan corr = calculateSumCorrection(null, matrix, WeekCount(matrix), schedulingOptions);
 
 
             if (minMax.Minimum > _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrix).EndTime)

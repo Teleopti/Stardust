@@ -79,5 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsTrue(_schedulingOptions.OnlyShiftsWhenUnderstaffed);
         }
+
+        //[Test]
+        //public void ShouldSetMushHavesTrue
     }
 }
