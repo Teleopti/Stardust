@@ -10,13 +10,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public class BusinessUnit : IStatisticsDataSetup
 	{
+		public int BusinessUnitId = 0;
 		public DataTable Table;
 
 		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
 		{
 			Table = dim_business_unit.CreateTable();
 
-			Table.AddRow(0, TestData.BusinessUnit.Id.Value, TestData.BusinessUnit.Name, sys_datasource.RaptorDefaultDatasourceId, DateTime.Now, DateTime.Now, DateTime.Now);
+			Table.AddRow(BusinessUnitId, TestData.BusinessUnit.Id.Value, TestData.BusinessUnit.Name, sys_datasource.RaptorDefaultDatasourceId, DateTime.Now, DateTime.Now, DateTime.Now);
 
 			Bulk.Insert(connection, Table);
 		}

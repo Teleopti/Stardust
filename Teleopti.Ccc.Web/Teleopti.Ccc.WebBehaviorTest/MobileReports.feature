@@ -50,7 +50,7 @@ Scenario: Select date in date-picker
 
 Scenario: Select skill in skill-picker
 	Given I am a supervisor
-	And I have skill statistic data
+	And I have skill analytics data
 	When I view ReportSettings
 	And I open the skill-picker
 	And I select a skill
@@ -67,14 +67,14 @@ Scenario: Select all skills item in skill-picker
 
 Scenario: Navigate within report view to previous day
 	Given I am a supervisor
-	When I am view a Report
-	And I click previous date
+	And I am viewing a report
+	When I click previous date
 	Then I should see a report for previous date
 
 Scenario: Navigate within report view to next day
 	Given I am a supervisor
-	When I am view a Report
-	And I click next date
+	And I am viewing a report
+	When I click next date
 	Then I should see a report for next date
 
 Scenario: Enter Application with partial access to reports
@@ -85,5 +85,5 @@ Scenario: Enter Application with partial access to reports
 Scenario: Tabledata shows sunday as first day of week for US culture
 	Given I am a supervisor
 	And I am american
-	When I am view a Report with week data
+	When I view a report with week data
 	Then I should see sunday as the first day of week in tabledata

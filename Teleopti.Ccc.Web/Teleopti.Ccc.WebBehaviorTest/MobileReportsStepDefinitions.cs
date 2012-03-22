@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			// Inject mobile UserAgent String /Replace CurrentBrowser?
 		}
 
-		[Given(@"I have skill statistic data")]
-		public void GivenIHaveSkillStatisticData()
+		[Given(@"I have skill analytics data")]
+		public void GivenIHaveSkillAnalyticsData()
 		{
 			UserFactory.User().Setup(new BusinessUnit());
 			UserFactory.User().Setup(new ThreeSkills());
@@ -137,32 +137,49 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayHidden(), Is.True);
 		}
 
-		[When(@"I am view a Report( with week data|)")]
-		public void WhenIAmViewAReport(string typeHint)
+		[Given(@"I am viewing a report")]
+		public void WhenIAmViewAReport()
 		{
 			createAndSignIn();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
-			Assert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
+			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 
 			_page.SetReportSettingsDate(StartDateForNextPrevNavigation);
-			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty, "Date should be set");
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty);
 			_page.ReportGetAnsweredAndAbandoned.Click();
-
-			if (!string.IsNullOrEmpty(typeHint) && typeHint.Contains("week"))
-			{
-				_page.ReportIntervalWeekInput.Click();
-			}
 
 			if (!_page.ReportTypeTableInput.Checked)
 			{
 				_page.ReportTypeTableInput.Click();
 			}
 
+			_page.ReportViewShowButton.Click();
+
+			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
+		}
+
+		[When(@"I view a report with week data")]
+		public void WhenIViewAReportWithWeekData()
+		{
+			createAndSignIn();
+			Navigation.GotoMobileReportsSettings();
+			_page = Browser.Current.Page<MobileReportsPage>();
+			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
+
+			_page.SetReportSettingsDate(StartDateForNextPrevNavigation);
+			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty);
+			_page.ReportGetAnsweredAndAbandoned.Click();
+
+			_page.ReportIntervalWeekInput.Click();
+			if (!_page.ReportTypeTableInput.Checked)
+			{
+				_page.ReportTypeTableInput.Click();
+			}
 
 			_page.ReportViewShowButton.Click();
 
-			Assert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True.After(10000, 100));
+			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I check type Graph")]
@@ -276,8 +293,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			var value = _page.ReportTableFirstDataCell.Text.Trim();
-			EventualAssert.That(() => "Sunday".Equals(value), Is.True, string.Format("Value Should By Sunday but was: {0}", value));
+			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo("Sunday"));
 		}
 
 		private static void createAndSignIn()
@@ -287,5 +303,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<MobileSignInPage>();
 			page.SignInApplication(userName, TestData.CommonPassword);
 		}
+
 	}
 }

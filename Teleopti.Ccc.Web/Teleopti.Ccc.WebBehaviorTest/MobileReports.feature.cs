@@ -199,7 +199,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 52
  testRunner.Given("I am a supervisor");
 #line 53
- testRunner.And("I have skill statistic data");
+ testRunner.And("I have skill analytics data");
 #line 54
  testRunner.When("I view ReportSettings");
 #line 55
@@ -247,9 +247,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 69
  testRunner.Given("I am a supervisor");
 #line 70
- testRunner.When("I am view a Report");
+ testRunner.And("I am viewing a report");
 #line 71
- testRunner.And("I click previous date");
+ testRunner.When("I click previous date");
 #line 72
  testRunner.Then("I should see a report for previous date");
 #line hidden
@@ -266,9 +266,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 75
  testRunner.Given("I am a supervisor");
 #line 76
- testRunner.When("I am view a Report");
+ testRunner.And("I am viewing a report");
 #line 77
- testRunner.And("I click next date");
+ testRunner.When("I click next date");
 #line 78
  testRunner.Then("I should see a report for next date");
 #line hidden
@@ -304,7 +304,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 87
  testRunner.And("I am american");
 #line 88
- testRunner.When("I am view a Report with week data");
+ testRunner.When("I view a report with week data");
 #line 89
  testRunner.Then("I should see sunday as the first day of week in tabledata");
 #line hidden
