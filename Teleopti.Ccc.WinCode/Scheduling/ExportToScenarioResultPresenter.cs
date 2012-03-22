@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -61,22 +62,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return;
 			}
 			verifyNecessaryPersons();
-			var warnings = doExport();
-			var culture = TeleoptiPrincipal.Current.Regional.UICulture;
-			_view.SetScenarioText(string.Format(culture,
-												Resources.ExportFromAndToScenario,
-												_schedulePartsToExport.First().Scenario.Description.Name,
-												_exportScenario.Description.Name));
-			_view.SetAgentText(string.Format(culture, Resources.ExportNoOfAgentInfo, noOfAgentsInvolved()));
-			if (warnings.Count() > 0)
-			{
-				var warningStrings = buildWarningStrings(warnings);
-				_view.SetWarningText(warningStrings);
-			}
-			else
-			{
-				_view.DisableBodyText();
-			}
+		    try
+		    {
+                var warnings = doExport();
+                var culture = TeleoptiPrincipal.Current.Regional.UICulture;
+                _view.SetScenarioText(string.Format(culture,
+                                                    Resources.ExportFromAndToScenario,
+                                                    _schedulePartsToExport.First().Scenario.Description.Name,
+                                                    _exportScenario.Description.Name));
+                _view.SetAgentText(string.Format(culture, Resources.ExportNoOfAgentInfo, noOfAgentsInvolved()));
+                if (warnings.Count() > 0)
+                {
+                    var warningStrings = buildWarningStrings(warnings);
+                    _view.SetWarningText(warningStrings);
+                }
+                else
+                {
+                    _view.DisableBodyText();
+                }
+		    }
+		    catch (DataSourceException exception)
+		    {
+                _view.ShowDataSourceException(exception);
+                _view.CloseForm();
+		    }
+			
 		}
 
 		public void OnCancel()
@@ -86,8 +96,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void OnConfirm()
 		{
-			_scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
-			_view.CloseForm();
+		    try
+		    {
+                _scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
+                _view.CloseForm();
+		    }
+		    catch (DataSourceException exception)
+		    {
+		        _view.ShowDataSourceException(exception);
+		    }
+			
 		}
 
 		private int noOfAgentsInvolved()
@@ -112,15 +130,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private IEnumerable<IBusinessRuleResponse> doExport()
 		{
-			using (_uowFactory.CreateAndOpenUnitOfWork())
-			{
-				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
-			    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-				_callback.ReassociateDataWithAllPeople();
-				ScheduleDictionaryToPersist =
-					_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
-				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);				
-			}
+            using (_uowFactory.CreateAndOpenUnitOfWork())
+            {
+                var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
+                var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+                _callback.ReassociateDataWithAllPeople();
+                ScheduleDictionaryToPersist =
+                    _scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+                return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
+            }
 		}
 
 		private DateTimePeriod schedulePartPeriod()

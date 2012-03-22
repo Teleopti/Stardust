@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         void SetAgentText(string agentText);
         void SetWarningText(IEnumerable<ExportToScenarioWarningData> validationWarnings);
         void DisableBodyText();
+        void ShowDataSourceException(DataSourceException exception);
     }
 }
