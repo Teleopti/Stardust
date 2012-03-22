@@ -8778,7 +8778,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Dieser Antrag wurde vom Antragsteller gelöscht und kann daher nicht mehr geändert werden.</value>
   </data>
   <data name="CreatedPageOf" xml:space="preserve">
-    <value>Erställt {0}. Seite {1} von {2}</value>
+    <value>Erstellt {0}. Seite {1} von {2}</value>
   </data>
   <data name="DaysPerYearColon" xml:space="preserve">
     <value>Tage pro Jahr:</value>

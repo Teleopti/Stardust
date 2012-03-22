@@ -897,4 +897,61 @@
   <data name="Skill" xml:space="preserve">
     <value>Skill</value>
   </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Aktivitäten-Zeit pro Agent</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Überstunden (hh:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Schichtende (Zeit)</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Schichtkategorie und Ganztags-Abwesenheiten pro Tag</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Abwesenheit</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Schichttausch</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Anfragen pro Agent</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>genehmigt</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>abgelehnt</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>schwebend</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Anfragetyp:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>angefragte Tage</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Anzahl der Anfragen</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Anfragedatum</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Anfrageperiode</value>
+  </data>
 </root>

@@ -150,7 +150,7 @@
     <comment>Action</comment>
   </data>
   <data name="Actions" xml:space="preserve">
-    <value>Funktioner</value>
+    <value>Åtgärder</value>
     <comment>Actions</comment>
   </data>
   <data name="Activities" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>Activity length</comment>
   </data>
   <data name="ActivityPosition" xml:space="preserve">
-    <value>Position aktivitet</value>
+    <value>Aktivitetsposition</value>
     <comment>Activity position</comment>
   </data>
   <data name="ACW" xml:space="preserve">
@@ -194,7 +194,7 @@
     <comment>Add activity</comment>
   </data>
   <data name="AddArrows" xml:space="preserve">
-    <value>Lägg till&gt;&gt;</value>
+    <value>&amp;Lägg till&gt;&gt;</value>
     <comment>&amp;Add&gt;&gt;</comment>
   </data>
   <data name="AddDayOff" xml:space="preserve">
@@ -238,15 +238,15 @@
     <comment>After call work time</comment>
   </data>
   <data name="AgentInfo" xml:space="preserve">
-    <value>Agent info</value>
+    <value>Agentinfo</value>
     <comment>Agent Info</comment>
   </data>
   <data name="AgentInformation" xml:space="preserve">
-    <value>Agent information</value>
+    <value>Agentinformation</value>
     <comment>Agent information</comment>
   </data>
   <data name="AgentInfoThreeDots" xml:space="preserve">
-    <value>Agent information...</value>
+    <value>Agentinformation...</value>
     <comment>Agent info...</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
@@ -294,7 +294,7 @@
     <comment>Apply</comment>
   </data>
   <data name="AreYouSureYouWantToDelete" xml:space="preserve">
-    <value>Vill du ta bort?</value>
+    <value>Är du säker på att du vill ta bort?</value>
     <comment>Are you sure you want to delete?</comment>
   </data>
   <data name="ArrowsRemove" xml:space="preserve">
@@ -310,7 +310,7 @@
     <comment>Auto position</comment>
   </data>
   <data name="AvailableScorecards" xml:space="preserve">
-    <value>Tillgängliga styrkort</value>
+    <value>Tillgängliga scorecards</value>
     <comment>Available Scorecards</comment>
   </data>
   <data name="AverageACW" xml:space="preserve">
@@ -330,7 +330,7 @@
     <comment>Average talk time</comment>
   </data>
   <data name="AverageTasks" xml:space="preserve">
-    <value>Genomsnittligt antal samtal</value>
+    <value>Genomsnittligt antal uppgifter</value>
     <comment>Average tasks</comment>
   </data>
   <data name="AverageWorkTime" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Calls</comment>
   </data>
   <data name="CampaignACWPercentSign" xml:space="preserve">
-    <value>Kampanjefterbearbetningstid %</value>
+    <value>Kampanj ACW %</value>
     <comment>Campaign ACW %</comment>
   </data>
   <data name="CampaignAfterWorkPercentSign" xml:space="preserve">
@@ -438,7 +438,7 @@
     <comment>Check all</comment>
   </data>
   <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
-    <value>Välj OK för att strunta i reglerna, tryck Avbryt för att korrigera själv först.</value>
+    <value>Välj OK för att ignorera reglerna, tryck Avbryt för att korrigera felen först.</value>
     <comment>Press OK to override rules, press Cancel to abort and correct errors first.</comment>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
@@ -470,7 +470,7 @@
     <comment>Color</comment>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
-    <value>Välj den definition som du vill ändra</value>
+    <value>Välj den deltidsdefinition du vill ändra</value>
     <comment>Choose part-time percentage definition to change</comment>
   </data>
   <data name="CommunicationErrorEndPoint" xml:space="preserve">
@@ -647,7 +647,7 @@ datum</value>
     <comment>Interval length</comment>
   </data>
   <data name="ManageScorecards" xml:space="preserve">
-    <value>Hantera styrkort</value>
+    <value>Hantera scorecard</value>
     <comment>Administrera scorecards</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -691,7 +691,7 @@ datum</value>
     <comment>Detail view</comment>
   </data>
   <data name="DeviationACWColon" xml:space="preserve">
-    <value>Avvikelse efterbearbetning:</value>
+    <value>Avvikelse ACW:</value>
     <comment>Deviation ACW:</comment>
   </data>
   <data name="Deviations" xml:space="preserve">
@@ -731,7 +731,7 @@ datum</value>
     <comment>Edit</comment>
   </data>
   <data name="EditForecast" xml:space="preserve">
-    <value>Öppna Prognos</value>
+    <value>Öppna prognos</value>
     <comment>Open forecast</comment>
   </data>
   <data name="OpenForecastThreeDots" xml:space="preserve">
@@ -743,11 +743,11 @@ datum</value>
     <comment>Editor</comment>
   </data>
   <data name="EditSkillTemplatesThreeDots" xml:space="preserve">
-    <value>Redigera Kompetensmallar</value>
+    <value>Redigera kompetensmallar</value>
     <comment>Edit skill templates</comment>
   </data>
   <data name="EditWorkloadTemplates" xml:space="preserve">
-    <value>Redigera Workloadmallar</value>
+    <value>Redigera workloadmallar</value>
     <comment>Edit workload templates</comment>
   </data>
   <data name="Email" xml:space="preserve">
@@ -783,7 +783,7 @@ datum</value>
     <comment>End time</comment>
   </data>
   <data name="EnterNameHere" xml:space="preserve">
-    <value>Skriv namn här</value>
+    <value>Ange namn här</value>
     <comment>Enter name here</comment>
   </data>
   <data name="ErrorOccuredWhenAccessingTheDataSource" xml:space="preserve">
@@ -839,11 +839,11 @@ datum</value>
     <comment>Forecasted agents with shrinkage</comment>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
-    <value>Prognostiserad efterbearbetningstid</value>
+    <value>Prognostiserad medelefterbearbetningstid</value>
     <comment>Forecasted average after call work</comment>
   </data>
   <data name="ForecastedAverageTalkTime" xml:space="preserve">
-    <value>Prognostiserad  medel samtalstid</value>
+    <value>Prognostiserad  medelsamtalstid</value>
     <comment>Forecasted average talk time</comment>
   </data>
   <data name="ForecastedCalls" xml:space="preserve">
@@ -883,7 +883,7 @@ datum</value>
     <comment>Full name</comment>
   </data>
   <data name="Functions" xml:space="preserve">
-    <value>Funktioner</value>
+    <value>funktioner</value>
     <comment>functions</comment>
   </data>
   <data name="FunctionsAvailable" xml:space="preserve">
@@ -895,7 +895,7 @@ datum</value>
     <comment>General</comment>
   </data>
   <data name="GridActions" xml:space="preserve">
-    <value>Gridåtgärder</value>
+    <value>Rutnätsåtgärder</value>
     <comment>Grid actions</comment>
   </data>
   <data name="GroupingAbsences" xml:space="preserve">
@@ -951,11 +951,11 @@ datum</value>
     <comment>Insert</comment>
   </data>
   <data name="InsertNewPerson" xml:space="preserve">
-    <value>Lägg till ny person</value>
+    <value>Infoga ny person</value>
     <comment>Insert New Person</comment>
   </data>
   <data name="InsertNewPersonFromClipboard" xml:space="preserve">
-    <value>Lägg till ny person från urklipp</value>
+    <value>Infoga ny person från urklipp</value>
     <comment>Insert New Person From Clipboard</comment>
   </data>
   <data name="Intraday" xml:space="preserve">
@@ -1006,7 +1006,7 @@ datum</value>
     <comment>Readiness (%)</comment>
   </data>
   <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
-    <value>KPIer inkluderad i styrkortet:</value>
+    <value>Nyckeltal inkluderade i scorecardet:</value>
     <comment>KPI's in scorecard:</comment>
   </data>
   <data name="Language" xml:space="preserve">
@@ -1114,7 +1114,7 @@ datum</value>
     <comment>Manage day templates...</comment>
   </data>
   <data name="ManageTemplate" xml:space="preserve">
-    <value>Hantera mallar</value>
+    <value>Hantera mall</value>
     <comment>Manage template</comment>
   </data>
   <data name="MaximumAgents" xml:space="preserve">
@@ -1210,11 +1210,11 @@ datum</value>
     <comment>The templates cannot be saved because of an error in validation. Check that each interval sums up to 100%.\n\nError information: {0}</comment>
   </data>
   <data name="MultisiteSkillWizard" xml:space="preserve">
-    <value>Kompetensguide multisite</value>
+    <value>Guide multisite-kompetens</value>
     <comment>Multisite skill wizard</comment>
   </data>
   <data name="MultisiteTemplate" xml:space="preserve">
-    <value>Kompetensmall multisite</value>
+    <value>Mall multisite-kompentens</value>
     <comment>Multisite template</comment>
   </data>
   <data name="MustSpecifyValidTime" xml:space="preserve">
@@ -1238,7 +1238,7 @@ datum</value>
     <comment>New</comment>
   </data>
   <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
-    <value>Ny kompetens multisite...</value>
+    <value>Ny multisite-kompentens...</value>
     <comment>New multisite skill...</comment>
   </data>
   <data name="NewOutlier" xml:space="preserve">
@@ -1358,7 +1358,7 @@ datum</value>
     <comment>Original after call work</comment>
   </data>
   <data name="OriginalCalls" xml:space="preserve">
-    <value>Ursprungligt inkommande samtal</value>
+    <value>Ursprungligt antal inkommande samtal</value>
     <comment>Original offered calls</comment>
   </data>
   <data name="OriginalTalkTime" xml:space="preserve">
@@ -1438,15 +1438,15 @@ datum</value>
     <comment>Paste special...</comment>
   </data>
   <data name="PeopleAdminScreen" xml:space="preserve">
-    <value>Persons</value>
+    <value>Personer</value>
     <comment>People</comment>
   </data>
   <data name="PeoplePeriods" xml:space="preserve">
-    <value>Personperiod</value>
+    <value>Personperioder</value>
     <comment>Person periods</comment>
   </data>
   <data name="Percentage" xml:space="preserve">
-    <value>Procent</value>
+    <value>Procentsats</value>
     <comment>Percentage</comment>
   </data>
   <data name="Period" xml:space="preserve">
@@ -1466,7 +1466,7 @@ datum</value>
     <comment>PeriodViewPROTOTYPE</comment>
   </data>
   <data name="Permission" xml:space="preserve">
-    <value>Rättigheter</value>
+    <value>Rättighet</value>
     <comment>Permission</comment>
   </data>
   <data name="PersonAdmin" xml:space="preserve">
@@ -1478,11 +1478,11 @@ datum</value>
     <comment>Personalize MyTime</comment>
   </data>
   <data name="PersonalShift" xml:space="preserve">
-    <value>Personligt skift</value>
+    <value>Personlig aktivitet</value>
     <comment>Personal shift</comment>
   </data>
   <data name="PersonalShifts" xml:space="preserve">
-    <value>Personliga skift</value>
+    <value>Personliga aktiviteter</value>
     <comment>Personal shifts</comment>
   </data>
   <data name="PersonSkill" xml:space="preserve">
@@ -1546,7 +1546,7 @@ datum</value>
     <comment>The multi-site skill does not contain any sub skills. Would you like to create one?</comment>
   </data>
   <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
-    <value>Vill du ta bort kompetens {0}{1}{0}?</value>
+    <value>Är du säker på att du vill ta bort kompetens {0}{1}{0}?</value>
     <comment>Are you sure that you want to delete the skill {0}{1}{0}?</comment>
   </data>
   <data name="QuestionSaveChanges" xml:space="preserve">
@@ -1554,7 +1554,7 @@ datum</value>
     <comment>Save changes?</comment>
   </data>
   <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
-    <value>Nyskapad kompetens innehåller inte några workload. Vill du skapa en ny workload nu?</value>
+    <value>Den nya kompetensen innehåller inte någon workload. Vill du skapa en workload nu?</value>
     <comment>Your skill does not contain any workloads, do you want to create a workload now?</comment>
   </data>
   <data name="QuestionWouldYouLikeToCreateWorkloadQuestionMark" xml:space="preserve">
@@ -1590,7 +1590,7 @@ datum</value>
     <comment>&amp;Remove from Quick Access Toolbar</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Ändra namn</value>
+    <value>Byt namn</value>
     <comment>Rename</comment>
   </data>
   <data name="Reports" xml:space="preserve">
@@ -1666,7 +1666,7 @@ datum</value>
     <comment>Schedule</comment>
   </data>
   <data name="ScheduleDescripton" xml:space="preserve">
-    <value>Beskrivning schema</value>
+    <value>Schemabeskrivning</value>
     <comment>Schedule descripton</comment>
   </data>
   <data name="ScheduledHeads" xml:space="preserve">
@@ -1703,11 +1703,11 @@ Periods</comment>
     <comment>Scheduling</comment>
   </data>
   <data name="ScoreCard" xml:space="preserve">
-    <value>Styrkort</value>
+    <value>Scorecard</value>
     <comment>Scorecard</comment>
   </data>
   <data name="Scorecards" xml:space="preserve">
-    <value>Styrkort</value>
+    <value>Scorecards</value>
     <comment>Scorecards</comment>
   </data>
   <data name="Segment" xml:space="preserve">
@@ -1727,7 +1727,7 @@ Periods</comment>
     <comment>Select period</comment>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
-    <value>Välj site:</value>
+    <value>Välj enhet:</value>
     <comment>Välj site:</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
@@ -1751,7 +1751,7 @@ Periods</comment>
     <comment>Set culture</comment>
   </data>
   <data name="SetKPITargets" xml:space="preserve">
-    <value>Ställ in KPI-mål</value>
+    <value>Ställ in mål</value>
     <comment>Set KPI targets</comment>
   </data>
   <data name="SetPassword" xml:space="preserve">
@@ -1763,7 +1763,7 @@ Periods</comment>
     <comment>Settings</comment>
   </data>
   <data name="SetTrendManually" xml:space="preserve">
-    <value>Sätt manuell trend</value>
+    <value>Sätt trend manuellt</value>
     <comment>Set trend manually</comment>
   </data>
   <data name="Shift" xml:space="preserve">
@@ -1835,7 +1835,7 @@ Periods</comment>
     <comment>Skill data </comment>
   </data>
   <data name="SkillDataGrids" xml:space="preserve">
-    <value>Kompetensdata</value>
+    <value>Kompetensdatarutnät</value>
     <comment>Skill data grids</comment>
   </data>
   <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
@@ -1855,7 +1855,7 @@ Periods</comment>
     <comment>Skill day templates</comment>
   </data>
   <data name="SkillNameIsInvalid" xml:space="preserve">
-    <value>Fältet namn måste anges och inte innehålla mer än 50 tecken.</value>
+    <value>Kompetensnamn måste anges och får inte innehålla mer än 50 tecken.</value>
     <comment>Fältet namn måste anges och inte innehålla mer än 50 tecken.</comment>
   </data>
   <data name="SkillsTotal" xml:space="preserve">
@@ -1863,7 +1863,7 @@ Periods</comment>
     <comment>Skills total</comment>
   </data>
   <data name="SkillTab" xml:space="preserve">
-    <value>Kompetens</value>
+    <value>Kompetensflik</value>
     <comment>Skill tab</comment>
   </data>
   <data name="SkillTemplate" xml:space="preserve">
@@ -1875,7 +1875,7 @@ Periods</comment>
     <comment>Forecast method</comment>
   </data>
   <data name="SkillViews" xml:space="preserve">
-    <value>Kompetens vyer</value>
+    <value>Kompetensvyer</value>
     <comment>Skill views</comment>
   </data>
   <data name="SkillWizard" xml:space="preserve">
@@ -1915,7 +1915,7 @@ Periods</comment>
     <comment>Standard</comment>
   </data>
   <data name="StandardColors" xml:space="preserve">
-    <value>Standardfärder</value>
+    <value>Standardfärger</value>
     <comment>Standard colors</comment>
   </data>
   <data name="StartDate" xml:space="preserve">
@@ -1947,7 +1947,7 @@ Periods</comment>
     <comment>Sub skills distributions</comment>
   </data>
   <data name="SubSkillHasValueInTemplate" xml:space="preserve">
-    <value>Underliggande kompetens kunde inte tas bort. Det finns värden angivna på mallar. Ta bort värden och försök igen.</value>
+    <value>Underliggande kompetens kunde inte tas bort. Det finns värden angivna i distributionsmallar. Ta bort värdena och försök igen.</value>
     <comment>The sub skill cannot be deleted. It has values in distribution templates. Remove them first and try again.</comment>
   </data>
   <data name="SubSkills" xml:space="preserve">
@@ -1991,15 +1991,15 @@ Periods</comment>
     <comment>Target period from</comment>
   </data>
   <data name="Team" xml:space="preserve">
-    <value>Grupp</value>
+    <value>Team</value>
     <comment>Team</comment>
   </data>
   <data name="TeamMembers" xml:space="preserve">
-    <value>Gruppmedlemmar</value>
+    <value>Teammedlemmar</value>
     <comment>Team members</comment>
   </data>
   <data name="TeamView" xml:space="preserve">
-    <value>Gruppvy</value>
+    <value>Teamvy</value>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
@@ -2095,7 +2095,7 @@ Periods</comment>
     <comment>Type</comment>
   </data>
   <data name="UICulture" xml:space="preserve">
-    <value>Kultur</value>
+    <value>Språk</value>
     <comment>UI-Culture</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -2135,7 +2135,7 @@ Periods</comment>
     <comment>Updated by</comment>
   </data>
   <data name="UpdateGrid" xml:space="preserve">
-    <value>Uppdatera grid</value>
+    <value>Uppdatera rutnät</value>
     <comment>Update grid</comment>
   </data>
   <data name="UpdatesStatistics" xml:space="preserve">
@@ -2159,7 +2159,7 @@ Periods</comment>
     <comment>User credentials for</comment>
   </data>
   <data name="UseTemplatesForLongtermForecasting" xml:space="preserve">
-    <value>Använd temporära mallar för långtidsprognos</value>
+    <value>Använd mallar för långtidsprognos</value>
     <comment>Use templates for longterm forecasting</comment>
   </data>
   <data name="UseTrend" xml:space="preserve">
@@ -2252,7 +2252,7 @@ veckodag</value>
     <comment>Wizard</comment>
   </data>
   <data name="WorkflowToolWelcome" xml:space="preserve">
-    <value>Arbetsflödesverktyget för workload hjälper dig att förbereda prognosarbetet.</value>
+    <value>Använd detta verktyg för att förbereda din workload.</value>
     <comment>Use this workflow tool to prepare your workload.</comment>
   </data>
   <data name="Workload" xml:space="preserve">
@@ -2260,7 +2260,7 @@ veckodag</value>
     <comment>Workload</comment>
   </data>
   <data name="WorkloadCreatedDotParameter0" xml:space="preserve">
-    <value>Skapad {0}.</value>
+    <value>Workload skapad {0}.</value>
     <comment>Workload created {0}.</comment>
   </data>
   <data name="WorkloadDayTemplate" xml:space="preserve">
@@ -2272,7 +2272,7 @@ veckodag</value>
     <comment>Workload day templates</comment>
   </data>
   <data name="WorkloadNameIsInvalid" xml:space="preserve">
-    <value>Fältet namn måste anges och inte innehålla mer än 50 tecken.</value>
+    <value>Namn på workload måste anges och får inte innehålla mer än 50 tecken.</value>
     <comment>Fältet namn måste anges och inte innehålla mer än 50 tecken.</comment>
   </data>
   <data name="WorkloadTemplate" xml:space="preserve">
@@ -2284,7 +2284,7 @@ veckodag</value>
     <comment>Workload wizard</comment>
   </data>
   <data name="WorkloadWizardInformation" xml:space="preserve">
-    <value>Guiden hjälper dig att skapa ett workload.</value>
+    <value>Guiden hjälper dig att skapa en workload.</value>
     <comment>This Wizard helps you to create a workload.</comment>
   </data>
   <data name="WorkloadWizardWelcome" xml:space="preserve">
@@ -2296,7 +2296,7 @@ veckodag</value>
     <comment>Work shift rule</comment>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>Regeluppsättning</value>
+    <value>Regeluppsättning för skift</value>
     <comment>Work shift rule set</comment>
   </data>
   <data name="Year" xml:space="preserve">
@@ -2320,7 +2320,7 @@ veckodag</value>
     <comment>00:00</comment>
   </data>
   <data name="DateFromGreaterThanDateTo" xml:space="preserve">
-    <value>Tilldatum måste vara större än fråndatum</value>
+    <value>Tilldatum måste vara senare än fråndatum</value>
     <comment>Date from can not be greater than date to.</comment>
   </data>
   <data name="EmptyRequest" xml:space="preserve">
@@ -2332,7 +2332,7 @@ veckodag</value>
     <comment>Requests summary</comment>
   </data>
   <data name="EmploymentTypeFixedStaff" xml:space="preserve">
-    <value>Fastanställda</value>
+    <value>Fast anställda</value>
     <comment>Fixed staff</comment>
   </data>
   <data name="EmploymentTypeHourlyStaff" xml:space="preserve">
@@ -2432,7 +2432,7 @@ veckodag</value>
     <comment>New Absence Request </comment>
   </data>
   <data name="Requests" xml:space="preserve">
-    <value>Förfrågan</value>
+    <value>Förfrågningar</value>
     <comment>Requests</comment>
   </data>
   <data name="PrintSchedule" xml:space="preserve">
@@ -2440,7 +2440,7 @@ veckodag</value>
     <comment>Print Schedule</comment>
   </data>
   <data name="ScoreCardPreview" xml:space="preserve">
-    <value>Styrkort förhandsgranskning</value>
+    <value>Förhandsgranskning scorecard</value>
     <comment>Scorecard Preview</comment>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
@@ -2456,7 +2456,7 @@ veckodag</value>
     <comment>Agent Schedule Messenger</comment>
   </data>
   <data name="ASM" xml:space="preserve">
-    <value>ASM</value>
+    <value>Öppna ASM</value>
     <comment>ASM</comment>
   </data>
   <data name="WeekView" xml:space="preserve">
@@ -2472,11 +2472,11 @@ veckodag</value>
     <comment>Delete skill...</comment>
   </data>
   <data name="SchedulingScreen" xml:space="preserve">
-    <value>Schema</value>
+    <value>Scheman</value>
     <comment>Scheduling screen</comment>
   </data>
   <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
-    <value>Vill du spara ändringar gjorda i schemat?</value>
+    <value>Vill du spara schemaändringarna?</value>
     <comment>Vill du spara ändringar gjorda i schemat?</comment>
   </data>
   <data name="EnterNewGroupName" xml:space="preserve">
@@ -2528,7 +2528,7 @@ veckodag</value>
     <comment>To:</comment>
   </data>
   <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
-    <value>Vill du ta bort workload {0}{1}{0}?</value>
+    <value>Är du säker på att du vill ta bort workload {0}{1}{0}?</value>
     <comment>Are you sure that you want to delete the workload {0}{1}{0}?</comment>
   </data>
   <data name="AuditTrail" xml:space="preserve">
@@ -2536,7 +2536,7 @@ veckodag</value>
     <comment>Audit Trail</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
-    <value>Hantera scenarion</value>
+    <value>Hantera scenarion </value>
     <comment>Manage your scenarios</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
@@ -2552,7 +2552,7 @@ veckodag</value>
     <comment>Show  Overtime</comment>
   </data>
   <data name="GridInChart" xml:space="preserve">
-    <value>Grafvy</value>
+    <value>Rutnät i graf</value>
     <comment>Grid In Chart</comment>
   </data>
   <data name="BackToLegalState" xml:space="preserve">
@@ -2560,7 +2560,7 @@ veckodag</value>
     <comment>Back To Legal State</comment>
   </data>
   <data name="EditCommonAgentNameDescription" xml:space="preserve">
-    <value>Redigera beskrivningsformat  för agent</value>
+    <value>Redigera agentbeskrivningsformat</value>
     <comment>Edit Common Agent Name Description</comment>
   </data>
   <data name="Example" xml:space="preserve">
@@ -2652,7 +2652,7 @@ veckodag</value>
     <comment>Workload days loaded</comment>
   </data>
   <data name="ChartViews" xml:space="preserve">
-    <value>Graflägen</value>
+    <value>Grafvyer</value>
     <comment>Chart views</comment>
   </data>
   <data name="Export" xml:space="preserve">
@@ -2660,7 +2660,7 @@ veckodag</value>
     <comment>Export</comment>
   </data>
   <data name="Output" xml:space="preserve">
-    <value>Utmatning</value>
+    <value>Resultat</value>
     <comment>Output</comment>
   </data>
   <data name="SelectColor" xml:space="preserve">
@@ -2673,7 +2673,7 @@ color</comment>
     <comment>Unable to load the Smart Part Module</comment>
   </data>
   <data name="SmartPartModuleNotFound" xml:space="preserve">
-    <value>Kan ej hitta Smart Part Modul</value>
+    <value>Kan ej hitta Smart Part-modul</value>
     <comment>Unable to find Smart Part Module</comment>
   </data>
   <data name="Templates" xml:space="preserve">
@@ -2721,7 +2721,7 @@ color</comment>
     <comment>Group Page Details</comment>
   </data>
   <data name="GroupPageName" xml:space="preserve">
-    <value>Namn gruppering</value>
+    <value>Grupperingsnamn</value>
     <comment>Group Page Name</comment>
   </data>
   <data name="GroupPageSettings" xml:space="preserve">
@@ -2741,7 +2741,7 @@ color</comment>
     <comment>Hours Per Day</comment>
   </data>
   <data name="Override" xml:space="preserve">
-    <value>Ändra</value>
+    <value>Ersätt</value>
     <comment>Override</comment>
   </data>
   <data name="PeriodHours" xml:space="preserve">
@@ -2753,7 +2753,7 @@ color</comment>
     <comment>Person Period Error</comment>
   </data>
   <data name="SchedulePeriodError" xml:space="preserve">
-    <value>Schemaperiodsfel</value>
+    <value>Schemaperiodfel</value>
     <comment>Schedule Period Error</comment>
   </data>
   <data name="Friday" xml:space="preserve">
@@ -2785,8 +2785,8 @@ color</comment>
     <comment>Wednesday</comment>
   </data>
   <data name="IncludeExclude" xml:space="preserve">
-    <value>Inkluderad
-Excluderad</value>
+    <value>Inkludera
+Exkludera</value>
     <comment>Include Exclude</comment>
   </data>
   <data name="PreviewOrEditGroupPage" xml:space="preserve">
@@ -2802,7 +2802,7 @@ Excluderad</value>
     <comment>RootGroup</comment>
   </data>
   <data name="NewGroupPageName" xml:space="preserve">
-    <value>Ny gruppering</value>
+    <value>Nytt grupperingsnamn</value>
     <comment>New Group Page Name</comment>
   </data>
   <data name="RenameGroupPage" xml:space="preserve">
@@ -2810,7 +2810,7 @@ Excluderad</value>
     <comment>Rename Group Page</comment>
   </data>
   <data name="AverageWorkTimePerDayColon" xml:space="preserve">
-    <value>Genomsnittlig dagarbetstid:</value>
+    <value>Genomsnittlig arbetstid per dag:</value>
     <comment>Average Work Time Per Day:</comment>
   </data>
   <data name="MaximumTimePerWeekColon" xml:space="preserve">
@@ -2838,7 +2838,7 @@ Excluderad</value>
     <comment>Contract:</comment>
   </data>
   <data name="ChooseContractToChange" xml:space="preserve">
-    <value>Välj kontrakt som du vill ändra</value>
+    <value>Välj kontrakt att ändra</value>
     <comment>Choose Contract To Manage</comment>
   </data>
   <data name="EnterContractDetails" xml:space="preserve">
@@ -2854,7 +2854,7 @@ Excluderad</value>
     <comment>Manage Contract Schedules</comment>
   </data>
   <data name="ChooseContractScheduleToChange" xml:space="preserve">
-    <value>Välj kontraktsschema du vill ändra</value>
+    <value>Välj kontraktsschema att ändra</value>
     <comment>Choose Contract Schedule To Manage</comment>
   </data>
   <data name="ScheduleColon" xml:space="preserve">
@@ -2866,11 +2866,11 @@ Excluderad</value>
     <comment>Select Workingdays For This Contract</comment>
   </data>
   <data name="NewPercentage" xml:space="preserve">
-    <value>Ny procent</value>
+    <value>Ny procentsats</value>
     <comment>New  Percentage</comment>
   </data>
   <data name="PercentageColon" xml:space="preserve">
-    <value>Procent:</value>
+    <value>Procentsats:</value>
     <comment>Percentage Colon</comment>
   </data>
   <data name="PartTimePercentageColon" xml:space="preserve">
@@ -2878,7 +2878,7 @@ Excluderad</value>
     <comment>Parttime Percentage Colon</comment>
   </data>
   <data name="EnterPartTimePercentageValue" xml:space="preserve">
-    <value>Välj deltidsdefinition</value>
+    <value>Ange deltidsprocentsats</value>
     <comment>Enter Part Time Percentage Value</comment>
   </data>
   <data name="Contracts" xml:space="preserve">
@@ -2886,11 +2886,11 @@ Excluderad</value>
     <comment>Contracts</comment>
   </data>
   <data name="ChooseScenarioToChange" xml:space="preserve">
-    <value>Välj scenario som du vill ändra</value>
+    <value>Välj scenario att ändra</value>
     <comment>Choose Scenario To Change</comment>
   </data>
   <data name="NewScenario" xml:space="preserve">
-    <value>Nytt Scenario</value>
+    <value>Nytt scenario</value>
     <comment>New Scenario</comment>
   </data>
   <data name="AuditTrailColon" xml:space="preserve">
@@ -2930,15 +2930,15 @@ Excluderad</value>
     <comment>New Scenario</comment>
   </data>
   <data name="ChooseScorecardToEdit" xml:space="preserve">
-    <value>Välj styrkort som du vill ändra</value>
+    <value>Välj scorecards att ändra</value>
     <comment>ChooseScorecardToEdit</comment>
   </data>
   <data name="EnterSettingsForThisScorecard" xml:space="preserve">
-    <value>Ange  inställningar för detta styrkort</value>
+    <value>Ange inställningar för detta scorecard</value>
     <comment>EnterSettingsForThisScorecard</comment>
   </data>
   <data name="EnterTargetValuesForEachTeam" xml:space="preserve">
-    <value>Ange  värden för respektive grupp</value>
+    <value>Ange målvärden för respektive team</value>
     <comment>EnterTargetValuesForEachTeam</comment>
   </data>
   <data name="FilterKPIs" xml:space="preserve">
@@ -2950,11 +2950,11 @@ Excluderad</value>
     <comment>PeriodColon</comment>
   </data>
   <data name="ScorecardColon" xml:space="preserve">
-    <value>Styrkort:</value>
+    <value>Scorecard:</value>
     <comment>Scorecard</comment>
   </data>
   <data name="SelectKPIToHandleColon" xml:space="preserve">
-    <value>Välj nyckeltal:</value>
+    <value>Välj nyckeltal att hantera:</value>
     <comment>SelectKPItohandleColon</comment>
   </data>
   <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
@@ -3119,7 +3119,7 @@ Ersätt</value>
     <comment>Min</comment>
   </data>
   <data name="RuleSets" xml:space="preserve">
-    <value>Regeluppsättning</value>
+    <value>Regeluppsättningar</value>
     <comment>Rule sets</comment>
   </data>
   <data name="ShiftBags" xml:space="preserve">
@@ -3225,15 +3225,15 @@ Ersätt</value>
     <value>Ogiltig förfrågan</value>
   </data>
   <data name="MeetingLocationRequired" xml:space="preserve">
-    <value>Du måste bestämma plats för mötet</value>
+    <value>Ange plats för mötet</value>
     <comment>Meeting Location validation message</comment>
   </data>
   <data name="MeetingParticipantsRequired" xml:space="preserve">
-    <value>Du måste välja deltagare till mötet</value>
+    <value>Välj deltagare till mötet</value>
     <comment>Meeting Participnat validation message</comment>
   </data>
   <data name="MeetingSubjectRequired" xml:space="preserve">
-    <value>Du måste bestämma ett ämne för mötet</value>
+    <value>Ange ett ämne för mötet</value>
     <comment>Meeting Subject validation message</comment>
   </data>
   <data name="Subject" xml:space="preserve">
@@ -3414,7 +3414,7 @@ Ersätt</value>
     <comment>Abandoned facsimiles</comment>
   </data>
   <data name="AFW" xml:space="preserve">
-    <value>AFT</value>
+    <value>AFW</value>
     <comment>AFT</comment>
   </data>
   <data name="AnsweredEmails" xml:space="preserve">
@@ -3442,7 +3442,7 @@ Ersätt</value>
     <comment>Campaign AEW %</comment>
   </data>
   <data name="CampaignAFWPercent" xml:space="preserve">
-    <value>Kampanj efterbehandlingstid %</value>
+    <value>Kampanj AFW %</value>
     <comment>Campaign AFT %</comment>
   </data>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
@@ -3550,15 +3550,15 @@ Ersätt</value>
     <comment>Original handling time</comment>
   </data>
   <data name="OriginalOfferedEmails" xml:space="preserve">
-    <value>Ursprungligt inkommande e-post</value>
+    <value>Ursprungligt antal inkommande e-post</value>
     <comment>Original offered emails</comment>
   </data>
   <data name="OriginalOfferedFacsimiles" xml:space="preserve">
-    <value>Ursprungligt inkommande fax</value>
+    <value>Ursprungligt antal inkommande fax</value>
     <comment>Original offered facsimiles</comment>
   </data>
   <data name="OriginalOfferedTasks" xml:space="preserve">
-    <value>Ursprungligt inkommande uppgifter</value>
+    <value>Ursprungligt antal inkommande uppgifter</value>
     <comment>Original offered tasks</comment>
   </data>
   <data name="ValidatedAEW" xml:space="preserve">
@@ -3590,7 +3590,7 @@ Ersätt</value>
     <comment>Validated handlinf time</comment>
   </data>
   <data name="DefineOrganization" xml:space="preserve">
-    <value>Skapa organisation</value>
+    <value>Definiera organisation</value>
     <comment>Setting Form TreeNode</comment>
   </data>
   <data name="OrganizationHierarchy" xml:space="preserve">
@@ -3614,7 +3614,7 @@ Ersätt</value>
     <comment>Grid header</comment>
   </data>
   <data name="OpenForecaster" xml:space="preserve">
-    <value>Forecasts</value>
+    <value>Prognoser</value>
     <comment>Function name for Forecaster</comment>
   </data>
   <data name="OpenReports" xml:space="preserve">
@@ -3642,11 +3642,11 @@ Ersätt</value>
     <comment>Prepare Skill...</comment>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>Login namn:</value>
+    <value>Användarnamn:</value>
     <comment>Login name:</comment>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>Logga på</value>
+    <value>Logga in</value>
     <comment>Log on</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
@@ -3738,8 +3738,7 @@ Ersätt</value>
     <comment>GapExists</comment>
   </data>
   <data name="NewRule" xml:space="preserve">
-    <value>Ny
-Regel</value>
+    <value>Ny regel</value>
     <comment>New Rule ribbon menu</comment>
   </data>
   <data name="NewRuleSet" xml:space="preserve">
@@ -3755,7 +3754,7 @@ Regel</value>
     <comment>&lt;Rule set name&gt;</comment>
   </data>
   <data name="CreateForecastWorkflowTool" xml:space="preserve">
-    <value>Skapa prognos arbetsflödeverktyg</value>
+    <value>Skapa prognos arbetsflödesverktyg</value>
     <comment>Create forecast workflow tool</comment>
   </data>
   <data name="DescriptionDayTracker" xml:space="preserve">
@@ -3810,7 +3809,7 @@ Regel</value>
     <comment>Maximum occupancy %:</comment>
   </data>
   <data name="MinimumOccupancyPercentSignColon" xml:space="preserve">
-    <value>Minimal nyttjandegrad %:</value>
+    <value>Minsta nyttjandegrad %:</value>
     <comment>Minimum occupancy %:</comment>
   </data>
   <data name="ShrinkagePercentSignColon" xml:space="preserve">
@@ -3894,7 +3893,7 @@ Regel</value>
     <comment>Created</comment>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Avslagen</value>
+    <value>Nekad</value>
     <comment>Avslagen</comment>
   </data>
   <data name="Pending" xml:space="preserve">
@@ -3918,7 +3917,7 @@ Regel</value>
     <comment>Status</comment>
   </data>
   <data name="RequestTypeShiftTrade" xml:space="preserve">
-    <value>Förfrågan om  skiftbyte</value>
+    <value>Skiftbyte</value>
     <comment>Shift Trade Request</comment>
   </data>
   <data name="ActualAgents" xml:space="preserve">
@@ -3986,7 +3985,7 @@ Regel</value>
     <comment>Request Screen</comment>
   </data>
   <data name="SaveClose" xml:space="preserve">
-    <value>Spara &amp; stäng</value>
+    <value>Spara &amp;&amp; stäng</value>
     <comment>Save &amp; Close</comment>
   </data>
   <data name="AddAnotherLevel" xml:space="preserve">
@@ -3994,7 +3993,7 @@ Regel</value>
     <comment>AddAnotherLevel</comment>
   </data>
   <data name="AndThenOn" xml:space="preserve">
-    <value>Sedan efter</value>
+    <value>och sedan efter</value>
     <comment>AndThenOn</comment>
   </data>
   <data name="Approve" xml:space="preserve">
@@ -4042,7 +4041,7 @@ Regel</value>
     <comment>processing notification</comment>
   </data>
   <data name="BudgetForecasting" xml:space="preserve">
-    <value>Budget prognos</value>
+    <value>Budgetprognos</value>
     <comment>Header title for Budget Forecasting Smart part</comment>
   </data>
   <data name="DetailedForecastSmartPart" xml:space="preserve">
@@ -4050,30 +4049,30 @@ Regel</value>
     <comment>Header title of Detailed Forecasting Smart part</comment>
   </data>
   <data name="SkillValidationSmartPart" xml:space="preserve">
-    <value>Validerad data</value>
+    <value>Kompetensvalidering</value>
     <comment>Header title of Skill validation Smart part</comment>
   </data>
   <data name="TemplatesSmartpart" xml:space="preserve">
     <value>Mallar</value>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
-    <value>Ange publiceringsdatum för varje grupp</value>
+    <value>Ange publiceringsdatum för varje team</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
   <data name="FilterTeams" xml:space="preserve">
-    <value>Filtrera grupper</value>
+    <value>Filtrera team</value>
     <comment>Filter Teams</comment>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
-    <value>Schemapublicering</value>
+    <value>Schemapubliceringsdatum</value>
     <comment>Schedule Publishing Dates</comment>
   </data>
   <data name="SetSchedulePublishingDates" xml:space="preserve">
-    <value>Ange publicerings datum</value>
+    <value>Ange publiceringsdatum</value>
     <comment>Set Schedule Publishing Dates</comment>
   </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
-    <value>Hantera fördelningar mellan kompetenser</value>
+    <value>Hantera multisite-fördelningar</value>
     <comment>Toolstrip menu item in Forecaster</comment>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
@@ -4107,19 +4106,19 @@ Regel</value>
     <value>Ny tilläggskolumn</value>
   </data>
   <data name="AddNewOptionalColumn" xml:space="preserve">
-    <value>Lägg till tilläggskolumn</value>
+    <value>Lägg till ny tilläggskolumn</value>
   </data>
   <data name="NoValueInNameField" xml:space="preserve">
-    <value>Saknas värde i namnfält</value>
+    <value>Värde i namnfält saknas</value>
   </data>
   <data name="SaveError" xml:space="preserve">
-    <value>Sparningsfel</value>
+    <value>Kunde inte spara</value>
   </data>
   <data name="ExternalLogOn" xml:space="preserve">
-    <value>Externt log in</value>
+    <value>Extern inloggning</value>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
-    <value>Välj kolumn du vill ändra</value>
+    <value>Välj tilläggskolumn att ändra</value>
   </data>
   <data name="ManageOptionalColumns" xml:space="preserve">
     <value>Hantera tilläggskolumner</value>
@@ -4161,7 +4160,7 @@ Regel</value>
     <value>Genomsnittligt antal fax</value>
   </data>
   <data name="RotationsCouldNotBeLoaded" xml:space="preserve">
-    <value>Sekvenser kunde inte laddas. Det finns inga Sekvenser sparade.</value>
+    <value>Sekvenser kunde inte laddas. Det finns inga sekvenser sparade.</value>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
     <value>Applikationsinloggning</value>
@@ -4173,7 +4172,7 @@ Regel</value>
     <value>Laddar data...</value>
   </data>
   <data name="LoggingOnTreeDots" xml:space="preserve">
-    <value>Loggar på...</value>
+    <value>Loggar in...</value>
   </data>
   <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
     <value>Letar efter datakällor...</value>
@@ -4263,7 +4262,7 @@ Regel</value>
     <value>Ny roll</value>
   </data>
   <data name="RenameRole" xml:space="preserve">
-    <value>Ändra rollnamn</value>
+    <value>Byt rollnamn</value>
   </data>
   <data name="AddPersonToRole" xml:space="preserve">
     <value>Lägg till personer till roll</value>
@@ -4285,7 +4284,7 @@ Regel</value>
     <comment>Z to A</comment>
   </data>
   <data name="ChangedBy" xml:space="preserve">
-    <value>Uppdaterad av</value>
+    <value>Ändrad av</value>
   </data>
   <data name="Overtime" xml:space="preserve">
     <value>Övertid</value>
@@ -4296,11 +4295,11 @@ Regel</value>
     <comment>Filter on</comment>
   </data>
   <data name="UseForRequests" xml:space="preserve">
-    <value>Används för förfrågningar</value>
+    <value>Använd för förfrågningar</value>
     <comment>Header in absence options</comment>
   </data>
   <data name="InsufficientPermission" xml:space="preserve">
-    <value>Du har inte rätt att göra detta. Kontakta din administratör för mer info.</value>
+    <value>Du har inte rättigheter för att kunna utföra denna uppgift. Kontakta din administratör för mer info.</value>
     <comment> Error message shows in Agnet Portal when Agent tries to perform a task which he/she doesn't have sufficient permission.</comment>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
@@ -4333,7 +4332,7 @@ regeluppsättning</value>
     <comment>Relative End</comment>
   </data>
   <data name="RelativeStart" xml:space="preserve">
-    <value>Relativ start</value>
+    <value>Relativt start</value>
     <comment>Relative Start</comment>
   </data>
   <data name="DefaultStateGroup" xml:space="preserve">
@@ -4349,7 +4348,7 @@ regeluppsättning</value>
     <comment>Gruppera status</comment>
   </data>
   <data name="ManageStateGroupsAndStates" xml:space="preserve">
-    <value>Hantera statusgrupper och statustillstånd</value>
+    <value>Hantera statusgrupper och statusar</value>
     <comment>Administrera statusgrupper och status</comment>
   </data>
   <data name="NewStateGroup" xml:space="preserve">
@@ -4365,7 +4364,7 @@ regeluppsättning</value>
     <comment>Använd statusgrupp som standard</comment>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(agenter är tillgängliga i telefon)</value>
+    <value>(agenter är tillgängliga att ta samtal)</value>
     <comment>(agenter är tillgängliga i telefon)</comment>
   </data>
   <data name="Reply" xml:space="preserve">
@@ -4381,7 +4380,7 @@ regeluppsättning</value>
     <comment>No chart data rows enabled</comment>
   </data>
   <data name="SiteTeam" xml:space="preserve">
-    <value>Enhet/Grupp</value>
+    <value>Enhet/Team</value>
     <comment>Site and Team</comment>
   </data>
   <data name="ReplyAndApprove" xml:space="preserve">
@@ -4390,8 +4389,7 @@ godkänn</value>
     <comment>Reply and approve button on ribbon for requests</comment>
   </data>
   <data name="ReplyAndDeny" xml:space="preserve">
-    <value>Svara och
-neka</value>
+    <value>Avslå med orsak</value>
     <comment>Reply and deny button on ribbon for requests</comment>
   </data>
   <data name="PersonRequestEmptySubjectError" xml:space="preserve">
@@ -4411,7 +4409,7 @@ neka</value>
     <comment>Site label text (Common text used in controls, lebels, trees, grids)</comment>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>Förfrågan skiftbyte</value>
+    <value>Förfrågan om skiftbyte</value>
     <comment>Shift Trade Request text in Agent portal</comment>
   </data>
   <data name="Respond" xml:space="preserve">
@@ -4463,7 +4461,7 @@ neka</value>
     <comment>Find next</comment>
   </data>
   <data name="AmpersandReplace" xml:space="preserve">
-    <value>&amp;Replace</value>
+    <value>&amp;Ersätt</value>
     <comment>Replace</comment>
   </data>
   <data name="FAmpersandindAll" xml:space="preserve">
@@ -4483,7 +4481,7 @@ neka</value>
     <comment>Find and replace</comment>
   </data>
   <data name="MatchCase" xml:space="preserve">
-    <value>Matcha versaler</value>
+    <value>Exakt matchning</value>
     <comment>Match case</comment>
   </data>
   <data name="MatchWholeCell" xml:space="preserve">
@@ -4556,7 +4554,7 @@ standard</value>
     <comment>Delete selected rows?</comment>
   </data>
   <data name="OptionalColumnName" xml:space="preserve">
-    <value>Optional column name</value>
+    <value>Namn tilläggskolumn</value>
     <comment>Optional column name optional columns settings</comment>
   </data>
   <data name="PartTimePercentageName" xml:space="preserve">
@@ -4576,11 +4574,11 @@ standard</value>
     <comment>The provided string could not be formatted to a valid time error message</comment>
   </data>
   <data name="ThereAreAgentsAssignedToTheTeam" xml:space="preserve">
-    <value>Det finns agenter kopplade till gruppen.</value>
+    <value>Det finns agenter kopplade till teamet</value>
     <comment>There are agents assigned to the team</comment>
   </data>
   <data name="ThereAreTeamsAssignedUnderneath" xml:space="preserve">
-    <value>Det finns grupper kopplade till den.</value>
+    <value>Det finns team kopplade till den.</value>
     <comment>There are teams assigned underneath</comment>
   </data>
   <data name="YouCannotHaveABlankDescription" xml:space="preserve">
@@ -4620,7 +4618,7 @@ standard</value>
     <comment>Agent Portal : My report header Title for Queue Details section</comment>
   </data>
   <data name="AfterContactWork" xml:space="preserve">
-    <value>Efterbearbetningstid</value>
+    <value>Efterbearbetning</value>
     <comment>AP:Queue grid columns (My Report)</comment>
   </data>
   <data name="AnsweredContracts" xml:space="preserve">
@@ -4632,7 +4630,7 @@ standard</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="AvailableTime" xml:space="preserve">
-    <value>Ready tid</value>
+    <value>Redotid</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="IdleTime" xml:space="preserve">
@@ -4644,11 +4642,11 @@ standard</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="ScheduleWorkCtiTime" xml:space="preserve">
-    <value>Schemalagd ready tid</value>
+    <value>Schemalagd redotid</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="Availabilities" xml:space="preserve">
-    <value>Tillgängligheter</value>
+    <value>Tillgänglighet</value>
     <comment>Availabilities</comment>
   </data>
   <data name="ChangeYourAvailabilities" xml:space="preserve">
@@ -4668,7 +4666,7 @@ standard</value>
     <comment>Add Activity...</comment>
   </data>
   <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Lägg till frånvaro...</value>
+    <value>Lägg till övertid...</value>
     <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
@@ -4696,7 +4694,7 @@ standard</value>
     <comment>No allowed business unit found in current database</comment>
   </data>
   <data name="NoAvailableDataSourcesHasBeenFound" xml:space="preserve">
-    <value>Inga externa datakällor hittades.</value>
+    <value>Inga tillgängliga datakällor hittades.</value>
     <comment>No available datasource has been found.</comment>
   </data>
   <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
@@ -4736,7 +4734,7 @@ standard</value>
     <comment>Permission: Function description for - ShiftCategoryPreferences</comment>
   </data>
   <data name="Available" xml:space="preserve">
-    <value>Använd</value>
+    <value>Tillgänglig</value>
     <comment>Available</comment>
   </data>
   <data name="NewAvailability" xml:space="preserve">
@@ -4776,7 +4774,7 @@ standard</value>
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AddNewTeam" xml:space="preserve">
-    <value>Lägg till grupp</value>
+    <value>Lägg till team</value>
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AdminStatus" xml:space="preserve">
@@ -4788,7 +4786,7 @@ standard</value>
     <comment>Setting pages : Tree node text cant be null.</comment>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
-    <value>Enhet/grupp får ej vara tomt</value>
+    <value>Enhetsnamn/teamnamn får ej vara tomt</value>
     <comment>Setting form: Hierarchical tree - nodes cant be null for site / team names</comment>
   </data>
   <data name="MessageTooLong" xml:space="preserve">
@@ -4824,11 +4822,11 @@ standard</value>
     <comment>Invalid Name</comment>
   </data>
   <data name="InvalidRecepient" xml:space="preserve">
-    <value>Ogiltigt val. Välj en existerande agent</value>
+    <value>Ogiltig mottagare. Välj en existerande agent</value>
     <comment>Invalid Recepient</comment>
   </data>
   <data name="KeyWord" xml:space="preserve">
-    <value>Nyckelord</value>
+    <value>Kortnamn</value>
     <comment>Key Word search</comment>
   </data>
   <data name="Searchcl" xml:space="preserve">
@@ -4844,7 +4842,7 @@ standard</value>
     <comment>Value</comment>
   </data>
   <data name="UserSettingsValueType" xml:space="preserve">
-    <value>Typ</value>
+    <value>Typ av värde</value>
     <comment>Value Type</comment>
   </data>
   <data name="SystemSettings" xml:space="preserve">
@@ -4880,7 +4878,7 @@ standard</value>
     <comment>Describes a Midnight break e.g 00:00 - 00:00</comment>
   </data>
   <data name="NotValidOpenHoursForMidnightBreak" xml:space="preserve">
-    <value>Felaktig öppettid för den inställda dyngsgränsen på kompetensen</value>
+    <value>Felaktiga öppettider för den inställda dyngsgränsen på kompetensen</value>
     <comment>Open hour not within midnight break</comment>
   </data>
   <data name="InvalidMultisiteDistribution" xml:space="preserve">
@@ -4888,7 +4886,7 @@ standard</value>
     <comment>Invalid multisite distribution</comment>
   </data>
   <data name="ExternalLogOnView" xml:space="preserve">
-    <value>Externt log in</value>
+    <value>Extern inloggningsvy</value>
     <comment>ExternalLogOnViewsv</comment>
   </data>
   <data name="GeneralView" xml:space="preserve">
@@ -4904,7 +4902,7 @@ standard</value>
     <comment>PersonalAccountViewsv</comment>
   </data>
   <data name="PersonalSkillView" xml:space="preserve">
-    <value>Kompetenser</value>
+    <value>Personliga kompetenser</value>
     <comment>PersonalSkillViewsv</comment>
   </data>
   <data name="PersonAvailabilityView" xml:space="preserve">
@@ -4920,7 +4918,7 @@ standard</value>
     <comment>RolesViewsv</comment>
   </data>
   <data name="SchedulePeriodView" xml:space="preserve">
-    <value>Schemaperiod</value>
+    <value>Perioder</value>
     <comment>SchedulePeriodViewsv</comment>
   </data>
   <data name="PersonAvailability" xml:space="preserve">
@@ -4945,7 +4943,7 @@ tillgänglighet</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
-    <value>Styrkort</value>
+    <value>Scorecards</value>
     <comment>Function OpenScorecard</comment>
   </data>
   <data name="Deleted" xml:space="preserve">
@@ -5005,7 +5003,7 @@ tillgänglighet</value>
     <comment>Description for HolidayTime tracking</comment>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
-    <value>Min Max Bemanning</value>
+    <value>Min/max bemanning</value>
     <comment>Min Max Staffing</comment>
   </data>
   <data name="Preference" xml:space="preserve">
@@ -5021,7 +5019,7 @@ tillgänglighet</value>
     <comment>Schedule Only Preference Days</comment>
   </data>
   <data name="UseAvailability" xml:space="preserve">
-    <value>Ta hänsyn till tillgänglighet</value>
+    <value>Använd tillgänglighet</value>
     <comment>Use Availability</comment>
   </data>
   <data name="UseMaxStaffing" xml:space="preserve">
@@ -5033,7 +5031,7 @@ tillgänglighet</value>
     <comment>Use Min Staffing</comment>
   </data>
   <data name="UsePreferences" xml:space="preserve">
-    <value>Ta hänsyn till önskemål</value>
+    <value>Använd önskemål</value>
     <comment>Use Preferences</comment>
   </data>
   <data name="UseShiftCategory" xml:space="preserve">
@@ -5045,11 +5043,11 @@ tillgänglighet</value>
     <comment>Early warning</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>Dubbla användare</value>
+    <value>Generell vy: användaruppgifter</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
-    <value>Det finns mer än en användare med det användar id:t.</value>
+    <value>Det finns mer än en användare med samma användar-ID.</value>
     <comment>Error message after validating user credentials.</comment>
   </data>
   <data name="Preferences" xml:space="preserve">
@@ -5081,7 +5079,7 @@ tillgänglighet</value>
     <comment>people</comment>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
-    <value>Du måste lägga till minst ett kontrakt, kontraktsschema, deltidsprocent och grupp under Alternativ för att öppna denna vy.</value>
+    <value>Du måste lägga till kontrakt, kontraktsschema, deltidsprocent och team under Alternativ för att öppna denna vy.</value>
     <comment>Person period could not load error</comment>
   </data>
   <data name="NewShiftCategory" xml:space="preserve">
@@ -5121,7 +5119,7 @@ tillgänglighet</value>
     <comment>Caption of the "Anchor" field of the Day off setting page</comment>
   </data>
   <data name="AverageWorkTimeCannotBeMoreThan24Hours" xml:space="preserve">
-    <value>Genomsnittlig dagarbetstid får ej vara mer än 24 timmar!</value>
+    <value>Genomsnittlig arbetstid kan ej vara mer än 24 timmar!</value>
     <comment>Contract setting page average work time field shouldnt be containing values more than 24 hours</comment>
   </data>
   <data name="ChooseDaysOffToChange" xml:space="preserve">
@@ -5169,7 +5167,7 @@ tillgänglighet</value>
     <comment>Text on description when creating a skill</comment>
   </data>
   <data name="ViewUnpublishedSchedules" xml:space="preserve">
-    <value>Se opublicerade scheman</value>
+    <value>Visa opublicerade scheman</value>
     <comment>View unpublished schedules Permission function</comment>
   </data>
   <data name="GlobalFunctions" xml:space="preserve">
@@ -5197,7 +5195,7 @@ tillgänglighet</value>
     <comment>Enter settings for each week</comment>
   </data>
   <data name="AlwaysOverrideTheseErrors" xml:space="preserve">
-    <value>Åsidosätt alltid dessa fel</value>
+    <value>Ignorera alltid dessa fel</value>
     <comment>Always Override These Errors</comment>
   </data>
   <data name="ChangeToOverMidnight" xml:space="preserve">
@@ -5205,7 +5203,7 @@ tillgänglighet</value>
     <comment>Change to over midnight</comment>
   </data>
   <data name="InvalidPercentageValue" xml:space="preserve">
-    <value>Ogilitigt procentvärde</value>
+    <value>Ogilitigt procenttal</value>
     <comment>settinga page: part time percentage</comment>
   </data>
   <data name="PercentageError" xml:space="preserve">
@@ -5217,32 +5215,32 @@ tillgänglighet</value>
     <comment>settings : part time percentatge</comment>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
-    <value>Alarmhantering</value>
+    <value>Larmhantering</value>
     <comment>används i inställningarnas träd</comment>
   </data>
   <data name="AlarmList" xml:space="preserve">
-    <value>Befintliga larm</value>
+    <value>Befintliga larmtyper</value>
   </data>
   <data name="CannotChangeSystemAlarmType" xml:space="preserve">
     <value>Du kan inte ändra ett systemlarm</value>
   </data>
   <data name="CannotDeleteSystemAlarmType" xml:space="preserve">
-    <value>Du kan inte ta bort ett systemalarm</value>
+    <value>Du kan inte ta bort ett systemlarm</value>
   </data>
   <data name="CreateAlarmTypes" xml:space="preserve">
-    <value>Skapa larm</value>
+    <value>Skapa larmtyper</value>
   </data>
   <data name="GiveAlarmAName" xml:space="preserve">
-    <value>Ge alarmet ettt namn</value>
+    <value>Ge larmet ett beskrivande namn</value>
   </data>
   <data name="NewAlarm" xml:space="preserve">
-    <value>Nytt larm</value>
+    <value>Skapa nytt larm</value>
   </data>
   <data name="SelectSuitableColor" xml:space="preserve">
     <value>Välj en lämplig färg</value>
   </data>
   <data name="SetTresholdTime" xml:space="preserve">
-    <value>Sätt tröskeltid i sekunder</value>
+    <value>Sätt tröskeltid för larm (i sekunder)</value>
   </data>
   <data name="CancelingLoadAndCloseProgram" xml:space="preserve">
     <value>Avbryter laddning och stänger applikationen...</value>
@@ -5257,7 +5255,7 @@ tillgänglighet</value>
     <comment>Options gui</comment>
   </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
-    <value>Fel! {0} till {1} är ingen tillåten tidsperiod.</value>
+    <value>Fel! {0} till {1} är inte en tillåten tidsperiod.</value>
     <comment>Error message to show when user try to set invalid time ranges!</comment>
   </data>
   <data name="ToggleLogOutState" xml:space="preserve">
@@ -5269,11 +5267,11 @@ tillgänglighet</value>
     <comment>Use for log out</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteAvailability" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort '{0}' ?</value>
+    <value>Är du säker på att du vill ta bort '{0}' tillgänglighet?</value>
     <comment>Are you sure you want to delete '{0}' availability?</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort  sekvens '{0}'?</value>
+    <value>Är du säker på att du vill ta bort sekvens '{0}'?</value>
     <comment>Are you sure you want to delete '{0}' rotation?</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
@@ -5296,7 +5294,7 @@ tillgänglighet</value>
     <comment>Cannot delete default scenario '{0}'. Zero is the name of the scenario.</comment>
   </data>
   <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
-    <value>Förhandsgranskning styrkort</value>
+    <value>Förhandsgranskning scorecard</value>
     <comment>Tooltip text to show when user move mouse over header area of score card preview in Agent Portal</comment>
   </data>
   <data name="EnteredTimeIsInvalid" xml:space="preserve">
@@ -5312,7 +5310,7 @@ tillgänglighet</value>
     <comment>Skill wiz</comment>
   </data>
   <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
-    <value>Minimal nyttjandegrad (%)</value>
+    <value>Minsta nyttjandegrad (%)</value>
     <comment>Skill wiz</comment>
   </data>
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
@@ -5320,7 +5318,7 @@ tillgänglighet</value>
     <comment>Skill wiz</comment>
   </data>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
-    <value>Statusgrupper måste ställas in före användning.</value>
+    <value>RTA-statusgrupper måste konfigureras före användning.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
   <data name="ApplyLicenseInstructions" xml:space="preserve">
@@ -5343,7 +5341,7 @@ Feldetaljer:
     <comment>IOException for license file in LogOnScreen</comment>
   </data>
   <data name="DatabaseProblem" xml:space="preserve">
-    <value>Det gick inte att spara licensen i databasen
+    <value>Det gick inte att spara licensen i databasen.
 Feldetaljer:
 {0}</value>
     <comment>Database error when storing license</comment>
@@ -5363,7 +5361,7 @@ Starta sedan om den. Du kan även behöva starta om MyTime för att aktivera nyl
     <comment>explanation for license failure in license window</comment>
   </data>
   <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Det är fel på din licens, den kan vara olagligt ändrad, var god installera en ny</value>
+    <value>Din licens är inte giltig, den kan vara olagligt ändrad, var god installera en ny</value>
     <comment>explanation for modified license in license window</comment>
   </data>
   <data name="NewLicenseAlreadyExpired" xml:space="preserve">
@@ -5408,7 +5406,7 @@ Feldetaljer:
     <value>Namnet används redan</value>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>Uppföljning kunde inte laddas. Det måste finnas minst en frånvaro som har en tracker.</value>
+    <value>Tidsuppföljning kunde inte laddas. Det måste finnas minst en frånvaro som har en tracker definierad under Inställningar.</value>
     <comment>Error message when absences cannot be loaded </comment>
   </data>
   <data name="About" xml:space="preserve">
@@ -5448,11 +5446,11 @@ Feldetaljer:
     <comment>ActivityT Time</comment>
   </data>
   <data name="ForecasterWillBeClosedDot" xml:space="preserve">
-    <value>Forecaster kommer stängas.</value>
+    <value>Prognoser kommer stängas.</value>
     <comment>Error message</comment>
   </data>
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
-    <value>Någon har sparat samma data före dig.</value>
+    <value>Någon har ändrat samma data före dig.</value>
     <comment>Error message</comment>
   </data>
   <data name="License" xml:space="preserve">
@@ -5477,7 +5475,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>license error when maximum active agents have been exceeded</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Denna licens täcker endast {0} aktiva agenter, men ni har {1}. Ni måste köpa en licens som täcker fler aktiva agenter</value>
+    <value>Denna licens täcker endast {0} aktiva agenter, men ni har {1}. Ni måste köpa en licens som täcker tillräckligt många aktiva agenter</value>
     <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
@@ -5534,7 +5532,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>ErrorMessagePreferenceDateLimit</comment>
   </data>
   <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Skapa tillgänglighet för timanställd</value>
+    <value>Tillgänglighet för timanställd</value>
     <comment>Student Availability</comment>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
@@ -5566,15 +5564,15 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Are you sure that you want to delete the planningGroup {0}{1}{0}?</comment>
   </data>
   <data name="PinnedUpWindow" xml:space="preserve">
-    <value>Agentlista</value>
+    <value>Bevakningslista</value>
     <comment>used in intraday </comment>
   </data>
   <data name="Pin" xml:space="preserve">
-    <value>Lägg till agentlista</value>
+    <value>Bevaka</value>
     <comment>used in rta</comment>
   </data>
   <data name="Unpin" xml:space="preserve">
-    <value>Ta bort från agentlista</value>
+    <value>Ta bort från lista</value>
     <comment>used in rta</comment>
   </data>
   <data name="DayOfWeekFriday" xml:space="preserve">
@@ -5654,7 +5652,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>used in rta summary</comment>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
-    <value>Spara som Scenario</value>
+    <value>Spara som scenario</value>
     <comment>SaveAsScenario</comment>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
@@ -5662,7 +5660,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>message to indicate that systemcan not create meeting without activites</comment>
   </data>
   <data name="MeetingCanNotLoadWithoutScenarios" xml:space="preserve">
-    <value>Kan inte starta. Kontrollera att det finns scenarion i systemet.</value>
+    <value>Kan inte ladda möten. Kontrollera att det finns scenarion i systemet.</value>
     <comment>Meessage to indicate that metings can not be loaded without scenarios.</comment>
   </data>
   <data name="TemplateTargetMultisite" xml:space="preserve">
@@ -5678,11 +5676,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Workload</comment>
   </data>
   <data name="ListOfValues" xml:space="preserve">
-    <value>Värdelista</value>
+    <value>Regeluppsättningslista</value>
     <comment>Rule set list</comment>
   </data>
   <data name="SelectYourListOfValues" xml:space="preserve">
-    <value>Visa din lista med regeluppsättningar</value>
+    <value>Välj din lista med regeluppsättningar</value>
     <comment>Select your list of rule sets</comment>
   </data>
   <data name="BlankDescription" xml:space="preserve">
@@ -5730,7 +5728,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Keep Free Week End Days</comment>
   </data>
   <data name="KeepFreeWeekEnds" xml:space="preserve">
-    <value>Behåll fria veckoslut</value>
+    <value>Behåll antal fria veckoslut</value>
     <comment>Keep Free Week Ends</comment>
   </data>
   <data name="KeepWeekEndsTogether" xml:space="preserve">
@@ -5746,7 +5744,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Scheduling Session Options</comment>
   </data>
   <data name="UseConsecutiveDaysOff" xml:space="preserve">
-    <value>Fridagar i rad</value>
+    <value>Använd fridagar i rad</value>
     <comment>Use Consecutive Days Off</comment>
   </data>
   <data name="UseDaysOffPerWeek" xml:space="preserve">
@@ -5754,7 +5752,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Use Day Off Per Week</comment>
   </data>
   <data name="UseRotations" xml:space="preserve">
-    <value>Ta hänsyn till sekvenser</value>
+    <value>Använd sekvenser</value>
     <comment>Use Rotations</comment>
   </data>
   <data name="AccessibilityDatesGrid" xml:space="preserve">
@@ -5794,7 +5792,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="ConfirmGroupingDeletion" xml:space="preserve">
-    <value>Bekräfta borttagning!</value>
+    <value>Bekräfta borttagning</value>
     <comment>Confirm Grouping Deletion</comment>
   </data>
   <data name="EnterANameForTheGrouping" xml:space="preserve">
@@ -5802,7 +5800,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Enter a name for the grouping!</comment>
   </data>
   <data name="NoOptionalColumnIsSelected" xml:space="preserve">
-    <value>Ingen egendefinierad kolumn är vald</value>
+    <value>Ingen tilläggskolumn är vald</value>
     <comment>No optional column is selected!</comment>
   </data>
   <data name="SelectAGroupByOption" xml:space="preserve">
@@ -5814,11 +5812,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Warning</comment>
   </data>
   <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Lägg till skiftkategori</value>
+    <value>Lägg till ny skiftkategori</value>
     <comment>Add new shift category</comment>
   </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
-    <value>Välj skiftkategori som du vill ändra</value>
+    <value>Välj skiftkategori att ändra</value>
     <comment>Choose shift category to change</comment>
   </data>
   <data name="EnterSettingsForShiftCategory" xml:space="preserve">
@@ -5838,7 +5836,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>New Person Availability</comment>
   </data>
   <data name="AvailabilitiesCouldNotBeLoaded" xml:space="preserve">
-    <value>Tillgängligheter kunde inte laddas.</value>
+    <value>Tillgänglighet kunde inte laddas.</value>
     <comment>Availabilities could not be loaded. There may not be any availabilities in the database.</comment>
   </data>
   <data name="NightlyRestTimeCannotBeMoreThan24Hours" xml:space="preserve">
@@ -5906,7 +5904,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Format :</comment>
   </data>
   <data name="OptionalColumnColon" xml:space="preserve">
-    <value>Egendefinierade kolumner:</value>
+    <value>Tilläggskolumn:</value>
     <comment>Optional Column :</comment>
   </data>
   <data name="NewDayOff" xml:space="preserve">
@@ -5918,7 +5916,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Suggested Times:</comment>
   </data>
   <data name="YouHaveToHaveAtLeastOneScoreCard" xml:space="preserve">
-    <value>Du måste ha minst ett styrkort</value>
+    <value>Du måste ha minst ett scorecard. Var god lägg till ett genom att trycka på +knappen</value>
     <comment>You have to have at least one Scorecard. Please add one by clicking + button</comment>
   </data>
   <data name="NewPartTimePercentage" xml:space="preserve">
@@ -5934,7 +5932,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Next activity start</comment>
   </data>
   <data name="AgentState" xml:space="preserve">
-    <value>Status</value>
+    <value>Agentstatus</value>
     <comment>Agent state</comment>
   </data>
   <data name="AgentTeam" xml:space="preserve">
@@ -5946,7 +5944,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Alarm</comment>
   </data>
   <data name="AlarmName" xml:space="preserve">
-    <value>Namn larm</value>
+    <value>Larmnamn</value>
     <comment>Alarm name</comment>
   </data>
   <data name="AlarmTime" xml:space="preserve">
@@ -5978,7 +5976,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Time</comment>
   </data>
   <data name="State" xml:space="preserve">
-    <value>Tillstånd</value>
+    <value>Status</value>
     <comment>State</comment>
   </data>
   <data name="TargetTime" xml:space="preserve">
@@ -5998,7 +5996,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Apply License</comment>
   </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
-    <value>Skriv värden för de olika kombinationerna</value>
+    <value>Ange värden för de olika kombinationerna</value>
     <comment>Enter values for the different combinations</comment>
   </data>
   <data name="JusticeValues" xml:space="preserve">
@@ -6014,11 +6012,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Budgeting</comment>
   </data>
   <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort '{0}' deltidsprocent?</value>
+    <value>Är du säker på att du vill ta bort '{0}' deltidsprocentsats?</value>
     <comment>Are you sure you want to delete '{0}' part time percentage?</comment>
   </data>
   <data name="UserDefinedOptions" xml:space="preserve">
-    <value>Egendefinierade </value>
+    <value>Egendefinierade alternativ</value>
     <comment>User Defined Options</comment>
   </data>
   <data name="DayOffPlannerOptions" xml:space="preserve">
@@ -6134,7 +6132,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>recurrence meeting text</comment>
   </data>
   <data name="RecurrentMeeting" xml:space="preserve">
-    <value>Återkommande</value>
+    <value>Återkommande möte</value>
     <comment>recurrence meeting text</comment>
   </data>
   <data name="RemoveRecurrence" xml:space="preserve">
@@ -6201,7 +6199,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Köstatistik</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Schemalagda agenter per interval och team</value>
+    <value>Schemalagda agenter per intervall och team</value>
     <comment>Schemalagda agenter per interval och team</comment>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
@@ -6213,7 +6211,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Schemalagd tid per agent</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Servicenivå och Agenter Ready</value>
+    <value>Servicenivå och Agenter redo</value>
     <comment>Servicenivå och Agenter Ready</comment>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
@@ -6237,7 +6235,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>recurrent meetings</comment>
   </data>
   <data name="RecurrentTextMonthly" xml:space="preserve">
-    <value>Den {0} {1} i varje {2} månad(er) från {3} till och med {4} {7} {5} {8} {6}.</value>
+    <value>Inträffar den {0} {1} varje {2} månad(er) från {3} till och med {4} {7} {5} {8} {6}.</value>
     <comment>recurrent meetings</comment>
   </data>
   <data name="RecurrentTextWeekly" xml:space="preserve">
@@ -6257,11 +6255,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Scheduler message</comment>
   </data>
   <data name="FilterOnMaxStartTimeOnRestriction" xml:space="preserve">
-    <value>Filtrerar på max starttid för önskemål</value>
+    <value>Filtrerar på max starttid för begränsningar</value>
     <comment>Scheduler message</comment>
   </data>
   <data name="FilterOnMinEndTimeOnRestriction" xml:space="preserve">
-    <value>Filtrerar på minimum sluttid för önskemål</value>
+    <value>Filtrerar på minsta sluttid för begränsningar</value>
     <comment>Scheduler message</comment>
   </data>
   <data name="FilterOnPersonalPeriodLimitations" xml:space="preserve">
@@ -6289,7 +6287,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Scheduler message</comment>
   </data>
   <data name="NoRuleSetBagDefined" xml:space="preserve">
-    <value>Ingen ruleset bag definierad</value>
+    <value>Ingen skiftpåse definierad</value>
     <comment>Scheduler message</comment>
   </data>
   <data name="NoSchedulePeriodIsDefinedForTheDate" xml:space="preserve">
@@ -6369,11 +6367,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Scheduler message</comment>
   </data>
   <data name="TheRecurrencePatternIsNotValid" xml:space="preserve">
-    <value>Inställningar för återkommande är inte giltigt</value>
+    <value>Inställningar för återkommande är inte giltiga</value>
     <comment>recurrent meetings</comment>
   </data>
   <data name="EnterPropertyValuesForMultiplicators" xml:space="preserve">
-    <value>Redigera egenskaper för multiplikatorer</value>
+    <value>Ange egenskaper för multiplikatorer</value>
     <comment>Isntructions to add Multiplicators</comment>
   </data>
   <data name="ExportCode" xml:space="preserve">
@@ -6385,11 +6383,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Delete confirmation message.</comment>
   </data>
   <data name="MultiplicatorType" xml:space="preserve">
-    <value>Typ</value>
+    <value>Multiplikatortyp</value>
     <comment>Type of the multiplicator</comment>
   </data>
   <data name="MultiplicatorValue" xml:space="preserve">
-    <value>Värde</value>
+    <value>Multiplikatorvärde</value>
     <comment>Value of the multiplicator</comment>
   </data>
   <data name="AddMultiplicator" xml:space="preserve">
@@ -6405,7 +6403,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Action "Add Person" </comment>
   </data>
   <data name="FilterPersonAccounts" xml:space="preserve">
-    <value>Filtrera personliga konton</value>
+    <value>Filtrera tidsuppföljning</value>
     <comment>Filter functionality of the person accounts</comment>
   </data>
   <data name="SchedulingDays" xml:space="preserve">
@@ -6428,7 +6426,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>för</value>
   </data>
   <data name="ModifyGroupPage" xml:space="preserve">
-    <value>Hantera grupperingar</value>
+    <value>Ändra gruppering</value>
     <comment>Modify group page</comment>
   </data>
   <data name="ModifyPeopleWithinGroupPage" xml:space="preserve">
@@ -6444,15 +6442,15 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Refresh screen every:</comment>
   </data>
   <data name="ScheduleOrSchedules" xml:space="preserve">
-    <value>Schemaändring(ar)</value>
+    <value>Schema(n)</value>
     <comment>Schedule(s)</comment>
   </data>
   <data name="CreateSkillSummery" xml:space="preserve">
-    <value>Skapa sammanfattning kompetens</value>
+    <value>Skapa kompetenssammanfattning </value>
     <comment>Context menu in Scheduler</comment>
   </data>
   <data name="EditSkillSummery" xml:space="preserve">
-    <value>Redigera sammanfattning kompetens</value>
+    <value>Redigera kompetenssammanfattning</value>
     <comment>Context menu in Scheduler</comment>
   </data>
   <data name="Skills" xml:space="preserve">
@@ -6460,7 +6458,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Label skill summery</comment>
   </data>
   <data name="SkillSummery" xml:space="preserve">
-    <value>Sammanfattning kompetens</value>
+    <value>Kompetenssammanfattning</value>
     <comment>Form name</comment>
   </data>
   <data name="SummeryName" xml:space="preserve">
@@ -6494,7 +6492,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Tab</comment>
   </data>
   <data name="SchedulingOptions" xml:space="preserve">
-    <value>SchemaläggningsInställningar</value>
+    <value>Schemaläggningsinställningar</value>
     <comment>Tab</comment>
   </data>
   <data name="NoRestrictionDefinedFor" xml:space="preserve">
@@ -6526,7 +6524,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Agent info</comment>
   </data>
   <data name="SchedulePeriod" xml:space="preserve">
-    <value>Schemaläggningsperiod</value>
+    <value>Schemaperiod</value>
     <comment>Agent info</comment>
   </data>
   <data name="RequiresSkill" xml:space="preserve">
@@ -6534,11 +6532,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Requires Skill column header in activity setting page</comment>
   </data>
   <data name="ZeroActivityInDb" xml:space="preserve">
-    <value>Inga aktiviteter är skapade!</value>
+    <value>Inga aktiviteter hittades i databasen</value>
     <comment>No activities in database</comment>
   </data>
   <data name="ZeroShiftCategoriesInDb" xml:space="preserve">
-    <value>Inga skiftkategorier är skapade!</value>
+    <value>Inga skiftkategorier hittades i databasen</value>
     <comment>No shift categories in database</comment>
   </data>
   <data name="DeleteContract" xml:space="preserve">
@@ -6550,7 +6548,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Delete part time percentage</comment>
   </data>
   <data name="ViewReports" xml:space="preserve">
-    <value>Titta på rapporter</value>
+    <value>Visa rapporter</value>
     <comment>View Reports</comment>
   </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
@@ -6626,7 +6624,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>multiplicator</comment>
   </data>
   <data name="InReadyTime" xml:space="preserve">
-    <value>I redo-tid</value>
+    <value>I redotid</value>
     <comment>"In Ready Time" column header for the activity setting page</comment>
   </data>
   <data name="SelectAMultiplicator" xml:space="preserve">
@@ -6634,7 +6632,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>multiplicator</comment>
   </data>
   <data name="DeleteSkillSummery" xml:space="preserve">
-    <value>Ta bort  sammanfattning kompetens</value>
+    <value>Ta bort kompetenssammanfattning </value>
     <comment>Context menu</comment>
   </data>
   <data name="DefaultTrackerDefaultDescription" xml:space="preserve">
@@ -6680,7 +6678,7 @@ Uppdaterad den: {1}</value>
     <comment>No scenario</comment>
   </data>
   <data name="ScenarioMustBeCreated" xml:space="preserve">
-    <value>Ett scenario måste skapas först</value>
+    <value>Minst ett scenario måste skapas först.</value>
     <comment>A scenario must be created first</comment>
   </data>
   <data name="EarliestEndTime" xml:space="preserve">
@@ -6704,7 +6702,7 @@ Uppdaterad den: {1}</value>
     <comment>CreatePayrollExport</comment>
   </data>
   <data name="PayrollExportWizard" xml:space="preserve">
-    <value>Lönelistexport guide</value>
+    <value>Lönelistexportguide</value>
     <comment>Payroll Export Wizard</comment>
   </data>
   <data name="UseShrinkage" xml:space="preserve">
@@ -6712,7 +6710,7 @@ Uppdaterad den: {1}</value>
     <comment>Scheduler</comment>
   </data>
   <data name="FileTypeSelection" xml:space="preserve">
-    <value>Välj typ av löneexport</value>
+    <value>Välj typ av löneexportfil</value>
     <comment>used in payrollexport</comment>
   </data>
   <data name="ESL" xml:space="preserve">
@@ -6728,7 +6726,7 @@ Uppdaterad den: {1}</value>
     <comment>Errormessage when PersonAccount exceeds its value</comment>
   </data>
   <data name="TeamSettings" xml:space="preserve">
-    <value>Inställningar för arbetsgrupp</value>
+    <value>Inställningar för arbetsteam</value>
     <comment>Team settings</comment>
   </data>
   <data name="TeamWriteProtection" xml:space="preserve">
@@ -6737,10 +6735,10 @@ Uppdaterad den: {1}</value>
     <comment>Write protection (days)</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
-    <value>Vill du ta bort kontraktet '{0}'?</value>
+    <value>Är du säker på att du vill ta bort kontraktet '{0}'?</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
-    <value>Vill du ta bort fridag '{0}'?</value>
+    <value>Är du säker på att du vill ta bort fridag '{0}'?</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
     <value>Vill du ta bort tilläggskolumn '{0}'?</value>
@@ -6749,7 +6747,7 @@ Uppdaterad den: {1}</value>
     <value>Hantera multiplikatorer</value>
   </data>
   <data name="DeleteGroupPage" xml:space="preserve">
-    <value>Ta bort grupperingar</value>
+    <value>Ta bort gruppering</value>
   </data>
   <data name="DefinitionName" xml:space="preserve">
     <value>Namn</value>
@@ -6871,7 +6869,7 @@ Uppdaterad den: {1}</value>
     <comment>Copyright</comment>
   </data>
   <data name="ProductNameColon" xml:space="preserve">
-    <value>System:</value>
+    <value>Produktnamn:</value>
     <comment>Product name</comment>
   </data>
   <data name="ProductVersionColon" xml:space="preserve">
@@ -6894,11 +6892,11 @@ Uppdaterad den: {1}</value>
     <value>Kodning</value>
   </data>
   <data name="ConsecutiveDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
-    <value>På varandra följande fridagar per vecka måste vara lika många eller färre än max antal</value>
+    <value>Sammanhängande fridagar per vecka måste vara lika många eller färre än max antal</value>
     <comment>Optimizer form</comment>
   </data>
   <data name="ConsecutiveWorkdaysPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
-    <value>På varandra följande arbetsdagar per vecka måste vara lika många eller färre än max antal</value>
+    <value>Sammanhängande arbetsdagar per vecka måste vara lika många eller färre än max antal</value>
     <comment>Optimizer form</comment>
   </data>
   <data name="MinDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
@@ -6906,7 +6904,7 @@ Uppdaterad den: {1}</value>
     <comment>Optimizer form</comment>
   </data>
   <data name="UseStudentAvailability" xml:space="preserve">
-    <value>Ta hänsyn till tillgänglighet för timanställd</value>
+    <value>Använd tillgänglighet för timanställda</value>
     <comment>Scheduling options</comment>
   </data>
   <data name="Alarms" xml:space="preserve">
@@ -6918,11 +6916,11 @@ Uppdaterad den: {1}</value>
     <comment>Options</comment>
   </data>
   <data name="ManageAlarms" xml:space="preserve">
-    <value>Hantera Alarm</value>
+    <value>Hantera larm</value>
     <comment>Options</comment>
   </data>
   <data name="ManageAlarmTypes" xml:space="preserve">
-    <value>Hantera Alarmtyper</value>
+    <value>Hantera larmtyper</value>
     <comment>Options</comment>
   </data>
   <data name="StateGroups" xml:space="preserve">
@@ -6930,7 +6928,7 @@ Uppdaterad den: {1}</value>
     <comment>Options</comment>
   </data>
   <data name="StateGroupsAndStates" xml:space="preserve">
-    <value>Statusgrupper och statustillstånd</value>
+    <value>Statusgrupper och statusar</value>
     <comment>Options</comment>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
@@ -6938,11 +6936,11 @@ Uppdaterad den: {1}</value>
     <comment>IMPROVE</comment>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Agent Scorecard</value>
+    <value>Agentscorecard</value>
     <comment>Agent Scorecard</comment>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
-    <value>Filtrerar på arbetstidsbegränsningar (skift med kontraktstid mellan {0} och {1})</value>
+    <value>Filtrera på arbetstidsbegränsningar (skift med kontraktstid mellan {0} och {1})</value>
     <comment>Scheduling Message</comment>
   </data>
   <data name="RangeOfRecurrence" xml:space="preserve">
@@ -6952,7 +6950,7 @@ Uppdaterad den: {1}</value>
     <value>Se detaljer</value>
   </data>
   <data name="MyTimeAppConfigFileError" xml:space="preserve">
-    <value>MyTime app.config konfigurationsfel</value>
+    <value>MyTime app.config är inte korrekt konfigurerad</value>
   </data>
   <data name="Projection" xml:space="preserve">
     <value>Projektion</value>
@@ -6987,7 +6985,7 @@ Uppdaterad den: {1}</value>
     <comment>Personförfrågan godkänd (undo/redo info)</comment>
   </data>
   <data name="UndoRedoReOptimize" xml:space="preserve">
-    <value>Optimering</value>
+    <value>Optimera</value>
     <comment>ReOptimize (undo/redo info)</comment>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
@@ -7048,7 +7046,7 @@ Uppdaterad den: {1}</value>
     <value>Skicka</value>
   </data>
   <data name="TextAnswer" xml:space="preserve">
-    <value>Text Svar</value>
+    <value>Textsvar</value>
   </data>
   <data name="YesNoAnswer" xml:space="preserve">
     <value>JA /NEJ Svar</value>
@@ -7092,10 +7090,10 @@ Uppdaterad den: {1}</value>
     <value>Skapa standardmeddelande</value>
   </data>
   <data name="CreateYesNoMessage" xml:space="preserve">
-    <value>Skapa Ja/Nej meddelande</value>
+    <value>Skapa Ja/Nej-meddelande</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Valbar</value>
+    <value>Anpassad</value>
   </data>
   <data name="YesNo" xml:space="preserve">
     <value>Ja/Nej</value>
@@ -7148,7 +7146,7 @@ Uppdaterad den: {1}</value>
     <comment>Agent portal message</comment>
   </data>
   <data name="YouDoNotHavePermissionsToViewTeamSchedules" xml:space="preserve">
-    <value>Du har inte rätt att se några gruppscheman</value>
+    <value>Du har inte rätt att se några teamscheman</value>
     <comment>My Time message</comment>
   </data>
   <data name="FileImport" xml:space="preserve">
@@ -7176,7 +7174,7 @@ Uppdaterad den: {1}</value>
     <comment>Keep start and end time</comment>
   </data>
   <data name="SelectOptionalColumn" xml:space="preserve">
-    <value>&lt; Välj extrakolumn &gt;</value>
+    <value>&lt; Välj tilläggskolumn &gt;</value>
     <comment>&lt; Välj extrakolumn &gt;</comment>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
@@ -7196,11 +7194,11 @@ Uppdaterad den: {1}</value>
     <comment>Fördefinerad enhetschef roll</comment>
   </data>
   <data name="BuiltInTeamLeaderRole" xml:space="preserve">
-    <value>Gruppledare</value>
+    <value>Teamledare</value>
     <comment>Fördefinerad gruppledare roll</comment>
   </data>
   <data name="GroupPageDeleteQuestion" xml:space="preserve">
-    <value>Vill du ta bort gruppering '{0}'?</value>
+    <value>Är du säker på att du vill ta bort gruppering '{0}'?</value>
     <comment>Vill du ta bort gruppering '{0}'?</comment>
   </data>
   <data name="GroupPageDeleteQuestionCaption" xml:space="preserve">
@@ -7232,7 +7230,7 @@ Uppdaterad den: {1}</value>
     <comment>New Group</comment>
   </data>
   <data name="PersonFromGroupingDeletionQuestion" xml:space="preserve">
-    <value>Vill du ta bort '{0}' från gruppen?</value>
+    <value>Är du säker på att du vill ta bort '{0}' från gruppen?</value>
     <comment>Are you sure you want to remove '{0}' from the group?</comment>
   </data>
   <data name="ModifyWriteProtectedSchedule" xml:space="preserve">
@@ -7242,14 +7240,14 @@ Uppdaterad den: {1}</value>
     <value>Sätt skrivskydd</value>
   </data>
   <data name="ViewSchedules" xml:space="preserve">
-    <value>Visa schema</value>
+    <value>Visa scheman</value>
   </data>
   <data name="NoStateGroupPresent" xml:space="preserve">
     <value>Ingen statusgrupp tillgänglig</value>
     <comment>No state group present</comment>
   </data>
   <data name="IncreaseTotalAlarmTime" xml:space="preserve">
-    <value>Påverka total larmtid</value>
+    <value>Öka total larmtid</value>
     <comment>Increase total alarm time</comment>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
@@ -7277,11 +7275,11 @@ Uppdaterad den: {1}</value>
     <comment>Not applicable</comment>
   </data>
   <data name="YouCanOnlyEnterPreferencesFromDateAccordingToThePreferenceDate" xml:space="preserve">
-    <value>Du kan bara göra önskemål från {0} i enlighet med önskemålsdatumet.</value>
+    <value>Du kan bara ange önskemål från {0} i enlighet med önskemålsdatumet.</value>
     <comment>Info message</comment>
   </data>
   <data name="HighestStdev" xml:space="preserve">
-    <value>Högsta stdev</value>
+    <value>Högsta stavv</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Lunch</value>
@@ -7293,13 +7291,13 @@ Uppdaterad den: {1}</value>
     <value>Kortrast</value>
   </data>
   <data name="CreatePerformanceManagerReport" xml:space="preserve">
-    <value>Skapa PM rapport</value>
+    <value>Skapa PM-rapport</value>
   </data>
   <data name="UnderConstruction" xml:space="preserve">
     <value>Under utveckling</value>
   </data>
   <data name="ViewPerformanceManagerReport" xml:space="preserve">
-    <value>Visa PM rapport</value>
+    <value>Visa PM-rapport</value>
   </data>
   <data name="ModifyPersonRestriction" xml:space="preserve">
     <value>Ändra begränsning</value>
@@ -7315,7 +7313,7 @@ Uppdaterad den: {1}</value>
     <value>Nytt svarsalternativ</value>
   </data>
   <data name="PayrollExportGenerationWillStartOnServer" xml:space="preserve">
-    <value>Löneexporten kommer att genereras på servern. Du kan fortsätta arbeta med andra uppgifter i systemet.</value>
+    <value>Löneexporten kommer nu att genereras på servern. Du kan fortsätta arbeta med andra uppgifter i systemet.</value>
     <comment>The payroll export generation will now begin on the server. You can continue to work with other tasks in the system.</comment>
   </data>
   <data name="SystemIsBusyWithBackgroundRequest" xml:space="preserve">
@@ -7323,7 +7321,7 @@ Uppdaterad den: {1}</value>
     <comment>The system is busy working on another background request. Please try again later.</comment>
   </data>
   <data name="ReportLevel" xml:space="preserve">
-    <value>Rapportnivå</value>
+    <value>Rapportera som</value>
     <comment>Report Level</comment>
   </data>
   <data name="DefaultSegment" xml:space="preserve">
@@ -7331,15 +7329,15 @@ Uppdaterad den: {1}</value>
     <comment>Default segment length</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Tillgänglig tid mot schemalagd kontraktstid</value>
+    <value>Redotid mot schemalagd kontraktstid</value>
     <comment>Ready Time vs. Contracted Schedule Time</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Tillgänglig tid mot schemalagd tillgänglig tid</value>
+    <value>Redotid mot schemalagd redotid</value>
     <comment>Ready time V.S. Scheduled Ready time</comment>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Tillgänglig tid mot schemalagd tid (inkl. tid före och efter skiftstart)</value>
+    <value>Redotid mot schemalagd tid (inkl. tid före och efter skiftstart)</value>
     <comment>Ready Time vs. Scheduled Time (incl time before and after shiftstart)</comment>
   </data>
   <data name="AnsweredContacts" xml:space="preserve">
@@ -7351,7 +7349,7 @@ Uppdaterad den: {1}</value>
     <comment>Not Scheduled</comment>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Schemauppföljning</value>
+    <value>Schemauppföljningsberäkning</value>
     <comment>Adherence calculation</comment>
   </data>
   <data name="AddDate" xml:space="preserve">
@@ -7411,7 +7409,7 @@ Uppdaterad den: {1}</value>
     <comment>Referred</comment>
   </data>
   <data name="TheScheduleHasChanged" xml:space="preserve">
-    <value>Schema har ändrats. Förfrågning om skiftbyte måste godkännas igen.</value>
+    <value>Schemat har ändrats. Förfrågan om skiftbyte måste godkännas igen.</value>
     <comment>The schedule has changed. This requested must be accepted again.</comment>
   </data>
   <data name="SelectMultipleDates" xml:space="preserve">
@@ -7464,7 +7462,7 @@ Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Ett problem har uppstått och Teleopti CCC måste stängas. Vi beklagar problem detta medför. Information som inte tidigare hade sparas kan ha gått förlorad.
+    <value>Ett problem har uppstått och Teleopti CCC måste stängas. Vi beklagar problem detta medför. Information som inte sparats kan ha gått förlorad.
 
 För att få värdefull information om detta fel, ber vi er att rapportera det genom att klicka på "Skicka e-postrapport"-knappen nedan. Detta kommer öppna ditt förvalda e-postprogram. Var snäll att bifoga följande:
 
@@ -7479,7 +7477,7 @@ Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
-    <value>En fil innehållande felmedelandet kunde inte skapas. Kopiera till urklipp och klistra gärna in detta i ett mail.</value>
+    <value>En fil innehållande felmedelandet kunde inte skapas. Kopiera till urklipp och klistra gärna in detta i ett e-postmeddelande.</value>
     <comment>Error handling</comment>
   </data>
   <data name="AuthorizingFunctionsThreeDots" xml:space="preserve">
@@ -7535,11 +7533,11 @@ Teleopti R&amp;D</value>
     <comment>Reloading chart...</comment>
   </data>
   <data name="ReloadingSkillGridThreeDots" xml:space="preserve">
-    <value>Laddar kompetensgrid...</value>
+    <value>Laddar kompetensrutnät...</value>
     <comment>Reloading skill grid...</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Hjälp</value>
+    <value>Hjälp F1</value>
   </data>
   <data name="AvailabilityDate" xml:space="preserve">
     <value>Tillgänglighetsdatum</value>
@@ -7608,7 +7606,7 @@ Teleopti R&amp;D</value>
     <value>Vänligen ta bort {0} från mötet. Du har inte tillräcklig behörighet för denna person.</value>
   </data>
   <data name="InvalidDataOnFollowingPage" xml:space="preserve">
-    <value>Kan inte spara. Ogiltig data på följande sidor:</value>
+    <value>Kan inte spara. Ogiltig data på följande sida:</value>
   </data>
   <data name="DeniedByMe" xml:space="preserve">
     <value>Nekad av mig</value>
@@ -7620,7 +7618,7 @@ Teleopti R&amp;D</value>
     <value>Nekad av administratör</value>
   </data>
   <data name="GrantedBySupervisor" xml:space="preserve">
-    <value>Godkänd av adminsitratör</value>
+    <value>Godkänd av administratör</value>
   </data>
   <data name="WaitingForOtherPart" xml:space="preserve">
     <value>Väntar på motpart</value>
@@ -7629,10 +7627,10 @@ Teleopti R&amp;D</value>
     <value>Väntar på nytt godkännande</value>
   </data>
   <data name="WaitingForSupervisorApproval" xml:space="preserve">
-    <value>Väntar på administratör</value>
+    <value>Väntar på godkännande från administratör</value>
   </data>
   <data name="WaitingForYourApproval" xml:space="preserve">
-    <value>Väntar på godkännnade</value>
+    <value>Väntar på ditt godkännnade</value>
   </data>
   <data name="DefaultIntradaySetting" xml:space="preserve">
     <value>Standardvy</value>
@@ -7653,10 +7651,10 @@ Teleopti R&amp;D</value>
     <value>Fastanställda periodarbetstid</value>
   </data>
   <data name="ConflictingRestrictions" xml:space="preserve">
-    <value>Motstridiga restriktioner</value>
+    <value>Motstridiga begränsningar</value>
   </data>
   <data name="NoRestrictionDefined" xml:space="preserve">
-    <value>Ingen restriktion definierad</value>
+    <value>Ingen begränsning definierad</value>
   </data>
   <data name="ExportFromAndToScenario" xml:space="preserve">
     <value>{0} --&gt; {1}</value>
@@ -7668,7 +7666,7 @@ Teleopti R&amp;D</value>
     <value>{0}: {1}</value>
   </data>
   <data name="ExportValidationWarnings" xml:space="preserve">
-    <value>Validerings-varningar</value>
+    <value>Valideringsvarningar</value>
   </data>
   <data name="ExportNoValidationWarnings" xml:space="preserve">
     <value>Inga validerings-varningar</value>
@@ -7677,10 +7675,10 @@ Teleopti R&amp;D</value>
     <value>Välj kommandon från</value>
   </data>
   <data name="ShowQuickAccessToolbarAboveRibbon" xml:space="preserve">
-    <value>Visa Quick Access Toolbar ovanför Ribbon</value>
+    <value>Visa verktygsfältet Snabbåtkomst ovanför menyfliksområdet</value>
   </data>
   <data name="ShowQuickAccessToolbarBelowRibbon" xml:space="preserve">
-    <value>Visa Quick Access Toolbar nedanför Ribbon</value>
+    <value>Visa verktygsfältet Snabbåtkomst nedanför menyfliksområdet</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
     <value>Selected area for {0} agent(er)</value>
@@ -7698,7 +7696,7 @@ Teleopti R&amp;D</value>
     <value>Slå på rapportering:</value>
   </data>
   <data name="Maximum5Scenarios" xml:space="preserve">
-    <value>*Max 5 scenarier kan användas för rapportering</value>
+    <value>*Max 5 scenarion kan användas för rapportering</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>Daglig</value>
@@ -7756,10 +7754,10 @@ veckodag</value>
     <value>Detta är den sista deltagaren i mötet. Vill du ta bort mötet  \"{0}\"?</value>
   </data>
   <data name="OriginalOfferedCalls" xml:space="preserve">
-    <value>Ursprungligt inkommande samtal</value>
+    <value>Ursprungligt antal inkommande samtal</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheRotationQuestion" xml:space="preserve">
-    <value>Vill du verkligen ta bort sekvensen?</value>
+    <value>Är du säker på att du vill ta bort sekvensen?</value>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
     <value>En ledighetsansökan har godkänts.</value>
@@ -7783,22 +7781,22 @@ veckodag</value>
     <value>En schemaändring har gjort att en förfrågan om skiftbyte måste accepteras igen.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>En textförfrågan har godkänts.</value>
+    <value>En enkel förfrågan har godkänts.</value>
   </data>
   <data name="TextRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>En textförfrågan har avslagits.</value>
+    <value>En enkel förfrågan har avslagits.</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDefinitionSet" xml:space="preserve">
-    <value>Vill du verkligen ta bort '{0}'?</value>
+    <value>Är du säker på att du vill ta bort '{0}'?</value>
   </data>
   <data name="DeleteMeeting" xml:space="preserve">
     <value>Ta bort möte</value>
   </data>
   <data name="AreYouSureYouWantToDeleteMeeting" xml:space="preserve">
-    <value>Vill du verkligen ta bort mötet {0}?</value>
+    <value>Är du säker på att du vill ta bort mötet {0}?</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Ny bytesförfrågan, godkänn eller avslå i din lista.</value>
+    <value>Ny skiftbytesförfrågan, godkänn eller avslå i din lista.</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
     <value>Summan av fördelningarna måste vara 100%</value>
@@ -7819,7 +7817,7 @@ veckodag</value>
     <value>Min:</value>
   </data>
   <data name="WeeklyWorkTime" xml:space="preserve">
-    <value>Arbetstid veckovis</value>
+    <value>Arbetstid per vecka</value>
   </data>
   <data name="Validate" xml:space="preserve">
     <value>Validera</value>
@@ -7848,10 +7846,10 @@ period</value>
     <value>Visa föregående dagar:</value>
   </data>
   <data name="TargetToleranceMinus" xml:space="preserve">
-    <value>Tolerans tid -</value>
+    <value>Toleranstid -</value>
   </data>
   <data name="TargetTolerancePlus" xml:space="preserve">
-    <value>Tolerans +</value>
+    <value>Toleranstid +</value>
   </data>
   <data name="OtherUser" xml:space="preserve">
     <value>Annan användare</value>
@@ -7860,7 +7858,7 @@ period</value>
     <value>Konflikt</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>En annan användare har ändrat dessa poster. Du måste bestämma vad du vill göra innan du fortsätter. Klicka på "OK" för att acceptera den andra användarens ändringar. Observera att dina egna motsvarande ändringar kommer att tas bort. Klicka på "Avbryt" för att fortsätta utan att spara (denna ändring upprerpas då när du sparar senare). Klicka på "Skriv över" för att spara dina egna ändringar och ta bort den andra användarens ändringar.</value>
+    <value>En annan användare har ändrat dessa poster. Du måste bestämma vad du vill göra innan du fortsätter. Klicka på "OK" för att acceptera den andra användarens ändringar. Observera att dina egna motsvarande ändringar kommer att tas bort. Klicka på "Avbryt" för att fortsätta utan att spara (denna konflikt upprepas då när du sparar senare). Klicka på "Skriv över" för att spara dina egna ändringar och ta bort den andra användarens ändringar.</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Ej sparad</value>
@@ -7869,7 +7867,7 @@ period</value>
     <value>Skriv över</value>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
-    <value>Spara igen när du har granskat de gjorda ändringarna.</value>
+    <value>Spara igen när du har granskat de gjorda ändringarna!</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Okänd</value>
@@ -7878,10 +7876,10 @@ period</value>
     <value>Till...</value>
   </data>
   <data name="PeriodInLegalState" xml:space="preserve">
-    <value>Period OK</value>
+    <value>Period i giltigt läge</value>
   </data>
   <data name="WeekInLegalState" xml:space="preserve">
-    <value>Vecka OK</value>
+    <value>Vecka i giltigt läge</value>
   </data>
   <data name="Fairness" xml:space="preserve">
     <value>Rättvisa</value>
@@ -7905,7 +7903,7 @@ period</value>
     <value>Information om lager:</value>
   </data>
   <data name="SnapToIntervalColon" xml:space="preserve">
-    <value>Anpassa till intervall</value>
+    <value>Fäst mot intervall</value>
   </data>
   <data name="Business" xml:space="preserve">
     <value>Verksamhet</value>
@@ -7932,10 +7930,10 @@ period</value>
     <value>Skiftredigerare</value>
   </data>
   <data name="ShowGraph" xml:space="preserve">
-    <value>Grafpanel</value>
+    <value>Graf</value>
   </data>
   <data name="ShowResult" xml:space="preserve">
-    <value>Resultatpanel</value>
+    <value>Resultat</value>
   </data>
   <data name="ShiftsPerDay" xml:space="preserve">
     <value>Skift per dag</value>
@@ -7956,7 +7954,7 @@ period</value>
     <value>Teleopti CCC - Systemvarning</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
-    <value>Schema + restriktioner</value>
+    <value>Schema + begränsningar</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
     <value>Veckodag</value>
@@ -8004,7 +8002,7 @@ period</value>
     <value>Lägg till definitionsgrupp</value>
   </data>
   <data name="AddNewMultiplicator" xml:space="preserve">
-    <value>Lägg till multiplikator</value>
+    <value>Lägg till ny multiplikator</value>
   </data>
   <data name="DeleteDefinitionSet" xml:space="preserve">
     <value>Ta bort definitionsgrupp </value>
@@ -8037,7 +8035,7 @@ period</value>
     <value>Återställ</value>
   </data>
   <data name="UseShiftCategoryRestrictions" xml:space="preserve">
-    <value>Ta hänsyn till skiftkategoribegränsningar</value>
+    <value>Använd skiftkategoribegränsningar</value>
   </data>
   <data name="InputError" xml:space="preserve">
     <value>Inmatningsfel</value>
@@ -8061,7 +8059,7 @@ period</value>
     <comment>Confidential</comment>
   </data>
   <data name="ModifyRequest" xml:space="preserve">
-    <value>Modifiera förfrågning</value>
+    <value>Modifiera förfrågan</value>
     <comment>Modify</comment>
   </data>
   <data name="Remaining" xml:space="preserve">
@@ -8077,19 +8075,19 @@ period</value>
     <comment>Text replacement</comment>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>Din skiftbytesförfrågan har avböjts av den tillfrågade.</value>
+    <value>Den tillfrågade tackade nej till din skiftbytesförfrågan.</value>
     <comment>Your Shift Trade Request has been denied by the person asked.</comment>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
-    <value>Din frånvaroförfrågan har avböjts, för få timmar kvar i saldo enligt tidsuppföljningen.</value>
+    <value>Din frånvaroförfrågan har nekats. För få timmar kvar i saldo enligt tidsuppföljningen.</value>
     <comment>Your Absence Request has been denied due to Personal Account Check.</comment>
   </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
-    <value>Din frånvaroförfrågan har avböjts, brist på resurstid för kompetens uppstår.</value>
+    <value>Din frånvaroförfrågan har nekats automatiskt, då brist på resurser annars uppstår.</value>
     <comment>Your Absence Request has been denied due to the need of skill resource hours.</comment>
   </data>
   <data name="RequestDenyReasonSupervisor" xml:space="preserve">
-    <value>Administratören har avböjt din förfrågan.</value>
+    <value>Administratören har nekat din förfrågan.</value>
     <comment>Your Request has been denied by administrator.</comment>
   </data>
   <data name="RequestStatusDtoNew" xml:space="preserve">
@@ -8141,7 +8139,7 @@ period</value>
     <comment>Uppföljningstyp</comment>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
-    <value>Olika skiftkategorier schemalagt i samma block.</value>
+    <value>Olika skiftkategorier schemalagda, därmed inte ett giltigt block.</value>
     <comment>Conflicting pre scheduled shift categories, not a valid block</comment>
   </data>
   <data name="ActualHeads" xml:space="preserve">
@@ -8149,7 +8147,7 @@ period</value>
     <comment>Grid header</comment>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
-    <value>Vill du använda den nya mallen på det markerade urvalet?</value>
+    <value>Vill du använda den nya mallen på de markerade dagarna?</value>
     <comment>Would you like to apply the new template to the selected days?</comment>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
@@ -8157,7 +8155,7 @@ period</value>
     <comment>You have to have at least one activity and shift category before creating a rule set.</comment>
   </data>
   <data name="PublishingDateSchedule" xml:space="preserve">
-    <value>Publiseringsdatum
+    <value>Publiceringsdatum
 schema</value>
     <comment>Headercolumn options team</comment>
   </data>
@@ -8178,7 +8176,7 @@ schema</value>
     <value>Valideringar</value>
   </data>
   <data name="SwapAndReschedule" xml:space="preserve">
-    <value>Skiftbyte med schemaläggning</value>
+    <value>Byt och schemalägg om</value>
   </data>
   <data name="OptimisticLockHeader" xml:space="preserve">
     <value>Datakonflikt</value>
@@ -8200,7 +8198,7 @@ schema</value>
     <comment>Show labels in ribbon</comment>
   </data>
   <data name="UseFreeWeekEndDays" xml:space="preserve">
-    <value>Använd Lediga Helgdagar</value>
+    <value>Använd lediga helgdagar</value>
     <comment>Use Free Weekend Days</comment>
   </data>
   <data name="UseFreeWeekEnds" xml:space="preserve">
@@ -8208,7 +8206,7 @@ schema</value>
     <comment>Use Free Weekends</comment>
   </data>
   <data name="MinTimeSchedulePeriodColon" xml:space="preserve">
-    <value>Min Tid Per Schemaläggningsperiod:</value>
+    <value>Min tid per schemaperiod:</value>
     <comment>MinTimeSchedulePeriodColon</comment>
   </data>
   <data name="DoNotColon" xml:space="preserve">
@@ -8237,7 +8235,7 @@ schema</value>
     <comment>Workflow Control Set</comment>
   </data>
   <data name="ModifySelection" xml:space="preserve">
-    <value>Modifiera Urval</value>
+    <value>Modifiera urval</value>
     <comment>Modify Selection</comment>
   </data>
   <data name="ChangeInPercent" xml:space="preserve">
@@ -8269,7 +8267,7 @@ schema</value>
     <comment>New total</comment>
   </data>
   <data name="NumberOfMembers" xml:space="preserve">
-    <value>Antal medlemmar</value>
+    <value>Antal celler</value>
     <comment>Number of members</comment>
   </data>
   <data name="OriginalSum" xml:space="preserve">
@@ -8297,7 +8295,7 @@ schema</value>
     <comment>Auto grant</comment>
   </data>
   <data name="CheckPersonAccount" xml:space="preserve">
-    <value>Kontrollera saldon</value>
+    <value>Kontrollera tidsuppföljning</value>
     <comment>Check personal account</comment>
   </data>
   <data name="CheckStaffing" xml:space="preserve">
@@ -8309,11 +8307,11 @@ schema</value>
     <comment>Choose Workflow Control Set to edit</comment>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
-    <value>Hantera Arbetsflöden</value>
+    <value>Hantera arbetsflöden</value>
     <comment>Manage Workflow Control Sets</comment>
   </data>
   <data name="OpenForAbsenceRequests" xml:space="preserve">
-    <value>Perioder för frånvaroförfrågningar</value>
+    <value>Period för frånvaroförfrågningar</value>
     <comment>Open for absence requests</comment>
   </data>
   <data name="Rolling" xml:space="preserve">
@@ -8333,7 +8331,7 @@ schema</value>
     <comment>Workflow Control Set:</comment>
   </data>
   <data name="WorkflowControlSetToolTip" xml:space="preserve">
-    <value>Kontrollera saldon: {0}
+    <value>Kontrollera tidsuppföljning: {0}
 Kontrollera bemanning: {1}
 Automatgodkänn: {2}
 Period: {3}</value>
@@ -8351,15 +8349,15 @@ Period: {3}</value>
     <comment>Add From - To Period</comment>
   </data>
   <data name="AddRollingPeriod" xml:space="preserve">
-    <value>Lägg till Rullande period</value>
+    <value>Lägg till rullande period</value>
     <comment>Add Rolling Period</comment>
   </data>
   <data name="DaysOffBackToLegalState" xml:space="preserve">
-    <value>Återställer fridagar enligt regler</value>
+    <value>Fridagar åter till giltigt läge</value>
     <comment>Days off back to legal state</comment>
   </data>
   <data name="Rescheduling" xml:space="preserve">
-    <value>Schemalägger om</value>
+    <value>Schemalägger om </value>
     <comment>Rescheduling</comment>
   </data>
   <data name="RollingBackSchedulesFor" xml:space="preserve">
@@ -8385,7 +8383,7 @@ Period: {3}</value>
     <value>Schemaanalys</value>
   </data>
   <data name="ServiceLevelAnalysis" xml:space="preserve">
-    <value>Servicenivåer</value>
+    <value>Servicenivåanalys</value>
   </data>
   <data name="OptimizingDaysOff" xml:space="preserve">
     <value>Optimerar fridagar</value>
@@ -8404,18 +8402,18 @@ Period: {3}</value>
     <comment>was successful</comment>
   </data>
   <data name="NewWorkflowControlSet" xml:space="preserve">
-    <value>Nytt Arbetsflöde</value>
+    <value>Nytt arbetsflöde</value>
     <comment>New Workflow Control Set</comment>
   </data>
   <data name="SchedulingResult" xml:space="preserve">
-    <value>Resultat Schemaläggning</value>
+    <value>Resultat schemaläggning</value>
   </data>
   <data name="ConsecutiveDaysOffRule" xml:space="preserve">
-    <value>Filtrera på sammanhängande antal fridagar</value>
+    <value>Filtrera på antal sammanhängande fridagar</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="ConsecutiveWorkdaysRule" xml:space="preserve">
-    <value>Filtrera på sammanhängande antal arbetsdagar</value>
+    <value>Filtrera på antal sammanhängande arbetsdagar</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="DaysOffPerWeekRule" xml:space="preserve">
@@ -8441,16 +8439,16 @@ Period: {3}</value>
     <value>Online-rapporter</value>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
-    <value>Schemalagd tid per aktivitetsrapport</value>
+    <value>Schemalagd tid per aktivitet</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din frånvaroförfrågan har avslagits automatiskt, på grund av en regel uppsatt av administratör.</value>
+    <value>Din frånvaroförfrågan har nekats automatiskt, på grund av en regel uppsatt av administratören.</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
-    <value>Din förfrågan kunde inte accepteras. Några datum är ännu inte öppna för förfrågningar.</value>
+    <value>Din förfrågan kunde inte behandlas. Några datum är i dagsläget inte öppna för förfrågningar.</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>Din förfrågan kunde inte accepteras. Det finns inga regler kopplade till ditt konto.</value>
+    <value>Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Aktivitet tillgänglig för utökade önskemål</value>
@@ -8463,14 +8461,14 @@ Period: {3}</value>
     <comment>Scheduler Report Viewer</comment>
   </data>
   <data name="RealTime" xml:space="preserve">
-    <value>Realtids rapporter</value>
+    <value>Realtidsrapporter</value>
     <comment>Real time</comment>
   </data>
   <data name="NotPublished" xml:space="preserve">
     <value>Ej publicerat</value>
   </data>
   <data name="PublishSchedulesToColon" xml:space="preserve">
-    <value>Publicera schema till: (inkluderar önskemålsperiod)</value>
+    <value>Publicera schema till (inkluderar önskemålsperiod):</value>
   </data>
   <data name="WriteProtectScheduledOlderThanDaysColon" xml:space="preserve">
     <value>Skrivskydda scheman äldre än (dagar):</value>
@@ -8489,16 +8487,16 @@ Period: {3}</value>
     <value>Önskemålsperiod</value>
   </data>
   <data name="StartDateMustBeSmallerThanEndDate" xml:space="preserve">
-    <value>Startdatum måste vara mindre än slutdatum</value>
+    <value>Startdatum måste vara tidigare än slutdatum</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>Skiftbyte nekat då det inte är öppet för förfrågningar på valda datum.</value>
+    <value>Skiftbyte nekat då valda datum inte är öppna för förfrågningar.</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>Skiftbyte nekat då du och den andra personen inte har samma kompetenser.</value>
+    <value>Skiftbyte nekat då ni inte har samma kompetenser.</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>Skiftbyte nekat då arbetsflödet inte är matchar.</value>
+    <value>Skiftbyte nekat då ni inte har samma arbetsflöde.</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
     <value>Skiftbyte nekat då toleransen för schemalagd kontraktstid överskreds.</value>
@@ -8552,7 +8550,7 @@ Period: {3}</value>
     <value>Publicerat:</value>
   </data>
   <data name="WriteProtectionColon" xml:space="preserve">
-    <value>Skrivskyddat:</value>
+    <value>Skrivskydd:</value>
   </data>
   <data name="MatchingSkills" xml:space="preserve">
     <value>Matchande kompetenser</value>
@@ -8597,15 +8595,15 @@ Period: {3}</value>
     <value>Undvik:</value>
   </data>
   <data name="AddNote" xml:space="preserve">
-    <value>Add notering</value>
+    <value>Lägg till notering</value>
     <comment>Add Note</comment>
   </data>
   <data name="EditNote" xml:space="preserve">
-    <value>Edit notering</value>
+    <value>Ändra anteckning</value>
     <comment>Edit Note</comment>
   </data>
   <data name="RemoveNote" xml:space="preserve">
-    <value>Remove notering</value>
+    <value>Ta bort notering</value>
     <comment>Remove Note</comment>
   </data>
   <data name="ManageDefinitionSet" xml:space="preserve">
@@ -8629,7 +8627,7 @@ Period: {3}</value>
     <value>Du har inget arbetsflöde</value>
   </data>
   <data name="CheckPermissionsForCastle" xml:space="preserve">
-    <value>Otillräckliga lokala rättigheter. Cachning är därför avstängd. Vänligen kontakta din systemadministratör.</value>
+    <value>Otillräckliga lokala rättigheter. Cachning måste vara avstängt. Vänligen kontakta din systemadministratör.</value>
   </data>
   <data name="ModifySchedule" xml:space="preserve">
     <value>Ändra scheman</value>
@@ -8676,15 +8674,15 @@ Period: {3}</value>
     <comment>OverflowOut</comment>
   </data>
   <data name="SelectScorecardForTeams" xml:space="preserve">
-    <value>Välj styrkort att använda på gruppnivå</value>
+    <value>Välj scorecard att använda på teamnivå</value>
     <comment>Select scorecard to use for teams</comment>
   </data>
   <data name="SetScorecard" xml:space="preserve">
-    <value>Välj styrkort</value>
+    <value>Välj scorecard</value>
     <comment>Set scorecard</comment>
   </data>
   <data name="SetScorecards" xml:space="preserve">
-    <value>Välj styrkort</value>
+    <value>Välj scorecards</value>
     <comment>Set scorecards</comment>
   </data>
   <data name="CopyToScheduler" xml:space="preserve">
@@ -8692,7 +8690,7 @@ Period: {3}</value>
     <comment>Copy To Scheduler</comment>
   </data>
   <data name="PasteShiftFromShifts" xml:space="preserve">
-    <value>Klistra in från Shifts</value>
+    <value>Klistra in skift från Skift</value>
     <comment>Paste Shift From Shifts</comment>
   </data>
   <data name="Unsuccessful" xml:space="preserve">
@@ -8700,7 +8698,7 @@ Period: {3}</value>
     <comment>Unsuccessful</comment>
   </data>
   <data name="AlterBetween" xml:space="preserve">
-    <value>Förändringar mellan</value>
+    <value>Växla mellan</value>
     <comment>AlterBetween</comment>
   </data>
   <data name="DoNotMove" xml:space="preserve">
@@ -8722,14 +8720,14 @@ Period: {3}</value>
     <value>En ogiltig tid ({0}) hittades på rad {1}. Ta bort alla ogiltiga tider och försök igen. Detta fel beror troligen på övergången till sommartid.</value>
   </data>
   <data name="CalculatingResourcesDotDotDot" xml:space="preserve">
-    <value>Resursberäknar...</value>
+    <value>Beräknar resurser...</value>
   </data>
   <data name="YouShouldHaveDaysOffParameterDotYouHaveParameterDot" xml:space="preserve">
     <value>Du ska ha {0} fridagar. Nu har du {1}.</value>
     <comment>You should have {0} Day Offs. Currently you have {1}.</comment>
   </data>
   <data name="LogOnWarningPasswordWillSoonExpire" xml:space="preserve">
-    <value>Du måste ändra ditt lösenord inom {0} dagar.</value>
+    <value>Du måste ändra ditt lösenord. Det går ut om {0} dagar.</value>
     <comment>Please change your password. It will expire within {0} days.</comment>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
@@ -8746,8 +8744,8 @@ Period: {3}</value>
   </data>
   <data name="ChangePasswordValidationError" xml:space="preserve">
     <value>Lösenordet kunde inte ändras.
-Kontrollera att ditt nuvarande lösenord är korrekt och att din bekräftan på det nya lösenordet stämmer överens.
-Om det här meddelandet fortfarande visas måste du verifiera att lösenordet uppfyller kraven gällande tecken och minsta längd.</value>
+Kontrollera att ditt nuvarande lösenord är korrekt och att din bekräftelse på det nya lösenordet stämmer överens.
+Om det här meddelandet fortfarande visas måste du verifiera att lösenordet uppfyller kraven gällande teckentyp och antal tecken.</value>
     <comment>The password could not be changed. 
 Please verify that your current password is correct and that your confirmation of the new password is valid. 
 If this validation error still occurs you must verify that your password follows the policy rules regarding length and characters.</comment>
@@ -8785,7 +8783,7 @@ If this validation error still occurs you must verify that your password follows
     <comment>MovePeriodOneIntervalEarlier</comment>
   </data>
   <data name="MovePeriodOneIntervalLater" xml:space="preserve">
-    <value>iod ett intervall senare</value>
+    <value>Flytta period ett intervall senare</value>
     <comment>MovePeriodOneIntervalLater</comment>
   </data>
   <data name="MoveStartOneIntervalEarlier" xml:space="preserve">
@@ -8809,11 +8807,11 @@ If this validation error still occurs you must verify that your password follows
     <comment>The week does not have the stipulated ({0}) weekly rest.</comment>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>Aktiva agenter i användning:</value>
+    <value>Aktiva agenter i bruk:</value>
     <comment>Active agents in use:</comment>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
-    <value>Optimerar skiftslängder</value>
+    <value>Optimerar skiftlängder</value>
     <comment>Optimizing shift lengths</comment>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
@@ -8843,7 +8841,7 @@ Error message: {0}</comment>
     <comment>Not selected Activities</comment>
   </data>
   <data name="SelectActivitiesIncludedInMaster" xml:space="preserve">
-    <value>Välj vilka aktiviteter som huvudaktiviteten kan bli</value>
+    <value>Välj vilka aktiviteter huvudaktiviteten kan bli</value>
     <comment>Select wich activities the Master Activity can become</comment>
   </data>
   <data name="SelectedActivities" xml:space="preserve">
@@ -8851,7 +8849,7 @@ Error message: {0}</comment>
     <comment>Selected Activities</comment>
   </data>
   <data name="SelectMasterActivitetToManage" xml:space="preserve">
-    <value>Välj huvudaktivitet du vill ändra</value>
+    <value>Välj huvudaktivitet att ändra</value>
     <comment>Select Master Activity to change</comment>
   </data>
   <data name="NewMasterActivity" xml:space="preserve">
@@ -8863,7 +8861,7 @@ Error message: {0}</comment>
     <comment>Audit Trail Settings</comment>
   </data>
   <data name="AuditTrailSettingOffQuestion" xml:space="preserve">
-    <value>Om du slår av ändringslogg för schemadata kommer all insamlad spårbarhetsinformation att raderas, vill du fortsätta?</value>
+    <value>Om du slår av ändringslogg för schemadata kommer all insamlad spårbarhetsinformation att raderas. Vill du fortsätta?</value>
     <comment>Turning off the Audit Trail for schedules will remove all collected audit trail data. Do you wish to continue?</comment>
   </data>
   <data name="EnableScheduleAuditTrail" xml:space="preserve">
@@ -8887,7 +8885,7 @@ Error message: {0}</comment>
     <comment>Are you sure you want to delete '{0}' master activity?</comment>
   </data>
   <data name="RequestHasBeenDeleted" xml:space="preserve">
-    <value>Denna förfrågan har blivit raderad och kan inte längre ändras.</value>
+    <value>Denna förfrågan har raderats av den som skapade den och kan inte längre ändras.</value>
     <comment>This request has been deleted by the requesting person and cannot be changed anymore.</comment>
   </data>
   <data name="CreatedPageOf" xml:space="preserve">
@@ -8895,11 +8893,11 @@ Error message: {0}</comment>
     <comment>Created date {0}. Page {1} of {2}</comment>
   </data>
   <data name="FilterPersonAccount" xml:space="preserve">
-    <value>Filtrera personligt konto</value>
+    <value>Filtrera tidsuppföljning</value>
     <comment>Filter functionality of the person accounts</comment>
   </data>
   <data name="PeriodNotInLegalState" xml:space="preserve">
-    <value>Period inte OK</value>
+    <value>Period inte i giltigt läge</value>
     <comment>PeriodNotInLegalState</comment>
   </data>
   <data name="SchedulingProgress" xml:space="preserve">
@@ -8911,15 +8909,15 @@ Error message: {0}</comment>
     <comment>Days per year</comment>
   </data>
   <data name="LessThanBudgetGroupNameGreaterThan" xml:space="preserve">
-    <value>&lt;Budgetgrupp Namn&gt;</value>
+    <value>&lt;Budgetgruppnamn&gt;</value>
     <comment>Budget group name</comment>
   </data>
   <data name="NewBudgetGroup" xml:space="preserve">
-    <value>Ny Budgetgrupp</value>
+    <value>Ny budgetgrupp</value>
     <comment>New budget group</comment>
   </data>
   <data name="NewBudgetGroupThreeDots" xml:space="preserve">
-    <value>Ny Budgetgrupp...</value>
+    <value>Ny budgetgrupp...</value>
     <comment>Creates a new budget group</comment>
   </data>
   <data name="OpenBudgetGroupThreeDots" xml:space="preserve">
@@ -8927,7 +8925,7 @@ Error message: {0}</comment>
     <comment>Opens a budget group</comment>
   </data>
   <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Tillagda Kompetenser:</value>
+    <value>Tillagda kompetenser:</value>
     <comment>Added Skills</comment>
   </data>
   <data name="AttritionRate" xml:space="preserve">
@@ -8935,7 +8933,7 @@ Error message: {0}</comment>
     <comment>Attrition rate</comment>
   </data>
   <data name="BudgetedStaff" xml:space="preserve">
-    <value>Budget personal</value>
+    <value>Budgetpersonal</value>
     <comment>Budgeted staff</comment>
   </data>
   <data name="Contractors" xml:space="preserve">
@@ -8983,7 +8981,7 @@ Error message: {0}</comment>
     <comment>Staff employed</comment>
   </data>
   <data name="StudentHours" xml:space="preserve">
-    <value>Studenttimmar</value>
+    <value>Timanställda (h)</value>
     <comment>Student hours</comment>
   </data>
   <data name="LoadForecastedHours" xml:space="preserve">
@@ -8995,11 +8993,11 @@ Error message: {0}</comment>
     <comment>Ändringar i schema</comment>
   </data>
   <data name="BlockAndTeamScheduling" xml:space="preserve">
-    <value>Block-  och gruppschemaläggning</value>
+    <value>Block-  och teamschemaläggning</value>
     <comment>Block and Team Scheduling</comment>
   </data>
   <data name="UseTeamScheduling" xml:space="preserve">
-    <value>Använd gruppschemaläggning</value>
+    <value>Använd teamschemaläggning</value>
     <comment>Use Team Scheduling</comment>
   </data>
   <data name="LoadStaffEmployed" xml:space="preserve">
@@ -9007,7 +9005,7 @@ Error message: {0}</comment>
     <comment>Ladda antal anställda</comment>
   </data>
   <data name="BudgetGroup" xml:space="preserve">
-    <value>Budget grupp</value>
+    <value>Budgetgrupp</value>
     <comment>Budgetgrupp</comment>
   </data>
   <data name="ErrorMessageNotAValidSchedulePeriod" xml:space="preserve">
@@ -9015,7 +9013,7 @@ Error message: {0}</comment>
     <comment>Not a valid Schedule Period</comment>
   </data>
   <data name="ErrorMessageNotConsistentShiftCategories" xml:space="preserve">
-    <value>Kan inte schemalägga grupp för den har redan olika skiftkategorier</value>
+    <value>Kan inte schemalägga team då den redan har olika skiftkategorier</value>
     <comment>Can't Schedule Team because it already has different Shift Categories</comment>
   </data>
   <data name="NetNetStaff" xml:space="preserve">
@@ -9099,13 +9097,13 @@ långtid</value>
     <value>Vill du spara ditt arbete eller avbryta?</value>
   </data>
   <data name="DeleteEfficiencyShrinkageRow" xml:space="preserve">
-    <value>Ta bort effektivititet/shrinkage</value>
+    <value>Ta bort effektivitet</value>
   </data>
   <data name="DeleteShrinkageRow" xml:space="preserve">
     <value>Ta bort shrinkage</value>
   </data>
   <data name="CustomEfficiencyShrinkage" xml:space="preserve">
-    <value>Anpassad effektivitet shrinkage </value>
+    <value>Anpassad effektivitet</value>
   </data>
   <data name="CustomShrinkage" xml:space="preserve">
     <value>Anpassad shrinkage</value>
@@ -9114,7 +9112,7 @@ långtid</value>
     <value>Optimera inom dag</value>
   </data>
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
-    <value>Ta endast hänsyn till veton</value>
+    <value>Använd endast veton</value>
     <comment>Use Preference Must Have Only</comment>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
@@ -9126,11 +9124,11 @@ långtid</value>
     <comment>Manage Sites</comment>
   </data>
   <data name="MaxSeats" xml:space="preserve">
-    <value>Max platser</value>
+    <value>Max arbetsplatser</value>
     <comment>Max Seats</comment>
   </data>
   <data name="RequiresSeat" xml:space="preserve">
-    <value>Plats krävs</value>
+    <value>Arbetsplats krävs</value>
     <comment>Requires Seat</comment>
   </data>
   <data name="Sites" xml:space="preserve">
@@ -9158,11 +9156,11 @@ långtid</value>
     <comment>SlotsFound</comment>
   </data>
   <data name="DoNotBreakMaxSeats" xml:space="preserve">
-    <value>Bryt inte mot maxarbetsplatser</value>
+    <value>Bryt inte mot max arbetsplatser</value>
     <comment>Do Not Break Max Seats</comment>
   </data>
   <data name="MaxSeatLimitBroken" xml:space="preserve">
-    <value>Maxarbetsplater överskridna</value>
+    <value>Maxarbetsplatser överskridna</value>
     <comment>Max Seat Limit Broken</comment>
   </data>
   <data name="MaxUsedSeats" xml:space="preserve">
@@ -9206,7 +9204,7 @@ långtid</value>
     <comment>Public Note:</comment>
   </data>
   <data name="RequestDetails" xml:space="preserve">
-    <value>Förfrågandetaljvy</value>
+    <value>Förfrågningsdetaljvy</value>
   </data>
   <data name="ViewDetails" xml:space="preserve">
     <value>Visa detaljer</value>
@@ -9216,11 +9214,11 @@ långtid</value>
     <comment>Are you sure you want to delete the '{0}' contract schedule?</comment>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
-    <value>Jämbördigt antal av varje skiftkategori</value>
+    <value>Samma antal av varje skiftkategori</value>
     <comment>Equal of each shift category</comment>
   </data>
   <data name="FairnessSystemUsedForScheduling" xml:space="preserve">
-    <value>Rättvisesystem som används i schemaläggning</value>
+    <value>Rättvisesystem som används vid schemaläggning</value>
     <comment>Fairness system used for scheduling</comment>
   </data>
   <data name="PointsPerShiftCategory" xml:space="preserve">
@@ -9250,7 +9248,7 @@ period</comment>
     <comment>{0} (Normal) {1} (Seasonality) {2} (Balance In) {3} (Extra) {4} (Balance Out) = {5}</comment>
   </data>
   <data name="ViewSchedulePeriodCalculation" xml:space="preserve">
-    <value>Se schemaperiodkalkyl</value>
+    <value>Visa uträkning av periodtid</value>
     <comment>View Schedule Period Calculation</comment>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
@@ -9274,7 +9272,7 @@ period</comment>
     <comment>Waiting...</comment>
   </data>
   <data name="SwapRaw" xml:space="preserve">
-    <value>Skiftbyte urval</value>
+    <value>Byt rakt av</value>
     <comment>SwapRaw</comment>
   </data>
   <data name="Restricted" xml:space="preserve">
@@ -9282,11 +9280,11 @@ period</comment>
     <comment>Restricted</comment>
   </data>
   <data name="ModifyRestrictedScenario" xml:space="preserve">
-    <value>Ändra skyddade scenarion</value>
+    <value>Ändra skyddade scenarion </value>
     <comment>Ändrade skyddade scenarion</comment>
   </data>
   <data name="ViewRestrictedScenario" xml:space="preserve">
-    <value>Visa skyddade scenarion</value>
+    <value>Visa skyddade scenarion </value>
     <comment>Visa skyddade scenarion</comment>
   </data>
   <data name="PlanningTimeBankCaption" xml:space="preserve">
@@ -9298,11 +9296,11 @@ period</comment>
     <comment>The Balance Out is outside  the limits!</comment>
   </data>
   <data name="PlanningTimeBankMax" xml:space="preserve">
-    <value>Max för tidbanksplan:</value>
+    <value>Max för planeringsbank:</value>
     <comment>Planning Time Bank Max:</comment>
   </data>
   <data name="PlanningTimeBankMin" xml:space="preserve">
-    <value>Min för tidbanksplan:</value>
+    <value>Min för planeringsbank:</value>
     <comment>Planning Time Bank Min:</comment>
   </data>
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
@@ -9314,7 +9312,7 @@ period</comment>
     <comment>Set Balance Out</comment>
   </data>
   <data name="SetPlanningTimeBank" xml:space="preserve">
-    <value>Sätta tidbanksplan</value>
+    <value>Sätta planeringsbank</value>
     <comment>Set Planning Time Bank</comment>
   </data>
   <data name="ExportToPDFGraphical" xml:space="preserve">
@@ -9358,7 +9356,7 @@ period</comment>
     <comment>Otillåtet värde</comment>
   </data>
   <data name="IllegalTimeInput" xml:space="preserve">
-    <value>Det angivna värdet är inte en tidsangivelse</value>
+    <value>Det angivna värdet är inte en giltig tidsangivelse</value>
     <comment>Det angivna värdet är inte en tidsangivelse</comment>
   </data>
   <data name="Id" xml:space="preserve">
@@ -9371,7 +9369,7 @@ period</comment>
     <value>Schemalagd övertid per agent</value>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
-    <value>Schemalagd tid kontra mål</value>
+    <value>Schemalagd tid mot mål</value>
     <comment>Schemalagd tid kontra mål</comment>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
@@ -9427,11 +9425,11 @@ period</comment>
     <comment>Next day:</comment>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Inga skift tillgängliga för denna tillgänglighet för timanställd.</value>
+    <value>Inga passande skift för denna tillgänglighet för timanställd.</value>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Period för tillgänglighet för timanställd</value>
+    <value>Tillgänglighetsperiod för timanställd</value>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
@@ -9458,7 +9456,7 @@ period</comment>
     <comment>Only for restrictions</comment>
   </data>
   <data name="LegalNotice" xml:space="preserve">
-    <value>Juridisk not</value>
+    <value>Legal notice</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
     <value>Skiftbytet kan inte utföras då ett skift innehåller frånvaro.</value>
@@ -9469,11 +9467,11 @@ period</comment>
     <comment>Skiftbyte nekat då personlig aktivitet hamnade utanför skiftet.</comment>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>Skiftbytet nekades då ett möte hamnade utanför ett skift.</value>
+    <value>Skiftbytet nekat då ett möte hamnade utanför ett skift.</value>
     <comment>Skiftbytet nekades då ett möte hamnade utanför ett skift.</comment>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
-    <value>Skiftkategorin i begränsningar stämmer inte med den i schemaläggningsinställningarna.</value>
+    <value>Skiftkategorin i begränsningar stämmer inte med skiftkategorin under Inställningar.</value>
     <comment>The Shift Category in the Restrictions conflicts with the Shift Category in Options.</comment>
   </data>
   <data name="DataSourceRequired" xml:space="preserve">
@@ -9525,7 +9523,7 @@ period</comment>
     <comment>Lock Student Availability</comment>
   </data>
   <data name="LockRotations" xml:space="preserve">
-    <value>Lås rotationer</value>
+    <value>Lås sekvenser</value>
     <comment>Lock Rotations</comment>
   </data>
   <data name="BusinessUnitRequired" xml:space="preserve">
@@ -9565,7 +9563,7 @@ period</comment>
     <comment>Common Agent Description for Schedule Exports</comment>
   </data>
   <data name="EditCommonAgentDescriptionForScheduleExportsFormat" xml:space="preserve">
-    <value>Redigera beskrivningsformat  för agent exportera schema</value>
+    <value>Redigera agentbeskrivning för schemaexportformat</value>
     <comment>Edit common agent description for schedule exports format</comment>
   </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
@@ -9584,11 +9582,11 @@ period</comment>
     <comment>All Must Have</comment>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktivitet per agent</value>
+    <value>Aktivitetstid per agent</value>
     <comment>Activity Time per Agent</comment>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
-    <value>{0} hindrar TeleoptiCCC från att stängas ned. \r\n Vill du tvinga fram en stängning ändå?</value>
+    <value>{0} hindrar TeleoptiCCC från att stängas ned. Vill du tvinga fram en stängning?</value>
     <comment>{0} has prevented the application from shutting down \r\n Do you want to force close the application?</comment>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
@@ -9608,7 +9606,7 @@ period</comment>
     <comment>MyTimeWeb</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Logga av</value>
+    <value>Logga ut</value>
     <comment>Log out</comment>
   </data>
   <data name="LicenseAgreement" xml:space="preserve">
@@ -9616,7 +9614,7 @@ period</comment>
     <comment>License Agreement</comment>
   </data>
   <data name="TeleoptiLicenseAgreementProgram" xml:space="preserve">
-    <value>Teleoptis Licensavtal för programvara</value>
+    <value>Teleoptis licensavtal för programvara</value>
     <comment>Teleopti's license agrement for software</comment>
   </data>
   <data name="PersonalActivity" xml:space="preserve">
@@ -9632,7 +9630,7 @@ period</comment>
     <comment>Meetings created by me</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Den här licensen täcker endast {0} arbetsplaser. Ni måste skaffa en licens som täcker tillräckligt många arbetsplaser.</value>
+    <value>Den här licensen täcker endast {0} arbetsplatser. Du måste skaffa en licens som täcker tillräckligt många arbetsplatser.</value>
   </data>
   <data name="SeatLicense" xml:space="preserve">
     <value>Detta system är licensierat till "{0}" enligt villkoren i licensavtalet och licensnyckeln upphör att gälla {1}.
@@ -9643,10 +9641,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
 {4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Ni har nästan nått er gräns på {0} arbetsplaser. Ni bör snarast skaffa er en utökad licens</value>
+    <value>Ni har nästan nått er gräns på {0} arbetsplatser. Du bör snarast skaffa en utökad licens</value>
   </data>
   <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Ni använder för många arbetsplaser, ni har licens för {0}. Ni måste utöka er licens innan ni kan fortsätta.</value>
+    <value>Ni använder för många arbetsplatser, ni har licens för {0}. Du måste utöka er licens innan du kan fortsätta.</value>
   </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>All frånvaro</value>
@@ -9660,7 +9658,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Din e-postadress måste vara angiven i Person-modulen för att kunna använda denna funktion.</value>
   </data>
   <data name="JobCategory" xml:space="preserve">
-    <value>Jobb kategori</value>
+    <value>Jobbkategori</value>
     <comment>Job Category</comment>
   </data>
   <data name="JobHistory" xml:space="preserve">
@@ -9704,7 +9702,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>SelectDestination</comment>
   </data>
   <data name="SelectMultisiteSkills" xml:space="preserve">
-    <value>Välj Multisite-kompetens</value>
+    <value>Välj multisite-kompetens</value>
     <comment>Select Multisite Skills</comment>
   </data>
   <data name="TargetBusinessUnit" xml:space="preserve">
@@ -9716,7 +9714,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Target Skill</comment>
   </data>
   <data name="TheExportWillStartInBackgroundMessage" xml:space="preserve">
-    <value>Exporten startas som ett jobb i bakgrunden när guiden är avslutad, kontrollera Job historiken för status.</value>
+    <value>Exporten startas som ett jobb i bakgrunden när guiden är avslutad, kontrollera Jobbhistoriken för status.</value>
     <comment>The export will be started as a job in the background, check Job History for status.</comment>
   </data>
   <data name="WorkingThreeDots" xml:space="preserve">
@@ -9728,7 +9726,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>You have to map at least one sub skill</comment>
   </data>
   <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
-    <value>Du måste välja minst ett skill.</value>
+    <value>Du måste välja minst en kompetens.</value>
     <comment>You have to select at least one skill</comment>
   </data>
   <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
@@ -9738,7 +9736,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Skicka ASM</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
-    <value>Saknar arbestflödeskontroll</value>
+    <value>Arbetsflöde saknas</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Inloggning kundwebb</value>
@@ -9755,7 +9753,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Skiftkategori och heldagsfrånvaro per dag</comment>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
-    <value>En underliggande kompetens verkar ha samma namn som den överliggande kompetensen eller så har två eller flera underliggande kompetenser samma namn, kontrollera egenskaperna på Multisite-kompetensen, Prognosen stängs ner.</value>
+    <value>En underliggande kompetens verkar ha samma namn som den överliggande kompetensen eller så har två eller flera underliggande kompetenser samma namn, kontrollera egenskaperna på multisite-kompetensen, Prognosen stängs ner.</value>
     <comment>Child skill Multi skill warning</comment>
   </data>
   <data name="UseStandardDeviation" xml:space="preserve">
@@ -9771,7 +9769,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Använd samma fridagar</comment>
   </data>
   <data name="UseTeam" xml:space="preserve">
-    <value>Använd grupp</value>
+    <value>Använd team</value>
     <comment>Använd grupp</comment>
   </data>
   <data name="AuditingIsNotRunning" xml:space="preserve">
@@ -9810,7 +9808,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Starta ändringsloggen?</value>
   </data>
   <data name="ViewCustomTeamSchedule" xml:space="preserve">
-    <value>Gruppschema baserat på andra grupperingar</value>
+    <value>Teamschema baserat på andra grupperingar</value>
   </data>
   <data name="ChangeDateFromColon" xml:space="preserve">
     <value>Ändringsdatum från:</value>
@@ -9841,7 +9839,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>override for budgeted allowance</comment>
   </data>
   <data name="AbsenceThreshold" xml:space="preserve">
-    <value>Tröskel värde %</value>
+    <value>Tröskelvärde</value>
     <comment>threshold for budgeted allowance</comment>
   </data>
   <data name="Allowance" xml:space="preserve">
@@ -9863,7 +9861,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>edit shrinkage</comment>
   </data>
   <data name="ViewScheduleHistory" xml:space="preserve">
-    <value>Visa schema ändringar</value>
+    <value>Visa schemaändringar</value>
     <comment>View Schedule History</comment>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
@@ -9895,7 +9893,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Missing Subject</comment>
   </data>
   <data name="ChooseScheduleTagToChange" xml:space="preserve">
-    <value>Välj tag att redigera</value>
+    <value>Välj schematagg att ändra</value>
   </data>
   <data name="DeleteTag" xml:space="preserve">
     <value>Ta bort vald tag</value>
@@ -9953,7 +9951,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Ange ett namn!</value>
   </data>
   <data name="TotalAllowance" xml:space="preserve">
-    <value>Totalt utrymme</value>
+    <value>Total tilldelning</value>
     <comment>total allowance</comment>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
@@ -9969,7 +9967,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Visa tilldelning</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>Gruppschema</value>
+    <value>Teamschema</value>
     <comment>Team Schedule</comment>
   </data>
   <data name="XRequests" xml:space="preserve">
@@ -9979,7 +9977,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Allt</value>
   </data>
   <data name="PersonFinderFieldBudgetGroup" xml:space="preserve">
-    <value>Budget grupp</value>
+    <value>Budgetgrupp</value>
   </data>
   <data name="PersonFinderFieldContract" xml:space="preserve">
     <value>Kontrakt</value>
@@ -10030,11 +10028,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Adjust for flexible work time</comment>
   </data>
   <data name="MeetingActivityRequired" xml:space="preserve">
-    <value>Du måste välja en aktivitet för mötet</value>
+    <value>Välj en aktivitet för mötet</value>
     <comment>Meeting Activity validation message</comment>
   </data>
   <data name="NoShiftsFound" xml:space="preserve">
-    <value>Inga skift kan hittas.</value>
+    <value>Inga skift kunde hittas.</value>
     <comment>No shifts could be found.</comment>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
@@ -10054,7 +10052,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Förfrågningar per agent</comment>
   </data>
   <data name="TargetValue" xml:space="preserve">
-    <value>Målvärdesberäkning</value>
+    <value>Målvärde</value>
     <comment>Target Value</comment>
   </data>
   <data name="Teleopti" xml:space="preserve">
@@ -10074,7 +10072,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Extending and reducing days off for flexible agents</comment>
   </data>
   <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
-    <value>Justera för flexibla lediga dager</value>
+    <value>Justera för flexibla lediga dagar</value>
     <comment>ExtendReduceDaysoffForFlexibleAgents</comment>
   </data>
   <data name="ThisIsTheDefaultScenario" xml:space="preserve">
@@ -10160,11 +10158,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Maximum seats</comment>
   </data>
   <data name="MaximumStaffing" xml:space="preserve">
-    <value>Max bemanning</value>
+    <value>Maxbemanning</value>
     <comment>Maximum staffing</comment>
   </data>
   <data name="MinimumStaffing" xml:space="preserve">
-    <value>Lägsta bemanning</value>
+    <value>Minbemanning</value>
     <comment>Minimum staffing</comment>
   </data>
   <data name="MustHaves" xml:space="preserve">
@@ -10176,7 +10174,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Optimization steps</comment>
   </data>
   <data name="ShiftLimits" xml:space="preserve">
-    <value>Skiftkategoribegränsningar</value>
+    <value>Skiftbegränsningar</value>
     <comment>Shift Limits</comment>
   </data>
   <data name="ShiftSelection" xml:space="preserve">
@@ -10192,7 +10190,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Student availabilities</comment>
   </data>
   <data name="Teams" xml:space="preserve">
-    <value>Grupper</value>
+    <value>Team</value>
     <comment>Teams</comment>
   </data>
   <data name="NoTeamsAvailable" xml:space="preserve">
@@ -10213,6 +10211,27 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>Personens roller</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>Minimum är {0} timmar.</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>Aktivitet kan inte vara tom.</value>
+  </data>
+  <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
+    <value>Du har inte rättighet att se skyddade scenarion och alla scenarion är skyddade.</value>
+  </data>
+  <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
+    <value>Din frånvaroförfrågan har blivit nekad automatiskt. Det finns inte tillräckligt med budgeterad tilldelning kvar för denna förfrågan.</value>
+  </data>
+  <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
+    <value>Ett fel inträffade vid försök att spara inställningarna.</value>
+  </data>
+  <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
+    <value>Du har allmänna rättigheter att se skyddade scenarion men inte för de valda teamen och datumen.</value>
+  </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>Maximum är {0} timmar.</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>Förfrågningshistorik</value>
