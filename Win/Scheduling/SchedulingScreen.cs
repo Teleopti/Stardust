@@ -3109,7 +3109,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			releaseUserInterface(canceled);
 			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
-				new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
+                if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleShot)
+                    new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
+                else
+                    ViewBase.ShowInformationMessage(string.Format(Resources.NoOfAgentDaysCouldNotBeScheduled, _scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
+                        , Resources.SchedulingResult);
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 		}

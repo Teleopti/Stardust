@@ -242,6 +242,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
             _schedulingOptions.TagToUseOnOptimize = _localSchedulingOptions.TagToUseOnOptimize;
+            _schedulingOptions.ShowTroubleShot = _localSchedulingOptions.ShowTroubleShot;
         }
 
         private void GetDataFromControls()
@@ -308,6 +309,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
 
             _currentSchedulingScreenSettings.SelectedFairnessGroupingKey = comboBoxGroupingFairness.SelectedValue.ToString();
+
+            _localSchedulingOptions.ShowTroubleShot = checkBoxShowTroubleShot.Checked;
         }
 
         private void SetDataInControls()
@@ -406,6 +409,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (_optimize)
                 checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupOptimizing;
             checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
+
+            checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleShot;
         }
 
         private bool MustHaveSetAndOnlyPreferenceDaysVisible()

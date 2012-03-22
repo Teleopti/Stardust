@@ -10226,4 +10226,10 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Kontraktstid sjunkande</value>
   </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Inkludera felsökningsinformation</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} agentdagar kunde inte schemaläggas.</value>
+  </data>
 </root>
