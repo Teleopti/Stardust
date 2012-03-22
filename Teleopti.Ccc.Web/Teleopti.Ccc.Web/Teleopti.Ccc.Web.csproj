@@ -208,6 +208,8 @@
     <Compile Include="Core\RequestContext\ICultureProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentPrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
