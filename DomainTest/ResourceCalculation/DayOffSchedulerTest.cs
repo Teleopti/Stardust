@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -390,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotAddContractDayOffWhenRestrictionWorkday()
         {
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
