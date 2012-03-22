@@ -225,6 +225,12 @@
     <Compile Include="Forecasting\Export\MultisiteForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\OpenAndSplitSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommandTest.cs" />
+    <Compile Include="Forecasting\ForecastsFile\CsvFileReaderTest.cs" />
+    <Compile Include="Forecasting\ForecastsFile\CsvFileRowTest.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidatorTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastFileTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileRowCreatorTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileRowTest.cs" />
     <Compile Include="Forecasting\MultisiteDayCloneIssueTest.cs" />
     <Compile Include="Forecasting\SkillDayBug14724Test.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxSeatsTest.cs" />
