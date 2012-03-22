@@ -206,6 +206,35 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Corrupt cookie due to no longer existing database should be overwritten by a logo" +
+            "n")]
+        public virtual void CorruptCookieDueToNoLongerExistingDatabaseShouldBeOverwrittenByALogon()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Corrupt cookie due to no longer existing database should be overwritten by a logo" +
+                    "n", ((string[])(null)));
+#line 56
+this.ScenarioSetup(scenarioInfo);
+#line 57
+ testRunner.Given("I am a user with a single business unit");
+#line 58
+ testRunner.When("I sign in by user name");
+#line 59
+ testRunner.And("My cookie gets pointed to non existing database");
+#line 60
+ testRunner.And("I navigate to an application page");
+#line 61
+ testRunner.Then("I should not be signed in");
+#line 62
+ testRunner.When("I sign in by user name");
+#line 63
+ testRunner.And("I navigate to an application page");
+#line 64
+ testRunner.Then("I should be signed in");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

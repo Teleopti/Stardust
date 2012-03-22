@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			target.CorruptMyCookie();
 			target.ExpireMyCookie();
+			target.NonExistingDatasourceCookie();
 		}
 	}
 }

@@ -24,5 +24,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Navigation.CreateCorruptCookie();
 		}
+
+		[When(@"My cookie gets pointed to non existing database")]
+		public void WhenMyCookieGetsPointedToNonExistingDatabase()
+		{
+			Navigation.CreateNonExistingDatabaseCookie();
+		}		
 	}
 }

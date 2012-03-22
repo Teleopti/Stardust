@@ -87,6 +87,20 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			}
 		}
 
+		[Test]
+		public void ShouldReturnNullIfSessionDataPointsToNonExistingDatabase()
+		{
+			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid(), AuthenticationTypeOption.Windows);
+			using (mocks.Record())
+			{
+				Expect.Call(sessionSpecificDataProvider.Grab()).Return(sessionData);
+			}
+			using (mocks.Playback())
+			{
+				target.Generate().Should().Be.Null();
+			}
+		}
+
 		private static SessionSpecificData createSessionData()
 		{
 			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid(), AuthenticationTypeOption.Windows);
