@@ -35,6 +35,10 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			{
 				return null;
 			}
+			catch (FormatException)
+			{
+				return null;
+			}
 		}
 	}
 }

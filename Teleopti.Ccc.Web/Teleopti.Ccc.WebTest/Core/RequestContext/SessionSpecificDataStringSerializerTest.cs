@@ -48,5 +48,12 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			target.Deserialize(string.Empty).Should().Be.Null();
 		}
+
+		[Test]
+		public void DeserializeShouldReturnNullIfNotBuildOnCorrectByteArray()
+		{
+			target.Deserialize("wrong")
+				.Should().Be.Null();
+		}
 	}
 }
