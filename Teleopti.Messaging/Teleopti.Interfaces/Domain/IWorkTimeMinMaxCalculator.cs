@@ -10,9 +10,9 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Calculate the min/max work times based on a rule set bag
 		/// </summary>
-		/// <param name="ruleSetBag">The sule set bag</param>
+		/// <param name="person"></param>
 		/// <param name="date">The date</param>
 		/// <returns></returns>
-		IWorkTimeMinMax WorkTimeMinMax(IRuleSetBag ruleSetBag, DateOnly date);
+		IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly date);
 	}
 }
