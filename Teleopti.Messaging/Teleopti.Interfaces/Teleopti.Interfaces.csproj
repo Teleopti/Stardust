@@ -175,6 +175,7 @@
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
     <Compile Include="Domain\DetailLevel.cs" />
+    <Compile Include="Domain\IAgentDayScheduleTag.cs" />
     <Compile Include="Domain\IAuditSetting.cs" />
     <Compile Include="Domain\IAuditSettingRepository.cs" />
     <Compile Include="Domain\IAuthorizeOrganisationDetail.cs" />
