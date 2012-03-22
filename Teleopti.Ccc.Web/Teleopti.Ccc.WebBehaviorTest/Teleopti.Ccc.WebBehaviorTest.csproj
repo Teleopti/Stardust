@@ -72,6 +72,7 @@
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />
     <Compile Include="Data\User\AgentThatLeavesTomorrow.cs" />
+    <Compile Include="Data\User\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />

@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-start-times");
+			var div = cell.Div(Find.ByClass("possible-start-times"));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
 		}
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-end-times");
+			var div = cell.Div(Find.ByClass("possible-end-times"));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
 		}
@@ -232,12 +232,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-contract-times");
+			var div = cell.Div(Find.ByClass("possible-contract-times"));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
 		}
-
-
 
 
 

@@ -205,6 +205,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingPreferenceToday());
 		}
 
+		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(string earliest, string latest)
+		{
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(earliest, latest));
+		}
+
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
 		{
@@ -450,7 +456,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]
 		public void GivenIHaveAShiftBagWithStartTimesToAndEndTimesTo(int earliestStart, int latestStart, int earliestEnd, int latestEnd)
 		{
-			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
 
