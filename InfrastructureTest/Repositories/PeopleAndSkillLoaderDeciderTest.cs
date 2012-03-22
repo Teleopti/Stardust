@@ -155,6 +155,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(2, list2Filter.Count);
         }
 
+		[Test]
+		public void VerifyOnlyOneParentReturnedIfMatchForTwoChildSkillsOnly()
+		{
+			Guid valid1 = Guid.NewGuid();
+			Guid valid2 = Guid.NewGuid();
+			target.SetSkillGuids(new List<Guid> { valid1, valid2 });
+
+			IChildSkill validSkill1 = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
+			validSkill1.SetId(valid1);
+
+			IChildSkill validSkill2 = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
+			validSkill2.SetId(valid1);
+
+			IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
+			parent.AddChildSkill(validSkill1);
+			parent.AddChildSkill(validSkill2);
+
+			IList<ISkill> list2Filter = new List<ISkill> { validSkill1, validSkill2 };
+			int removed = target.FilterSkills(list2Filter);
+			Assert.AreEqual(-1, removed);
+			Assert.AreEqual(3, list2Filter.Count);
+		}
+
         [Test]
         public void VerifyParentNotReturnedIfNoMatchForChildSkill()
         {
