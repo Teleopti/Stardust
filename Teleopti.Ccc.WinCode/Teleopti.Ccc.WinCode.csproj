@@ -572,6 +572,7 @@
     <Compile Include="Scheduling\GridlockCommands\GridlockAllRestrictionsCommand.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllTagsCommand.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockTagCommand.cs" />
+    <Compile Include="Scheduling\GridlockCommands\WriteProtectionRemoveCommand.cs" />
     <Compile Include="Scheduling\GridLockRemoverForDelete.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsCommand.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllRotationsDayOffCommand.cs" />
