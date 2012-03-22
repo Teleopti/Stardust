@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			var cookie = makeCookie(userName, _now.Time, userData);
-
-			setCookie(cookie);
+			MakeCookie(userName, _now.Time, userData);
 		}
 
 		public SessionSpecificData Grab()
@@ -44,10 +42,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 
 			var ticket = decryptCookie(cookie);
 			var userData = string.Empty;
-			if (ticket == null || ticket.Expired)
-			{
-			}
-			else
+			if (ticket != null && !ticket.Expired)
 			{
 				userData = ticket.UserData;
 				handleSlidingExpiration(cookie, ticket);
@@ -77,7 +72,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			_httpContext.Response.Cookies.Add(cookie);
 		}
 
-		private HttpCookie makeCookie(string userName, DateTime now, string userData)
+		public void MakeCookie(string userName, DateTime now, string userData)
 		{
 			var ticket = makeTicket(userName, now, userData);
 
@@ -93,7 +88,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			{
 				cookie.Domain = _sessionSpecificCookieDataProviderSettings.AuthenticationCookieDomain;
 			}
-			return cookie;
+			setCookie(cookie);
 		}
 
 		private FormsAuthenticationTicket makeTicket(string userName, DateTime now, string userData)

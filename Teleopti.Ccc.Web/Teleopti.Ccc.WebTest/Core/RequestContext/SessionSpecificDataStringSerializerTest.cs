@@ -31,9 +31,10 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		}
 
 		[Test]
-		public void FailingDeserializationShouldThrow()
+		public void FailingDeserializationShouldReturnNull()
 		{
-			Assert.Throws<SerializationException>(() => target.Deserialize("totally wrong"));
+			target.Deserialize(Convert.ToBase64String(Convert.FromBase64String("Totally wrong")))
+				.Should().Be.Null();
 		}
 
 		[Test]

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
@@ -25,5 +19,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.ExpireMyCookie();
 		}
 
+		[When(@"My cookie gets corrupt")]
+		public void WhenMyCookieIsCorrupt()
+		{
+			Navigation.CreateCorruptCookie();
+		}
 	}
 }

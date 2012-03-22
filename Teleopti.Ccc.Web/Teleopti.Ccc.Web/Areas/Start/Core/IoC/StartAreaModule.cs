@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<AvailableWindowsDataSources>().As<IAvailableWindowsDataSources>();
 			builder.RegisterType<Redirector>().As<IRedirector>();
 			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
-			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>();
+			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
 		}
 	}
 }
