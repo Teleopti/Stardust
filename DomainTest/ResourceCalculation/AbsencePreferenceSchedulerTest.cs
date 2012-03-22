@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void ShouldAddAbsenceIfPreffered()
+        public void ShouldAddAbsenceIfPreferred()
         {
             var absence = new Absence();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, absence,new List<IActivityRestriction>()) { IsPreferenceDay = true };

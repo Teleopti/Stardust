@@ -249,9 +249,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         {
             var range1 = _mock.StrictMock<IScheduleRange>();
             var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var dateOnly = new DateOnly();
-            var dateOnlyPeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
 
             using (_mock.Record())
             {
@@ -265,13 +262,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(true);
-
-                Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
-                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())

@@ -102,26 +102,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             {
                 IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
 
-                bool locked = true;
-                foreach (var scheduleMatrixPro in matrixList)
+                if (!scheduleDay.IsScheduled())
                 {
-                    if (scheduleMatrixPro.Person == scheduleDay.Person)
+                    bool locked = true;
+                    foreach (var scheduleMatrixPro in matrixList)
                     {
-                        foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
+                        if (scheduleMatrixPro.Person == scheduleDay.Person)
                         {
-                            if(scheduleDayPro.Day == scheduleDay.DateOnlyAsPeriod.DateOnly)
+                            foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
                             {
-                                locked = false;
-                                break;
+                                if (scheduleDayPro.Day == scheduleDay.DateOnlyAsPeriod.DateOnly)
+                                {
+                                    locked = false;
+                                    break;
+                                }
                             }
+                            break;
                         }
-                        break;
                     }
-                }
 
-                if (!locked && !scheduleDay.IsScheduled())
-                {
-                    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, true, bestCategory);
+                    bool sucess = false;
+                    if(!locked) sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, true, bestCategory);
                     if (!sucess)
                     {
                         return false;
