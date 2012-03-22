@@ -104,6 +104,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
+    <Compile Include="Areas\Start\Controllers\TestControllerTest.cs" />
     <Compile Include="Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\FakePermissionProvider.cs" />
     <Compile Include="Areas\Start\MenuViewModelFactoryTest.cs" />
