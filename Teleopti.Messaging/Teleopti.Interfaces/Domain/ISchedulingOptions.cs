@@ -321,6 +321,6 @@ namespace Teleopti.Interfaces.Domain
 
         ///<summary>
         ///</summary>
-        bool ShowTroubleShot { get; set; }
+        bool ShowTroubleshot { get; set; }
     }
 }

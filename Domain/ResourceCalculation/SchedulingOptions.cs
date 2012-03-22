@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IScheduleTag TagToUseOnScheduling { get; set; }
         public IScheduleTag TagToUseOnOptimize { get; set; }
 
-        public bool ShowTroubleShot { get; set; }
+        public bool ShowTroubleshot { get; set; }
 
         public SchedulingOptions()
         {
