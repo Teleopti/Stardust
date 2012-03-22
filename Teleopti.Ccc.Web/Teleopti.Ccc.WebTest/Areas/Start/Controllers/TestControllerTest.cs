@@ -13,20 +13,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		 * (and they are not part of ncover)
 		 */
 
-		private TestController target;
-
-		[SetUp]
-		public void Setup()
-		{
-			target = new TestController(MockRepository.GenerateStub<ISessionSpecificDataProvider>());
-		}
-
 		[Test]
 		public void PlainStupid()
 		{
-			target.CorruptMyCookie();
-			target.ExpireMyCookie();
-			target.NonExistingDatasourceCookie();
+			using (var target = new TestController(MockRepository.GenerateStub<ISessionSpecificDataProvider>()))
+			{
+				target.CorruptMyCookie();
+				target.ExpireMyCookie();
+				target.NonExistingDatasourceCookie();	
+			}
 		}
 	}
 }
