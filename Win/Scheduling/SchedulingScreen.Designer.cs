@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
             this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
             this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-            this.toolStripSpinningProgressControl1.TransitionSegment = 2;
+            this.toolStripSpinningProgressControl1.TransitionSegment = 4;
             this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
             this.toolStripSpinningProgressControl1.Visible = false;
             // 
@@ -2530,7 +2530,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonViewDetails.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonViewDetails.Name = "toolStripButtonViewDetails";
             this.SetShortcut(this.toolStripButtonViewDetails, System.Windows.Forms.Keys.None);
-            this.toolStripButtonViewDetails.Size = new System.Drawing.Size(81, 0);
+            this.toolStripButtonViewDetails.Size = new System.Drawing.Size(81, 78);
             this.toolStripButtonViewDetails.Text = "xxViewDetails";
             this.toolStripButtonViewDetails.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewDetails, true);
@@ -2545,7 +2545,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonViewAllowance.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonViewAllowance.Name = "toolStripButtonViewAllowance";
             this.SetShortcut(this.toolStripButtonViewAllowance, System.Windows.Forms.Keys.None);
-            this.toolStripButtonViewAllowance.Size = new System.Drawing.Size(101, 0);
+            this.toolStripButtonViewAllowance.Size = new System.Drawing.Size(101, 78);
             this.toolStripButtonViewAllowance.Text = "xxViewAllowance";
             this.toolStripButtonViewAllowance.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewAllowance, true);
@@ -2583,7 +2583,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripExHandleRequests.Location = new System.Drawing.Point(275, 1);
             this.toolStripExHandleRequests.Name = "toolStripExHandleRequests";
             this.toolStripExHandleRequests.ShowLauncher = false;
-            this.toolStripExHandleRequests.Size = new System.Drawing.Size(387, 0);
+            this.toolStripExHandleRequests.Size = new System.Drawing.Size(387, 98);
             this.toolStripExHandleRequests.TabIndex = 1;
             this.toolStripExHandleRequests.Text = "xxHandleRequests";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExHandleRequests, true);
@@ -2677,7 +2677,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripEx3.Location = new System.Drawing.Point(664, 1);
             this.toolStripEx3.Name = "toolStripEx3";
             this.toolStripEx3.ShowLauncher = false;
-            this.toolStripEx3.Size = new System.Drawing.Size(47, 0);
+            this.toolStripEx3.Size = new System.Drawing.Size(47, 98);
             this.toolStripEx3.TabIndex = 2;
             this.toolStripEx3.Text = "xxFilter";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx3, true);
@@ -2711,7 +2711,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripExFilterDays.Location = new System.Drawing.Point(713, 1);
             this.toolStripExFilterDays.Name = "toolStripExFilterDays";
             this.toolStripExFilterDays.ShowLauncher = false;
-            this.toolStripExFilterDays.Size = new System.Drawing.Size(237, 98);
+            this.toolStripExFilterDays.Size = new System.Drawing.Size(242, 98);
             this.toolStripExFilterDays.TabIndex = 3;
             this.toolStripExFilterDays.Text = "xxFilterDays";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFilterDays, true);
@@ -2736,9 +2736,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripComboBoxExFilterDays.Margin = new System.Windows.Forms.Padding(7, 2, 2, 2);
             this.toolStripComboBoxExFilterDays.MaxDropDownItems = 4;
             this.toolStripComboBoxExFilterDays.Name = "toolStripComboBoxExFilterDays";
-            this.toolStripComboBoxExFilterDays.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.SetShortcut(this.toolStripComboBoxExFilterDays, System.Windows.Forms.Keys.None);
-            this.toolStripComboBoxExFilterDays.Size = new System.Drawing.Size(40, 23);
+            this.toolStripComboBoxExFilterDays.Size = new System.Drawing.Size(45, 23);
             this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripComboBoxExFilterDays, true);
             this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripComboBoxExFilterDays, false);
