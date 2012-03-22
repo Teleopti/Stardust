@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             studentSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, bool useOccupancyAdjustment, ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
@@ -276,7 +277,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-                //fixedStaffSchedulingService.DayOffScheduling(unlockedSchedules, schedulePartModifyAndRollbackServiceForContractDaysOff);
                 fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff);
 
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
@@ -1073,6 +1073,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPage;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll)
         {
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -1124,6 +1125,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 schedulePartModifyAndRollbackServiceforContractDaysOff.Rollback();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker)
         {
             if (allScheduleDays == null) throw new ArgumentNullException("allScheduleDays");

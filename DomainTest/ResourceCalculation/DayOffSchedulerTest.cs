@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
 		private MockRepository _mocks;
 
-		private  ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private  IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private  IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private  ISchedulingOptions _schedulingOptions;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IDayOffScheduler _target;
 		private DateOnly _date1 = new DateOnly(2009, 2, 2);
 		private IScheduleDayAvailableForDayOffSpecification _scheduleAvailableForDayOffSpecification;
-	    private IScheduleMatrixListCreator _scheduleMatrixListCreator;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 	    private IContract _contract;
         private DateOnlyPeriod _period;
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_mocks = new MockRepository();
             _period = new DateOnlyPeriod(_date1, _date1.AddDays(1));
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -52,9 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulingOptions = new SchedulingOptions();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
-		    _scheduleMatrixListCreator = _mocks.StrictMock<IScheduleMatrixListCreator>();
-			_target = new DayOffScheduler(_schedulingResultStateHolder, _dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
-                                          _schedulingOptions, _schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification, _scheduleMatrixListCreator);
+			_target = new DayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
+                                          _schedulingOptions, _schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification);
 
            
 		    _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();

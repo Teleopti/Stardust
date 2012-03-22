@@ -25,11 +25,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public DayOffScheduler(ISchedulingResultStateHolder schedulingResultStateHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+		public DayOffScheduler(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, ISchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-            IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
-            IScheduleMatrixListCreator scheduleMatrixListCreator)
+            IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
