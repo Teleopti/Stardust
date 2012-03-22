@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
         private readonly IImportForecastsRepository _importForecastsRepository;
+        private readonly IForecastsFileContentProvider _contentProvider;
         private readonly IJobResultFeedback _feedback;
         private readonly IMessageBroker _messageBroker;
         private readonly IServiceBus _serviceBus;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             ISkillRepository skillRepository,
             IJobResultRepository jobResultRepository,
             IImportForecastsRepository importForecastsRepository,
+            IForecastsFileContentProvider contentProvider,
             IJobResultFeedback feedback,
             IMessageBroker messageBroker,
             IServiceBus serviceBus)
@@ -39,12 +41,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _skillRepository = skillRepository;
             _jobResultRepository = jobResultRepository;
             _importForecastsRepository = importForecastsRepository;
+            _contentProvider = contentProvider;
             _feedback = feedback;
             _messageBroker = messageBroker;
             _serviceBus = serviceBus;
             _jobResultProgressEncoder = new JobResultProgressEncoder();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Consume(ImportForecastsFileToSkill message)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -62,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     sendValidationError(message.JobId, "The uploaded file has no content.");
                     return;
                 }
-                var commandResult = new ForecastsFileContentProvider(forecastFile.FileContent, timeZone).Analyze();
+                var commandResult =_contentProvider.LoadContent(forecastFile.FileContent, timeZone).Analyze();
                 if (!commandResult.Succeeded)
                 {
                     sendValidationError(message.JobId, string.Concat("Validation error! ", commandResult.ErrorMessage));
@@ -85,13 +89,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _unitOfWorkFactory = null;
         }
 
-        private IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
-                                             ForecastsAnalyzeCommandResult commandResult)
+        private static IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
+                                             IForecastsAnalyzeCommandResult commandResult)
         {
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
             foreach (var date in commandResult.Period.DayCollection())
             {
-                var openHours = commandResult.WorkloadDayOpenHours.Get(date);
+                var openHours = commandResult.WorkloadDayOpenHours.GetOpenHour(date);
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                                        {
                                            BusinessUnitId = message.BusinessUnitId,
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            TargetSkillId = message.TargetSkillId,
                                            StartOpenHour = openHours.StartTime,
                                            EndOpenHour = openHours.EndTime,
-                                           Forecasts = commandResult.ForecastFileDictionary.Get(date),
+                                           Forecasts = commandResult.ForecastFileContainer.GetForecastsRows(date),
                                            ImportMode = message.ImportMode
                                        });
             }

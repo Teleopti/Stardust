@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	{
 		void SetProgress(int percentage);
 		void SetMessage(string message);
-        void SetJobStatusId(Guid? id);
+        void SetJobStatusId(Guid id);
 	    void ChangeMaximumProgressValue(int percentage);
 	}
 

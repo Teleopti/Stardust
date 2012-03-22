@@ -4,18 +4,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
-    public interface IWorkloadDayOpenHoursDictionary
+    public interface IWorkloadDayOpenHoursContainer
     {
-        void Add(DateOnly dateOnly, TimePeriod openHours);
-        TimePeriod Get(DateOnly dateOnly);
+        void AddOpenHour(DateOnly dateOnly, TimePeriod openHours);
+        TimePeriod GetOpenHour(DateOnly dateOnly);
     }
 
-    public class WorkloadDayOpenHoursDictionary : IWorkloadDayOpenHoursDictionary
+    public class WorkloadDayOpenHoursContainer : IWorkloadDayOpenHoursContainer
     {
         private readonly IDictionary<DateOnly, TimePeriod> _workloadDayOpenHours =
             new Dictionary<DateOnly, TimePeriod>();
 
-        public void Add(DateOnly dateOnly, TimePeriod openHours)
+        public void AddOpenHour(DateOnly dateOnly, TimePeriod openHours)
         {
             TimePeriod existingOpenHours;
             if (_workloadDayOpenHours.TryGetValue(dateOnly, out existingOpenHours))
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _workloadDayOpenHours.Add(dateOnly, openHours);
         }
 
-        public TimePeriod Get(DateOnly dateOnly)
+        public TimePeriod GetOpenHour(DateOnly dateOnly)
         {
             TimePeriod openHours;
             _workloadDayOpenHours.TryGetValue(dateOnly, out openHours);

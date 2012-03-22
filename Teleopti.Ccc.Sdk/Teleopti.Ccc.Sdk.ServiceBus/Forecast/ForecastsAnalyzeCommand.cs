@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastsAnalyzeCommand
     {
-        ForecastsAnalyzeCommandResult Execute();
+        IForecastsAnalyzeCommandResult Execute();
     }
 
     public class ForecastsAnalyzeCommand : IForecastsAnalyzeCommand
@@ -20,15 +20,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _forecasts = forecasts;
         }
 
-        public ForecastsAnalyzeCommandResult Execute()
+        public IForecastsAnalyzeCommandResult Execute()
         {
-            var result = new ForecastsAnalyzeCommandResult { ForecastFileDictionary = new ForecastFileDictionary() };
+            var result = new ForecastsAnalyzeCommandResult { ForecastFileContainer = new ForecastFileContainer() };
             var firstRow = _forecasts.First();
             var intervalLengthTicks = firstRow.LocalDateTimeTo.Subtract(firstRow.LocalDateTimeFrom).Ticks;
             var skillName = firstRow.SkillName;
             var startDateTime = DateTime.MaxValue;
             var endDateTime = DateTime.MinValue;
-            var workloadDayOpenHours = new WorkloadDayOpenHoursDictionary();
+            var workloadDayOpenHours = new WorkloadDayOpenHoursContainer();
             foreach (var forecastsRow in _forecasts)
             {
                 if (!forecastsRow.SkillName.Equals(skillName))
@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                workloadDayOpenHours.Add(new DateOnly(forecastsRow.LocalDateTimeFrom),
+                workloadDayOpenHours.AddOpenHour(new DateOnly(forecastsRow.LocalDateTimeFrom),
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
                                                         forecastsRow.LocalDateTimeTo.TimeOfDay));
 
-                result.ForecastFileDictionary.Add(new DateOnly(forecastsRow.LocalDateTimeFrom), forecastsRow);
+                result.ForecastFileContainer.AddForecastsRow(new DateOnly(forecastsRow.LocalDateTimeFrom), forecastsRow);
             }
             result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
             result.WorkloadDayOpenHours = workloadDayOpenHours;

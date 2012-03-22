@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public ImportForecastForm(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler)
         {
             InitializeComponent();
-            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
+            _presenter = new ImportForecastPresenter(new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
             getSelectedSkillName();
             populateWorkloadList();
             _skill = preselectedSkill;

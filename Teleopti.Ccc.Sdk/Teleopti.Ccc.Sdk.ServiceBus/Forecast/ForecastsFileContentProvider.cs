@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Interfaces.Domain;
@@ -7,7 +9,14 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
-    public class ForecastsFileContentProvider
+    public interface IForecastsFileContentProvider
+    {
+        ICollection<IForecastsFileRow> Forecasts { get; }
+        IForecastsFileContentProvider LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone);
+        IForecastsAnalyzeCommandResult Analyze();
+    }
+
+    public class ForecastsFileContentProvider : IForecastsFileContentProvider
     {
         private readonly ICollection<IForecastsFileRow> _forecasts = new List<IForecastsFileRow>();
 
@@ -15,16 +24,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             get { return _forecasts; }
         }
-
-        public ForecastsFileContentProvider(byte[] fileContent, ICccTimeZoneInfo timeZone)
-        {
-            loadContent(fileContent, timeZone);
-        }
-
-        private void loadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
+        
+        public IForecastsFileContentProvider LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
             var validators = setupForecastsFileValidators();
-            var rows = fileContent.ToString().Split('\n').Select(line => new CsvFileRow(line)).ToList();
+            var rows = Encoding.UTF8.GetString(fileContent).Split('\n').Select(line => new CsvFileRow(line)).ToList();
             rows.ForEach(row =>
             {
                 if (!ForecastsFileRowCreator.IsFileColumnValid(row))
@@ -36,8 +40,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     if (!validators[i].Validate(row.Content[i]))
                         throw new ValidationException(validators[i].ErrorMessage);
                 }
-                _forecasts.Add(ForecastsFileRowCreator.Create(row, timeZone));
+                Forecasts.Add(ForecastsFileRowCreator.Create(row, timeZone));
             });
+            return this;
         }
 
         private static List<IForecastsFileValidator> setupForecastsFileValidators()
@@ -55,8 +60,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             return validators;
         }
 
-        public ForecastsAnalyzeCommandResult Analyze()
+        public IForecastsAnalyzeCommandResult Analyze()
         {
+            if(Forecasts.Count == 0)
+                throw new InvalidOperationException("Forecasts should be not empty.");
             var analyzeCommand = new ForecastsAnalyzeCommand(Forecasts);
             return analyzeCommand.Execute();
         }

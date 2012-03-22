@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
@@ -33,8 +32,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             Assert.That(result.SkillName, Is.EqualTo("Insurance"));
             Assert.That(result.Period, Is.EqualTo(new DateOnlyPeriod(date, date)));
             Assert.That(result.IntervalLengthTicks, Is.EqualTo(9000000000));
-            Assert.That(result.WorkloadDayOpenHours.Get(date),Is.EqualTo(new TimePeriod(2, 0, 2, 30)));
-            Assert.That(result.ForecastFileDictionary.Get(date), Is.EqualTo(_forecastsRows));
+            Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date),Is.EqualTo(new TimePeriod(2, 0, 2, 30)));
+            Assert.That(result.ForecastFileContainer.GetForecastsRows(date), Is.EqualTo(_forecastsRows));
         }
 
         private static IEnumerable<IForecastsFileRow> setUpForecasts()
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 UtcDateTimeFrom = new DateTime(2012, 3, 1, 1, 15, 0, DateTimeKind.Utc),
                 UtcDateTimeTo = new DateTime(2012, 3, 1, 1, 30, 0, DateTimeKind.Utc)
             };
-            return new List<IForecastsFileRow> { row1, row2 };
+            return new[] {row1, row2};
         }
     }
 }

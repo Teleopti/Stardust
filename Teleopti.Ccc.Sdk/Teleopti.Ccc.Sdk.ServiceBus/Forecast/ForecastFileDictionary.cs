@@ -4,34 +4,34 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
-    public interface IForecastFileDictionary
+    public interface IForecastFileContainer
     {
-        void Add(DateOnly date, IForecastsFileRow forecasts);
-        ICollection<IForecastsFileRow> Get(DateOnly date);
+        void AddForecastsRow(DateOnly dateOnly, IForecastsFileRow forecasts);
+        ICollection<IForecastsFileRow> GetForecastsRows(DateOnly dateOnly);
     }
 
-    public class ForecastFileDictionary : IForecastFileDictionary
+    public class ForecastFileContainer : IForecastFileContainer
     {
         private readonly IDictionary<DateOnly, ICollection<IForecastsFileRow>> _forecastedFileDictionary =
             new Dictionary<DateOnly, ICollection<IForecastsFileRow>>();
 
-        public void Add(DateOnly date, IForecastsFileRow forecastsRow)
+        public void AddForecastsRow(DateOnly dateOnly, IForecastsFileRow forecasts)
         {
             ICollection<IForecastsFileRow> forecastsRows;
-            if (_forecastedFileDictionary.TryGetValue(date, out forecastsRows))
+            if (_forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows))
             {
-                if (forecastsRows.Contains(forecastsRow))
+                if (forecastsRows.Contains(forecasts))
                     return;
-                forecastsRows.Add(forecastsRow);
+                forecastsRows.Add(forecasts);
             }
             else
-                _forecastedFileDictionary.Add(date, new List<IForecastsFileRow> { forecastsRow });
+                _forecastedFileDictionary.Add(dateOnly, new List<IForecastsFileRow> { forecasts });
         }
 
-        public ICollection<IForecastsFileRow> Get(DateOnly date)
+        public ICollection<IForecastsFileRow> GetForecastsRows(DateOnly dateOnly)
         {
             ICollection<IForecastsFileRow> forecastsRows;
-            _forecastedFileDictionary.TryGetValue(date, out forecastsRows);
+            _forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows);
             return forecastsRows;
         }
     }

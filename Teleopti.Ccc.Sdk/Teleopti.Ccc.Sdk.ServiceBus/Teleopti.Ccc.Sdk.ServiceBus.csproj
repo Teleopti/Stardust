@@ -243,6 +243,7 @@
     <Compile Include="Forecast\JobResultFeedback.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillConsumer.cs" />
     <Compile Include="Forecast\WorkloadDayOpenHoursDictionary.cs" />
+    <Compile Include="ImportForecastContainerInstaller.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
     <Compile Include="IPersonAbsenceAccountProvider.cs" />
     <Compile Include="IRequestFactory.cs" />
