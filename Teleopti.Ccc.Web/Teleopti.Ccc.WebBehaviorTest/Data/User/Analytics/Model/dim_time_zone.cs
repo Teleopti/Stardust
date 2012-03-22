@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 {
 	public static class dim_time_zone
 	{

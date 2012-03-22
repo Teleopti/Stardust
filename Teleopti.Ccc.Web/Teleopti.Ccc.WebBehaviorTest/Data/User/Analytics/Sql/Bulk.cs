@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql
 {
 	public static class Bulk
 	{

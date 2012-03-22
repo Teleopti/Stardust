@@ -19,7 +19,7 @@ Scenario: Enter Application without permission
 Scenario: Logout from application
 	Given I am a supervisor
 	And I view MobileReports
-	And I click Signout button
+	When I click the signout button
 	Then I should be signed out
 
 Scenario: Enter Application with report preference

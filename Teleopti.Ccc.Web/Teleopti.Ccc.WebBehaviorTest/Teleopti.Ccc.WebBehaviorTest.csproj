@@ -71,24 +71,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
-    <Compile Include="Data\User\Analytics\bridge_time_zone.cs" />
-    <Compile Include="Data\User\Analytics\Bulk.cs" />
+    <Compile Include="Data\User\Analytics\BusinessUnit.cs" />
+    <Compile Include="Data\User\Analytics\Model\bridge_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\Model\dim_business_unit.cs" />
+    <Compile Include="Data\User\Analytics\Model\dim_skill.cs" />
+    <Compile Include="Data\User\Analytics\Model\sys_datasource.cs" />
+    <Compile Include="Data\User\Analytics\Sql\Bulk.cs" />
     <Compile Include="Data\User\Analytics\BridgeTimeZoneFromDatesIntervalsAndTimeZones.cs" />
-    <Compile Include="Data\User\Analytics\dim_date.cs" />
-    <Compile Include="Data\User\Analytics\dim_interval.cs" />
-    <Compile Include="Data\User\Analytics\dim_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\Model\dim_date.cs" />
+    <Compile Include="Data\User\Analytics\Model\dim_interval.cs" />
+    <Compile Include="Data\User\Analytics\Model\dim_time_zone.cs" />
     <Compile Include="Data\User\Analytics\EternityAndNotDefinedDate.cs" />
     <Compile Include="Data\User\Analytics\QuarterOfAnHourInterval.cs" />
+    <Compile Include="Data\User\Analytics\ThreeSkills.cs" />
     <Compile Include="Data\User\Analytics\TodayDate.cs" />
     <Compile Include="Data\User\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\Interfaces\IStatisticsDataSetup.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
-    <Content Include="Data\TestData.autofac.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />

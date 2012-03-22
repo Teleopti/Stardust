@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest
+﻿using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
+
+namespace Teleopti.Ccc.WebBehaviorTest
 {
 	using NUnit.Framework;
 
@@ -28,7 +30,14 @@
 			// Inject mobile UserAgent String /Replace CurrentBrowser?
 		}
 
-		[Given(@"I click Signout button")]
+		[Given(@"I have skill statistic data")]
+		public void GivenIHaveSkillStatisticData()
+		{
+			UserFactory.User().Setup(new BusinessUnit());
+			UserFactory.User().Setup(new ThreeSkills());
+		}
+
+		[When(@"I click the signout button")]
 		public void GivenIClickSignoutButton()
 		{
 			_page.SignoutButton.Click();

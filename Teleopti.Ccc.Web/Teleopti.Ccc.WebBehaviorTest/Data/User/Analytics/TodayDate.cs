@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Analytics.ReportTexts;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
 

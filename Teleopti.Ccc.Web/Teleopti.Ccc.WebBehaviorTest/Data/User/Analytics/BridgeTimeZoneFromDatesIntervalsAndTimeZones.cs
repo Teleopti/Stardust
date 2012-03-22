@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					a.time_zone_id,
 					a.local_date_id,
 					a.local_interval_id,
-					1,
+					sys_datasource.RaptorDefaultDatasourceId,
 					DateTime.Now,
 					DateTime.Now)
 				);

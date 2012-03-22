@@ -58,11 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new BridgeTimeZoneFromDatesIntervalsAndTimeZones());
 		}
 
-		[Given(@"I have skill statistic data")]
-		public void GivenIHaveSkillStatisticData()
-		{
-		}
-
 		[Given(@"I am user without permission to MobileReports")]
 		public void GivenIAmUserWithoutPermissionToMobileReports()
 		{
