@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
@@ -70,7 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
-    <Compile Include="Data\User\Analytics\DefaultStatisticsTimeZoneData.cs" />
+    <Compile Include="Data\User\Analytics\bridge_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\Bulk.cs" />
+    <Compile Include="Data\User\Analytics\BridgeTimeZoneFromDatesIntervalsAndTimeZones.cs" />
+    <Compile Include="Data\User\Analytics\dim_date.cs" />
+    <Compile Include="Data\User\Analytics\dim_interval.cs" />
+    <Compile Include="Data\User\Analytics\dim_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\EternityAndNotDefinedDate.cs" />
+    <Compile Include="Data\User\Analytics\QuarterOfAnHourInterval.cs" />
+    <Compile Include="Data\User\Analytics\TodayDate.cs" />
+    <Compile Include="Data\User\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\Interfaces\IStatisticsDataSetup.cs" />

@@ -48,15 +48,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I am a supervisor")]
-		public void GivenIAmASupervisorWithMobile()
+		public void GivenIAmASupervisor()
 		{
 			UserFactory.User().Setup(new Supervisor());
+			UserFactory.User().Setup(new EternityAndNotDefinedDate());
+			UserFactory.User().Setup(new TodayDate());
+			UserFactory.User().Setup(new QuarterOfAnHourInterval());
+			UserFactory.User().Setup(new UtcAndCetTimeZones());
+			UserFactory.User().Setup(new BridgeTimeZoneFromDatesIntervalsAndTimeZones());
 		}
 
 		[Given(@"I have skill statistic data")]
 		public void GivenIHaveSkillStatisticData()
 		{
-			UserFactory.User().Setup(new DefaultStatisticsTimeZoneData());
 		}
 
 		[Given(@"I am user without permission to MobileReports")]
