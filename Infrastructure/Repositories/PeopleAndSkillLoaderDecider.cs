@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
             foreach (IChildSkill child in skills.OfType<IChildSkill>().ToList())
             {
-                skills.Add(child.ParentSkill);
+				if (!skills.Contains(child.ParentSkill))
+					skills.Add(child.ParentSkill);
             }
 
             return orgCount - skills.Count;
