@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
                         while (reader.ReadNextRow(row))
                         {
                             validateRowByRow(validators, row);
-                            fileContent.Append(row.ToString() + '\n');
+                            fileContent.Append(row + Environment.NewLine);
                             row.Clear();
                             rowNumber++;
                         }
