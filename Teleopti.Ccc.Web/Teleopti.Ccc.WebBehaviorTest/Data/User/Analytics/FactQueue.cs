@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		}
 	}
 
-	public static class Extensions
+	public static class GenerateStatisticsExtensions
 	{
 		private static readonly Random _random = new Random();
 

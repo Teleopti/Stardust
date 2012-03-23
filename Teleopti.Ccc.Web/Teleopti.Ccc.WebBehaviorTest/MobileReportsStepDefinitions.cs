@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
 		}
 
-		[Given(@"I have fact queue data for a week")]
+		[Given(@"I have fact queue data")]
 		public void GivenIHaveFactQueueDataForAWeek()
 		{
 			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var workloads = new AWorkload(skills, timeZones, businessUnits, dataSource);
 			UserFactory.User().Setup(workloads);
 			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
-			var dates = UserFactory.User().UserData<IDateData>();
 			var intervals = UserFactory.User().UserData<IIntervalData>();
 			var bridgeTimeZones = UserFactory.User().UserData<IBridgeTimeZone>();
+			var dates = UserFactory.User().UserData<IDateData>();
 			UserFactory.User().Setup(new FactQueue(dates, intervals, queues, dataSource, timeZones, bridgeTimeZones));
 		}
 
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo("Sunday"));
+			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.StringContaining("Sunday"));
 		}
 
 		private static void createAndSignIn()

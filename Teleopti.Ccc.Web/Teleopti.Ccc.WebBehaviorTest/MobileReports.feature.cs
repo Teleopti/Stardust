@@ -304,10 +304,12 @@ this.ScenarioSetup(scenarioInfo);
 #line 87
  testRunner.And("I am american");
 #line 88
- testRunner.And("I have fact queue data for a week");
+ testRunner.And("I have analytics data for the current week");
 #line 89
- testRunner.When("I view a report with week data");
+ testRunner.And("I have fact queue data");
 #line 90
+ testRunner.When("I view a report with week data");
+#line 91
  testRunner.Then("I should see sunday as the first day of week in tabledata");
 #line hidden
             testRunner.CollectScenarioErrors();

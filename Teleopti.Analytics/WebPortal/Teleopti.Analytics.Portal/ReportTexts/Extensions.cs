@@ -41,7 +41,13 @@ namespace Teleopti.Analytics.ReportTexts
 			}
 		}
 
-		public static string GetWeekDayResourceKey(this DayOfWeek weekdayNumber) { return ((int) weekdayNumber).GetWeekDayResourceKey(); }
+		public static string GetWeekDayResourceKey(this DayOfWeek weekdayNumber)
+		{
+			var number = (int) weekdayNumber;
+			if (weekdayNumber == DayOfWeek.Sunday)
+				number = 7;
+			return number.GetWeekDayResourceKey();
+		}
 
 		public static string GetWeekDayResourceKey(this int weekdayNumber)
 		{

@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
 
-		private readonly ICollection<IDataSetup> _dataSetups = new List<IDataSetup>();
+		private readonly IList<IDataSetup> _dataSetups = new List<IDataSetup>();
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
-		private readonly ICollection<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
-		private readonly ICollection<IPostSetup> _postSetups = new List<IPostSetup>();
-		private readonly ICollection<IAnalyticsDataSetup> _statisticsSetups = new List<IAnalyticsDataSetup>();
+		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
+		private readonly IList<IPostSetup> _postSetups = new List<IPostSetup>();
+		private readonly IList<IAnalyticsDataSetup> _analyticsSetups = new List<IAnalyticsDataSetup>();
  
 		private readonly ICollection<UserFactory> _colleagues = new List<UserFactory>();
 		private UserFactory _teamColleague;
@@ -82,13 +82,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_userSetups.Add(setup);
 		}
 
-		public void ReplaceSetupByType<T>(T setup) where T : IUserSetup
+		public void ReplaceSetupByType<T>(IUserSetup setup)
 		{
-			var existing = _userSetups
-				.Where(s => setup.GetType() == s.GetType())
-				.Select((s, i) => new {s, i}).Single();
-			_userSetups.Remove(existing.s);
-			_userSetups.Insert(existing.i, setup);
+			ReplaceSetupByType<T, IUserSetup>(_userSetups, setup);
 		}
 
 		public void Setup(IDataSetup setup)
@@ -108,7 +104,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
 		{
-			_statisticsSetups.Add(analyticsDataSetup);
+			_analyticsSetups.Add(analyticsDataSetup);
+		}
+
+		private void ReplaceSetupByType<TReplace, TSetup>(IList<TSetup> setups, TSetup setup)
+		{
+			var existing = setups
+				.Where(s => typeof(TReplace).IsAssignableFrom(s.GetType()))
+				.Select((s, i) => new { s, i }).Single();
+			setups.Remove(existing.s);
+			setups.Insert(existing.i, setup);
 		}
 
 		public void SetupCulture(IUserSetup setup)
@@ -161,7 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				connection.Open();
-				_statisticsSetups.ForEach(s => s.Apply(connection, CultureInfo.GetCultureInfo("sv-SE")));
+				_analyticsSetups.ForEach(s => s.Apply(connection, CultureInfo.GetCultureInfo("sv-SE")));
 			}
 		}
 
@@ -173,7 +178,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					.Union(_userDataSetups)
 					.Union(_postSetups)
 					.Union(_dataSetups)
-					.Union(_statisticsSetups)
+					.Union(_analyticsSetups)
 					;
 			}
 		}

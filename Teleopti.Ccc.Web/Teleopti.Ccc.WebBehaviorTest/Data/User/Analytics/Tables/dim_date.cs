@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using Teleopti.Analytics.ReportTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			string month_name,
 			string month_resource_key,
 			int day_in_month,
-			int weekday_number,
+			DayOfWeek weekday_number,
 			string weekday_name,
 			string weekday_resource_key,
 			int week_number,
@@ -54,7 +57,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["month_name"] = month_name;
 			row["month_resource_key"] = month_resource_key;
 			row["day_in_month"] = day_in_month;
-			row["weekday_number"] = weekday_number;
+			if (weekday_number == DayOfWeek.Sunday)
+				row["weekday_number"] = 7;
+			else
+				row["weekday_number"] = weekday_number;
 			row["weekday_name"] = weekday_name;
 			row["weekday_resource_key"] = weekday_resource_key;
 			row["week_number"] = week_number;
@@ -62,6 +68,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["quarter"] = quarter;
 			row["insert_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
+		}
+
+		public static void AddDate(
+			this DataTable dataTable,
+			int date_id,
+			DateTime date_date,
+			CultureInfo culture
+			)
+		{
+			dataTable.AddDate(
+				date_id,
+				date_date.Date,
+				date_date.Year,
+				date_date.Year*100 + date_date.Month,
+				date_date.Month,
+				culture.DateTimeFormat.GetMonthName(date_date.Month),
+				date_date.Month.GetMonthResourceKey(),
+				date_date.Day,
+				date_date.DayOfWeek,
+				culture.DateTimeFormat.GetDayName(date_date.DayOfWeek),
+				date_date.DayOfWeek.GetWeekDayResourceKey(),
+				DateHelper.WeekNumber(date_date, culture),
+				(date_date.Year*100 + DateHelper.WeekNumber(date_date, culture)).ToString(culture),
+				date_date.Year + "Q" + DateHelper.GetQuarter(date_date.Month)
+				);
 		}
 
 		public static IEnumerable<int> FindDateIdsByDate(this DataTable dataTable, DateTime date)

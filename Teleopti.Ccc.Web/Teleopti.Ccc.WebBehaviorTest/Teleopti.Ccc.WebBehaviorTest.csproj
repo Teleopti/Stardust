@@ -74,6 +74,7 @@
     <Compile Include="Data\User\Analytics\AQueue.cs" />
     <Compile Include="Data\User\Analytics\AWorkload.cs" />
     <Compile Include="Data\User\Analytics\BusinessUnit.cs" />
+    <Compile Include="Data\User\Analytics\CurrentWeekDates.cs" />
     <Compile Include="Data\User\Analytics\ExistingDatasources.cs" />
     <Compile Include="Data\User\Analytics\FactQueue.cs" />
     <Compile Include="Data\User\Analytics\FillBridgeQueueWorkloadFromData.cs" />
