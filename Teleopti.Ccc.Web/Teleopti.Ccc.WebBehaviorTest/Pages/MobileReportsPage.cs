@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
@@ -161,12 +163,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public string ThirdSkillName { get; set; }
 
-		public void SetReportSettingsDate(DateOnly date)
+		public void SetReportSettingsDate(DateOnly date, CultureInfo culture)
 		{
-			new JQueryExpression().SelectById("sel-date").Trigger("datebox",
-			                                                      string.Format(
-			                                                      	"{{'method':'set', 'value': '{0:yyyy-MM-dd}', 'date': new Date({1}, {2} , {3})}}",
-																	(DateTime)date, date.Year, date.Month - 1, date.Day)).Eval();
+			var dateString = date.Date.ToShortDateString(culture);
+			new JQueryExpression()
+				.SelectById("sel-date")
+				.Trigger("datebox",
+				         string.Format(
+				         	"{{'method':'set', 'value': '{0}', 'date': new Date({1}, {2} , {3})}}",
+				         	dateString, date.Year, date.Month - 1, date.Day))
+				.Eval();
 		}
 	}
 }

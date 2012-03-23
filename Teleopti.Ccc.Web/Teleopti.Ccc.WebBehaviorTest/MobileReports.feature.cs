@@ -147,20 +147,26 @@ this.ScenarioSetup(scenarioInfo);
 #line 33
  testRunner.Given("I am a supervisor");
 #line 34
- testRunner.When("I view ReportSettings");
+ testRunner.And("I have analytics data for today");
 #line 35
- testRunner.And("I select a report");
+ testRunner.And("I have analytics fact queue data");
 #line 36
- testRunner.And("I check type Graph");
+ testRunner.When("I view ReportSettings");
 #line 37
- testRunner.And("I check type Table");
+ testRunner.And("I select a report");
 #line 38
- testRunner.And("I click View Report Button");
+ testRunner.And("I select date today");
 #line 39
- testRunner.Then("I should se a report");
+ testRunner.And("I check type Graph");
 #line 40
- testRunner.And("I should see a graph");
+ testRunner.And("I check type Table");
 #line 41
+ testRunner.And("I click View Report Button");
+#line 42
+ testRunner.Then("I should see a report");
+#line 43
+ testRunner.And("I should see a graph");
+#line 44
  testRunner.And("I should see a table");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -171,19 +177,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SelectDateInDate_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select date in date-picker", ((string[])(null)));
-#line 43
-this.ScenarioSetup(scenarioInfo);
-#line 44
- testRunner.Given("I am a supervisor");
-#line 45
- testRunner.When("I view ReportSettings");
 #line 46
- testRunner.And("I open the date-picker");
+this.ScenarioSetup(scenarioInfo);
 #line 47
- testRunner.And("I click on any date");
+ testRunner.Given("I am a supervisor");
 #line 48
- testRunner.Then("the date-picker should close");
+ testRunner.When("I view ReportSettings");
 #line 49
+ testRunner.And("I open the date-picker");
+#line 50
+ testRunner.And("I click on any date");
+#line 51
+ testRunner.Then("the date-picker should close");
+#line 52
  testRunner.And("I should see the selected date");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -194,21 +200,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SelectSkillInSkill_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select skill in skill-picker", ((string[])(null)));
-#line 51
-this.ScenarioSetup(scenarioInfo);
-#line 52
- testRunner.Given("I am a supervisor");
-#line 53
- testRunner.And("I have skill analytics data");
 #line 54
- testRunner.When("I view ReportSettings");
+this.ScenarioSetup(scenarioInfo);
 #line 55
- testRunner.And("I open the skill-picker");
+ testRunner.Given("I am a supervisor");
 #line 56
- testRunner.And("I select a skill");
+ testRunner.And("I have analytics data for today");
 #line 57
- testRunner.And("I close the skill-picker");
+ testRunner.And("I have skill analytics data");
 #line 58
+ testRunner.When("I view ReportSettings");
+#line 59
+ testRunner.And("I open the skill-picker");
+#line 60
+ testRunner.And("I select a skill");
+#line 61
+ testRunner.And("I close the skill-picker");
+#line 62
  testRunner.Then("I should see the selected skill");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -219,19 +227,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SelectAllSkillsItemInSkill_Picker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Select all skills item in skill-picker", ((string[])(null)));
-#line 60
-this.ScenarioSetup(scenarioInfo);
-#line 61
- testRunner.Given("I am a supervisor");
-#line 62
- testRunner.When("I view ReportSettings");
-#line 63
- testRunner.And("I open the skill-picker");
 #line 64
- testRunner.And("I select the all skills item");
+this.ScenarioSetup(scenarioInfo);
 #line 65
- testRunner.And("I close the skill-picker");
+ testRunner.Given("I am a supervisor");
 #line 66
+ testRunner.When("I view ReportSettings");
+#line 67
+ testRunner.And("I open the skill-picker");
+#line 68
+ testRunner.And("I select the all skills item");
+#line 69
+ testRunner.And("I close the skill-picker");
+#line 70
  testRunner.Then("I should see the all skill item selected");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -242,15 +250,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigateWithinReportViewToPreviousDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate within report view to previous day", ((string[])(null)));
-#line 68
-this.ScenarioSetup(scenarioInfo);
-#line 69
- testRunner.Given("I am a supervisor");
-#line 70
- testRunner.And("I am viewing a report");
-#line 71
- testRunner.When("I click previous date");
 #line 72
+this.ScenarioSetup(scenarioInfo);
+#line 73
+ testRunner.Given("I am a supervisor");
+#line 74
+ testRunner.And("I have analytics data for the current week");
+#line 75
+ testRunner.And("I am viewing a report");
+#line 76
+ testRunner.When("I click previous date");
+#line 77
  testRunner.Then("I should see a report for previous date");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -261,15 +271,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NavigateWithinReportViewToNextDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate within report view to next day", ((string[])(null)));
-#line 74
+#line 79
 this.ScenarioSetup(scenarioInfo);
-#line 75
+#line 80
  testRunner.Given("I am a supervisor");
-#line 76
+#line 81
+ testRunner.And("I have analytics data for the current week");
+#line 82
  testRunner.And("I am viewing a report");
-#line 77
+#line 83
  testRunner.When("I click next date");
-#line 78
+#line 84
  testRunner.Then("I should see a report for next date");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -280,13 +292,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void EnterApplicationWithPartialAccessToReports()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enter Application with partial access to reports", ((string[])(null)));
-#line 80
+#line 86
 this.ScenarioSetup(scenarioInfo);
-#line 81
+#line 87
  testRunner.Given("I am user with partial access to reports");
-#line 82
+#line 88
  testRunner.When("I view ReportSettings");
-#line 83
+#line 89
  testRunner.Then("I should only see reports i have access to");
 #line hidden
             testRunner.CollectScenarioErrors();
@@ -297,19 +309,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void TabledataShowsSundayAsFirstDayOfWeekForUSCulture()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Tabledata shows sunday as first day of week for US culture", ((string[])(null)));
-#line 85
-this.ScenarioSetup(scenarioInfo);
-#line 86
- testRunner.Given("I am a supervisor");
-#line 87
- testRunner.And("I am american");
-#line 88
- testRunner.And("I have analytics data for the current week");
-#line 89
- testRunner.And("I have fact queue data");
-#line 90
- testRunner.When("I view a report with week data");
 #line 91
+this.ScenarioSetup(scenarioInfo);
+#line 92
+ testRunner.Given("I am a supervisor");
+#line 93
+ testRunner.And("I am american");
+#line 94
+ testRunner.And("I have analytics data for the current week");
+#line 95
+ testRunner.And("I have analytics fact queue data");
+#line 96
+ testRunner.When("I view a report with week data");
+#line 97
  testRunner.Then("I should see sunday as the first day of week in tabledata");
 #line hidden
             testRunner.CollectScenarioErrors();
