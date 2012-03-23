@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly ICollection<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 		private readonly ICollection<IPostSetup> _postSetups = new List<IPostSetup>();
-		private readonly ICollection<IStatisticsDataSetup> _statisticsSetups = new List<IStatisticsDataSetup>();
+		private readonly ICollection<IAnalyticsDataSetup> _statisticsSetups = new List<IAnalyticsDataSetup>();
  
 		private readonly ICollection<UserFactory> _colleagues = new List<UserFactory>();
 		private UserFactory _teamColleague;
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_postSetups.Add(postSetup);
 		}
 
-		public void Setup(IStatisticsDataSetup statisticsDataSetup)
+		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
 		{
-			_statisticsSetups.Add(statisticsDataSetup);
+			_statisticsSetups.Add(analyticsDataSetup);
 		}
 
 		public void SetupCulture(IUserSetup setup)

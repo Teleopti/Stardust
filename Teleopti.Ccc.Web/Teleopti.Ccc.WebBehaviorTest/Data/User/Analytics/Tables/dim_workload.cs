@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_workload
 	{
@@ -52,11 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			float percentage_abandoned_within_service_level,
 			float percentage_abandoned_after_service_level,
 			int business_unit_id,
-			int datasource_id,
-			DateTime insert_date,
-			DateTime update_date,
-			DateTime datasource_update_date,
-			bool is_deleted)
+			int datasource_id)
 		{
 			var row = dataTable.NewRow();
 			row["workload_id"] = workload_id;
@@ -77,10 +73,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["percentage_abandoned_after_service_level"] = percentage_abandoned_after_service_level;
 			row["business_unit_id"] = business_unit_id;
 			row["datasource_id"] = datasource_id;
-			row["insert_date"] = insert_date;
-			row["update_date"] = update_date;
-			row["datasource_update_date"] = datasource_update_date;
-			row["is_deleted"] = is_deleted;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
+			row["datasource_update_date"] = DateTime.Now;
+			row["is_deleted"] = false;
 			dataTable.Rows.Add(row);
 		}
 	}

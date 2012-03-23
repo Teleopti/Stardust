@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class sys_datasource
 	{

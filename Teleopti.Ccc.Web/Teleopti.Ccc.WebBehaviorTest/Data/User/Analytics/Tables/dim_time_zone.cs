@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_time_zone
 	{
@@ -30,9 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			bool default_zone,
 			int utc_conversion,
 			int utc_conversion_dst,
-			int datasource_id,
-			DateTime insert_date,
-			DateTime update_date)
+			int datasource_id)
 		{
 			var row = dataTable.NewRow();
 			row["time_zone_id"] = time_zone_id;
@@ -42,8 +40,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["utc_conversion"] = utc_conversion;
 			row["utc_conversion_dst"] = utc_conversion_dst;
 			row["datasource_id"] = datasource_id;
-			row["insert_date"] = insert_date;
-			row["update_date"] = update_date;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
 			row["to_be_deleted"] = false;
 			dataTable.Rows.Add(row);
 		}

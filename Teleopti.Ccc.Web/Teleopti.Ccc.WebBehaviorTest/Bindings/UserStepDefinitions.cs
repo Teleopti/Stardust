@@ -51,11 +51,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmASupervisor()
 		{
 			UserFactory.User().Setup(new Supervisor());
+
+			var dates = new TodayDate();
+			var intervals = new QuarterOfAnHourInterval();
+			var timeZones = new UtcAndCetTimeZones();
 			UserFactory.User().Setup(new EternityAndNotDefinedDate());
-			UserFactory.User().Setup(new TodayDate());
-			UserFactory.User().Setup(new QuarterOfAnHourInterval());
-			UserFactory.User().Setup(new UtcAndCetTimeZones());
-			UserFactory.User().Setup(new BridgeTimeZoneFromDatesIntervalsAndTimeZones());
+			UserFactory.User().Setup(dates);
+			UserFactory.User().Setup(intervals);
+			UserFactory.User().Setup(timeZones);
+			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones));
 		}
 
 		[Given(@"I am user without permission to MobileReports")]

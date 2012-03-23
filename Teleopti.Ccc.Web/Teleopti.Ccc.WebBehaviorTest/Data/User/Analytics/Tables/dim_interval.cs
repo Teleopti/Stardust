@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_interval
 	{
@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			string hour_name,
 			DateTime interval_start,
 			DateTime interval_end,
-			int datasource_id,
-			DateTime insert_date,
-			DateTime update_date)
+			int datasource_id)
 		{
 			var row = dataTable.NewRow();
 			row["interval_id"] = interval_id;
@@ -40,8 +38,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["interval_start"] = interval_start;
 			row["interval_end"] = interval_end;
 			row["datasource_id"] = datasource_id;
-			row["insert_date"] = insert_date;
-			row["update_date"] = update_date;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
 		}
 	}

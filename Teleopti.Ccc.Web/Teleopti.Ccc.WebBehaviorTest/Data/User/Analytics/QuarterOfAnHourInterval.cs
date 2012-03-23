@@ -5,15 +5,15 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
-	public class QuarterOfAnHourInterval : IStatisticsDataSetup
+	public class QuarterOfAnHourInterval : IAnalyticsDataSetup, IIntervalData
 	{
-		public DataTable Table;
+		public DataTable Table { get; private set; }
 
 		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
 		{
@@ -43,9 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				         			hourName,
 				         			intervalStart,
 				         			intervalEnd,
-				         			1,
-				         			DateTime.Now,
-				         			DateTime.Now
+				         			1
 				         			);
 
 				         	}
@@ -53,5 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 			Bulk.Insert(connection, Table);
 		}
+
 	}
 }

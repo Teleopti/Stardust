@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_skill
 	{
@@ -32,11 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			Guid forecast_method_code,
 			string forecast_method_name,
 			int business_unit_id,
-			int datasource_id,
-			DateTime insert_date,
-			DateTime update_date,
-			DateTime datasource_update_date,
-			bool is_deleted)
+			int datasource_id)
 		{
 			var row = dataTable.NewRow();
 			row["skill_id"] = skill_id;
@@ -47,10 +43,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["forecast_method_name"] = forecast_method_name;
 			row["business_unit_id"] = business_unit_id;
 			row["datasource_id"] = datasource_id;
-			row["insert_date"] = insert_date;
-			row["update_date"] = update_date;
-			row["datasource_update_date"] = datasource_update_date;
-			row["is_deleted"] = is_deleted;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
+			row["datasource_update_date"] = DateTime.Now;
+			row["is_deleted"] = false;
 			dataTable.Rows.Add(row);
 		}
 	}

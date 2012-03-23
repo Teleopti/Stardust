@@ -3,16 +3,16 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Analytics.ReportTexts;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
-	public class TodayDate : IStatisticsDataSetup
+	public class TodayDate : IAnalyticsDataSetup, IDateData
 	{
-		public DataTable Table;
+		public DataTable Table { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
 		{
@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				date.DayOfWeek.GetWeekDayResourceKey(),
 				DateHelper.WeekNumber(date, statisticsDataCulture),
 				(date.Year * 100 + DateHelper.WeekNumber(date, statisticsDataCulture)).ToString(statisticsDataCulture),
-				date.Year + "Q" + DateHelper.GetQuarter(date.Month),
-				DateTime.Now
+				date.Year + "Q" + DateHelper.GetQuarter(date.Month)
 				);
 
 			Bulk.Insert(connection, Table);
 		}
+
 	}
 }

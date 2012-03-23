@@ -33,8 +33,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have skill analytics data")]
 		public void GivenIHaveSkillAnalyticsData()
 		{
-			UserFactory.User().Setup(new BusinessUnit());
-			UserFactory.User().Setup(new ThreeSkills());
+			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
+			var businessUnits = new BusinessUnit(TestData.BusinessUnit);
+			UserFactory.User().Setup(businessUnits);
+			UserFactory.User().Setup(new ThreeSkills(timeZones, businessUnits));
+		}
+
+		[Given(@"I have fact queue data for a week")]
+		public void GivenIHaveFactQueueDataForAWeek()
+		{
+			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
+			var queues = new AQueue();
+			var businessUnits = new BusinessUnit(TestData.BusinessUnit);
+			UserFactory.User().Setup(queues);
+			UserFactory.User().Setup(businessUnits);
+			var skills = new ThreeSkills(timeZones, businessUnits);
+			UserFactory.User().Setup(skills);
+			var workloads = new AWorkload(skills, timeZones, businessUnits);
+			UserFactory.User().Setup(workloads);
+			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits));
 		}
 
 		[When(@"I click the signout button")]

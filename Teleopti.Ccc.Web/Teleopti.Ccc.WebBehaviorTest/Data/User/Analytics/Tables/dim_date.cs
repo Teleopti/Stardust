@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_date
 	{
@@ -41,8 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			string weekday_resource_key,
 			int week_number,
 			string year_week,
-			string quarter,
-			DateTime insert_date)
+			string quarter)
 		{
 			var row = dataTable.NewRow();
 			row["date_id"] = date_id;
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["week_number"] = week_number;
 			row["year_week"] = year_week;
 			row["quarter"] = quarter;
-			row["insert_date"] = insert_date;
+			row["insert_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
 		}
 	}

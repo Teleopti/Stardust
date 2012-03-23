@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
+namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class bridge_time_zone
 	{
@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			int time_zone_id,
 			int local_date_id,
 			int local_interval_id,
-			int datasource_id,
-			DateTime insert_date,
-			DateTime update_date)
+			int datasource_id)
 		{
 			var row = dataTable.NewRow();
 			row["date_id"] = date_id;
@@ -37,8 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model
 			row["local_date_id"] = local_date_id;
 			row["local_interval_id"] = local_interval_id;
 			row["datasource_id"] = datasource_id;
-			row["insert_date"] = insert_date;
-			row["update_date"] = update_date;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
 		}
 	}

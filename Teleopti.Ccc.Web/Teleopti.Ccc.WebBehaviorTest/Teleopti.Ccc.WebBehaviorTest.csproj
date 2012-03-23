@@ -71,18 +71,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\Analytics\AQueue.cs" />
     <Compile Include="Data\User\Analytics\AWorkload.cs" />
     <Compile Include="Data\User\Analytics\BusinessUnit.cs" />
-    <Compile Include="Data\User\Analytics\Model\bridge_time_zone.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_business_unit.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_skill.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_workload.cs" />
-    <Compile Include="Data\User\Analytics\Model\sys_datasource.cs" />
+    <Compile Include="Data\User\Analytics\FillBridgeQueueWorkloadFromData.cs" />
+    <Compile Include="Data\User\Analytics\IBusinessUnitData.cs" />
+    <Compile Include="Data\User\Analytics\IDateData.cs" />
+    <Compile Include="Data\User\Analytics\IIntervalData.cs" />
+    <Compile Include="Data\User\Analytics\IQueueData.cs" />
+    <Compile Include="Data\User\Analytics\ISkillData.cs" />
+    <Compile Include="Data\User\Analytics\ITimeZoneData.cs" />
+    <Compile Include="Data\User\Analytics\IWorkloadData.cs" />
+    <Compile Include="Data\User\Analytics\Tables\bridge_queue_workload.cs" />
+    <Compile Include="Data\User\Analytics\Tables\bridge_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_business_unit.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_queue.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_skill.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_workload.cs" />
+    <Compile Include="Data\User\Analytics\Tables\sys_datasource.cs" />
     <Compile Include="Data\User\Analytics\Sql\Bulk.cs" />
-    <Compile Include="Data\User\Analytics\BridgeTimeZoneFromDatesIntervalsAndTimeZones.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_date.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_interval.cs" />
-    <Compile Include="Data\User\Analytics\Model\dim_time_zone.cs" />
+    <Compile Include="Data\User\Analytics\FillBridgeTimeZoneFromData.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_date.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_interval.cs" />
+    <Compile Include="Data\User\Analytics\Tables\dim_time_zone.cs" />
     <Compile Include="Data\User\Analytics\EternityAndNotDefinedDate.cs" />
     <Compile Include="Data\User\Analytics\QuarterOfAnHourInterval.cs" />
     <Compile Include="Data\User\Analytics\ThreeSkills.cs" />
@@ -90,7 +101,7 @@
     <Compile Include="Data\User\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
-    <Compile Include="Data\User\Interfaces\IStatisticsDataSetup.cs" />
+    <Compile Include="Data\User\Interfaces\IAnalyticsDataSetup.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />

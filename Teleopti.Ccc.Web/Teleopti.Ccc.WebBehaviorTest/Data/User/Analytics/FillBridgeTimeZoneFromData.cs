@@ -4,25 +4,30 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Model;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
-	public class BridgeTimeZoneFromDatesIntervalsAndTimeZones : IStatisticsDataSetup
+	public class FillBridgeTimeZoneFromData : IAnalyticsDataSetup
 	{
+		private readonly IDateData _dates;
+		private readonly IIntervalData _intervals;
+		private readonly ITimeZoneData _timeZones;
+
+		public FillBridgeTimeZoneFromData(IDateData dates, IIntervalData intervals, ITimeZoneData timeZones)
+		{
+			_dates = dates;
+			_intervals = intervals;
+			_timeZones = timeZones;
+		}
+
 		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
 		{
-
-			// propably have to fetch using base class or interface when we need more dates and time zones
-			// but not even sure this class should depend on the "current" user factory, maybe it needs to be injected
-			// there's also a temporal coupling here. other setups need to be run before this one..
-			var dim_date = UserFactory.User().UserData<TodayDate>().Table;
-			var dim_interval = UserFactory.User().UserData<QuarterOfAnHourInterval>().Table;
-			var dim_time_zone = UserFactory.User().UserData<UtcAndCetTimeZones>().Table;
-
-			var table = bridge_time_zone.CreateTable();
+			var dim_date = _dates.Table;
+			var dim_interval = _intervals.Table;
+			var dim_time_zone = _timeZones.Table;
 
 			var query = from d in dim_date.AsEnumerable()
 			            let date_id = (int) d["date_id"]
@@ -58,6 +63,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			                   		local_interval_id
 			                   	};
 
+			var table = bridge_time_zone.CreateTable();
+
 			query.ForEach(
 				a => table.AddRow(
 					a.date_id,
@@ -65,9 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					a.time_zone_id,
 					a.local_date_id,
 					a.local_interval_id,
-					sys_datasource.RaptorDefaultDatasourceId,
-					DateTime.Now,
-					DateTime.Now)
+					sys_datasource.RaptorDefaultDatasourceId)
 				);
 
 			Bulk.Insert(connection, table);
