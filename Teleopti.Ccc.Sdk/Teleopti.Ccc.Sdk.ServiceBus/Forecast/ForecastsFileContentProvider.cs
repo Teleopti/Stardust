@@ -19,6 +19,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     public class ForecastsFileContentProvider : IForecastsFileContentProvider
     {
         private readonly ICollection<IForecastsFileRow> _forecasts = new List<IForecastsFileRow>();
+    	private static readonly IList<IForecastsFileValidator> _validators = new List<IForecastsFileValidator>
+    	                                                                  	{
+    	                                                                  		new ForecastsFileSkillNameValidator(),
+    	                                                                  		new ForecastsFileDateTimeValidator(),
+    	                                                                  		new ForecastsFileDateTimeValidator(),
+    	                                                                  		new ForecastsFileIntegerValueValidator(),
+    	                                                                  		new ForecastsFileDoubleValueValidator(),
+    	                                                                  		new ForecastsFileDoubleValueValidator(),
+    	                                                                  		new ForecastsFileDoubleValueValidator()
+    	                                                                  	};
 
         public ICollection<IForecastsFileRow> Forecasts
         {
@@ -27,7 +37,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         
         public IForecastsFileContentProvider LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
-            var validators = setupForecastsFileValidators();
             var rows = Encoding.UTF8.GetString(fileContent).Split('\n').Select(line => new CsvFileRow(line)).ToList();
             rows.ForEach(row =>
             {
@@ -37,27 +46,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 }
                 for (var i = 0; i < row.Count; i++)
                 {
-                    if (!validators[i].Validate(row.Content[i]))
-                        throw new ValidationException(validators[i].ErrorMessage);
+                    if (!_validators[i].Validate(row.Content[i]))
+                        throw new ValidationException(_validators[i].ErrorMessage);
                 }
                 Forecasts.Add(ForecastsFileRowCreator.Create(row, timeZone));
             });
             return this;
-        }
-
-        private static List<IForecastsFileValidator> setupForecastsFileValidators()
-        {
-            var validators = new List<IForecastsFileValidator>
-                                 {
-                                     new ForecastsFileSkillNameValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileIntegerValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator()
-                                 };
-            return validators;
         }
 
         public IForecastsAnalyzeCommandResult Analyze()
