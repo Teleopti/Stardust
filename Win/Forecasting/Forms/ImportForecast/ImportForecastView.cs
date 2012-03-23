@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             var savedFileId = Guid.Empty;
             _gracefulHandler.AttemptDatabaseConnectionDependentAction(() =>
             {
-                savedFileId = _presenter.SaveForecastFile();
+                savedFileId = _presenter.SaveForecastFile(UploadFileName);
             });
             return savedFileId;
         }

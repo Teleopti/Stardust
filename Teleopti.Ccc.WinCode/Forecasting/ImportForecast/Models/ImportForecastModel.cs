@@ -16,10 +16,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
     public interface IImportForecastModel
     {
         string GetSelectedSkillName();
-        Guid SaveValidatedForecastFileInDb();
-        void ValidateFile(string uploadFileName);
+        Guid SaveValidatedForecastFileInDb(string fileName);
+        void ValidateFile(StreamReader streamReader);
         IWorkload LoadWorkload();
-        string FileName { get; set; }
         byte[] FileContent { get; set; }
     }
 
@@ -41,17 +40,16 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             return _skill.Name;
         }
 
-        public string FileName { get; set; }
         public byte[] FileContent { get; set; }
 
-        public Guid SaveValidatedForecastFileInDb()
+        public Guid SaveValidatedForecastFileInDb(string fileName)
         {
-            if (string.IsNullOrEmpty(FileName))
-                throw new InvalidOperationException("File has not been validated yet.");
+            if(string.IsNullOrEmpty(fileName))
+                throw new InvalidOperationException("Incorrect file name.");
             var result = Guid.Empty;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var forecastFile = new ForecastFile(FileName, FileContent);
+                var forecastFile = new ForecastFile(fileName, FileContent);
                _importForecastsRepository.Add(forecastFile);
                var savedItem = uow.PersistAll();
                var item = savedItem.FirstOrDefault();
@@ -71,37 +69,34 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             return Guid.Empty;
         }
 
-        public void ValidateFile(string uploadFileName)
+        public void ValidateFile(StreamReader streamReader)
         {
             var fileContent = new StringBuilder();
-            using (var stream = new StreamReader(uploadFileName))
+            var rowNumber = 1;
+            try
             {
-                var rowNumber = 1;
-                try
-                {
-                    if (stream.Peek() == -1) throw new ValidationException("File is empty.");
-                    var reader = new CsvFileReader(stream);
-                    var row = new CsvFileRow();
-                    var validators = setUpForecastsFileValidators();
+                if (streamReader.Peek() == -1) throw new ValidationException("File is empty.");
+                var reader = new CsvFileReader(streamReader);
+                var row = new CsvFileRow();
+                var validators = setUpForecastsFileValidators();
 
-                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
+                using (PerformanceOutput.ForOperation("Validate forecasts import file."))
+                {
+                    while (reader.ReadNextRow(row))
                     {
-                        while (reader.ReadNextRow(row))
-                        {
-                            validateRowByRow(validators, row);
-                            fileContent.Append(row + Environment.NewLine);
-                            row.Clear();
-                            rowNumber++;
-                        }
+                        validateRowByRow(validators, row);
+                        fileContent.Append(row + Environment.NewLine);
+                        row.Clear();
+                        rowNumber++;
                     }
                 }
-                catch (ValidationException exception)
-                {
-                    throw new ValidationException(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
-                }
             }
-            FileName = uploadFileName;
-            FileContent = Encoding.UTF8.GetBytes(fileContent.ToString());
+            catch (ValidationException exception)
+            {
+                throw new ValidationException(
+                    string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
+            }
+            FileContent = Encoding.UTF8.GetBytes(fileContent.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
         }
 
         public IWorkload LoadWorkload()

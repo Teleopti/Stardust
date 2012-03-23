@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
@@ -26,14 +27,17 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
             SkillName = _model.GetSelectedSkillName();
         }
 
-        public Guid SaveForecastFile()
+        public Guid SaveForecastFile(string uploadFileName)
         {
-            return _model.SaveValidatedForecastFileInDb();
+            return _model.SaveValidatedForecastFileInDb(uploadFileName);
         }
 
         public void ValidateFile(string uploadFileName)
         {
-            _model.ValidateFile(uploadFileName);
+            using (var stream = new StreamReader(uploadFileName))
+            {
+                _model.ValidateFile(stream);
+            }
         }
 
         public ImportForecastsOptionsDto GetImportForecastOption()

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -22,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         private ISkill _skill;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IImportForecastsRepository _importForecastsRepository;
-
+        
         [SetUp]
         public void Setup()
         {
@@ -50,7 +53,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var forecastFile = _mocks.StrictMock<IForecastFile>();
-            _target.FileName = "C:\test.csv";
             var fileId = Guid.NewGuid();
             using (_mocks.Record())
             {
@@ -62,15 +64,60 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             }
             using (_mocks.Playback())
             {
-                Assert.That(_target.SaveValidatedForecastFileInDb(), Is.EqualTo(fileId));
+                Assert.That(_target.SaveValidatedForecastFileInDb("C:\test.csv"), Is.EqualTo(fileId));
             }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ShouldHandleInvalidatedFile()
+        public void ShouldValidateValidFile()
         {
-            _target.SaveValidatedForecastFileInDb();
+            var streamReader = _mocks.StrictMock<StreamReader>();
+            const string file = "Insurance,20120301 12:45,20120301 13:00,17,179,0,4.05";
+            var fileContent = Encoding.UTF8.GetBytes(file);
+            using (_mocks.Record())
+            {
+                Expect.Call(streamReader.Peek()).Return('d');
+                Expect.Call(streamReader.ReadLine()).Return(file).Repeat.Once();
+                Expect.Call(streamReader.ReadLine()).Return("").Repeat.Once();
+            }
+            using (_mocks.Playback())
+            {
+                _target.ValidateFile(streamReader);
+                Assert.That(_target.FileContent, Is.EqualTo(fileContent));
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldValidateInvalidFile()
+        {
+            var streamReader = _mocks.StrictMock<StreamReader>();
+            const string file = "Insurance,20120301 12:45,20120301 13:00,17,179";
+            using (_mocks.Record())
+            {
+                Expect.Call(streamReader.Peek()).Return('d');
+                Expect.Call(streamReader.ReadLine()).Return(file).Repeat.Once();
+                Expect.Call(streamReader.ReadLine()).Return("").Repeat.Once();
+            }
+            using (_mocks.Playback())
+            {
+                _target.ValidateFile(streamReader);
+            }
+        }
+        
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldValidateInvalidEmptyFile()
+        {
+            var streamReader = _mocks.StrictMock<StreamReader>();
+            using (_mocks.Record())
+            {
+                Expect.Call(streamReader.Peek()).Return(-1);
+            }
+            using (_mocks.Playback())
+            {
+                _target.ValidateFile(streamReader);
+            }
         }
     }
 }
