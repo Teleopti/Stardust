@@ -52,14 +52,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new Supervisor());
 
+			var timeZones = new UtcAndCetTimeZones();
 			var dates = new TodayDate();
 			var intervals = new QuarterOfAnHourInterval();
-			var timeZones = new UtcAndCetTimeZones();
 			var dataSource = new ExistingDatasources(timeZones);
 			UserFactory.User().Setup(new EternityAndNotDefinedDate());
+			UserFactory.User().Setup(timeZones);
 			UserFactory.User().Setup(dates);
 			UserFactory.User().Setup(intervals);
-			UserFactory.User().Setup(timeZones);
+			UserFactory.User().Setup(dataSource);
 			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
 

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
@@ -48,6 +49,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					_businessUnits.BusinessUnitId,
 					_datasource.RaptorDefaultDatasourceId)
 				);
+
+			Bulk.Insert(connection, table);
 		}
 	}
 }

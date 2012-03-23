@@ -10,12 +10,14 @@ using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
-	public class FillBridgeTimeZoneFromData : IAnalyticsDataSetup
+	public class FillBridgeTimeZoneFromData : IAnalyticsDataSetup, IBridgeTimeZone
 	{
 		private readonly IDateData _dates;
 		private readonly IIntervalData _intervals;
 		private readonly ITimeZoneData _timeZones;
 		private readonly IDatasourceData _datasource;
+
+		public DataTable Table { get; set; }
 
 		public FillBridgeTimeZoneFromData(IDateData dates, IIntervalData intervals, ITimeZoneData timeZones, IDatasourceData datasource)
 		{
@@ -55,10 +57,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			                   		local_interval_id
 			                   	};
 
-			var table = bridge_time_zone.CreateTable();
+			Table = bridge_time_zone.CreateTable();
 
 			query.ForEach(
-				a => table.AddTimeZone(
+				a => Table.AddTimeZone(
 					a.date_id,
 					a.interval_id,
 					a.time_zone_id,
@@ -67,8 +69,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					_datasource.RaptorDefaultDatasourceId)
 				);
 
-			Bulk.Insert(connection, table);
+			Bulk.Insert(connection, Table);
 		}
+
 	}
 
 }

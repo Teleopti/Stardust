@@ -54,6 +54,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var workloads = new AWorkload(skills, timeZones, businessUnits, dataSource);
 			UserFactory.User().Setup(workloads);
 			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
+			var dates = UserFactory.User().UserData<IDateData>();
+			var intervals = UserFactory.User().UserData<IIntervalData>();
+			var bridgeTimeZones = UserFactory.User().UserData<IBridgeTimeZone>();
+			UserFactory.User().Setup(new FactQueue(dates, intervals, queues, dataSource, timeZones, bridgeTimeZones));
 		}
 
 		[When(@"I click the signout button")]

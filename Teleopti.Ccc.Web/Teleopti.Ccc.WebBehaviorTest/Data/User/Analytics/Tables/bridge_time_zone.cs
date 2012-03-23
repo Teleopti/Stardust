@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -9,14 +10,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.bridge_time_zone");
-			table.Columns.Add("date_id");
-			table.Columns.Add("interval_id");
-			table.Columns.Add("time_zone_id");
-			table.Columns.Add("local_date_id");
-			table.Columns.Add("local_interval_id");
-			table.Columns.Add("datasource_id");
-			table.Columns.Add("insert_date");
-			table.Columns.Add("update_date");
+			table.Columns.Add("date_id", typeof(int));
+			table.Columns.Add("interval_id", typeof(int));
+			table.Columns.Add("time_zone_id", typeof(int));
+			table.Columns.Add("local_date_id", typeof(int));
+			table.Columns.Add("local_interval_id", typeof(int));
+			table.Columns.Add("datasource_id", typeof(int));
+			table.Columns.Add("insert_date", typeof(DateTime));
+			table.Columns.Add("update_date", typeof(DateTime));
 			return table;
 		}
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			dataTable.Rows.Add(row);
 		}
 
-		public static DataRow FindBridgeTimeZoneByIds(
+		public static IEnumerable<DataRow> FindBridgeTimeZoneRowsByIds(
 			this DataTable dataTable,
 			int date_id,
 			int interval_id,
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			        	(int) b["interval_id"] == interval_id &&
 			        	(int) b["time_zone_id"] == time_zone_id
 			        select
-			        	b).Single();
+			        	b).ToArray();
 		}
 	}
 }

@@ -20,26 +20,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			UpdateRaptorDefaultDatasourceWithTimeZoneId();
-			LoadDatasourcesFromDatabase();
+			UpdateRaptorDefaultDatasourceWithTimeZoneId(connection);
+			LoadDatasourcesFromDatabase(connection);
 		}
 
 		const string raptorDefaultDatasourceName = "TeleoptiCCC";
 		const int raptorDefaultDatasourceId = 1;
 
-		private void LoadDatasourcesFromDatabase()
+		private void LoadDatasourcesFromDatabase(SqlConnection connection)
 		{
-			var command = new SqlCommand("select * from mart.sys_datasource");
+			var command = new SqlCommand("select * from mart.sys_datasource", connection);
 			var reader = command.ExecuteReader();
 			Table = sys_datasource.CreateTable();
 			Table.Load(reader);
 			RaptorDefaultDatasourceId = Table.FindDatasourceIdByName(raptorDefaultDatasourceName);
 		}
 
-		private void UpdateRaptorDefaultDatasourceWithTimeZoneId()
+		private void UpdateRaptorDefaultDatasourceWithTimeZoneId(SqlConnection connection)
 		{
 			var sql = string.Format("update mart.sys_datasource set time_zone_id = {0} where datasource_id = {1}", _timeZones.CetTimeZoneId, raptorDefaultDatasourceId);
-			var updateTimeZone = new SqlCommand(sql);
+			var updateTimeZone = new SqlCommand(sql, connection);
 			if (updateTimeZone.ExecuteNonQuery() != 1)
 				throw new Exception("Expected 1 rows affected!");
 		}

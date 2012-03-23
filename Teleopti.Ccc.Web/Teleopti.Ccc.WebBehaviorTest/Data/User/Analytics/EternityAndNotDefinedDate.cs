@@ -8,7 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
-	public class EternityAndNotDefinedDate : IAnalyticsDataSetup, IDateData
+	public class EternityAndNotDefinedDate : IAnalyticsDataSetup
 	{
 		public DataTable Table { get; private set; }
 

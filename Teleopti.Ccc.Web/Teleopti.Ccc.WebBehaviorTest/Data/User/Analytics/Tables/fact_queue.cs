@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["queue_id"] = queue_id;
 			row["local_date_id"] = local_date_id;
 			row["local_interval_id"] = local_interval_id;
-			row["offered_calls"] = local_interval_id;
+			row["offered_calls"] = offered_calls;
 			row["answered_calls"] = answered_calls;
 			row["answered_calls_within_SL"] = answered_calls_within_SL;
 			row["abandoned_calls"] = abandoned_calls;

@@ -42,11 +42,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			            from i in intervals
 			            from q in queue
 			            let date_id = (int) d["date_id"]
-			            let interval_id = (int) d["interval_id"]
+			            let interval_id = (int) i["interval_id"]
 			            let queue_id = (int) q["queue_id"]
 			            let datasource_id = (int) q["datasource_id"]
 			            let time_zone_id = _datasource.Table.FindTimeZoneIdByDatasourceId(datasource_id)
-			            let bridgeTimeZone = _bridgeTimeZone.Table.FindBridgeTimeZoneByIds(date_id, interval_id, time_zone_id)
+			            let bridgeTimeZones = _bridgeTimeZone.Table.FindBridgeTimeZoneRowsByIds(date_id, interval_id, time_zone_id)
+						where bridgeTimeZones.Any()
+						let bridgeTimeZone = bridgeTimeZones.Single()
 			            let local_date_id = (int) bridgeTimeZone["local_date_id"]
 			            let local_interval_id = (int) bridgeTimeZone["local_interval_id"]
 			            select new
@@ -62,12 +64,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			query.ForEach(a =>
 			              	{
 			              		var date = dates.FindDateByDateId(a.date_id);
-			              		var time = intervals.FindTimeByIntervalId(a.date_id);
+			              		var time = intervals.FindTimeByIntervalId(a.interval_id);
 			              		var dateTime = date.Add(time.TimeOfDay);
 			              		var offered_calls = GenerateOfferedCalls(dateTime);
-			              		var answered_valls = Noise(offered_calls - 10, 3);
-			              		var talk_time_s = Noise(offered_calls * 100, 100);
-			              		var speed_of_answer = Noise(talk_time_s / 2, 100);
+			              		var answered_calls = (offered_calls - 7).Noise(3).Abs();
+			              		var abandoned_calls = (offered_calls - answered_calls/3).Noise(2).Abs();
+								var talk_time_s = (offered_calls * 100).Noise(100).Abs();
+								var speed_of_answer = (talk_time_s / 2).Noise(100).Abs();
 			              		table.AddFact(
 			              			a.date_id,
 			              			a.interval_id,
@@ -75,21 +78,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			              			a.local_date_id,
 			              			a.local_interval_id,
 			              			offered_calls,
-			              			answered_valls,
+			              			answered_calls,
 			              			0,
-			              			Noise(10, 2),
+									abandoned_calls,
 			              			0,
 			              			0,
-			              			Noise(1, 1),
-			              			Noise(1, 1),
-			              			talk_time_s,
+			              			1.Noise(1),
+									1.Noise(1),
+									talk_time_s,
 			              			0,
 			              			talk_time_s,
 			              			speed_of_answer,
-			              			Noise(200, 100),
-			              			Noise(200, 100),
-			              			Noise(200, 100),
-			              			a.datasource_id
+			              			200.Noise(100),
+									200.Noise(100),
+									200.Noise(100),
+									a.datasource_id
 			              			);
 			              	});
 
@@ -103,32 +106,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					new Tuple<TimeSpan, int>(TimeSpan.FromHours(0), 0),
 					new Tuple<TimeSpan, int>(TimeSpan.FromHours(6), 0),
 					new Tuple<TimeSpan, int>(TimeSpan.FromHours(7), 10),
-					new Tuple<TimeSpan, int>(TimeSpan.FromHours(8), 20),
-					new Tuple<TimeSpan, int>(TimeSpan.FromHours(9), 30),
-					new Tuple<TimeSpan, int>(TimeSpan.FromHours(10), 40),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(8), 30),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(9), 40),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(10), 50),
 					new Tuple<TimeSpan, int>(TimeSpan.FromHours(13), 30),
-					new Tuple<TimeSpan, int>(TimeSpan.FromHours(16), 20),
-					new Tuple<TimeSpan, int>(TimeSpan.FromHours(19), 0),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(17), 50),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(20), 35),
+					new Tuple<TimeSpan, int>(TimeSpan.FromHours(21), 0),
 					new Tuple<TimeSpan, int>(TimeSpan.FromHours(25), 0),
 				};
 
 		private int GenerateOfferedCalls(DateTime dateTime)
 		{
 			var baseValue = _offeredCallsLookup
-				.SkipWhile(t => t.Item1 <= dateTime.TimeOfDay)
+				.SkipWhile(t => t.Item1 < dateTime.TimeOfDay)
 				.Select(t => t.Item2)
-				.Single()
+				.First()
 				;
-			var value = Noise(baseValue, 5);
+			var value = baseValue.Noise(5).Abs();
 			return value;
 		}
+	}
 
+	public static class Extensions
+	{
 		private static readonly Random _random = new Random();
-		private int Noise(int value, int vary)
+
+		public static int Noise(this int value, int vary)
 		{
 			var noise = _random.Next(-vary, vary);
 			var newValue = value + noise;
 			return newValue;
 		}
+
+		public static int Abs(this int value)
+		{
+			return Math.Abs(value);
+		}
+
 	}
 }

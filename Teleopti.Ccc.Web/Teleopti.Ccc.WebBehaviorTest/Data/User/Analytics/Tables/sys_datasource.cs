@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			table.Columns.Add("datasource_database_id", typeof(int));
 			table.Columns.Add("datasource_database_name");
 			table.Columns.Add("datasource_type_name");
-			table.Columns.Add("time_zone_id", typeof(float));
+			table.Columns.Add("time_zone_id", typeof(int));
 			table.Columns.Add("inactive", typeof(bool));
 			table.Columns.Add("insert_date", typeof(DateTime));
 			table.Columns.Add("update_date", typeof(DateTime));

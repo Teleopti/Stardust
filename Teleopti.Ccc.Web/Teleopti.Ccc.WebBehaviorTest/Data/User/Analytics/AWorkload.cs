@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
 
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 			Table.AddWorkload(WorkloadId, WorkloadCode, "A workload", _skills.FirstSkillId, _skills.FirstSkillCode, _skills.FirstSkillName, _timezones.UtcTimeZoneId, Guid.NewGuid(), "Forecast method", 1, 1, -1, -1, 0, 1, 1, _businessUnits.BusinessUnitId, _datasource.RaptorDefaultDatasourceId);
 
+			Bulk.Insert(connection, Table);
 		}
 
 	}
