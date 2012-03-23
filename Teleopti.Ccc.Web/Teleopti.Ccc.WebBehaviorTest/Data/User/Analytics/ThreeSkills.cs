@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		private readonly ITimeZoneData _timeZones;
 		private readonly IBusinessUnitData _businessUnits;
+		private readonly IDatasourceData _datasource;
 
 		public DataTable Table { get; set; }
 
@@ -27,25 +28,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		public Guid Skill3Code = Guid.NewGuid();
 		public string Skill3Name = "Skill 3";
 
-		public ThreeSkills(ITimeZoneData timeZones, IBusinessUnitData businessUnits)
+		public ThreeSkills(ITimeZoneData timeZones, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
 			FirstSkillId = 0;
 			FirstSkillCode = Guid.NewGuid();
 			FirstSkillName = "Skill 1";
 			_timeZones = timeZones;
 			_businessUnits = businessUnits;
+			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			var time_zone_id = _timeZones.UtcTimeZoneId;
 			var business_unit_id = _businessUnits.BusinessUnitId;
 
 			Table = dim_skill.CreateTable();
 
-			Table.AddRow(FirstSkillId, FirstSkillCode, FirstSkillName, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, sys_datasource.RaptorDefaultDatasourceId);
-			Table.AddRow(Skill2Id, Skill2Code, Skill2Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, sys_datasource.RaptorDefaultDatasourceId);
-			Table.AddRow(Skill3Id, Skill3Code, Skill3Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, sys_datasource.RaptorDefaultDatasourceId);
+			Table.AddSkill(FirstSkillId, FirstSkillCode, FirstSkillName, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
+			Table.AddSkill(Skill2Id, Skill2Code, Skill2Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
+			Table.AddSkill(Skill3Id, Skill3Code, Skill3Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
 
 			Bulk.Insert(connection, Table);
 		}

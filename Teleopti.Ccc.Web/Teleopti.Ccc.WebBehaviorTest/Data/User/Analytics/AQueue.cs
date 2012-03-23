@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -9,15 +8,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public class AQueue : IAnalyticsDataSetup, IQueueData
 	{
+		private readonly IDatasourceData _datasource;
+
 		public int QueueId = 0;
 
 		public DataTable Table { get; private set; }
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public AQueue(IDatasourceData datasource) {
+			_datasource = datasource;
+		}
+
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_workload.CreateTable();
 
-			Table.AddRow(QueueId,2, "10001", "Queue 1", "Queue 1", "Log Object", sys_datasource.RaptorDefaultDatasourceId);
+			Table.AddQueue(QueueId, 2, "10001", "Queue 1", "Queue 1", "Log Object", _datasource.RaptorDefaultDatasourceId);
 		}
 
 	}

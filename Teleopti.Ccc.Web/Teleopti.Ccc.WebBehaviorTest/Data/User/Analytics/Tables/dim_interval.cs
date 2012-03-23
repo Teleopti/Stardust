@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			table.Columns.Add("interval_name");
 			table.Columns.Add("halfhour_name");
 			table.Columns.Add("hour_name");
-			table.Columns.Add("interval_start", typeof (DateTime));
+			table.Columns.Add("interval_start", typeof(DateTime));
 			table.Columns.Add("interval_end", typeof(DateTime));
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date");
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddInterval(
 			this DataTable dataTable,
 			int interval_id,
 			string interval_name,
@@ -41,6 +42,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
+		}
+
+		public static int FindIntervalIdByTimeOfDay(
+			this EnumerableRowCollection<DataRow> rows,
+			DateTime time)
+		{
+			var timeOfDay = time.TimeOfDay;
+			return (from li in rows
+			        let liTime = ((DateTime) li["interval_start"]).TimeOfDay
+			        where liTime == timeOfDay
+			        select (int) li["interval_id"]
+			       ).Single();
+		}
+
+		public static DateTime FindTimeByIntervalId(
+			this EnumerableRowCollection<DataRow> rows,
+			int interval_id)
+		{
+			return (from li in rows
+			        where (int) li["interval_id"] == interval_id
+			        select ((DateTime) li["interval_start"])
+			       ).Single();
 		}
 	}
 }

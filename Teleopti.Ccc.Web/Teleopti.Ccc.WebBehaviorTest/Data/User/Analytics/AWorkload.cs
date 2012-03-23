@@ -12,24 +12,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly ISkillData _skills;
 		private readonly ITimeZoneData _timezones;
 		private readonly IBusinessUnitData _businessUnits;
+		private readonly IDatasourceData _datasource;
 
 		public int WorkloadId = 0;
 		public Guid WorkloadCode = Guid.NewGuid();
 
 		public DataTable Table { get; private set; }
 
-		public AWorkload(ISkillData skills, ITimeZoneData timezones, IBusinessUnitData businessUnits)
+		public AWorkload(ISkillData skills, ITimeZoneData timezones, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
 			_skills = skills;
 			_timezones = timezones;
 			_businessUnits = businessUnits;
+			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_workload.CreateTable();
 
-			Table.AddRow(WorkloadId, WorkloadCode, "A workload", _skills.FirstSkillId, _skills.FirstSkillCode, _skills.FirstSkillName, _timezones.UtcTimeZoneId, Guid.NewGuid(), "Forecast method", 1, 1, -1, -1, 0, 1, 1, _businessUnits.BusinessUnitId, sys_datasource.RaptorDefaultDatasourceId);
+			Table.AddWorkload(WorkloadId, WorkloadCode, "A workload", _skills.FirstSkillId, _skills.FirstSkillCode, _skills.FirstSkillName, _timezones.UtcTimeZoneId, Guid.NewGuid(), "Forecast method", 1, 1, -1, -1, 0, 1, 1, _businessUnits.BusinessUnitId, _datasource.RaptorDefaultDatasourceId);
 
 		}
 

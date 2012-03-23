@@ -34,24 +34,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void GivenIHaveSkillAnalyticsData()
 		{
 			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
-			var businessUnits = new BusinessUnit(TestData.BusinessUnit);
+			var dataSource = UserFactory.User().UserData<IDatasourceData>();
+			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
 			UserFactory.User().Setup(businessUnits);
-			UserFactory.User().Setup(new ThreeSkills(timeZones, businessUnits));
+			UserFactory.User().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
 		}
 
 		[Given(@"I have fact queue data for a week")]
 		public void GivenIHaveFactQueueDataForAWeek()
 		{
 			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
-			var queues = new AQueue();
-			var businessUnits = new BusinessUnit(TestData.BusinessUnit);
+			var dataSource = UserFactory.User().UserData<IDatasourceData>();
+			var queues = new AQueue(dataSource);
+			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
 			UserFactory.User().Setup(queues);
 			UserFactory.User().Setup(businessUnits);
-			var skills = new ThreeSkills(timeZones, businessUnits);
+			var skills = new ThreeSkills(timeZones, businessUnits, dataSource);
 			UserFactory.User().Setup(skills);
-			var workloads = new AWorkload(skills, timeZones, businessUnits);
+			var workloads = new AWorkload(skills, timeZones, businessUnits, dataSource);
 			UserFactory.User().Setup(workloads);
-			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits));
+			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
 		}
 
 		[When(@"I click the signout button")]
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should be signed out")]
 		public void ThenIShouldBeSignedOut()
 		{
-			Assert.That(() => Browser.Current.Url.EndsWith("/SignIn"), Is.True.After(5000, 50));
+			EventualAssert.That(() => Browser.Current.Url.EndsWith("/SignIn"), Is.True);
 		}
 
 		[Then(@"I should se a report")]

@@ -55,11 +55,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var dates = new TodayDate();
 			var intervals = new QuarterOfAnHourInterval();
 			var timeZones = new UtcAndCetTimeZones();
+			var dataSource = new ExistingDatasources(timeZones);
 			UserFactory.User().Setup(new EternityAndNotDefinedDate());
 			UserFactory.User().Setup(dates);
 			UserFactory.User().Setup(intervals);
 			UserFactory.User().Setup(timeZones);
-			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones));
+			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
 
 		[Given(@"I am user without permission to MobileReports")]

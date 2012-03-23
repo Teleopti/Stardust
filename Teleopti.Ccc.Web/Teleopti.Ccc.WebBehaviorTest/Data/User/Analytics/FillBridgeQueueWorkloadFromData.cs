@@ -14,15 +14,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly IWorkloadData _workloads;
 		private readonly IQueueData _queues;
 		private readonly IBusinessUnitData _businessUnits;
+		private readonly IDatasourceData _datasource;
 
-		public FillBridgeQueueWorkloadFromData(IWorkloadData workloads, IQueueData queues, IBusinessUnitData businessUnits)
+		public FillBridgeQueueWorkloadFromData(IWorkloadData workloads, IQueueData queues, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
 			_workloads = workloads;
 			_queues = queues;
 			_businessUnits = businessUnits;
+			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			var dim_workload = _workloads.Table.AsEnumerable();
 			var dim_queue = _queues.Table.AsEnumerable();
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					a.workload_id,
 					a.skill_id,
 					_businessUnits.BusinessUnitId,
-					sys_datasource.RaptorDefaultDatasourceId)
+					_datasource.RaptorDefaultDatasourceId)
 				);
 		}
 	}

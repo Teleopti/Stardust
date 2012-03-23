@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddBusinessUnit(
 			this DataTable dataTable,
 			int business_unit_id,
 			Guid business_unit_code,

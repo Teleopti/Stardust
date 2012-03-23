@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddWorkload(
 			this DataTable dataTable,
 			int workload_id,
 			Guid workload_code,

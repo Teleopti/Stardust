@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddSkill(
 			this DataTable dataTable,
 			int skill_id,
 			Guid skill_code,

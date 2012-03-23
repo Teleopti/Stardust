@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddQueue(
 			this DataTable dataTable,
 			int queue_id,
 			int queue_agg_id,

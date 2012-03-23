@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		public int UtcTimeZoneId { get; set; }
 		public int CetTimeZoneId { get; set; }
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_time_zone.CreateTable();
 
 			var utcTimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-			Table.AddDimTimeZoneRow(
+			Table.AddTimeZone(
 				UtcTimeZoneId,
 				utcTimeZone.Id,
 				utcTimeZone.DisplayName,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				);
 
 			var cetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			Table.AddDimTimeZoneRow(
+			Table.AddTimeZone(
 				CetTimeZoneId,
 				cetTimeZone.Id,
 				cetTimeZone.DisplayName,

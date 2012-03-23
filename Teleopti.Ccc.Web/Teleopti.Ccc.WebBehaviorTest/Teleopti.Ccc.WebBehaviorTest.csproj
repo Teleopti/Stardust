@@ -74,8 +74,12 @@
     <Compile Include="Data\User\Analytics\AQueue.cs" />
     <Compile Include="Data\User\Analytics\AWorkload.cs" />
     <Compile Include="Data\User\Analytics\BusinessUnit.cs" />
+    <Compile Include="Data\User\Analytics\ExistingDatasources.cs" />
+    <Compile Include="Data\User\Analytics\FactQueue.cs" />
     <Compile Include="Data\User\Analytics\FillBridgeQueueWorkloadFromData.cs" />
+    <Compile Include="Data\User\Analytics\IBridgeTimeZone.cs" />
     <Compile Include="Data\User\Analytics\IBusinessUnitData.cs" />
+    <Compile Include="Data\User\Analytics\IDatasourceData.cs" />
     <Compile Include="Data\User\Analytics\IDateData.cs" />
     <Compile Include="Data\User\Analytics\IIntervalData.cs" />
     <Compile Include="Data\User\Analytics\IQueueData.cs" />
@@ -88,6 +92,7 @@
     <Compile Include="Data\User\Analytics\Tables\dim_queue.cs" />
     <Compile Include="Data\User\Analytics\Tables\dim_skill.cs" />
     <Compile Include="Data\User\Analytics\Tables\dim_workload.cs" />
+    <Compile Include="Data\User\Analytics\Tables\fact_queue.cs" />
     <Compile Include="Data\User\Analytics\Tables\sys_datasource.cs" />
     <Compile Include="Data\User\Analytics\Sql\Bulk.cs" />
     <Compile Include="Data\User\Analytics\FillBridgeTimeZoneFromData.cs" />

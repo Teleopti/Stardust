@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddDimTimeZoneRow(
+		public static void AddTimeZone(
 			this DataTable dataTable,
 			int time_zone_id,
 			string time_zone_code,
@@ -44,6 +45,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["update_date"] = DateTime.Now;
 			row["to_be_deleted"] = false;
 			dataTable.Rows.Add(row);
+		}
+
+		public static TimeZoneInfo FindTimeZoneById(
+			this DataTable dataTable,
+			int time_zone_id)
+		{
+			var time_zone_code =
+				(
+					from t in dataTable.AsEnumerable()
+					where (int) t["time_zone_id"] == time_zone_id
+					select (string) t["time_zone_code"]
+				).Single();
+			return TimeZoneInfo.FindSystemTimeZoneById(time_zone_code);
 		}
 
 	}

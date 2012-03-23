@@ -14,25 +14,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		public DataTable Table { get; set; }
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_date.CreateTable();
 
 			var date = DateTime.Now.Date;
-			Table.AddRow(
+			Table.AddDate(
 				0,
 				date,
 				date.Year,
 				date.Year * 100 + date.Month,
 				date.Month,
-				statisticsDataCulture.DateTimeFormat.GetMonthName(date.Month),
+				analyticsDataCulture.DateTimeFormat.GetMonthName(date.Month),
 				date.Month.GetMonthResourceKey(),
 				date.Day,
 				(int)date.DayOfWeek,
-				statisticsDataCulture.DateTimeFormat.GetDayName(date.DayOfWeek),
+				analyticsDataCulture.DateTimeFormat.GetDayName(date.DayOfWeek),
 				date.DayOfWeek.GetWeekDayResourceKey(),
-				DateHelper.WeekNumber(date, statisticsDataCulture),
-				(date.Year * 100 + DateHelper.WeekNumber(date, statisticsDataCulture)).ToString(statisticsDataCulture),
+				DateHelper.WeekNumber(date, analyticsDataCulture),
+				(date.Year * 100 + DateHelper.WeekNumber(date, analyticsDataCulture)).ToString(analyticsDataCulture),
 				date.Year + "Q" + DateHelper.GetQuarter(date.Month)
 				);
 

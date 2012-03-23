@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		DataTable Table { get; }
 		int UtcTimeZoneId { get; }
+		int CetTimeZoneId { get; }
 	}
 }

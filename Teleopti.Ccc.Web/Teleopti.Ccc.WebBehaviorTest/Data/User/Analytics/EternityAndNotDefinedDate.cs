@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		public DataTable Table { get; private set; }
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_date.CreateTable();
 
-			Table.AddRow(-2, new DateTime(2059, 12, 31), 0, 0, 0, "Eternity", null, 0, 0, "Eternity", null, 0, "000000", "ET");
-			Table.AddRow(-1, new DateTime(1900, 1, 1), 0, 0, 0, "Not Defined", null, 0, 0, "Not Defined", null, 0, "000000", "ND");
+			Table.AddDate(-2, new DateTime(2059, 12, 31), 0, 0, 0, "Eternity", null, 0, 0, "Eternity", null, 0, "000000", "ET");
+			Table.AddDate(-1, new DateTime(1900, 1, 1), 0, 0, 0, "Not Defined", null, 0, 0, "Not Defined", null, 0, "000000", "ND");
 			
 			Bulk.Insert(connection, Table);
 		}

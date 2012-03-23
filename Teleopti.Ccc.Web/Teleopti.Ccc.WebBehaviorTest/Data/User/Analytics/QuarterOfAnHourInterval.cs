@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		public DataTable Table { get; private set; }
 
-		public void Apply(SqlConnection connection, CultureInfo statisticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
 			Table = dim_interval.CreateTable();
 			var interval = TimeSpan.FromMinutes(15);
@@ -28,15 +28,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				         	{
 				         		var time = a.time;
 				         		var index = a.index;
-				         		var formattedTime = time.ToString(statisticsDataCulture.DateTimeFormat.ShortTimePattern);
+				         		var formattedTime = time.ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
 				         		var id = index;
 				         		var intervalStart = time;
 				         		var intervalEnd = time.Add(interval);
-				         		var intervalName = formattedTime + "-" + intervalEnd.ToString(statisticsDataCulture.DateTimeFormat.ShortTimePattern);
-				         		var halfHourName = formattedTime + "-" + time.Add(TimeSpan.FromMinutes(30)).ToString(statisticsDataCulture.DateTimeFormat.ShortTimePattern);
-				         		var hourName = formattedTime + "-" + time.Add(TimeSpan.FromHours(1)).ToString(statisticsDataCulture.DateTimeFormat.ShortTimePattern);
+				         		var intervalName = formattedTime + "-" + intervalEnd.ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
+				         		var halfHourName = formattedTime + "-" + time.Add(TimeSpan.FromMinutes(30)).ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
+				         		var hourName = formattedTime + "-" + time.Add(TimeSpan.FromHours(1)).ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
 
-				         		Table.AddRow(
+				         		Table.AddInterval(
 				         			id,
 				         			intervalName,
 				         			halfHourName,

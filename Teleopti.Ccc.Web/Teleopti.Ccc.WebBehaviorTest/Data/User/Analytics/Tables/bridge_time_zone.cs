@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddTimeZone(
 			this DataTable dataTable,
 			int date_id,
 			int interval_id,
@@ -38,6 +39,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
+		}
+
+		public static DataRow FindBridgeTimeZoneByIds(
+			this DataTable dataTable,
+			int date_id,
+			int interval_id,
+			int time_zone_id)
+		{
+			return (from b in dataTable.AsEnumerable()
+			        where
+			        	(int) b["date_id"] == date_id &&
+			        	(int) b["interval_id"] == interval_id &&
+			        	(int) b["time_zone_id"] == time_zone_id
+			        select
+			        	b).Single();
 		}
 	}
 }
