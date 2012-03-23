@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ClientProxies;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
@@ -20,17 +19,17 @@ using log4net;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
-    public partial class ImportForecastForm : BaseRibbonForm, IImportForecast
+    public partial class ImportForecastView : BaseRibbonForm, IImportForecastView
     {
         private readonly ImportForecastPresenter _presenter;
-        private ISkill _skill;
+        private readonly ISkill _skill;
         private readonly IGracefulDataSourceExceptionHandler _gracefulHandler;
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastForm));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastView));
         
-        public ImportForecastForm(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler)
+        public ImportForecastView(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler)
         {
             InitializeComponent();
-            _presenter = new ImportForecastPresenter(new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
+            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
             getSelectedSkillName();
             populateWorkloadList();
             _skill = preselectedSkill;
@@ -39,8 +38,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         private void populateWorkloadList()
         {
-            _presenter.PopulateWorkloadList();
-            var firstWorkload = _presenter.WorkloadList.FirstOrDefault();
+            _presenter.PopulateWorkload();
+            var firstWorkload = _presenter.Workload;
             if(firstWorkload==null)
             {
                 throw new ArgumentNullException("No workload exists.");
@@ -64,12 +63,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             }
         }
 
-        public ISkill Skill
-        {
-            get { return _skill; }
-            set { _skill = value; }
-        }
-
         public bool IsWorkloadImport
         {
             get { return radioButtonImportWorkload.Checked; }
@@ -84,28 +77,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             get { return radioButtonImportWLAndStaffing.Checked; }
         }
-
-        private ImportForecastsOptionsDto getImportForecastOption()
-        {
-            if (IsWorkloadImport)
-                return ImportForecastsOptionsDto.ImportWorkload;
-            if (IsStaffingImport)
-                return ImportForecastsOptionsDto.ImportStaffing;
-            if (IsStaffingAndWorkloadImport)
-                return ImportForecastsOptionsDto.ImportWorkloadAndStaffing;
-            throw new NotSupportedException("Options not supported.");
-        }
-
+        
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
             buttonAdvImport.Enabled = false;
-
-            _presenter.ValidateFile(UploadFileName);
-            var savedFileId = saveFileToServer();
+            try
+            {
+                _presenter.ValidateFile(UploadFileName);
+            }
+            catch (ValidationException exception)
+            {
+                MessageBoxAdv.Show(exception.Message, UserTexts.Resources.ValidationError);
+                return;
+            }
             var statusDialog = new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
             statusDialog.Show(this);
             statusDialog.SetProgress(1);
             statusDialog.SetMessage("Uploading file:" + UploadFileName + " to server...");
+            var savedFileId = saveFileToServer();
             if (savedFileId == Guid.Empty)
             {
                 MessageBoxAdv.Show("Error occured when trying to import file.");
@@ -118,7 +107,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             statusDialog.SetMessage("Validating...");
             var dto = new ImportForecastsFileCommandDto
                           {
-                              ImportForecastsMode = getImportForecastOption(),
+                              ImportForecastsMode = _presenter.GetImportForecastOption(),
                               UploadedFileId = savedFileId,
                               TargetSkillId = _skill.Id.GetValueOrDefault()
                           };

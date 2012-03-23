@@ -13,13 +13,21 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
 {
-    public class ImportForecastModel
+    public interface IImportForecastModel
+    {
+        string GetSelectedSkillName();
+        Guid SaveValidatedForecastFileInDb();
+        void ValidateFile(string uploadFileName);
+        IWorkload LoadWorkload();
+        string FileName { get; set; }
+        byte[] FileContent { get; set; }
+    }
+
+    public class ImportForecastModel : IImportForecastModel
     {
         private readonly ISkill _skill;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IImportForecastsRepository _importForecastsRepository;
-        private byte[] _fileContent;
-        private string _fileName;
 
         public ImportForecastModel(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository)
         {
@@ -28,24 +36,22 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             _importForecastsRepository = importForecastsRepository;
         }
 
-        public IEnumerable<IWorkload> LoadWorkloadList()
-        {
-            return _skill.WorkloadCollection.OrderBy(wl => wl.Name).ToList();
-        }
-
         public string GetSelectedSkillName()
         {
             return _skill.Name;
         }
 
+        public string FileName { get; set; }
+        public byte[] FileContent { get; set; }
+
         public Guid SaveValidatedForecastFileInDb()
         {
-            if(string.IsNullOrEmpty(_fileName))
-                throw new Exception("File has not been validated yet.");
+            if (string.IsNullOrEmpty(FileName))
+                throw new InvalidOperationException("File has not been validated yet.");
             var result = Guid.Empty;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-               var forecastFile = new ForecastFile(_fileName, _fileContent);
+                var forecastFile = new ForecastFile(FileName, FileContent);
                _importForecastsRepository.Add(forecastFile);
                var savedItem = uow.PersistAll();
                var item = savedItem.FirstOrDefault();
@@ -83,7 +89,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
                         while (reader.ReadNextRow(row))
                         {
                             validateRowByRow(validators, row);
-                            fileContent.Append(row.ToString() + '\n');
+                            fileContent.Append(row + Environment.NewLine);
                             row.Clear();
                             rowNumber++;
                         }
@@ -94,8 +100,13 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
                     throw new ValidationException(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
                 }
             }
-            _fileName = uploadFileName;
-            _fileContent = Encoding.UTF8.GetBytes(fileContent.ToString());
+            FileName = uploadFileName;
+            FileContent = Encoding.UTF8.GetBytes(fileContent.ToString());
+        }
+
+        public IWorkload LoadWorkload()
+        {
+            return _skill.WorkloadCollection.FirstOrDefault();
         }
 
         private static void validateRowByRow(IList<IForecastsFileValidator> validators, IFileRow row)

@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         
         public IForecastsFileContentProvider LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
-            var rows = Encoding.UTF8.GetString(fileContent).Split('\n').Select(line => new CsvFileRow(line)).ToList();
+            var rows =
+                Encoding.UTF8.GetString(fileContent).Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(
+                    line => new CsvFileRow(line)).ToList();
             rows.ForEach(row =>
             {
                 if (!ForecastsFileRowCreator.IsFileColumnValid(row))
