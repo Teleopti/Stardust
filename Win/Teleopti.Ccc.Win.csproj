@@ -701,11 +701,11 @@
     <Compile Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.Designer.cs">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastForm.cs">
+    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastForm.Designer.cs">
-      <DependentUpon>ImportForecastForm.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
+      <DependentUpon>ImportForecastView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryView.cs">
       <SubType>Form</SubType>
@@ -2489,8 +2489,8 @@
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.resx">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastForm.resx">
-      <DependentUpon>ImportForecastForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
+      <DependentUpon>ImportForecastView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryView.resx">
       <DependentUpon>JobHistoryView.cs</DependentUpon>

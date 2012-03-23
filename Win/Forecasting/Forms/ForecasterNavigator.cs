@@ -427,9 +427,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
-
         
-
 		private ISkillType getSkillType(TreeNode node)
 		{
 			if (node == null)
@@ -1216,8 +1214,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));
             var skill = (ISkill)node.Tag;
-
-            using (var impForecast = new ImportForecastForm(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
+            if (skill.WorkloadCollection.Count() == 0)
+            {
+                ViewBase.ShowWarningMessage("No workload available.", Resources.ImportError);
+                return;
+            }
+            using (var impForecast = new ImportForecastView(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
             {
                 impForecast.ShowDialog(this);
             }

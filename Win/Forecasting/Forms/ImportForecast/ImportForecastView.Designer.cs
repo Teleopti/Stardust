@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
-    partial class ImportForecastForm
+    partial class ImportForecastView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportForecastForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportForecastView));
             this.ribbonControlAdvFixed1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.radioButtonImportStaffing = new System.Windows.Forms.RadioButton();
@@ -265,7 +265,7 @@
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // ImportForecastForm
+            // ImportForecastView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -277,7 +277,7 @@
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "ImportForecastForm";
+            this.Name = "ImportForecastView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "xxImportForecast";
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).EndInit();
