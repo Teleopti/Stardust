@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;

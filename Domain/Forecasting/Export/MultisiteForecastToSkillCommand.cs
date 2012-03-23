@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,8 +12,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IScenarioProvider _scenarioProvider;
         private readonly IJobResultFeedback _jobResultFeedback;
-    	private int _progressStep;
-        private int _lastProgressStep;
 
         public MultisiteForecastToSkillCommand(ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillDayLoadHelper skillDayLoadHelper, IScenarioProvider scenarioProvider, IJobResultFeedback jobResultFeedback)
         {
@@ -27,10 +24,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "subskill")]
 		public void Execute(ISkillExportSelection skillSelection)
 		{
-			validateProgressStep(skillSelection);
             foreach (var multisiteSkillForExport in skillSelection.MultisiteSkillsForExport)
             {
-                _jobResultFeedback.ReportProgress(_progressStep,
+                _jobResultFeedback.ReportProgress(0,
 					string.Format(CultureInfo.InvariantCulture, "Starting export of {0}.", multisiteSkillForExport.MultisiteSkill.Name));
                 var skillDictionary = _skillDayLoadHelper.LoadSchedulerSkillDays(skillSelection.Period,
                                                                                  new[] { multisiteSkillForExport.MultisiteSkill },
@@ -48,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 						continue;
 					}
 
-                    _jobResultFeedback.ReportProgress(_progressStep,
+                    _jobResultFeedback.ReportProgress(0,
                         string.Format(CultureInfo.InvariantCulture, "Processing subskill {0}.", skillExportCombination.SourceSkill.Name));
                     ISkillStaffPeriodDictionary skillStaffPeriods;
                     if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillExportCombination.SourceSkill, out skillStaffPeriods))
@@ -60,19 +56,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     }
                 }
             }
-            _jobResultFeedback.ReportProgress(_lastProgressStep, string.Format(CultureInfo.InvariantCulture, "Export of multisite skills succeeded."));
+            _jobResultFeedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Export of multisite skills succeeded."));
         }
-
-    	private void validateProgressStep(ISkillExportSelection skillSelection)
-    	{
-    		var numberOfSubSkills = (from m in skillSelection.MultisiteSkillsForExport
-    		                         from s in m.SubSkillMapping
-    		                         select 1).Sum();
-
-            var steps = numberOfSubSkills + skillSelection.MultisiteSkillsForExport.Count() * 2;
-    	    _progressStep = (int) Math.Floor(skillSelection.Incremental*1d/steps);
-            _lastProgressStep = skillSelection.Incremental - _progressStep * (steps-1);
-    	}
     }
 
     public interface IMultisiteForecastToSkillCommand

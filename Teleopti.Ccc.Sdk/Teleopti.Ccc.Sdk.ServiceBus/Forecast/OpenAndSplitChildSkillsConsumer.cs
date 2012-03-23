@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Warning(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)")]
 		public void Consume(OpenAndSplitChildSkills message)
 		{
-		    var stepIncremental = message.IncreaseProgressBy/2;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture,
                                              "Incoming number of child skills for multisite skill {0}: {1}.", multisiteSkill.Name,
 											 message.MultisiteSkillSelections.ChildSkillSelections.Count()));
-                _feedback.ReportProgress(stepIncremental,
+                _feedback.ReportProgress(5,
 										 string.Format(CultureInfo.InvariantCulture, "Open and split target skills for skill {0} period {1}.",
                                                        multisiteSkill.Name, message.Period));
 
@@ -89,8 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				MultisiteSkillSelections = message.MultisiteSkillSelections,
 				OwnerPersonId = message.OwnerPersonId,
 				Period = message.Period,
-				Timestamp = message.Timestamp,
-                IncreaseProgressBy = message.IncreaseProgressBy - stepIncremental
+				Timestamp = message.Timestamp
 			});
 
 			_unitOfWorkFactory = null;

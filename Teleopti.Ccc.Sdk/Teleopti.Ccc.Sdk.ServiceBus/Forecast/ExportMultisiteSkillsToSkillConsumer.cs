@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -47,11 +45,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				_feedback.SetJobResult(jobResult, _messageBroker);
 				_feedback.ReportProgress(1, "Starting export...");
-				endProcessing(unitOfWork);
+                unitOfWork.PersistAll();
 			}
 
 			var listOfMessages = new List<OpenAndSplitChildSkills>();
-			foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
+            foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
 			{
 				foreach (var dateOnlyPeriod in message.Period.Split(20))
 				{
@@ -68,18 +66,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				}
 			}
 
-			var messageCount = listOfMessages.Count;
-			var incremental = (int)Math.Floor(99d / messageCount);
-            listOfMessages.ForEach(m=>m.IncreaseProgressBy = incremental);
-		    listOfMessages.Last().IncreaseProgressBy = 99 - incremental*(messageCount - 1);
-			listOfMessages.ForEach(m=> _serviceBus.Send(m));
-			_unitOfWorkFactory = null;
-		}
+			_feedback.ChangeTotalProgress(1 + listOfMessages.Count * 7);
 
-		private void endProcessing(IUnitOfWork unitOfWork)
-		{
-			unitOfWork.PersistAll();
-			_feedback.Dispose();
+			listOfMessages.ForEach(m=> _serviceBus.Send(m));
+
+            _feedback.Dispose();
+			_unitOfWorkFactory = null;
 		}
 	}
 }
