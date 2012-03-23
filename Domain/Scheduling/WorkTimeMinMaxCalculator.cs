@@ -9,17 +9,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class WorkTimeMinMaxCalculator : IWorkTimeMinMaxCalculator
 	{
 		private readonly IRuleSetProjectionService _ruleSetProjectionService;
+		private readonly IEffectiveRestrictionForDisplayCreator _effectiveRestrictionCreator;
 
-		public WorkTimeMinMaxCalculator(IRuleSetProjectionService ruleSetProjectionService)
+		public WorkTimeMinMaxCalculator(IRuleSetProjectionService ruleSetProjectionService, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
 		{
 			_ruleSetProjectionService = ruleSetProjectionService;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
 		public IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly date)
 		{
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																			  new WorkTimeLimitation(), null, null, null,
-																			  new List<IActivityRestriction>());
+			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay();
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				throw new InvalidOperationException("No person period defined");

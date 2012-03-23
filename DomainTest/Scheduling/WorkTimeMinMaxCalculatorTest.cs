@@ -27,22 +27,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 						};
 
 			var projectionService = new RuleSetProjectionService(new ShiftCreatorService());
-			var target = new WorkTimeMinMaxCalculator(projectionService);
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			var effectiveRestrictionCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																  new WorkTimeLimitation(), null, null, null,
+																  new WorkTimeLimitation(), new ShiftCategory("AM"), null, null,
 																  new List<IActivityRestriction>());
 
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] {personPeriod});
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			ruleSetBag.Stub(x => x.MinMaxWorkTime(projectionService, DateOnly.Today, effectiveRestriction)).Return(workTimeMinMax);
+			effectiveRestrictionCreator.Stub(x => x.GetEffectiveRestrictionForDisplay()).Return(effectiveRestriction);
 
+			var target = new WorkTimeMinMaxCalculator(projectionService, effectiveRestrictionCreator);
 			var result = target.WorkTimeMinMax(person, DateOnly.Today);
 
 			result.Should().Be.EqualTo(workTimeMinMax);
 		}
-
 	}
 }

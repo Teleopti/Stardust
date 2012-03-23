@@ -190,6 +190,8 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
