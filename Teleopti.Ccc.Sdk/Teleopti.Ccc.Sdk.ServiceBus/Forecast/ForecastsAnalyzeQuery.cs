@@ -6,23 +6,23 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
-    public interface IForecastsAnalyzeCommand
+    public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeCommandResult Execute();
+        IForecastsAnalyzeQueryResult Run();
     }
 
-    public class ForecastsAnalyzeCommand : IForecastsAnalyzeCommand
+    public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
         private readonly IEnumerable<IForecastsFileRow> _forecasts;
 
-        public ForecastsAnalyzeCommand(IEnumerable<IForecastsFileRow> forecasts)
+        public ForecastsAnalyzeQuery(IEnumerable<IForecastsFileRow> forecasts)
         {
             _forecasts = forecasts;
         }
 
-        public IForecastsAnalyzeCommandResult Execute()
+        public IForecastsAnalyzeQueryResult Run()
         {
-            var result = new ForecastsAnalyzeCommandResult { ForecastFileContainer = new ForecastFileContainer() };
+            var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
             var firstRow = _forecasts.First();
             var intervalLengthTicks = firstRow.LocalDateTimeTo.Subtract(firstRow.LocalDateTimeFrom).Ticks;
             var skillName = firstRow.SkillName;

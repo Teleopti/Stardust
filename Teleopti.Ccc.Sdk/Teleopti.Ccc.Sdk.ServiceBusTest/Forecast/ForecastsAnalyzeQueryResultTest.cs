@@ -7,14 +7,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 {
     [TestFixture]
-    public class ForecastsAnalyzeCommandResultTest
+    public class ForecastsAnalyzeQueryResultTest
     {
-        private IForecastsAnalyzeCommandResult _target;
+        private IForecastsAnalyzeQueryResult _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new ForecastsAnalyzeCommandResult();
+            _target = new ForecastsAnalyzeQueryResult();
         }
 
         [Test]

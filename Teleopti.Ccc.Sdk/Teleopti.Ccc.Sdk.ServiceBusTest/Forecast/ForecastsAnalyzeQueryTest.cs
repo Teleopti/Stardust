@@ -9,23 +9,23 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 {
     [TestFixture]
-    public class ForecastsAnalyzeCommandTest
+    public class ForecastsAnalyzeQueryTest
     {
-        private IForecastsAnalyzeCommand _target;
+        private IForecastsAnalyzeQuery _target;
         private IEnumerable<IForecastsFileRow> _forecastsRows;
 
         [SetUp]
         public void Setup()
         {
             _forecastsRows = setUpForecasts();
-            _target = new ForecastsAnalyzeCommand(_forecastsRows);
+            _target = new ForecastsAnalyzeQuery(_forecastsRows);
         }
 
         [Test]
         public void ShouldAnalyzeForecasts()
         {
             var date = new DateOnly(2012, 3, 1);
-            var result = _target.Execute();
+            var result = _target.Run();
 
             Assert.That(result.ErrorMessage, Is.Null);
             Assert.That(result.Succeeded, Is.True);

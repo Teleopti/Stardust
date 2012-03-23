@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skillId = Guid.NewGuid();
             var skill = SkillFactory.CreateSkill("test skill");
             skill.TimeZone = _timeZone;
-            var commandResult = _mocks.StrictMock<IForecastsAnalyzeCommandResult>();
+            var commandResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
             var row = new ForecastsFileRow
                           {
                               TaskTime = 179,
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skillId = Guid.NewGuid();
             var skill = SkillFactory.CreateSkill("test skill");
             skill.TimeZone = _timeZone;
-            var commandResult = _mocks.StrictMock<IForecastsAnalyzeCommandResult>();
+            var commandResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);

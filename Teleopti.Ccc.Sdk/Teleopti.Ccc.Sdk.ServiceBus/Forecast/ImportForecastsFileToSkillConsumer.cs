@@ -90,12 +90,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         }
 
         private static IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
-                                             IForecastsAnalyzeCommandResult commandResult)
+                                             IForecastsAnalyzeQueryResult queryResult)
         {
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
-            foreach (var date in commandResult.Period.DayCollection())
+            foreach (var date in queryResult.Period.DayCollection())
             {
-                var openHours = commandResult.WorkloadDayOpenHours.GetOpenHour(date);
+                var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                                        {
                                            BusinessUnitId = message.BusinessUnitId,
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            TargetSkillId = message.TargetSkillId,
                                            StartOpenHour = openHours.StartTime,
                                            EndOpenHour = openHours.EndTime,
-                                           Forecasts = commandResult.ForecastFileContainer.GetForecastsRows(date),
+                                           Forecasts = queryResult.ForecastFileContainer.GetForecastsRows(date),
                                            ImportMode = message.ImportMode
                                        });
             }

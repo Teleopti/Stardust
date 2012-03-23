@@ -2,7 +2,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
-    public interface IForecastsAnalyzeCommandResult
+    public interface IForecastsAnalyzeQueryResult
     {
         string ErrorMessage { get; set; }
         bool Succeeded { get; set; }
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         IWorkloadDayOpenHoursContainer WorkloadDayOpenHours { get; set; }
     }
 
-    public class ForecastsAnalyzeCommandResult : IForecastsAnalyzeCommandResult
+    public class ForecastsAnalyzeQueryResult : IForecastsAnalyzeQueryResult
     {
         public string ErrorMessage { get; set; }
         public bool Succeeded { get { return string.IsNullOrEmpty(ErrorMessage); } set{} }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     {
         ICollection<IForecastsFileRow> Forecasts { get; }
         IForecastsFileContentProvider LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone);
-        IForecastsAnalyzeCommandResult Analyze();
+        IForecastsAnalyzeQueryResult Analyze();
     }
 
     public class ForecastsFileContentProvider : IForecastsFileContentProvider
@@ -56,12 +56,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             return this;
         }
 
-        public IForecastsAnalyzeCommandResult Analyze()
+        public IForecastsAnalyzeQueryResult Analyze()
         {
             if(Forecasts.Count == 0)
                 throw new InvalidOperationException("Forecasts should be not empty.");
-            var analyzeCommand = new ForecastsAnalyzeCommand(Forecasts);
-            return analyzeCommand.Execute();
+            var analyzeCommand = new ForecastsAnalyzeQuery(Forecasts);
+            return analyzeCommand.Run();
         }
     }
 }

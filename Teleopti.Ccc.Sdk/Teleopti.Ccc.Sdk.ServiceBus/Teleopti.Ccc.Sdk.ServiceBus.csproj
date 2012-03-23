@@ -234,8 +234,8 @@
     <Compile Include="ForecastContainerInstaller.cs" />
     <Compile Include="Forecast\DateOnlyPeriodExtensions.cs" />
     <Compile Include="Forecast\ForecastFileDictionary.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeCommand.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeCommandResult.cs" />
+    <Compile Include="Forecast\ForecastsAnalyzeQuery.cs" />
+    <Compile Include="Forecast\ForecastsAnalyzeQueryResult.cs" />
     <Compile Include="Forecast\ForecastsFileContentProvider.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumer.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillConsumer.cs" />

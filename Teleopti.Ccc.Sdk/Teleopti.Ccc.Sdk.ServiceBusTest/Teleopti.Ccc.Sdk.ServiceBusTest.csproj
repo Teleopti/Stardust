@@ -164,8 +164,8 @@
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillResolveTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillTest.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeCommandResultTest.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeCommandTest.cs" />
+    <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
+    <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
     <Compile Include="Forecast\ForecastsFileContentProviderTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
