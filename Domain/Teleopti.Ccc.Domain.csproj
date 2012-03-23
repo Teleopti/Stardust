@@ -158,6 +158,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Domain">
+      <HintPath>..\Version6\Domain.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -660,6 +663,7 @@
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceChecker.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractor.cs" />

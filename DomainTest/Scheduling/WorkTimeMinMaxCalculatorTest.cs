@@ -5,10 +5,13 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
@@ -19,31 +22,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMinMaxWorkTimeFromRuleSetBag()
 		{
-			var workTimeMinMax = new WorkTimeMinMax
-						{
-							StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
-							EndTimeLimitation = new EndTimeLimitation(new TimeSpan(16, 0, 0), new TimeSpan(18, 0, 0)),
-							WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(10, 0, 0))
-						};
-
-			var projectionService = new RuleSetProjectionService(new ShiftCreatorService());
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
-			var person = MockRepository.GenerateMock<IPerson>();
 			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
-			var effectiveRestrictionCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																  new WorkTimeLimitation(), new ShiftCategory("AM"), null, null,
-																  new List<IActivityRestriction>());
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var options = MockRepository.GenerateMock<IEffectiveRestrictionOptions>();
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
+			var workTimeMineMax = new WorkTimeMinMax();
 
-			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] {personPeriod});
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
-			ruleSetBag.Stub(x => x.MinMaxWorkTime(projectionService, DateOnly.Today, effectiveRestriction)).Return(workTimeMinMax);
-			effectiveRestrictionCreator.Stub(x => x.GetEffectiveRestrictionForDisplay()).Return(effectiveRestriction);
+			scheduleRepository.Stub(
+				x =>
+				x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(true, false),
+				                                 new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow), scenario)).Return(
+				                                 	scheduleDictionary).IgnoreArguments();
+			;
+			scheduleDictionary.Stub(x => x[person].ScheduledDay(DateOnly.Today)).Return(scheduleDay);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, options)).Return(
+				effectiveRestriction).IgnoreArguments();
+			ruleSetBag.Stub(x => x.MinMaxWorkTime(ruleSetProjectionService, DateOnly.Today, effectiveRestriction)).Return(
+				workTimeMineMax);
 
-			var target = new WorkTimeMinMaxCalculator(projectionService, effectiveRestrictionCreator);
-			var result = target.WorkTimeMinMax(person, DateOnly.Today);
+			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator,
+			                                          scheduleRepository);
+			var result = target.WorkTimeMinMax(person, DateOnly.Today, scenario);
 
-			result.Should().Be.EqualTo(workTimeMinMax);
+			result.Should().Be.EqualTo(workTimeMineMax);
 		}
 	}
 }

@@ -617,7 +617,6 @@
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />
-    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractorTest.cs" />

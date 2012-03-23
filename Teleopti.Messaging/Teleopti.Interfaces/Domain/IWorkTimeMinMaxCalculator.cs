@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -11,8 +12,9 @@ namespace Teleopti.Interfaces.Domain
 		/// Calculate the min/max work times based on a rule set bag
 		/// </summary>
 		/// <param name="person"></param>
-		/// <param name="date">The date</param>
+		/// <param name="date"></param>
+		/// <param name="scenario"></param>
 		/// <returns></returns>
-		IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly date);
+		IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly date, IScenario scenario);
 	}
 }
