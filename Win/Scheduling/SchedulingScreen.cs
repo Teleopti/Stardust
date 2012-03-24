@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using log4net;
 using MbCache.Core;
@@ -3242,6 +3243,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_backgroundWorkerRunning = false;
 
+            if (stateHolderExceptionOccurred(e))
+                return;
+
 			if (datasourceExceptionOccurred(e))
 				return;
 
@@ -3337,6 +3341,26 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
             if (toolStripButtonViewAllowance.Available)
                 toolStripButtonViewAllowance.Enabled = isViewAllowanceAvailable();
+        }
+
+        private bool stateHolderExceptionOccurred(RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                var sourceException = e.Error as StateHolderException;
+                if (sourceException == null)
+                    return false;
+
+                using (var view = new SimpleExceptionHandlerView(sourceException, Resources.OpenTeleoptiCCC, sourceException.Message))
+                {
+                    view.ShowDialog();
+                }
+
+                _forceClose = true;
+                Close();
+                return true;
+            }
+            return false;
         }
 
 		private bool datasourceExceptionOccurred(RunWorkerCompletedEventArgs e)
@@ -5035,6 +5059,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
 		{
 			stateHolder.LoadCommonState(uow, new RepositoryFactory());
+            if(stateHolder.CommonStateHolder.DayOffs.Count == 0)
+                throw new StateHolderException("At least one day off must be added in options");
 		}
 
 		private void disableSave()
