@@ -5060,7 +5060,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			stateHolder.LoadCommonState(uow, new RepositoryFactory());
             if(stateHolder.CommonStateHolder.DayOffs.Count == 0)
-                throw new StateHolderException("At least one day off must be added in options");
+                throw new StateHolderException("You must create at least one Day Off in Options!");
 		}
 
 		private void disableSave()
@@ -7750,16 +7750,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			sort(e, new SortByEndDescendingCommand(SchedulerState));
 		}
-
-        private void ToolStripMenuItemContractTimeAscMouseUp(object sender, MouseEventArgs e)
-        {
-            sort(e, new SortByContractTimeAscendingCommand(SchedulerState));
-        }
-
-        private void ToolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
-        {
-            sort(e, new SortByContractTimeDescendingCommand(SchedulerState));
-        }
 
 		private void ToolStripMenuItemUnlockSelectionRmMouseUp(object sender, MouseEventArgs e)
 		{
