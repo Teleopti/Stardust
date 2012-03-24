@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             {
                 solvers.Add(new ConsecutiveWorkdaysSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
                 if (_dayOffPlannerSessionRuleSet.UseFreeWeekendDays)
-                    solvers.Add(new TuiCaseSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
+                    solvers.Add(new TuiCaseSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
             }
 
             return solvers;
