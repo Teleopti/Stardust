@@ -353,7 +353,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (schedulePart == null) throw new ArgumentNullException("schedulePart");
             if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
             if (finderService == null) throw new ArgumentNullException("finderService");
-            IEffectiveRestriction effectiveRestriction = getEffectiveRestriction(schedulePart, schedulingOptions);
 
             DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
             ICccTimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
