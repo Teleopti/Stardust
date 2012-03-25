@@ -4288,29 +4288,30 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
             
             _undoRedo.CreateBatch(Resources.UndoRedoScheduling);
+		    var schedulingOptions = _container.Resolve<ISchedulingOptions>();
 
 			//Extend period with 10 days to handle block scheduling
 			DateOnlyPeriod groupPagePeriod =
 				_schedulerState.RequestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
-			if (_optimizerOriginalPreferences.SchedulingOptions.UseBlockScheduling != BlockFinderType.None)
+            if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
 				groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = ScheduleOptimizerHelper.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<GroupScheduleGroupPageDataProvider>(),
 																_optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
 
-			if (_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
+            if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-                _schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+                schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				switch (_optimizerOriginalPreferences.SchedulingOptions.UseBlockScheduling)
+                switch (schedulingOptions.UseBlockScheduling)
 				{
 					case BlockFinderType.None:
 						{
 
-							if (_optimizerOriginalPreferences.SchedulingOptions.UseGroupScheduling)
+                            if (schedulingOptions.UseGroupScheduling)
 								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays);
 							else
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, true, _schedulingOptions, _backgroundWorkerScheduling);
+								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, true, _backgroundWorkerScheduling);
 
 							break;
 						}
@@ -4339,9 +4340,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//shiftcategorylimitations
 			if (!_backgroundWorkerScheduling.CancellationPending)
 			{
-				if (_schedulingOptions.UseShiftCategoryLimitations)
+                if (schedulingOptions.UseShiftCategoryLimitations)
 				{
-					_schedulingOptions.UseShiftCategoryLimitations = true;
 					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
 							_backgroundWorkerScheduling);
 				}

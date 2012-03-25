@@ -83,6 +83,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyPreferences()
         {
+            _optimizationPreferences.General.UseMustHaves = false;
+
             _optimizationPreferences.General.UsePreferences = true;
             _optimizationPreferences.General.PreferencesValue = 1;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
@@ -133,39 +135,53 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_schedulingOptions.UsePreferences);
         }
 
-        //[Test]
-        //public void VerifyMustHaves()
-        //{
-        //    //_optimizationPreferences.General.UseMustHaves = true;
-        //    //_optimizationPreferences.General.MustHavesValue = 1;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsTrue(_schedulingOptions.UsePreferences);
+        [Test]
+        public void VerifyMustHaves()
+        {
+            _optimizationPreferences.General.UsePreferences = false;
 
-        //    //_optimizationPreferences.General.UseMustHaves = true;
-        //    //_optimizationPreferences.General.MustHavesValue = 0.8;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsTrue(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
 
-        //    //_optimizationPreferences.General.UseMustHaves = true;
-        //    //_optimizationPreferences.General.MustHavesValue = 0;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
 
-        //    //_optimizationPreferences.General.UseMustHaves = false;
-        //    //_optimizationPreferences.General.MustHavesValue = 1;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 0.8;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
 
-        //    //_optimizationPreferences.General.UseMustHaves = false;
-        //    //_optimizationPreferences.General.MustHavesValue = 0.8;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
 
-        //    //_optimizationPreferences.General.UseMustHaves = false;
-        //    //_optimizationPreferences.General.MustHavesValue = 0;
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
-        //    //Assert.IsFalse(_schedulingOptions.UsePreferences);
-        //}
+            _optimizationPreferences.General.UseMustHaves = false;
+            _optimizationPreferences.General.MustHavesValue = 1;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+
+            _optimizationPreferences.General.UseMustHaves = false;
+            _optimizationPreferences.General.MustHavesValue = 0.8;
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+
+            _optimizationPreferences.General.UseMustHaves = false;
+            _optimizationPreferences.General.MustHavesValue = 0;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UsePreferencesMustHaveOnly);
+            Assert.IsFalse(_schedulingOptions.PreferencesDaysOnly);
+            Assert.IsFalse(_schedulingOptions.UsePreferences);
+        }
 
         [Test]
         public void VerifyRotations()

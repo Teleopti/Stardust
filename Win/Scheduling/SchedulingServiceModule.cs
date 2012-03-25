@@ -147,7 +147,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
 
             builder.RegisterType<BlockOptimizerBlockCleaner>().As<IBlockOptimizerBlockCleaner>().InstancePerLifetimeScope();
-            
+            builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().
+                InstancePerLifetimeScope();
+
         }
 
     }
