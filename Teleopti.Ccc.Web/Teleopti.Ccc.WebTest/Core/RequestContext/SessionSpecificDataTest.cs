@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			buId = Guid.NewGuid();
 			personId = Guid.NewGuid();
 			dataSource = Guid.NewGuid().ToString();
-			target = new SessionSpecificData(buId, dataSource, personId);			
+			target = new SessionSpecificData(buId, dataSource, personId, AuthenticationTypeOption.Windows);			
 		}
 
 		[Test]
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			target.BusinessUnitId.Should().Be.EqualTo(buId);
 			target.PersonId.Should().Be.EqualTo(personId);
 			target.DataSourceName.Should().Be.EqualTo(dataSource);
+			target.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Windows);
 		}
 	}
 }

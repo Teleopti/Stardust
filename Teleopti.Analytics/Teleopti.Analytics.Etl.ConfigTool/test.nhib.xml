@@ -4,7 +4,7 @@
     <session-factory name="Demo on my Computer">
       <property name="connection.provider">Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure</property>
       <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
-      <property name="connection.connection_string">Data Source=.;Initial Catalog=Root-TH_Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi</property>
+      <property name="connection.connection_string">Data Source=.;Initial Catalog=HgMain_Demoreg_TeleoptiCCC7;User Id=sa;Password=rogermoore</property>
       <property name="show_sql">false</property>
       <property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
       <property name="default_schema">dbo</property>
@@ -13,6 +13,6 @@
     </session-factory>
   </hibernate-configuration>
   <matrix name="MatrixDatamartDemo">
-    <connectionString>Data source=.;Initial Catalog=Root-TH_Demoreg_TeleoptiAnalytics;User Id=sa;Password=cadadi</connectionString>
+    <connectionString>Data source=.;Initial Catalog=HgMain_Demoreg_TeleoptiAnalytics;User Id=sa;Password=rogermoore</connectionString>
   </matrix>
 </datasource>

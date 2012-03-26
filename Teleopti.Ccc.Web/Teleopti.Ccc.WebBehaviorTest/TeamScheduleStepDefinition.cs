@@ -182,13 +182,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var myTeam = UserFactory.User().UserData<Team>().TheTeam.Description.Name;
 			var otherTeam = UserFactory.User().UserData<AnotherTeam>().TheTeam.Description.Name;
-			var expected = new[] {myTeam, otherTeam};
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
 
-			EventualAssert.That(() => picker.Exists, Is.True);
-			EventualAssert.That(() => picker.JQueryVisible(), Is.True);
-			EventualAssert.That(() => picker.DisplayVisible(), Is.True);
-			expected.ToList().ForEach(e => picker.Texts().Should().Contain(e));
+			AssertTeamPickerHasTeams(new[] {myTeam, otherTeam});
+		}
+
+		private static void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
+		{
+			var page = Pages.Pages.TeamSchedulePage;
+
+			EventualAssert.That(() => page.TeamPicker.Exists, Is.True);
+			EventualAssert.That(() => page.TeamPicker.JQueryVisible(), Is.True);
+			EventualAssert.That(() => page.TeamPicker.DisplayVisible(), Is.True);
+			teamNames.ToList().ForEach(e => EventualAssert.That(() => page.TeamPicker.Texts().Contains(e), Is.True));
 		}
 
 		[Then(@"the teams should be sorted alphabetically")]
@@ -249,10 +254,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheTeam_PickerWithTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			var expected = new[] { theOtherSitesTeam };
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
 
-			expected.ToList().ForEach(e => picker.Texts().Should().Contain(e));
+			AssertTeamPickerHasTeams(new[] {theOtherSitesTeam});
 		}
 
 		[Then(@"I should see the other site's team")]
@@ -287,6 +290,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(visible, Is.False);
 		}
 
+		[Then(@"I should see the team-picker")]
+		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
+		{
+			var picker = Pages.Pages.TeamSchedulePage.TeamPicker;
+
+			picker.Should().Not.Be.Null();
+		}
 
 
 		private static void AssertAgentIsDisplayed(string name)

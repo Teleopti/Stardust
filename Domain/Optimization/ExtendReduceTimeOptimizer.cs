@@ -120,7 +120,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-            if (!tryScheduleDay(dateOnly, lenghtHint))
+            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayBefore,
+                                                                                            _optimizerPreferences.
+                                                                                                SchedulingOptions);
+            if (!tryScheduleDay(dateOnly, lenghtHint, effectiveRestriction))
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 return false;
@@ -158,11 +161,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private bool tryScheduleDay(DateOnly day, WorkShiftLengthHintOption workShiftLengthHintOption)
+        private bool tryScheduleDay(DateOnly day, WorkShiftLengthHintOption workShiftLengthHintOption, IEffectiveRestriction effectiveRestriction)
         {
             IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(day);
             _optimizerPreferences.SchedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), _optimizerPreferences.SchedulingOptions);
 
             if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), false, effectiveRestriction))
             {

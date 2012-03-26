@@ -3744,7 +3744,7 @@ Periods</comment>
     <comment>Please choose a business unit</comment>
   </data>
   <data name="PleaseChooseADatasource" xml:space="preserve">
-    <value>请选择原始数据</value>
+    <value>请选择数据源</value>
     <comment>Please choose a datasource</comment>
   </data>
   <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
@@ -6983,7 +6983,7 @@ Periods</comment>
     <value>日期已经存在</value>
   </data>
   <data name="NA" xml:space="preserve">
-    <value>不适用</value>
+    <value>不可用</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
     <value>已排班</value>
@@ -7613,7 +7613,7 @@ Periods</comment>
     <value>适用偏好仅必须有</value>
   </data>
   <data name="Left" xml:space="preserve">
-    <value>左</value>
+    <value>剩余</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
     <value>一个或多个缺勤未保存。当缺勤包含在个人帐户中时，您不能更改其跟踪类型。</value>
@@ -9214,5 +9214,8 @@ Periods</comment>
   </data>
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>至少为{0}小时。</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>活动设置不能为空</value>
   </data>
 </root>

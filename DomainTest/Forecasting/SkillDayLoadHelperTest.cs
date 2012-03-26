@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -132,6 +133,52 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(skillDays[2], resultSkillDays.ElementAt(2));
             Assert.IsNotNull(resultSkillDays.ElementAt(0).SkillDayCalculator);
             Assert.IsNotNull(resultSkillDays.ElementAt(2).SkillDayCalculator);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void VerifyLoadBudgetSkillDaysWithMultisiteSkill()
+        {
+            var multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
+            _skills.Add(multisiteSkill);
+            _mocks.ReplayAll();
+
+            _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);
+
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void VerifyLoadBudgetSkillDays()
+        {
+            var multisiteSkill = SkillFactory.CreateMultisiteSkill("multisite skill");
+            var childSkill = SkillFactory.CreateChildSkill("Sub 1", multisiteSkill);
+            multisiteSkill.AddChildSkill(childSkill);
+            _skills.Add(childSkill);
+            var skillToBeLoad = new List<ISkill> {_skills[0], multisiteSkill};
+            IList<ISkillDay> skillDays = new List<ISkillDay>
+                                             {
+                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(1)),
+                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc)),
+                                                 SkillDayFactory.CreateSkillDay(childSkill,DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc))
+                                             };
+            IList<IMultisiteDay> multisiteDays = new List<IMultisiteDay>
+                                             {
+                                                 new MultisiteDay(_dtp.StartDate, multisiteSkill, _scenario)
+                                             };
+            Expect.Call(_skillDayRep.FindRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)),
+                                               skillToBeLoad, _scenario)).Return(skillDays).Repeat.Any();
+            Expect.Call(_multisiteDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp), multisiteSkill, _scenario)).Return(multisiteDays).Repeat.Once();
+
+            Expect.Call(_skillDayRep.FindRange(SkillDayCalculator.GetPeriodToLoad(_dtp),
+                                               childSkill, _scenario)).Return(new List<ISkillDay> { skillDays[2] }).Repeat.Once();
+            _mocks.ReplayAll();
+
+            var result = _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);
+            var resultSkillDays = result[childSkill];
+            
+            Assert.AreEqual(1, resultSkillDays.Count);
             _mocks.VerifyAll();
         }
 

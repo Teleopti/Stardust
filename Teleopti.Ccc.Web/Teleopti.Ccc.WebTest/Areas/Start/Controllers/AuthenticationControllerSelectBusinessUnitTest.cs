@@ -8,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Models.Shared;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -41,12 +42,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			signInBusinessUnitModel.DataSourceName = "arne weise";
 			signInBusinessUnitModel.PersonId = Guid.NewGuid();
+			signInBusinessUnitModel.AuthenticationType = (int)AuthenticationTypeOption.Windows;
 
 			using (mocks.Record())
 			{
 				logon.LogOn(signInBusinessUnitModel.BusinessUnitId, 
 								signInBusinessUnitModel.DataSourceName,
-				                signInBusinessUnitModel.PersonId);
+				                signInBusinessUnitModel.PersonId,
+									 AuthenticationTypeOption.Windows);
 			}
 			using (mocks.Playback())
 			{
@@ -72,10 +75,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			signInBusinessUnitModel.DataSourceName = "Datasource";
 			signInBusinessUnitModel.PersonId = Guid.NewGuid();
+			signInBusinessUnitModel.AuthenticationType = (int)AuthenticationTypeOption.Application;
 
 			using (mocks.Record())
 			{
-				Expect.Call(() => logon.LogOn(signInBusinessUnitModel.BusinessUnitId, signInBusinessUnitModel.DataSourceName, signInBusinessUnitModel.PersonId)).Throw(
+				Expect.Call(() => logon.LogOn(signInBusinessUnitModel.BusinessUnitId, signInBusinessUnitModel.DataSourceName, signInBusinessUnitModel.PersonId, AuthenticationTypeOption.Application)).Throw(
 					new PermissionException("Permission Exception"));
 			}
 			using (mocks.Playback())

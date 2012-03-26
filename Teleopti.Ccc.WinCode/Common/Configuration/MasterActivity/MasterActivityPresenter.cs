@@ -76,8 +76,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
             _view.LoadComboWithMasterActivities(masters);
             if (!masters.IsEmpty())
             {
-                SetPropertiesInView(masters.First());
-                _view.SelectMaster(masters.First());
+				_view.SelectMaster(masters.First());
+				SetPropertiesInView(masters.First());
+				LoadAllMasterActivities();
             }
             else
             {

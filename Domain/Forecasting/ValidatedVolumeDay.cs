@@ -631,9 +631,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-02
         /// </remarks>
-        public virtual bool IsClosed
+        //public virtual bool IsClosed
+        public virtual IOpenForWork OpenForWork
         {
-            get { return _taskOwnerDay.IsClosed; }
+            //get { return _taskOwnerDay.IsClosed; }
+            get
+            {
+                return new OpenForWork()
+                           {
+                               IsOpenForIncomingWork = _taskOwnerDay.OpenForWork.IsOpenForIncomingWork,
+                               IsOpen = _taskOwnerDay.OpenForWork.IsOpen
+                           };
+            }
         }
 
         /// <summary>

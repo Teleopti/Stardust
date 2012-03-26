@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             IPerson newPerson = PersonFactory.CreatePerson();
 
-            target.SetCurrentPrincipal(newPerson,null,null);
+            target.SetCurrentPrincipal(newPerson,null,null, AuthenticationTypeOption.Unknown);
 
             var currentPrincipal = TeleoptiPrincipal.Current;
             ((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
@@ -42,12 +42,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPerson newPerson = PersonFactory.CreatePerson();
 
             Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("test"),new string[]{});
-            target.SetCurrentPrincipal(newPerson, null, null);
+				target.SetCurrentPrincipal(newPerson, null, null, AuthenticationTypeOption.Unknown);
 
             var currentPrincipal = TeleoptiPrincipal.Current;
             ((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
             currentPrincipal.Identity.Should().Not.Be.EqualTo(threadPreviousIdentity);
         }
+
+		 [Test]
+		 public void ShouldSetAuthenticationType()
+		 {
+		 	const AuthenticationTypeOption authType = AuthenticationTypeOption.Application;
+
+			 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("test"), new string[] { });
+			 target.SetCurrentPrincipal(null, null, null, authType);
+
+			 var currentPrincipal = TeleoptiPrincipal.Current;
+			 ((TeleoptiIdentity)currentPrincipal.Identity).TeleoptiAuthenticationType.Should().Be.EqualTo(authType);
+		 }
 
         [TearDown]
         public void Teardown()

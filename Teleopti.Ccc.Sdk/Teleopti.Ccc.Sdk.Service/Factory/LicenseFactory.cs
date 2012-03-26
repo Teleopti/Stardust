@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 _licenseVerificationResultDto = new LicenseVerificationResultDto(false);
 
-                var verifier = new LicenseVerifier(this, _unitOfWorkFactory, new PersonRepository(_unitOfWorkFactory),
-                                                   new LicenseRepository(_unitOfWorkFactory));
+                var verifier = new LicenseVerifier(this, _unitOfWorkFactory, new LicenseRepository(_unitOfWorkFactory));
                 var licenseService = verifier.LoadAndVerifyLicense();
 
                 if (licenseService != null)

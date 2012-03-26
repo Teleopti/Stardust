@@ -18,9 +18,12 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
 		TimeSpan EndTime { get; set; }
 		TimeSpan StartTime { get; set; }
 		TimeSpan MeetingDuration { get; set; }
-		string Location { get; set; }
-		string Subject { get; set; }
-		string Description { get; set; }
+		string Location { set; }
+		string GetLocation(ITextFormatter formatter);
+		string Subject { set; }
+		string GetSubject(ITextFormatter formatter);
+		string Description { set; }
+		string GetDescription(ITextFormatter formatter);
 		IActivity Activity { get; set; }
 		ICccTimeZoneInfo TimeZone { get; set; }
 		string Participants { get; }

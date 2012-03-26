@@ -1,16 +1,11 @@
-USE [ETLNightlyBuild_TeleoptiAnalytics]
+USE [$(TeleoptiAnalytics)]
 SET NOCOUNT ON
 
 --Insert ETL properties
-INSERT INTO [mart].[sys_configuration]([key], value, insert_date)
-SELECT 'Culture', '1033', GETDATE()
-
-INSERT INTO [mart].[sys_configuration]([key], value, insert_date)
-SELECT 'IntervalLengthMinutes', '15', GETDATE()  
-  
-INSERT INTO [mart].[sys_configuration]([key], value, insert_date)
-SELECT 'TimeZoneCode', 'W. Europe Standard Time', GETDATE()
-
+DELETE [mart].[sys_configuration]
+exec mart.sys_configuration_save @key=N'Culture',@value=1053
+exec mart.sys_configuration_save @key=N'IntervalLengthMinutes',@value=15
+exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standard Time'
 GO
 
 --Add SP that checks for ETL-errors

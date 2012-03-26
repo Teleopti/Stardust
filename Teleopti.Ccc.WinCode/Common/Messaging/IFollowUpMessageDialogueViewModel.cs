@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
         ObservableCollection<IDialogueMessage> Messages { get; }
         string ReplyText { get; set; }
         bool IsReplied { get; }
-        string Reply { get; }
+    	string GetReply(ITextFormatter formatter);
         bool AllowDialogueReply { get; set; }
     }
 }

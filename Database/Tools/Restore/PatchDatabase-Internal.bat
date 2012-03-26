@@ -113,9 +113,11 @@ GOTO :Error
 
 ECHO.
 ECHO upgrade successfull!
+CD "%ROOTDIR%"
 GOTO Finish
 
 :Error
+CD "%ROOTDIR%"
 COLOR C
 ECHO.
 ECHO --------

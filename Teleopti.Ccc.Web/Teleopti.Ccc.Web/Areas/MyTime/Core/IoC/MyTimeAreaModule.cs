@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
-			builder.RegisterType<PrincipalProvider>().As<IPrincipalProvider>();
+			builder.RegisterType<PrincipalFactory>().As<IPrincipalFactory>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
 			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
@@ -138,6 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<HasDayOffUnderFullDayAbsence>().As<IHasDayOffUnderFullDayAbsence>();
+			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
 		}
 	}
 }

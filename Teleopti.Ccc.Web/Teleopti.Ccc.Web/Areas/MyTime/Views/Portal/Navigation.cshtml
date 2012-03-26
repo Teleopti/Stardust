@@ -1,5 +1,4 @@
 ﻿@using Teleopti.Ccc.UserTexts
-@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
@@ -10,27 +9,27 @@
 	</div>
 	<ul>
 		@foreach (var navSection in Model.NavigationItems)
-		{
+  {
 			<li><a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a></li>
-		}
+  }
 	</ul>
 		<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
 			<div class="toolbar-inner">
 			</div>
 		</section>
 	@foreach (var navSection in Model.NavigationItems)
-	{
+ {
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<div class="toolbar-inner">
 				@foreach (var toolbarItem in navSection.ToolBarItems)
-				{
-					if (toolbarItem is ToolBarSeparatorItem)
-					{
+	 {
+		 if (toolbarItem is ToolBarSeparatorItem)
+		 {
 						<div class="seperator"></div>
-					}
-					if (toolbarItem is ToolBarDatePicker)
-					{
-						var dpicker = toolbarItem as ToolBarDatePicker;
+		 }
+		 if (toolbarItem is ToolBarDatePicker)
+		 {
+			 var dpicker = toolbarItem as ToolBarDatePicker;
 						<div id="@string.Format("{0}DateRangeSelector", navSection.Controller)" class="date-range-selector floatleft ml10">
 							<button data-mytime-action="#" class="first">@dpicker.PrevTitle</button>
 							<input id="@string.Format("{0}DatePicker", navSection.Controller)" type="text" class="datepicker" />
@@ -38,45 +37,45 @@
 							<span class="selected-date-period displayblock"></span>
 							<a class="displaynone" data-mytime-action="#"></a>
 						</div>
-					}
-					if (toolbarItem is ToolBarButtonItem)
-					{
-						var button = toolbarItem as ToolBarButtonItem;
+		 }
+		 if (toolbarItem is ToolBarButtonItem)
+		 {
+			 var button = toolbarItem as ToolBarButtonItem;
 						<button title="@Html.AttributeEncode(button.Title)" id="@string.Format("{0}-{1}-button", navSection.Controller, button.ButtonType)" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon ir floatleft mr10">@button.Title</button>
-					}
-					if (toolbarItem is ToolBarSplitButton)
-					{
-						var splitButton = toolbarItem as ToolBarSplitButton;
-						foreach (var option in splitButton.Options.Where(s => s.Style != null))
-						{
+		 }
+		 if (toolbarItem is ToolBarSplitButton)
+		 {
+			 var splitButton = toolbarItem as ToolBarSplitButton;
+			 foreach (var option in splitButton.Options.Where(s => s.Style != null))
+			 {
 							<style>
 								@string.Format(".{0} .ui-splitbutton-menu-icon-secondary {{ background-color: {1}; }}", option.Style.Name, option.Style.ColorHex)
 							</style>
-						}
+			 }
 						<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
 							<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
 							<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
 								@foreach (var option in splitButton.Options)
-								{
+		  {
 									<option value="@option.Value" class="@(option.Style != null ? option.Style.Name : "")">@option.Text</option>
-								}
+		  }
 							</select>
 						</div>
-					}
-					if (toolbarItem is ToolBarSelectBox)
-					{
-						var selectBox = toolbarItem as ToolBarSelectBox;
+		 }
+		 if (toolbarItem is ToolBarSelectBox)
+		 {
+			 var selectBox = toolbarItem as ToolBarSelectBox;
 						<select title="@Html.AttributeEncode(selectBox.Title)" class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
 							@foreach (var option in selectBox.Options)
-							{
+		 {
 								<option value="@option.Value">@option.Text</option>
-							}
+		 }
 						</select>
-					}
-				}
+		 }
+	 }
 			</div>
 		</section>
-	}
+ }
 			
 	<section id="toolbar-right" class="col-main floatright">
 		<div class="toolbar-inner">
@@ -85,9 +84,12 @@
 						<dd>
 							<ul class="ui-widget-content ui-corner-all ui-menu">
 								<li class="ui-menu-item"><a href="#Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
-								<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+								@if (Model.ShowChangePassword)
+		  { 
+									<li class="ui-menu-item"><a href="#Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
+		  }
 								<li>&nbsp;</li>
-								<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout",@class="ui-corner-all" })</li>
+								<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout", @class = "ui-corner-all" })</li>
 							</ul>
 						</dd>
 				</dl>

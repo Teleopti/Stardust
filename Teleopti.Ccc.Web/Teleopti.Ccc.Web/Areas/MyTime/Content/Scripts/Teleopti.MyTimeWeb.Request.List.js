@@ -32,12 +32,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	function _loadAPage() {
 		var skip = $('#Requests-list li:not(.template)').length;
 		var take = 20;
-		$.ajax({
+		$.myTimeAjax({
 			url: "Requests/Requests",
 			dataType: "json",
 			type: 'GET',
-			cache: false,
-			global: false,
 			beforeSend: _loading,
 			data: {
 				Take: take,
@@ -162,13 +160,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function _deleteRequest(listItem) {
 		var url = listItem.data('mytime-link');
-		$.ajax({
+		$.myTimeAjax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "DELETE",
-			cache: false,
-			global: false,
 			beforeSend: function () {
 				Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
 			},
@@ -197,12 +193,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var connector = listItem
 			.find('.request-connector')
 			;
-		$.ajax({
+		$.myTimeAjax({
 			url: url,
 			dataType: "json",
 			type: 'GET',
-			cache: false,
-			global: false,
 			beforeSend: function () {
 				_disconnectAllOthers(listItem);
 				Teleopti.MyTimeWeb.Request.TextRequest.FadeEditSection();

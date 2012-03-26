@@ -156,7 +156,9 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IPersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\PersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\StyleClassViewModel.cs" />
+    <Compile Include="Areas\Start\Controllers\TestController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Redirector.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IRedirector.cs" />
     <Compile Include="Areas\Start\Core\Menu\DefinedApplicationAreas.cs" />
@@ -205,6 +208,8 @@
     <Compile Include="Core\RequestContext\ICultureProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentPrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -339,8 +344,8 @@
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\IRequestContextInitializer.cs" />
-    <Compile Include="Core\RequestContext\IPrincipalProvider.cs" />
-    <Compile Include="Core\RequestContext\PrincipalProvider.cs" />
+    <Compile Include="Core\RequestContext\IPrincipalFactory.cs" />
+    <Compile Include="Core\RequestContext\PrincipalFactory.cs" />
     <Compile Include="Core\RequestContext\RequestContextInitializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateOnlyModelBinder.cs" />
@@ -403,7 +408,9 @@
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
@@ -435,6 +442,8 @@
     <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />

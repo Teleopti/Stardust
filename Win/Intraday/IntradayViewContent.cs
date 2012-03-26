@@ -293,6 +293,18 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.AuthorizingFunctionsThreeDots);
 
+			var control = dockingManager1.ActiveControl;
+
+			dockingManager1.ActivateControl(elementHostDayLayerView);
+			dockingManager1.ActivateControl(elementHostShiftEditor);
+			dockingManager1.ActivateControl(panelSkillGrid);
+			dockingManager1.ActivateControl(elementHostPinnedLayerView);
+			dockingManager1.ActivateControl(elementHostAgentState);
+			dockingManager1.ActivateControl(elementHostStaffingEffect);
+			dockingManager1.ActivateControl(panelSkillChart);
+
+			dockingManager1.ActivateControl(control);
+
             var rtaOrEwEnabled = _presenter.RealTimeAdherenceEnabled || _presenter.EarlyWarningEnabled;
             dockingManager1.SetHiddenOnLoad(panelSkillChart, !_presenter.EarlyWarningEnabled);
             dockingManager1.SetHiddenOnLoad(panelSkillGrid, !_presenter.EarlyWarningEnabled);

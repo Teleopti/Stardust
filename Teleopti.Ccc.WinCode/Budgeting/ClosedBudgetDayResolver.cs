@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
                           select new { Date = g.Key, SkillDays = g };
             
             
-            foreach (var g in days.Where(g => g.SkillDays.All(d => d.IsClosed)))
+            foreach (var g in days.Where(g => g.SkillDays.All(d => !d.OpenForWork.IsOpen)))
             {
                 _closedDays.Add(g.SkillDays.First());
             }

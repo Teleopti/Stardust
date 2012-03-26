@@ -73,7 +73,7 @@ Scenario: Select period from period-picker
 
 
 
- Scenario: View standard preference list
+Scenario: View standard preference list
 	Given I am an agent
 	And I have an open workflow control set with an allowed standard preference
 	And I am viewing preferences

@@ -909,4 +909,49 @@
   <data name="LogInSuccessTitleText" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Echange de roulement</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Texte</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Demandes par agent</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Refusé</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Type de demande:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Statut:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Jours demandés</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Demandes</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Date d'envoi</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Période demandée</value>
+  </data>
 </root>

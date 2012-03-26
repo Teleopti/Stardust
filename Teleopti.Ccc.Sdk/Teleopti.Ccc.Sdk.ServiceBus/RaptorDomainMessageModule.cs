@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
             	var licenseVerifier = new LicenseVerifier(new LicenseFeedback(), unitOfWorkFactory,
-            	                                          new PersonRepository(unitOfWorkFactory),
             	                                          new LicenseRepository(unitOfWorkFactory));
                 var licenseService = licenseVerifier.LoadAndVerifyLicense();
                 if (licenseService == null)
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     dataSourceContainer.User.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
                 AuthenticationMessageHeader.Password = SuperUser.Password;
                 AuthenticationMessageHeader.UseWindowsIdentity = false;
-                _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
+                _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, AuthenticationTypeOption.Application);
 
 				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWork, _repositoryFactory.CreatePersonRepository(unitOfWork));
             }

@@ -10,6 +10,7 @@ GO
 -- Date			Author	Description
 ------------------------------------------------
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
+-- 2012-02-14	DavidJ	#	- refactor tables
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 --Static dimension table
@@ -48,7 +49,9 @@ CREATE TABLE  #rights_agents (right_id int)
 CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #selected_agents (selected_id int)
 CREATE TABLE #result(
-	date smalldatetime,
+	start_date smalldatetime,
+	end_date smalldatetime,
+	date_of_request smalldatetime,
 	person_id int,
 	person_name nvarchar(100),
 	request_type_id int,
@@ -60,7 +63,7 @@ CREATE TABLE #result(
 	hide_time_zone bit
 	)
 
---Handle "all" request types from selection
+--Handle "all" request types from select	ion
 IF @request_type_id=-2
 	INSERT INTO #request_type
 	SELECT request_type_id FROM mart.dim_request_type
@@ -102,19 +105,21 @@ ELSE
 --------------
 INSERT INTO #result
 SELECT
-	date					= d.date_date,
+	start_date				= f.request_startdate,
+	end_date                = f.request_enddate,
+	date_of_request		    = f.application_datetime,
 	person_id				= p.person_id,
 	person_name				= p.person_name,
 	request_type_id			= rt.request_type_id,
 	request_type_name		= ISNULL(typeTranslations.term_language, rt.request_type_name),
 	request_status_id		= rs.request_status_id,
 	request_status_name		= ISNULL(statusTranslations.term_language, rs.request_status_name),
-	request_start_date_count= sum(f.request_start_date_count),
-	request_day_count		= sum(f.request_day_count),
+	request_start_date_count= (f.request_start_date_count),
+	request_day_count		= (f.request_day_count),
 	hide_time_zone			= @hide_time_zone
 FROM mart.fact_request f
 inner join mart.dim_date d
-	on f.date_id_local = d.date_id
+	on f.request_start_date_id = d.date_id
 inner join mart.dim_person p
 	on p.person_id = f.person_id
 inner join #selected_agents s
@@ -134,19 +139,20 @@ AND d.date_date between @date_from AND @date_to
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id IN (SELECT right_id FROM #rights_agents)
 
-GROUP BY
+/*GROUP BY
 	d.date_date,
 	p.person_id,
 	p.person_name,
 	rt.request_type_id,
 	ISNULL(typeTranslations.term_language, rt.request_type_name),
 	rs.request_status_id,
-	ISNULL(statusTranslations.term_language, rs.request_status_name)
+	ISNULL(statusTranslations.term_language, rs.request_status_name)*/
 order by
 	p.person_id,
 	d.date_date
 	
 	
 SELECT * FROM #result	
+
 END
 GO

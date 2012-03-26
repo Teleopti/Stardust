@@ -50,12 +50,11 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _updatePassword(oldPassword, newPassword) {
 		var data = { OldPassword: oldPassword, NewPassword: newPassword };
-		$.ajax({
+		$.myTimeAjax({
 			url: "Settings/ChangePassword",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "PUT",
-			cache: false,
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
 				var updatedLabel = $("label#updated");
@@ -93,12 +92,11 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _selectorChanged(value, url) {
 		$("#selectors label").hide();
 		var data = { LCID: value };
-		$.ajax({
+		$.myTimeAjax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "PUT",
-			cache: false,
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
 				location.reload();

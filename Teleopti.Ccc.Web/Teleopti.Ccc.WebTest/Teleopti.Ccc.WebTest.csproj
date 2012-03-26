@@ -104,11 +104,13 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
+    <Compile Include="Areas\Start\Controllers\TestControllerTest.cs" />
     <Compile Include="Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\FakePermissionProvider.cs" />
     <Compile Include="Areas\Start\MenuViewModelFactoryTest.cs" />
     <Compile Include="Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
+    <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
     <Compile Include="Core\Portal\FakePermissionProvider.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentPrincipalProviderTest.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
     <Compile Include="Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
@@ -144,7 +147,7 @@
     <Compile Include="Controllers\PreferenceControllerTest.cs" />
     <Compile Include="Controllers\RequestsControllerTest.cs" />
     <Compile Include="Core\DatePatternConverterTest.cs" />
-    <Compile Include="Core\Portal\LayoutBaseHtmlHelperTest.cs" />
+    <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseHtmlHelperTest.cs" />
     <Compile Include="TestHtmlHelperBuilder.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="StubbingControllerBuilder.cs" />
@@ -163,9 +166,9 @@
     <Compile Include="Core\RequestContext\DefaultSessionSpecificCookieDataProviderSettingsTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\DataSourcesProviderTest.cs" />
     <Compile Include="Core\RequestContext\PersonCultureSetterTest.cs" />
-    <Compile Include="Core\RequestContext\RequestContextContextInitializerTest.cs" />
+    <Compile Include="Core\RequestContext\RequestContextInitializerTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProviderTest.cs" />
-    <Compile Include="Core\RequestContext\PrincipalProviderTest.cs" />
+    <Compile Include="Core\RequestContext\PrincipalFactoryTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataTest.cs" />
     <Compile Include="Core\Authentication\SignInTypeViewModelBaseTest.cs" />
     <Compile Include="Core\Authentication\ViewModelFactory\SignInViewModelFactoryTest.cs" />

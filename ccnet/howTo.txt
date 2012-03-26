@@ -179,6 +179,9 @@ Make sure it is set as "ReadOnly"
 netsh advfirewall firewall add rule name = IIS_80 dir = in protocol = tcp action = allow localport = 80 remoteip = any profile = DOMAIN
 netsh advfirewall firewall add rule name = CCTray dir = in protocol = tcp action = allow localport = 21234 remoteip = any profile = DOMAIN
 
+- share the folder
+net share CruiseControl.NET="C:\Program Files (x86)\CruiseControl.NET" /GRANT:everyone,CHANGE
+
 -WebDashBoard
 unzip this file: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2FDeployment%2Fwebdashboard.zip
 Into c:\Program Files (x86)\CruiseControl.NET\webdashboard
@@ -317,3 +320,15 @@ Keep comments here, in case we need to enabled it again ...
 //
 //note3: On some machines, you need to "Update the Package Data" => packages.xml under "v7.0A" rather then "v6.0A"
 
+
+---------------------
+Enable hg fetch extension
+---------------------
+On the ccnet machine setting "tags" on repositories, hg extension "fetch" needs to be enabled.
+The easiest way to do this is to add...
+[extensions]
+fetch =  
+...to the file %USERPROFILE%\mercurial.ini.
+(If the ini file does not exist, you can add it)
+Currently the ccnet service is running as TfsIntegration.
+To verify it has been enabled correctly, run "hg help extensions"

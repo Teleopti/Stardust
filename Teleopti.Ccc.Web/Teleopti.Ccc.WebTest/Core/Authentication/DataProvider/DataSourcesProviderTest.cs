@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			var dataSources = new List<IDataSource>();
 
-			using(mocks.Record())
+			using (mocks.Record())
 			{
 				Expect.Call(applicationData.RegisteredDataSourceCollection)
 					.Return(dataSources);
 			}
 
-			using(mocks.Playback())
+			using (mocks.Playback())
 			{
 				target.RetrieveDatasourcesForApplication()
 					.Should().Be.SameInstanceAs(dataSources);
@@ -52,23 +52,23 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			var validDs = mocks.StrictMock<IDataSource>();
 			var invalidDs = mocks.StrictMock<IDataSource>();
-			var dsList = new[] {validDs, invalidDs};
+			var dsList = new[] { validDs, invalidDs };
 			var winAccount = new WindowsAccount("domain", "user");
 
-			using(mocks.Record())
+			using (mocks.Record())
 			{
 				Expect.Call(applicationData.RegisteredDataSourceCollection)
 					.Return(dsList);
 
 				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(winAccount);
 				Expect.Call(availableWindowsDataSources.AvailableDataSources(dsList, winAccount.DomainName, winAccount.UserName))
-					.Return(new[]{validDs});
+					.Return(new[] { validDs });
 			}
 
-			using(mocks.Playback())
+			using (mocks.Playback())
 			{
 				target.RetrieveDatasourcesForWindows()
-						.Should().Have.SameValuesAs(new[] { validDs });				
+						.Should().Have.SameValuesAs(new[] { validDs });
 			}
 		}
 
@@ -91,17 +91,34 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void CanFindDataSourceByName()
 		{
 			var hit = new testDataSource("gnaget!");
-			var dataSources = new[] {new testDataSource("heja"), hit};
+			var dataSources = new[] { new testDataSource("heja"), hit };
 
-			using(mocks.Record())
+			using (mocks.Record())
 			{
 				Expect.Call(applicationData.RegisteredDataSourceCollection)
 					.Return(dataSources);
 			}
-			using(mocks.Playback())
+			using (mocks.Playback())
 			{
 				target.RetrieveDataSourceByName("gnaget!")
 					.Should().Be.SameInstanceAs(hit);
+			}
+		}
+
+		[Test]
+		public void DataSourceShouldReturnNullIfNonExisting()
+		{
+			var dataSources = new[] { new testDataSource("heja") };
+
+			using (mocks.Record())
+			{
+				Expect.Call(applicationData.RegisteredDataSourceCollection)
+					.Return(dataSources);
+			}
+			using (mocks.Playback())
+			{
+				target.RetrieveDataSourceByName("gnaget")
+					.Should().Be.Null();
 			}
 		}
 
@@ -139,9 +156,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				throw new NotImplementedException();
 			}
 
-            public string Server { get; set; }
+			public string Server { get; set; }
 
-            public string InitialCatalog { get; set; }
+			public string InitialCatalog { get; set; }
 			public string OriginalFileName { get; set; }
 			public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
 

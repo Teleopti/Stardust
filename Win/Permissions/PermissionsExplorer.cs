@@ -17,10 +17,10 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Win.Permissions
 
         public event EventHandler Saved;
 
-        private IList<IPerson> _personsToAddRole;
         private IList<IAvailableData> _availableDataCollection;
         private readonly IList<IAvailableData> _availableDataForSelectedRoles = new List<IAvailableData>();
         private IList<TreeNodeAdv> _rangeOptionCheckBoxesCollection;
@@ -64,10 +63,13 @@ namespace Teleopti.Ccc.Win.Permissions
         private Control _lastInFocus;
         private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
+        private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
 
         public PermissionsExplorer(IComponentContext container)
         {
             _container = container;
+
+            
             InitializeComponent();
             instantiateEditControl();
             instantiateClipboardControl();
@@ -1068,13 +1070,13 @@ namespace Teleopti.Ccc.Win.Permissions
             return listViewRoles.SelectedItems.Count > 0;
         }
 
-        private void bindPeople(ICollection<IPerson> people)
+        private void bindPeople(ICollection<IPersonInRole> people)
         {
             if (people != null)
             {
                 int count = listViewPeople.Items.Count;
                 int totalHits = listViewRoles.SelectedItems.Count;
-                IList<IPerson> personList = new List<IPerson>();
+                IList<IPersonInRole> personList = new List<IPersonInRole>();
 
                 for (int index = 0; index < count; index++)
                 {
@@ -1082,7 +1084,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
                     if (currentItem != null)
                     {
-                        var currentPerson = currentItem.TagObject as IPerson;
+                        var currentPerson = currentItem.TagObject as IPersonInRole;
 
                         if (currentPerson != null)
                         {
@@ -1118,15 +1120,15 @@ namespace Teleopti.Ccc.Win.Permissions
                     }
                 }
 
-                IEnumerable<IPerson> enumerable = people.Except(personList);
+                IEnumerable<IPersonInRole> enumerable = people.Except(personList);
 
                 listViewPeople.BeginUpdate();
-                foreach (IPerson person in enumerable)
+                foreach (IPersonInRole person in enumerable)
                 {
                     // Create a new person and add to listViewPeople.
                     ListViewItem newPerson = new ExtentListItem
                                                  {
-                                                     Text = person.Name.FirstName,
+                                                     Text = person.FirstName,
                                                      TagObject = person,
                                                      Tag = 1
                                                  }
@@ -1134,14 +1136,14 @@ namespace Teleopti.Ccc.Win.Permissions
 
                     var lastName = new ListViewItem.ListViewSubItem
                                                                 {
-                                                                    Text = person.Name.LastName,
+                                                                    Text = person.LastName,
                                                                     Tag = person
                                                                 }
                     ;
 
                     var teamName = new ListViewItem.ListViewSubItem
-                                    {
-                                        Text = PermissionsExplorerHelper.GetCurrentTeamForPerson(person.Id)
+                                       {
+                                           Text = person.Team 
                                     };
                     newPerson.SubItems.AddRange(new[] { lastName, teamName });
                     listViewPeople.Items.Add(newPerson);
@@ -1271,10 +1273,6 @@ namespace Teleopti.Ccc.Win.Permissions
             }
             catch (DataSourceException dataSourceException)
             {
-                //using (var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.OpenTeleoptiCCC, UserTexts.Resources.ServerUnavailable))
-                //{
-                //    view.ShowDialog(this);
-                //}
                 DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(dataSourceException);
                 FormKill();
             }
@@ -1514,7 +1512,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
                         if (pItem != null)
                         {
-                            var person = pItem.TagObject as IPerson;
+                            var person = pItem.TagObject as IPersonInRole;
 
                             if (person != null)
                             {
@@ -1522,17 +1520,11 @@ namespace Teleopti.Ccc.Win.Permissions
                                 foreach (ExtentListItem rItem in listViewRoles.SelectedItems)
                                 {
                                     var applicationRole = rItem.TagObject as IApplicationRole;
-                                    if (person.PermissionInformation.ApplicationRoleCollection.Contains(applicationRole))
-                                    {
-                                        person.PermissionInformation.RemoveApplicationRole(applicationRole);
-                                    }
-
+                                    removeApplicationRoleAndCache(person.Id, applicationRole);
+                                    
                                     // Remove this person from the cache dictionary also
                                     PermissionsExplorerStateHolder.RemovePersonInPermissionsDataDictionary(applicationRole, person);
                                 }
-                                //PermissionsExplorerStateHolder.DeleteApplicationRoleFromPerson(person);
-                                //Mark this person as dirty
-                                PermissionsExplorerStateHolder.MarkAsDirty(person.Id);
 
                                 // Remove node from the tree.
                                 pItem.Remove();
@@ -1552,6 +1544,34 @@ namespace Teleopti.Ccc.Win.Permissions
                     // Show number of peoples assigned.
                     showPeopleHeader();
                 }
+            }
+        }
+
+        private void removeApplicationRoleAndCache(Guid id, IApplicationRole role)
+        {
+            IPerson personFromCache = PermissionsExplorerStateHolder.IsPersonInTheList(id);
+
+            if (personFromCache != null)
+            {
+                if (personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
+                {
+                    personFromCache.PermissionInformation.RemoveApplicationRole(role);
+                    PermissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
+                }
+            }
+            else
+            {
+                using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    IPersonRepository personRepository = new PersonRepository(uow);
+                    personFromCache = personRepository.Load(id);
+                    PermissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
+                    if (personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
+                    {
+                        personFromCache.PermissionInformation.RemoveApplicationRole(role);
+                        PermissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
+                    }
+                } 
             }
         }
 
@@ -1599,8 +1619,6 @@ namespace Teleopti.Ccc.Win.Permissions
 
                 PermissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
             }
-
-            _personsToAddRole.Add(personFromCache);
         }
 
         private bool copy(ListView view)
@@ -1659,17 +1677,16 @@ namespace Teleopti.Ccc.Win.Permissions
 
                     PermissionsExplorerStateHolder.SaveApplicationRole(applicationRole);
 
-                    ICollection<IPerson> sourcePersonCollection = new List<IPerson>();
-                    foreach (IPerson person in PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole))
+                    ICollection<IPersonInRole> sourcePersonCollection = new List<IPersonInRole>();
+                    foreach (var person in PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole))
                     {
                         sourcePersonCollection.Add(person);
                     }
 
                     // Add roles for each person selected.
-                    foreach (IPerson person in sourcePersonCollection)
+                    foreach (var person in sourcePersonCollection)
                     {
-                        person.PermissionInformation.AddApplicationRole(applicationRole);
-                        PermissionsExplorerStateHolder.MarkAsDirty(person.Id);
+                        addApplicationRoleAndCache(person.Id, applicationRole);
                     }
 
                     IAvailableData sourceAvailableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole);
@@ -1747,13 +1764,12 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void removeDeletedRoleFromPeople(IApplicationRole deletedApplicationRole)
         {
-            ICollection<IPerson> personCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(deletedApplicationRole);
+            ICollection<IPersonInRole> personCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(deletedApplicationRole);
 
             // Remove roles for each person selected.
-            foreach (IPerson person in personCollection)
+            foreach (var person in personCollection)
             {
-                person.PermissionInformation.RemoveApplicationRole(deletedApplicationRole);
-                PermissionsExplorerStateHolder.MarkAsDirty(person.Id);
+                removeApplicationRoleAndCache(person.Id, deletedApplicationRole);
             }
         }
 
@@ -2043,6 +2059,9 @@ namespace Teleopti.Ccc.Win.Permissions
                         break;
                 }
             }
+            if (!e.Cancel && _permissionsViewerPresenter != null)
+                _permissionsViewerPresenter.CloseViewer();
+
         }
 
         private void editControlDeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -2083,7 +2102,7 @@ namespace Teleopti.Ccc.Win.Permissions
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private static void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
+        private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
         {
             try
             {
@@ -2114,7 +2133,7 @@ namespace Teleopti.Ccc.Win.Permissions
             handleRolePaste();
         }
 
-        private static void contextMenuStripClipboardOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void contextMenuStripClipboardOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
         }
@@ -2295,18 +2314,10 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void handleRoleSelection(IApplicationRole selectedRole, int itemIndex)
         {
-            ICollection<IPerson> peopleCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(selectedRole);
+            var peopleCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(selectedRole);
             if (peopleCollection == null)
             {
                 peopleCollection = PermissionsExplorerHelper.LoadPeopleByApplicationRole(selectedRole).ToList();
-                var builtInUsers = from p in peopleCollection
-                                   where p.BuiltIn
-                                   select p;
-                foreach (IPerson builtInUser in builtInUsers.ToList())
-                {
-                    peopleCollection.Remove(builtInUser);
-                }
-                PermissionsExplorerStateHolder.AddToPersonAdapterCollection(peopleCollection);
             }
             bindPeople(peopleCollection);
 
@@ -2337,18 +2348,18 @@ namespace Teleopti.Ccc.Win.Permissions
                     {
                         foreach (ExtentListItem rItem in listViewRoles.SelectedItems)
                         {
-                            _personsToAddRole = new List<IPerson>();
                             var role = rItem.TagObject as IApplicationRole;
-
+                            var tempPersons = PermissionsExplorerHelper.LoadPeopleNotInApplicationRole(role,
+                                                                                                       SelectedPersonsToAddToRole);
                             foreach (var id in SelectedPersonsToAddToRole)
                             {
                                 addApplicationRoleAndCache(id, role);
                             }
 
-                            PermissionsExplorerStateHolder.AssignPersonInPermissionsDataDictionary(role, _personsToAddRole);
+                            PermissionsExplorerStateHolder.AssignPersonInPermissionsDataDictionary(role, tempPersons);
+                            handleRoleSelection(role, rItem.Index);
                         }
-                        bindPeople(_personsToAddRole);
-                        showPeopleHeader();
+                       showPeopleHeader();
                      }
                     if(peopleInsertScreen.DialogResult == DialogResult.Abort)
                     {
@@ -2360,5 +2371,22 @@ namespace Teleopti.Ccc.Win.Permissions
         }
 
         #endregion
+
+        private void permissionsExplorerKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.M && (e.Alt))
+            {
+                toolStripExViewer.Visible = !toolStripExViewer.Visible;
+            }
+        }
+
+        private void toolStripButtonShowViewerClick(object sender, EventArgs e)
+        {
+            if(_permissionsViewerPresenter == null || _permissionsViewerPresenter.Unloaded)
+                _permissionsViewerPresenter = _container.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPermissionViewerRolesPresenter>();
+
+            _permissionsViewerPresenter.ShowViewer();
+        }
+
     }
 }

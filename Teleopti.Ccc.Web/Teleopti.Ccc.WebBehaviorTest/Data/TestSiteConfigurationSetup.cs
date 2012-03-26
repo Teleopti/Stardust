@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using CassiniDev;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using log4net;
 
@@ -49,6 +51,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			RemoveTestDataNHibFile();
 			RevertBackedUpNHibFiles();
+		}
+
+		public static void RestartApplication()
+		{
+			// just to make sure we'r not on the same second.
+			// Not even sure this is required to make the touch valid at all times
+			Thread.Sleep(1010);
+			// touch the nhib file in the bin folder to make the app restart
+			File.SetLastWriteTimeUtc(TargetTestDataNHibFile, DateTime.UtcNow);
 		}
 
 		private static void RemoveTestDataNHibFile()

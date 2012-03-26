@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private IScenario _scenario;
         private string _scheduleNote;
         private DateOnly _noteDate;
-        private readonly NormalizeText _normalizeText = new NormalizeText();
 
         public Note(IPerson person, DateOnly noteDate, IScenario scenario, string scheduleNote) : this()
         {
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _person = person;
             _noteDate = noteDate;
             _scenario = scenario;
-            _scheduleNote = _normalizeText.Normalize(scheduleNote);
+            _scheduleNote = scheduleNote;
         }
 
         /// <summary>
@@ -54,10 +53,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _scenario; }
         }
 
-        public virtual string ScheduleNote
+        public virtual string GetScheduleNote(ITextFormatter formatter)
         {
-            get { return _scheduleNote; }
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_scheduleNote);
         }
+
+		private string ScheduleNote { get { return _scheduleNote; } }
 
         public virtual DateOnly NoteDate
         {
@@ -83,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             string combined = _scheduleNote.Length == 0 ? text : string.Concat(_scheduleNote, " ", text);
             InParameter.StringTooLong("text", combined, 255);
-            _scheduleNote = _normalizeText.Normalize(combined);
+            _scheduleNote = combined;
         }
 
         public virtual void ClearScheduleNote()
@@ -109,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public virtual void ReplaceText(string text)
         {
             InParameter.StringTooLong("text", text, 255);
-            _scheduleNote = _normalizeText.Normalize(text);
+            _scheduleNote = text;
         }
 
         public virtual IAggregateRoot MainRoot

@@ -17,13 +17,27 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
-        string Title { get; set; }
+        string Title { set; }
+
+    	/// <summary>
+    	/// Get the formatted title
+    	/// </summary>
+    	/// <param name="formatter"></param>
+    	/// <returns></returns>
+    	string GetTitle(ITextFormatter formatter);
 
         /// <summary>
         /// Gets or sets the message.
         /// </summary>
         /// <value>The message.</value>
-        string Message { get; set; }
+        string Message { set; }
+
+    	/// <summary>
+    	/// Get the formatted message
+    	/// </summary>
+    	/// <param name="formatter"></param>
+    	/// <returns></returns>
+    	string GetMessage(ITextFormatter formatter);
 
         /// <summary>
         /// Gets or sets a value indicating whether to allow dialogue replies.

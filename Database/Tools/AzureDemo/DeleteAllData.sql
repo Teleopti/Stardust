@@ -1,4 +1,12 @@
-SET NOCOUNT ON;
+SET NOCOUNT ON
+set quoted_identifier on
+set arithabort off
+set numeric_roundabort off
+set ansi_warnings on
+set ansi_padding on
+set ansi_nulls on
+set concat_null_yields_null on
+
 CREATE TABLE #statements(SchemaName nvarchar(100), TableName nvarchar(200), Level int, IsLeafLevel int, SQLStatement nvarchar(2000));
 --create table #TablesToFlush (SQLStatement nvarchar(4000));
 --insert into #TablesToFlush 

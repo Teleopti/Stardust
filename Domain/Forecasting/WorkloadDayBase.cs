@@ -148,13 +148,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-01-23
         /// </remarks>
-        private bool _isClosed
+        //private bool _isClosed
+        private IOpenForWork _isClosed
         {
             get
             {
-                return _openHourList.Count == 0 ||
-                       (_openHourList.Count == 1 &&
-                       _openHourList[0].SpanningTime() == TimeSpan.Zero);
+                var open = new OpenForWork()
+                {
+                    IsOpen = !(_openHourList.Count == 0 || (_openHourList.Count == 1 && _openHourList[0].SpanningTime() == TimeSpan.Zero)),
+                };
+                open.IsOpenForIncomingWork = open.IsOpen || IsEmailWorkload;
+                return open;
+                //return _openHourList.Count == 0 ||
+                //       (_openHourList.Count == 1 &&
+                //       _openHourList[0].SpanningTime() == TimeSpan.Zero);
             }
         }
 
@@ -225,7 +232,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             Release();
 
-            if (_isClosed) //Checks the open hours
+            if (!_isClosed.IsOpen) //Checks the open hours
                 Close();
 
             ResetStatistics();
@@ -409,7 +416,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 11/28/2007
         /// </remarks>
-        public virtual bool IsClosed
+        //public virtual bool IsClosed
+        public virtual IOpenForWork OpenForWork
         {
             get { return _isClosed; }
         }
@@ -628,7 +636,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 else
                 {
-                    if (!_isClosed && _taskPeriodList.Count > 0)
+                    if (_isClosed.IsOpenForIncomingWork && _taskPeriodList.Count > 0)
                     {
                         _averageTaskTime = TimeSpan.FromTicks((long)
                                 (_taskPeriodList.Average(t => t.AverageTaskTime.Ticks)));
@@ -675,7 +683,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 else
                 {
-                    if (!_isClosed && _taskPeriodList.Count > 0)
+                    if (_isClosed.IsOpenForIncomingWork && _taskPeriodList.Count > 0)
                     {
                         _totalStatisticAverageTaskTime = TimeSpan.FromTicks((long)
                                 (_taskPeriodList.Average(t => t.StatisticTask.StatAverageTaskTime.Ticks)));
@@ -1113,7 +1121,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void checkOpen()
         {
-            if (_isClosed && !IsEmailWorkload)
+            if (!_isClosed.IsOpen && !IsEmailWorkload)
                 throw new InvalidOperationException("Workload day must be open.");
         }
 

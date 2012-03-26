@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
@@ -16,7 +16,6 @@
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
 		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
-		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
@@ -28,6 +27,7 @@
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
+		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -63,6 +63,10 @@
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
 	</ItemGroup>
 
+	<PropertyGroup>
+	    <!--override, needs to be done after imports I think...-->
+		<DoCodeAnalysis>false</DoCodeAnalysis>
+	</PropertyGroup>
 
 	<ItemGroup>
 
@@ -110,8 +114,8 @@
 	
 	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
 		<Message Text="Building Azure packages ..." Importance="high" />
-		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
-		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion) 0 $(MSIShare) $(DeployShare)"/>
+		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
 		<Message Text="Building Azure packages . Done!" Importance="high" />
 	</Target>
 	
@@ -126,8 +130,15 @@
 	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
+  
+  <Target Name="MoveToKanbox" Condition="'$(FullBuild)' == 'No'">
+	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
+	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
 
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;UploadRoot;UploadNew">
+	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(CCNetProject).zip&quot;"/>
+  </Target>
+
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
     <Message Text="Calling upload target"/>
   </Target>
   
@@ -140,8 +151,15 @@
     <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
     <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
   </Target>
+  
+  <Target Name="DeletePBIMSI" Condition="'$(FullBuild)' == 'No'">
+	<Message Text="Deleting PBIMSI folders to get new ones"/>
+	<Exec Command="rd &quot;$(DeployPath)&quot; /Q /S"/>
+	<Exec Command="rd &quot;$(MSIPath)&quot; /Q /S"/>
+  </Target>
+  
 			
-	<Target Name="AllFilesIncluded">
+	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
 		<ItemGroup>
 
 
@@ -250,7 +268,8 @@
   $(CCNetWorkingDirectory)\Database\**\DemoDatabase\**\*.*;
 	$(CCNetWorkingDirectory)\Database\DBManager.exe"/>
 			<Database
-			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe"/>
+			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Teleopti.Ccc.DBManager.Library.dll"/>
 
 			<!-- DemoDatabase -->
 			<DemoDatabase
@@ -353,7 +372,7 @@
 			<!-- SupportTools -->
 			<SupportTools Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\**\*.*" />
 			<StartStopSystem Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\StartStopSystem\*.*" />
-			<RML Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\RML\**\*.*" />
+			<SQLServerPerformance Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\SQLServerPerformance\**\*.*" />
       <WiseIISConfig Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\WiseIISConfig\**\*.*" />
 
       <!-- ClientClickOnce -->
@@ -379,34 +398,38 @@
 
 
 	<Target Name="GetVersion">
+		<exec command="hg update -r &quot;$(branch)&quot;" />
 		<Message Text="Set DeployPath: [$(DeployPath)] ..." Importance="high"/>
 		<ReadLinesFromFile File="@(VersionFile)" >
 			<Output TaskParameter="Lines"
 			  PropertyName="BranchVersion" />
 		</ReadLinesFromFile>
 		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
-		<!--
-		<TfsVersion TfsLibraryLocation="$(TfsLibraryLocation)" LocalPath="$(CCNetWorkingDirectory)">
-			<Output TaskParameter="Changeset" PropertyName="Revision"/>
-		</TfsVersion>
-		<Message Text="TFS ChangeSet: $(Revision)" Importance="high"/>
-		-->
+
 		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
 		<Message Text="HG Revision: $(Revision)" Importance="high"/>
 		
-		<PropertyGroup>
+		<PropertyGroup Condition="'$(FullBuild)' == 'No'">
+			<CCCVersion>$(CCCMajorMinor).0.0</CCCVersion>
+			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
+			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
+		</PropertyGroup>
+		
+		<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
 			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
 			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
 			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 		</PropertyGroup>
+		
+		
+		
 		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
 		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
 
 	</Target>
-
-
+	
 
 	<!--Enable this target to get version on all assemblies-->
 	<Target Name="UpdateAssemblyInfos" Inputs="@(AssemblyInfos)" Outputs="%(Identity).Dummy" DependsOnTargets="GetVersion">
@@ -548,8 +571,8 @@
 			DestinationFiles="@(SupportTools->'$(DeployPath)\SupportTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(StartStopSystem)"
 			DestinationFiles="@(StartStopSystem->'$(DeployPath)\SupportTools\StartStopSystem\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		<Copy	SourceFiles="@(RML)"
-			DestinationFiles="@(RML->'$(DeployPath)\SupportTools\RML\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(SQLServerPerformance)"
+			DestinationFiles="@(SQLServerPerformance->'$(DeployPath)\SupportTools\SQLServerPerformance\%(RecursiveDir)%(Filename)%(Extension)')"/>
     <Copy	SourceFiles="@(WiseIISConfig)"
       DestinationFiles="@(WiseIISConfig->'$(DeployPath)\SupportTools\WiseIISConfig\%(RecursiveDir)%(Filename)%(Extension)')"/>
     <Copy	SourceFiles="@(Azure)"
@@ -607,4 +630,16 @@
     <Message Text="Error while building new release. Please check build logs for details!"/>
   </Target>
 
+  <Target Name="TagChangeset" DependsOnTargets="GetVersion">
+  	<Message Text="Setting tag $(CCCVersion) on tip of release branch $(branch)"/>
+	<exec command="hg update -r default" />
+	<exec command="hg revert -a"/>
+	<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
+	<exec command="hg update -r &quot;$(branch)&quot;" />
+  </Target>
+  <Target Name="PushTag">
+  	<exec command="hg revert -a"/>
+  	<exec command="hg fetch $(ServerRepo)" /> 
+	<exec command="hg push $(ServerRepo)"/>
+  </Target>
 </Project>

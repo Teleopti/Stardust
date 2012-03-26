@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
@@ -124,23 +125,23 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyTextFields()
         {
-            Assert.AreEqual(_meeting.Location,_target.Location);
-            Assert.AreEqual(_meeting.Subject,_target.Subject);
-            Assert.AreEqual(_meeting.Description,_target.Description);
+			Assert.AreEqual(_meeting.GetLocation(new NoFormatting()), _target.GetLocation(new NoFormatting()));
+			Assert.AreEqual(_meeting.GetSubject(new NoFormatting()), _target.GetSubject(new NoFormatting()));
+			Assert.AreEqual(_meeting.GetDescription(new NoFormatting()), _target.GetDescription(new NoFormatting()));
 
             _target.Location = "New location";
             Assert.IsTrue(_propertyChanged);
-            Assert.AreEqual(_target.Meeting.Location, _target.Location);
+			Assert.AreEqual(_target.Meeting.GetLocation(new NoFormatting()), _target.GetLocation(new NoFormatting()));
             _propertyChanged = false;
 
             _target.Subject = "New subject";
             Assert.IsTrue(_propertyChanged);
-            Assert.AreEqual(_target.Meeting.Subject, _target.Subject);
+			Assert.AreEqual(_target.Meeting.GetSubject(new NoFormatting()), _target.GetSubject(new NoFormatting()));
             _propertyChanged = false;
 
             _target.Description = "New description";
             Assert.IsTrue(_propertyChanged);
-            Assert.AreEqual(_target.Meeting.Description, _target.Description);
+			Assert.AreEqual(_target.Meeting.GetDescription(new NoFormatting()), _target.GetDescription(new NoFormatting()));
         }
 
         [Test]

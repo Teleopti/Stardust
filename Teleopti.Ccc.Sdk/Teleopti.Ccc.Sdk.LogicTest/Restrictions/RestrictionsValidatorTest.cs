@@ -73,13 +73,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowIfStateHolderIsNull()
         {
-             _target.ValidateSchedulePeriod(_period, _period, null, 160, 8, 0, 0, _person, 0,0,0,0,0,0,0);
+            _target.ValidateSchedulePeriod(_period, _period, null, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowIfPersonIsNull()
         {
-            _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0);
+            _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, false);
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using(_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreNotEqual(0, result.Count);
             }
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
            using (_mocks.Playback())
            {
-               IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0);
+               IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                Assert.IsNotNull(result);
                Assert.AreNotEqual(0, result.Count);
            }
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreNotEqual(0, result.Count);
             }
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 for (int i = 0; i < result.Count - 1; i++)
                 {
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreEqual("day", result[0].ScheduledItemName);
                 Assert.IsTrue(result[0].HasShift);

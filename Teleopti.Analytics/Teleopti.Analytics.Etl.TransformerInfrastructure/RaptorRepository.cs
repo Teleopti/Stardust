@@ -6,18 +6,21 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -29,6 +32,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	{
 		private readonly string _dataMartConnectionString;
 		private IsolationLevel _isolationLevel;
+	    private ILicenseStatusUpdater _licenseStatusUpdater;
 
 		public RaptorRepository(string dataMartConnectionString, string isolationLevel)
 		{
@@ -599,7 +603,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return 1;
 		}
 
-		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
+	    public ILicenseStatusUpdater LicenseStatusUpdater
+	    {
+	        get {
+                if (_licenseStatusUpdater == null)
+                {
+                    _licenseStatusUpdater =
+                        new LicenseStatusUpdater(new LicenseStatusRepositories(UnitOfWorkFactory.Current,
+                                                                               new RepositoryFactory()));
+                }
+	            return _licenseStatusUpdater;
+	        }
+	    }
+        
+	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
 			foreach (IPerson person in dictionary.Keys)
@@ -916,7 +933,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
+	    public int FillFactRequestedDaysMart(DateTimePeriod period)
+	    {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
+            parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
+
+            return
+                HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_load", parameterList,
+                                              _dataMartConnectionString);
+	    }
+
+	    public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
 		{
 			DataTable dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
 																 "mart.etl_bridge_time_zone_get_load_period", null,

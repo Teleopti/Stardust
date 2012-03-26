@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleOnlyWithOwnData;
 		public static IApplicationRole AgentRoleWithSiteData;
 		public static IApplicationRole AgentRoleWithAnotherSiteData;
+		public static IApplicationRole AdministratorRoleWithEveryoneData;
 
 		public static IActivity ActivityPhone;
 		public static IActivity ActivityLunch;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IWorkflowControlSet WorkflowControlSetPreferenceClosed;
 
 		public static IScenario Scenario;
+		public static IScenario SecondScenario;
 		public static IGroupingActivity GroupingActivity;
 		public static IShiftCategory ShiftCategory;
 		public static IDayOffTemplate DayOffTemplate;
@@ -67,6 +69,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IPartTimePercentage PartTimePercentageOne;
 		public static IContractSchedule WorkingWeekContractSchedule;
 		public static IContractSchedule DayOffTodayContractSchedule;
-
 	}
 }

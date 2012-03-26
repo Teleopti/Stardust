@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		[Required(AllowEmptyStrings = false, 
 			ErrorMessageResourceType = typeof(Resources), 
 			ErrorMessageResourceName = "MissingSubject")]
+		[StringLength(80, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "TheNameIsTooLong")]
 		public string Subject { get; set; }
 
+        [StringLength(2000, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "MessageTooLong")]
 		public string Message { get; set; }
 
 		public DateTimePeriodForm Period { get; set; }

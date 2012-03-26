@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             var lstActivities = new List<IMasterActivityModel> { master2 };
             Expect.Call(_view.ConfirmDelete()).Return(true);
             Expect.Call(() => _viewModel.DeleteMasterActivity(master1));
-            Expect.Call(_viewModel.AllNotDeletedMasterActivities).Return(lstActivities);
-            Expect.Call(() => _view.LoadComboWithMasterActivities(lstActivities));
+            Expect.Call(_viewModel.AllNotDeletedMasterActivities).Return(lstActivities).Repeat.Twice();
+            Expect.Call(() => _view.LoadComboWithMasterActivities(lstActivities)).Repeat.Twice();
             Expect.Call(() => _view.SelectMaster(master2));
             Expect.Call(() => _view.LongName = "NyMaster");
             Expect.Call(() => _view.Color = Color.DodgerBlue);

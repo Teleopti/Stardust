@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -60,14 +61,14 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 		public IList<IObservable<FollowUpPushMessageViewModel>> Observables { get; private set; }
 		public ObservableCollection<IFollowUpMessageDialogueViewModel> Dialogues { get; private set; }
 
-		public string Title
+		public string GetTitle(ITextFormatter formatter)
 		{
-			get { return _model.Title; }
+			return _model.GetTitle(formatter);
 		}
 
-		public string Message
+		public string GetMessage(ITextFormatter formatter)
 		{
-			get { return _model.Message; }
+			return _model.GetMessage(new NoFormatting());
 		}
 
 		public IList<ReplyOptionViewModel> ReplyOptions

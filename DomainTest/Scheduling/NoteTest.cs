@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.DomainTest.Helper;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_person, _target.Person);
             Assert.AreEqual(expectedPeriod, _target.Period);
             Assert.AreEqual(_scenario, _target.Scenario);
-            Assert.AreEqual(_scheduleNote, _target.ScheduleNote);
+			Assert.AreEqual(_scheduleNote, _target.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(_person, _target.MainRoot);
             Assert.AreEqual(_noteDate, _target.NoteDate);
         }
@@ -59,16 +60,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             string text = "And he went home";
             string extectedText = string.Concat(_scheduleNote, " ", text);
             _target.AppendScheduleNote(text);
-            Assert.AreEqual(extectedText, _target.ScheduleNote);
+			Assert.AreEqual(extectedText, _target.GetScheduleNote(new NoFormatting()));
         }
 
         [Test]
         public void CanClearNote()
         {
             Assert.IsFalse(string.IsNullOrEmpty(_scheduleNote));
-            Assert.AreEqual(_scheduleNote, _target.ScheduleNote);
+			Assert.AreEqual(_scheduleNote, _target.GetScheduleNote(new NoFormatting()));
             _target.ClearScheduleNote();
-            Assert.AreEqual(string.Empty, _target.ScheduleNote);
+			Assert.AreEqual(string.Empty, _target.GetScheduleNote(new NoFormatting()));
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Note clone = (Note)_target.Clone();
 
             Assert.AreNotSame(clone, _target);
-            Assert.AreEqual(clone.ScheduleNote, _target.ScheduleNote);
+			Assert.AreEqual(clone.GetScheduleNote(new NoFormatting()), _target.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(clone.Period, _target.Period);
             Assert.AreEqual(clone.Person, _target.Person);
             Assert.AreEqual(clone.Scenario, _target.Scenario);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             INote clone = _target.NoneEntityClone();
 
             Assert.AreNotSame(clone, _target);
-            Assert.AreEqual(clone.ScheduleNote, _target.ScheduleNote);
+			Assert.AreEqual(clone.GetScheduleNote(new NoFormatting()), _target.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(clone.Period, _target.Period);
             Assert.AreEqual(clone.Person, _target.Person);
             Assert.AreEqual(clone.Scenario, _target.Scenario);
@@ -168,14 +169,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _target = new Note(_person, _noteDate, _scenario, text);
             text = text.PadRight(255, 'x');
             _target.AppendScheduleNote(text);
-            Assert.AreEqual(255, _target.ScheduleNote.Length);
+			Assert.AreEqual(255, _target.GetScheduleNote(new NoFormatting()).Length);
         }
 
         [Test]
         public void VerifyCloneAndChangeParameters()
         {
             var newScenario = new Scenario("new scenario");
-            string text = _target.ScheduleNote;
+			string text = _target.GetScheduleNote(new NoFormatting());
 
             var moveToTheseParameters = new Note(_target.Person, _target.NoteDate, newScenario, text);
 
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreNotSame(_target.Scenario, newNote.Scenario);
             Assert.AreSame(newScenario, newNote.Scenario);
             Assert.AreEqual(_target.Period, newNote.Period);
-            Assert.AreEqual(_target.ScheduleNote, castedNote.ScheduleNote);
+			Assert.AreEqual(_target.GetScheduleNote(new NoFormatting()), castedNote.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(_target.NoteDate, castedNote.NoteDate);
         }
 
@@ -194,9 +195,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void CanReplaceText()
         {
             string text = string.Concat(_scheduleNote, " ", "and went home");
-            Assert.AreEqual(_scheduleNote, _target.ScheduleNote);
+			Assert.AreEqual(_scheduleNote, _target.GetScheduleNote(new NoFormatting()));
             _target.ReplaceText(text);
-            Assert.AreEqual(text, _target.ScheduleNote);
+			Assert.AreEqual(text, _target.GetScheduleNote(new NoFormatting()));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿@signin
-Feature: Sign in
+﻿Feature: Sign in
 	In order to access the site
 	As a user that is not signed in
 	I want to be able to sign in
@@ -34,4 +33,4 @@ Scenario: Sign in with wrong password should give me an informative error
 Scenario: Sign in without permission
 	Given I dont have permission to sign in
 	When I sign in by user name
-	Then I am not signed in
+	Then I should not be signed in

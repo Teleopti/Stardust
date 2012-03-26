@@ -14,6 +14,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
+	var _settings = {};
+
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
@@ -69,7 +71,31 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	function _expireMyCookie() {
+		$.ajax({
+				url: _settings.startBaseUrl + 'Test/ExpireMyCookie',
+				global: false,
+				cache: false,
+				async: false,
+				success: function() {
+					$('#page')
+						.append('Cookie is expired!')
+						;
+				},
+				error: function(r) {
+					if (r.status == 401 || r.status == 403) {
+						$('#page')
+							.append('Cookie is expired!')
+							;
+					}
+				}
+			});
+	}
+
 	return {
+		Init: function (settings) {
+			_settings = settings;
+		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			$('#dialog-modal').attr('title', 'Ajax error: ' + title);
 			$('#dialog-modal').dialog({
@@ -101,6 +127,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		CloseEditSection: function (editSectionId) {
 			_closeEditSection(editSectionId);
+		},
+		ExpireMyCookie: function () {
+			_expireMyCookie();
 		}
 	};
 

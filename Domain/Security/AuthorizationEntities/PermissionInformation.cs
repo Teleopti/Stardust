@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private IList<IApplicationRole> personInApplicationRole = new List<IApplicationRole>();
         private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
-     
+
         private string defaultTimeZone;
         private ICccTimeZoneInfo _defaultTimeZoneCache;
         private int? culture;
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Created by: rogerkr
         /// Created date: 2007-11-28
         /// </remarks>
-        public PermissionInformation(IPerson parent) : this()
+        public PermissionInformation(IPerson parent)
+            : this()
         {
             _belongsTo = parent;
         }
@@ -69,8 +70,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                 }
                 return new ReadOnlyCollection<IApplicationRole>(newPersonInApplicationRole);
             }
-        
-       }
+
+        }
 
         public IWindowsAuthenticationInfo WindowsAuthenticationInfo
         {
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
         public ICccTimeZoneInfo DefaultTimeZone()
         {
-            if (_defaultTimeZoneCache==null || _defaultTimeZoneCache.Id!=defaultTimeZone)
+            if (_defaultTimeZoneCache == null || _defaultTimeZoneCache.Id != defaultTimeZone)
             {
                 _defaultTimeZoneCache = string.IsNullOrEmpty(defaultTimeZone)
                                             ? new CccTimeZoneInfo(TimeZoneInfo.Local)
@@ -166,10 +167,20 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             else culture = null;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
         public CultureInfo Culture()
         {
             if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture;
-            return CultureInfo.GetCultureInfo(culture.Value);
+
+            try
+            {
+                return CultureInfo.GetCultureInfo(culture.Value);
+            }
+            catch (ArgumentException)
+            {
+                return Thread.CurrentThread.CurrentCulture;
+            }
+
         }
 
         public int? CultureLCID()
@@ -183,10 +194,19 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             else uiCulture = null;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
         public CultureInfo UICulture()
         {
             if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture;
-            return CultureInfo.GetCultureInfo(uiCulture.Value);
+
+            try
+            {
+                return CultureInfo.GetCultureInfo(uiCulture.Value);
+            }
+            catch (ArgumentException)
+            {
+                return Thread.CurrentThread.CurrentUICulture;
+            }
         }
 
         public int? UICultureLCID()
@@ -197,7 +217,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         public void AddApplicationRole(IApplicationRole role)
         {
             InParameter.NotNull("role", role);
-            if(!personInApplicationRole.Contains(role))
+            if (!personInApplicationRole.Contains(role))
                 personInApplicationRole.Add(role);
         }
 

@@ -65,38 +65,34 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		    data = args.data || {},
 		    statusCode404 = args.statusCode404
 			;
-		$.ajax({
-			url: "Preference/Preference",
-			dataType: "json",
-			type: type,
-			cache: false,
-			global: false,
-			beforeSend: function () {
-				var cell = $('li[data-mytime-date="' + date + '"]')
-					.addClass('relative')
-					;
-				$('<div>')
-					.addClass('loading overlay')
-					.appendTo(cell)
-					.show()
-					;
-			},
-			complete: function (jqXHR, textStatus) {
-				$('li[data-mytime-date="' + date + '"]').removeClass('relative');
-				$('li[data-mytime-date="' + date + '"] .overlay').remove();
-			},
-			data: data,
-			success: function (data, textStatus, jqXHR) {
-				var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
-				preference.html(data.PreferenceRestriction);
-				var cell = $('li[data-mytime-date="' + data.Date + '"]');
-				cell.removeClassStartingWith('color_');
-				cell.addClass(data.StyleClassName);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (statusCode404 && jqXHR.status == 404) {
-					statusCode404();
-				} else {
+		$.myTimeAjax({
+				url: "Preference/Preference",
+				dataType: "json",
+				type: type,
+				beforeSend: function() {
+					var cell = $('li[data-mytime-date="' + date + '"]')
+						.addClass('relative')
+						;
+					$('<div>')
+						.addClass('loading overlay')
+						.appendTo(cell)
+						.show()
+						;
+				},
+				complete: function(jqXHR, textStatus) {
+					$('li[data-mytime-date="' + date + '"]').removeClass('relative');
+					$('li[data-mytime-date="' + date + '"] .overlay').remove();
+				},
+				data: data,
+				success: function(data, textStatus, jqXHR) {
+					var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
+				preference.text(data.PreferenceRestriction || "");
+					var cell = $('li[data-mytime-date="' + data.Date + '"]');
+					cell.removeClassStartingWith('color_');
+					cell.addClass(data.StyleClassName);
+				},
+				statusCode404: statusCode404,
+				error: function(jqXHR, textStatus, errorThrown) {
 					var cellHtml = $('<h2></h2>')
 						.addClass('error');
 					$('li[data-mytime-date="' + date + '"] .preference')
@@ -105,7 +101,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 						var error = $.parseJSON(jqXHR.responseText);
 						$('<a></a>')
 							.append(error.ShortMessage + "!")
-							.click(function () {
+							.click(function() {
 								errorInfo.toggle();
 							})
 							.appendTo(cellHtml)
@@ -114,20 +110,19 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 							.hide()
 							.width(300)
 							.css({
-								'position': 'absolute',
-								'border': '1px solid #ccc',
-								'background-color': 'white',
-								'padding': '10px'
-							})
+									'position': 'absolute',
+									'border': '1px solid #ccc',
+									'background-color': 'white',
+									'padding': '10px'
+								})
 							.append(error.Message)
 							.insertAfter(cellHtml)
 							;
-					} catch (e) {
+					} catch(e) {
 						cellHtml.append("Error!");
 					}
 				}
-			}
-		});
+			});
 	}
 
 	function _activateSelectable() {

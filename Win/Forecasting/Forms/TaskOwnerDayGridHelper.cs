@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				gridStyleInfo.CellTipText = templateDay.TemplateReference.TemplateName;
 				return;
             }
-            if (taskOwner.IsClosed)
+            if (!taskOwner.OpenForWork.IsOpen)
             {
                 gridStyleInfo.CellTipText = UserTexts.Resources.Closed;
                 return;

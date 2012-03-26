@@ -1,7 +1,7 @@
 @ECHO off
-SET ServiceName=%1
-SET ExePath=%2
-SET ExeName=%3
+SET ServiceName=%~1
+SET ExePath=%~2
+SET ExeName=%~3
 
 ::If Running then Stop
 SC query "%ServiceName%" | FIND "STATE" > NUL

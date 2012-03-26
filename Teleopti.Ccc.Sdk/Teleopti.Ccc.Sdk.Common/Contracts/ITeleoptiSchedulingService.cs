@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
 namespace Teleopti.Ccc.Sdk.Common.Contracts
 {
@@ -305,6 +306,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <returns></returns>
         [OperationContract]
         ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriod(PersonDto person, DateOnlyDto dateInPeriod, string timeZoneId);
+
+        /// <summary>
+        /// Gets the validated schedule details with restrictions and schedule period information for the schedule period containing the given date.
+        /// </summary>
+        /// <param name="queryDto">The query.</param>
+        [OperationContract]
+        ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto);
 
         /// <summary>
         /// Gets overtime and shift allowance details for a person between the given dates.

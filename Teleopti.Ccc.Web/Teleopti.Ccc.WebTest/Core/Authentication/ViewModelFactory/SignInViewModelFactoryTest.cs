@@ -71,10 +71,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.ViewModelFactory
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person);
+				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Windows);
 
 				result.HasBusinessUnits.Should().Be.True();
 				result.BusinessUnits.Select(x => x.Name).Should().Have.SameValuesAs(_businessUnits.Select(x => x.Name));
+				result.SignIn.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Windows);
 			}
 		}
 
@@ -92,9 +93,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.ViewModelFactory
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person);
+				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Application);
 				result.SignIn.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
 				result.SignIn.BusinessUnitId.Should().Be.EqualTo(_businessUnits.First().Id);
+				result.SignIn.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
 			}
 		}
 
@@ -115,7 +117,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.ViewModelFactory
 				result.ApplicationSignIn.HasDataSource.Should().Be.True();
 				result.ApplicationSignIn.DataSources.Select(x => x.Name).Should().Have.SameValuesAs(
 					_applDataSources.Select(x => x.DataSourceName));
-
 
 				result.HasWindowsSignIn.Should().Be.True();
 				result.WindowsSignIn.HasDataSource.Should().Be.True();

@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private IList<IRequest> requests = new List<IRequest>(1);
         private bool _isDeleted;
         private string _denyReason = string.Empty;
-        private readonly NormalizeText _normalizeText = new NormalizeText();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonRequest"/> class.
@@ -142,12 +141,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 request.TextForNotification = message.Length>255 ? message.Substring(0,255) : message; //Need to set this to make the message to be sent
             }
 
-            _message = _normalizeText.Normalize(message);
+            _message = message;
             NotifyPropertyChanged("Message");
             return true;
         }
 
-        /// <summary>
+    	/// <summary>
+    	/// Gets the formatted message
+    	/// </summary>
+    	/// <value>The message.</value>
+    	public virtual string GetMessage(ITextFormatter formatter)
+    	{
+    		if(formatter == null)
+				throw new ArgumentNullException("formatter");
+
+			return formatter.Format(_message);
+    	}
+
+    	/// <summary>
         /// Gets or sets the message.
         /// </summary>
         /// <value>The message.</value>
@@ -155,7 +166,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// Created by: robink
         /// Created date: 2008-06-05
         /// </remarks>
-        public virtual string Message
+        private string Message
         {
             get { return _message; }
         }
@@ -177,15 +188,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// Created by: zoet
         /// Created date: 2008-10-06
         /// </remarks>
-        public virtual string Subject
-        {
-            get { return _subject; }
-            set
-            {
-                _subject = _normalizeText.Normalize(value);
-                NotifyPropertyChanged("Subject");
-            }
-        }
+		public virtual string Subject
+		{
+			protected get
+			{
+				return _subject;
+			}
+
+			set
+			{
+				_subject = value;
+				NotifyPropertyChanged("Subject");
+			}
+		}
+
+
+		public virtual string GetSubject(ITextFormatter formatter)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException("formatter");
+			
+			return formatter.Format(_subject);
+		}
 
         public virtual IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization)
         {
@@ -226,7 +250,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             NotifyOnStatusChange();
         }
 
-        /// <summary>
+    	/// <summary>
         /// Gets a value indicating whether this instance is editable.
         /// </summary>
         /// <value>
@@ -399,10 +423,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void Restore(IPersonRequest previousState)
         {
-            _message = previousState.Message;
+        	_message = previousState.GetMessage(new NoFormatting());
             var previousStateTyped = (PersonRequest) previousState;
             RequestState = previousStateTyped.RequestState;
-            Subject = previousState.Subject;
+            Subject = previousState.GetSubject(new NoFormatting());
             _denyReason = previousState.DenyReason;
             _isDeleted = previousStateTyped.IsDeleted;
             SetRequest(previousState.Request);

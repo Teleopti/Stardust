@@ -1,0 +1,64 @@
+USE [master]
+GO
+-----
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(CUSTOMER)_TeleoptiAnalytics')
+ALTER DATABASE [$(CUSTOMER)_TeleoptiAnalytics] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
+GO
+PRINT 'Restoring $(CUSTOMER)_TeleoptiAnalytics'
+
+RESTORE DATABASE [$(CUSTOMER)_TeleoptiAnalytics]
+FROM  DISK = N'$(BACKUPFOLDER)\$(CUSTOMER)_TeleoptiAnalytics.BAK'
+WITH  FILE = 1,
+MOVE N'TeleoptiAnalytics_Primary' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Primary.mdf',
+MOVE N'TeleoptiAnalytics_Log' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Log.ldf',
+MOVE N'TeleoptiAnalytics_Stage' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Stage.ndf',
+MOVE N'TeleoptiAnalytics_Mart' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Mart.ndf',
+MOVE N'TeleoptiAnalytics_Msg' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Msg.ndf',
+MOVE N'TeleoptiAnalytics_Rta' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiAnalytics_Rta.ndf',
+NOUNLOAD,
+REPLACE,
+STATS = 10
+GO
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(CUSTOMER)_TeleoptiAnalytics')
+ALTER DATABASE [$(CUSTOMER)_TeleoptiAnalytics] SET  MULTI_USER
+ALTER DATABASE [$(CUSTOMER)_TeleoptiAnalytics] SET RECOVERY SIMPLE WITH NO_WAIT
+GO
+---
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(CUSTOMER)_TeleoptiCCCAgg')
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCCAgg] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
+GO
+
+PRINT 'Restoring $(CUSTOMER)_TeleoptiCCCAgg'
+
+RESTORE DATABASE [$(CUSTOMER)_TeleoptiCCCAgg]
+FROM  DISK = N'$(BACKUPFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.BAK'
+WITH  FILE = 1,
+MOVE N'TeleoptiCCCAgg_Data' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.mdf',
+MOVE N'TeleoptiCCCAgg_Log' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.ldf',
+NOUNLOAD,
+REPLACE,
+STATS = 10
+
+GO
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(CUSTOMER)_TeleoptiCCCAgg')
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCCAgg] SET  MULTI_USER
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCCAgg] SET RECOVERY SIMPLE WITH NO_WAIT
+GO
+--
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(CUSTOMER)_TeleoptiCCC7')
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCC7] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
+GO
+PRINT 'Restoring $(CUSTOMER)_TeleoptiCCC7'
+
+RESTORE DATABASE [$(CUSTOMER)_TeleoptiCCC7]
+FROM DISK = N'$(BACKUPFOLDER)\$(CUSTOMER)_TeleoptiCCC7.BAK'
+WITH  FILE = 1,
+MOVE N'TeleoptiCCC7_Data' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiCCC7.mdf',
+MOVE N'TeleoptiCCC7_Log' TO N'$(DATAFOLDER)\$(CUSTOMER)_TeleoptiCCC7.ldf',
+NOUNLOAD,
+REPLACE,
+STATS = 10
+GO
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCC7] SET  MULTI_USER
+ALTER DATABASE [$(CUSTOMER)_TeleoptiCCC7] SET RECOVERY SIMPLE WITH NO_WAIT
+GO

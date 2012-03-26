@@ -1,4 +1,9 @@
 @ECHO off
+::Example Call:
+::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 False Skip
+::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 True Skip
+::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
+
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
 
@@ -8,9 +13,10 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 SET PoolName=%~1
 SET SubSiteName=%~2
 SET NETVersion=%~3
-SET SDKCREDPROT=%~4
-SET CustomIISUsr=%~5
-SET CustomIISPwd=%~6
+SET SSL=%~4
+SET SDKCREDPROT=%~5
+SET CustomIISUsr=%~6
+SET CustomIISPwd=%~7
 
 IF "%PoolName%"=="" GOTO NoInput
 IF "%SubSiteName%"=="" GOTO NoInput
@@ -59,9 +65,18 @@ cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityTy
 )
 echo.
 
-::4 - Specify the authentication for the virtual dir
-::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/e3a60d16-1f4d-44a4-9866-5aded450956f.mspx?mfr=true
+::4 SSL seetings
+echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
+echo.
 
+::5 .NET version
+echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
+cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
+echo.
+
+::6 - Specify the authentication for the virtual dir
+::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/e3a60d16-1f4d-44a4-9866-5aded450956f.mspx?mfr=true
 
 ::We have this config in two places. Trust BuildArtifacts to be correct and let WISE do the dynamic content stuff
 ::anonymousAuthentication=always true

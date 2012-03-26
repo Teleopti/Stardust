@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Ccc.Web.Models.Shared;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					return PartialView(winView, signInModel.Value);
 
 			var authenticationResult = _authenticator.AuthenticateWindowsUser(model.DataSourceName);
-			return tryLogon(winView, signInModel, authenticationResult);
+			return tryLogon(winView, signInModel, authenticationResult, AuthenticationTypeOption.Windows);
 		}
 
 		[HttpPost]
@@ -85,10 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var authenticationResult = _authenticator.AuthenticateApplicationUser(model.DataSourceName, model.UserName,
 			                                                                      model.Password);
-			return tryLogon(appView, signInModel, authenticationResult);
+			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application);
 		}
 
-		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult)
+		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType)
 		{
 			if (!authenticationResult.Successful)
 			{
@@ -104,7 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 
 			var businessUnitViewModel = _viewModelFactory.CreateBusinessUnitViewModel(authenticationResult.DataSource,
-			                                                                          authenticationResult.Person);
+			                                                                          authenticationResult.Person,
+																											  authenticationType);
 			switch (businessUnitViewModel.BusinessUnits.Count())
 			{
 				case 0:
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					var businessUnitId = businessUnitViewModel.BusinessUnits.First().Id;
 					var persionId = authenticationResult.Person.Id.Value;
 					var dataSourceName = authenticationResult.DataSource.DataSourceName;
-					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId);
+					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType);
 				default:
 					if (IsJsonRequest())
 					{
@@ -131,14 +133,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public ActionResult Logon([Bind(Prefix = "SignIn")] SignInBusinessUnitModel model)
 		{
-			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId);
+			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType);
 		}
 
-		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId)
+		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
 		{
 			try
 			{
-				_logon.LogOn(buisinessUnitId, dataSourceName, personId);
+				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType);
 
 				return _redirector.SignInRedirect();
 			}
