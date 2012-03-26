@@ -10535,4 +10535,8 @@ These options are activated:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Contract time descending</value>
   </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Remove write protection</value>
+    <comment>Remove write protection</comment>
+  </data>
 </root>
