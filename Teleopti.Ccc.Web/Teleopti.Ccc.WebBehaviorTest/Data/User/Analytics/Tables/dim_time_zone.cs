@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_time_zone
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.dim_time_zone");
@@ -48,12 +50,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		}
 
 		public static TimeZoneInfo FindTimeZoneById(
-			this DataTable dataTable,
+			this IEnumerable<DataRow> dataTable,
 			int time_zone_id)
 		{
 			var time_zone_code =
 				(
-					from t in dataTable.AsEnumerable()
+					from t in dataTable
 					where (int) t["time_zone_id"] == time_zone_id
 					select (string) t["time_zone_code"]
 				).Single();

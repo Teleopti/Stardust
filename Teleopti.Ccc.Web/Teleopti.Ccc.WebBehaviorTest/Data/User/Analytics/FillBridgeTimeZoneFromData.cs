@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly ITimeZoneData _timeZones;
 		private readonly IDatasourceData _datasource;
 
-		public DataTable Table { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public FillBridgeTimeZoneFromData(IDateData dates, IIntervalData intervals, ITimeZoneData timeZones, IDatasourceData datasource)
 		{
@@ -29,9 +30,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			var dim_date = _dates.Table.AsEnumerable();
-			var dim_interval = _intervals.Table.AsEnumerable();
-			var dim_time_zone = _timeZones.Table.AsEnumerable();
+			var dim_date = _dates.Rows.AsEnumerable();
+			var dim_interval = _intervals.Rows.AsEnumerable();
+			var dim_time_zone = _timeZones.Rows.AsEnumerable();
 
 			var query = from d in dim_date
 			            let date_id = (int) d["date_id"]
@@ -57,10 +58,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			                   		local_interval_id
 			                   	};
 
-			Table = bridge_time_zone.CreateTable();
+			var table = bridge_time_zone.CreateTable();
 
 			query.ForEach(
-				a => Table.AddTimeZone(
+				a => table.AddTimeZone(
 					a.date_id,
 					a.interval_id,
 					a.time_zone_id,
@@ -69,7 +70,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 					_datasource.RaptorDefaultDatasourceId)
 				);
 
-			Bulk.Insert(connection, Table);
+			Bulk.Insert(connection, table);
+
+			Rows = table.AsEnumerable();
 		}
 
 	}

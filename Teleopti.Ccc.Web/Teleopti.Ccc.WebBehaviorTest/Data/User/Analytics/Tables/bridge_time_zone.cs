@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class bridge_time_zone
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.bridge_time_zone");
@@ -43,12 +44,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		}
 
 		public static IEnumerable<DataRow> FindBridgeTimeZoneRowsByIds(
-			this DataTable dataTable,
+			this IEnumerable<DataRow> rows,
 			int date_id,
 			int interval_id,
 			int time_zone_id)
 		{
-			return (from b in dataTable.AsEnumerable()
+			return (from b in rows
 			        where
 			        	(int) b["date_id"] == date_id &&
 			        	(int) b["interval_id"] == interval_id &&

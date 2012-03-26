@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public interface IBusinessUnitData
 	{
-		DataTable Table { get; }
+		IEnumerable<DataRow> Rows { get; }
 		int BusinessUnitId { get; }
 	}
 }

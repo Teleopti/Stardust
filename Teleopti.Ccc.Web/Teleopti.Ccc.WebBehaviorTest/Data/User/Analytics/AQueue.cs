@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Sql;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables;
 using Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces;
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public int QueueId = 0;
 
-		public DataTable Table { get; private set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public AQueue(IDatasourceData datasource) {
 			_datasource = datasource;
@@ -21,11 +23,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_queue.CreateTable();
+			// tbh, not completely sure its ok to dispose datatable and still use its rows
+			using (var table = dim_queue.CreateTable())
+			{
+				table.AddQueue(QueueId, 2, "10001", "Queue 1", "Queue 1", "Log Object", _datasource.RaptorDefaultDatasourceId);
 
-			Table.AddQueue(QueueId, 2, "10001", "Queue 1", "Queue 1", "Log Object", _datasource.RaptorDefaultDatasourceId);
+				Bulk.Insert(connection, table);
 
-			Bulk.Insert(connection, Table);
+				Rows = table.AsEnumerable();
+			}
 		}
 
 	}

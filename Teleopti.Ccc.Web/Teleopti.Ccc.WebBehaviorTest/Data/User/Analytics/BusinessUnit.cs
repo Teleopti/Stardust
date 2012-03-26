@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -14,8 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly IBusinessUnit _businessUnit;
 		private readonly IDatasourceData _datasource;
 
-		public int BusinessUnitId { get; private set; }
-		public DataTable Table { get; private set; }
+		public int BusinessUnitId { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public BusinessUnit(IBusinessUnit businessUnit, IDatasourceData datasource) {
 			_businessUnit = businessUnit;
@@ -25,11 +26,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_business_unit.CreateTable();
+			using (var table = dim_business_unit.CreateTable())
+			{
+				table.AddBusinessUnit(BusinessUnitId, _businessUnit.Id.Value, _businessUnit.Name, _datasource.RaptorDefaultDatasourceId);
 
-			Table.AddBusinessUnit(BusinessUnitId, _businessUnit.Id.Value, _businessUnit.Name, _datasource.RaptorDefaultDatasourceId);
+				Bulk.Insert(connection, table);
 
-			Bulk.Insert(connection, Table);
+				Rows = table.AsEnumerable();
+			}
 		}
 
 	}

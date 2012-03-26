@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -13,11 +14,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public class QuarterOfAnHourInterval : IAnalyticsDataSetup, IIntervalData
 	{
-		public DataTable Table { get; private set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_interval.CreateTable();
+			var table = dim_interval.CreateTable();
 			var interval = TimeSpan.FromMinutes(15);
 			var start = new DateTime(1900, 1, 1);
 			var end = start.AddHours(24);
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				         		var halfHourName = formattedTime + "-" + time.Add(TimeSpan.FromMinutes(30)).ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
 				         		var hourName = formattedTime + "-" + time.Add(TimeSpan.FromHours(1)).ToString(analyticsDataCulture.DateTimeFormat.ShortTimePattern);
 
-				         		Table.AddInterval(
+				         		table.AddInterval(
 				         			id,
 				         			intervalName,
 				         			halfHourName,
@@ -49,7 +50,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				         	}
 				);
 
-			Bulk.Insert(connection, Table);
+			Bulk.Insert(connection, table);
+
+			Rows = table.AsEnumerable();
 		}
 
 	}

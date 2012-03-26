@@ -34,9 +34,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 			var table = fact_queue.CreateTable();
 
-			var dates = _dates.Table.AsEnumerable();
-			var intervals = _intervals.Table.AsEnumerable();
-			var queue = _queue.Table.AsEnumerable();
+			var dates = _dates.Rows;
+			var intervals = _intervals.Rows;
+			var queue = _queue.Rows;
+			var datasource = _datasource.Rows;
 
 			var query = from d in dates
 			            from i in intervals
@@ -45,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			            let interval_id = (int) i["interval_id"]
 			            let queue_id = (int) q["queue_id"]
 			            let datasource_id = (int) q["datasource_id"]
-			            let time_zone_id = _datasource.Table.FindTimeZoneIdByDatasourceId(datasource_id)
-			            let bridgeTimeZones = _bridgeTimeZone.Table.FindBridgeTimeZoneRowsByIds(date_id, interval_id, time_zone_id)
+			            let time_zone_id = datasource.FindTimeZoneIdByDatasourceId(datasource_id)
+			            let bridgeTimeZones = _bridgeTimeZone.Rows.FindBridgeTimeZoneRowsByIds(date_id, interval_id, time_zone_id)
 						where bridgeTimeZones.Any()
 						let bridgeTimeZone = bridgeTimeZones.Single()
 			            let local_date_id = (int) bridgeTimeZone["local_date_id"]

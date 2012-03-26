@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			var dim_workload = _workloads.Table.AsEnumerable();
-			var dim_queue = _queues.Table.AsEnumerable();
+			var dim_workload = _workloads.Rows;
+			var dim_queue = _queues.Rows;
 
 			var query = from w in dim_workload
 			            from q in dim_queue
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			var table = bridge_queue_workload.CreateTable();
 
 			query.ForEach(
-				a => table.AddRow(
+				a => table.AddBridgeQueueWorkload(
 					a.queue_id,
 					a.workload_id,
 					a.skill_id,

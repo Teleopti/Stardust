@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class bridge_queue_workload
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.bridge_queue_workload");
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			return table;
 		}
 
-		public static void AddRow(
+		public static void AddBridgeQueueWorkload(
 			this DataTable dataTable,
 			int queue_id,
 			int workload_id,

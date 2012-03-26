@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		public int WorkloadId = 0;
 		public Guid WorkloadCode = Guid.NewGuid();
 
-		public DataTable Table { get; private set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public AWorkload(ISkillData skills, ITimeZoneData timezones, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
@@ -30,11 +31,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_workload.CreateTable();
+			using (var table = dim_workload.CreateTable())
+			{
+				table.AddWorkload(WorkloadId, WorkloadCode, "A workload", _skills.FirstSkillId, _skills.FirstSkillCode, _skills.FirstSkillName, _timezones.UtcTimeZoneId, Guid.NewGuid(), "Forecast method", 1, 1, -1, -1, 0, 1, 1, _businessUnits.BusinessUnitId, _datasource.RaptorDefaultDatasourceId);
 
-			Table.AddWorkload(WorkloadId, WorkloadCode, "A workload", _skills.FirstSkillId, _skills.FirstSkillCode, _skills.FirstSkillName, _timezones.UtcTimeZoneId, Guid.NewGuid(), "Forecast method", 1, 1, -1, -1, 0, 1, 1, _businessUnits.BusinessUnitId, _datasource.RaptorDefaultDatasourceId);
+				Bulk.Insert(connection, table);
 
-			Bulk.Insert(connection, Table);
+				Rows = table.AsEnumerable();
+			}
 		}
 
 	}

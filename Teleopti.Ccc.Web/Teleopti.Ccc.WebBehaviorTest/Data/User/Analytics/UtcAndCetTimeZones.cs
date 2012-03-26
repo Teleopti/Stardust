@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -17,37 +18,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			CetTimeZoneId = 1;
 		}
 
-		public DataTable Table { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
+
 		public int UtcTimeZoneId { get; set; }
 		public int CetTimeZoneId { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_time_zone.CreateTable();
+			using (var table = dim_time_zone.CreateTable())
+			{
+				var utcTimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+				table.AddTimeZone(
+					UtcTimeZoneId,
+					utcTimeZone.Id,
+					utcTimeZone.DisplayName,
+					false,
+					0,
+					0,
+					-1
+					);
 
-			var utcTimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-			Table.AddTimeZone(
-				UtcTimeZoneId,
-				utcTimeZone.Id,
-				utcTimeZone.DisplayName,
-				false,
-				0,
-				0,
-				-1
-				);
+				var cetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+				table.AddTimeZone(
+					CetTimeZoneId,
+					cetTimeZone.Id,
+					cetTimeZone.DisplayName,
+					true,
+					(int)cetTimeZone.BaseUtcOffset.TotalMinutes,
+					0,
+					-1
+					);
 
-			var cetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			Table.AddTimeZone(
-				CetTimeZoneId,
-				cetTimeZone.Id,
-				cetTimeZone.DisplayName,
-				true,
-				(int)cetTimeZone.BaseUtcOffset.TotalMinutes,
-				0,
-				-1
-				);
+				Bulk.Insert(connection, table);
 
-			Bulk.Insert(connection, Table);
+				Rows = table.AsEnumerable();
+			}
 		}
 
 	}

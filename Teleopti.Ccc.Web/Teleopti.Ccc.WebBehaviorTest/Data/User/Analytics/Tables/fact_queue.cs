@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class fact_queue
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.fact_queue");

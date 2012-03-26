@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class sys_datasource
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.sys_datasource");
@@ -26,22 +28,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		}
 
 		public static int FindTimeZoneIdByDatasourceId(
-			this DataTable dataTable,
+			this IEnumerable<DataRow> dataTable,
 			int datasource_id)
 		{
 			return (
-			       	from s in dataTable.AsEnumerable()
+			       	from s in dataTable
 			       	where (int) s["datasource_id"] == datasource_id
 			       	select (int) s["time_zone_id"]
 			       ).Single();
 		}
 
 		public static int FindDatasourceIdByName(
-			this DataTable dataTable,
+			this IEnumerable<DataRow> dataTable,
 			string datasource_name)
 		{
 			return (
-			       	from s in dataTable.AsEnumerable()
+			       	from s in dataTable
 			       	where (string) s["datasource_name"] == datasource_name
 			       	select (int) s["datasource_id"]
 			       ).Single();

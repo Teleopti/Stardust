@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public class CurrentWeekDates : IAnalyticsDataSetup, IDateData
 	{
-		public DataTable Table { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_date.CreateTable();
+			var table = dim_date.CreateTable();
 
 			var startDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, analyticsDataCulture);
 			var dates = startDate.DateRange(7);
@@ -26,11 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			var id = 0;
 			dates.ForEach(date =>
 			              	{
-			              		Table.AddDate(id, date, analyticsDataCulture);
+								table.AddDate(id, date, analyticsDataCulture);
 			              		id++;
 			              	});
 
-			Bulk.Insert(connection, Table);
+			Bulk.Insert(connection, table);
+
+			Rows = table.AsEnumerable();
 		}
 	}
 

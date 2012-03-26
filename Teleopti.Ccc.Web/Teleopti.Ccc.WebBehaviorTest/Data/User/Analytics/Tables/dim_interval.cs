@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_interval
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.dim_interval");
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		}
 
 		public static int FindIntervalIdByTimeOfDay(
-			this EnumerableRowCollection<DataRow> rows,
+			this IEnumerable<DataRow> rows,
 			DateTime time)
 		{
 			var timeOfDay = time.TimeOfDay;
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 		}
 
 		public static DateTime FindTimeByIntervalId(
-			this EnumerableRowCollection<DataRow> rows,
+			this IEnumerable<DataRow> rows,
 			int interval_id)
 		{
 			return (from li in rows

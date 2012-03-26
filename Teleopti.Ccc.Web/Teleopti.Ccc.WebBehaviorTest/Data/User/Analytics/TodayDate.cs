@@ -13,16 +13,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 {
 	public class TodayDate : IAnalyticsDataSetup, IDateData
 	{
-		public DataTable Table { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
 		{
-			Table = dim_date.CreateTable();
+			using (var table = dim_date.CreateTable())
+			{
+				var date = DateTime.Now.Date;
+				table.AddDate(0, date, analyticsDataCulture);
 
-			var date = DateTime.Now.Date;
-			Table.AddDate(0, date, analyticsDataCulture);
+				Bulk.Insert(connection, table);
 
-			Bulk.Insert(connection, Table);
+				Rows = table.AsEnumerable();
+			}
 		}
 
 	}

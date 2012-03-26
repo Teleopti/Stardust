@@ -12,28 +12,32 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static IDataSource CreateDataSource()
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+			{
+				using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+				{
+					if (IniFileInfo.Create)
+						PrepareDatabases(ccc7, analytics);
 
-			if (IniFileInfo.Create)
-				PrepareDatabases(ccc7, analytics);
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()) { UseCache = false };
+					var dataSource = CreateDataSource(dataSourceFactory);
 
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()) { UseCache = false };
-			var dataSource = CreateDataSource(dataSourceFactory);
+					if (IniFileInfo.Create)
+						CreateSchemas(dataSourceFactory, ccc7, analytics);
 
-			if (IniFileInfo.Create)
-				CreateSchemas(dataSourceFactory, ccc7, analytics);
-
-			return dataSource;
+					return dataSource;
+				}
+			}
 		}
 
 		public static void ClearAnalyticsData()
 		{
-			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
-			analytics.CleanAnalytics();
+			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+			{
+				analytics.CleanAnalytics();
+			}
 		}
 
 		private static void PrepareDatabases(DatabaseHelper ccc7, DatabaseHelper analytics)

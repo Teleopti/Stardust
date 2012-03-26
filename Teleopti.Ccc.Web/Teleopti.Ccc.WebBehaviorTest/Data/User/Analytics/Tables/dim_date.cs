@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 {
 	public static class dim_date
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.dim_date");
@@ -95,12 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 				);
 		}
 
-		public static IEnumerable<int> FindDateIdsByDate(this DataTable dataTable, DateTime date)
-		{
-			return dataTable.AsEnumerable().FindDateIdsByDate(date);
-		}
-
-		public static IEnumerable<int> FindDateIdsByDate(this EnumerableRowCollection<DataRow> rows, DateTime date)
+		public static IEnumerable<int> FindDateIdsByDate(this IEnumerable<DataRow> rows, DateTime date)
 		{
 			return (
 			       	from d in rows.DateRowsByDateQuery(date)
@@ -109,12 +105,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 				.ToArray();
 		}
 
-		public static int FindDateIdByDate(this EnumerableRowCollection<DataRow> rows, DateTime date)
+		public static int FindDateIdByDate(this IEnumerable<DataRow> rows, DateTime date)
 		{
 			return rows.FindDateIdsByDate(date).Single();
 		}
 
-		public static DateTime FindDateByDateId(this EnumerableRowCollection<DataRow> rows, int date_id)
+		public static DateTime FindDateByDateId(this IEnumerable<DataRow> rows, int date_id)
 		{
 			return (
 					from d in rows.DateRowsByIdQuery(date_id)
@@ -122,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 				   ).Single();
 		}
 
-		private static IEnumerable<DataRow> DateRowsByDateQuery(this EnumerableRowCollection<DataRow> rows, DateTime date)
+		private static IEnumerable<DataRow> DateRowsByDateQuery(this IEnumerable<DataRow> rows, DateTime date)
 		{
 			date = date.Date;
 			return from d in rows
@@ -131,7 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics.Tables
 			       select d;
 		}
 
-		private static IEnumerable<DataRow> DateRowsByIdQuery(this EnumerableRowCollection<DataRow> rows, int date_id)
+		private static IEnumerable<DataRow> DateRowsByIdQuery(this IEnumerable<DataRow> rows, int date_id)
 		{
 			return from d in rows
 				   where (int)d["date_id"] == date_id

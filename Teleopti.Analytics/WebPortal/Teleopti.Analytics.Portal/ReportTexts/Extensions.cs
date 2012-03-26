@@ -41,6 +41,7 @@ namespace Teleopti.Analytics.ReportTexts
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "WeekDay")]
 		public static string GetWeekDayResourceKey(this DayOfWeek weekdayNumber)
 		{
 			var number = (int) weekdayNumber;
@@ -49,6 +50,7 @@ namespace Teleopti.Analytics.ReportTexts
 			return number.GetWeekDayResourceKey();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "WeekDay")]
 		public static string GetWeekDayResourceKey(this int weekdayNumber)
 		{
 			switch (weekdayNumber)

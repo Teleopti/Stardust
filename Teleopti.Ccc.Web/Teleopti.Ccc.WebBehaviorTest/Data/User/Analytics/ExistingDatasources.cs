@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly ITimeZoneData _timeZones;
 
 		public int RaptorDefaultDatasourceId { get; set; }
-		public DataTable Table { get; set; }
+		public IEnumerable<DataRow> Rows { get; set; }
 
 		public ExistingDatasources(ITimeZoneData timeZones) {
 			_timeZones = timeZones;
@@ -29,19 +30,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 
 		private void LoadDatasourcesFromDatabase(SqlConnection connection)
 		{
-			var command = new SqlCommand("select * from mart.sys_datasource", connection);
-			var reader = command.ExecuteReader();
-			Table = sys_datasource.CreateTable();
-			Table.Load(reader);
-			RaptorDefaultDatasourceId = Table.FindDatasourceIdByName(raptorDefaultDatasourceName);
+			using (var table = sys_datasource.CreateTable())
+			{
+				using (var command = new SqlCommand("select * from mart.sys_datasource", connection))
+				{
+					var reader = command.ExecuteReader();
+					table.Load(reader);
+				}
+				Rows = table.AsEnumerable();
+			}
+			RaptorDefaultDatasourceId = Rows.FindDatasourceIdByName(raptorDefaultDatasourceName);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void UpdateRaptorDefaultDatasourceWithTimeZoneId(SqlConnection connection)
 		{
 			var sql = string.Format("update mart.sys_datasource set time_zone_id = {0} where datasource_id = {1}", _timeZones.CetTimeZoneId, raptorDefaultDatasourceId);
-			var updateTimeZone = new SqlCommand(sql, connection);
-			if (updateTimeZone.ExecuteNonQuery() != 1)
-				throw new Exception("Expected 1 rows affected!");
+			using (var updateTimeZone = new SqlCommand(sql, connection))
+			{
+				if (updateTimeZone.ExecuteNonQuery() != 1)
+					throw new Exception("Expected 1 rows affected!");
+			}
 		}
 	}
 }
