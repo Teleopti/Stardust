@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			BusinessUnitId = 0;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			using (var table = dim_business_unit.CreateTable())
 			{

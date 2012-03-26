@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
+﻿using Teleopti.Analytics.ReportTexts;
+using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -55,7 +56,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var intervals = UserFactory.User().UserData<IIntervalData>();
 			var bridgeTimeZones = UserFactory.User().UserData<IBridgeTimeZone>();
 			var dates = UserFactory.User().UserData<IDateData>();
-			UserFactory.User().Setup(new FactQueue(dates, intervals, queues, dataSource, timeZones, bridgeTimeZones));
+			UserFactory.User().Setup(new FactQueue(dates, intervals, queues, dataSource, bridgeTimeZones));
+			UserFactory.User().Setup(new WeekdayTranslations());
 		}
 
 		[When(@"I click the signout button")]
@@ -286,9 +288,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			ScenarioContext.Current.Pending();
-			// sunday isnt shown as the first day and I cant see any code that should make it so
-			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.StringContaining("Sunday"));
+			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.ResDayOfWeekSunday));
 		}
 
 		private static void createAndSignIn()

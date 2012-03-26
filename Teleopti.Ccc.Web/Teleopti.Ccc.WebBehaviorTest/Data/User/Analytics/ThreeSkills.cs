@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var time_zone_id = _timeZones.UtcTimeZoneId;
 			var business_unit_id = _businessUnits.BusinessUnitId;

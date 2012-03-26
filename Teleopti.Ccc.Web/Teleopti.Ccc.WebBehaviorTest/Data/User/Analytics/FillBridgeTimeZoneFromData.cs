@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var dim_date = _dates.Rows.AsEnumerable();
 			var dim_interval = _intervals.Rows.AsEnumerable();

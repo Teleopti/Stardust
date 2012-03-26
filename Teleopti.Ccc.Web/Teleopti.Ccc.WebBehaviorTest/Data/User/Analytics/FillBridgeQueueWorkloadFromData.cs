@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			_datasource = datasource;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var dim_workload = _workloads.Rows;
 			var dim_queue = _queues.Rows;

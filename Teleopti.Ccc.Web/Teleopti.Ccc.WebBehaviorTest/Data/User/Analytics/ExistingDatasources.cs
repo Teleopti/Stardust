@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			_timeZones = timeZones;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			UpdateRaptorDefaultDatasourceWithTimeZoneId(connection);
 			LoadDatasourcesFromDatabase(connection);

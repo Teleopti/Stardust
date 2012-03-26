@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		public IEnumerable<DataRow> Rows { get; set; }
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			using (var table = dim_date.CreateTable())
 			{

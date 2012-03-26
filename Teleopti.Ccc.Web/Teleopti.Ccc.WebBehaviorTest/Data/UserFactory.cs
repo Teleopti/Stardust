@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
 				connection.Open();
-				_analyticsSetups.ForEach(s => s.Apply(connection, CultureInfo.GetCultureInfo("sv-SE")));
+				_analyticsSetups.ForEach(s => s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE")));
 			}
 		}
 

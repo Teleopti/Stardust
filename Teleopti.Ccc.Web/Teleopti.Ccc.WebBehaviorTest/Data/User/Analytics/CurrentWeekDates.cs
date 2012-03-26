@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		public IEnumerable<DataRow> Rows { get; set; }
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var table = dim_date.CreateTable();
 
-			var startDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, analyticsDataCulture);
+			var startDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, userCulture);
 			var dates = startDate.DateRange(7);
 
 			var id = 0;

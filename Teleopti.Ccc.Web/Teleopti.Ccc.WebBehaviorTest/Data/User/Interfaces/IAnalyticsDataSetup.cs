@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Interfaces
 {
 	public interface IAnalyticsDataSetup
 	{
-		void Apply(SqlConnection connection, CultureInfo analyticsDataCulture);
+		void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture);
 	}
 }

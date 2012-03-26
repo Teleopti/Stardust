@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		public int UtcTimeZoneId { get; set; }
 		public int CetTimeZoneId { get; set; }
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture)
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			using (var table = dim_time_zone.CreateTable())
 			{

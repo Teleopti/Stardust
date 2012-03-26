@@ -17,20 +17,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 		private readonly IIntervalData _intervals;
 		private readonly IQueueData _queue;
 		private readonly IDatasourceData _datasource;
-		private readonly ITimeZoneData _timeZones;
 		private readonly IBridgeTimeZone _bridgeTimeZone;
 
-		public FactQueue(IDateData dates, IIntervalData intervals, IQueueData queue, IDatasourceData datasource, ITimeZoneData timeZones, IBridgeTimeZone bridgeTimeZone)
+		public FactQueue(IDateData dates, IIntervalData intervals, IQueueData queue, IDatasourceData datasource, IBridgeTimeZone bridgeTimeZone)
 		{
 			_dates = dates;
 			_intervals = intervals;
 			_queue = queue;
 			_datasource = datasource;
-			_timeZones = timeZones;
 			_bridgeTimeZone = bridgeTimeZone;
 		}
 
-		public void Apply(SqlConnection connection, CultureInfo analyticsDataCulture) {
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture) {
 
 			var table = fact_queue.CreateTable();
 
@@ -68,10 +66,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 			              		var time = intervals.FindTimeByIntervalId(a.interval_id);
 			              		var dateTime = date.Add(time.TimeOfDay);
 			              		var offered_calls = GenerateOfferedCalls(dateTime);
-			              		var answered_calls = (offered_calls - 7).Noise(3).Abs();
-			              		var abandoned_calls = (offered_calls - answered_calls/3).Noise(2).Abs();
-								var talk_time_s = (offered_calls * 100).Noise(100).Abs();
-								var speed_of_answer = (talk_time_s / 2).Noise(100).Abs();
+			              		var answered_calls = (offered_calls - 7).Vary(3).Abs();
+			              		var abandoned_calls = (offered_calls - answered_calls/3).Vary(2).Abs();
+								var talk_time_s = (offered_calls * 100).Vary(100).Abs();
+								var speed_of_answer = (talk_time_s / 2).Vary(100).Abs();
 			              		table.AddFact(
 			              			a.date_id,
 			              			a.interval_id,
@@ -84,22 +82,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 									abandoned_calls,
 			              			0,
 			              			0,
-			              			1.Noise(1),
-									1.Noise(1),
+			              			1.Vary(1),
+									1.Vary(1),
 									talk_time_s,
 			              			0,
 			              			talk_time_s,
 			              			speed_of_answer,
-			              			200.Noise(100),
-									200.Noise(100),
-									200.Noise(100),
+			              			200.Vary(100),
+									200.Vary(100),
+									200.Vary(100),
 									a.datasource_id
 			              			);
 			              	});
 
 			Bulk.Insert(connection, table);
 		}
-
 
 		private static readonly IEnumerable<Tuple<TimeSpan, int>> _offeredCallsLookup =
 			new[]
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 				.Select(t => t.Item2)
 				.First()
 				;
-			var value = baseValue.Noise(5).Abs();
+			var value = baseValue.Vary(5).Abs();
 			return value;
 		}
 	}
@@ -133,7 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics
 	{
 		private static readonly Random _random = new Random();
 
-		public static int Noise(this int value, int vary)
+		public static int Vary(this int value, int vary)
 		{
 			var noise = _random.Next(-vary, vary);
 			var newValue = value + noise;

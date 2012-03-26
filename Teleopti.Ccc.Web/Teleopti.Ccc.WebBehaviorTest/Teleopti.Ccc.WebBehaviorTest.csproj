@@ -94,6 +94,7 @@
     <Compile Include="Data\User\Analytics\Tables\dim_skill.cs" />
     <Compile Include="Data\User\Analytics\Tables\dim_workload.cs" />
     <Compile Include="Data\User\Analytics\Tables\fact_queue.cs" />
+    <Compile Include="Data\User\Analytics\Tables\language_translation.cs" />
     <Compile Include="Data\User\Analytics\Tables\sys_datasource.cs" />
     <Compile Include="Data\User\Analytics\Sql\Bulk.cs" />
     <Compile Include="Data\User\Analytics\FillBridgeTimeZoneFromData.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Data\User\Analytics\ThreeSkills.cs" />
     <Compile Include="Data\User\Analytics\TodayDate.cs" />
     <Compile Include="Data\User\Analytics\UtcAndCetTimeZones.cs" />
+    <Compile Include="Data\User\Analytics\WeekdayTranslations.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\Interfaces\IAnalyticsDataSetup.cs" />
