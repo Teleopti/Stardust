@@ -54,3 +54,4 @@ Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.C
 *[Tt]est.dll.[Cc]onfig
 *.ncov.bkp
 Teleopti.Ccc.Rta/Teleopti.Ccc.Rta.WebService/RtaWebService.log.1
+Database/Tools/Restore/output
