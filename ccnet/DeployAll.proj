@@ -634,6 +634,7 @@
 	<exec command="hg update -r default" />
 	<exec command="hg revert -a"/>
 	<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
+	<exec command="hg update -r &quot;$(branch)&quot;" />
   </Target>
   <Target Name="PushTag">
   	<exec command="hg revert -a"/>
