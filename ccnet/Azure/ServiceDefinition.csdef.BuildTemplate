@@ -10,6 +10,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="MyTime" physicalDirectory="../Azure/Temp/AzureContent/MyTime" />
         <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
         <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
+		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
         <Bindings>
 <!--          <Binding name="HttpIn" endpointName="HttpIn" /> -->
           <Binding name="HttpsIn" endpointName="HttpsIn" />
