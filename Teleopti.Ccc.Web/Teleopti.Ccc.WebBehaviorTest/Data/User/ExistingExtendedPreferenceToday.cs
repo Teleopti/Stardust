@@ -7,20 +7,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 {
 	public class ExistingExtendedPreferenceToday : BasePreference
 	{
-		private readonly TimeSpan _earliest;
-		private readonly TimeSpan _latest;
 
-		public ExistingExtendedPreferenceToday(string earliest, string latest)
+		private readonly StartTimeLimitation _startTimeLimitation;
+		private readonly EndTimeLimitation _endTimeLimitation;
+
+		public ExistingExtendedPreferenceToday(string earliestStart, string latestStart, string earliestEnd, string latestEnd)
 		{
-			TimeHelper.TryParse(earliest, out _earliest);
-			TimeHelper.TryParse(latest, out _latest);
+			if (earliestStart != null && latestStart != null)
+			{
+				TimeSpan earliestStartTime;
+				TimeSpan latestStartTime;
+				TimeHelper.TryParse(earliestStart, out earliestStartTime);
+				TimeHelper.TryParse(latestStart, out latestStartTime);
+				_startTimeLimitation = new StartTimeLimitation(earliestStartTime, latestStartTime);
+			}
+
+			if (earliestEnd != null && latestEnd != null)
+			{
+				TimeSpan earliestEndTime;
+				TimeSpan latestEndTime;
+				TimeHelper.TryParse(earliestEnd, out earliestEndTime);
+				TimeHelper.TryParse(latestEnd, out latestEndTime);
+				_endTimeLimitation = new EndTimeLimitation(earliestEndTime, latestEndTime);
+			}
 		}
 
 		protected override PreferenceRestriction ApplyRestriction()
 		{
 			return new PreferenceRestriction()
 			                            	{
-			                            		EndTimeLimitation = new EndTimeLimitation(_earliest, _latest)
+			                            		StartTimeLimitation = _startTimeLimitation,
+												EndTimeLimitation = _endTimeLimitation
 			                            	};
 		}
 
