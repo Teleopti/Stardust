@@ -17,14 +17,14 @@ Scenario: Feedback for a day without restrictions
 Scenario: Feedback for a day with day off preference
 	Given I am an agent
 	And I have a shift bag
-	And I have preference with day off
+	And I have a day off preference
 	When I view preferences
 	Then I should see no feedback
 
 Scenario: Feedback for a day with absence preference
 	Given I am an agent
 	And I have a shift bag
-	And I have preference with absence
+	And I have a absence preference
 	When I view preferences
 	Then I should see no feedback
 

@@ -100,7 +100,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 19
  testRunner.And("I have a shift bag");
 #line 20
- testRunner.And("I have preference with day off");
+ testRunner.And("I have a day off preference");
 #line 21
  testRunner.When("I view preferences");
 #line 22
@@ -121,7 +121,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 26
  testRunner.And("I have a shift bag");
 #line 27
- testRunner.And("I have preference with absence");
+ testRunner.And("I have a absence preference");
 #line 28
  testRunner.When("I view preferences");
 #line 29

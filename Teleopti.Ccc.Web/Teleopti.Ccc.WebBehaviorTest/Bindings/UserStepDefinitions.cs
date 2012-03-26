@@ -471,6 +471,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
 
+		[Given(@"I have a shift bag")]
+		public void GivenIHaveAShiftBag()
+		{
+			UserFactory.User().Setup(new RuleSetBag(8, 10, 16, 18));
+		}
+
+
 		[Given(@"I am an agent in a team that leaves tomorrow")]
 		public void GivenIAmAnAgentThatLeavesTomorrow()
 		{

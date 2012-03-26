@@ -237,6 +237,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
 		}
 
+		[Then(@"I should see no feedback")]
+		public void ThenIShouldSeeNoFeedback()
+		{
+			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var cell = _page.CalendarCellForDate(date);
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
+
+			startTimeDiv.InnerHtml.Should().Be.Null();
+			endTimeDiv.InnerHtml.Should().Be.Null();
+			contractTimeDiv.InnerHtml.Should().Be.Null();
+		}
 
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
