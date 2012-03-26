@@ -125,17 +125,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				wsRs.SetId(Guid.NewGuid());
 			return wsRs;
 		}
-
-		[Test]
-		public void ShouldRegisterWorkTimeMinMaxCalculator()
-		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
-			using (var container = containerBuilder.Build())
-			{
-				container.Resolve<IWorkTimeMinMaxCalculator>()
-					.Should().Not.Be.Null();
-			}
-		}
 	}
 }

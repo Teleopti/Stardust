@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
 			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
+			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
 		}
 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

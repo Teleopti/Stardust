@@ -376,5 +376,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var result = requestContainer.Resolve<IEffectiveRestrictionForDisplayCreator>();
 			result.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldResolveWorkTimeMinMaxCalculator()
+		{
+			var result = requestContainer.Resolve<IWorkTimeMinMaxCalculator>();
+			result.Should().Not.Be.Null();
+		}
 	}
 }

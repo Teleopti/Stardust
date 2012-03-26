@@ -34,9 +34,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IRuleSetProjectionService>()
 					.InstancePerLifetimeScope();
 			}
-			builder.RegisterType<WorkTimeMinMaxCalculator>()
-				.As<IWorkTimeMinMaxCalculator>()
-				.InstancePerLifetimeScope();
 		}
 
 		private static void inValidateCache(IRuleSetProjectionService obj)
