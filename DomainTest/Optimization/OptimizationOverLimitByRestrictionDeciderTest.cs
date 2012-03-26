@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _originalDays.Add(_scheduleDayKey3, _scheduleDay3);
             _originalDays.Add(_scheduleDayKey4, _scheduleDay4);
 
-
         }
 
         [Test]
@@ -159,10 +158,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-                _restrictionChecker.ScheduleDay = _scheduleDay1;
-                _restrictionChecker.ScheduleDay = _scheduleDay2;
-                _restrictionChecker.ScheduleDay = _scheduleDay3;
-                _restrictionChecker.ScheduleDay = _scheduleDay4;
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
                 Expect.Call(_restrictionChecker.CheckPreference())
                     .Return(PermissionState.None)
@@ -277,10 +276,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-                _restrictionChecker.ScheduleDay = _scheduleDay1;
-                _restrictionChecker.ScheduleDay = _scheduleDay2;
-                _restrictionChecker.ScheduleDay = _scheduleDay3;
-                _restrictionChecker.ScheduleDay = _scheduleDay4;
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
                 Expect.Call(_restrictionChecker.CheckPreferenceMustHave())
                     .Return(PermissionState.None)
@@ -401,10 +400,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-                _restrictionChecker.ScheduleDay = _scheduleDay1;
-                _restrictionChecker.ScheduleDay = _scheduleDay2;
-                _restrictionChecker.ScheduleDay = _scheduleDay3;
-                _restrictionChecker.ScheduleDay = _scheduleDay4;
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
                 Expect.Call(_restrictionChecker.CheckRotations())
                     .Return(PermissionState.None)
@@ -524,10 +523,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-                _restrictionChecker.ScheduleDay = _scheduleDay1;
-                _restrictionChecker.ScheduleDay = _scheduleDay2;
-                _restrictionChecker.ScheduleDay = _scheduleDay3;
-                _restrictionChecker.ScheduleDay = _scheduleDay4;
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
                 Expect.Call(_restrictionChecker.CheckAvailability())
                     .Return(PermissionState.None)
@@ -647,10 +646,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-                _restrictionChecker.ScheduleDay = _scheduleDay1;
-                _restrictionChecker.ScheduleDay = _scheduleDay2;
-                _restrictionChecker.ScheduleDay = _scheduleDay3;
-                _restrictionChecker.ScheduleDay = _scheduleDay4;
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
                 Expect.Call(_restrictionChecker.CheckStudentAvailability())
                     .Return(PermissionState.None)
@@ -673,6 +672,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         #endregion
+
         private void resetPreferences()
         {
             _optimizationPreferences.General.UsePreferences = false;
@@ -687,10 +687,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
                 .Return(_originalDays).Repeat.AtLeastOnce();
 
-            _restrictionChecker.ScheduleDay = _scheduleDay1;
-            _restrictionChecker.ScheduleDay = _scheduleDay2;
-            _restrictionChecker.ScheduleDay = _scheduleDay3;
-            _restrictionChecker.ScheduleDay = _scheduleDay4;
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
 
             Expect.Call(checkMethod())
                 .Return(PermissionState.None);
