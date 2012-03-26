@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var dateTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 
+			if (person == null)
+				throw new ArgumentNullException("person");
+
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				throw new InvalidOperationException("No person period defined");

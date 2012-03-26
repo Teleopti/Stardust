@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 	public class EffectiveRestrictionForDisplayCreatorTest
 	{
 		[Test]
-		public void SchouldCreateEffectiveRestrictionBasedOnPreference()
+		public void ShouldCreateEffectiveRestrictionBasedOnPreference()
 		{
 			var preference = new PreferenceRestriction {ShiftCategory = new ShiftCategory("AM")};
 			var effectiveRestrictionOptions = new EffectiveRestrictionOptions(true);

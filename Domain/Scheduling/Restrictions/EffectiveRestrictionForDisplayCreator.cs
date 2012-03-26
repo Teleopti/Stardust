@@ -15,11 +15,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
 
-			if (effectiveRestrictionOptions.UsePreference)
+			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
-				effectiveRestriction = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().Aggregate(effectiveRestriction, (current, preferenceRestriction) => (EffectiveRestriction) current.Combine(new EffectiveRestriction(preferenceRestriction.StartTimeLimitation, preferenceRestriction.EndTimeLimitation, preferenceRestriction.WorkTimeLimitation, preferenceRestriction.ShiftCategory, preferenceRestriction.DayOffTemplate, preferenceRestriction.Absence, preferenceRestriction.ActivityRestrictionCollection)));
+				if (effectiveRestrictionOptions.UsePreference)
+				{
+					effectiveRestriction =
+						scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().Aggregate(effectiveRestriction,
+						                                                                               (current, preferenceRestriction) =>
+						                                                                               (EffectiveRestriction)
+						                                                                               current.Combine(
+						                                                                               	new EffectiveRestriction(
+						                                                                               		preferenceRestriction.
+						                                                                               			StartTimeLimitation,
+						                                                                               		preferenceRestriction.
+						                                                                               			EndTimeLimitation,
+						                                                                               		preferenceRestriction.
+						                                                                               			WorkTimeLimitation,
+						                                                                               		preferenceRestriction.
+						                                                                               			ShiftCategory,
+						                                                                               		preferenceRestriction.
+						                                                                               			DayOffTemplate,
+						                                                                               		preferenceRestriction.Absence,
+						                                                                               		preferenceRestriction.
+						                                                                               			ActivityRestrictionCollection)));
+				}
 			}
-
 
 			return effectiveRestriction;
 		}
