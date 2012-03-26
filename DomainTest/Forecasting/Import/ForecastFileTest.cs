@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.IsNotEmpty(forecastFile.FileContent);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldHaveDefaultConstructor()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(typeof (ForecastFile)));

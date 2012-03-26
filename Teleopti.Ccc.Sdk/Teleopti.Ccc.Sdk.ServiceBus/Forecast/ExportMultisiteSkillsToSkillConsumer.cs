@@ -48,25 +48,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 unitOfWork.PersistAll();
 			}
 
-			var listOfMessages = new List<OpenAndSplitChildSkills>();
+            var listOfMessages = new List<ExportMultisiteSkillToSkill>();
+		    int progressSteps = 1;
             foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
-			{
-				foreach (var dateOnlyPeriod in message.Period.Split(20))
-				{
-					listOfMessages.Add(new OpenAndSplitChildSkills
-					                   	{
-					                   		BusinessUnitId = message.BusinessUnitId,
-					                   		Datasource = message.Datasource,
-					                   		JobId = message.JobId,
-					                   		MultisiteSkillSelections = multisiteSkillSelection,
-					                   		OwnerPersonId = message.OwnerPersonId,
-					                   		Period = dateOnlyPeriod,
-					                   		Timestamp = message.Timestamp
-					                   	});
-				}
-			}
-
-			_feedback.ChangeTotalProgress(1 + listOfMessages.Count * 7);
+            {
+                foreach (var dateOnlyPeriod in message.Period.Split(20))
+                {
+                    listOfMessages.Add(new ExportMultisiteSkillToSkill
+                                           {
+                                               BusinessUnitId = message.BusinessUnitId,
+                                               Datasource = message.Datasource,
+                                               JobId = message.JobId,
+                                               MultisiteSkillSelections = multisiteSkillSelection,
+                                               OwnerPersonId = message.OwnerPersonId,
+                                               Period = dateOnlyPeriod,
+                                               Timestamp = message.Timestamp
+                                           });
+                    progressSteps++;
+                }
+                progressSteps += multisiteSkillSelection.ChildSkillSelections.Count*message.Period.DayCollection().Count*4;
+            }
+            _feedback.ChangeTotalProgress(progressSteps);
 
 			listOfMessages.ForEach(m=> _serviceBus.Send(m));
 

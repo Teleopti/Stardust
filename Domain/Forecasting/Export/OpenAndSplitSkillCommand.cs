@@ -21,28 +21,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			_skillDayRepository = skillDayRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(ISkill skill, DateOnlyPeriod period)
-		{
-			var scenario = _scenarioProvider.DefaultScenario(skill.BusinessUnit);
-			var skillDays = _skillDayRepository.FindRange(period, skill, scenario);
-			var allSkillDays = _skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, true);
-
-			var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(allSkillDays, skill.WorkloadCollection.First());
-			foreach (var workloadDayBase in workloadDays)
-			{
-				workloadDayBase.MakeOpen24Hours();
-				workloadDayBase.SplitTemplateTaskPeriods(workloadDayBase.TaskPeriodList.ToList());
-				var skillDay = workloadDayBase.Parent as ISkillDay;
-				if (skillDay != null)
-				{
-					skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
-
-					setTargetBusinessUnit(skillDay, skill.BusinessUnit);
-				}
-			}
-		}
-
 	    public void Execute(ISkill skill, DateOnlyPeriod period, IList<TimePeriod> openHoursList)
 	    {
             var scenario = _scenarioProvider.DefaultScenario(skill.BusinessUnit);

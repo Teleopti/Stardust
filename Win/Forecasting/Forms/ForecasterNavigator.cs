@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IImportForecastsRepository _importForecastsRepository;
+	    private readonly IForecastsRowExtractor _rowExtractor;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -81,12 +83,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		}
 
-        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory, IImportForecastsRepository importForecastsRepository)
+        public ForecasterNavigator(PortalSettings portalSettings, 
+            IRepositoryFactory repositoryFactory, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IQuickForecastViewFactory quickForecastViewFactory, 
+            IImportForecastsRepository importForecastsRepository,
+            IForecastsRowExtractor rowExtractor)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
             _importForecastsRepository = importForecastsRepository;
+            _rowExtractor = rowExtractor;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1222,7 +1230,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 ViewBase.ShowWarningMessage("No workload available.", Resources.ImportError);
                 return;
             }
-            using (var impForecast = new ImportForecastView(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
+            using (var impForecast = new ImportForecastView(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler, _rowExtractor))
             {
                 impForecast.ShowDialog(this);
             }

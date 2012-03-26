@@ -58,5 +58,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 		void SetJobResult(IJobResult jobResult, IMessageBroker messageBroker);
 
         void ChangeTotalProgress(int totalPercentage);
+        Guid JobId();
     }
 }

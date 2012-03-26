@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         {
             var dateTime = new DateOnly(2012, 3, 1);
             _target.ErrorMessage = "Something wrong!";
-            _target.IntervalLengthTicks = 9000000;
+            _target.IntervalLength = TimeSpan.FromTicks(9000000);
             _target.Period = new DateOnlyPeriod(dateTime, dateTime);
             _target.SkillName = "Insurance";
             var openHours = new WorkloadDayOpenHoursContainer();
             openHours.AddOpenHour(dateTime, new TimePeriod(12, 0, 12, 15));
             var forecasts = new ForecastFileContainer();
-            forecasts.AddForecastsRow(dateTime, new ForecastsFileRow
+            forecasts.AddForecastsRow(dateTime, new ForecastsRow
                                         {
                                             TaskTime = 170,
                                             AfterTaskTime = 0,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _target.ForecastFileContainer = forecasts;
 
             Assert.That(_target.ErrorMessage, Is.EqualTo("Something wrong!"));
-            Assert.That(_target.IntervalLengthTicks, Is.EqualTo(9000000));
+            Assert.That(_target.IntervalLength, Is.EqualTo(TimeSpan.FromTicks(9000000)));
             Assert.That(_target.ForecastFileContainer, Is.EqualTo(forecasts));
             Assert.That(_target.WorkloadDayOpenHours, Is.EqualTo(openHours));
         }

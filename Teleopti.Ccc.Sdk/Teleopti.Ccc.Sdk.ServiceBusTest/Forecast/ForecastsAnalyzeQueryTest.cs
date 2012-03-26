@@ -12,33 +12,41 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     public class ForecastsAnalyzeQueryTest
     {
         private IForecastsAnalyzeQuery _target;
-        private IEnumerable<IForecastsFileRow> _forecastsRows;
 
         [SetUp]
         public void Setup()
         {
-            _forecastsRows = setUpForecasts();
-            _target = new ForecastsAnalyzeQuery(_forecastsRows);
+           _target = new ForecastsAnalyzeQuery();
         }
 
         [Test]
         public void ShouldAnalyzeForecasts()
         {
             var date = new DateOnly(2012, 3, 1);
-            var result = _target.Run();
+            var forecastsRows = setUpForecasts();
+            var result = _target.Run(forecastsRows,TimeSpan.Zero);
 
             Assert.That(result.ErrorMessage, Is.Null);
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.SkillName, Is.EqualTo("Insurance"));
             Assert.That(result.Period, Is.EqualTo(new DateOnlyPeriod(date, date)));
-            Assert.That(result.IntervalLengthTicks, Is.EqualTo(9000000000));
+            Assert.That(result.IntervalLength, Is.EqualTo(TimeSpan.FromTicks(9000000000)));
             Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date),Is.EqualTo(new TimePeriod(2, 0, 2, 30)));
-            Assert.That(result.ForecastFileContainer.GetForecastsRows(date), Is.EqualTo(_forecastsRows));
+            Assert.That(result.ForecastFileContainer.GetForecastsRows(date), Is.EqualTo(forecastsRows));
         }
 
-        private static IEnumerable<IForecastsFileRow> setUpForecasts()
+        [Test]
+        public void ShouldHandleOpenHoursWithMidnightBreak()
         {
-            var row1 = new ForecastsFileRow
+            var forecastsRows = setUpForecastsWithMidnightBreak();
+            var date = new DateOnly(2012, 3, 1);
+            var result = _target.Run(forecastsRows,TimeSpan.FromHours(2));
+            Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date), Is.EqualTo(new TimePeriod(6, 0, 26, 0)));
+        }
+
+        private static IEnumerable<IForecastsRow> setUpForecasts()
+        {
+            var row1 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,
@@ -50,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 UtcDateTimeFrom = new DateTime(2012, 3, 1, 1, 0, 0, DateTimeKind.Utc),
                 UtcDateTimeTo = new DateTime(2012, 3, 1, 1, 15, 0, DateTimeKind.Utc)
             };
-            var row2 = new ForecastsFileRow
+            var row2 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,
@@ -61,6 +69,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Tasks = 10,
                 UtcDateTimeFrom = new DateTime(2012, 3, 1, 1, 15, 0, DateTimeKind.Utc),
                 UtcDateTimeTo = new DateTime(2012, 3, 1, 1, 30, 0, DateTimeKind.Utc)
+            };
+            return new[] {row1, row2};
+        } 
+        
+        private static IEnumerable<IForecastsRow> setUpForecastsWithMidnightBreak()
+        {
+            var row1 = new ForecastsRow
+            {
+                TaskTime = 170,
+                AfterTaskTime = 0,
+                Agents = 2,
+                LocalDateTimeFrom = new DateTime(2012, 3, 1, 6, 0, 0),
+                LocalDateTimeTo = new DateTime(2012, 3, 1, 6, 15, 0),
+                SkillName = "Insurance",
+                Tasks = 10,
+                UtcDateTimeFrom = new DateTime(2012, 3, 1, 6, 0, 0, DateTimeKind.Utc),
+                UtcDateTimeTo = new DateTime(2012, 3, 1, 6, 15, 0, DateTimeKind.Utc)
+            };
+            var row2 = new ForecastsRow
+            {
+                TaskTime = 170,
+                AfterTaskTime = 0,
+                Agents = 2,
+                LocalDateTimeFrom = new DateTime(2012, 3, 2, 1, 45, 0),
+                LocalDateTimeTo = new DateTime(2012, 3, 2, 2, 00, 0),
+                SkillName = "Insurance",
+                Tasks = 10,
+                UtcDateTimeFrom = new DateTime(2012, 3, 2, 1, 45, 0, DateTimeKind.Utc),
+                UtcDateTimeTo = new DateTime(2012, 3, 2, 2, 00, 0, DateTimeKind.Utc)
             };
             return new[] {row1, row2};
         }

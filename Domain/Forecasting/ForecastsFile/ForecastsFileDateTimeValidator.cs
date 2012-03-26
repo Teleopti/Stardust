@@ -1,27 +1,23 @@
 using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public class ForecastsFileDateTimeValidator : IForecastsFileValidator
+    public class ForecastsFileDateTimeValidator : IForecastsFileValidator<DateTime>
     {
-        public bool Validate(string value)
+        public bool TryParse(string value, out ForecastParseResult<DateTime> result)
         {
-            try
+            result = new ForecastParseResult<DateTime>();
+            DateTime parseResult;
+            if (DateTime.TryParseExact(value, "yyyyMMdd HH:mm", null, DateTimeStyles.None, out parseResult))
             {
-                DateTime result;
-                if (DateTime.TryParseExact(value, "yyyyMMdd HH:mm", null, DateTimeStyles.None, out result))
-                    return true;
-                ErrorMessage = string.Format("Datetime format of {0} is wrong", value);
-                return false;
+                result.Value = parseResult;
+                result.Success = true;
+                return true;
             }
-            catch (ArgumentException)
-            {
-                ErrorMessage = string.Format("Datetime format of {0} is wrong", value);
-                return false;
-            }
+            result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "Date time format of {0} is wrong", value);
+            return false;
         }
-
-        public string ErrorMessage { get; set; }
     }
 }

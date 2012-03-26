@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -8,35 +7,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeQueryResult Run();
+        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset);
     }
 
     public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
-        private readonly IEnumerable<IForecastsFileRow> _forecasts;
-
-        public ForecastsAnalyzeQuery(IEnumerable<IForecastsFileRow> forecasts)
-        {
-            _forecasts = forecasts;
-        }
-
-        public IForecastsAnalyzeQueryResult Run()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset)
         {
             var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
-            var firstRow = _forecasts.First();
-            var intervalLengthTicks = firstRow.LocalDateTimeTo.Subtract(firstRow.LocalDateTimeFrom).Ticks;
-            var skillName = firstRow.SkillName;
             var startDateTime = DateTime.MaxValue;
             var endDateTime = DateTime.MinValue;
             var workloadDayOpenHours = new WorkloadDayOpenHoursContainer();
-            foreach (var forecastsRow in _forecasts)
+
+            string previousSkillName = null;
+            TimeSpan? previousIntervalLength = null;
+
+            foreach (var forecastsRow in forecastRows)
             {
-                if (!forecastsRow.SkillName.Equals(skillName))
+                if (!string.IsNullOrEmpty(previousSkillName) && !forecastsRow.SkillName.Equals(previousSkillName))
                 {
                     result.ErrorMessage = "There exists multiple skill names in the file.";
                     break;
                 }
-                if (forecastsRow.LocalDateTimeTo.Subtract(forecastsRow.LocalDateTimeFrom).Ticks != intervalLengthTicks)
+
+                var intervalLength = forecastsRow.LocalDateTimeTo.Subtract(forecastsRow.LocalDateTimeFrom);
+                if (previousIntervalLength.HasValue && intervalLength != previousIntervalLength)
                 {
                     result.ErrorMessage = "Intervals do not have the same length.";
                     break;
@@ -46,16 +42,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                workloadDayOpenHours.AddOpenHour(new DateOnly(forecastsRow.LocalDateTimeFrom),
-                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
-                                                        forecastsRow.LocalDateTimeTo.TimeOfDay));
+                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(midnightBreakOffset));
+                workloadDayOpenHours.AddOpenHour(day,
+                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day),
+                                                        forecastsRow.LocalDateTimeTo.Subtract(day)));
 
-                result.ForecastFileContainer.AddForecastsRow(new DateOnly(forecastsRow.LocalDateTimeFrom), forecastsRow);
+                result.ForecastFileContainer.AddForecastsRow(day, forecastsRow);
+
+                previousSkillName = forecastsRow.SkillName;
+                previousIntervalLength = intervalLength;
             }
             result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
             result.WorkloadDayOpenHours = workloadDayOpenHours;
-            result.IntervalLengthTicks = intervalLengthTicks;
-            result.SkillName = firstRow.SkillName;
+            result.IntervalLength = previousIntervalLength.GetValueOrDefault();
+            result.SkillName = previousSkillName;
             return result;
         }
     }

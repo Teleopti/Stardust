@@ -3,9 +3,9 @@ using System;
 namespace Teleopti.Interfaces.Messages.General
 {
     /// <summary>
-    /// Represents a row from csv file
+    /// Represents a forecast row
     /// </summary>
-    public interface IForecastsFileRow
+    public interface IForecastsRow
     {
         /// <summary>
         /// Skill's name
@@ -43,5 +43,9 @@ namespace Teleopti.Interfaces.Messages.General
         /// Forecasted agents
         /// </summary>
         double? Agents { get; set; }
+        /// <summary>
+        /// Shrinkage
+        /// </summary>
+        double? Shrinkage { get; set; }
     }
 }

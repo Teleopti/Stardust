@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 
         public Guid SaveForecastFile(string uploadFileName)
         {
-            return _model.SaveValidatedForecastFileInDb(uploadFileName);
+            return _model.SaveValidatedForecastFile(new ForecastFile(uploadFileName, _model.FileContent));
         }
 
         public void ValidateFile(string uploadFileName)

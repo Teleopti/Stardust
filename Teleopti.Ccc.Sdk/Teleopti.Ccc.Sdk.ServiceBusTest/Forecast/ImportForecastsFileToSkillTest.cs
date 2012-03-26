@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         private IUnitOfWork _unitOfWork;
         private IJobResult _jobResult;
         private IForecastFile _forecastFile;
+        private IForecastsAnalyzeQuery _analyzeQuery;
 
         [SetUp]
         public void Setup()
@@ -52,8 +54,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             _jobResult = _mocks.DynamicMock<IJobResult>();
             _forecastFile = _mocks.DynamicMock<IForecastFile>();
+            _analyzeQuery = _mocks.StrictMock<IForecastsAnalyzeQuery>();
             _target = new ImportForecastsFileToSkillConsumer(_unitOfWorkFactory, _skillRepository, _jobResultRepository,
-                                                             _importForecastsRepository, _contentProvider, _feedback,
+                                                             _importForecastsRepository, _contentProvider,_analyzeQuery, _feedback,
                                                              _messageBroker, _serviceBus);
         }
 
@@ -65,8 +68,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skillId = Guid.NewGuid();
             var skill = SkillFactory.CreateSkill("test skill");
             skill.TimeZone = _timeZone;
-            var commandResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
-            var row = new ForecastsFileRow
+            var queryResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
+            var row = new ForecastsRow
                           {
                               TaskTime = 179,
                               AfterTaskTime = 0,
@@ -90,12 +93,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill).Repeat.Any();
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
                 Expect.Call(_forecastFile.FileContent).Return(fileContent);
-                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(_contentProvider);
-                Expect.Call(_contentProvider.Analyze()).Return(commandResult);
-                Expect.Call(commandResult.Succeeded).Return(true).Repeat.Any();
-                Expect.Call(commandResult.Period).Return(new DateOnlyPeriod(dateTime, dateTime)).Repeat.Any();
-                Expect.Call(commandResult.WorkloadDayOpenHours).Return(openHours);
-                Expect.Call(commandResult.ForecastFileContainer).Return(forecasts);
+                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new[]{row});
+                Expect.Call(_analyzeQuery.Run(new[] {row},TimeSpan.Zero)).Return(queryResult);
+                Expect.Call(queryResult.Succeeded).Return(true).Repeat.Any();
+                Expect.Call(queryResult.Period).Return(new DateOnlyPeriod(dateTime, dateTime)).Repeat.Any();
+                Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
+                Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
                 Expect.Call(() => _feedback.SetJobResult(_jobResult, _messageBroker));
                 Expect.Call(() => _serviceBus.Send()).Constraints(
                     Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill)a[0]).Date == dateTime));
@@ -123,10 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(null);
-                Expect.Call(_messageBroker.IsInitialized).Return(true);
-                Expect.Call(() => _messageBroker.SendEventMessage(DateTime.Now, DateTime.Now, Guid.Empty, Guid.Empty,
-                                                                  null, DomainUpdateType.NotApplicable,
-                                                                  null)).IgnoreArguments().Repeat.Once();
+                Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
             }
             using (_mocks.Playback())
             {
@@ -153,11 +153,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
+                Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(null);
-                Expect.Call(_messageBroker.IsInitialized).Return(true);
-                Expect.Call(() => _messageBroker.SendEventMessage(DateTime.Now, DateTime.Now, Guid.Empty, Guid.Empty,
-                                                                  null, DomainUpdateType.NotApplicable,
-                                                                  null)).IgnoreArguments().Repeat.Once();
             }
             using (_mocks.Playback())
             {
@@ -181,21 +178,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skillId = Guid.NewGuid();
             var skill = SkillFactory.CreateSkill("test skill");
             skill.TimeZone = _timeZone;
-            var commandResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
+            var queryResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
             using (_mocks.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
+                Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
                 Expect.Call(_forecastFile.FileContent).Return(fileContent);
-                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(_contentProvider);
-                Expect.Call(_contentProvider.Analyze()).Return(commandResult);
-                Expect.Call(commandResult.Succeeded).Return(false).Repeat.Any();
-                Expect.Call(commandResult.ErrorMessage).Return("error occured.");
-                Expect.Call(_messageBroker.IsInitialized).Return(true);
-                Expect.Call(() => _messageBroker.SendEventMessage(DateTime.Now, DateTime.Now, Guid.Empty, Guid.Empty,
-                                                                  null, DomainUpdateType.NotApplicable,
-                                                                  null)).IgnoreArguments().Repeat.Once();
+                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsRow>());
+                Expect.Call(_analyzeQuery.Run(new List<IForecastsRow>(),TimeSpan.Zero)).Return(queryResult);
+                Expect.Call(queryResult.Succeeded).Return(false).Repeat.Any();
+                Expect.Call(queryResult.ErrorMessage).Return("error occured.");
             }
             using (_mocks.Playback())
             {

@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -26,10 +27,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         private readonly IGracefulDataSourceExceptionHandler _gracefulHandler;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastView));
         
-        public ImportForecastView(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler)
+        public ImportForecastView(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler, IForecastsRowExtractor rowExtractor)
         {
             InitializeComponent();
-            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository));
+            _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository, rowExtractor));
             getSelectedSkillName();
             populateWorkloadList();
             _skill = preselectedSkill;
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             statusDialog.SetJobStatusId(savedFileId);
             statusDialog.SetProgress(2);
             statusDialog.SetMessage(UploadFileName + " uploaded.");
-            statusDialog.SetProgress(1);
+            statusDialog.SetProgress(3);
             statusDialog.SetMessage("Validating...");
             var dto = new ImportForecastsFileCommandDto
                           {
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                               UploadedFileId = savedFileId,
                               TargetSkillId = _skill.Id.GetValueOrDefault()
                           };
+
             statusDialog.SetJobStatusId(executeCommand(dto));
         }
 

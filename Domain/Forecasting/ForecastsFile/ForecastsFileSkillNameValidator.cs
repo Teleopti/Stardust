@@ -1,25 +1,29 @@
+using System.Globalization;
+using Teleopti.Ccc.Domain.Forecasting.Import;
+
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public class ForecastsFileSkillNameValidator : IForecastsFileValidator
+    public class ForecastsFileSkillNameValidator : IForecastsFileValidator<string>
     {
         private const int maxSkillNameLength = 50;
 
-        public bool Validate(string value)
+        public bool TryParse(string value, out ForecastParseResult<string> result)
         {
+            result = new ForecastParseResult<string>();
             if (string.IsNullOrEmpty(value))
             {
-                ErrorMessage = "Skill name should not be empty";
+                result.ErrorMessage = "Skill name should not be empty";
                 return false;
             }
             if (value.Length > maxSkillNameLength)
             {
-                ErrorMessage = string.Format("Skill name is longer than {0} characters.",
+                result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "Skill name is longer than {0} characters.",
                                              maxSkillNameLength);
                 return false;
             }
+            result.Value = value;
+            result.Success = true;
             return true;
         }
-
-        public string ErrorMessage { get; set; }
     }
 }

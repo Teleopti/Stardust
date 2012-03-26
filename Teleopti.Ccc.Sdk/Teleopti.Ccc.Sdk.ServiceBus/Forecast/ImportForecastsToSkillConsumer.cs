@@ -53,11 +53,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     endProcessing(unitOfWork);
                     return;
                 }
-                
-                _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1}.",
-                                             skill.Name, message.Date));
-                _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Importing forecasts to skill: {0} on {1}.",
-                                                      skill.Name, message.Date));
+                var stepMessage = string.Format(CultureInfo.InvariantCulture, "Import forecasts to skill: {0} on {1}.",
+                                                 skill.Name, message.Date);
+                _feedback.Info(stepMessage);
+                _feedback.ReportProgress(1,stepMessage);
                 using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
                 {
                     try
@@ -68,8 +67,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     {
                         unitOfWork.Clear();
                         unitOfWork.Merge(jobResult);
-                        _feedback.Error("An error occurred while running import.", exception);
-                        _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
+                        stepMessage = string.Format(CultureInfo.InvariantCulture, "An error occurred while running import.");
+                        _feedback.Error(stepMessage, exception);
+                        _feedback.ReportProgress(0, stepMessage);
                         endProcessing(unitOfWork);
                         return;
                     }

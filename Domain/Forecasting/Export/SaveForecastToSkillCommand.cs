@@ -22,52 +22,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			_scenarioProvider = scenarioProvider;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public void Execute(DateOnlyPeriod period, ISkill targetSkill, ISkillStaffPeriodDictionary sourceSkillStaffPeriods)
-		{
-			var defaultScenario = _scenarioProvider.DefaultScenario(targetSkill.BusinessUnit);
-			var skillDayDictionary = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] { targetSkill }, defaultScenario);
-			foreach (var skillDayList in skillDayDictionary)
-			{
-				var newSkillDayList = _skillDayRepository.GetAllSkillDays(period, skillDayList.Value, skillDayList.Key, defaultScenario, false);
-				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(newSkillDayList,
-																				   targetSkill.WorkloadCollection.First());
-
-				foreach (var workloadDay in workloadDays)
-				{
-					var skillDay = (ISkillDay)workloadDay.Parent;
-					workloadDay.Lock();
-				    var savedPeriods = new HashSet<DateTimePeriod>();
-					foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
-					{
-						ISkillStaffPeriod skillStaffPeriod;
-
-						if (sourceSkillStaffPeriods.TryGetValue(skillDataPeriod.Period, out skillStaffPeriod))
-						{
-                            if (savedPeriods.Contains(skillDataPeriod.Period)) continue;
-						    savedPeriods.Add(skillDataPeriod.Period);
-							skillDataPeriod.ManualAgents = skillStaffPeriod.Payload.ForecastedIncomingDemand;
-							skillDataPeriod.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
-
-							var taskPeriod =
-								workloadDay.TaskPeriodList.FirstOrDefault(
-									p => p.Period.StartDateTime == skillStaffPeriod.Period.StartDateTime);
-							if (taskPeriod != null)
-							{
-								taskPeriod.Tasks = skillStaffPeriod.Payload.TaskData.Tasks;
-								taskPeriod.AverageTaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime;
-								taskPeriod.AverageAfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime;
-							}
-						}
-					}
-				}
-			}
-		}
-
-        public void Execute(DateOnly date, ISkill targetSkill, ICollection<IForecastsFileRow> forecasts, ImportForecastsMode importMode)
+        public void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<IForecastsRow> forecasts, ImportForecastsMode importMode)
         {
             var defaultScenario = _scenarioProvider.DefaultScenario(targetSkill.BusinessUnit);
-            var dateOnlyPeriod = new DateOnlyPeriod(date, date);
+            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
             var skillDayDictionary =
                 _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod,
                                                            new[] {targetSkill}, defaultScenario);
@@ -79,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                 var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(newSkillDayList,
                                                                                    targetSkill.WorkloadCollection.First());
 
-                var workloadDay = workloadDays.FirstOrDefault(d => d.CurrentDate.Equals(date));
+                var workloadDay = workloadDays.FirstOrDefault(d => d.CurrentDate.Equals(dateOnly));
                 if (workloadDay == null) break;
                 var skillDay = (ISkillDay) workloadDay.Parent;
                 workloadDay.Lock();
@@ -90,8 +48,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                         forecasts.FirstOrDefault(
                             f => new DateTimePeriod(f.UtcDateTimeFrom, f.UtcDateTimeTo).Equals(period.Period));
                     if (forecastRow == null) continue;
-                    if (importMode == ImportForecastsMode.ImportStaffing || importMode == ImportForecastsMode.ImportWorkloadAndStaffing)
+                    if (forecastRow.Agents.HasValue)
                         skillDataPeriod.ManualAgents = forecastRow.Agents;
+                    if (forecastRow.Shrinkage.HasValue)
+                        skillDataPeriod.Shrinkage = new Percent(forecastRow.Shrinkage.GetValueOrDefault());
+                    
                     if (importMode == ImportForecastsMode.ImportWorkload || importMode == ImportForecastsMode.ImportWorkloadAndStaffing)
                     {
                         var taskPeriod =
