@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IPreSchedulingStatusChecker _preSchedulingStatusChecker;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
-        private readonly ISchedulingOptions _schedulingOptions;
+        private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
         public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-            ISchedulingOptions schedulingOptions)
+            IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _workShiftCalculatorsManager = workShiftCalculatorsManager;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _fairnessAndMaxSeatCalculatorsManager = fairnessAndMaxSeatCalculatorsManager;
-            _schedulingOptions = schedulingOptions;
+            _effectiveRestrictionCreator = effectiveRestrictionCreator;
         }
 
         private IScheduleDictionary ScheduleDictionary
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart,IEffectiveRestriction effectiveRestriction, IScheduleMatrixPro matrix)
+        public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix)
         {
             _workShiftMinMaxCalculator.ResetCache();
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (!currentSchedulePeriod.IsValid)
                 return null;
 
-            if (!_shiftProjectionCacheFilter.CheckRestrictions(_schedulingOptions, effectiveRestriction, FinderResult))
+            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
+            if (!_shiftProjectionCacheFilter.CheckRestrictions(schedulingOptions, effectiveRestriction, FinderResult))
                 return null;
 
             var timeZone = _person.PermissionInformation.DefaultTimeZone();
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 return null;
             }
 
-            var result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix);
+            var result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
             if(result == null && effectiveRestriction.IsRestriction)
             {
                 _shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     loggFilterResult(UserTexts.Resources.NoWorkShiftsWereAvailable, 0, 0);
                     return null;
                 }
-                result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix);
+                result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
             }
             return result;
         }
@@ -111,7 +112,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
-            IVirtualSchedulePeriod currentSchedulePeriod)
+            IVirtualSchedulePeriod currentSchedulePeriod,
+            ISchedulingOptions schedulingOptions)
         {
 			var person = currentSchedulePeriod.Person;
             IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person, shiftProjectionCaches, dataHolders, nonBlendSkillPeriods);
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				return null;
 
 			// if we only want shifts that don't overstaff
-            if (_schedulingOptions.OnlyShiftsWhenUnderstaffed && highestShiftValue <= 0)
+            if (schedulingOptions.OnlyShiftsWhenUnderstaffed && highestShiftValue <= 0)
 			{
 				FinderResult.StoppedOnOverstaffing = true;
 				FinderResult.Successful = true;
@@ -169,14 +171,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
-            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix)
+            IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
             {
-                if (_schedulingOptions.ShiftCategory != null)
+                if (schedulingOptions.ShiftCategory != null)
                 {
                     // override the one in Effective
-                    effectiveRestriction.ShiftCategory = _schedulingOptions.ShiftCategory;
+                    effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
                 }
 
                 _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
@@ -185,12 +187,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                                                                                          person.PermissionInformation.DefaultTimeZone(),
                                                                                                          _shiftList,
                                                                                                          effectiveRestriction,
-                                                                                                         _schedulingOptions.NotAllowedShiftCategories,
+                                                                                                         schedulingOptions.NotAllowedShiftCategories,
                                                                                                           FinderResult);
                 if (_shiftList.Count == 0)
                     return null;
 
-            	MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, _schedulingOptions);
+            	MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
 
                 if (!allowedMinMax.HasValue)
                 {
@@ -203,9 +205,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 if (_shiftList.Count == 0)
                     return null;
 
-                if (_schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime && _schedulingOptions.SpecificStartAndEndTime.HasValue)
+                if (schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime && schedulingOptions.SpecificStartAndEndTime.HasValue)
                 {
-                    _shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(_schedulingOptions.SpecificStartAndEndTime.Value, _shiftList, _finderResult);
+                    _shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(schedulingOptions.SpecificStartAndEndTime.Value, _shiftList, _finderResult);
                     if (_shiftList.Count == 0)
                         return null;
                 }
@@ -218,7 +220,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var nonBlendPeriods = _personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
                 var dataholder = _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
 
-                result = FindBestMainShift(dateOnly, _shiftList, dataholder,maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod);
+                result = FindBestMainShift(dateOnly, _shiftList, dataholder,maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
             }
 
             return result;

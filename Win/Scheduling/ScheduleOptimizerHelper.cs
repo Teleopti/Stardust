@@ -240,13 +240,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ScheduleSelectedPersonDays(IList<IScheduleDay> allSelectedSchedules,
                                                 bool useOccupancyAdjustment,
-                                                ISchedulingOptions schedulingOptions,
                                                 BackgroundWorker backgroundWorker)
         {
             if (allSelectedSchedules == null) throw new ArgumentNullException("allSelectedSchedules");
-            if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
-            schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+            var options = _container.Resolve<ISchedulingOptions>();
+            options.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 
             IList<IScheduleDay> unlockedSchedules = new List<IScheduleDay>();
             foreach (var scheduleDay in allSelectedSchedules)
@@ -267,14 +266,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             sorted.Sort();
             var period = new DateOnlyPeriod(sorted.First(), sorted.Last());
 
-            OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, schedulingOptions, _container);
+            OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, period, options, _container);
 
             var stateHolder = _container.Resolve<ISchedulingResultStateHolder>();
 
             var scheduleTagSetter = _container.Resolve<IScheduleTagSetter>();
-            scheduleTagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
+            scheduleTagSetter.ChangeTagToSet(options.TagToUseOnScheduling);
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
-            var options = _container.Resolve<ISchedulingOptions>();
+            
 
             fixedStaffSchedulingService.ClearFinderResults();
             _backgroundWorker = backgroundWorker;
@@ -295,7 +294,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
-                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(options.TagToUseOnScheduling));
                 fixedStaffSchedulingService.DayOffScheduling(unlockedSchedules, schedulePartModifyAndRollbackServiceForContractDaysOff);
 
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
@@ -310,14 +309,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 }
 
-                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false);
+                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, options, useOccupancyAdjustment, false);
                 _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
                 fixedStaffSchedulingService.FinderResults.Clear();
                 
                 foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
                 {
                     int iterations = 0;
-                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions) && iterations < 10)
+                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, options) && iterations < 10)
                     {
                         iterations++;
                     }
@@ -354,7 +353,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (schedulePart == null) throw new ArgumentNullException("schedulePart");
             if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
             if (finderService == null) throw new ArgumentNullException("finderService");
-            IEffectiveRestriction effectiveRestriction = getEffectiveRestriction(schedulePart, schedulingOptions);
 
             DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
             ICccTimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
@@ -377,7 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                 IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
                                         new List<IScheduleDay> { schedulePart })[0];
 
-                                cache = finderService.FindBestShift(schedulePart, effectiveRestriction, matrix);
+                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix);
                             }
                             var result = finderService.FinderResult;
                             _allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);

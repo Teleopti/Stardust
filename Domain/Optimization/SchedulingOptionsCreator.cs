@@ -67,9 +67,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool use = optimizationPreferences.General.UsePreferences;
             double value = optimizationPreferences.General.PreferencesValue;
 
-            schedulingOptions.UsePreferencesMustHaveOnly = false; // always
             schedulingOptions.PreferencesDaysOnly = false; // always
-            schedulingOptions.UsePreferences = use && value == 1d;            
+            schedulingOptions.UsePreferences = use && value == 1d;
+
+            use = optimizationPreferences.General.UseMustHaves;
+            if(use)
+            {
+                value = optimizationPreferences.General.MustHavesValue;
+                schedulingOptions.UsePreferences = use && value == 1d; //must be set before UsePreferencesMustHaveOnly
+                schedulingOptions.UsePreferencesMustHaveOnly = use && value == 1d;
+            }
         }
 
         private static void setRotationsInSchedulingOptions(IOptimizationPreferences optimizationPreferences,
