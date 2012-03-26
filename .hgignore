@@ -55,3 +55,4 @@ Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.C
 *.ncov.bkp
 Teleopti.Ccc.Rta/Teleopti.Ccc.Rta.WebService/RtaWebService.log.1
 PBI 18157.sln
+Database/Tools/Restore/output
