@@ -505,6 +505,7 @@
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRestrictionsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllTagsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockTagCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\WriteProtectionRemoveCommandTest.cs" />
     <Compile Include="Scheduler\GridLockRemoverForDeleteTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsDayOffCommandTest.cs" />
