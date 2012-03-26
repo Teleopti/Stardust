@@ -707,11 +707,11 @@
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryView.cs">
+    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryView.Designer.cs">
-      <DependentUpon>JobHistoryView.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.Designer.cs">
+      <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPresenter.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModel.cs" />
@@ -2492,8 +2492,8 @@
     <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryView.resx">
-      <DependentUpon>JobHistoryView.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.resx">
+      <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>

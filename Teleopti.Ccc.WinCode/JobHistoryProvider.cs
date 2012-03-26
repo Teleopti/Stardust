@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.LoadHistoryWithPaging(pagingDetail, JobCategory.QuickForecast,
-																		   JobCategory.MultisiteExport, JobCategory.ForecastsImport);
+																		   JobCategory.MultisiteExport);
 				return
 					jobResult.Select(
 						j =>
