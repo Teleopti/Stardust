@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleRepository = scheduleRepository;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly date, IScenario scenario)
+		public IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly scheduleDate, IScenario scenario)
 		{
-			var dateTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dateTime = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, 0, 0, 0, DateTimeKind.Utc);
 
 			if (person == null)
 				throw new ArgumentNullException("person");
 
-			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
+			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(scheduleDate, scheduleDate)).SingleOrDefault();
 			if (personPeriod == null)
 				throw new InvalidOperationException("No person period defined");
 
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}),
 			                                                                     new ScheduleDictionaryLoadOptions(true, false),
 			                                                                     new DateTimePeriod(dateTime, dateTime), scenario);
-			var scheduleDay = scheduleDictionary[person].ScheduledDay(date);
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(scheduleDate);
 			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
 
-			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
+			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, scheduleDate, effectiveRestriction);
 		}
 	}
 }
