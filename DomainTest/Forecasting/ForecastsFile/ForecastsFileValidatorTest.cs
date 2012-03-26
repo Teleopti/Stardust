@@ -1,120 +1,130 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.ForecastsFile
 {
     [TestFixture]
     public class ForecastsFileValidatorTest
     {
-        private IForecastsFileValidator _target;
-
         [Test]
         public void ShouldValidateValidSkillName()
         {
-            _target = new ForecastsFileSkillNameValidator();
+            var target = new ForecastsFileSkillNameValidator();
 
-            var result = _target.Validate("Insurance");
+            ForecastParseResult<string> parseResult;
+            var result = target.TryParse("Insurance", out parseResult);
 
             Assert.That(result, Is.True);
-            Assert.That(_target.ErrorMessage, Is.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Null);
         }
 
         [Test]
         public void ShouldValidateInvalidSkillName()
         {
-            _target = new ForecastsFileSkillNameValidator();
+            var target = new ForecastsFileSkillNameValidator();
 
-            var result = _target.Validate("");
+            ForecastParseResult<string> parseResult;
+            var result = target.TryParse("", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
         }
 
         [Test]
         public void ShouldValidateInvalidSkillNameExceedsMaxLength()
         {
-            _target = new ForecastsFileSkillNameValidator();
+            var target = new ForecastsFileSkillNameValidator();
 
-            var result = _target.Validate("InsuranceInsuranceInsuranceInsuranceInsuranceInsurance");
+            ForecastParseResult<string> parseResult;
+            var result = target.TryParse("InsuranceInsuranceInsuranceInsuranceInsuranceInsurance", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
         }
 
         [Test]
         public void ShouldValidateValidDateTime()
         {
-            _target = new ForecastsFileDateTimeValidator();
+            var target = new ForecastsFileDateTimeValidator();
 
-            var result = _target.Validate("20110907 18:15");
+            ForecastParseResult<DateTime> parseResult;
+            var result = target.TryParse("20110907 18:15", out parseResult);
 
             Assert.That(result, Is.True);
-            Assert.That(_target.ErrorMessage, Is.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Null);
         }
-        
+
         [Test]
         public void ShouldValidateInvalidDateTime()
         {
-            _target = new ForecastsFileDateTimeValidator();
+            var target = new ForecastsFileDateTimeValidator();
 
-            var result = _target.Validate("2011090718:15");
-
-            Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
-
-            result = _target.Validate("20110907 25:15");
+            ForecastParseResult<DateTime> parseResult;
+            var result = target.TryParse("2011090718:15", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
 
-            result = _target.Validate("110907 25:15");
+            result = target.TryParse("20110907 25:15", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
+
+            result = target.TryParse("110907 25:15", out parseResult);
+
+            Assert.That(result, Is.False);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
         }
 
         [Test]
         public void ShouldValidateValidIntegerValue()
         {
-            _target = new ForecastsFileIntegerValueValidator();
+            var target = new ForecastsFileIntegerValueValidator();
 
-            var result = _target.Validate("1000");
+            ForecastParseResult<int> parseResult;
+            var result = target.TryParse("1000", out parseResult);
 
             Assert.That(result, Is.True);
-            Assert.That(_target.ErrorMessage, Is.Null);
-        } 
-        
+            Assert.That(parseResult.ErrorMessage, Is.Null);
+        }
+
         [Test]
         public void ShouldValidateInvalidIntegerValue()
         {
-            _target = new ForecastsFileIntegerValueValidator();
+            var target = new ForecastsFileIntegerValueValidator();
 
-            var result = _target.Validate("1000.1");
+            ForecastParseResult<int> parseResult;
+            var result = target.TryParse("1000.1", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
         }
 
         [Test]
         public void ShouldValidateValidDoubleValue()
         {
-            _target = new ForecastsFileDoubleValueValidator();
+            var target = new ForecastsFileDoubleValueValidator();
 
-            var result = _target.Validate("1000.1");
+            ForecastParseResult<double> parseResult;
+            var result = target.TryParse("1000.1", out parseResult);
 
             Assert.That(result, Is.True);
-            Assert.That(_target.ErrorMessage, Is.Null);
-        } 
-        
+            Assert.That(parseResult.ErrorMessage, Is.Null);
+        }
+
         [Test]
         public void ShouldValidateInvalidDoubleValue()
         {
-            _target = new ForecastsFileDoubleValueValidator();
+            var target = new ForecastsFileDoubleValueValidator();
 
-            var result = _target.Validate("100,1");
+            ForecastParseResult<double> parseResult;
+            var result = target.TryParse("100,1", out parseResult);
 
             Assert.That(result, Is.False);
-            Assert.That(_target.ErrorMessage, Is.Not.Null);
+            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
         }
+
     }
 }

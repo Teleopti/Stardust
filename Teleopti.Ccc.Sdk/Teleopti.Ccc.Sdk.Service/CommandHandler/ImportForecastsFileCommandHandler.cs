@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         public CommandResultDto Handle(ImportForecastsFileCommandDto command)
         {
             Guid jobResultId;
+            var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now)),
-                                              ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
+                                              person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 jobResultId = jobResult.Id.GetValueOrDefault();
                 unitOfWork.PersistAll();
@@ -47,28 +48,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 JobId = jobResultId,
                 UploadedFileId = command.UploadedFileId,
                 TargetSkillId = command.TargetSkillId,
-                OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(Guid.Empty),
+                OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
                 BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
                 Datasource = identity.DataSource.Application.Name,
                 Timestamp = DateTime.UtcNow,
-                ImportMode = getImportForecastMode(command.ImportForecastsMode)
+                ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
             _busSender.NotifyServiceBus(message);
             return new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
-        }
-
-        private static ImportForecastsMode getImportForecastMode(ImportForecastsOptionsDto optionsDto)
-        {
-            switch (optionsDto)
-            {
-                case ImportForecastsOptionsDto.ImportWorkload:
-                    return ImportForecastsMode.ImportWorkload;
-                case ImportForecastsOptionsDto.ImportStaffing:
-                    return ImportForecastsMode.ImportStaffing;
-                case ImportForecastsOptionsDto.ImportWorkloadAndStaffing:
-                    return ImportForecastsMode.ImportWorkloadAndStaffing;
-            }
-            return ImportForecastsMode.ImportWorkloadAndStaffing;
         }
     }
 }

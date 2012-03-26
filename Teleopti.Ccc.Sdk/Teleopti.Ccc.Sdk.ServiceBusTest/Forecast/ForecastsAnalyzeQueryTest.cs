@@ -18,20 +18,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         public void Setup()
         {
             _forecastsRows = setUpForecasts();
-            _target = new ForecastsAnalyzeQuery(_forecastsRows);
+            _target = new ForecastsAnalyzeQuery();
         }
 
         [Test]
         public void ShouldAnalyzeForecasts()
         {
             var date = new DateOnly(2012, 3, 1);
-            var result = _target.Run();
+            var result = _target.Run(_forecastsRows);
 
             Assert.That(result.ErrorMessage, Is.Null);
             Assert.That(result.Succeeded, Is.True);
             Assert.That(result.SkillName, Is.EqualTo("Insurance"));
             Assert.That(result.Period, Is.EqualTo(new DateOnlyPeriod(date, date)));
-            Assert.That(result.IntervalLengthTicks, Is.EqualTo(9000000000));
+            Assert.That(result.IntervalLength, Is.EqualTo(TimeSpan.FromTicks(9000000000)));
             Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date),Is.EqualTo(new TimePeriod(2, 0, 2, 30)));
             Assert.That(result.ForecastFileContainer.GetForecastsRows(date), Is.EqualTo(_forecastsRows));
         }

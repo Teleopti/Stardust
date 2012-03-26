@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             _skill = SkillFactory.CreateSkillWithWorkloadAndSources();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _importForecastsRepository = _mocks.StrictMock<IImportForecastsRepository>();
-            _target = new ImportForecastModel(_skill, _unitOfWorkFactory, _importForecastsRepository);
+            _target = new ImportForecastModel(_skill, _unitOfWorkFactory, _importForecastsRepository,new ForecastsRowExtractor());
         }
 
         [Test]

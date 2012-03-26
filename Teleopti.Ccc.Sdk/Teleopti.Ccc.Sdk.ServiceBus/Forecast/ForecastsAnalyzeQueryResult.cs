@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         string ErrorMessage { get; set; }
         bool Succeeded { get; set; }
         string SkillName { get; set; }
-        long IntervalLengthTicks { get; set; }
+        TimeSpan IntervalLength { get; set; }
         DateOnlyPeriod Period { get; set; }
         IForecastFileContainer ForecastFileContainer { get; set; }
         IWorkloadDayOpenHoursContainer WorkloadDayOpenHours { get; set; }
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         public string ErrorMessage { get; set; }
         public bool Succeeded { get { return string.IsNullOrEmpty(ErrorMessage); } set{} }
         public string SkillName { get; set; }
-        public long IntervalLengthTicks { get; set; }
+        public TimeSpan IntervalLength { get; set; }
         public DateOnlyPeriod Period { get; set; }
         public IForecastFileContainer ForecastFileContainer { get; set; }
         public IWorkloadDayOpenHoursContainer WorkloadDayOpenHours { get; set; }
