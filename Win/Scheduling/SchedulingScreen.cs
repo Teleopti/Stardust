@@ -4610,8 +4610,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             else
                             {
                                 _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, preferences.SchedulingOptions, _backgroundWorkerScheduling);
-                                                                                    preferences.SchedulingOptions,
-                                                                                    _backgroundWorkerScheduling);
+                                                                                  
                             }
 
                             break;
