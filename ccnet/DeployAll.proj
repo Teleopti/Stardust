@@ -398,6 +398,7 @@
 
 
 	<Target Name="GetVersion">
+		<exec command="hg update -r &quot;$(branch)&quot;" />
 		<Message Text="Set DeployPath: [$(DeployPath)] ..." Importance="high"/>
 		<ReadLinesFromFile File="@(VersionFile)" >
 			<Output TaskParameter="Lines"
