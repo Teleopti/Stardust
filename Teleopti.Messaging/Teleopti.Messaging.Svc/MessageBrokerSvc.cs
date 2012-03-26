@@ -60,7 +60,10 @@ namespace Teleopti.Messaging.Svc
             RemotingConfiguration.RegisterWellKnownServiceType(typeof(BrokerService), "TeleoptiBrokerService", WellKnownObjectMode.Singleton);
             _brokerService = (BrokerService)Activator.GetObject(typeof(BrokerService), String.Format(CultureInfo.InvariantCulture, "tcp://{0}:{1}/{2}", _server, _port, Name));
             InitialisePublisher(_connectionString);
-            _brokerService.SendEventMessage(DateTime.Now, DateTime.Now, 1, Process.GetCurrentProcess().Id, Guid.Empty, 0, false, Guid.NewGuid(), typeof(IStartedService).AssemblyQualifiedName, DomainUpdateType.Insert, Environment.UserName);
+        	_brokerService.SendEventMessage(DateTime.Now, DateTime.Now, 1, Process.GetCurrentProcess().Id, Guid.Empty, 0,
+        	                                false, Guid.NewGuid(), typeof (IStartedService).AssemblyQualifiedName,
+        	                                Guid.NewGuid(), typeof (IStartedService).AssemblyQualifiedName,
+        	                                DomainUpdateType.Insert, Environment.UserName);
         }
 
         /// <summary>

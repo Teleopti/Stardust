@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 
 namespace Teleopti.Support.Security
@@ -13,6 +14,8 @@ namespace Teleopti.Support.Security
         private bool _useIntegratedSecurity;
         private bool _forecasterMode;
         private bool _personUpdateMode;
+        private bool _passwordEncryptionMode;
+        private bool _licenseStatusMode;
 
         public CommandLineArgument(string[] argumentCollection)
         {
@@ -28,6 +31,16 @@ namespace Teleopti.Support.Security
         public bool ForecasterMode
         {
             get { return _forecasterMode; }
+        }
+
+        public bool PasswordEncryptionMode
+        {
+            get { return _passwordEncryptionMode; }
+        }
+
+        public bool LicenseStatusMode
+        {
+            get { return _licenseStatusMode; }
         }
 
         public string DestinationServer
@@ -105,6 +118,12 @@ namespace Teleopti.Support.Security
                         break;
                     case "-PU":
                         _personUpdateMode = true;
+                        break;
+                    case "-PE":
+                        _passwordEncryptionMode = true;
+                        break;
+                    case "-LS":
+                        _licenseStatusMode = true;
                         break;
                 }
             }

@@ -246,7 +246,7 @@ namespace Teleopti.Messaging.Composites
                 try
                 { 
                     _messageBroker.ServiceGuard(_brokerService);
-                    filter = _brokerService.RegisterFilter(_messageBroker.SubscriberId, domainObjectId, domainObjectType.AssemblyQualifiedName, startDate, endDate, Environment.UserName);
+                    filter = _brokerService.RegisterFilter(_messageBroker.SubscriberId, parentObjectId, parentObjectType.AssemblyQualifiedName, domainObjectId, domainObjectType.AssemblyQualifiedName, startDate, endDate, Environment.UserName);
                 }
                 catch (Exception exception)
                 {

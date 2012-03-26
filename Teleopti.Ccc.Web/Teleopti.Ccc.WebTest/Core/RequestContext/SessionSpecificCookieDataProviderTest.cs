@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpContextBase httpContext;
 		private INow now;
 		private DateTime fictiveNow;
-
 		private SessionSpecificCookieDataProvider target;
 		private ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private HttpCookieCollection _cookieCollection;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now.Stub(x => x.Time).Return(fictiveNow);
 
 			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
-			target = new SessionSpecificCookieDataProvider(httpContext, _sessionSpecificCookieDataProviderSettings, now);
+			target = new SessionSpecificCookieDataProvider(httpContext, _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer());
 		}
 
 		[Test]

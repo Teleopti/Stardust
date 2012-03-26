@@ -5,16 +5,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-
-    public interface IAgentDayScheduleTag : IExportToAnotherScenario
-    {
-        IScheduleTag ScheduleTag { get; set; }
-
-        DateOnly TagDate { get;}
-
-        IAgentDayScheduleTag NoneEntityClone();
-    }
-
     public class AgentDayScheduleTag : AggregateRootWithBusinessUnit, IAgentDayScheduleTag
 
     {

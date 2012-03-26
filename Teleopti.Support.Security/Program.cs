@@ -11,19 +11,29 @@
         {
             var commandLineArgument = new CommandLineArgument(args);
 
-            if (commandLineArgument.ForecasterMode || commandLineArgument.PersonUpdateMode)
+            if (!commandLineArgument.ForecasterMode &&
+                !commandLineArgument.PersonUpdateMode &&
+                !commandLineArgument.PasswordEncryptionMode &&
+                !commandLineArgument.LicenseStatusMode)
             {
-                if (commandLineArgument.ForecasterMode)
-                    forecasterDateAdjustment.Execute(commandLineArgument);
-
-                if (commandLineArgument.PersonUpdateMode)
-                    PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
-            }
-            else
-            {
+                forecasterDateAdjustment.Execute(commandLineArgument);
                 passwordEncryption.Execute(commandLineArgument);
+                PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+                LicenseStatusChecker.Execute(commandLineArgument);
+                return;
             }
-            LicenseStatusChecker.Execute(commandLineArgument);
+
+            if (commandLineArgument.ForecasterMode)
+                forecasterDateAdjustment.Execute(commandLineArgument);
+
+            if (commandLineArgument.PersonUpdateMode)
+                PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+
+            if (commandLineArgument.PasswordEncryptionMode)
+                passwordEncryption.Execute(commandLineArgument);
+
+            if (commandLineArgument.LicenseStatusMode)
+                LicenseStatusChecker.Execute(commandLineArgument);
         }
     }
 }

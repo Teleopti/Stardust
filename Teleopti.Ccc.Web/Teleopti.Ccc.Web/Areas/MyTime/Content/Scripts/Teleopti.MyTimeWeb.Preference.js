@@ -86,7 +86,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				data: data,
 				success: function(data, textStatus, jqXHR) {
 					var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
-					preference.html(data.PreferenceRestriction);
+				preference.text(data.PreferenceRestriction || "");
 					var cell = $('li[data-mytime-date="' + data.Date + '"]');
 					cell.removeClassStartingWith('color_');
 					cell.addClass(data.StyleClassName);
