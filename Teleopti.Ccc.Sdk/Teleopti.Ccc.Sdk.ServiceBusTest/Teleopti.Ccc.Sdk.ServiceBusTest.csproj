@@ -168,8 +168,6 @@
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
-    <Compile Include="Forecast\OpenAndSplitChildSkillsResolveTest.cs" />
-    <Compile Include="Forecast\OpenAndSplitChildSkillsTest.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTest.cs" />

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsFileContentProvider
     {
-        ICollection<IForecastsFileRow> LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone);
+        ICollection<IForecastsRow> LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone);
     }
 
     public class ForecastsFileContentProvider : IForecastsFileContentProvider
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             _rowExtractor = rowExtractor;
         }
 
-        public ICollection<IForecastsFileRow> LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
+        public ICollection<IForecastsRow> LoadContent(byte[] fileContent, ICccTimeZoneInfo timeZone)
         {
             return Encoding.UTF8.GetString(fileContent).Split(new[] {Environment.NewLine},
                                                            StringSplitOptions.RemoveEmptyEntries).Select(

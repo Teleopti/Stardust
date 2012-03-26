@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date), Is.EqualTo(new TimePeriod(6, 0, 26, 0)));
         }
 
-        private static IEnumerable<IForecastsFileRow> setUpForecasts()
+        private static IEnumerable<IForecastsRow> setUpForecasts()
         {
-            var row1 = new ForecastsFileRow
+            var row1 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 UtcDateTimeFrom = new DateTime(2012, 3, 1, 1, 0, 0, DateTimeKind.Utc),
                 UtcDateTimeTo = new DateTime(2012, 3, 1, 1, 15, 0, DateTimeKind.Utc)
             };
-            var row2 = new ForecastsFileRow
+            var row2 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,
@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             return new[] {row1, row2};
         } 
         
-        private IEnumerable<IForecastsFileRow> setUpForecastsWithMidnightBreak()
+        private static IEnumerable<IForecastsRow> setUpForecastsWithMidnightBreak()
         {
-            var row1 = new ForecastsFileRow
+            var row1 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 UtcDateTimeFrom = new DateTime(2012, 3, 1, 6, 0, 0, DateTimeKind.Utc),
                 UtcDateTimeTo = new DateTime(2012, 3, 1, 6, 15, 0, DateTimeKind.Utc)
             };
-            var row2 = new ForecastsFileRow
+            var row2 = new ForecastsRow
             {
                 TaskTime = 170,
                 AfterTaskTime = 0,

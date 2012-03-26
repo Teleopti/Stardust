@@ -1,6 +1,6 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SaveForecastToSkillCommand>().As<ISaveForecastToSkillCommand>();
 			builder.RegisterType<MultisiteForecastToSkillCommand>().As<IMultisiteForecastToSkillCommand>();
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
+            builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
+            builder.RegisterType<SendImportForecastBusMessage>().As<ISendBusMessage>();
 		}
     }
 }

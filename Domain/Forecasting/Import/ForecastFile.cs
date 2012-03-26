@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 
         protected ForecastFile(){}
 
-        public ForecastFile(string filename , byte[] fileContent)
+        public ForecastFile(string fileName , byte[] fileContent)
         {
             _fileContent = fileContent;
-            _fileName = filename;
+            _fileName = fileName;
         }
 
         public virtual byte[] FileContent

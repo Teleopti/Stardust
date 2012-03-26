@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
                               UploadedFileId = savedFileId,
                               TargetSkillId = _skill.Id.GetValueOrDefault()
                           };
+
             statusDialog.SetJobStatusId(executeCommand(dto));
         }
 

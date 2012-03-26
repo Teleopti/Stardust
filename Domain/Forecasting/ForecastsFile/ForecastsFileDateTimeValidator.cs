@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
                 result.Success = true;
                 return true;
             }
-            result.ErrorMessage = string.Format("Date time format of {0} is wrong", value);
+            result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "Date time format of {0} is wrong", value);
             return false;
         }
     }

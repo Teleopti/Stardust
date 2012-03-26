@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
     [TestFixture]
     public class ForecastsFileRowTest
     {
-        private ForecastsFileRow _row;
+        private ForecastsRow _row;
 
         [Test]
         public void ShouldSetValues()
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             var localDateTimeFrom = new DateTime(2011, 1, 1, 8, 15, 0);
             var localDateTimeTo = new DateTime(2011, 1, 1, 8, 30, 0);
             var skillName = "Insurance";
-            _row = new ForecastsFileRow
+            _row = new ForecastsRow
                        {
                            TaskTime = taskTime,
                            AfterTaskTime = afterTaskTime,

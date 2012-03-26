@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skill = SkillFactory.CreateSkill("test skill");
             skill.TimeZone = _timeZone;
             var queryResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
-            var row = new ForecastsFileRow
+            var row = new ForecastsRow
                           {
                               TaskTime = 179,
                               AfterTaskTime = 0,
@@ -186,8 +186,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
                 Expect.Call(_forecastFile.FileContent).Return(fileContent);
-                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsFileRow>());
-                Expect.Call(_analyzeQuery.Run(new List<IForecastsFileRow>(),TimeSpan.Zero)).Return(queryResult);
+                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsRow>());
+                Expect.Call(_analyzeQuery.Run(new List<IForecastsRow>(),TimeSpan.Zero)).Return(queryResult);
                 Expect.Call(queryResult.Succeeded).Return(false).Repeat.Any();
                 Expect.Call(queryResult.ErrorMessage).Return("error occured.");
             }

@@ -7,12 +7,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows, TimeSpan midnightBreakOffSet);
+        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset);
     }
 
     public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
-        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows, TimeSpan midnightBreakOffSet)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset)
         {
             var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
             var startDateTime = DateTime.MaxValue;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(midnightBreakOffSet));
+                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(midnightBreakOffset));
                 workloadDayOpenHours.AddOpenHour(day,
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day),
                                                         forecastsRow.LocalDateTimeTo.Subtract(day)));

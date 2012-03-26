@@ -70,9 +70,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             const string file = "Insurance,20120301 12:45,20120301 13:00,17,179,0,4.05";
             var fileContent = Encoding.UTF8.GetBytes(file);
-            var streamReader = new StreamReader(new MemoryStream(fileContent));
-
-            _target.ValidateFile(streamReader);
+            using (var stream = new MemoryStream(fileContent))
+            {
+                var streamReader = new StreamReader(stream);
+                _target.ValidateFile(streamReader);
+            }
             Assert.That(_target.FileContent, Is.EqualTo(fileContent));
         }
 
@@ -82,8 +84,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             const string file = "Insurance,20120301 12:45,20120301 13:00,17,179";
             var fileContent = Encoding.UTF8.GetBytes(file);
-            var streamReader = new StreamReader(new MemoryStream(fileContent));
-            _target.ValidateFile(streamReader);
+            using (var stream = new MemoryStream(fileContent))
+            {
+                var streamReader = new StreamReader(stream);
+                _target.ValidateFile(streamReader);
+            }
         }
 
         [Test]
@@ -92,8 +97,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             const string file = "";
             var fileContent = Encoding.UTF8.GetBytes(file);
-            var streamReader = new StreamReader(new MemoryStream(fileContent));
-            _target.ValidateFile(streamReader);
+            using (var stream = new MemoryStream(fileContent))
+            {
+                var streamReader = new StreamReader(stream);
+                _target.ValidateFile(streamReader);
+            }
         }
     }
 }

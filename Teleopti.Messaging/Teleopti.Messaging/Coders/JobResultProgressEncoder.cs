@@ -49,7 +49,7 @@ namespace Teleopti.Messaging.Coders
             sb.Append(Consts.Separator);
             sb.Append(message);
             sb.Append(Consts.Separator);
-            sb.Append(Convert.ToString(item.TotalPercentage));
+            sb.Append(item.TotalPercentage.ToString(CultureInfo.InvariantCulture));
 
             var encodedList = new List<byte>();
             encodedList.AddRange(_encoding.GetBytes(sb.ToString()));

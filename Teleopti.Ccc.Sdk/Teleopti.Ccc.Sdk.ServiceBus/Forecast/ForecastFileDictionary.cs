@@ -6,18 +6,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastFileContainer
     {
-        void AddForecastsRow(DateOnly dateOnly, IForecastsFileRow forecasts);
-        ICollection<IForecastsFileRow> GetForecastsRows(DateOnly dateOnly);
+        void AddForecastsRow(DateOnly dateOnly, IForecastsRow forecasts);
+        ICollection<IForecastsRow> GetForecastsRows(DateOnly dateOnly);
     }
 
     public class ForecastFileContainer : IForecastFileContainer
     {
-        private readonly IDictionary<DateOnly, ICollection<IForecastsFileRow>> _forecastedFileDictionary =
-            new Dictionary<DateOnly, ICollection<IForecastsFileRow>>();
+        private readonly IDictionary<DateOnly, ICollection<IForecastsRow>> _forecastedFileDictionary =
+            new Dictionary<DateOnly, ICollection<IForecastsRow>>();
 
-        public void AddForecastsRow(DateOnly dateOnly, IForecastsFileRow forecasts)
+        public void AddForecastsRow(DateOnly dateOnly, IForecastsRow forecasts)
         {
-            ICollection<IForecastsFileRow> forecastsRows;
+            ICollection<IForecastsRow> forecastsRows;
             if (_forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows))
             {
                 if (forecastsRows.Contains(forecasts))
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 forecastsRows.Add(forecasts);
             }
             else
-                _forecastedFileDictionary.Add(dateOnly, new List<IForecastsFileRow> { forecasts });
+                _forecastedFileDictionary.Add(dateOnly, new List<IForecastsRow> { forecasts });
         }
 
-        public ICollection<IForecastsFileRow> GetForecastsRows(DateOnly dateOnly)
+        public ICollection<IForecastsRow> GetForecastsRows(DateOnly dateOnly)
         {
-            ICollection<IForecastsFileRow> forecastsRows;
+            ICollection<IForecastsRow> forecastsRows;
             _forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows);
             return forecastsRows;
         }

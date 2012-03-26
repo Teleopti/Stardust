@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var jobId = Guid.NewGuid();
             var skillId = Guid.NewGuid();
             var skill = SkillFactory.CreateSkill("test skill");
-             var row = new ForecastsFileRow
+             var row = new ForecastsRow
                           {
                               TaskTime = 179,
                               AfterTaskTime = 0,

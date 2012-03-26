@@ -238,11 +238,11 @@
     <Compile Include="Forecast\ForecastsAnalyzeQueryResult.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumer.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillConsumer.cs" />
-    <Compile Include="Forecast\OpenAndSplitChildSkillsConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillConsumer.cs" />
     <Compile Include="Forecast\JobResultFeedback.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillConsumer.cs" />
+    <Compile Include="Forecast\SendImportForecastBusMessage.cs" />
     <Compile Include="Forecast\WorkloadDayOpenHoursDictionary.cs" />
     <Compile Include="ImportForecastContainerInstaller.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
             }
             if (value.Length > maxSkillNameLength)
             {
-                result.ErrorMessage = string.Format("Skill name is longer than {0} characters.",
+                result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "Skill name is longer than {0} characters.",
                                              maxSkillNameLength);
                 return false;
             }

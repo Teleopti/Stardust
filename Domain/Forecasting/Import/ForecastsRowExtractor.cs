@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Interfaces.Domain;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsRowExtractor
     {
-        IForecastsFileRow Extract(string rowString, ICccTimeZoneInfo timeZone);
+        IForecastsRow Extract(string value, ICccTimeZoneInfo timeZone);
     }
 
     public class ForecastsRowExtractor : IForecastsRowExtractor
@@ -19,14 +20,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
         private readonly ForecastsFileIntegerValueValidator _integerValidator = new ForecastsFileIntegerValueValidator();
         private readonly ForecastsFileDoubleValueValidator _doubleValidator = new ForecastsFileDoubleValueValidator();
 
-        public IForecastsFileRow Extract(string rowString, ICccTimeZoneInfo timeZone)
+        public IForecastsRow Extract(string rowString, ICccTimeZoneInfo timeZone)
         {
             var content = rowString.Split(',');
             if (!_columnsInRowValidSpecification.IsSatisfiedBy(content))
             {
                 throw new ValidationException("There are more or less columns than expected.");
             }
-            var newRow = new ForecastsFileRow();
+            var newRow = new ForecastsRow();
 
             ForecastParseResult<string> stringResult;
             if (!_skillNameValidator.TryParse(content[0], out stringResult))
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             newRow.LocalDateTimeFrom = dateTimeResult.Value;
             if (timeZone.IsInvalidTime(newRow.LocalDateTimeFrom))
             {
-                throw new ValidationException(string.Format("{0} is invalid time.", newRow.LocalDateTimeFrom));
+                throw new ValidationException(string.Format(CultureInfo.InvariantCulture, "{0} is invalid time.", newRow.LocalDateTimeFrom));
             }
             
             if (!_dateTimeValidator.TryParse(content[2], out dateTimeResult))
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             newRow.LocalDateTimeTo = dateTimeResult.Value;
             if (timeZone.IsInvalidTime(newRow.LocalDateTimeTo))
             {
-                throw new ValidationException(string.Format("{0} is invalid time.", newRow.LocalDateTimeTo));
+                throw new ValidationException(string.Format(CultureInfo.InvariantCulture, "{0} is invalid time.", newRow.LocalDateTimeTo));
             }
 
             newRow.UtcDateTimeFrom = timeZone.ConvertTimeToUtc(newRow.LocalDateTimeFrom, timeZone);

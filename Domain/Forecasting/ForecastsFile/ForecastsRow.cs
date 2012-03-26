@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public class ForecastsFileRow : IForecastsFileRow
+    public class ForecastsRow : IForecastsRow
     {
         public string SkillName { get; set; }
         public DateTime LocalDateTimeFrom { get; set; }
@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public double TaskTime { get; set; }
         public double AfterTaskTime { get; set; }
         public double? Agents { get; set; }
+        public double? Shrinkage { get; set; }
     }
 }

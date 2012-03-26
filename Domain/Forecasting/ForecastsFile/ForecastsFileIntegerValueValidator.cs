@@ -1,3 +1,4 @@
+using System.Globalization;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
                 result.Value = parseResult;
                 return true;
             }
-            result.ErrorMessage = string.Format("{0} should be an integer.", value);
+            result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "{0} should be an integer.", value);
             return false;
         }
     }

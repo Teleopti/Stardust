@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var openHours = new WorkloadDayOpenHoursContainer();
             openHours.AddOpenHour(dateTime, new TimePeriod(12, 0, 12, 15));
             var forecasts = new ForecastFileContainer();
-            forecasts.AddForecastsRow(dateTime, new ForecastsFileRow
+            forecasts.AddForecastsRow(dateTime, new ForecastsRow
                                         {
                                             TaskTime = 170,
                                             AfterTaskTime = 0,
