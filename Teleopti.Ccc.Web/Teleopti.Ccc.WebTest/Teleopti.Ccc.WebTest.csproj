@@ -88,7 +88,6 @@
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProviderTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\SkillProviderTest.cs" />
-    <Compile Include="Areas\MobileReports\Core\Report\TestDataWebReportRepositoryTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\DefinedReportTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportDataServiceTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Report\ReportRequestValidatorResultTest.cs" />
