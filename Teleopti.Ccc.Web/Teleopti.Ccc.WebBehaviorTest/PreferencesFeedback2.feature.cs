@@ -209,23 +209,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 56
  testRunner.Given("I am an agent");
 #line 57
- testRunner.And("I have a shift bag");
+ testRunner.And("I have a shift bag with start times 8 to 9 and end times 12 to 22");
 #line 58
- testRunner.And("I have a preference with work time limitation between 7 and 9 hours");
+ testRunner.And("I have a preference with work time limitation between 4 and 5");
 #line 59
  testRunner.When("I view preferences");
 #line 60
- testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
-                    "rence");
-#line 61
- testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
-                    "nce");
-#line 62
- testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
-                    "eference");
-#line 63
- testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
-                    "eference");
+ testRunner.Then("I should see the contract time boundry 4 to 5");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -235,26 +225,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithLunchStartTimeLimitationPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with lunch start time limitation preference", ((string[])(null)));
-#line 65
+#line 62
 this.ScenarioSetup(scenarioInfo);
-#line 66
+#line 63
  testRunner.Given("I am an agent");
-#line 67
+#line 64
  testRunner.And("I have a shift bag");
-#line 68
+#line 65
  testRunner.And("I have a preference with lunch start time limitation between 11:00 and 12:00");
-#line 69
+#line 66
  testRunner.When("I view preferences");
-#line 70
+#line 67
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 71
+#line 68
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 72
+#line 69
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 73
+#line 70
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -266,26 +256,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithLunchEndTimeLimitationPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with lunch end time limitation preference", ((string[])(null)));
-#line 75
+#line 72
 this.ScenarioSetup(scenarioInfo);
-#line 76
+#line 73
  testRunner.Given("I am an agent");
-#line 77
+#line 74
  testRunner.And("I have a shift bag");
-#line 78
+#line 75
  testRunner.And("I have a preference with lunch end time limitation between 12:00 and 13:00");
-#line 79
+#line 76
  testRunner.When("I view preferences");
-#line 80
+#line 77
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 81
+#line 78
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 82
+#line 79
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 83
+#line 80
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -297,26 +287,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithLunchLengthLimitationPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with lunch length limitation preference", ((string[])(null)));
-#line 85
+#line 82
 this.ScenarioSetup(scenarioInfo);
-#line 86
+#line 83
  testRunner.Given("I am an agent");
-#line 87
+#line 84
  testRunner.And("I have a shift bag");
-#line 88
+#line 85
  testRunner.And("I have a preference with lunch length limitation between 1 and 2 hours");
-#line 89
+#line 86
  testRunner.When("I view preferences");
-#line 90
+#line 87
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 91
+#line 88
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 92
+#line 89
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 93
+#line 90
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -328,26 +318,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with availability", ((string[])(null)));
-#line 98
+#line 95
 this.ScenarioSetup(scenarioInfo);
-#line 99
+#line 96
  testRunner.Given("I am an agent");
-#line 100
+#line 97
  testRunner.And("I have a shift bag");
-#line 101
+#line 98
  testRunner.And("I have availability");
-#line 102
+#line 99
  testRunner.When("I view preferences");
-#line 103
+#line 100
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts that match the ava" +
                     "ilability");
-#line 104
+#line 101
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts that match the avail" +
                     "ability");
-#line 105
+#line 102
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts that match the " +
                     "availability");
-#line 106
+#line 103
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts that match the " +
                     "availability");
 #line hidden
@@ -359,26 +349,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithStartTimeLimitationAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with start time limitation availability", ((string[])(null)));
-#line 108
+#line 105
 this.ScenarioSetup(scenarioInfo);
-#line 109
+#line 106
  testRunner.Given("I am an agent");
-#line 110
+#line 107
  testRunner.And("I have a shift bag");
-#line 111
+#line 108
  testRunner.And("I have a availability with start time limitation of 7:00 at the earliest");
-#line 112
+#line 109
  testRunner.When("I view preferences");
-#line 113
+#line 110
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 114
+#line 111
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 115
+#line 112
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 116
+#line 113
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -390,26 +380,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithEndTimeLimitationAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with end time limitation availability", ((string[])(null)));
-#line 118
+#line 115
 this.ScenarioSetup(scenarioInfo);
-#line 119
+#line 116
  testRunner.Given("I am an agent");
-#line 120
+#line 117
  testRunner.And("I have a shift bag");
-#line 121
+#line 118
  testRunner.And("I have a availability with end time limitation of 20:00 at the latest");
-#line 122
+#line 119
  testRunner.When("I view preferences");
-#line 123
+#line 120
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 124
+#line 121
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 125
+#line 122
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 126
+#line 123
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -421,26 +411,26 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithWorkTimeLimitationAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with work time limitation availability", ((string[])(null)));
-#line 128
+#line 125
 this.ScenarioSetup(scenarioInfo);
-#line 129
+#line 126
  testRunner.Given("I am an agent");
-#line 130
+#line 127
  testRunner.And("I have a shift bag");
-#line 131
+#line 128
  testRunner.And("I have a availability with work time limitation between 7 and 9 hours");
-#line 132
+#line 129
  testRunner.When("I view preferences");
-#line 133
+#line 130
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts matching the prefe" +
                     "rence");
-#line 134
+#line 131
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts matching the prefere" +
                     "nce");
-#line 135
+#line 132
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
-#line 136
+#line 133
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts matching the pr" +
                     "eference");
 #line hidden
@@ -452,28 +442,28 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithAvailabilityAndPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with availability and preference", ((string[])(null)));
-#line 140
+#line 137
 this.ScenarioSetup(scenarioInfo);
-#line 141
+#line 138
  testRunner.Given("I am an agent");
-#line 142
+#line 139
  testRunner.And("I have a shift bag");
-#line 143
+#line 140
  testRunner.And("I have availability");
-#line 144
+#line 141
  testRunner.And("I have preference with shift category AM");
-#line 145
+#line 142
  testRunner.When("I view preferences");
-#line 146
+#line 143
  testRunner.Then("I should see the start time boundry for the shift bag\'s shifts of category AM and" +
                     " that match the availability");
-#line 147
+#line 144
  testRunner.And("I should see the end time boundry for the shift bag\'s shifts of category AM and t" +
                     "hat match the availability");
-#line 148
+#line 145
  testRunner.And("I should see the minimum contract time for the shift bag\'s shifts of category AM " +
                     "and that match the availability");
-#line 149
+#line 146
  testRunner.And("I should see the maximum contract time for the shift bag\'s shifts of category AM " +
                     "and that match the availability");
 #line hidden
@@ -485,19 +475,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithASchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with a schedule", ((string[])(null)));
-#line 153
+#line 150
 this.ScenarioSetup(scenarioInfo);
-#line 154
+#line 151
  testRunner.Given("I am an agent");
-#line 155
+#line 152
  testRunner.And("I have a shift");
-#line 156
+#line 153
  testRunner.When("I view preferences");
-#line 157
+#line 154
  testRunner.Then("I should see the start time of the shift");
-#line 158
+#line 155
  testRunner.And("I should see the end time of the shift");
-#line 159
+#line 156
  testRunner.And("I should see the contract time of the shift");
 #line hidden
             this.ScenarioCleanup();
@@ -508,25 +498,25 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void FeedbackForADayWithASchedulePreferenceAndAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback for a day with a schedule, preference and availability", ((string[])(null)));
-#line 161
+#line 158
 this.ScenarioSetup(scenarioInfo);
-#line 162
+#line 159
  testRunner.Given("I am an agent");
-#line 163
+#line 160
  testRunner.And("I have a shift");
-#line 164
+#line 161
  testRunner.And("I have a shift bag");
-#line 165
+#line 162
  testRunner.And("I have preference for shift category AM");
-#line 166
+#line 163
  testRunner.And("I have availability");
-#line 167
+#line 164
  testRunner.When("I view preferences");
-#line 168
+#line 165
  testRunner.Then("I should see the start time of the shift");
-#line 169
+#line 166
  testRunner.And("I should see the end time of the shift");
-#line 170
+#line 167
  testRunner.And("I should see the contract time of the shift");
 #line hidden
             this.ScenarioCleanup();

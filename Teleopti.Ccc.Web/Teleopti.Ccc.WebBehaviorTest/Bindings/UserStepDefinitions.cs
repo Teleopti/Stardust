@@ -208,15 +208,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
 		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(string earliest, string latest)
 		{
-			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, earliest, latest));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, earliest, latest, null, null));
 		}
 
 		[Given(@"I have a preference with start time limitation between (.*) and (.*)")]
 		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(string earliest, string latest)
 		{
-			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(earliest, latest, null, null));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(earliest, latest, null, null, null, null));
 		}
 
+		[Given(@"I have a preference with work time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(string shortest, string longest)
+		{
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, null, null, shortest, longest));
+		}
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()

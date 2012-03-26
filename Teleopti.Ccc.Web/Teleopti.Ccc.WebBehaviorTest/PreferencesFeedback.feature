@@ -54,13 +54,10 @@ Scenario: Feedback for a day with end time limitation preference
 
 Scenario: Feedback for a day with work time limitation preference
 	Given I am an agent
-	And I have a shift bag
-	And I have a preference with work time limitation between 7 and 9 hours
+	And I have a shift bag with start times 8 to 9 and end times 12 to 22
+	And I have a preference with work time limitation between 4 and 5
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts matching the preference
-	And I should see the end time boundry for the shift bag's shifts matching the preference
-	And I should see the minimum contract time for the shift bag's shifts matching the preference
-	And I should see the maximum contract time for the shift bag's shifts matching the preference
+	Then I should see the contract time boundry 4 to 5
 
 Scenario: Feedback for a day with lunch start time limitation preference
 	Given I am an agent

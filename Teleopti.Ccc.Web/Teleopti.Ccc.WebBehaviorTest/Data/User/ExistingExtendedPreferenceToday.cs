@@ -10,8 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 
 		private readonly StartTimeLimitation _startTimeLimitation;
 		private readonly EndTimeLimitation _endTimeLimitation;
+		private readonly WorkTimeLimitation _workTimeLimitation;
 
-		public ExistingExtendedPreferenceToday(string earliestStart, string latestStart, string earliestEnd, string latestEnd)
+		public ExistingExtendedPreferenceToday(string earliestStart, string latestStart, string earliestEnd, string latestEnd, string shortest, string longest)
 		{
 			if (earliestStart != null && latestStart != null)
 			{
@@ -30,6 +31,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 				TimeHelper.TryParse(latestEnd, out latestEndTime);
 				_endTimeLimitation = new EndTimeLimitation(earliestEndTime, latestEndTime);
 			}
+
+			if (shortest != null && longest != null)
+			{
+				TimeSpan shortestTime;
+				TimeSpan longestTime;
+				TimeHelper.TryParse(shortest, out shortestTime);
+				TimeHelper.TryParse(longest, out longestTime);
+				_workTimeLimitation = new WorkTimeLimitation(shortestTime, longestTime);
+			}
 		}
 
 		protected override PreferenceRestriction ApplyRestriction()
@@ -37,7 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			return new PreferenceRestriction()
 			                            	{
 			                            		StartTimeLimitation = _startTimeLimitation,
-												EndTimeLimitation = _endTimeLimitation
+												EndTimeLimitation = _endTimeLimitation,
+												WorkTimeLimitation = _workTimeLimitation
 			                            	};
 		}
 
