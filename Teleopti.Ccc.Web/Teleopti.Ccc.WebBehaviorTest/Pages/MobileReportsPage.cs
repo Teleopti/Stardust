@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-graph-canvas")] public Element ReportGraph;
 		[FindBy(Id = "sel-skill-button")] public Link ReportSkillSelectionOpener;
 		[FindBy(Id = "report-table-holder")] public Div ReportTableContainer;
-		[FindBy(Id = "report-settings-interval-week")] public RadioButton ReportIntervalWeekInput;
+		[FindBy(Class = "report-table")] public Table ReportTable;
+		[FindBy(Id = "report-settings-interval-week")]
+		public RadioButton ReportIntervalWeekInput;
 		[FindBy(Id = "report-settings-type-graph")] public CheckBox ReportTypeGraphInput;
 		[FindBy(Id = "report-settings-type-table")] public CheckBox ReportTypeTableInput;
 		[FindBy(Id = "report-view-date-nav-current")] public Link ReportViewNavDate;
@@ -31,17 +34,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-view-date-nav-prev")] public Link ReportViewPrevDateNavigation;
 		[FindBy(Id = "report-view-show-button")] public Link ReportViewShowButton;
 
-		public TableCell ReportTableFirstDataCell 
+		public TableCell ReportTableFirstDataCell
 		{
 			get
 			{
-				//((WatiN.Core.ElementContainer<WatiN.Core.Div>)(ReportTableContainer)).Tables.First().OwnTableBodies.First().TableRowsDirectChildren.First().Text
-				var tb = ReportTableContainer.TableBodies.First();
-				return tb.TableCells.First();
+				ReportTable.WaitUntilExists();
+				var firstCell = ReportTable.TableCell(Find.Any);
+				firstCell.WaitUntilExists();
+				return firstCell;
 			}
 		}
-
-	
 
 		public RadioButtonCollection Reports
 		{
@@ -73,15 +75,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return DatePickerContenainerDays.Skip(10).First(); }
 		}
 
-		public ListItem ThirdSkillInSkillList
-		{
-			get { return ReportSkillSelectionList.ListItems.Skip(2).First(); }
-		}
-
-
 		[FindBy(Id = "signout-button")]
 		public Link SignoutButton { get; set; }
-
 
 		// Setting controls
 		[FindBy(Id = "sel-date")]
@@ -154,16 +149,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-view")]
 		public Div ReportsViewPageContainer { get; set; }
 
-		public string ReportCurrentDate
-		{
-			get
-			{
-				return ReportViewNavDate.Text;
-			}
-		}
-
-		public string ThirdSkillName { get; set; }
-
 		public void SetReportSettingsDate(DateOnly date, CultureInfo culture)
 		{
 			var dateString = date.Date.ToShortDateString(culture);
@@ -174,6 +159,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				         	"{{'method':'set', 'value': '{0}', 'date': new Date({1}, {2} , {3})}}",
 				         	dateString, date.Year, date.Month - 1, date.Day))
 				.Eval();
+		}
+
+		public void SelectSkillByName(string name)
+		{
+			ReportSkillSelectionList.ListItem(Find.ByText(s => s.Contains(name))).EventualClick();
 		}
 	}
 }

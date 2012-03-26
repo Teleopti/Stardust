@@ -1,23 +1,19 @@
-﻿using Teleopti.Analytics.ReportTexts;
+﻿using TechTalk.SpecFlow.Bindings;
+using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	using NUnit.Framework;
-
 	using TechTalk.SpecFlow;
-
 	using Teleopti.Ccc.WebBehaviorTest.Core;
 	using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 	using Teleopti.Ccc.WebBehaviorTest.Data;
 	using Teleopti.Ccc.WebBehaviorTest.Pages;
 	using Teleopti.Interfaces.Domain;
-
 	using WatiN.Core;
-
 	using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
-	using Table = WatiN.Core.Table;
 
 	[Binding]
 	public class MobileReportsStepDefinitions
@@ -64,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the signout button")]
 		public void GivenIClickSignoutButton()
 		{
-			_page.SignoutButton.Click();
+			_page.SignoutButton.EventualClick();
 		}
 
 		[Then(@"I should be signed out")]
@@ -90,14 +86,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAReportForNextDate()
 		{
 			var expexted = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportCurrentDate, Is.EqualTo(expexted));
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
 			var expexted = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportCurrentDate, Is.EqualTo(expexted));
+			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
 		}
 
 		[Then(@"I should see a table")]
@@ -129,7 +125,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the selected skill")]
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
-			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Contains(_page.ThirdSkillName), Is.True);
+			var skillName = UserFactory.User().UserData<ThreeSkills>().Skill2Name;
+			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text, Is.StringContaining(skillName));
 		}
 
 		[Then(@"I should only see reports i have access to")]
@@ -153,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 
 			WhenISelectDateToday();
-			_page.ReportGetAnsweredAndAbandoned.Click();
+			_page.ReportGetAnsweredAndAbandoned.EventualClick();
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -167,8 +164,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 
 			WhenISelectDateToday();
-			_page.ReportGetAnsweredAndAbandoned.Click();
-			_page.ReportIntervalWeekInput.Click();
+			_page.ReportGetAnsweredAndAbandoned.EventualClick();
+			_page.ReportIntervalWeekInput.EventualClick();
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -177,7 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenICheckTypeGraph()
 		{
 			if (!_page.ReportTypeGraphInput.Checked)
-				_page.ReportTypeGraphInput.Click();
+				_page.ReportTypeGraphInput.EventualClick();
 			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
 		}
 
@@ -185,40 +182,40 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenICheckTypeTable()
 		{
 			if (!_page.ReportTypeTableInput.Checked)
-				_page.ReportTypeTableInput.Click();
+				_page.ReportTypeTableInput.EventualClick();
 			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.True);
 		}
 
 		[When(@"I click next date")]
 		public void WhenIClickNextDate()
 		{
-			_page.ReportViewNextDateNavigation.Click();
+			_page.ReportViewNextDateNavigation.EventualClick();
 		}
 
 		[When(@"I click on any date")]
 		public void WhenIClickOnAnyDate()
 		{
 			var pickerDayDiv = _page.AnyDatePickerDay;
-			pickerDayDiv.Click();
+			pickerDayDiv.EventualClick();
 		}
 
 		[When(@"I click previous date")]
 		public void WhenIClickPreviousDate()
 		{
-			_page.ReportViewPrevDateNavigation.Click();
+			_page.ReportViewPrevDateNavigation.EventualClick();
 		}
 
 		[When(@"I click View Report Button")]
 		public void WhenIClickViewReportButton()
 		{
-			_page.ReportViewShowButton.Click();
+			_page.ReportViewShowButton.EventualClick();
 			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I close the skill-picker")]
 		public void WhenICloseTheSkillPicker()
 		{
-			_page.ReportSkillSelectionCloseButton.Click();
+			_page.ReportSkillSelectionCloseButton.EventualClick();
 			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.False);
 		}
 
@@ -234,14 +231,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the date-picker")]
 		public void WhenIOpenTheDatePicker()
 		{
-			_page.ReportSelectionDateOpener.Click();
+			_page.ReportSelectionDateOpener.EventualClick();
 			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			_page.ReportSkillSelectionOpener.Click();
+			_page.ReportSkillSelectionOpener.EventualClick();
 			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.True);
 			EventualAssert.That(() => _page.ReportSkillSelectionContainer.DisplayVisible(), Is.True);
 		}
@@ -249,7 +246,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a report")]
 		public void WhenISelectAReport()
 		{
-			_page.ReportGetAnsweredAndAbandoned.Click();
+			_page.ReportGetAnsweredAndAbandoned.EventualClick();
 			Assert.That(() => _page.ReportGetAnsweredAndAbandonedInput.Checked, Is.True);
 		}
 
@@ -268,14 +265,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			{
 				if (skillListItem.GetAttributeValue("aria-selected").Equals("true"))
 				{
-					skillListItem.Click();
+					skillListItem.EventualClick();
 				}
 			}
 
-			var third = _page.ThirdSkillInSkillList;
-			third.Click();
-
-			_page.ThirdSkillName = third.Text.Trim();
+			_page.SelectSkillByName(UserFactory.User().UserData<ThreeSkills>().Skill2Name);
 		}
 
 		[When(@"I view ReportSettings")]
