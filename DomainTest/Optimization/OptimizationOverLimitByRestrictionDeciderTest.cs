@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private OptimizationOverLimitByRestrictionDecider _target;
         private MockRepository _mocks;
 
-        private IScheduleMatrixOriginalStateContainer _matrixOriginalStateContainer;
+        private IScheduleMatrixPro _matrix;
         private ICheckerRestriction _restrictionChecker;
         private OptimizationPreferences _optimizationPreferences;
 
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
 
-            _matrixOriginalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
+            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _restrictionChecker = _mocks.StrictMock<ICheckerRestriction>();
             _optimizationPreferences = new OptimizationPreferences();
             resetPreferences();
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyInstantiate()
         {
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrixOriginalStateContainer,
+                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences);
             Assert.IsNotNull(_target);
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.PreferencesValue = 0.4d;
 
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrixOriginalStateContainer,
+                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences);
             bool result = _target.OverLimit();
@@ -155,8 +154,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
 
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
@@ -170,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -180,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addPreferencesMockExpectation()
         {
-            addMockExpectation(new Func<PermissionState>(_restrictionChecker.CheckPreference));
+            addMockExpectation(_restrictionChecker.CheckPreference);
         }
 
 
@@ -201,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -222,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -243,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -258,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.MustHavesValue = 0.4d;
 
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrixOriginalStateContainer,
+                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences);
             bool result = _target.OverLimit();
@@ -273,8 +270,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
 
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
@@ -288,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -298,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addMustHaveMockExpectation()
         {
-            addMockExpectation(new Func<PermissionState>(_restrictionChecker.CheckPreferenceMustHave));
+            addMockExpectation(_restrictionChecker.CheckPreferenceMustHave);
         }
 
 
@@ -319,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -340,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -361,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -381,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -397,8 +392,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
 
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
@@ -412,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -422,7 +415,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addRotationMockExpectation()
         {
-            addMockExpectation(new Func<PermissionState>(_restrictionChecker.CheckRotations));
+            addMockExpectation(_restrictionChecker.CheckRotations);
         }
 
         #endregion
@@ -442,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -463,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -484,7 +477,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -504,7 +497,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -520,8 +513,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
 
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
@@ -535,7 +526,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -545,7 +536,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addAvailabilityMockExpectation()
         {
-            addMockExpectation(new Func<PermissionState>(_restrictionChecker.CheckAvailability));
+            addMockExpectation(_restrictionChecker.CheckAvailability);
         }
 
         #endregion
@@ -565,7 +556,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -586,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -607,7 +598,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -627,7 +618,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -643,9 +634,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
-
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
                 Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
@@ -658,7 +646,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrixOriginalStateContainer,
+                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
                 bool result = _target.OverLimit();
@@ -668,7 +656,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addStudentAvailabilityMockExpectation()
         {
-            addMockExpectation(new Func<PermissionState>(_restrictionChecker.CheckStudentAvailability));
+            addMockExpectation(_restrictionChecker.CheckStudentAvailability);
         }
 
         #endregion
@@ -684,8 +672,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void addMockExpectation(Func<PermissionState> checkMethod)
         {
-            Expect.Call(_matrixOriginalStateContainer.OldPeriodDaysState)
-                .Return(_originalDays).Repeat.AtLeastOnce();
 
             Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
             Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);

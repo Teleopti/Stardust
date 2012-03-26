@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 
                 var restrictionChecker = new RestrictionChecker();
-                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixContainer, restrictionChecker, _optimizerPreferences);
+                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, _optimizerPreferences);
 
                 var schedulingOptionsCreator = new SchedulingOptionsCreator();
 

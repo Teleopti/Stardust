@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider; 
 
         public OptimizationOverLimitByRestrictionDecider(
-            IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer,
+            IScheduleMatrixPro matrix,
             ICheckerRestriction restrictionChecker,
             IOptimizationPreferences optimizationPreferences
             )
         {
             _optimizationPreferences = optimizationPreferences;
-            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(matrixOriginalStateContainer, restrictionChecker);
+            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(matrix, restrictionChecker);
         }
 
         public bool OverLimit()

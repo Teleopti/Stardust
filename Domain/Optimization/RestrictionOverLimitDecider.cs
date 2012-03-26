@@ -6,15 +6,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class RestrictionOverLimitDecider : IRestrictionOverLimitDecider
     {
-        private readonly IScheduleMatrixOriginalStateContainer _matrixOriginalStateContainer;
+        private readonly IScheduleMatrixPro _matrix;
         private readonly ICheckerRestriction _restrictionChecker;
 
         public RestrictionOverLimitDecider(
-            IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer,
+            IScheduleMatrixPro matrix,
             ICheckerRestriction restrictionChecker
             )
         {
-            _matrixOriginalStateContainer = matrixOriginalStateContainer;
+            _matrix = matrix;
             _restrictionChecker = restrictionChecker;
         }
 
@@ -82,11 +82,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             int brokenDays = 0;
             int allDays = 0;
-            IDictionary<DateOnly, IScheduleDay> originalState
-                = _matrixOriginalStateContainer.OldPeriodDaysState;
-            foreach (IScheduleDay scheduleDay in originalState.Values)
+            foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
             {
-                _restrictionChecker.ScheduleDay = scheduleDay;
+                _restrictionChecker.ScheduleDay = scheduleDayPro.DaySchedulePart();
                 PermissionState permissionState = checkMethod();
                 if (permissionState != PermissionState.None)
                     allDays++;

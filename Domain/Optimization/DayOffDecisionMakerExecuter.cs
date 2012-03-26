@@ -141,7 +141,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (movesOverMaxDaysLimit())
             {
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
-                return false;
+                foreach (var changedDay in movedDates)
+                {
+                    //should only lock the days breaking restrictions, so we must return those days from movesOverMaxDaysLimit
+                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(changedDay.DateChanged, changedDay.DateChanged));
+                }
+                return true;
             }
 
             double newValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -157,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool movesOverMaxDaysLimit()
         {
-            return _optimizationOverLimitDecider.OverLimit();
+            return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
