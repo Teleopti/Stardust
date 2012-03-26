@@ -10,7 +10,5 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <returns></returns>
 		IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions);
-
-		IEffectiveRestriction GetEffectiveRestrictionForDisplay();
 	}
 }

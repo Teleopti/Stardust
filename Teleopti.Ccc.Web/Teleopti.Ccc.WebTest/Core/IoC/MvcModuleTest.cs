@@ -369,5 +369,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 			ok.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldResolveEffectiveRestrictionForDisplayCreator()
+		{
+			var result = requestContainer.Resolve<IEffectiveRestrictionForDisplayCreator>();
+			result.Should().Not.Be.Null();
+		}
 	}
 }

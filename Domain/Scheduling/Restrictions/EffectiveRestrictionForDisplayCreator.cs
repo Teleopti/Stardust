@@ -23,10 +23,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			return effectiveRestriction;
 		}
-
-		public IEffectiveRestriction GetEffectiveRestrictionForDisplay()
-		{
-			return null;
-		}
 	}
 }
