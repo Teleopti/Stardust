@@ -10245,4 +10245,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Kontraktstid sjunkande</value>
   </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Ta bort skrivskydd</value>
+    <comment>Remove write protection</comment>
+  </data>
 </root>
