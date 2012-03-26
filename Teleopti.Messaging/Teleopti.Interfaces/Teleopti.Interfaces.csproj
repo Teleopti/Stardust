@@ -190,6 +190,7 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
     <Compile Include="Domain\INightRestWhiteSpotSolverService.cs" />

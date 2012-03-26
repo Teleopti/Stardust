@@ -1204,10 +1204,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    {
             _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
             {
-                using (var view = new JobHistoryView())
+                using (var view = new JobHistoryDetailedView())
                 {
                     view.ShowDialog(this);
                 }
+                //using (var view = new JobHistoryView())
+                //{
+                //    view.ShowDialog(this);
+                //}
             });
         }
 
