@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     endProcessing(unitOfWork);
                     return;
                 }
-                var queryResult = _analyzeQuery.Run(_contentProvider.LoadContent(forecastFile.FileContent, timeZone, skill.MidnightBreakOffset));
+                var queryResult = _analyzeQuery.Run(_contentProvider.LoadContent(forecastFile.FileContent, timeZone), skill.MidnightBreakOffset);
                 if (!queryResult.Succeeded)
                 {
                     var errorMessage = string.Concat("Validation error! ", queryResult.ErrorMessage);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
 
                 var listOfMessages = generateMessages(message, queryResult);
-                _feedback.ChangeTotalProgress(4 + listOfMessages.Count * 4);
+                _feedback.ChangeTotalProgress(6 + listOfMessages.Count * 4);
                 endProcessing(unitOfWork);
 
                 listOfMessages.ForEach(m => _serviceBus.Send(m));

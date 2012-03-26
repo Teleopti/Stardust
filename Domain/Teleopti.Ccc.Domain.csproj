@@ -236,8 +236,11 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
     <Compile Include="Forecasting\Import\ForecastFile.cs" />
+    <Compile Include="Forecasting\Import\ForecastParseResult.cs" />
     <Compile Include="Forecasting\Import\ForecastsFileContentProvider.cs" />
+    <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
     <Compile Include="Forecasting\Import\IForecastFile.cs" />
+    <Compile Include="Forecasting\Import\IsColumnCountInRowValid.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />

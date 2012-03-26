@@ -42,58 +42,5 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.That(_row.LocalDateTimeFrom, Is.EqualTo(localDateTimeFrom));
             Assert.That(_row.LocalDateTimeTo, Is.EqualTo(localDateTimeTo));
         }
-
-        [Test]
-        public void ShouldCompareTwoInstances()
-        {
-            var tasks = 12;
-            var taskTime = 110.02;
-            var afterTaskTime = 121.30;
-            var agents = 2;
-            var utcDateTimeFrom = new DateTime(2011, 1, 1, 6, 15, 0, DateTimeKind.Utc);
-            var utcDateTimeTo = new DateTime(2011, 1, 1, 6, 30, 0, DateTimeKind.Utc);
-            var localDateTimeFrom = new DateTime(2011, 1, 1, 8, 15, 0);
-            var localDateTimeTo = new DateTime(2011, 1, 1, 8, 30, 0);
-            var skillName = "Insurance";
-            var row1 = new ForecastsFileRow
-            {
-                TaskTime = taskTime,
-                AfterTaskTime = afterTaskTime,
-                Agents = agents,
-                LocalDateTimeFrom = localDateTimeFrom,
-                LocalDateTimeTo = localDateTimeTo,
-                SkillName = skillName,
-                Tasks = tasks,
-                UtcDateTimeFrom = utcDateTimeFrom,
-                UtcDateTimeTo = utcDateTimeTo
-            };
-            var row2 = new ForecastsFileRow
-            {
-                TaskTime = taskTime,
-                AfterTaskTime = afterTaskTime,
-                Agents = agents,
-                LocalDateTimeFrom = localDateTimeFrom,
-                LocalDateTimeTo = localDateTimeTo,
-                SkillName = skillName,
-                Tasks = tasks,
-                UtcDateTimeFrom = utcDateTimeFrom,
-                UtcDateTimeTo = utcDateTimeTo
-            };            
-            var row3 = new ForecastsFileRow
-            {
-                TaskTime = taskTime,
-                AfterTaskTime = afterTaskTime,
-                Agents = agents,
-                LocalDateTimeFrom = localDateTimeFrom,
-                LocalDateTimeTo = localDateTimeTo,
-                SkillName = "new skill",
-                Tasks = tasks,
-                UtcDateTimeFrom = utcDateTimeFrom,
-                UtcDateTimeTo = utcDateTimeTo
-            };
-            
-            Assert.That(row1.Equals(row2), Is.True);
-            Assert.That(row1.Equals(row3), Is.False);
-        }
     }
 }

@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             statusDialog.SetJobStatusId(savedFileId);
             statusDialog.SetProgress(2);
             statusDialog.SetMessage(UploadFileName + " uploaded.");
-            statusDialog.SetProgress(1);
+            statusDialog.SetProgress(3);
             statusDialog.SetMessage("Validating...");
             var dto = new ImportForecastsFileCommandDto
                           {

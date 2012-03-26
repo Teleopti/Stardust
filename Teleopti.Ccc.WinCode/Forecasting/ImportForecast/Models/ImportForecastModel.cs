@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
     public interface IImportForecastModel
     {
         string GetSelectedSkillName();
-        Guid SaveValidatedForecastFileInDb(string fileName);
+        Guid SaveValidatedForecastFile(IForecastFile forecastFile);
         void ValidateFile(StreamReader streamReader);
         IWorkload LoadWorkload();
         byte[] FileContent { get; set; }
@@ -40,14 +40,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
 
         public byte[] FileContent { get; set; }
 
-        public Guid SaveValidatedForecastFileInDb(string fileName)
+        public Guid SaveValidatedForecastFile(IForecastFile forecastFile)
         {
-            if(string.IsNullOrEmpty(fileName))
-                throw new InvalidOperationException("Incorrect file name.");
             Guid result;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var forecastFile = new ForecastFile(fileName, FileContent);
                 _importForecastsRepository.Add(forecastFile);
                 uow.PersistAll();
                 result = forecastFile.Id.GetValueOrDefault();
@@ -67,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
                     if (rowNumber > 100) break;
 
                     var line = streamReader.ReadLine();
-                    _rowExtractor.Extract(line, _skill.TimeZone, _skill.MidnightBreakOffset);
+                    _rowExtractor.Extract(line, _skill.TimeZone);
                     rowNumber++;
                 }
             }
@@ -76,6 +73,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
                 throw new ValidationException(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
             }
             var fileContent = new byte[streamReader.BaseStream.Length];
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             streamReader.BaseStream.Read(fileContent, 0, (int) streamReader.BaseStream.Length);
             FileContent = fileContent;
         }

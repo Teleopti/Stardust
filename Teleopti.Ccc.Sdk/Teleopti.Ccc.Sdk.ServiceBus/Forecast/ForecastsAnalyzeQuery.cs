@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -8,12 +7,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows);
+        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows, TimeSpan midnightBreakOffSet);
     }
 
     public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
-        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows)
+        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsFileRow> forecastRows, TimeSpan midnightBreakOffSet)
         {
             var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
             var startDateTime = DateTime.MaxValue;
@@ -42,11 +41,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                workloadDayOpenHours.AddOpenHour(new DateOnly(forecastsRow.LocalDateTimeFrom),
-                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.TimeOfDay,
-                                                        forecastsRow.LocalDateTimeTo.TimeOfDay));
+                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(midnightBreakOffSet));
+                workloadDayOpenHours.AddOpenHour(day,
+                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day),
+                                                        forecastsRow.LocalDateTimeTo.Subtract(day)));
 
-                result.ForecastFileContainer.AddForecastsRow(new DateOnly(forecastsRow.LocalDateTimeFrom), forecastsRow);
+                result.ForecastFileContainer.AddForecastsRow(day, forecastsRow);
 
                 previousSkillName = forecastsRow.SkillName;
                 previousIntervalLength = intervalLength;

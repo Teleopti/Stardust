@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill).Repeat.Any();
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
                 Expect.Call(_forecastFile.FileContent).Return(fileContent);
-                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone, skill.MidnightBreakOffset)).Return(new[]{row});
-                Expect.Call(_analyzeQuery.Run(new[] {row})).Return(queryResult);
+                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new[]{row});
+                Expect.Call(_analyzeQuery.Run(new[] {row},TimeSpan.Zero)).Return(queryResult);
                 Expect.Call(queryResult.Succeeded).Return(true).Repeat.Any();
                 Expect.Call(queryResult.Period).Return(new DateOnlyPeriod(dateTime, dateTime)).Repeat.Any();
                 Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
@@ -186,8 +186,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
                 Expect.Call(_forecastFile.FileContent).Return(fileContent);
-                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone, skill.MidnightBreakOffset)).Return(new List<IForecastsFileRow>());
-                Expect.Call(_analyzeQuery.Run(new List<IForecastsFileRow>())).Return(queryResult);
+                Expect.Call(_contentProvider.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsFileRow>());
+                Expect.Call(_analyzeQuery.Run(new List<IForecastsFileRow>(),TimeSpan.Zero)).Return(queryResult);
                 Expect.Call(queryResult.Succeeded).Return(false).Repeat.Any();
                 Expect.Call(queryResult.ErrorMessage).Return("error occured.");
             }

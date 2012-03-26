@@ -3,7 +3,6 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +17,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJobResultRepository _jobResultRepository;
 
-        public ImportForecastsFileCommandHandler(IServiceBusSender busSender, IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+        public ImportForecastsFileCommandHandler(IServiceBusSender busSender,
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
             _unitOfWorkFactory = unitOfWorkFactory;

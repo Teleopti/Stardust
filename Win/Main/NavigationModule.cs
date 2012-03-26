@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.Win.Intraday;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Win.Main
             builder.RegisterType<PeopleNavigator>();
             builder.RegisterType<SchedulerNavigator>();
             builder.Register(c => c.Resolve<PortalSettingsProvider>().PortalSettings).As<PortalSettings>().As<IPortalSettings>();
+            builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
         }
     }
 }

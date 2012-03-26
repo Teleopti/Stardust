@@ -166,7 +166,6 @@
     <Compile Include="Forecast\ExportMultisiteSkillToSkillTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
-    <Compile Include="Forecast\ForecastsFileContentProviderTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="Forecast\OpenAndSplitChildSkillsResolveTest.cs" />
