@@ -65,6 +65,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.XML" />
@@ -74,6 +75,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
     <Compile Include="DataSourceHelper.cs" />
@@ -149,6 +151,44 @@
     <Compile Include="Services\PersonRequestAuthorizationCheckerForTest.cs" />
     <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestDoesNothing.cs" />
     <Compile Include="StateHolderProxyHelper.cs" />
+    <Compile Include="TestData\Analytics\AQueue.cs" />
+    <Compile Include="TestData\Analytics\AWorkload.cs" />
+    <Compile Include="TestData\Analytics\BusinessUnit.cs" />
+    <Compile Include="TestData\Analytics\CurrentWeekDates.cs" />
+    <Compile Include="TestData\Analytics\EternityAndNotDefinedDate.cs" />
+    <Compile Include="TestData\Analytics\ExistingDatasources.cs" />
+    <Compile Include="TestData\Analytics\FactQueue.cs" />
+    <Compile Include="TestData\Analytics\FillBridgeQueueWorkloadFromData.cs" />
+    <Compile Include="TestData\Analytics\FillBridgeTimeZoneFromData.cs" />
+    <Compile Include="TestData\Analytics\IBridgeTimeZone.cs" />
+    <Compile Include="TestData\Analytics\IBusinessUnitData.cs" />
+    <Compile Include="TestData\Analytics\IDatasourceData.cs" />
+    <Compile Include="TestData\Analytics\IDateData.cs" />
+    <Compile Include="TestData\Analytics\IIntervalData.cs" />
+    <Compile Include="TestData\Analytics\IQueueData.cs" />
+    <Compile Include="TestData\Analytics\ISkillData.cs" />
+    <Compile Include="TestData\Analytics\ITimeZoneData.cs" />
+    <Compile Include="TestData\Analytics\IWorkloadData.cs" />
+    <Compile Include="TestData\Analytics\QuarterOfAnHourInterval.cs" />
+    <Compile Include="TestData\Analytics\Sql\Bulk.cs" />
+    <Compile Include="TestData\Analytics\Tables\bridge_queue_workload.cs" />
+    <Compile Include="TestData\Analytics\Tables\bridge_time_zone.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_business_unit.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_date.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_interval.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_queue.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_skill.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_time_zone.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_workload.cs" />
+    <Compile Include="TestData\Analytics\Tables\fact_queue.cs" />
+    <Compile Include="TestData\Analytics\Tables\language_translation.cs" />
+    <Compile Include="TestData\Analytics\Tables\sys_datasource.cs" />
+    <Compile Include="TestData\Analytics\ThreeSkills.cs" />
+    <Compile Include="TestData\Analytics\TodayDate.cs" />
+    <Compile Include="TestData\Analytics\UtcAndCetTimeZones.cs" />
+    <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
+    <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
+    <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +199,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\ReportTexts.csproj">
+      <Project>{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}</Project>
+      <Name>ReportTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
       <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
@@ -186,6 +230,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

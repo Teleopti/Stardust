@@ -1,5 +1,6 @@
 ﻿using Teleopti.Analytics.ReportTexts;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {

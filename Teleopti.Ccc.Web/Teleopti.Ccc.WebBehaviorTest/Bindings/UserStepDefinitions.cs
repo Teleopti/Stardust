@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
-using Teleopti.Ccc.WebBehaviorTest.Data.User.Analytics;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
