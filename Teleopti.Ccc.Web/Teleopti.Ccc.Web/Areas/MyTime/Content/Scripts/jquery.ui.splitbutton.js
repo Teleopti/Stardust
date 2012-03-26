@@ -62,7 +62,7 @@
 					appendTo: menu,
 					minLength: 0,
 					select: function (event, ui) {
-						button.button('option', 'label', ui.item.label);
+						button.button('option', 'label', $('<div/>').text(ui.item.label).html());
 						button.data('value', ui.item.value);
 						button.data('label', ui.item.label);
 						self._trigger("clicked", event, {
