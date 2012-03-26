@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -47,39 +45,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				_feedback.SetJobResult(jobResult, _messageBroker);
 				_feedback.ReportProgress(1, "Starting export...");
-				endProcessing(unitOfWork);
+                unitOfWork.PersistAll();
 			}
 
-			var listOfMessages = new List<OpenAndSplitChildSkills>();
-			foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
-			{
-				foreach (var dateOnlyPeriod in message.Period.Split(20))
-				{
-					listOfMessages.Add(new OpenAndSplitChildSkills
-					                   	{
-					                   		BusinessUnitId = message.BusinessUnitId,
-					                   		Datasource = message.Datasource,
-					                   		JobId = message.JobId,
-					                   		MultisiteSkillSelections = multisiteSkillSelection,
-					                   		OwnerPersonId = message.OwnerPersonId,
-					                   		Period = dateOnlyPeriod,
-					                   		Timestamp = message.Timestamp
-					                   	});
-				}
-			}
+            var listOfMessages = new List<ExportMultisiteSkillToSkill>();
+		    int progressSteps = 1;
+            foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
+            {
+                foreach (var dateOnlyPeriod in message.Period.Split(20))
+                {
+                    listOfMessages.Add(new ExportMultisiteSkillToSkill
+                                           {
+                                               BusinessUnitId = message.BusinessUnitId,
+                                               Datasource = message.Datasource,
+                                               JobId = message.JobId,
+                                               MultisiteSkillSelections = multisiteSkillSelection,
+                                               OwnerPersonId = message.OwnerPersonId,
+                                               Period = dateOnlyPeriod,
+                                               Timestamp = message.Timestamp
+                                           });
+                    progressSteps++;
+                }
+                progressSteps += multisiteSkillSelection.ChildSkillSelections.Count*message.Period.DayCollection().Count*4;
+            }
+            _feedback.ChangeTotalProgress(progressSteps);
 
-			var messageCount = listOfMessages.Count;
-			var incremental = (int)Math.Floor(99d / messageCount);
-            listOfMessages.ForEach(m=>m.IncreaseProgressBy = incremental);
-		    listOfMessages.Last().IncreaseProgressBy = 99 - incremental*(messageCount - 1);
 			listOfMessages.ForEach(m=> _serviceBus.Send(m));
-			_unitOfWorkFactory = null;
-		}
 
-		private void endProcessing(IUnitOfWork unitOfWork)
-		{
-			unitOfWork.PersistAll();
-			_feedback.Dispose();
+            _feedback.Dispose();
+			_unitOfWorkFactory = null;
 		}
 	}
 }

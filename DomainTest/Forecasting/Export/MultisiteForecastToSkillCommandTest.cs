@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
         private MultisiteForecastToSkillCommand target;
         private MockRepository mocks;
         private IJobResultFeedback jobResultFeedback;
-        private ISaveForecastToSkillCommand saveForecastToSkillCommand;
+        private IImportForecastToSkillCommand importForecastToSkillCommand;
         private ISkillDayLoadHelper skillDayLoadHelper;
         private IScenarioProvider scenarioProvider;
 
@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             targetSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
 
             jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
-            saveForecastToSkillCommand = mocks.DynamicMock<ISaveForecastToSkillCommand>();
+            importForecastToSkillCommand = mocks.DynamicMock<IImportForecastToSkillCommand>();
             skillDayLoadHelper = mocks.DynamicMock<ISkillDayLoadHelper>();
             scenarioProvider = mocks.DynamicMock<IScenarioProvider>();
 
-            target = new MultisiteForecastToSkillCommand(saveForecastToSkillCommand, skillDayLoadHelper, scenarioProvider, jobResultFeedback);
+            target = new MultisiteForecastToSkillCommand(importForecastToSkillCommand, skillDayLoadHelper, scenarioProvider, jobResultFeedback);
         }
 
         [Test]
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
                                                                       sourceScenario)).Return(
                                                                           new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new [] { childSkillDay } } });
 
-                Expect.Call(() => saveForecastToSkillCommand.Execute(selection.Period, targetSkill, null)).Constraints(
-                    Rhino.Mocks.Constraints.Is.Equal(selection.Period), Rhino.Mocks.Constraints.Is.Equal(targetSkill),
+                Expect.Call(() => importForecastToSkillCommand.Execute(childSkill, targetSkill, null)).Constraints(
+                    Rhino.Mocks.Constraints.Is.Equal(childSkill), Rhino.Mocks.Constraints.Is.Equal(targetSkill),
                     Rhino.Mocks.Constraints.Is.Anything());
                 Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
                     new ReadOnlyCollection<ISkillStaffPeriod>(new[] {skillStaffPeriod}));

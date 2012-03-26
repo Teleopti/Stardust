@@ -7,6 +7,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
     {
         IEnumerable<IMultisiteSkillForExport> MultisiteSkillsForExport { get; }
         DateOnlyPeriod Period { get; }
-        int Incremental { get; }
     }
 }

@@ -329,10 +329,13 @@
     <Compile Include="FileImport\ImportFileDoTest.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
+    <Compile Include="Forecasting\DetailedJobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
