@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -17,17 +18,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ICheckerRestriction _restrictionChecker;
         private OptimizationPreferences _optimizationPreferences;
 
-        private DateOnly _scheduleDayKey1;
-        private DateOnly _scheduleDayKey2;
-        private DateOnly _scheduleDayKey3;
-        private DateOnly _scheduleDayKey4;
+        private IScheduleDayPro _scheduleDayPro1;
+        private IScheduleDayPro _scheduleDayPro2;
+        private IScheduleDayPro _scheduleDayPro3;
+        private IScheduleDayPro _scheduleDayPro4;
 
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
         private IScheduleDay _scheduleDay3;
         private IScheduleDay _scheduleDay4;
-
-        private IDictionary<DateOnly, IScheduleDay> _originalDays;
 
         [SetUp]
         public void Setup()
@@ -39,21 +38,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences = new OptimizationPreferences();
             resetPreferences();
 
-            _scheduleDayKey1 = new DateOnly(2000, 01, 01);
-            _scheduleDayKey2 = new DateOnly(2000, 01, 02);
-            _scheduleDayKey3 = new DateOnly(2000, 01, 03);
-            _scheduleDayKey4 = new DateOnly(2000, 01, 04);
+            _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
 
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay4 = _mocks.StrictMock<IScheduleDay>();
-
-            _originalDays = new Dictionary<DateOnly, IScheduleDay>();
-            _originalDays.Add(_scheduleDayKey1, _scheduleDay1);
-            _originalDays.Add(_scheduleDayKey2, _scheduleDay2);
-            _originalDays.Add(_scheduleDayKey3, _scheduleDay3);
-            _originalDays.Add(_scheduleDayKey4, _scheduleDay4);
 
         }
 
@@ -155,10 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
 
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+                commonMocks();
 
                 Expect.Call(_restrictionChecker.CheckPreference())
                     .Return(PermissionState.None)
@@ -271,10 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
 
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+                commonMocks();
 
                 Expect.Call(_restrictionChecker.CheckPreferenceMustHave())
                     .Return(PermissionState.None)
@@ -393,10 +380,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
 
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+                commonMocks();
 
                 Expect.Call(_restrictionChecker.CheckRotations())
                     .Return(PermissionState.None)
@@ -514,10 +498,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
 
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+                commonMocks();
 
                 Expect.Call(_restrictionChecker.CheckAvailability())
                     .Return(PermissionState.None)
@@ -634,10 +615,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+                commonMocks();
 
                 Expect.Call(_restrictionChecker.CheckStudentAvailability())
                     .Return(PermissionState.None)
@@ -673,10 +651,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void addMockExpectation(Func<PermissionState> checkMethod)
         {
 
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+            commonMocks();
 
             Expect.Call(checkMethod())
                 .Return(PermissionState.None);
@@ -688,5 +663,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(PermissionState.None);
         }
 
+        private void commonMocks()
+        {
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+
+            Expect.Call(_matrix.EffectivePeriodDays).Return(
+                new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
+                                                            {
+                                                                _scheduleDayPro1,
+                                                                _scheduleDayPro2,
+                                                                _scheduleDayPro3,
+                                                                _scheduleDayPro4
+                                                            }));
+
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3);
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_scheduleDay4);
+        }
     }
 }
