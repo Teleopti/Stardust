@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get
 			{
 				ReportTable.WaitUntilExists();
-				var firstCell = ReportTable.TableCell(Find.Any);
+				var firstCell = ReportTable.TableCell(Find.First());
 				firstCell.WaitUntilExists();
 				return firstCell;
 			}

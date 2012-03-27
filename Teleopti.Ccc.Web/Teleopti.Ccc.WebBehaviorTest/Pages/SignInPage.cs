@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectFirstApplicationDataSource()
 		{
-			ApplicationDataSourceList.ListItems.First().Click();
+			ApplicationDataSourceList.ListItem(Find.First()).EventualClick();
 		}
 
 		public void ClickApplicationOkButton()
@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectFirstWindowsDataSource()
 		{
-			WindowsDataSourceList.ListItems.First().Click();
+			WindowsDataSourceList.ListItem(Find.First()).EventualClick();
 		}
 
 		public void SelectFirstBusinessUnit()
 		{
-			BusinessUnitList.WaitUntilExists(5);
-			BusinessUnitList.ListItems.First().Click();
+			BusinessUnitList.WaitUntilExists();
+			BusinessUnitList.ListItem(Find.First()).EventualClick();
 		}
 
 		public void ClickBusinessUnitOkButton()
@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInWindows()
 		{
-			WindowsTabLink.Click();
+			WindowsTabLink.EventualClick();
 			SelectFirstWindowsDataSource();
-			WindowsOkButton.Click();
+			WindowsOkButton.EventualClick();
 		}
 
 		private void WaitUntilSignInOrBusinessUnitListOrErrorAppears()

@@ -210,6 +210,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			_page.ReportViewShowButton.EventualClick();
 			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
+			EventualAssert.That(() => _page.ReportsViewPageContainer.JQueryVisible(), Is.True);
+			EventualAssert.That(() => _page.ReportsViewPageContainer.ClassName, Is.StringContaining("ui-page-active"));
 		}
 
 		[When(@"I close the skill-picker")]
