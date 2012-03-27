@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.treeViewSkills.Name = "treeViewSkills";
             this.treeViewSkills.RightToLeftLayout = true;
             this.treeViewSkills.SelectedImageIndex = 0;
-            this.treeViewSkills.Size = new System.Drawing.Size(212, 366);
+            this.treeViewSkills.Size = new System.Drawing.Size(212, 368);
             this.treeViewSkills.TabIndex = 1;
             this.treeViewSkills.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSkills_BeforeSelect);
             this.treeViewSkills.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewSkills_MouseDown);
@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip1);
             this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.splitContainer1.Size = new System.Drawing.Size(212, 550);
-            this.splitContainer1.SplitterDistance = 366;
+            this.splitContainer1.SplitterDistance = 368;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 4;
             // 

@@ -600,6 +600,7 @@
     <Compile Include="ExceptionHandling\ExceptionHandlerView.Designer.cs">
       <DependentUpon>ExceptionHandlerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\ForecasterModule.cs" />
     <Compile Include="Forecasting\ForecasterSettings.cs" />
     <Compile Include="Forecasting\Forms\CopyToSkillView.cs">
       <SubType>Form</SubType>
@@ -709,6 +710,7 @@
     <Compile Include="Forecasting\Forms\WorkloadPages\WorkloadQueueAdjustment.designer.cs">
       <DependentUpon>WorkloadQueueAdjustment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\IJobHistoryViewFactory.cs" />
     <Compile Include="Grouping\DynamicOptionType.cs" />
     <Compile Include="Grouping\FindPersonsModel.cs" />
     <Compile Include="Grouping\FindPersonsPresenter.cs" />

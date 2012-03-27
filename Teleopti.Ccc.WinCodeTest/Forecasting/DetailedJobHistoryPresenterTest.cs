@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Win.Forecasting;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Forecasting;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting
@@ -12,30 +10,29 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
     [TestFixture]
     public class DetailedJobHistoryPresenterTest
     {
-        private DetailedJobHistoryPresenter target;
+        private JobHistoryPresenter target;
         private MockRepository mocks;
         private IJobHistoryView view;
-        private IDetailedJobHistoryProvider jobHistoryProvider;
+        private IJobResultProvider jobResultProvider;
 
         [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
-            //view = mocks.DynamicMock<IDetailedJobHistoryView>();
             view = mocks.DynamicMock<IJobHistoryView>();
-            jobHistoryProvider = mocks.DynamicMock<IDetailedJobHistoryProvider>();
-            target = new DetailedJobHistoryPresenter(view, jobHistoryProvider);
+            jobResultProvider = mocks.DynamicMock<IJobResultProvider>();
+            target = new JobHistoryPresenter(view, jobResultProvider, new PagingDetail());
         }
 
         [Test]
         public void ShouldInitialize()
         {
             var jobModel = new JobResultModel{JobId = new Guid(), JobCategory = "Forecast Import", Owner = "talham", Status = "Done"};
-            var details = new List<DetailedJobHistoryResultModel>();
+            var details = new List<JobResultDetailModel>();
             using (mocks.Record())
             {
-                Expect.Call(jobHistoryProvider.GetHistory(jobModel)).Return(details);
-                Expect.Call(() => view.BindJobDetailData(details));
+                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel)).Return(details);
+                Expect.Call(() => view.BindJobResultDetailData(details));
             }
             using (mocks.Playback())
             {

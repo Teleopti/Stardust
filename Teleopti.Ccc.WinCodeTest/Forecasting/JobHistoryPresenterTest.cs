@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 		private JobHistoryPresenter target;
 		private MockRepository mocks;
 		private IJobHistoryView view;
-		private IJobHistoryProvider jobHistoryProvider;
+		private IJobResultProvider jobResultProvider;
 		private PagingDetail pagingDetail;
 
 		[SetUp]
@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 		{
 			mocks = new MockRepository();
 			view = mocks.DynamicMock<IJobHistoryView>();
-			jobHistoryProvider = mocks.DynamicMock<IJobHistoryProvider>();
+			jobResultProvider = mocks.DynamicMock<IJobResultProvider>();
 			pagingDetail = new PagingDetail {Take = 20};
-			target = new JobHistoryPresenter(view,jobHistoryProvider,pagingDetail);
+			target = new JobHistoryPresenter(view,jobResultProvider,pagingDetail);
 		}
 
 		[Test]
@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 			var jobResultModels = new List<JobResultModel>();
 			using (mocks.Record())
 			{
-				Expect.Call(() => view.BindData(jobResultModels));
-				Expect.Call(jobHistoryProvider.GetHistory(pagingDetail)).Return(jobResultModels);
+				Expect.Call(() => view.BindJobResultData(jobResultModels));
+				Expect.Call(jobResultProvider.GetJobResults(pagingDetail)).Return(jobResultModels);
 			}
 			using (mocks.Playback())
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 			var jobResultModels = new List<JobResultModel>();
 			using (mocks.Record())
 			{
-				Expect.Call(jobHistoryProvider.GetHistory(pagingDetail)).Return(jobResultModels);
+				Expect.Call(jobResultProvider.GetJobResults(pagingDetail)).Return(jobResultModels);
 			}
 			using (mocks.Playback())
 			{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 			var jobResultModels = new List<JobResultModel>();
 			using (mocks.Record())
 			{
-				Expect.Call(jobHistoryProvider.GetHistory(pagingDetail)).Return(jobResultModels);
+				Expect.Call(jobResultProvider.GetJobResults(pagingDetail)).Return(jobResultModels);
 			}
 			using (mocks.Playback())
 			{
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 			var jobResultModels = new List<JobResultModel>();
 			using (mocks.Record())
 			{
-				Expect.Call(() => view.BindData(jobResultModels));
+				Expect.Call(() => view.BindJobResultData(jobResultModels));
 
-				Expect.Call(jobHistoryProvider.GetHistory(pagingDetail)).Return(jobResultModels);
+				Expect.Call(jobResultProvider.GetJobResults(pagingDetail)).Return(jobResultModels);
 			}
 			using (mocks.Playback())
 			{

@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IImportForecastsRepository _importForecastsRepository;
+	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IForecastsRowExtractor _rowExtractor;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -88,12 +89,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IUnitOfWorkFactory unitOfWorkFactory, 
             IQuickForecastViewFactory quickForecastViewFactory, 
             IImportForecastsRepository importForecastsRepository,
+            IJobHistoryViewFactory jobHistoryViewFactory,
             IForecastsRowExtractor rowExtractor)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
             _importForecastsRepository = importForecastsRepository;
+            _jobHistoryViewFactory = jobHistoryViewFactory;
             _rowExtractor = rowExtractor;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -1208,18 +1211,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	    private void toolStripMenuItemJobHistory_Click(object sender, EventArgs e)
 	    {
-            _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
-            {
-                using (var view = new JobHistoryDetailedView())
-                {
-                    view.ShowDialog(this);
-                }
-                //using (var view = new JobHistoryView())
-                //{
-                //    view.ShowDialog(this);
-                //}
-            });
-        }
+	        _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
+	    }
 
         private void importForecast(TreeNode node)
         {
