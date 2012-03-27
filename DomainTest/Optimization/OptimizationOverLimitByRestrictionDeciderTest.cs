@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class OptimizationOverLimitByRestrictionDeciderTest
     {
-        private OptimizationOverLimitByRestrictionDecider _target;
+        private IOptimizationOverLimitDecider _target;
         private MockRepository _mocks;
 
         private IScheduleMatrixPro _matrix;
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -99,8 +99,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+
             }
         }
 
@@ -120,8 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsTrue(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
             }
         }
 
@@ -135,8 +136,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _matrix,
                 _restrictionChecker,
                 _optimizationPreferences);
-            bool result = _target.OverLimit();
-            Assert.IsFalse(result);
+            IList<DateOnly> result = _target.OverLimit();
+            Assert.IsTrue(result.Count == 0);
         }
 
         [Test]
@@ -160,8 +161,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -191,8 +192,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -212,8 +213,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -233,8 +234,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsTrue(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
             }
         }
 
@@ -248,8 +249,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _matrix,
                 _restrictionChecker,
                 _optimizationPreferences);
-            bool result = _target.OverLimit();
-            Assert.IsFalse(result);
+            IList<DateOnly> result = _target.OverLimit();
+            Assert.IsTrue(result.Count == 0);
         }
 
         [Test]
@@ -273,8 +274,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -304,8 +305,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -325,8 +326,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -346,8 +347,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsTrue(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
             }
         }
 
@@ -366,8 +367,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -392,8 +393,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -422,8 +423,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -443,8 +444,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -464,8 +465,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsTrue(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
             }
         }
 
@@ -484,8 +485,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -510,8 +511,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -540,8 +541,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -561,8 +562,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -582,8 +583,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsTrue(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
             }
         }
 
@@ -602,8 +603,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -627,8 +628,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _matrix,
                     _restrictionChecker,
                     _optimizationPreferences);
-                bool result = _target.OverLimit();
-                Assert.IsFalse(result);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
             }
         }
 
@@ -683,6 +684,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
             Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3);
             Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_scheduleDay4);
+
+            Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
         }
     }
 }

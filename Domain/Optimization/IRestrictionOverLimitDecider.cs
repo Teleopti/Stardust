@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -7,10 +8,10 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public interface IRestrictionOverLimitDecider
     {
-        bool PreferencesOverLimit(double limit);
-        bool MustHavesOverLimit(double limit);
-        bool RotationOverLimit(double limit);
-        bool AvailabilitiesOverLimit(double limit);
-        bool StudentAvailabilitiesOverLimit(double limit);
+        IList<DateOnly> PreferencesOverLimit(Percent limit);
+        IList<DateOnly> MustHavesOverLimit(Percent limit);
+        IList<DateOnly> RotationOverLimit(Percent limit);
+        IList<DateOnly> AvailabilitiesOverLimit(Percent limit);
+        IList<DateOnly> StudentAvailabilitiesOverLimit(Percent limit);
     }
 }

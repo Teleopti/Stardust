@@ -18,70 +18,46 @@ namespace Teleopti.Ccc.Domain.Optimization
             _restrictionChecker = restrictionChecker;
         }
 
-        public bool PreferencesOverLimit(double limit)
+        public IList<DateOnly> PreferencesOverLimit(Percent limit)
         {
-            double brokenLimit = calculateBrokenLimit(limit);
-            double currentValue = calculateBrokenPreferencesPercentage();
-            return currentValue > brokenLimit;
+            return calculateReturn(limit, _restrictionChecker.CheckPreference);
         }
 
-        private double calculateBrokenPreferencesPercentage()
+        public IList<DateOnly> MustHavesOverLimit(Percent limit)
         {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckPreference));
+            return calculateReturn(limit, _restrictionChecker.CheckPreferenceMustHave);
         }
 
-        public bool MustHavesOverLimit(double limit)
+        public IList<DateOnly> RotationOverLimit(Percent limit)
         {
-            double brokenLimit = calculateBrokenLimit(limit);
-            double currentValue = calculateBrokenMustHavesPercentage();
-            return currentValue > brokenLimit;
+            return calculateReturn(limit, _restrictionChecker.CheckRotations);
         }
 
-        private double calculateBrokenMustHavesPercentage()
+        public IList<DateOnly> AvailabilitiesOverLimit(Percent limit)
         {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckPreferenceMustHave));
+            return calculateReturn(limit, _restrictionChecker.CheckAvailability);
         }
 
-        public bool RotationOverLimit(double limit)
+        public IList<DateOnly> StudentAvailabilitiesOverLimit(Percent limit)
         {
-            double brokenLimit = calculateBrokenLimit(limit);
-            double currentValue = calculateBrokenRotationPercentage();
-            return currentValue > brokenLimit;
+            return calculateReturn(limit, _restrictionChecker.CheckStudentAvailability);
         }
 
-        private double calculateBrokenRotationPercentage()
+        private IList<DateOnly> calculateReturn(Percent limit, Func<PermissionState> checkMethod)
         {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckRotations));
+            double brokenLimit = calculateBrokenLimit(limit.Value);
+            brokenReturn current = calculateBrokenPercentage(checkMethod);
+            if (current.BrokenPercentage > brokenLimit)
+                return current.BrokenDays;
+
+            return new List<DateOnly>();
         }
 
-        public bool AvailabilitiesOverLimit(double limit)
-        {
-            double brokenLimit = calculateBrokenLimit(limit);
-            double currentValue = calculateBrokenAvailabilitiesPercentage();
-            return currentValue > brokenLimit;
-        }
-
-        private double calculateBrokenAvailabilitiesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckAvailability));
-        }
-
-        public bool StudentAvailabilitiesOverLimit(double limit)
-        {
-            double brokenLimit = calculateBrokenLimit(limit);
-            double currentValue = calculateBrokenStudentAvailabilitiesPercentage();
-            return currentValue > brokenLimit;
-        }
-
-        private double calculateBrokenStudentAvailabilitiesPercentage()
-        {
-            return calculateBrokenPercentage(new Func<PermissionState>(_restrictionChecker.CheckStudentAvailability));
-        }
-
-        private double calculateBrokenPercentage(Func<PermissionState> checkMethod)
+        private brokenReturn calculateBrokenPercentage(Func<PermissionState> checkMethod)
         {
             int brokenDays = 0;
             int allDays = 0;
+            IList<DateOnly> brokenDates = new List<DateOnly>();
             foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
             {
                 _restrictionChecker.ScheduleDay = scheduleDayPro.DaySchedulePart();
@@ -89,16 +65,48 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (permissionState != PermissionState.None)
                     allDays++;
                 if (permissionState == PermissionState.Broken)
+                {
                     brokenDays++;
+                    brokenDates.Add(scheduleDayPro.Day);
+                }
             }
+
+            double retPercentage;
             if (allDays == 0d)
-                return 0d;
-            return (double)brokenDays / (double)allDays;
+                retPercentage = 0d;
+            else
+            {
+                retPercentage = brokenDays/(double) allDays;
+            }
+
+            return new brokenReturn(brokenDates, retPercentage);
         }
 
         private static double calculateBrokenLimit(double fulFillValue)
         {
             return 1 - fulFillValue;
+        }
+
+        private class brokenReturn
+        {
+            private readonly IList<DateOnly> _brokenDays;
+            private readonly double _brokenPercentage;
+
+            public brokenReturn(IList<DateOnly> brokenDays, double brokenPercentage)
+            {
+                _brokenDays = brokenDays;
+                _brokenPercentage = brokenPercentage;
+            }
+
+            public IList<DateOnly> BrokenDays
+            {
+                get { return _brokenDays; }
+            }
+
+            public double BrokenPercentage
+            {
+                get { return _brokenPercentage; }
+            }
         }
     }
 }

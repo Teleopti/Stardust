@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -19,64 +20,51 @@ namespace Teleopti.Ccc.Domain.Optimization
             _restrictionOverLimitDecider = new RestrictionOverLimitDecider(matrix, restrictionChecker);
         }
 
-        public bool OverLimit()
+        public IList<DateOnly> OverLimit()
         {
-            bool overallResult = PreferencesOverLimit();
-            if (overallResult)
-                return true;
+            List<DateOnly> overallResult = new List<DateOnly>();
+            overallResult.AddRange(PreferencesOverLimit());
+            overallResult.AddRange(MustHavesOverLimit());
+            overallResult.AddRange(RotationOverLimit());
+            overallResult.AddRange(AvailabilitiesOverLimit());
+            overallResult.AddRange(StudentAvailabilitiesOverLimit());
 
-            overallResult = MustHavesOverLimit();
-            if (overallResult)
-                return true;
-
-            overallResult = RotationOverLimit();
-            if (overallResult)
-                return true;
-
-            overallResult = AvailabilitiesOverLimit();
-            if (overallResult)
-                return true;
-
-            overallResult = StudentAvailabilitiesOverLimit();
-            if (overallResult)
-                return true;
-
-            return false;
+            return overallResult;
         }
 
-        public bool PreferencesOverLimit()
+        public IList<DateOnly> PreferencesOverLimit()
         {
             if (!_optimizationPreferences.General.UsePreferences)
-                return false;
-            return _restrictionOverLimitDecider.PreferencesOverLimit(_optimizationPreferences.General.PreferencesValue);
+                return new List<DateOnly>();
+            return _restrictionOverLimitDecider.PreferencesOverLimit(new Percent(_optimizationPreferences.General.PreferencesValue));
         }
 
-        public bool MustHavesOverLimit()
+        public IList<DateOnly> MustHavesOverLimit()
         {
             if (!_optimizationPreferences.General.UseMustHaves)
-                return false;
-            return _restrictionOverLimitDecider.MustHavesOverLimit(_optimizationPreferences.General.MustHavesValue);
+                return new List<DateOnly>();
+            return _restrictionOverLimitDecider.MustHavesOverLimit(new Percent(_optimizationPreferences.General.MustHavesValue));
         }
 
-        public bool RotationOverLimit()
+        public IList<DateOnly> RotationOverLimit()
         {
             if (!_optimizationPreferences.General.UseRotations)
-                return false;
-            return _restrictionOverLimitDecider.RotationOverLimit(_optimizationPreferences.General.RotationsValue);
+                return new List<DateOnly>();
+            return _restrictionOverLimitDecider.RotationOverLimit(new Percent(_optimizationPreferences.General.RotationsValue));
         }
 
-        public bool AvailabilitiesOverLimit()
+        public IList<DateOnly> AvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseAvailabilities)
-                return false;
-            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(_optimizationPreferences.General.AvailabilitiesValue);
+                return new List<DateOnly>();
+            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.AvailabilitiesValue));
         }
 
-        public bool StudentAvailabilitiesOverLimit()
+        public IList<DateOnly> StudentAvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseStudentAvailabilities)
-                return false;
-            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(_optimizationPreferences.General.StudentAvailabilitiesValue);
+                return new List<DateOnly>();
+            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue));
         }
     }
 }

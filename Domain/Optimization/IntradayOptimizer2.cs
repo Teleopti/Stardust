@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using log4net;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -69,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            if (MovedDaysOverMaxDaysLimit())
+            if (MovedDaysOverMaxDaysLimit().Count > 0)
                 return false;
 
             // Step: get day to move
@@ -130,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 lockDay(dateToBeRemoved);
                 return true;
             }
-            if (MovedDaysOverMaxDaysLimit())
+            if (MovedDaysOverMaxDaysLimit().Count > 0)
             {
                 _rollbackService.Rollback();
                 changed.CurrentSchedule =
@@ -157,7 +154,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        public bool MovedDaysOverMaxDaysLimit()
+        public IList<DateOnly> MovedDaysOverMaxDaysLimit()
         {
             return _optimizationOverLimitDecider.OverLimit();
         }

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            if (movedDaysOverOrAtMaxDaysLimit())
+            if (movesOverMaxDaysLimit().Count > 0)
                 return false;
 
             bool sucess = false;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             double newPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
-            if (newPeriodValue > oldPeriodValue)
+            if (newPeriodValue > oldPeriodValue || movesOverMaxDaysLimit().Count > 0)
             {
                 scheduleDayBefore =
                 (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private bool movedDaysOverOrAtMaxDaysLimit()
+        private IList<DateOnly> movesOverMaxDaysLimit()
         {
             return _optimizationOverLimitDecider.OverLimit();
         }

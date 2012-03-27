@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -10,8 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <summary>
         /// Decides if the otimization is over the given limit
         /// </summary>
-        /// <param name="logWriter">The log writer.</param>
         /// <returns></returns>
-        bool OverLimit();
+        IList<DateOnly> OverLimit();
     }
 }

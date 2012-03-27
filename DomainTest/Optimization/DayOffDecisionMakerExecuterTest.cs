@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(dateOnly);
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix)).Return(true);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false)
+                    .Return(new List<DateOnly>())
                     .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(false);
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
-                    .Return(false);
+                    .Return(new List<DateOnly>());
             }
 
             bool result;
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments()
                     .Return(_effectiveRestriction).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false).Repeat.AtLeastOnce();
+                    .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }
 
@@ -461,7 +461,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
                     .Return(true);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
-                    .Return(false)
+                    .Return(new List<DateOnly>())
                     .Repeat.AtLeastOnce();
                 SetExpectationsForSettingOriginalShiftCategory();
             }

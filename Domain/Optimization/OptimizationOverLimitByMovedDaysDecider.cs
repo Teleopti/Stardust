@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class OptimizationOverLimitByMovedDaysDecider : IOptimizationOverLimitDecider
+    public class OptimizationOverLimitByMovedDaysDecider
     {
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private readonly int _moveMaxDaysOff;

@@ -2,13 +2,11 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -95,8 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false);
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -130,8 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false);
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -168,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks(decisionMakerResult);
 
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false);
+                    .Return(new List<DateOnly>());
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -198,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false);
+                    .Return(new List<DateOnly>());
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -233,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(false);
+                    .Return(new List<DateOnly>());
                 Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
                     .Return(decisionMakerResult);
             }

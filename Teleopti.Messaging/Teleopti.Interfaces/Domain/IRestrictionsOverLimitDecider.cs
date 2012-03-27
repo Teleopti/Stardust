@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -9,30 +11,30 @@ namespace Teleopti.Interfaces.Domain
         /// Check if preferenceses are over the limit.
         /// </summary>
         /// <returns></returns>
-        bool PreferencesOverLimit();
+        IList<DateOnly> PreferencesOverLimit();
 
         /// <summary>
         /// Check if must haves are over the limit.
         /// </summary>
         /// <returns></returns>
-        bool MustHavesOverLimit();
+        IList<DateOnly> MustHavesOverLimit();
 
         /// <summary>
         /// Check if rotations are over the limit.
         /// </summary>
         /// <returns></returns>
-        bool RotationOverLimit();
+        IList<DateOnly> RotationOverLimit();
 
         /// <summary>
         /// Check if preferenceses are over the limit.
         /// </summary>
         /// <returns></returns>
-        bool AvailabilitiesOverLimit();
+        IList<DateOnly> AvailabilitiesOverLimit();
 
         /// <summary>
         /// Check if preferenceses are over the limit.
         /// </summary>
         /// <returns></returns>
-        bool StudentAvailabilitiesOverLimit();
+        IList<DateOnly> StudentAvailabilitiesOverLimit();
     }
 }

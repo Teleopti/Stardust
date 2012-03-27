@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
 
-            if (movesOverMaxDaysLimit())
+            if (movesOverMaxDaysLimit().Count > 0)
                 return false;
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
@@ -138,13 +138,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            if (movesOverMaxDaysLimit())
+            IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+            if (daysToLock.Count > 0)
             {
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
-                foreach (var changedDay in movedDates)
+                foreach (var day in daysToLock)
                 {
                     //should only lock the days breaking restrictions, so we must return those days from movesOverMaxDaysLimit
-                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(changedDay.DateChanged, changedDay.DateChanged));
+                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
                 }
                 return true;
             }
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private bool movesOverMaxDaysLimit()
+        private IList<DateOnly> movesOverMaxDaysLimit()
         {
             return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
         }
