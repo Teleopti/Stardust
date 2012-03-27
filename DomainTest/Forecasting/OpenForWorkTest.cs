@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void ShouldCompareTwoInstances()
         {
             var openForWork = new OpenForWork();
-            Assert.That(_target == openForWork, Is.False);
+            Assert.That(_target.Equals(openForWork), Is.False);
 
             var openForWork1 = new OpenForWork { IsOpen = true, IsOpenForIncomingWork = true };
-            Assert.That(_target == openForWork1, Is.True);
+            Assert.That(_target.Equals(openForWork1), Is.True);
         }
 
         [Test]
