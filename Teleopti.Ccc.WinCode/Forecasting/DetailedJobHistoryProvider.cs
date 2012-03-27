@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-        public DetailedJobHistoryProvider(IUnitOfWorkFactory unitOfWorkFactory, JobResultRepository jobResultRepository)
+        public DetailedJobHistoryProvider(IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
@@ -25,17 +25,19 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
                 var jobResultList = new List<DetailedJobHistoryResultModel>();
                 
-                foreach (var temp in jobResult.Details)
+                foreach (var temp in jobResult.Details.Reverse())
                 {
-                    if (temp.DetailLevel == DetailLevel.Warning || temp.DetailLevel == DetailLevel.Error || temp.DetailLevel == DetailLevel.Info)
+                    if (temp.DetailLevel == DetailLevel.Warning || temp.DetailLevel == DetailLevel.Error)
                     {
-                        var jobResultDetails = new DetailedJobHistoryResultModel();
-                        jobResultDetails.Message = temp.Message;
-                        jobResultDetails.TimeStamp = temp.Timestamp;
-                        jobResultDetails.ExceptionMessage = temp.ExceptionMessage;
-                        jobResultDetails.ExceptionStackTrace = temp.ExceptionStackTrace;
-                        jobResultDetails.InnerExceptionMessage = temp.InnerExceptionMessage;
-                        jobResultDetails.InnerExceptionStackTrace = temp.InnerExceptionStackTrace;
+                        var jobResultDetails = new DetailedJobHistoryResultModel
+                                                   {
+                                                       Message = temp.Message,
+                                                       TimeStamp = temp.Timestamp,
+                                                       ExceptionMessage = temp.ExceptionMessage,
+                                                       ExceptionStackTrace = temp.ExceptionStackTrace,
+                                                       InnerExceptionMessage = temp.InnerExceptionMessage,
+                                                       InnerExceptionStackTrace = temp.InnerExceptionStackTrace
+                                                   };
 
                         jobResultList.Add(jobResultDetails);
                     }

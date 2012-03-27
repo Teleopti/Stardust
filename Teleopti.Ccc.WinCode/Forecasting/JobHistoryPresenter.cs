@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _view = view;
         	_jobHistoryProvider = jobHistoryProvider;
         	_pagingDetail = pagingDetail;
-        	_pagingDetail.PropertyChanged += _pagingDetail_PropertyChanged;
+        	_pagingDetail.PropertyChanged += pagingDetailPropertyChanged;
         }
 
-    	private void _pagingDetail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    	private void pagingDetailPropertyChanged(object sender, PropertyChangedEventArgs e)
     	{
     		_view.TogglePrevious(_pagingDetail.Skip > 0);
     		_view.ToggleNext(_pagingDetail.Skip + _pagingDetail.Take < _pagingDetail.TotalNumberOfResults);

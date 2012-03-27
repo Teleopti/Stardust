@@ -188,7 +188,7 @@
             this.gridControlJobHistory.ThemesEnabled = true;
             this.gridControlJobHistory.UseListChangedEvent = true;
             this.gridControlJobHistory.UseRightToLeftCompatibleTextBox = true;
-            this.gridControlJobHistory.CellClick += new Syncfusion.Windows.Forms.Grid.GridCellClickEventHandler(this.gridControlJobHistory_CellClick);
+            this.gridControlJobHistory.CellClick += new Syncfusion.Windows.Forms.Grid.GridCellClickEventHandler(this.gridControlJobHistoryCellClick);
             // 
             // autoLabelPageCount
             // 
@@ -213,7 +213,7 @@
             this.linkLabelNext.TabStop = true;
             this.linkLabelNext.Text = "xxNext";
             this.linkLabelNext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.linkLabelNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelNext_LinkClicked);
+            this.linkLabelNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelNextLinkClicked);
             // 
             // linkLabelPrevious
             // 
@@ -228,7 +228,7 @@
             this.linkLabelPrevious.TabStop = true;
             this.linkLabelPrevious.Text = "xxPrevious";
             this.linkLabelPrevious.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.linkLabelPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelPrevious_LinkClicked);
+            this.linkLabelPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelPreviousLinkClicked);
             // 
             // tableLayoutPanel3
             // 

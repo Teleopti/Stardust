@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IImportForecastsRepository _importForecastsRepository;
 	    private readonly IForecastsRowExtractor _rowExtractor;
+	    private readonly IJobHistoryProvider _jobHistoryProvider;
+	    private readonly IDetailedJobHistoryProvider _detailedJobHistoryProvider;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -88,13 +90,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IUnitOfWorkFactory unitOfWorkFactory, 
             IQuickForecastViewFactory quickForecastViewFactory, 
             IImportForecastsRepository importForecastsRepository,
-            IForecastsRowExtractor rowExtractor)
+            IForecastsRowExtractor rowExtractor,
+            IJobHistoryProvider jobHistoryProvider,
+            IDetailedJobHistoryProvider detailedJobHistoryProvider)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
             _importForecastsRepository = importForecastsRepository;
             _rowExtractor = rowExtractor;
+            _jobHistoryProvider = jobHistoryProvider;
+            _detailedJobHistoryProvider = detailedJobHistoryProvider;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1210,14 +1216,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    {
             _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
             {
-                using (var view = new JobHistoryDetailedView())
+                using (var view = new JobHistoryDetailedView(_jobHistoryProvider, _detailedJobHistoryProvider))
                 {
                     view.ShowDialog(this);
                 }
-                //using (var view = new JobHistoryView())
-                //{
-                //    view.ShowDialog(this);
-                //}
             });
         }
 

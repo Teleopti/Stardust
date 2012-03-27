@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public ImportForecastView(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler, IForecastsRowExtractor rowExtractor)
         {
             InitializeComponent();
+            if (!DesignMode)
+                SetTexts();
             _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository, rowExtractor));
             getSelectedSkillName();
             populateWorkloadList();
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             var firstWorkload = _presenter.Workload;
             if(firstWorkload==null)
             {
-                throw new ArgumentNullException("No workload exists.");
+                throw new ArgumentNullException("No workload available.");
             }
             labelWorkloadName.Text = firstWorkload.Name;
         }
