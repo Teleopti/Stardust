@@ -10571,4 +10571,7 @@ These options are activated:
     <value>Import Forecast</value>
     <comment>Import Forecast</comment>
   </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>View Job History</value>
+  </data>
 </root>

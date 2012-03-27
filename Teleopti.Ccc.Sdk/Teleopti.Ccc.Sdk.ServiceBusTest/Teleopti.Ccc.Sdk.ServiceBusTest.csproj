@@ -135,6 +135,7 @@
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
+    <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
