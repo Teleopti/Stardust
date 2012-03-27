@@ -229,22 +229,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
-		[Test]
-		public void ShouldAddPreferredAbsencesAndThenDayOffs()
-		{
-			var part1 = _mocks.StrictMock<IScheduleDay>();
-			var person = _mocks.StrictMock<IPerson>();
-			var date1 = new DateOnly(2009, 2, 2);
-			var rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 
-			Expect.Call(part1.Person).Return(person).Repeat.AtLeastOnce();
-			Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date1, new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
-			Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(new List<DateOnly> {date1}, new List<IPerson> {person})).IgnoreArguments();
-            Expect.Call(() => _dayOffScheduler.DayOffScheduling(new List<IScheduleDay> { part1 }, new List<DateOnly> { date1 }, new List<IPerson> { person }, rollbackService)).IgnoreArguments();
-			_mocks.ReplayAll();
-			_schedulingService.DayOffScheduling(new List<IScheduleDay> { part1 }, rollbackService);
-			_mocks.VerifyAll();
-		}
+        [Test]
+        public void ShouldAddPreferredAbsencesAndThenDayOffs()
+        {
+            var rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+            var matrixProList = new List<IScheduleMatrixPro>();
+
+            Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList));
+            Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService));
+            _mocks.ReplayAll();
+            
+            _schedulingService.DayOffScheduling(matrixProList, matrixProList, rollbackService);
+            _mocks.VerifyAll();
+        }
 
 		
 		[Test]
