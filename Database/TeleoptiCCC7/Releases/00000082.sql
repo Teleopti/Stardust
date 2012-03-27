@@ -1021,7 +1021,67 @@ LEFT OUTER JOIN mart.dim_date d
 ON temp.Date_date = d.date_date
 GO
   
-GO  
+
+----------------
+--Name: tamasb
+--Date: 2009-03-20 17:13
+--Desc: Add superxxx data
+--Expl: Super User, Super Role
+---------------- 
+SET NOCOUNT ON
+BEGIN
+			--declare
+			DECLARE @SuperUserId as uniqueidentifier
+			DECLARE @SuperRoleId as uniqueidentifier
+			DECLARE @AllFunctionId as uniqueidentifier
+
+			--init
+			SELECT	  @SuperUserId = '3f0886ab-7b25-4e95-856a-0d726edc2a67'
+			SELECT	  @SuperRoleId = '193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
+			
+			--insert to super user
+			IF  (
+				NOT EXISTS (SELECT id FROM [dbo].[Person] WHERE Id = @SuperUserId) -- check for the existence of super user role
+				)
+			BEGIN
+				INSERT [dbo].[Person]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Email], [Note], [EmploymentNumber], [TerminalDate], [FirstName], [LastName], [DefaultTimeZone], [ApplicationLogOnName], [IsDeleted], [BuiltIn])
+				VALUES			     (@SuperUserId,1,@SuperUserId, NULL, getdate(), NULL, '', '', '', NULL, '_Super User', '_Super User', 'UTC', '_Super User', 0, 1) 
+
+			END
+			IF  (
+				NOT EXISTS (SELECT	Id FROM ApplicationFunction WHERE FunctionCode = 'All' and IsDeleted = 0)
+				)
+			BEGIN
+				INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Parent], [FunctionCode], [FunctionDescription], [ForeignId], [ForeignSource], [SortOrder], [IsDeleted])
+				VALUES (newid(),1, @SuperUserId, NULL, getdate(), NULL, NULL, 'All', 'xxAll', '0000-1000', 'Raptor', NULL, 0) 
+
+			END
+			
+			SELECT	  @AllFunctionId = Id FROM ApplicationFunction WHERE FunctionCode = 'All' and IsDeleted = 0
+
+			--insert to super role
+			IF  (NOT EXISTS (SELECT id FROM [dbo].[ApplicationRole] WHERE Id = @SuperRoleId)) -- check for the existence of super user role
+				INSERT [dbo].[ApplicationRole]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [Name], [DescriptionText], [BuiltIn], [BusinessUnit], [IsDeleted])
+				VALUES (@SuperRoleId,1,@SuperUserId, NULL, getdate(), NULL, '_Super Role', 'xxSuperRole', 1, NULL, 0) 
+
+			--insert into availableData
+			IF  (NOT EXISTS (SELECT id FROM [dbo].[AvailableData] WHERE [ApplicationRole] = @SuperRoleId))
+				INSERT [dbo].[AvailableData]([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn], [ApplicationRole], [AvailableDataRange], [IsDeleted])
+				VALUES (newid(),1,@SuperUserId, NULL, getdate(), NULL, @SuperRoleId, 5, 0) 
+
+			--insert into ApplicationFunctionInRole
+			IF  (NOT EXISTS (SELECT * FROM [dbo].[ApplicationFunctionInRole] WHERE [ApplicationRole] = @SuperRoleId AND [ApplicationFunction] = @AllFunctionId))
+				INSERT [dbo].[ApplicationFunctionInRole]([ApplicationRole], [ApplicationFunction])
+				VALUES (@SuperRoleId, @AllFunctionId) 
+
+			--insert into PersonInApplicationRole
+			IF  (NOT EXISTS (SELECT * FROM [dbo].[PersonInApplicationRole] WHERE [Person] = @SuperUserId AND [ApplicationRole] = @SuperRoleId))
+				INSERT [dbo].[PersonInApplicationRole]([Person], [ApplicationRole])
+				VALUES (@SuperUserId, @SuperRoleId) 
+
+
+END
+SET NOCOUNT OFF
  
 
 GO

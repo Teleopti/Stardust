@@ -128,7 +128,6 @@
     <Compile Include="Areas\MobileReports\Core\ISkillProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingProfile.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MobileReports\Core\Matrix\TestDataWebReportRepository.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\IDefinedReportProvider.cs" />
     <Compile Include="Areas\MobileReports\Core\ReportDataFetcher.cs" />

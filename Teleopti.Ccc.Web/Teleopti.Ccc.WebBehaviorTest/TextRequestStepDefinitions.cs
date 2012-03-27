@@ -4,6 +4,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -26,11 +27,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input text request values")]
 		public void WhenIInputTextRequstValues()
 		{
+			var date = DateTime.Today;
+			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
 		}
 
