@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public ImportForecastView(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IGracefulDataSourceExceptionHandler gracefulHandler, IForecastsRowExtractor rowExtractor)
         {
             InitializeComponent();
+            if (!DesignMode)
+                SetTexts();
             _presenter = new ImportForecastPresenter(this, new ImportForecastModel(preselectedSkill, unitOfWorkFactory, importForecastsRepository, rowExtractor));
             getSelectedSkillName();
             populateWorkloadList();
@@ -37,13 +39,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             _gracefulHandler = gracefulHandler;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         private void populateWorkloadList()
         {
             _presenter.PopulateWorkload();
             var firstWorkload = _presenter.Workload;
             if(firstWorkload==null)
             {
-                throw new ArgumentNullException("No workload exists.");
+                throw new ArgumentNullException("No workload available.");
             }
             labelWorkloadName.Text = firstWorkload.Name;
         }
@@ -78,7 +81,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             get { return radioButtonImportWLAndStaffing.Checked; }
         }
-        
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Forecasting.Forms.ExportPages.JobStatusView.SetMessage(System.String)")]
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
             buttonAdvImport.Enabled = false;

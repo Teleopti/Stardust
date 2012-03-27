@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
         public virtual string ExceptionMessage { get; set; }
         public virtual string InnerExceptionStackTrace { get; set; }
         public virtual string InnerExceptionMessage { get; set; }
-        public virtual DateTime TimeStamp { get; set; }
+        public virtual DateTime Timestamp { get; set; }
     }
 }

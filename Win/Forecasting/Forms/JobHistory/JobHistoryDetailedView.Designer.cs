@@ -26,6 +26,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "gridControlJobHistory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "gridControlDetailedJobHistory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void InitializeComponent()
         {
             Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
@@ -187,7 +188,7 @@
             this.gridControlJobHistory.ThemesEnabled = true;
             this.gridControlJobHistory.UseListChangedEvent = true;
             this.gridControlJobHistory.UseRightToLeftCompatibleTextBox = true;
-            this.gridControlJobHistory.CellClick += new Syncfusion.Windows.Forms.Grid.GridCellClickEventHandler(this.gridControlJobHistory_CellClick);
+            this.gridControlJobHistory.CellClick += new Syncfusion.Windows.Forms.Grid.GridCellClickEventHandler(this.gridControlJobHistoryCellClick);
             // 
             // autoLabelPageCount
             // 
@@ -212,7 +213,7 @@
             this.linkLabelNext.TabStop = true;
             this.linkLabelNext.Text = "xxNext";
             this.linkLabelNext.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.linkLabelNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelNext_LinkClicked);
+            this.linkLabelNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelNextLinkClicked);
             // 
             // linkLabelPrevious
             // 
@@ -227,7 +228,7 @@
             this.linkLabelPrevious.TabStop = true;
             this.linkLabelPrevious.Text = "xxPrevious";
             this.linkLabelPrevious.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.linkLabelPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelPrevious_LinkClicked);
+            this.linkLabelPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelPreviousLinkClicked);
             // 
             // tableLayoutPanel3
             // 

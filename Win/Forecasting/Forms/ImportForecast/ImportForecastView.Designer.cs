@@ -213,7 +213,7 @@
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 4;
-            this.buttonAdvBrowseFile.Text = "Browse";
+            this.buttonAdvBrowseFile.Text = "xxBrowse";
             this.buttonAdvBrowseFile.UseVisualStyle = true;
             this.buttonAdvBrowseFile.Click += new System.EventHandler(this.browseImportFileButtonClick);
             // 
@@ -263,7 +263,7 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.FileName = "";
             // 
             // ImportForecastView
             // 

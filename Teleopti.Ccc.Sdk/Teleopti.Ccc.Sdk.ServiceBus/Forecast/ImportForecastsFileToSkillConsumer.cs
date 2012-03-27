@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.SetJobResult(jobResult, _messageBroker);
                 if (skill == null)
                 {
-                    const string errorMessage = "Skill does not exist.";
+                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Skill does not exist.");
                     _feedback.Error(errorMessage);
                     _feedback.ReportProgress(0, errorMessage);
                     endProcessing(unitOfWork);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 var forecastFile = _importForecastsRepository.Get(message.UploadedFileId);
                 if (forecastFile == null)
                 {
-                    const string errorMessage = "The uploaded file has no content.";
+                     var errorMessage = string.Format(CultureInfo.InvariantCulture,"The uploaded file has no content.");
                     _feedback.Error(errorMessage);
                     _feedback.ReportProgress(0, errorMessage);
                     endProcessing(unitOfWork);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 var queryResult = _analyzeQuery.Run(_contentProvider.LoadContent(forecastFile.FileContent, timeZone), skill.MidnightBreakOffset);
                 if (!queryResult.Succeeded)
                 {
-                    var errorMessage = string.Concat("Validation error! ", queryResult.ErrorMessage);
+                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Validation error! {0}", queryResult.ErrorMessage);
                     _feedback.Error(errorMessage);
                     _feedback.ReportProgress(0, errorMessage);
                     endProcessing(unitOfWork);
