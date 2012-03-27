@@ -10563,4 +10563,8 @@ These options are activated:
     <value>Workload name:</value>
     <comment>Workload name</comment>
   </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Import Forecast</value>
+    <comment>Import Forecast</comment>
+  </data>
 </root>

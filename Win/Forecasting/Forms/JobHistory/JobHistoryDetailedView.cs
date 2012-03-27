@@ -39,7 +39,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             base.OnLoad(e);
             if (DesignMode) return;
 
-            _presenter = new JobHistoryPresenter(this, new JobHistoryProvider(UnitOfWorkFactory.Current, new JobResultRepository(UnitOfWorkFactory.Current)), new PagingDetail { Take = 20 });
+            _presenter = new JobHistoryPresenter(this,
+                                                 new JobHistoryProvider(UnitOfWorkFactory.Current,
+                                                                        new JobResultRepository(
+                                                                            UnitOfWorkFactory.Current)),
+                                                 new PagingDetail {Take = 20});
             _presenter.Initialize();
         }
 
@@ -130,7 +134,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             var gridBoundColumnMessage = new GridBoundColumn();
             
             gridBoundColumnTimestamp.HeaderText = UserTexts.Resources.Timestamp;
-            gridBoundColumnTimestamp.MappingName = "TimeStamp";
+            gridBoundColumnTimestamp.MappingName = "Timestamp";
             gridBoundColumnTimestamp.ReadOnly = true;
             gridBoundColumnTimestamp.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Left;
 

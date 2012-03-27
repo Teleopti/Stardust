@@ -81,9 +81,8 @@
             // 
             // splitContainerJobHistoryView
             // 
-            this.splitContainerJobHistoryView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(235)))), ((int)(((byte)(240))))), System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(211)))), ((int)(((byte)(221))))));
+            this.splitContainerJobHistoryView.BackColor = System.Drawing.SystemColors.Window;
             this.splitContainerJobHistoryView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerJobHistoryView.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
             this.splitContainerJobHistoryView.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
             this.splitContainerJobHistoryView.Location = new System.Drawing.Point(3, 3);
             this.splitContainerJobHistoryView.Name = "splitContainerJobHistoryView";
@@ -235,7 +234,7 @@
             this.tableLayoutPanel3.BackColor = System.Drawing.SystemColors.Window;
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 897F));
             this.tableLayoutPanel3.Controls.Add(this.gridControlDetailedJobHistory, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
