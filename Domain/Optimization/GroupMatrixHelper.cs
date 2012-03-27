@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class GroupMatrixHelper : IGroupMatrixHelper
     {
         private readonly IGroupMatrixContainerCreator _groupMatrixContainerCreator;
+        private IList<IScheduleMatrixPro> _allMatrixes;
 
         public GroupMatrixHelper(IGroupMatrixContainerCreator groupMatrixContainerCreator)
         {
@@ -103,6 +104,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IScheduleMatrixPro scheduleMatrix = findGroupMatrix(allMatrixes, groupMember, daysOffToRemove[0]);
                 if (scheduleMatrix == null)
                     return null;
+
+                _allMatrixes = allMatrixes;
 
                 GroupMatrixContainer matrixContainer =
                     _groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix, ruleSet);
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (var dateOnly in daysOffToRemove)
             {
-                if (!groupSchedulingService.ScheduleOneDay(dateOnly, groupPerson))
+                if (!groupSchedulingService.ScheduleOneDay(dateOnly, groupPerson, _allMatrixes))
                 {
                     schedulePartModifyAndRollbackService.Rollback();
                     return false;
