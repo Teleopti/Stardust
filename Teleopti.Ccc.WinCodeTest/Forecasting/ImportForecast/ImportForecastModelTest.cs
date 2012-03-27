@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         [Test]
         public void ShouldGetSkillName()
         {
-            Assert.That(_target.GetSelectedSkillName(), Is.EqualTo("TestSkill"));   
+            Assert.That(_target.SelectedSkillName, Is.EqualTo("TestSkill"));   
         }
 
         [Test]

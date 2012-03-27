@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             _gracefulHandler = gracefulHandler;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         private void populateWorkloadList()
         {
             _presenter.PopulateWorkload();
@@ -80,7 +81,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             get { return radioButtonImportWLAndStaffing.Checked; }
         }
-        
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Forecasting.Forms.ExportPages.JobStatusView.SetMessage(System.String)")]
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
             buttonAdvImport.Enabled = false;

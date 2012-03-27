@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
 {
     public interface IImportForecastModel
     {
-        string GetSelectedSkillName();
+        string SelectedSkillName { get; }
         Guid SaveValidatedForecastFile(IForecastFile forecastFile);
         void ValidateFile(StreamReader streamReader);
         IWorkload LoadWorkload();
@@ -33,13 +33,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             _rowExtractor = rowExtractor;
         }
 
-        public string GetSelectedSkillName()
+        public string SelectedSkillName
         {
-            return _skill.Name;
+            get { return _skill.Name; }
         }
 
         public byte[] FileContent { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public Guid SaveValidatedForecastFile(IForecastFile forecastFile)
         {
             Guid result;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             return result;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
         public void ValidateFile(StreamReader streamReader)
         {
             var rowNumber = 1;
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
             }
             catch (ValidationException exception)
             {
-                throw new ValidationException(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
+                throw new ValidationException(string.Format("Line {0}, Error:{1}", rowNumber, exception.Message), exception);
             }
             var fileContent = new byte[streamReader.BaseStream.Length];
             streamReader.BaseStream.Seek(0, SeekOrigin.Begin);

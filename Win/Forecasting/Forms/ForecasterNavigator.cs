@@ -1223,6 +1223,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             });
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowWarningMessage(System.String,System.String)")]
         private void importForecast(TreeNode node)
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));

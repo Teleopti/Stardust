@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
 
         public CommandResultDto Handle(ImportForecastsFileCommandDto command)
         {
+            if (command == null)
+                throw new FaultException("Command is null.");
             Guid jobResultId;
             var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

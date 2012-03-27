@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return forecastFile;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         protected override void VerifyAggregateGraphProperties(IForecastFile loadedAggregateFromDatabase)
         {
             IForecastFile forecastFile = CreateAggregateWithCorrectBusinessUnit();

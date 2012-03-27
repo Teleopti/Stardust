@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(2));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void initializeGrid()
         {
             var gridBoundColumnJobCategory = new GridBoundColumn();
@@ -125,13 +126,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridBoundColumnStatus});
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void initializeJobHistoryDetailGrid()
         {
             var gridBoundColumnTimestamp = new GridBoundColumn();
             var gridBoundColumnMessage = new GridBoundColumn();
             
             gridBoundColumnTimestamp.HeaderText = UserTexts.Resources.Timestamp;
-            gridBoundColumnTimestamp.MappingName = "TimeStamp";
+            gridBoundColumnTimestamp.MappingName = "Timestamp";
             gridBoundColumnTimestamp.ReadOnly = true;
             gridBoundColumnTimestamp.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Left;
 

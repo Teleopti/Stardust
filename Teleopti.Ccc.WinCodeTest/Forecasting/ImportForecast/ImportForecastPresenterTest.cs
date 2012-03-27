@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         {
             using (_mocks.Record())
             {
-                Expect.Call(_model.GetSelectedSkillName()).Return(_skill.Name);
+                Expect.Call(_model.SelectedSkillName).Return(_skill.Name);
             }
             using (_mocks.Playback())
             {

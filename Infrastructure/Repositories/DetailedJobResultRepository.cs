@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NHibernate.Criterion;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -27,8 +21,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWorkFactory)
         {
         }
-
-
-        
     }
 }

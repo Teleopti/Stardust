@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_jobResultRepository = jobResultRepository;
 		}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<DetailedJobHistoryResultModel> GetHistory(JobResultModel jobResultModel)
         {
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
                         var jobResultDetails = new DetailedJobHistoryResultModel
                                                    {
                                                        Message = temp.Message,
-                                                       TimeStamp = temp.Timestamp,
+                                                       Timestamp = temp.Timestamp,
                                                        ExceptionMessage = temp.ExceptionMessage,
                                                        ExceptionStackTrace = temp.ExceptionStackTrace,
                                                        InnerExceptionMessage = temp.InnerExceptionMessage,

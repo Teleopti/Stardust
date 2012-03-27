@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 
         public void GetSelectedSkillName()
         {
-            SkillName = _model.GetSelectedSkillName();
+            SkillName = _model.SelectedSkillName;
         }
 
         public Guid SaveForecastFile(string uploadFileName)
