@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
         private readonly ForecastsFileIntegerValueValidator _integerValidator = new ForecastsFileIntegerValueValidator();
         private readonly ForecastsFileDoubleValueValidator _doubleValidator = new ForecastsFileDoubleValueValidator();
 
-        public IForecastsRow Extract(string rowString, ICccTimeZoneInfo timeZone)
+        public IForecastsRow Extract(string value, ICccTimeZoneInfo timeZone)
         {
-            var content = rowString.Split(',');
+            var content = value.Split(',');
             if (!_columnsInRowValidSpecification.IsSatisfiedBy(content))
             {
                 throw new ValidationException("There are more or less columns than expected.");

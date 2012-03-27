@@ -168,6 +168,7 @@
     <Compile Include="Forecasting\Import\ForecastsFileRowTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\MultisiteDayCloneIssueTest.cs" />
+    <Compile Include="Forecasting\OpenForWorkTest.cs" />
     <Compile Include="Forecasting\SkillDayBug14724Test.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxSeatsTest.cs" />
     <Compile Include="Forecasting\IntervalHasAboveMaxSeatsTest.cs" />
