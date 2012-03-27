@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.Should().Not.Be.Null(); // Unable to figure out params .Empty();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "Teleopti.Ccc.TestCommon.TestData.Core.AnalyticsDataFactory.Persist"), Test]
 		public void VerifyGetSkill()
 		{
 			var dataFactory = new AnalyticsDataFactory();
