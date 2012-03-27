@@ -46,10 +46,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.SetJobResult(jobResult, _messageBroker);
                 if (skill == null)
                 {
+                    _feedback.Error(string.Format("Skill with Id:{0} does not exist.", message.TargetSkillId));
+                    _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture,
+                                                           "An error occurred while running import to {0} on {1}.",
+                                                           message.TargetSkillId, message.Date));
                     unitOfWork.Clear();
                     unitOfWork.Merge(jobResult);
-                    _feedback.Error(string.Format("Skill with Id:{0} does not exist.", message.TargetSkillId));
-                    _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running import."));
                     endProcessing(unitOfWork);
                     return;
                 }
@@ -61,15 +63,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 {
                     try
                     {
-                        _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
+                        if (message.Forecasts != null)
+                            _saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
                     }
                     catch (Exception exception)
                     {
-                        unitOfWork.Clear();
-                        unitOfWork.Merge(jobResult);
-                        stepMessage = string.Format(CultureInfo.InvariantCulture, "An error occurred while running import.");
+                        stepMessage = string.Format(CultureInfo.InvariantCulture,
+                                                    "An error occurred while running import to {0} on {1}.", skill.Name, message.Date);
                         _feedback.Error(stepMessage, exception);
                         _feedback.ReportProgress(0, stepMessage);
+                        unitOfWork.Clear();
+                        unitOfWork.Merge(jobResult);
                         endProcessing(unitOfWork);
                         return;
                     }

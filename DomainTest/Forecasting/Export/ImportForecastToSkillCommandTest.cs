@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             var forecastRow = new ForecastsRow {AfterTaskTime = 1, TaskTime = 12, Tasks = 10};
             using(_mocks.Record())
             {
-                Expect.Call(() => _sendBusMessage.Process(new[] {forecastRow}, targetSkill)).IgnoreArguments();
+                Expect.Call(() => _sendBusMessage.Process(new[] { forecastRow }, targetSkill, new DateOnlyPeriod())).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
-                _target.Execute(sourceSkill, targetSkill, skillStaffPeriodDictionary);
+                _target.Execute(sourceSkill, targetSkill, skillStaffPeriodDictionary, new DateOnlyPeriod());
             }
         }
     }

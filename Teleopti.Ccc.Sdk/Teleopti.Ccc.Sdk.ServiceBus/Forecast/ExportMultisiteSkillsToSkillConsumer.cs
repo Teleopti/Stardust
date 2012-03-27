@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			}
 
             var listOfMessages = new List<ExportMultisiteSkillToSkill>();
-		    int progressSteps = 1;
+		    var progressSteps = 1;
             foreach (var multisiteSkillSelection in message.MultisiteSkillSelections)
             {
                 foreach (var dateOnlyPeriod in message.Period.Split(20))
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            });
                     progressSteps++;
                 }
-                progressSteps += multisiteSkillSelection.ChildSkillSelections.Count*message.Period.DayCollection().Count*4;
+                progressSteps += multisiteSkillSelection.ChildSkillSelections.Count*message.Period.DayCount()*4;
             }
             _feedback.ChangeTotalProgress(progressSteps);
 

@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
                                                                       sourceScenario)).Return(
                                                                           new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new [] { childSkillDay } } });
 
-                Expect.Call(() => importForecastToSkillCommand.Execute(childSkill, targetSkill, null)).Constraints(
+                Expect.Call(() => importForecastToSkillCommand.Execute(childSkill, targetSkill, null, new DateOnlyPeriod())).Constraints(
                     Rhino.Mocks.Constraints.Is.Equal(childSkill), Rhino.Mocks.Constraints.Is.Equal(targetSkill),
-                    Rhino.Mocks.Constraints.Is.Anything());
+                    Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything());
                 Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
                     new ReadOnlyCollection<ISkillStaffPeriod>(new[] {skillStaffPeriod}));
             }
