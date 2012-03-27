@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Forecasting;
@@ -12,15 +10,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 {
     public partial class JobHistoryDetailedView : BaseRibbonForm, IJobHistoryView
     {
-        private readonly IJobHistoryProvider _jobHistoryProvider;
-        private readonly IDetailedJobHistoryProvider _detailedJobHistoryProvider;
-        private JobHistoryPresenter _presenter;
-        private DetailedJobHistoryPresenter _detailedJobHistoryPresenter;
-
-        public JobHistoryDetailedView(IJobHistoryProvider jobHistoryProvider, IDetailedJobHistoryProvider detailedJobHistoryProvider)
+        public JobHistoryDetailedView()
         {
-            _jobHistoryProvider = jobHistoryProvider;
-            _detailedJobHistoryProvider = detailedJobHistoryProvider;
             InitializeComponent();
             initializeGrid();
             initializeJobHistoryDetailGrid();
@@ -41,18 +32,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             base.OnLoad(e);
             if (DesignMode) return;
 
-            _presenter = new JobHistoryPresenter(this, _jobHistoryProvider, new PagingDetail { Take = 20 });
-            _presenter.Initialize();
+            Presenter.Initialize();
         }
 
-        public void BindData(IEnumerable<JobResultModel> jobResultModels)
+        internal JobHistoryPresenter Presenter { get; set; }
+
+        public void BindJobResultData(IEnumerable<JobResultModel> jobResultModels)
         {
             gridControlJobHistory.DataSource = jobResultModels;
         }
 
-        public void BindJobDetailData(IList<DetailedJobHistoryResultModel> jobHistoryEntries)
+        public void BindJobResultDetailData(IList<JobResultDetailModel> jobHistoryEntries)
         {
             gridControlDetailedJobHistory.DataSource = jobHistoryEntries;
+            resizeJobDetailColumns();
         }
 
         public void TogglePrevious(bool enabled)
@@ -72,7 +65,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 
         private void toolStripButtonReloadHistory_Click(object sender, EventArgs e)
         {
-            _presenter.ReloadHistory();
+            Presenter.ReloadHistory();
         }
 
         private void resizeColumns()
@@ -91,7 +84,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(2));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void initializeGrid()
         {
             var gridBoundColumnJobCategory = new GridBoundColumn();
@@ -126,7 +118,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridBoundColumnStatus});
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void initializeJobHistoryDetailGrid()
         {
             var gridBoundColumnTimestamp = new GridBoundColumn();
@@ -146,30 +137,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridBoundColumnTimestamp,
                 gridBoundColumnMessage});
         }
-        
-        private void linkLabelPreviousLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+
+      
+        private void linkLabelPrevious_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-            _presenter.Previous();
+            Presenter.Previous();
         }
 
-        private void linkLabelNextLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelNext_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-            _presenter.Next();
+            Presenter.Next();
         }
 
-        public void LoadJobHistoryData(JobResultModel jobResultModel)
+        private void gridControlJobHistory_CellClick(object sender, GridCellClickEventArgs e)
         {
-            _detailedJobHistoryPresenter = new DetailedJobHistoryPresenter(this, _detailedJobHistoryProvider);
-            _detailedJobHistoryPresenter.LoadDetailedHistory(jobResultModel);
-        }
-
-        private void gridControlJobHistoryCellClick(object sender, GridCellClickEventArgs e)
-        {
-            if (e.RowIndex == 0) return;
-            var temp = (IList) gridControlJobHistory.DataSource;
-            var jobResult = (JobResultModel) temp[e.RowIndex - 1];
-            LoadJobHistoryData(jobResult);
-            resizeJobDetailColumns();
+            if (e.RowIndex != 0)
+            {
+                var data = (IList) gridControlJobHistory.DataSource;
+                var jobResult = (JobResultModel) data[e.RowIndex - 1];
+                Presenter.LoadDetailedHistory(jobResult);
+            }
         }
     }
 }

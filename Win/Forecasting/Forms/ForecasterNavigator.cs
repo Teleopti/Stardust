@@ -51,9 +51,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IImportForecastsRepository _importForecastsRepository;
+	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IForecastsRowExtractor _rowExtractor;
-	    private readonly IJobHistoryProvider _jobHistoryProvider;
-	    private readonly IDetailedJobHistoryProvider _detailedJobHistoryProvider;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -90,17 +89,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IUnitOfWorkFactory unitOfWorkFactory, 
             IQuickForecastViewFactory quickForecastViewFactory, 
             IImportForecastsRepository importForecastsRepository,
-            IForecastsRowExtractor rowExtractor,
-            IJobHistoryProvider jobHistoryProvider,
-            IDetailedJobHistoryProvider detailedJobHistoryProvider)
+            IJobHistoryViewFactory jobHistoryViewFactory,
+            IForecastsRowExtractor rowExtractor)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
             _importForecastsRepository = importForecastsRepository;
+            _jobHistoryViewFactory = jobHistoryViewFactory;
             _rowExtractor = rowExtractor;
-            _jobHistoryProvider = jobHistoryProvider;
-            _detailedJobHistoryProvider = detailedJobHistoryProvider;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1214,16 +1211,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	    private void toolStripMenuItemJobHistory_Click(object sender, EventArgs e)
 	    {
-            _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
-            {
-                using (var view = new JobHistoryDetailedView(_jobHistoryProvider, _detailedJobHistoryProvider))
-                {
-                    view.ShowDialog(this);
-                }
-            });
-        }
+	        _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
+	    }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowWarningMessage(System.String,System.String)")]
         private void importForecast(TreeNode node)
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));

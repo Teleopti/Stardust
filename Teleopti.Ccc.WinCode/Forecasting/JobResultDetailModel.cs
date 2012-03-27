@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.WinCode.Forecasting
 {
-    public class DetailedJobHistoryResultModel
+    public class JobResultDetailModel
     {
         public Guid? JobId { get; set; }
         public string Message { get; set; }

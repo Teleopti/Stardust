@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Forecasting;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting
@@ -9,35 +10,37 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
     [TestFixture]
     public class DetailedJobHistoryPresenterTest
     {
-        private DetailedJobHistoryPresenter _target;
-        private MockRepository _mocks;
-        private IJobHistoryView _view;
-        private IDetailedJobHistoryProvider _jobHistoryProvider;
+        private JobHistoryPresenter target;
+        private MockRepository mocks;
+        private IJobHistoryView view;
+        private IJobResultProvider jobResultProvider;
 
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _view = _mocks.DynamicMock<IJobHistoryView>();
-            _jobHistoryProvider = _mocks.DynamicMock<IDetailedJobHistoryProvider>();
-            _target = new DetailedJobHistoryPresenter(_view, _jobHistoryProvider);
+            mocks = new MockRepository();
+            view = mocks.DynamicMock<IJobHistoryView>();
+            jobResultProvider = mocks.DynamicMock<IJobResultProvider>();
+            target = new JobHistoryPresenter(view, jobResultProvider, new PagingDetail());
         }
 
         [Test]
         public void ShouldInitialize()
         {
             var jobModel = new JobResultModel{JobId = new Guid(), JobCategory = "Forecast Import", Owner = "talham", Status = "Done"};
-            var details = new List<DetailedJobHistoryResultModel>();
-            using (_mocks.Record())
+            var details = new List<JobResultDetailModel>();
+            using (mocks.Record())
             {
-                Expect.Call(_jobHistoryProvider.GetHistory(jobModel)).Return(details);
-                Expect.Call(() => _view.BindJobDetailData(details));
+                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel)).Return(details);
+                Expect.Call(() => view.BindJobResultDetailData(details));
             }
-            using (_mocks.Playback())
+            using (mocks.Playback())
             {
                
-                _target.LoadDetailedHistory(jobModel);
+                target.LoadDetailedHistory(jobModel);
             }
         }
+
+
     }
 }
