@@ -18,6 +18,9 @@ CREATE PROC [Msg].[sp_Log_Insert]
 	@ChangedDateTime datetime
 AS
 BEGIN
+--reset input to SQL Server time
+SELECT @ChangedDateTime = GETDATE()
+
 IF(@LogId = '00000000-0000-0000-0000-000000000000')
 	BEGIN
 		SET @LogId = newid()
