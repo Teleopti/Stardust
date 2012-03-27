@@ -8,3 +8,4 @@ RTA,RTA,RTA
 RTATools,TeleoptiCCC\Tools\RTATools,RTATools
 SDK,SDK,SDK
 ClickOnceSignTools,TeleoptiCCC\Tools\ClickOnceSign,DummyFolder
+Broker,Broker,Broker
