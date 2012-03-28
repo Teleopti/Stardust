@@ -359,7 +359,6 @@ namespace Teleopti.Messaging.SignalR
 			{
 				var subscription = _proxy.Subscribe(EventName);
 				subscription.Data -= subscription_Data;
-				proxy.RemoveEvent(EventName);
 			}
 		}
 
