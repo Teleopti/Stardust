@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 Expect.Call(encryption.EncryptString(password)).Return(password);
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
                 Expect.Call(applicationAuthenticationInfo.Password).Return(password);
                 Expect.Call(checkPasswordChange.Check(userDetail)).Return(authenticationResult);
             }
@@ -63,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 Expect.Call(encryption.EncryptString(password)).Return(password);
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
                 Expect.Call(applicationAuthenticationInfo.Password).Return("invalidpass");
                 Expect.Call(checkBruteForce.Check(userDetail)).Return(new AuthenticationResult());
             }

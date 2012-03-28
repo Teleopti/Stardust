@@ -320,8 +320,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(3);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(3);
+                Expect.Call(_base.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
                 Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
                 Expect.Call(authInfo.Password).Return("");
                 Expect.Call(authInfo.ApplicationLogOnName).Return("AppUser123");
@@ -348,16 +347,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string setValue = "";
             _base = _mocks.StrictMock<IPerson>();
             var userDetail = _mocks.StrictMock<IUserDetail>();
-            var permission = _mocks.StrictMock<IPermissionInformation>();
             var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(1);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(1);
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                    new DateOnly(DateTime.Today), _base)).Return(true);
-                Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
+                Expect.Call(() => _base.ApplicationAuthenticationInfo = null);
             }
             using (_mocks.Playback())
             {
@@ -384,8 +380,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo);
+                Expect.Call(_base.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Twice();
                 Expect.Call(authInfo.ApplicationLogOnName).Return("userX07");
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
@@ -540,10 +535,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void ShouldNotChangeIfUserHasNoPermissionToChangeLogOnAndPassword()
         {
             const string oldLogOnInfo = "oldLogOnInfo";
-            _base.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = oldLogOnInfo;
-            _base.PermissionInformation.ApplicationAuthenticationInfo.Password = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.DomainName = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = oldLogOnInfo;
+            _base.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                      {ApplicationLogOnName = oldLogOnInfo, Password = oldLogOnInfo};
+            _base.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                  {DomainName = oldLogOnInfo, WindowsLogOnName = oldLogOnInfo};
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                     new DateOnly(DateTime.Today), _base)).Return(false);

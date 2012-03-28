@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private ICriteria createApplicationLogonNameCriteria(string logOnName)
         {
             return Session.CreateCriteria(typeof(Person), "person")
-                .Add(Restrictions.Eq("PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName",
                                      logOnName))
                 .Add(Restrictions.Disjunction()
                          .Add(Restrictions.IsNull("TerminalDate"))
@@ -136,10 +136,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Or(
                          Restrictions.Not(
                              Restrictions.Eq(
-                                 "PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                                 "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                  String.Empty)),
                          Restrictions.Not(
-                             Restrictions.Eq("PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName",
+                             Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName",
                                              String.Empty)))).SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
         }
 
@@ -162,11 +162,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             //should be case sensitive in password but not on user name
             //what if sql server instance is case insensitive - should the username still be incasesensitive?
             return Session.CreateCriteria(typeof(Person), "person")
-                .Add(Restrictions.Eq("PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName", logOnName))
+                .Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", logOnName))
                 .Add(Restrictions.Disjunction()
                         .Add(Restrictions.IsNull("TerminalDate"))
                         .Add(Restrictions.Ge("TerminalDate", new DateOnly(DateTime.Now))))
-                .Add(Restrictions.Eq("PermissionInformation.WindowsAuthenticationInfo.DomainName", domainName));
+                .Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", domainName));
         }
 
 
@@ -722,12 +722,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 IList<string[]> personInfoList = (from p in personCollection
                                                   select new[]
                                                              {
-                                                                 p.PermissionInformation.WindowsAuthenticationInfo.
-                                                                     WindowsLogOnName,
-                                                                 p.PermissionInformation.ApplicationAuthenticationInfo.
-                                                                     ApplicationLogOnName,
-                                                                 p.PermissionInformation.WindowsAuthenticationInfo.
-                                                                     DomainName,
+                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.WindowsLogOnName,
+                                                                 p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName,
+                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.DomainName,
                                                                  p.Id.ToString()
                                                              }).ToList();
 
@@ -760,16 +757,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                 Restrictions.Or
                                     (
                                         Restrictions.In(
-                                            "PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                                            "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                             applicationLogOns),
 
                                         Restrictions.And
                                             (
                                                 Restrictions.In(
-                                                    "PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName",
+                                                    "WindowsAuthenticationInfo.WindowsLogOnName",
                                                     windowsLogOns),
                                                 Restrictions.In(
-                                                    "PermissionInformation.WindowsAuthenticationInfo.DomainName",
+                                                    "WindowsAuthenticationInfo.DomainName",
                                                     domains)
                                             )
                                     ),

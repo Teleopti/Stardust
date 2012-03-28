@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
@@ -15,10 +16,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             IPerson person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("kalle", "kula");
             person.SetId(Guid.NewGuid());
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "karl";
-            person.PermissionInformation.ApplicationAuthenticationInfo.Password = "secret";
-            person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "winLogon";
-            person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "myDomain";
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {ApplicationLogOnName = "karl", Password = "secret"};
+            
+            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                   {WindowsLogOnName = "winLogon", DomainName = "myDomain"};
             person.Email = "kalle.kula@myDomain.com";
             person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(1033));
             person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1053));
@@ -27,10 +29,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("pelle", "pilla");
             person.SetId(Guid.NewGuid());
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "perra";
-            person.PermissionInformation.ApplicationAuthenticationInfo.Password = "ts";
-            person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "pepi";
-            person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "Domain1";
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {ApplicationLogOnName = "perra", Password = "ts"};
+                
+            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { WindowsLogOnName = "pepi", DomainName = "Domain1" }; 
             person.Email = "pella.pilla@Domain1.com";
             //person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(1033));
             //person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1053));

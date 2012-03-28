@@ -52,12 +52,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_workflowControlSet);
 		}
 
-		protected override IPerson CreateAggregateWithCorrectBusinessUnit()
+	    protected override IPerson CreateAggregateWithCorrectBusinessUnit()
 		{
 			IPerson person = PersonFactory.CreatePerson("sdgf");
 			person.Name = new Name("Roger", "Msdfr");
-			person.Email = "roger.kratz@teleopti.com";
-			person.PermissionInformation.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo();
+	        person.Email = "roger.kratz@teleopti.com";
 			person.WorkflowControlSet = _workflowControlSet;
 			return person;
 		}
@@ -65,10 +64,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(IPerson loadedAggregateFromDatabase)
 		{
 			IPerson person = CreateAggregateWithCorrectBusinessUnit();
-			Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
+		    Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
 			Assert.AreEqual(person.Email, loadedAggregateFromDatabase.Email);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.IsNotNull(loadedAggregateFromDatabase.PermissionInformation.ApplicationAuthenticationInfo);
+			Assert.That(loadedAggregateFromDatabase.ApplicationAuthenticationInfo, Is.Null);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
 
 			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);           
@@ -152,8 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyCorrectWindowsUser()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-			person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "domain";
-			person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "username";
+            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "domain", WindowsLogOnName = "username" };
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.DoesWindowsUserExists("domain", "username").Should().Be.True();
@@ -165,8 +163,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void DeadPersonShouldNotBeFound()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-			person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "domain";
-			person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "username";
+		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+		                                           {DomainName = "domain", WindowsLogOnName = "username"};
+			
 			person.TerminalDate = new DateOnly(DateTime.Now.AddDays(-2));
 			PersistAndRemoveFromUnitOfWork(person);
 
@@ -1480,13 +1479,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var pr = new PersonRepository(UnitOfWork);
 
 			IList<IPerson> personList = new List<IPerson>(1);
-			person1.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "kamal";
+			person1.WindowsAuthenticationInfo.WindowsLogOnName = "kamal";
 			personList.Add(person1);
 
 			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
 			Assert.That(returned.Count(), Is.GreaterThan(0));
 
-			personList[0].PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "virajs";
+		    personList[0].ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = "virajs", Password = "passadej"};
 			returned = pr.FindPersonsWithGivenUserCredentials(personList);
             Assert.That(returned.Count(), Is.GreaterThan(0));
 		}

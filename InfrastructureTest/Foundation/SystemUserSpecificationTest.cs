@@ -22,14 +22,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifySystemUser()
         {
-            IPerson person = mocks.StrictMock<IPerson>();
-            IPermissionInformation permissionInformation = mocks.StrictMock<IPermissionInformation>();
-            IApplicationAuthenticationInfo applicationAuthenticationInfo =
-                mocks.StrictMock<IApplicationAuthenticationInfo>();
+            var person = mocks.StrictMock<IPerson>();
+            var applicationAuthenticationInfo = mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (mocks.Record())
             {
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Times(2);
                 Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return(SuperUser.UserName);
             }
             using (mocks.Playback())
@@ -41,14 +38,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyNonSystemUser()
         {
-            IPerson person = mocks.StrictMock<IPerson>();
-            IPermissionInformation permissionInformation = mocks.StrictMock<IPermissionInformation>();
-            IApplicationAuthenticationInfo applicationAuthenticationInfo =
-                mocks.StrictMock<IApplicationAuthenticationInfo>();
+            var person = mocks.StrictMock<IPerson>();
+            var applicationAuthenticationInfo = mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (mocks.Record())
             {
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Times(2);
                 Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return("KalleK");
             }
             using (mocks.Playback())
