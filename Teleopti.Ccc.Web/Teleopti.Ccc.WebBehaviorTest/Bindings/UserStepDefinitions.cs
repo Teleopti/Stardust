@@ -241,9 +241,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I have a preference with lunch length limitation of 1 hour today")]
 		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday()
 		{
-			UserFactory.User().Setup(new ExistingLunchPreferenceToday(0, 0, 1));
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(workTimeLimitation));
 		}
 
+		[Given(@"I have a preference with lunch end time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(endTimeLimitation));
+		}
+
+		[Given(@"I have a preference with lunch start time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(startTimeLimitation));
+		}
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()

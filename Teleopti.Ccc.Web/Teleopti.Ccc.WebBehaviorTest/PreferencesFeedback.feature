@@ -60,23 +60,21 @@ Scenario: Feedback for a day with work time limitation preference
 
 Scenario: Feedback for a day with lunch start time limitation preference
 	Given I am an agent
-	And I have a shift bag
-	And I have a preference with lunch start time limitation between 11:00 and 12:00
+	And I have a shift bag with one shift 8 to 17 and lunch 12 to 13 and one shift 9 to 19 and lunch 13 to 14
+	And I have a preference with lunch start time limitation between 13 and 13
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts matching the preference
-	And I should see the end time boundry for the shift bag's shifts matching the preference
-	And I should see the minimum contract time for the shift bag's shifts matching the preference
-	And I should see the maximum contract time for the shift bag's shifts matching the preference
+	Then I should see the start time boundry 9 to 9
+	And I should see the end time boundry 19 to 19
+	And I should see the contract time boundry 10 to 10 
 
 Scenario: Feedback for a day with lunch end time limitation preference
 	Given I am an agent
-	And I have a shift bag
-	And I have a preference with lunch end time limitation between 12:00 and 13:00
+	And I have a shift bag with one shift 9 to 18 and lunch 12 to 13 and one shift 9 to 19 and lunch 12 to 14
+	And I have a preference with lunch end time limitation between 12 and 13
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts matching the preference
-	And I should see the end time boundry for the shift bag's shifts matching the preference
-	And I should see the minimum contract time for the shift bag's shifts matching the preference
-	And I should see the maximum contract time for the shift bag's shifts matching the preference
+	Then I should see the start time boundry 9 to 9
+	And I should see the end time boundry 18 to 18
+	And I should see the contract time boundry 9 to 9 
 
 Scenario: Feedback for a day with lunch length limitation preference
 	Given I am an agent

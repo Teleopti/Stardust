@@ -12,11 +12,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		private readonly EndTimeLimitation _end;
 		private readonly WorkTimeLimitation _length;
 
-		public ExistingLunchPreferenceToday(int start, int end, int length)
+		public ExistingLunchPreferenceToday(WorkTimeLimitation workTimeLimitation)
 		{
-			_start = start == 0 ? new StartTimeLimitation() : new StartTimeLimitation(new TimeSpan(start, 0, 0), new TimeSpan(start, 0, 0));
-			_end = end == 0 ? new EndTimeLimitation() : new EndTimeLimitation(new TimeSpan(end, 0, 0), new TimeSpan(end, 0, 0));
-			_length = length == 0 ? new WorkTimeLimitation() : new WorkTimeLimitation(new TimeSpan(length, 0, 0), new TimeSpan(length, 0, 0));
+			_start = new StartTimeLimitation();
+			_end = new EndTimeLimitation();
+			_length = workTimeLimitation;
+		}
+
+		public ExistingLunchPreferenceToday(EndTimeLimitation endTimeLimitation)
+		{
+			_start = new StartTimeLimitation();
+			_end = endTimeLimitation;
+			_length = new WorkTimeLimitation();
+		}
+
+		public ExistingLunchPreferenceToday(StartTimeLimitation startTimeLimitation)
+		{
+			_start = startTimeLimitation;
+			_end = new EndTimeLimitation();
+			_length = new WorkTimeLimitation();
 		}
 
 		protected override PreferenceRestriction ApplyRestriction()
