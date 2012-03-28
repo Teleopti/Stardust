@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private ICriteria createApplicationLogonNameCriteria(string logOnName)
         {
             return Session.CreateCriteria(typeof(Person), "person")
-                .Add(Restrictions.Eq("PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName",
                                      logOnName))
                 .Add(Restrictions.Disjunction()
                          .Add(Restrictions.IsNull("TerminalDate"))
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Or(
                          Restrictions.Not(
                              Restrictions.Eq(
-                                 "PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                                 "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                  String.Empty)),
                          Restrictions.Not(
                              Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName",
@@ -722,12 +722,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 IList<string[]> personInfoList = (from p in personCollection
                                                   select new[]
                                                              {
-                                                                 p.WindowsAuthenticationInfo.
-                                                                     WindowsLogOnName,
-                                                                 p.PermissionInformation.ApplicationAuthenticationInfo.
-                                                                     ApplicationLogOnName,
-                                                                 p.WindowsAuthenticationInfo.
-                                                                     DomainName,
+                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.WindowsLogOnName,
+                                                                 p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName,
+                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.DomainName,
                                                                  p.Id.ToString()
                                                              }).ToList();
 
@@ -760,7 +757,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                 Restrictions.Or
                                     (
                                         Restrictions.In(
-                                            "PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
+                                            "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                             applicationLogOns),
 
                                         Restrictions.And

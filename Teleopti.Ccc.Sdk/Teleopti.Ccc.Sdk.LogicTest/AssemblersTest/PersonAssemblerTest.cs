@@ -64,6 +64,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             var person = CreatePerson(true);
             person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
                                                    {DomainName = "DOM", WindowsLogOnName = "AIN"};
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {ApplicationLogOnName = "App", Password = "Pass"};
             using (_mocks.Record())
             {
                 Expect.Call(_workflowControlSetAssembler.DomainEntityToDto(person.WorkflowControlSet))
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(person.PermissionInformation.CultureLCID(), personDto.CultureLanguageId);
             Assert.AreEqual(person.PermissionInformation.UICultureLCID(), personDto.UICultureLanguageId);
             Assert.AreEqual(person.PermissionInformation.DefaultTimeZone().Id, personDto.TimeZoneId);
-            Assert.AreEqual(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName,personDto.ApplicationLogOnName);
+            Assert.AreEqual(person.ApplicationAuthenticationInfo.ApplicationLogOnName,personDto.ApplicationLogOnName);
             Assert.AreEqual(person.WindowsAuthenticationInfo.WindowsLogOnName,personDto.WindowsLogOnName);
             Assert.AreEqual(person.WindowsAuthenticationInfo.DomainName,personDto.WindowsDomain);
             Assert.AreEqual(person.PersonPeriodCollection.Count(), personDto.PersonPeriodCollection.Count);
@@ -148,8 +150,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(personDto.EmploymentNumber, personDo.EmploymentNumber);
             Assert.AreEqual(personDo.PermissionInformation.UICultureLCID(), 1025);
             Assert.AreEqual(personDo.PermissionInformation.CultureLCID(), 1053);
-            Assert.AreEqual(personDto.ApplicationLogOnName, personDo.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            Assert.AreEqual(personDto.ApplicationLogOnPassword, personDo.PermissionInformation.ApplicationAuthenticationInfo.Password);
+            Assert.AreEqual(personDto.ApplicationLogOnName, "");
+            Assert.AreEqual(personDto.ApplicationLogOnPassword, "");
             Assert.AreEqual(personDto.WindowsLogOnName, personDo.WindowsAuthenticationInfo.WindowsLogOnName);
             Assert.AreEqual(personDto.WindowsDomain, personDo.WindowsAuthenticationInfo.DomainName);
             Assert.AreEqual(personDto.Note, personDo.Note);
@@ -191,8 +193,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
             //Because it is deleted
             Assert.That(personDo.WindowsAuthenticationInfo, Is.Null);
-            Assert.AreEqual(personDto.ApplicationLogOnPassword, personDo.PermissionInformation.ApplicationAuthenticationInfo.Password);
-            Assert.AreEqual("", personDo.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
+            Assert.That( personDo.ApplicationAuthenticationInfo, Is.Null);
             Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
             Assert.AreEqual(personDto.UICultureLanguageId, personDo.PermissionInformation.UICultureLCID());
             Assert.AreEqual(personDto.IsDeleted, ((Person)personDo).IsDeleted);

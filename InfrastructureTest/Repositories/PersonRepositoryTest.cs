@@ -52,12 +52,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_workflowControlSet);
 		}
 
-		protected override IPerson CreateAggregateWithCorrectBusinessUnit()
+	    protected override IPerson CreateAggregateWithCorrectBusinessUnit()
 		{
 			IPerson person = PersonFactory.CreatePerson("sdgf");
 			person.Name = new Name("Roger", "Msdfr");
-			person.Email = "roger.kratz@teleopti.com";
-			person.PermissionInformation.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo();
+	        person.Email = "roger.kratz@teleopti.com";
 			person.WorkflowControlSet = _workflowControlSet;
 			return person;
 		}
@@ -65,10 +64,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(IPerson loadedAggregateFromDatabase)
 		{
 			IPerson person = CreateAggregateWithCorrectBusinessUnit();
-			Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
+		    Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
 			Assert.AreEqual(person.Email, loadedAggregateFromDatabase.Email);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.IsNotNull(loadedAggregateFromDatabase.PermissionInformation.ApplicationAuthenticationInfo);
+			Assert.That(loadedAggregateFromDatabase.ApplicationAuthenticationInfo, Is.Null);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
 
 			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);           
@@ -1486,7 +1485,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
 			Assert.That(returned.Count(), Is.GreaterThan(0));
 
-			personList[0].PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "virajs";
+		    personList[0].ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = "virajs", Password = "passadej"};
 			returned = pr.FindPersonsWithGivenUserCredentials(personList);
             Assert.That(returned.Count(), Is.GreaterThan(0));
 		}

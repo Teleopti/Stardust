@@ -123,19 +123,10 @@ namespace Teleopti.Analytics.Etl.Transformer
 
         private static string getPersonApplicationLogOn(IPerson person)
         {
-            if (
-                    (
-                        person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName == null
-                        ||
-                        person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName.Trim().Length == 0
-                    )
-                )
-            {
-                // User has no valid application authetication info
+            if (person.ApplicationAuthenticationInfo == null)
                 return null;
-            }
-
-            return person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
+            
+            return person.ApplicationAuthenticationInfo.ApplicationLogOnName;
         }
 
         public ResultDto SynchronizeUserPermissions(IList<UserDto> users, string olapServer, string olapDatabase)

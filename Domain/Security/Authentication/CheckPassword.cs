@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
     	public virtual AuthenticationResult CheckLogOn(IUserDetail userDetail, string password)
         {
             AuthenticationResult result;
-            if (userDetail.Person.PermissionInformation.ApplicationAuthenticationInfo.Password.Equals(Encryption.EncryptString(password)))
+            if (userDetail.Person.ApplicationAuthenticationInfo.Password.Equals(Encryption.EncryptString(password)))
             {
                 result = _checkPasswordChange.Check(userDetail);
             }
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 		public override AuthenticationResult CheckLogOn(IUserDetail userDetail, string password)
 		{
-			if (Encryption.EncryptStringWithBase64(_passphraseProvider.Passphrase(),userDetail.Person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(CultureInfo.CurrentUICulture)).Equals(password))
+			if (Encryption.EncryptStringWithBase64(_passphraseProvider.Passphrase(),userDetail.Person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(CultureInfo.CurrentUICulture)).Equals(password))
 			{
 				return new AuthenticationResult {Person = userDetail.Person, Successful = true};
 			}

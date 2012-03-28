@@ -44,8 +44,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personDto.EmploymentNumber = entity.EmploymentNumber;
             personDto.CultureLanguageId = entity.PermissionInformation.CultureLCID();
             personDto.UICultureLanguageId = entity.PermissionInformation.UICultureLCID();
-            personDto.ApplicationLogOnName = entity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
-            personDto.ApplicationLogOnPassword = entity.PermissionInformation.ApplicationAuthenticationInfo.Password;
+            if (entity.ApplicationAuthenticationInfo != null)
+            {
+                personDto.ApplicationLogOnName = entity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+                personDto.ApplicationLogOnPassword = entity.ApplicationAuthenticationInfo.Password;
+            }
+            else
+            {
+                personDto.ApplicationLogOnName = "";
+                personDto.ApplicationLogOnPassword = "";
+            }
             if (entity.WindowsAuthenticationInfo != null)
             {
                 personDto.WindowsDomain = entity.WindowsAuthenticationInfo.DomainName;
@@ -116,10 +124,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 throw new ArgumentException("Timezone cannot be empty");
             if (dto.UICultureLanguageId.HasValue)
                 person.PermissionInformation.SetUICulture(new CultureInfo(dto.UICultureLanguageId.Value));
-            if (!string.IsNullOrEmpty(dto.ApplicationLogOnName))
-                person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = dto.ApplicationLogOnName;
-            if (!string.IsNullOrEmpty(dto.ApplicationLogOnPassword))
-                person.PermissionInformation.ApplicationAuthenticationInfo.Password = dto.ApplicationLogOnPassword;
+            if (!string.IsNullOrEmpty(dto.ApplicationLogOnName) && !string.IsNullOrEmpty(dto.ApplicationLogOnPassword))
+                person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                           {
+                                                               ApplicationLogOnName = dto.ApplicationLogOnName,
+                                                               Password = dto.ApplicationLogOnPassword
+                                                           };
             if (!string.IsNullOrEmpty(dto.Email))
                 person.Email = dto.Email;
             if (!string.IsNullOrEmpty(dto.EmploymentNumber))

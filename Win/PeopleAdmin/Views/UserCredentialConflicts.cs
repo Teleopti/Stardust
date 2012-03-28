@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             var item = new ListViewItem(person.Name.ToString());
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.WindowsAuthenticationInfo.
-                                                                   DomainName));
+                                                               person.WindowsAuthenticationInfo == null ? "" :
+                                                               person.WindowsAuthenticationInfo.DomainName));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.WindowsAuthenticationInfo.
-                                                                   WindowsLogOnName));
+                                                                    person.WindowsAuthenticationInfo == null ? "" :
+                                                                    person.WindowsAuthenticationInfo.WindowsLogOnName));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.PermissionInformation.ApplicationAuthenticationInfo.
-                                                                   ApplicationLogOnName));
+                                                               person.ApplicationAuthenticationInfo == null ? "" :
+                                                               person.ApplicationAuthenticationInfo.ApplicationLogOnName));
             if(person.TerminalDate.HasValue)
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, person.TerminalDate.Value.ToShortDateString(CultureInfo.CurrentCulture)));
 

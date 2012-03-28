@@ -151,11 +151,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPerson CreatePersonWithBasicPermissionInfo(string logOnName, string password)
         {
-            ApplicationAuthenticationInfo applicationPer = new ApplicationAuthenticationInfo();
-            applicationPer.ApplicationLogOnName = logOnName;
-            applicationPer.Password = password;
+            var applicationPer = new ApplicationAuthenticationInfo
+                                     {
+                                         ApplicationLogOnName = logOnName,
+                                         Password = password
+                                     };
             IPerson ret = CreatePerson("created by", "object mother");
-            ret.PermissionInformation.ApplicationAuthenticationInfo = applicationPer;
+            ret.ApplicationAuthenticationInfo = applicationPer;
             return ret;
         }
 
@@ -171,9 +173,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPerson CreatePersonWithWindowsPermissionInfo(string logOnName, string domainName)
         {
-            WindowsAuthenticationInfo winPer = new WindowsAuthenticationInfo();
-            winPer.WindowsLogOnName = logOnName;
-            winPer.DomainName = domainName;
+            var winPer = new WindowsAuthenticationInfo {WindowsLogOnName = logOnName, DomainName = domainName};
             IPerson ret = CreatePerson("Created", "by object mother");
             ret.WindowsAuthenticationInfo = winPer;
             return ret;

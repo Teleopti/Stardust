@@ -305,7 +305,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         /// </remarks>
         public string WindowsLogOnName
         {
-            get { return ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName; }
+            get
+            {
+                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
+                return ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
@@ -320,7 +324,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 
         public string DomainName
         {
-            get { return ContainedEntity.WindowsAuthenticationInfo.DomainName; }
+            get
+            {
+                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
+                return ContainedEntity.WindowsAuthenticationInfo.DomainName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
@@ -344,41 +352,46 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         }
         public string ApplicationLogOnName
         {
-            get { return ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName; }
+            get
+            {
+                if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
+                return ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
+                
                 if (string.IsNullOrEmpty(value))
                 {
+                    ContainedEntity.ApplicationAuthenticationInfo = null;
                     _isValid = true;
                     return;
                 }
+                if (ContainedEntity.ApplicationAuthenticationInfo == null)
+                    ContainedEntity.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                                        {ApplicationLogOnName = value};
+                else
+                    ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
                 var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-                _isValid = ContainedEntity.ChangePassword(ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
+                _isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
                 if (!_isValid) //Is there a better solution for this?
                     writeMessage();
             }
         }
 
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        /// <value>The password.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "result")]
         public string Password
         {
-            get { return ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.Password; }
+            get
+            {
+                if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
+                return ContainedEntity.ApplicationAuthenticationInfo.Password;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                if(string.IsNullOrEmpty(ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName))
+                if (ContainedEntity.ApplicationAuthenticationInfo == null || string.IsNullOrEmpty(ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName))
                 {
                     _isValid = true;
                     return;

@@ -87,9 +87,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("John", "Doe");
             person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
                                                    {DomainName = "domain", WindowsLogOnName = "johnd"};
-            
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "johnnied";
-            person.PermissionInformation.ApplicationAuthenticationInfo.Password = "yupiiepwd";
+
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {
+                                                           ApplicationLogOnName = "johnnied",
+                                                           Password = "yupiiepwd"
+                                                       };
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users", true, false));
             RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
@@ -126,8 +129,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             // User with permission to create Performance Mangager reports (ONLY application logon info!)
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("Zacke", "zax");
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "zackboy";
-            person.PermissionInformation.ApplicationAuthenticationInfo.Password = "zzpwd";
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {ApplicationLogOnName = "zackboy", Password = "zzpwd"};
+            
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users creators", false, true));
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users viewers", true, false));

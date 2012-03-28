@@ -67,12 +67,6 @@
 		  not-null="true"
 		  type="boolean" />
 
-		<property name="PartOfUnique"
-					not-null="false"
-					type="guid"
-					access="property"
-					unique-key="Unique_LogOn"/>
-    
 		<component name="PermissionInformation"
 				 class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.PermissionInformation">
 			<parent name="BelongsTo"/>
@@ -93,19 +87,6 @@
 					  type="int"
 			  not-null="false"/>
       
-			<component name="ApplicationAuthenticationInfo"
-					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
-				<property name="ApplicationLogOnName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_LogOn"/>
-				<property name="Password"
-				not-null="false"
-				length="50"
-				type="Encrypted" />
-			</component>
-
 			<bag name="personInApplicationRole"
             access="field"
 				    cascade="none">
@@ -174,9 +155,23 @@
 				  type="string"
 						  unique-key="Unique_WinLogOn"/>
       </component>
-
     </join>
     
+    <join table="ApplicationAuthenticationInfo"  fetch="join" optional="true">
+      <key column="Person"/>
+      <component name="ApplicationAuthenticationInfo"
+					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
+        <property name="ApplicationLogOnName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_AppLogOn"/>
+        <property name="Password"
+				not-null="false"
+				length="50"
+				type="Encrypted" />
+      </component>
+    </join>
     
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />

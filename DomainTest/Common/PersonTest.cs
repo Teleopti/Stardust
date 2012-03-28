@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(0, _target.PersonPeriodCollection.Count());
             Assert.IsFalse(_target.TerminalDate.HasValue);
             Assert.AreEqual(0, _target.PersonSchedulePeriodCollection.Count);
-            Assert.IsNull(_target.PartOfUnique);
-            Assert.AreSame(_target, _target.PersonWriteProtection.BelongsTo);
+           Assert.AreSame(_target, _target.PersonWriteProtection.BelongsTo);
             Assert.IsFalse(_target.BuiltIn);
         }
 
@@ -761,10 +760,14 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOldPasswordDiffers()
         {
-            string oldNotEncrypted = "Tap Out and Aruba Heights";
+            const string oldNotEncrypted = "Tap Out and Aruba Heights";
             var encryption = new OneWayEncryption();
 
-            _target.PermissionInformation.ApplicationAuthenticationInfo.Password = encryption.EncryptString(oldNotEncrypted);
+            _target.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                        {
+                                                            ApplicationLogOnName = "name",
+                                                            Password = encryption.EncryptString(oldNotEncrypted)
+                                                        };
             var mocks = new MockRepository();
 
             var service = mocks.StrictMock<ILoadPasswordPolicyService>();

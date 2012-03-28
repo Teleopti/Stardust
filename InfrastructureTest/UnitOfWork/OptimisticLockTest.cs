@@ -127,14 +127,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 IPerson user2 = rep2.Load(user.Id.Value);
 
                 //update
-                IWindowsAuthenticationInfo win = new WindowsAuthenticationInfo();
-                win.DomainName = "heja";
-                win.WindowsLogOnName = "gnaget";
+                IWindowsAuthenticationInfo win = new WindowsAuthenticationInfo
+                                                     {
+                                                         DomainName = "heja",
+                                                         WindowsLogOnName = "gnaget"
+                                                     };
                 user.WindowsAuthenticationInfo = win;
-                IApplicationAuthenticationInfo app = new ApplicationAuthenticationInfo();
-                app.ApplicationLogOnName = "buuu";
-                app.Password="djurgarn";
-                user2.PermissionInformation.ApplicationAuthenticationInfo = app;
+                IApplicationAuthenticationInfo app = new ApplicationAuthenticationInfo
+                                                         {
+                                                             ApplicationLogOnName = "buuu",
+                                                             Password = "djurgarn"
+                                                         };
+                user2.ApplicationAuthenticationInfo = app;
 
 
                 //flush

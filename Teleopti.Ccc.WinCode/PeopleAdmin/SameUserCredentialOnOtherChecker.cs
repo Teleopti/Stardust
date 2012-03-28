@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                 if (conflicts.Contains(person))
                     continue;
 
-                var domain = person.WindowsAuthenticationInfo.DomainName;
-                var logOnName = person.WindowsAuthenticationInfo.WindowsLogOnName;
-                var appLogOnName = person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
+                var domain = person.WindowsAuthenticationInfo == null ? "" : person.WindowsAuthenticationInfo.DomainName;
+                var logOnName = person.WindowsAuthenticationInfo == null ? "" : person.WindowsAuthenticationInfo.WindowsLogOnName;
+                var appLogOnName = person.ApplicationAuthenticationInfo == null ? "" : person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 
                 if ((!string.IsNullOrEmpty(domain) && !string.IsNullOrEmpty(logOnName)) || !string.IsNullOrEmpty(appLogOnName))
                 {
@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                             continue;
                         if (conflicts.Contains(conflictPerson))
                             continue;
-                        var conflictdomain = conflictPerson.WindowsAuthenticationInfo.DomainName.ToUpperInvariant();
-                        var conflictlogOnName = conflictPerson.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant();
-                        var conflictAppLogOnName = conflictPerson.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant();
+                        var conflictdomain = conflictPerson.WindowsAuthenticationInfo == null ? "" : conflictPerson.WindowsAuthenticationInfo.DomainName.ToUpperInvariant();
+                        var conflictlogOnName = conflictPerson.WindowsAuthenticationInfo == null ? "" : conflictPerson.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant();
+                        var conflictAppLogOnName = conflictPerson.ApplicationAuthenticationInfo == null ? "" : conflictPerson.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant();
                         if (!string.IsNullOrEmpty(appLogOnName) && appLogOnName.ToUpperInvariant().Equals(conflictAppLogOnName))
                         {
                             retList.Add(new SameUserCredentialOnOther(person, conflictPerson));

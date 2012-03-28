@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.Domain.Common
             set { _windowsAuthenticationInfo = value; }
         }
 
-        public IApplicationAuthenticationInfo ApplicationAuthenticationInfo
+        public virtual IApplicationAuthenticationInfo ApplicationAuthenticationInfo
         {
             get
             {

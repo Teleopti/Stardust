@@ -21,12 +21,12 @@ namespace Teleopti.Analytics.Etl.Transformer
                 row["person_first_name"] = person.Name.FirstName;
                 row["person_last_name"] = person.Name.LastName;
                 row["application_logon_name"] =
-                    person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
+                    person.ApplicationAuthenticationInfo.ApplicationLogOnName;
                 row["windows_logon_name"] =
                     person.WindowsAuthenticationInfo.WindowsLogOnName;
                 row["windows_domain_name"] =
                     person.WindowsAuthenticationInfo.DomainName;
-                row["password"] = person.PermissionInformation.ApplicationAuthenticationInfo.Password;
+                row["password"] = person.ApplicationAuthenticationInfo.Password;
                 row["email"] = person.Email;
                 row["language_id"] = person.PermissionInformation.UICultureLCID().GetValueOrDefault(-1);
                 //row["language_name"] = CultureInfo.GetCultureInfo(person.PermissionInformation.UICultureLCID().GetValueOrDefault(1033)).ToString();

@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 {
                     if (person.WindowsAuthenticationInfo != null)
                         sb.Append(person.WindowsAuthenticationInfo.DomainName + delim);
-                    if (person.PermissionInformation.ApplicationAuthenticationInfo != null)
-                        sb.Append(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName + delim);
+                    if (person.ApplicationAuthenticationInfo != null)
+                        sb.Append(person.ApplicationAuthenticationInfo.ApplicationLogOnName + delim);
                 }
 
                 ret.Add(person, sb.ToString());

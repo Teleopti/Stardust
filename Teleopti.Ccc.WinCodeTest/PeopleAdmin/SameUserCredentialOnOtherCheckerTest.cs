@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
                                                                  {WindowsLogOnName = winLogOn, DomainName = domain}
                              };
 
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = appLogOn;
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = appLogOn};
             return person;
         }
     }

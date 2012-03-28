@@ -53,8 +53,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = _personCollection[4];
             Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName);
             Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.DomainName);
-            Assert.IsNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            Assert.IsNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
+            Assert.That(person.ApplicationAuthenticationInfo, Is.Null);
 
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
             Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection)).Return(PmPermissionType.ReportDesigner);
@@ -73,8 +72,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = _personCollection[6]; // Belongs to three roles
             Assert.That(person.WindowsAuthenticationInfo, Is.Null);
 
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
+            Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
+            Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.Password);
 
             var applicationRole1 = person.PermissionInformation.ApplicationRoleCollection[0];
             var applicationRole2 = person.PermissionInformation.ApplicationRoleCollection[1];
@@ -98,8 +97,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = _personCollection[3];
             Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName);
             Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.DomainName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
+            Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
+            Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.Password);
 
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
 
@@ -199,8 +198,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             int applicationUserCount =
                 _personCollection.Count(
-                    p =>
-                    !string.IsNullOrEmpty(p.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName));
+                    p => p.ApplicationAuthenticationInfo != null);
 
             Assert.Greater(windowsUserCount, 0);
             Assert.Greater(applicationUserCount, 0);

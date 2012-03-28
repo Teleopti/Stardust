@@ -276,8 +276,7 @@ namespace Teleopti.Ccc.Win.Main
                     MessageDialogs.ShowError(this, string.Concat(authenticationResult.Message, "  "), Resources.LogOn);
                 if (authenticationResult.Successful)
                 {
-                    _choosenDataSource.User.PermissionInformation.ApplicationAuthenticationInfo.Password =
-                        password; //To use for silent background log on
+                    _choosenDataSource.User.ApplicationAuthenticationInfo.Password = password; //To use for silent background log on
                     
                     ChooseBusinessUnit();
                 }

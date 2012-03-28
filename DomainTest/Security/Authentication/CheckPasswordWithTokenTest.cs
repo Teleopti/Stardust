@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 Expect.Call(encryption.EncryptStringWithBase64(passphrase, logOn)).Return(password);
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
                 Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return(logOn);
                 Expect.Call(passphraseProvider.Passphrase()).Return(passphrase);
             }
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 Expect.Call(encryption.EncryptString(password)).Return(password);
                 Expect.Call(encryption.EncryptStringWithBase64(passphrase, logOn)).Return("invalidauthpass");
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Twice();
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Twice();
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Twice();
                 Expect.Call(applicationAuthenticationInfo.Password).Return("invalidpass");
 				Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return(logOn);
 				Expect.Call(passphraseProvider.Passphrase()).Return(passphrase);
