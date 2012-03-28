@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Common
         private IWorkflowControlSet _workflowControlSet;
         private DayOfWeek _firstDayOfWeek;
         private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
+        private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 
         public Person()
         {
@@ -94,34 +95,6 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get { return _name; }
             set { _name = value; }
-        }
-
-        /// <summary>
-        /// Gets the part of unique.
-        /// </summary>
-        /// <value>The part of unique.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-18
-        /// </remarks>
-        public virtual Guid? PartOfUnique
-        {
-            get
-            {
-                if (//string.IsNullOrEmpty(PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName) &&
-                    string.IsNullOrEmpty(PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName))
-                {
-                    return Id;
-                }
-
-                if(IsDeleted)
-                {
-                    return Id;
-                }
-
-                return null;
-            }
-            protected set { }
         }
 
         /// <summary>
@@ -612,11 +585,12 @@ namespace Teleopti.Ccc.Domain.Common
 
     	public virtual bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail)
         {
-            IApplicationAuthenticationInfo authenticationInfo = PermissionInformation.ApplicationAuthenticationInfo;
+            if (_applicationAuthenticationInfo == null)
+                _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
             IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
             if (policy.CheckPasswordStrength(newPassword))
             {
-                authenticationInfo.Password = newPassword;
+                _applicationAuthenticationInfo.Password = newPassword;
                 userDetail.RegisterPasswordChange();
                 return true;
             }
@@ -625,14 +599,15 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual bool ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail)
         {
-            IApplicationAuthenticationInfo authenticationInfo = PermissionInformation.ApplicationAuthenticationInfo;
-            
-            if (!checkOldPassword(oldPassword, newPassword, authenticationInfo)) return false;
+            if (_applicationAuthenticationInfo == null)
+                _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
+
+            if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo)) return false;
 
             IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
             if (policy.CheckPasswordStrength(newPassword))
             {
-                authenticationInfo.Password = newPassword;
+                _applicationAuthenticationInfo.Password = newPassword;
                 userDetail.RegisterPasswordChange();
                 return true;
             }
@@ -646,6 +621,18 @@ namespace Teleopti.Ccc.Domain.Common
                 return _windowsAuthenticationInfo;
             }
             set { _windowsAuthenticationInfo = value; }
+        }
+
+        public IApplicationAuthenticationInfo ApplicationAuthenticationInfo
+        {
+            get
+            {
+                return _applicationAuthenticationInfo;
+            }
+            set
+            {
+                _applicationAuthenticationInfo = value;
+            }
         }
 
         private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo)
@@ -799,10 +786,8 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual void SetDeleted()
         {
-            //WindowsAuthenticationInfo.DomainName = "";
-            //WindowsAuthenticationInfo.WindowsLogOnName = "";
             _windowsAuthenticationInfo = null;
-            PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "";
+            _applicationAuthenticationInfo = null;
            
             _isDeleted = true;
         }

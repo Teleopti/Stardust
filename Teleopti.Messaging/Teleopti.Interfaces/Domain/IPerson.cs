@@ -43,16 +43,6 @@ namespace Teleopti.Interfaces.Domain
         Name Name { get; set; }
 
         /// <summary>
-        /// Gets the part of unique.
-        /// </summary>
-        /// <value>The part of unique.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-18
-        /// </remarks>
-        Guid? PartOfUnique { get; }
-
-        /// <summary>
         /// Gets the permission related information.
         /// </summary>
         /// <value>The permission information.</value>
@@ -425,5 +415,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The windows authentication info.</value>
         IWindowsAuthenticationInfo WindowsAuthenticationInfo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application authentication info.
+        /// </summary>
+        /// <value>The application authentication info.</value>
+        IApplicationAuthenticationInfo ApplicationAuthenticationInfo { get; set; }
     }
 }
