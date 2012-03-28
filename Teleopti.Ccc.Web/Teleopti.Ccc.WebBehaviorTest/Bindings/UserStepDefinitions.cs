@@ -4,6 +4,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -207,21 +208,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(string earliest, string latest)
+		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(int earliest, int latest)
 		{
-			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, earliest, latest, null, null));
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(endTimeLimitation));
 		}
 
 		[Given(@"I have a preference with start time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(string earliest, string latest)
+		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(int earliest, int latest)
 		{
-			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(earliest, latest, null, null, null, null));
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(startTimeLimitation));
 		}
 
 		[Given(@"I have a preference with work time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(string shortest, string longest)
+		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(int shortest, int longest)
 		{
-			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, null, null, shortest, longest));
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(shortest, 0, 0), new TimeSpan(longest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(workTimeLimitation));
 		}
 
 

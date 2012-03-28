@@ -12,34 +12,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 		private readonly EndTimeLimitation _endTimeLimitation;
 		private readonly WorkTimeLimitation _workTimeLimitation;
 
-		public ExistingExtendedPreferenceToday(string earliestStart, string latestStart, string earliestEnd, string latestEnd, string shortest, string longest)
+		public ExistingExtendedPreferenceToday(StartTimeLimitation startTimeLimitation)
 		{
-			if (earliestStart != null && latestStart != null)
-			{
-				TimeSpan earliestStartTime;
-				TimeSpan latestStartTime;
-				TimeHelper.TryParse(earliestStart, out earliestStartTime);
-				TimeHelper.TryParse(latestStart, out latestStartTime);
-				_startTimeLimitation = new StartTimeLimitation(earliestStartTime, latestStartTime);
-			}
+			_startTimeLimitation = startTimeLimitation;
+			_endTimeLimitation = new EndTimeLimitation();
+			_workTimeLimitation = new WorkTimeLimitation();
+		}
 
-			if (earliestEnd != null && latestEnd != null)
-			{
-				TimeSpan earliestEndTime;
-				TimeSpan latestEndTime;
-				TimeHelper.TryParse(earliestEnd, out earliestEndTime);
-				TimeHelper.TryParse(latestEnd, out latestEndTime);
-				_endTimeLimitation = new EndTimeLimitation(earliestEndTime, latestEndTime);
-			}
+		public ExistingExtendedPreferenceToday(EndTimeLimitation endTimeLimitation)
+		{
+			_startTimeLimitation = new StartTimeLimitation();
+			_endTimeLimitation = endTimeLimitation;
+			_workTimeLimitation = new WorkTimeLimitation();
+		}
 
-			if (shortest != null && longest != null)
-			{
-				TimeSpan shortestTime;
-				TimeSpan longestTime;
-				TimeHelper.TryParse(shortest, out shortestTime);
-				TimeHelper.TryParse(longest, out longestTime);
-				_workTimeLimitation = new WorkTimeLimitation(shortestTime, longestTime);
-			}
+		public ExistingExtendedPreferenceToday(WorkTimeLimitation workTimeLimitation)
+		{
+			_startTimeLimitation = new StartTimeLimitation();
+			_endTimeLimitation = new EndTimeLimitation();
+			_workTimeLimitation = workTimeLimitation;
 		}
 
 		protected override PreferenceRestriction ApplyRestriction()
