@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 					foreach (var activityRestriction in activityRestrictionCollection)
 						preferenceDay.Restriction.RemoveActivityRestriction(activityRestriction);
 					preferenceDay.Restriction.MustHave = false;
+					preferenceDay.TemplateName = null;
 				}
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);

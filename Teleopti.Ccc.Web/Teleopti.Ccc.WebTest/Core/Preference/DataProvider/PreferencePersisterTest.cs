@@ -197,5 +197,26 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.DataProvider
 
 			preferenceDay.Restriction.MustHave.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldClearTemplateName()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var person = new Person();
+			var preferenceRestriction = new PreferenceRestriction();
+			var preferenceDay = new PreferenceDay(person, DateOnly.Today, preferenceRestriction) {TemplateName = "Extended"};
+			var input = new PreferenceDayInput { Date = DateOnly.Today };
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var target = new PreferencePersister(preferenceDayRepository, mapper, loggedOnUser);
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(input.Date, person)).Return(new List<IPreferenceDay> { preferenceDay });
+			mapper.Stub(x => x.Map(input, preferenceDay)).Return(preferenceDay);
+
+			target.Persist(input);
+
+			preferenceDay.TemplateName.Should().Be.Null();
+		}
 	}
 }
