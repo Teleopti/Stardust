@@ -234,6 +234,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ShiftCategoryPreferenceToday() {ShiftCategory = firstCategory});
 		}
 
+		[Given(@"I have a preference with lunch length limitation of 1 hour today")]
+		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday()
+		{
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(0, 0, 1));
+		}
+
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
@@ -500,6 +506,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new RuleSetBag(8, 10, 16, 18));
 		}
 
+		[Given(@"I have a shift bag with one shift (.*) to (.*) and lunch (.*) to (.*) and one shift (.*) to (.*) and lunch (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithOneShiftToAndLunchToAndOneShiftToAndLunchTo(int start1, int end1, int lunchStart1, int lunchEnd1, int start2, int end2, int lunchStart2, int lunchEnd2)
+		{
+			UserFactory.User().Setup(new RuleSetBagWithTwoShiftsAndLunch(start1, end1, lunchStart1, lunchEnd1, start2, end2, lunchStart2, lunchEnd2));
+		}
 
 		[Given(@"I am an agent in a team that leaves tomorrow")]
 		public void GivenIAmAnAgentThatLeavesTomorrow()

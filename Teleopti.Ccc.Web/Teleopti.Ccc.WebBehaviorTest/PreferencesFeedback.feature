@@ -80,13 +80,12 @@ Scenario: Feedback for a day with lunch end time limitation preference
 
 Scenario: Feedback for a day with lunch length limitation preference
 	Given I am an agent
-	And I have a shift bag
-	And I have a preference with lunch length limitation between 1 and 2 hours
+	And I have a shift bag with one shift 8 to 17 and lunch 12 to 13 and one shift 9 to 19 and lunch 12 to 14
+	And I have a preference with lunch length limitation of 1 hour today
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts matching the preference
-	And I should see the end time boundry for the shift bag's shifts matching the preference
-	And I should see the minimum contract time for the shift bag's shifts matching the preference
-	And I should see the maximum contract time for the shift bag's shifts matching the preference
+	Then I should see the start time boundry 8 to 8
+	And I should see the end time boundry 17 to 17
+	And I should see the contract time boundry 9 to 9 
 
 
 
