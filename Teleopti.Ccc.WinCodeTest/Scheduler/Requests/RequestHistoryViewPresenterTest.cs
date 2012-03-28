@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Expect.Call(person.Id).Return(guid);
             Expect.Call(() => _requestHistoryView.FillPersonCombo(new List<IRequestPerson>(), guid)).IgnoreArguments();
             Expect.Call(_requestHistoryView.ShowForm);
+            Expect.Call(() => _loadRequestHistoryCommand.Execute());
             _mocks.ReplayAll();
             _requestHistoryViewPresenter.ShowHistory(guid, new List<IPerson>{person});
             _mocks.VerifyAll();
@@ -118,10 +119,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         {
             var err = new DataSourceException();
             Expect.Call(() => _requestHistoryView.ShowRequestDetails(""));
+            Expect.Call(_requestHistoryView.StartRow).Return(101);
             Expect.Call(_requestHistoryView.PageSize).Return(50);
             Expect.Call(_requestHistoryView.StartRow = 1);
             Expect.Call(_loadRequestHistoryCommand.Execute).Throw(err);
             Expect.Call(() => _requestHistoryView.ShowDataSourceException(err));
+            Expect.Call(_requestHistoryView.StartRow = 101);
             _mocks.ReplayAll();
             _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.First);
             _mocks.VerifyAll();

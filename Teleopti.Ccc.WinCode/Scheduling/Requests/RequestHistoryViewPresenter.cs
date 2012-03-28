@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             if (historyPage.Equals(RequestHistoryPage.First))
                 _requestHistoryView.StartRow = 1;
             if (historyPage.Equals(RequestHistoryPage.Next))
-                _requestHistoryView.StartRow = _requestHistoryView.StartRow + size;
+                _requestHistoryView.StartRow = startRowBeforeError + size;
             if (historyPage.Equals(RequestHistoryPage.Previous))
-                _requestHistoryView.StartRow = _requestHistoryView.StartRow - size;
+                _requestHistoryView.StartRow = startRowBeforeError - size;
 
             try
             {
