@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
 
-			result.StyleClassName
-				.Should().Be(Color.PeachPuff.ToStyleClass());
+			result.HexColor
+				.Should().Be(Color.PeachPuff.ToHtml());
 		}
 
 		[Test]
@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
 
-			result.StyleClassName
-				.Should().Be(Color.Sienna.ToStyleClass());
+			result.HexColor
+				.Should().Be(Color.Sienna.ToHtml());
 		}
 
 		[Test]
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
 
-			result.StyleClassName
-				.Should().Be(Color.Thistle.ToStyleClass());
+			result.HexColor
+				.Should().Be(Color.Thistle.ToHtml());
 		}
 
 	}
