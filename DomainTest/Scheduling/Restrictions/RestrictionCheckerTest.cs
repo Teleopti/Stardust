@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _activity = new Activity("Activity");
         }
 
-        //Availability
+        #region Availability
         [Test]
         public void VerifyCanCalculateIllegalStartPermissionState()
         {
@@ -379,7 +380,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-        //Rotations
+        #endregion
+
+        #region Rotations
+
         [Test]
         public void VerifyCanCalculateIllegalStartRotationPermissionState()
         {
@@ -738,12 +742,87 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff })).Repeat.Twice();
+                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff }));
             }
 
             using (_mockRepository.Playback())
             {
                 _target = new RestrictionChecker(_schedulePartMock);
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+            }
+        }
+
+        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public void VerifyCanCalculateIllegalDayOffRotationsPermissionState2()
+        {
+            IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOffTemplate"));
+            dayOffTemplate.Anchor = TimeSpan.FromHours(10);
+            dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
+
+            IPersonDayOff personDayOff = new PersonDayOff(_person,
+                                   ScenarioFactory.CreateScenarioAggregate(),
+                                   dayOffTemplate, new DateOnly(2007, 1, 1));
+
+
+            IShiftCategory shiftCategory = new ShiftCategory("TopCat");
+            IMainShift mainShift = new MainShift(shiftCategory);
+            IPersonAssignment assignment = new PersonAssignment(_person, new Scenario("Default"));
+            assignment.SetMainShift(mainShift);
+
+
+            IRotationRestriction dayRestriction = new RotationRestriction
+            {
+                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
+                StartTimeLimitation =
+                    new StartTimeLimitation(
+                    new TimeSpan(6, 0, 0),
+                    new TimeSpan(20, 0, 0)),
+                EndTimeLimitation =
+                new EndTimeLimitation(
+                    new TimeSpan(6, 0, 0),
+                    new TimeSpan(20, 0, 0)),
+                ShiftCategory = shiftCategory,
+                DayOffTemplate = new DayOffTemplate(new Description("WrongDayOff"))
+
+            };
+
+            var dayRestrictions = new List<IRestrictionBase> { dayRestriction };
+
+            using (_mockRepository.Record())
+            {
+                Expect.Call(_schedulePartMock.PersonAssignmentConflictCollection).Return(new List<IPersonAssignment> { assignment }).Repeat.Any();
+                Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
+                Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
+                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
+                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff }));
+            }
+
+            using (_mockRepository.Playback())
+            {
+                _target = new RestrictionChecker(_schedulePartMock);
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+            }
+        }
+
+        [Test]
+        public void VerifyShiftRotationWithDayOffShouldReturnBroken()
+        {
+            IScheduleDay scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
+            RotationRestriction rotationRestriction = new RotationRestriction();
+            rotationRestriction.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
+            IPersonDayOff personDayOff = PersonDayOffFactory.CreatePersonDayOff();
+            _target = new RestrictionChecker(scheduleDay);
+
+            using(_mockRepository.Record())
+            {
+                Expect.Call(scheduleDay.RestrictionCollection())
+                    .Return(new List<IRestrictionBase>{ rotationRestriction }).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay.PersonDayOffCollection())
+                    .Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{ personDayOff })).Repeat.AtLeastOnce();
+            }
+            using(_mockRepository.Playback())
+            {
                 Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
             }
         }
@@ -873,7 +952,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-        [Test] //Preference
+        #endregion
+
+        #region Preference
+
+        [Test] 
         public void VerifyCanCalculateIllegalStartPreferencePermissionState()
         {
             IActivity activity = new Activity("Activity");
@@ -1092,6 +1175,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
             }
         }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateIllegalTimesOverMidnightPreferencePermissionState()
         {
@@ -1338,7 +1422,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
         	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.Any();
         }
-
 
         [Test]
         public void VerifyCanCalculateIllegalShiftCategoryPreferencePermissionState()
@@ -1831,6 +1914,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(PermissionState.None, _target.CheckPreference());
             }
         }
+
+        #endregion
+
+        #region StudentAvailability
+
         [Test]
         public void VerifySatisfiedStudentAvailabilityWhenNotAvailable()
         {
@@ -1993,6 +2081,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability());
             }
         }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUnspecifiedAvailability()
         {
@@ -2030,6 +2119,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(PermissionState.Unspecified, _target.CheckStudentAvailability());
             }
         }
+
+        #endregion
 
         private void RecordMock(IEnumerable<IRestrictionBase> baseRestrictions, IEnumerable<IPersistableScheduleData> dayRestrictions)
         {

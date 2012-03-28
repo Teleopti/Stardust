@@ -83,13 +83,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState = PermissionState.Unspecified;
 
-            if (_schedulePart.PersonDayOffCollection().Count == 0 && rotation.DayOffTemplate != null)
+            var personDayOffCollaction = _schedulePart.PersonDayOffCollection();
+
+            if (personDayOffCollaction.Count == 0 && rotation.DayOffTemplate != null)
             {
                 return PermissionState.Broken;
             }
 
             //todo: How does the dayoff work?
-            foreach (IPersonDayOff dayOff in _schedulePart.PersonDayOffCollection())
+            foreach (IPersonDayOff dayOff in personDayOffCollaction)
             {
                 if (rotation.DayOffTemplate != null)
                 {
@@ -117,7 +119,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (rotation == null)
                 return PermissionState.None;
 
+
             PermissionState permissionState = PermissionState.Unspecified;
+            
+            if(_schedulePart.PersonDayOffCollection().Count > 0)
+            {
+                if(rotation.DayOffTemplate == null)
+                    return PermissionState.Broken;
+            }
 
             var visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
 
