@@ -46,18 +46,12 @@
 		 if (toolbarItem is ToolBarSplitButton)
 		 {
 			 var splitButton = toolbarItem as ToolBarSplitButton;
-			 foreach (var option in splitButton.Options.Where(s => s.Style != null))
-			 {
-							<style>
-								@string.Format(".{0} .ui-splitbutton-menu-icon-secondary {{ background-color: {1}; }}", option.Style.Name, option.Style.ColorHex)
-							</style>
-			 }
 						<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
 							<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
 							<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
 								@foreach (var option in splitButton.Options)
 		  {
-									<option value="@option.Value" class="@(option.Style != null ? option.Style.Name : "")">@option.Text</option>
+									<option value="@option.Value" bg-color="@(option.Style != null ? option.Style.ColorHex : "")">@option.Text</option>
 		  }
 							</select>
 						</div>

@@ -74,11 +74,11 @@
 						response(select.children("option").map(function () {
 							var text = $(this).text();
 							var value = $(this).val();
-							var cssClass = $(this).attr('class');
+							var bgColor = $(this).attr('bg-color');
 							return {
 								label: text,
 								value: value,
-								cssClass: cssClass,
+								bgColor: bgColor,
 								option: this
 							};
 						}));
@@ -90,7 +90,6 @@
 			menu.data("autocomplete")._renderItem = function (ul, item) {
 				if (item.value == "-")
 					return $('<li></li>')
-						.addClass(item.cssClass)
 						.addClass('ui-splitbutton-menu-splitter')
 						.append($('<div>'))
 						.appendTo(ul)
@@ -103,13 +102,13 @@
 				var secondaryIcon = $("<span>")
 					.addClass('ui-splitbutton-menu-icon-secondary')
 					.addClass('ui-corner-all')
+					.css("background-color", item.bgColor)
 					;
 				var itemButton = $("<a></a>")
 					.append(text)
 					.append(secondaryIcon)
 					;
 				return $("<li></li>")
-					.addClass(item.cssClass)
 					.data("item.autocomplete", item)
 					.append(itemButton)
 					.appendTo(ul)
