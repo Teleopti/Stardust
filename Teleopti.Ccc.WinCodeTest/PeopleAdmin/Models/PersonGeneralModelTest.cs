@@ -542,8 +542,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string oldLogOnInfo = "oldLogOnInfo";
             _base.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = oldLogOnInfo;
             _base.PermissionInformation.ApplicationAuthenticationInfo.Password = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.DomainName = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = oldLogOnInfo;
+            _base.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                  {DomainName = oldLogOnInfo, WindowsLogOnName = oldLogOnInfo};
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                     new DateOnly(DateTime.Today), _base)).Return(false);

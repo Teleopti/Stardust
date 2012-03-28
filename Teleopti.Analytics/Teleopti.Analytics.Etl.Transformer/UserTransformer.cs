@@ -23,9 +23,9 @@ namespace Teleopti.Analytics.Etl.Transformer
                 row["application_logon_name"] =
                     person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
                 row["windows_logon_name"] =
-                    person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName;
+                    person.WindowsAuthenticationInfo.WindowsLogOnName;
                 row["windows_domain_name"] =
-                    person.PermissionInformation.WindowsAuthenticationInfo.DomainName;
+                    person.WindowsAuthenticationInfo.DomainName;
                 row["password"] = person.PermissionInformation.ApplicationAuthenticationInfo.Password;
                 row["email"] = person.Email;
                 row["language_id"] = person.PermissionInformation.UICultureLCID().GetValueOrDefault(-1);

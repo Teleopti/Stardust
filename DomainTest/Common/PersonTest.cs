@@ -540,24 +540,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyPartOfUniqueWorks()
-        {
-            Guid guid = Guid.NewGuid();
-            _target.SetId(guid);
-
-            Assert.AreEqual(guid, _target.PartOfUnique.Value);
-
-            _target.PermissionInformation.WindowsAuthenticationInfo = new WindowsAuthenticationInfo();
-            _target.PermissionInformation.WindowsAuthenticationInfo.DomainName = "toptinet";
-            _target.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "robink";
-
-            Assert.IsFalse(_target.PartOfUnique.HasValue);
-
-            ((IDeleteTag)_target).SetDeleted();
-            Assert.AreEqual(guid, _target.PartOfUnique.Value);
-        }
-
-        [Test]
         public void VerifySeniority()
         {
             ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");

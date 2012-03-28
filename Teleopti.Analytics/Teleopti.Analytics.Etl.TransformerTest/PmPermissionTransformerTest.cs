@@ -51,8 +51,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldGetUserWhichOnlyGotWindowsCredentials()
         {
             IPerson person = _personCollection[4];
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.DomainName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.DomainName);
             Assert.IsNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
             Assert.IsNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
 
@@ -71,8 +71,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldGetUserWhichOnlyGotApplicationCredentials()
         {
             IPerson person = _personCollection[6]; // Belongs to three roles
-            Assert.IsNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName);
-            Assert.IsNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.DomainName);
+            Assert.That(person.WindowsAuthenticationInfo, Is.Null);
+
             Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
             Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
 
@@ -96,8 +96,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldGetUserWhichGotBothWindowsAndApplicationCredentials()
         {
             IPerson person = _personCollection[3];
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.DomainName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.DomainName);
             Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
             Assert.IsNotNullOrEmpty(person.PermissionInformation.ApplicationAuthenticationInfo.Password);
 
@@ -152,8 +152,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldNotGetUsersThatLacksPermissionToPm()
         {
             IPerson person = _personCollection[7]; // Does not belong to a ApplicationRole
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName);
-            Assert.IsNotNullOrEmpty(person.PermissionInformation.WindowsAuthenticationInfo.DomainName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName);
+            Assert.IsNotNullOrEmpty(person.WindowsAuthenticationInfo.DomainName);
             Assert.AreEqual(0, person.PermissionInformation.ApplicationRoleCollection.Count);
 
             IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
@@ -195,9 +195,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             int windowsUserCount =
                 _personCollection.Count(
-                    p =>
-                    !string.IsNullOrEmpty(p.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName) &&
-                    !string.IsNullOrEmpty(p.PermissionInformation.WindowsAuthenticationInfo.DomainName));
+                    p => p.WindowsAuthenticationInfo != null);
 
             int applicationUserCount =
                 _personCollection.Count(

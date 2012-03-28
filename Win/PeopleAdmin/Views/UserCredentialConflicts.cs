@@ -45,10 +45,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             var item = new ListViewItem(person.Name.ToString());
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.PermissionInformation.WindowsAuthenticationInfo.
+                                                               person.WindowsAuthenticationInfo.
                                                                    DomainName));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.PermissionInformation.WindowsAuthenticationInfo.
+                                                               person.WindowsAuthenticationInfo.
                                                                    WindowsLogOnName));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
                                                                person.PermissionInformation.ApplicationAuthenticationInfo.

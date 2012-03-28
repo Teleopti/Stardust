@@ -46,9 +46,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(personUser.Name.LastName, _row0["person_last_name"]);
             Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName,
                             _row0["application_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName,
+            Assert.AreEqual(personUser.WindowsAuthenticationInfo.WindowsLogOnName,
                             _row0["windows_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.DomainName,
+            Assert.AreEqual(personUser.WindowsAuthenticationInfo.DomainName,
                             _row0["windows_domain_name"]);
             Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.Password, _row0["password"]);
             Assert.AreEqual(personUser.Email, _row0["email"]);

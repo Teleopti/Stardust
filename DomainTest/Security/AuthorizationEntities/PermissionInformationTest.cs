@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyDefaultProperties()
         {
             Assert.AreEqual(0, target.ApplicationRoleCollection.Count);
-            Assert.IsNotNull(target.WindowsAuthenticationInfo);
             Assert.IsNotNull(target.ApplicationAuthenticationInfo);
             Assert.AreEqual(Thread.CurrentThread.CurrentCulture, target.Culture());
             Assert.AreEqual(Thread.CurrentThread.CurrentUICulture, target.UICulture());
@@ -122,13 +121,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void CannotAddNullAsApplicationAuthenticationInfo()
         {
             target.ApplicationAuthenticationInfo = null;
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotAddNullAsWindowsAuthenticationInfo()
-        {
-            target.WindowsAuthenticationInfo = null;
         }
 
         #endregion

@@ -664,7 +664,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Delete("from Absence");
             Session.Delete("from PushMessageDialogue");
             Session.Delete("from PushMessage");
-            Session.CreateQuery("update Person p set p.IsDeleted=1").ExecuteUpdate();
+           // Session.CreateQuery("update Person p set p.IsDeleted=1").ExecuteUpdate();
             Session.CreateQuery("update Scenario s set s.IsDeleted=1").ExecuteUpdate();
 
             Session.Flush();
