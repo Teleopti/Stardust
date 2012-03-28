@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -210,31 +211,46 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
 			var div = cell.Div(Find.ByClass("possible-start-times"));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
 			var div = cell.Div(Find.ByClass("possible-end-times"));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the contract time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
 			var div = cell.Div(Find.ByClass("possible-contract-times"));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see no feedback")]

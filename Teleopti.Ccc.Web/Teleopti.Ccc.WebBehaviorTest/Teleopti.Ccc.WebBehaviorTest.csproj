@@ -72,6 +72,10 @@
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />
     <Compile Include="Data\User\AgentThatLeavesTomorrow.cs" />
+    <Compile Include="Data\User\ShiftCategoryPreferenceToday.cs" />
+    <Compile Include="Data\User\SecondShiftCategory.cs" />
+    <Compile Include="Data\User\FirstShiftCategory.cs" />
+    <Compile Include="Data\User\RuleSetBagWithTwoCategories.cs" />
     <Compile Include="Data\User\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
@@ -81,6 +85,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Data\User\BaseShiftCategory.cs" />
     <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />

@@ -30,13 +30,12 @@ Scenario: Feedback for a day with absence preference
 
 Scenario: Feedback for a day with shift category preference
 	Given I am an agent
-	And I have a shift bag
-	And I have preference with shift category AM
+	And I have a shift bag with two categories with shift from 8 to 16 and from 12 to 19
+	And I have preference for the first category today
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts of category AM
-	And I should see the end time boundry for the shift bag's shifts of category AM
-	And I should see the minimum contract time for the shift bag's shifts of category AM
-	And I should see the maximum contract time for the shift bag's shifts of category AM
+	Then I should see the start time boundry 8 to 8
+	And I should see the end time boundry 16 to 16
+	And I should see the contract time boundry 8 to 8
 
 Scenario: Feedback for a day with start time limitation preference
 	Given I am an agent

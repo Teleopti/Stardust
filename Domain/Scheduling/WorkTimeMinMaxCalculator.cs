@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(scheduleDate, scheduleDate)).SingleOrDefault();
 			if (personPeriod == null)
-				throw new InvalidOperationException("No person period defined");
+				return null;
 
 			var ruleSetBag = personPeriod.RuleSetBag;
 			if (ruleSetBag == null)
-				throw new InvalidOperationException("No rule set bag defined");
+				return null;
 
 			var options = new EffectiveRestrictionOptions(true);
 			var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}),

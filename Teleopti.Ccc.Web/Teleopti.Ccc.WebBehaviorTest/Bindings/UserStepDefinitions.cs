@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 
@@ -222,6 +223,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(null, null, null, null, shortest, longest));
 		}
+
+
+		[Given(@"I have preference for the first category today")]
+		public void GivenIHavePreferenceForTheFirstCategoryToday()
+		{
+			var firstCat = UserFactory.User().UserData<FirstShiftCategory>();
+			var firstCategory = firstCat.ShiftCategory;
+
+			UserFactory.User().Setup(new ShiftCategoryPreferenceToday() {ShiftCategory = firstCategory});
+		}
+
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
@@ -470,6 +482,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
 		}
+
+		[Given(@"I have a shift bag with two categories with shift from (.*) to (.*) and from (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithTwoCategoriesWithShiftFromToAndFromTo(int start1, int end1, int start2, int end2)
+		{
+			var category1 = new FirstShiftCategory();
+			var category2 = new SecondShiftCategory();
+			UserFactory.User().Setup(category1);
+			UserFactory.User().Setup(category2);
+			UserFactory.User().Setup(new RuleSetBagWithTwoCategories(category1, start1, end1, category2, start2, end2));
+		}
+
 
 		[Given(@"I have a shift bag")]
 		public void GivenIHaveAShiftBag()
