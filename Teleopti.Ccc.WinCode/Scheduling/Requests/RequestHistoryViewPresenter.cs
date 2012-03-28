@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private void LoadRequests(RequestHistoryPage historyPage)
         {
             _requestHistoryView.ShowRequestDetails("");
+            var startRowBeforeError = _requestHistoryView.StartRow;
             var size = _requestHistoryView.PageSize;
             if (historyPage.Equals(RequestHistoryPage.First))
                 _requestHistoryView.StartRow = 1;
@@ -66,9 +68,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             {
                 _loadRequestHistoryCommand.Execute();
             }
-            catch (Infrastructure.Foundation.DataSourceException e)
+            catch (DataSourceException e)
             {
                 _requestHistoryView.ShowDataSourceException(e);
+                _requestHistoryView.StartRow = startRowBeforeError;
                 return;
             }
             UpdateNextPreviousState(size);
@@ -82,15 +85,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         public void ShowHistory(Guid preselectedPerson, ICollection<IPerson> filteredPersons)
         {
-            ICollection<IRequestPerson> persons = filteredPersons.Select(person => new RequestPerson
-                                                                                       {
-                                                                                           Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person), Id = person.Id.Value
-                                                                                       }).Cast<IRequestPerson>().ToList();
-
-            _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
-            _requestHistoryView.ShowForm();
+            try
+            {
+                ICollection<IRequestPerson> persons = filteredPersons.Select(person => new RequestPerson
+                {
+                    Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+                    Id = person.Id.Value
+                }).Cast<IRequestPerson>().ToList();
+                _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
+                _requestHistoryView.ShowForm();
+                _loadRequestHistoryCommand.Execute();
+            }
+            catch (DataSourceException dataSourceException)
+            {
+                _requestHistoryView.ShowDataSourceException(dataSourceException);
+                return;
+            }
         }
-
     }
 
     public class RequestPerson : IRequestPerson

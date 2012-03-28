@@ -36,9 +36,9 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAdv1 = new Syncfusion.Windows.Forms.ButtonAdv();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonAdvNext = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonAdvPrevious = new Syncfusion.Windows.Forms.ButtonAdv();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.linkNext = new System.Windows.Forms.LinkLabel();
+            this.linkPrevious = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvPersons)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -138,40 +138,14 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.buttonAdvNext);
-            this.panel1.Controls.Add(this.buttonAdvPrevious);
+            this.panel1.Controls.Add(this.linkPrevious);
+            this.panel1.Controls.Add(this.linkNext);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 523);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(388, 41);
             this.panel1.TabIndex = 2;
-            // 
-            // buttonAdvNext
-            // 
-            this.buttonAdvNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.buttonAdvNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvNext.CustomManagedColor = System.Drawing.SystemColors.ActiveCaption;
-            this.buttonAdvNext.Location = new System.Drawing.Point(198, 6);
-            this.buttonAdvNext.Name = "buttonAdvNext";
-            this.buttonAdvNext.Size = new System.Drawing.Size(50, 23);
-            this.buttonAdvNext.TabIndex = 1;
-            this.buttonAdvNext.Text = ">";
-            this.buttonAdvNext.UseVisualStyle = true;
-            this.buttonAdvNext.Click += new System.EventHandler(this.ButtonAdvNextClick);
-            // 
-            // buttonAdvPrevious
-            // 
-            this.buttonAdvPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonAdvPrevious.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvPrevious.CustomManagedColor = System.Drawing.SystemColors.ActiveCaption;
-            this.buttonAdvPrevious.Location = new System.Drawing.Point(140, 6);
-            this.buttonAdvPrevious.Name = "buttonAdvPrevious";
-            this.buttonAdvPrevious.Size = new System.Drawing.Size(50, 23);
-            this.buttonAdvPrevious.TabIndex = 0;
-            this.buttonAdvPrevious.Text = "<";
-            this.buttonAdvPrevious.UseVisualStyle = true;
-            this.buttonAdvPrevious.Click += new System.EventHandler(this.ButtonAdvPreviousClick);
             // 
             // textBox1
             // 
@@ -185,6 +159,33 @@
             this.tableLayoutPanel1.SetRowSpan(this.textBox1, 2);
             this.textBox1.Size = new System.Drawing.Size(374, 493);
             this.textBox1.TabIndex = 3;
+            // 
+            // linkNext
+            // 
+            this.linkNext.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.linkNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.linkNext.AutoSize = true;
+            this.linkNext.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkNext.Location = new System.Drawing.Point(210, 6);
+            this.linkNext.Name = "linkNext";
+            this.linkNext.Size = new System.Drawing.Size(45, 14);
+            this.linkNext.TabIndex = 2;
+            this.linkNext.TabStop = true;
+            this.linkNext.Text = "xxNext";
+            this.linkNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkNextLinkClicked);
+            // 
+            // linkPrevious
+            // 
+            this.linkPrevious.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.linkPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.linkPrevious.AutoSize = true;
+            this.linkPrevious.Location = new System.Drawing.Point(130, 8);
+            this.linkPrevious.Name = "linkPrevious";
+            this.linkPrevious.Size = new System.Drawing.Size(60, 13);
+            this.linkPrevious.TabIndex = 3;
+            this.linkPrevious.TabStop = true;
+            this.linkPrevious.Text = "xxPrevious";
+            this.linkPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkPreviousLinkClicked);
             // 
             // RequestHistoryView
             // 
@@ -201,6 +202,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -216,7 +218,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox1;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdv1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvNext;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPrevious;
+        private System.Windows.Forms.LinkLabel linkNext;
+        private System.Windows.Forms.LinkLabel linkPrevious;
     }
 }

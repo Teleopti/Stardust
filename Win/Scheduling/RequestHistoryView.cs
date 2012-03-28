@@ -75,12 +75,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void SetNextEnabledState(bool enabled)
         {
-            buttonAdvNext.Enabled = enabled;
+            linkNext.Enabled = enabled;
         }
 
         public void SetPreviousEnabledState(bool enabled)
         {
-            buttonAdvPrevious.Enabled = enabled;
+            linkPrevious.Enabled = enabled;
         }
 
         public void ShowDataSourceException(DataSourceException dataSourceException)
@@ -98,22 +98,22 @@ namespace Teleopti.Ccc.Win.Scheduling
             _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.First);
         }
 
-        private void ButtonAdvNextClick(object sender, EventArgs e)
-        {
-            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Next);
-        }
-
-        private void ButtonAdvPreviousClick(object sender, EventArgs e)
-        {
-            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
-        }
-
         private void listViewRequests_SelectedIndexChanged(object sender, EventArgs e)
         {
             IRequestHistoryLightweight selected = null;
             if (listViewRequests.FocusedItem != null)
                 selected = listViewRequests.FocusedItem.Tag as IRequestHistoryLightweight;
             _eventAggregator.GetEvent<RequestHistoryRequestChanged>().Publish(selected);
+        }
+
+        private void LinkPreviousLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Previous);
+        }
+
+        private void LinkNextLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            _eventAggregator.GetEvent<RequestHistoryPageChanged>().Publish(RequestHistoryPage.Next);
         }
     }
 }
