@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				throw new HttpException(404, "Preference not found");
 
 			_preferenceDayRepository.Remove(preferences.Single());
-			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat() };
+			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat(), HexColor = ""};
 		}
 	}
 }
