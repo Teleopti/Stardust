@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Common
         private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
         private IWorkflowControlSet _workflowControlSet;
         private DayOfWeek _firstDayOfWeek;
+        private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
 
         public Person()
         {
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get
             {
-                if (string.IsNullOrEmpty(PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName) &&
+                if (//string.IsNullOrEmpty(PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName) &&
                     string.IsNullOrEmpty(PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName))
                 {
                     return Id;
@@ -638,6 +639,15 @@ namespace Teleopti.Ccc.Domain.Common
             return false;
         }
 
+        public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
+        {
+            get
+            {
+                return _windowsAuthenticationInfo;
+            }
+            set { _windowsAuthenticationInfo = value; }
+        }
+
         private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo)
         {
             var encryption = new OneWayEncryption();
@@ -789,8 +799,9 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual void SetDeleted()
         {
-            PermissionInformation.WindowsAuthenticationInfo.DomainName = "";
-            PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "";
+            //WindowsAuthenticationInfo.DomainName = "";
+            //WindowsAuthenticationInfo.WindowsLogOnName = "";
+            _windowsAuthenticationInfo = null;
             PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "";
            
             _isDeleted = true;

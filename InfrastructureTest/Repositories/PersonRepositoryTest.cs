@@ -152,8 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyCorrectWindowsUser()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-			person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "domain";
-			person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "username";
+            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "domain", WindowsLogOnName = "username" };
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.DoesWindowsUserExists("domain", "username").Should().Be.True();
@@ -165,8 +164,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void DeadPersonShouldNotBeFound()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-			person.PermissionInformation.WindowsAuthenticationInfo.DomainName = "domain";
-			person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "username";
+		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+		                                           {DomainName = "domain", WindowsLogOnName = "username"};
+			
 			person.TerminalDate = new DateOnly(DateTime.Now.AddDays(-2));
 			PersistAndRemoveFromUnitOfWork(person);
 
@@ -1480,7 +1480,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var pr = new PersonRepository(UnitOfWork);
 
 			IList<IPerson> personList = new List<IPerson>(1);
-			person1.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = "kamal";
+			person1.WindowsAuthenticationInfo.WindowsLogOnName = "kamal";
 			personList.Add(person1);
 
 			var returned = pr.FindPersonsWithGivenUserCredentials(personList);

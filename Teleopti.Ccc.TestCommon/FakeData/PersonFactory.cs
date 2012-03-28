@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             winPer.WindowsLogOnName = logOnName;
             winPer.DomainName = domainName;
             IPerson ret = CreatePerson("Created", "by object mother");
-            ret.PermissionInformation.WindowsAuthenticationInfo = winPer;
+            ret.WindowsAuthenticationInfo = winPer;
             return ret;
         }
 

@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 IWindowsAuthenticationInfo win = new WindowsAuthenticationInfo();
                 win.DomainName = "heja";
                 win.WindowsLogOnName = "gnaget";
-                user.PermissionInformation.WindowsAuthenticationInfo = win;
+                user.WindowsAuthenticationInfo = win;
                 IApplicationAuthenticationInfo app = new ApplicationAuthenticationInfo();
                 app.ApplicationLogOnName = "buuu";
                 app.Password="djurgarn";

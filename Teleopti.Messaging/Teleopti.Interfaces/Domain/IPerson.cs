@@ -419,5 +419,11 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-08-23
         /// </remarks>
         bool ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
+
+        /// <summary>
+        /// Gets or sets the windows authentication info.
+        /// </summary>
+        /// <value>The windows authentication info.</value>
+        IWindowsAuthenticationInfo WindowsAuthenticationInfo { get; set; }
     }
 }

@@ -22,11 +22,11 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IList<IApplicationRole> ApplicationRoleCollection { get; }
 
-        /// <summary>
-        /// Gets or sets the windows authentication info.
-        /// </summary>
-        /// <value>The windows authentication info.</value>
-        IWindowsAuthenticationInfo WindowsAuthenticationInfo { get; set; }
+        ///// <summary>
+        ///// Gets or sets the windows authentication info.
+        ///// </summary>
+        ///// <value>The windows authentication info.</value>
+        //IWindowsAuthenticationInfo WindowsAuthenticationInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the application authentication info.
