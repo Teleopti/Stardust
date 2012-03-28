@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.User
 			ShiftCategory = new ShiftCategory(CategoryName());
 		}
 		
-		protected override string CategoryName()
+		protected override sealed string CategoryName()
 		{
 			return "2nd";
 		}
