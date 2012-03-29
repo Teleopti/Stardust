@@ -264,10 +264,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UserTestData.PersonApplicationUserSingleBusinessUnit.WorkflowControlSet = TestData.WorkflowControlSetPublished;
 
 			UserTestData.PersonWithNoPermission = new Person();
-			UserTestData.PersonWithNoPermission.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = UserTestData.PersonWithNoPermissionUserName;
-			UserTestData.PersonWithNoPermission.PermissionInformation.ApplicationAuthenticationInfo.Password = TestData.CommonPassword;
-
-			var personRepository = new PersonRepository(uow);
+		    UserTestData.PersonWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+		                                                                            {
+		                                                                                ApplicationLogOnName =
+		                                                                                    UserTestData.
+		                                                                                    PersonWithNoPermissionUserName,
+		                                                                                Password = TestData.CommonPassword
+		                                                                            };
+            var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 			personRepository.Add(UserTestData.PersonWindowsUser);
 			personRepository.Add(UserTestData.PersonApplicationUser);

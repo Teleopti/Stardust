@@ -43,11 +43,11 @@ CREATE TABLE [dbo].[ApplicationAuthenticationInfo](
 	[Person] [uniqueidentifier] NOT NULL,
 	[ApplicationLogOnName] [nvarchar](50) NOT NULL,
 	[Password] [nvarchar](50) NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_ApplicationAuthenticationInfo] PRIMARY KEY CLUSTERED 
 (
 	[Person] ASC
-),
-UNIQUE NONCLUSTERED 
+)  ,
+CONSTRAINT [UQ_ApplicationLogOnName] UNIQUE NONCLUSTERED 
 (
 	[ApplicationLogOnName] ASC
 ))
@@ -64,11 +64,11 @@ CREATE TABLE [dbo].[WindowsAuthenticationInfo](
 	[Person] [uniqueidentifier] NOT NULL,
 	[WindowsLogOnName] [nvarchar](50) NOT NULL,
 	[DomainName] [nvarchar](50) NOT NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_WindowsAuthenticationInfo] PRIMARY KEY CLUSTERED 
 (
 	[Person] ASC
 ),
-UNIQUE NONCLUSTERED 
+CONSTRAINT [UQ_LogonNameDomain]UNIQUE NONCLUSTERED 
 (
 	[WindowsLogOnName] ASC,
 	[DomainName] ASC
