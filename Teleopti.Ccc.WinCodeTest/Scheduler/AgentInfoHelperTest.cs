@@ -313,5 +313,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Assert.AreEqual(_target.Person.Name.ToString(), _target.PersonName);
         }
+
+        [Test]
+        public void VerifyRestrictionProperties()
+        {
+            Assert.AreEqual(1, _target.PreferenceFulfillment.Value);
+            Assert.AreEqual(1, _target.MustHavesFulfillment.Value);
+            Assert.AreEqual(1, _target.RotationFullfillment.Value);
+            Assert.AreEqual(1, _target.AvailabilityFulfillment.Value);
+            Assert.AreEqual(1, _target.StudentAvailabilityFulfillment.Value);
+        }
     }
 }

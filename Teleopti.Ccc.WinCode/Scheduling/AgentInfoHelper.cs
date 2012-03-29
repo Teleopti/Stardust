@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private IScheduleMatrixPro _matrix;
         private IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
         private string _daysOffTolerance;
+        private Percent _preferenceFulfillment;
+        private Percent _mustHavesFulfillment;
+        private Percent _rotationFullfillment;
+        private Percent _availabilityFulfillment;
+        private Percent _studentAvailabilityFulfillment;
 
         public AgentInfoHelper(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ISchedulingOptions schedulingOptions, IRuleSetProjectionService ruleSetProjectionService)
         {
@@ -204,6 +209,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _daysOffTolerance; }
         }
 
+        public Percent PreferenceFulfillment
+        {
+            get { return new Percent(1 - _preferenceFulfillment.Value); }
+        }
+
+        public Percent RotationFullfillment
+        {
+            get { return new Percent(1 - _rotationFullfillment.Value); }
+        }
+
+        public Percent AvailabilityFulfillment
+        {
+            get { return new Percent(1 - _availabilityFulfillment.Value); }
+        }
+
+        public Percent StudentAvailabilityFulfillment
+        {
+            get { return new Percent(1 - _studentAvailabilityFulfillment.Value); }
+        }
+
+        public Percent MustHavesFulfillment
+        {
+            get { return new Percent(1 -  _mustHavesFulfillment.Value); }
+        }
+
         //public TimeSpan CurrentShiftAllowanceTime
         //{
         //    get { return _currentShiftAllowanceTime; }
@@ -234,6 +264,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                                                                             _matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
             setMinMaxData();
+            setRestrictionFullfillment();
         }
 
         private void setMinMaxData()
@@ -256,6 +287,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 
             _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
+        }
+
+        private void setRestrictionFullfillment()
+        {
+            RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(_matrix, new RestrictionChecker());
+            _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1)).BrokenPercentage;
+            _mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1)).BrokenPercentage;
+            _rotationFullfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1)).BrokenPercentage;
+            _availabilityFulfillment = restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
+            _studentAvailabilityFulfillment = restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
         }
 
         private void setCurrentScheduled()

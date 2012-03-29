@@ -510,6 +510,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                 createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
                                  helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
             }
+
+            listViewSchedulePeriod.Items.Add("");
+            if (employmentType != EmploymentType.HourlyStaff)
+            {
+                createAndAddItem(listViewSchedulePeriod, "xxPreferenceFullFillment", helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, "xxMustHaveFullFillment", helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, "xxRotationFullFillment", helper.RotationFullfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, "xxAvailibilityFullFillment", helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+            }
+            else
+            {
+                createAndAddItem(listViewSchedulePeriod, "xxStudentAvailabilityFullFillment", helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+            }
+            
         }
 
         private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
