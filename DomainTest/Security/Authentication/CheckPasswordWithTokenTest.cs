@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         private ICheckPassword target;
         private IOneWayEncryption encryption;
         private IApplicationAuthenticationInfo applicationAuthenticationInfo;
-        private IPermissionInformation permissionInformation;
         private IPerson person;
         private IUserDetail userDetail;
         private ICheckBruteForce checkBruteForce;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             encryption = mocks.StrictMock<IOneWayEncryption>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
-            permissionInformation = mocks.StrictMock<IPermissionInformation>();
             applicationAuthenticationInfo =
                 mocks.StrictMock<IApplicationAuthenticationInfo>();
             checkBruteForce = mocks.StrictMock<ICheckBruteForce>();
