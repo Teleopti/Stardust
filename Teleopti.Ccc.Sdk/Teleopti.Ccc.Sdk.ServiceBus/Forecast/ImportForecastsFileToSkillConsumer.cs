@@ -1,38 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
-using Teleopti.Messaging.Coders;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public class ImportForecastsFileToSkillConsumer : ConsumerOf<ImportForecastsFileToSkill>
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ImportForecastsFileToSkillConsumer));
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
         private readonly IImportForecastsRepository _importForecastsRepository;
         private readonly IForecastsFileContentProvider _contentProvider;
+        private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
         private readonly IMessageBroker _messageBroker;
         private readonly IServiceBus _serviceBus;
-        private readonly JobResultProgressEncoder _jobResultProgressEncoder;
 
         public ImportForecastsFileToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,
             ISkillRepository skillRepository,
             IJobResultRepository jobResultRepository,
             IImportForecastsRepository importForecastsRepository,
             IForecastsFileContentProvider contentProvider,
+            IForecastsAnalyzeQuery analyzeQuery,
             IJobResultFeedback feedback,
             IMessageBroker messageBroker,
             IServiceBus serviceBus)
@@ -42,10 +39,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _jobResultRepository = jobResultRepository;
             _importForecastsRepository = importForecastsRepository;
             _contentProvider = contentProvider;
+            _analyzeQuery = analyzeQuery;
             _feedback = feedback;
             _messageBroker = messageBroker;
             _serviceBus = serviceBus;
-            _jobResultProgressEncoder = new JobResultProgressEncoder();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -53,35 +50,43 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var targetSkill = _skillRepository.Get(message.TargetSkillId);
-                if (targetSkill == null)
+                var jobResult = _jobResultRepository.Get(message.JobId);
+                var skill = _skillRepository.Get(message.TargetSkillId);
+                _feedback.SetJobResult(jobResult, _messageBroker);
+                if (skill == null)
                 {
-                    sendValidationError(message.JobId, "Skill does not exsit.");
+                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Skill does not exist.");
+                    _feedback.Error(errorMessage);
+                    _feedback.ReportProgress(0, errorMessage);
+                    endProcessing(unitOfWork);
                     return;
                 }
-                var timeZone = targetSkill.TimeZone;
+                var timeZone = skill.TimeZone;
                 var forecastFile = _importForecastsRepository.Get(message.UploadedFileId);
                 if (forecastFile == null)
                 {
-                    sendValidationError(message.JobId, "The uploaded file has no content.");
+                     var errorMessage = string.Format(CultureInfo.InvariantCulture,"The uploaded file has no content.");
+                    _feedback.Error(errorMessage);
+                    _feedback.ReportProgress(0, errorMessage);
+                    endProcessing(unitOfWork);
                     return;
                 }
-                var commandResult =_contentProvider.LoadContent(forecastFile.FileContent, timeZone).Analyze();
-                if (!commandResult.Succeeded)
+                var queryResult = _analyzeQuery.Run(_contentProvider.LoadContent(forecastFile.FileContent, timeZone), skill.MidnightBreakOffset);
+                if (!queryResult.Succeeded)
                 {
-                    sendValidationError(message.JobId, string.Concat("Validation error! ", commandResult.ErrorMessage));
+                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Validation error! {0}", queryResult.ErrorMessage);
+                    _feedback.Error(errorMessage);
+                    _feedback.ReportProgress(0, errorMessage);
+                    endProcessing(unitOfWork);
                     return;
                 }
-
-                var jobResult = _jobResultRepository.Get(message.JobId);
-                jobResult.Period = commandResult.Period;
-                var skill = _skillRepository.Get(message.TargetSkillId);
-                _feedback.SetJobResult(jobResult, _messageBroker);
+                jobResult.Period = queryResult.Period;
+                
                 _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", skill.Name));
                 _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
 
-                var listOfMessages = generateMessages(message, commandResult);
-                _feedback.ChangeTotalProgress(4 + listOfMessages.Count * 4);
+                var listOfMessages = generateMessages(message, queryResult);
+                _feedback.ChangeTotalProgress(6 + listOfMessages.Count * 4);
                 endProcessing(unitOfWork);
 
                 listOfMessages.ForEach(m => _serviceBus.Send(m));
@@ -90,12 +95,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         }
 
         private static IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
-                                             IForecastsAnalyzeCommandResult commandResult)
+                                             IForecastsAnalyzeQueryResult queryResult)
         {
             var listOfMessages = new List<OpenAndSplitTargetSkill>();
-            foreach (var date in commandResult.Period.DayCollection())
+            foreach (var date in queryResult.Period.DayCollection())
             {
-                var openHours = commandResult.WorkloadDayOpenHours.GetOpenHour(date);
+                var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
                 listOfMessages.Add(new OpenAndSplitTargetSkill
                                        {
                                            BusinessUnitId = message.BusinessUnitId,
@@ -107,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            TargetSkillId = message.TargetSkillId,
                                            StartOpenHour = openHours.StartTime,
                                            EndOpenHour = openHours.EndTime,
-                                           Forecasts = commandResult.ForecastFileContainer.GetForecastsRows(date),
+                                           Forecasts = queryResult.ForecastFileContainer.GetForecastsRows(date),
                                            ImportMode = message.ImportMode
                                        });
             }
@@ -118,38 +123,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         {
             unitOfWork.PersistAll();
             _feedback.Dispose();
-        }
-
-        private void sendValidationError(Guid jobId, string errorMessage)
-        {
-            var jobResultProgress = new JobResultProgress
-            {
-                Message = errorMessage,
-                Percentage = 0,
-                JobResultId = jobId
-            };
-            sendMessage(_jobResultProgressEncoder.Encode(jobResultProgress));
-        }
-
-        private void sendMessage(byte[] binaryData)
-        {
-            using (new MessageBrokerSendEnabler())
-            {
-                if (messageBrokerIsRunning())
-                {
-                    _messageBroker.SendEventMessage(DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
-                                                    typeof(IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
-                }
-                else
-                {
-                    Logger.Warn("Job progress could not be sent because the message broker is unavailable.");
-                }
-            }
-        }
-
-        private bool messageBrokerIsRunning()
-        {
-            return _messageBroker != null && _messageBroker.IsInitialized;
         }
     }
 }

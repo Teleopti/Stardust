@@ -35,10 +35,5 @@ namespace Teleopti.Interfaces.Messages.General
 		/// The owner of this action.
 		/// </summary>
 		public Guid OwnerPersonId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the step to increase progress by.
-		/// </summary>
-		public int IncreaseProgressBy { get; set; }
 	}
 }

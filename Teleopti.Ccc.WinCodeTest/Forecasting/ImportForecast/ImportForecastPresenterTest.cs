@@ -1,51 +1,89 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 {
     [TestFixture]
     public class ImportForecastPresenterTest
     {
-        private MockRepository _mock;
-        private ImportForecastModel _model;
+        private MockRepository _mocks;
+        private IImportForecastModel _model;
         private ImportForecastPresenter _target;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IImportForecastsRepository _importForecastsRepository;
+        private IImportForecastView _view;
+        private ISkill _skill;
 
         [SetUp]
         public void Setup()
         {
-            _mock = new MockRepository();
-            _mock.DynamicMock<IImportForecast>();
-            _unitOfWorkFactory = _mock.DynamicMock<IUnitOfWorkFactory>();
-            _importForecastsRepository = _mock.DynamicMock<IImportForecastsRepository>();
-            var tempSkill = SkillFactory.CreateSkill("test");
-            _model = new ImportForecastModel(tempSkill, _unitOfWorkFactory, _importForecastsRepository);
-            _target = new ImportForecastPresenter(_model);
+            _mocks = new MockRepository();
+            _skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+            _view = _mocks.StrictMock<IImportForecastView>();
+            _model = _mocks.StrictMock<IImportForecastModel>();
+            _target = new ImportForecastPresenter(_view, _model);
         }
 
         [Test]
         public void ShouldInitializeSkillName()
         {
-            _target.GetSelectedSkillName();
-            Assert.IsNotNull(_target.SkillName);
+            using (_mocks.Record())
+            {
+                Expect.Call(_model.SelectedSkillName).Return(_skill.Name);
+            }
+            using (_mocks.Playback())
+            {
+                _target.GetSelectedSkillName();
+                Assert.IsNotNull(_target.SkillName);
+            }
         }
 
         [Test]
-        public void ShouldPopulateWorkloadList()
+        public void ShouldPopulateWorkload()
         {
-            var tempSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
-            var tempModel = new ImportForecastModel(tempSkill, _unitOfWorkFactory, _importForecastsRepository);
-            _target = new ImportForecastPresenter(tempModel);
-            _target.PopulateWorkloadList();
-            Assert.IsNotEmpty(_target.WorkloadList.ToList());
+            var workload = _skill.WorkloadCollection.FirstOrDefault();
+            using (_mocks.Record())
+            {
+                Expect.Call(_model.LoadWorkload()).Return(workload);
+            }
+            using (_mocks.Playback())
+            {
+                _target.PopulateWorkload();
+                Assert.That(_target.Workload, Is.EqualTo(workload));
+            }
+        }
+        
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ShouldHandleEmptyWorkload()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_model.LoadWorkload()).Return(null);
+            }
+            using (_mocks.Playback())
+            {
+                _target.PopulateWorkload();
+            }
+        }
+
+        [Test]
+        public void ShouldReturnCorrectOption()
+        {
+            using(_mocks.Record())
+            {
+                Expect.Call(_view.IsWorkloadImport).Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                Assert.That(_target.GetImportForecastOption(), Is.EqualTo(ImportForecastsOptionsDto.ImportWorkload));
+            }
         }
     }
 }

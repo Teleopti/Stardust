@@ -9104,6 +9104,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {
@@ -9113,11 +9122,56 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import file name:.
+        /// </summary>
+        public static string ImportFileNameColon {
+            get {
+                return ResourceManager.GetString("ImportFileNameColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Forecast.
+        /// </summary>
+        public static string ImportForecast {
+            get {
+                return ResourceManager.GetString("ImportForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Queue From File.
         /// </summary>
         public static string ImportQueueFromFile {
             get {
                 return ResourceManager.GetString("ImportQueueFromFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Staffing.
+        /// </summary>
+        public static string ImportStaffing {
+            get {
+                return ResourceManager.GetString("ImportStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Workload.
+        /// </summary>
+        public static string ImportWorkload {
+            get {
+                return ResourceManager.GetString("ImportWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Workload and Staffing.
+        /// </summary>
+        public static string ImportWorkloadAndStaffing {
+            get {
+                return ResourceManager.GetString("ImportWorkloadAndStaffing", resourceCulture);
             }
         }
         
@@ -9704,6 +9758,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string JobHistory {
             get {
                 return ResourceManager.GetString("JobHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Job History.
+        /// </summary>
+        public static string JobHistoryView {
+            get {
+                return ResourceManager.GetString("JobHistoryView", resourceCulture);
             }
         }
         
@@ -16462,6 +16525,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove write protection.
+        /// </summary>
+        public static string RemoveWriteProtection {
+            get {
+                return ResourceManager.GetString("RemoveWriteProtection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
         public static string Rename {
@@ -19681,6 +19753,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillLoaded {
             get {
                 return ResourceManager.GetString("SkillLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill name:.
+        /// </summary>
+        public static string SkillNameColon {
+            get {
+                return ResourceManager.GetString("SkillNameColon", resourceCulture);
             }
         }
         
@@ -23366,6 +23447,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WorkloadDayTemplates {
             get {
                 return ResourceManager.GetString("WorkloadDayTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workload name:.
+        /// </summary>
+        public static string WorkloadNameColon {
+            get {
+                return ResourceManager.GetString("WorkloadNameColon", resourceCulture);
             }
         }
         

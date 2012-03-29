@@ -35,6 +35,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             sendMessage(binaryData);
         }
 
+        public Guid JobId()
+        {
+            return _jobResult.Id.GetValueOrDefault();
+        }
+
         public void ReportProgress(int percentage, string information)
         {
             var jobResultProgress = new JobResultProgress

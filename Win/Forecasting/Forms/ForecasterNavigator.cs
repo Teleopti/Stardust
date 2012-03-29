@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -51,6 +51,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IImportForecastsRepository _importForecastsRepository;
+	    private readonly IForecastsRowExtractor _rowExtractor;
+	    private readonly IJobHistoryProvider _jobHistoryProvider;
+	    private readonly IDetailedJobHistoryProvider _detailedJobHistoryProvider;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -82,12 +85,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		}
 
-        public ForecasterNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IQuickForecastViewFactory quickForecastViewFactory, IImportForecastsRepository importForecastsRepository)
+        public ForecasterNavigator(PortalSettings portalSettings, 
+            IRepositoryFactory repositoryFactory, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IQuickForecastViewFactory quickForecastViewFactory, 
+            IImportForecastsRepository importForecastsRepository,
+            IForecastsRowExtractor rowExtractor,
+            IJobHistoryProvider jobHistoryProvider,
+            IDetailedJobHistoryProvider detailedJobHistoryProvider)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
             _importForecastsRepository = importForecastsRepository;
+            _rowExtractor = rowExtractor;
+            _jobHistoryProvider = jobHistoryProvider;
+            _detailedJobHistoryProvider = detailedJobHistoryProvider;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -427,9 +440,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
-
         
-
 		private ISkillType getSkillType(TreeNode node)
 		{
 			if (node == null)
@@ -1205,19 +1216,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    {
             _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
             {
-                using (var view = new JobHistoryView())
+                using (var view = new JobHistoryDetailedView(_jobHistoryProvider, _detailedJobHistoryProvider))
                 {
                     view.ShowDialog(this);
                 }
             });
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowWarningMessage(System.String,System.String)")]
         private void importForecast(TreeNode node)
         {
             node = findAncestorNodeOfType(node, typeof(ISkill));
             var skill = (ISkill)node.Tag;
-
-            using (var impForecast = new ImportForecastForm(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler))
+            if (skill.WorkloadCollection.Count() == 0)
+            {
+                ViewBase.ShowWarningMessage("No workload available.", Resources.ImportError);
+                return;
+            }
+            using (var impForecast = new ImportForecastView(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler, _rowExtractor))
             {
                 impForecast.ShowDialog(this);
             }

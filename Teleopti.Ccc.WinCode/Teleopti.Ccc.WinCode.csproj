@@ -88,70 +88,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
-    <OutputPath>bin\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
-    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Ccc.WinCode.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\AutoFac\Autofac.dll</HintPath>
@@ -387,6 +323,12 @@
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
+    <Compile Include="Forecasting\CopyToSkillCommand.cs" />
+    <Compile Include="Forecasting\CopyToSkillModel.cs" />
+    <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
+    <Compile Include="Forecasting\DetailedJobHistoryPresenter.cs" />
+    <Compile Include="Forecasting\DetailedJobHistoryProvider.cs" />
+    <Compile Include="Forecasting\DetailedJobHistoryResultModel.cs" />
     <Compile Include="Forecasting\ExportPages\ChildSkillMappingModel.cs" />
     <Compile Include="Forecasting\ExportPages\DestinationSkillModel.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettings.cs" />
@@ -399,14 +341,27 @@
     <Compile Include="Forecasting\ExportPages\IExportAcrossBusinessUnitsSettingsProvider.cs" />
     <Compile Include="Forecasting\ExportPages\MultisiteSkillModel.cs" />
     <Compile Include="Forecasting\ExportPages\MultisiteSkillSelectionModel.cs" />
+    <Compile Include="Forecasting\ICopyToSkillCommand.cs" />
+    <Compile Include="Forecasting\ICopyToSkillView.cs" />
+    <Compile Include="Forecasting\IDetailedJobHistoryProvider.cs" />
+    <Compile Include="Forecasting\IDetailedJobHistoryView.cs" />
     <Compile Include="Forecasting\IJobHistoryProvider.cs" />
     <Compile Include="Forecasting\IJobHistoryView.cs" />
     <Compile Include="Forecasting\ImportForecast\Models\ImportForecastModel.cs" />
     <Compile Include="Forecasting\ImportForecast\Presenters\ImportForecastPresenter.cs" />
-    <Compile Include="Forecasting\ImportForecast\Views\IImportForecast.cs" />
+    <Compile Include="Forecasting\ImportForecast\Views\IImportForecastView.cs" />
+    <Compile Include="Forecasting\IsPossibleTargetSkillForCopy.cs" />
     <Compile Include="Forecasting\JobHistoryPresenter.cs" />
     <Compile Include="Forecasting\JobHistoryProvider.cs" />
     <Compile Include="Forecasting\JobResultModel.cs" />
+    <Compile Include="Forecasting\OpenHourHelper.cs" />
+    <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPages.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillGeneralPresenter.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillPropertiesPages.cs" />
+    <Compile Include="Forecasting\SkillPages\SkillWizardPages.cs" />
+    <Compile Include="Forecasting\TextManager.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPages.cs" />
+    <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPages.cs" />
     <Compile Include="Grouping\Commands\AddGroupPageCommand.cs" />
     <Compile Include="Grouping\Commands\CommandProvider.cs" />
     <Compile Include="Grouping\Commands\RenameGroupPageCommand.cs" />
@@ -507,12 +462,6 @@
     <Compile Include="Meetings\Events\ShowExportMeetingClicked.cs" />
     <Compile Include="Meetings\Interfaces\IExportMeetingView.cs" />
     <Compile Include="Meetings\MeetingParticipantPermittedChecker.cs" />
-    <Compile Include="Forecasting\CopyToSkillCommand.cs" />
-    <Compile Include="Forecasting\CopyToSkillModel.cs" />
-    <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
-    <Compile Include="Forecasting\ICopyToSkillCommand.cs" />
-    <Compile Include="Forecasting\ICopyToSkillView.cs" />
-    <Compile Include="Forecasting\IsPossibleTargetSkillForCopy.cs" />
     <Compile Include="Meetings\Overview\AppointmentFromMeetingCreator.cs" />
     <Compile Include="Meetings\Commands\AddMeetingCommand.cs" />
     <Compile Include="Meetings\Commands\CopyMeetingCommand.cs" />
@@ -713,7 +662,6 @@
     <Compile Include="FileImport\IModel.cs" />
     <Compile Include="FileImport\ImportFileDo.cs" />
     <Compile Include="FileImport\ImportFileDoCollection.cs" />
-    <Compile Include="Forecasting\SkillPages\SkillGeneralPresenter.cs" />
     <Compile Include="Intraday\IDayLayerViewModel.cs" />
     <Compile Include="Common\ISchedulingResultLoader.cs" />
     <Compile Include="Intraday\IManageAlarmSituationView.cs" />
@@ -1005,7 +953,6 @@
     <Compile Include="Common\Rows\SkillStaffPeriodGridRowScheduler.cs" />
     <Compile Include="Converters\TimeSpanConverter.cs" />
     <Compile Include="Common\Chart\ChartSettingsManager.cs" />
-    <Compile Include="Forecasting\TextManager.cs" />
     <Compile Include="Intraday\DayLayerViewModel.cs" />
     <Compile Include="Intraday\IIntradayView.cs" />
     <Compile Include="Intraday\IntradayPresenter.cs" />
@@ -1088,7 +1035,6 @@
     <Compile Include="Scheduling\DateTimePeriodViewModel.cs" />
     <Compile Include="Scheduling\Gridlock.cs" />
     <Compile Include="Scheduling\GridlockManager.cs" />
-    <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPages.cs" />
     <Compile Include="Presentation\BusinessUnitListBoxPresenter.cs" />
     <Compile Include="Presentation\IEntityPresenter.cs" />
     <Compile Include="Presentation\IListBoxPresenter.cs" />
@@ -1119,11 +1065,6 @@
     <Compile Include="Common\DailyAssignmentList.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
     <Compile Include="Common\PasteOptions.cs" />
-    <Compile Include="Forecasting\OpenHourHelper.cs" />
-    <Compile Include="Forecasting\SkillPages\SkillPropertiesPages.cs" />
-    <Compile Include="Forecasting\SkillPages\SkillWizardPages.cs" />
-    <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPages.cs" />
-    <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPages.cs" />
     <Compile Include="PeopleAdmin\IPersonRoleView.cs" />
     <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
     <Compile Include="Presentation\AuthorizationEntityListBoxPresenter.cs" />

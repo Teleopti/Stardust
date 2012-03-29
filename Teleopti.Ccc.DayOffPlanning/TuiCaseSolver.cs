@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.DayOffPlanning
         private readonly DayOffPlannerSessionRuleSet _sessionRuleSet;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
-        private Random _random;
+        private readonly Random _random;
 
-        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations, int randomSeed)
         {
             _maxIterations = maxIterations;
             _functions = functions;
             _bitArray = bitArray;
             _sessionRuleSet = sessionRuleSet;
-            _random = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
+            _random = new Random(randomSeed);
         }
 
         public MinMaxNumberOfResult ResolvableState()

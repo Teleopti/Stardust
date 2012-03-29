@@ -1,129 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models
 {
-    public class ImportForecastModel
+    public interface IImportForecastModel
+    {
+        string SelectedSkillName { get; }
+        Guid SaveValidatedForecastFile(IForecastFile forecastFile);
+        void ValidateFile(StreamReader streamReader);
+        IWorkload LoadWorkload();
+        byte[] FileContent { get; set; }
+    }
+
+    public class ImportForecastModel : IImportForecastModel
     {
         private readonly ISkill _skill;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IImportForecastsRepository _importForecastsRepository;
-        private byte[] _fileContent;
-        private string _fileName;
+        private readonly IForecastsRowExtractor _rowExtractor;
 
-        public ImportForecastModel(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository)
+        public ImportForecastModel(ISkill preselectedSkill, IUnitOfWorkFactory unitOfWorkFactory, IImportForecastsRepository importForecastsRepository, IForecastsRowExtractor rowExtractor)
         {
             _skill = preselectedSkill;
             _unitOfWorkFactory = unitOfWorkFactory;
             _importForecastsRepository = importForecastsRepository;
+            _rowExtractor = rowExtractor;
         }
 
-        public IEnumerable<IWorkload> LoadWorkloadList()
+        public string SelectedSkillName
         {
-            return _skill.WorkloadCollection.OrderBy(wl => wl.Name).ToList();
+            get { return _skill.Name; }
         }
 
-        public string GetSelectedSkillName()
-        {
-            return _skill.Name;
-        }
+        public byte[] FileContent { get; set; }
 
-        public Guid SaveValidatedForecastFileInDb()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public Guid SaveValidatedForecastFile(IForecastFile forecastFile)
         {
-            if(string.IsNullOrEmpty(_fileName))
-                throw new Exception("File has not been validated yet.");
-            var result = Guid.Empty;
+            Guid result;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-               var forecastFile = new ForecastFile(_fileName, _fileContent);
-               _importForecastsRepository.Add(forecastFile);
-               var savedItem = uow.PersistAll();
-               var item = savedItem.FirstOrDefault();
-               if (item != null) result = extractId(item.Root);
+                _importForecastsRepository.Add(forecastFile);
+                uow.PersistAll();
+                result = forecastFile.Id.GetValueOrDefault();
             }
             return result;
         }
 
-        private static Guid extractId(object root)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
+        public void ValidateFile(StreamReader streamReader)
         {
-            var entity = root as IEntity;
-            if (entity != null) return entity.Id.GetValueOrDefault();
-
-            var custom = root as ICustomChangedEntity;
-            if (custom != null) return custom.Id.GetValueOrDefault();
-
-            return Guid.Empty;
-        }
-
-        public void ValidateFile(string uploadFileName)
-        {
-            var fileContent = new StringBuilder();
-            using (var stream = new StreamReader(uploadFileName))
+            var rowNumber = 1;
+            try
             {
-                var rowNumber = 1;
-                try
-                {
-                    if (stream.Peek() == -1) throw new ValidationException("File is empty.");
-                    var reader = new CsvFileReader(stream);
-                    var row = new CsvFileRow();
-                    var validators = setUpForecastsFileValidators();
+                if (streamReader.Peek() == -1) throw new ValidationException("File is empty.");
 
-                    using (PerformanceOutput.ForOperation("Validate forecasts import file."))
-                    {
-                        while (reader.ReadNextRow(row))
-                        {
-                            validateRowByRow(validators, row);
-                            fileContent.Append(row.ToString() + '\n');
-                            row.Clear();
-                            rowNumber++;
-                        }
-                    }
-                }
-                catch (ValidationException exception)
+                while (!streamReader.EndOfStream)
                 {
-                    throw new ValidationException(string.Format("LineNumber{0}, Error:{1}", rowNumber, exception.Message), exception);
+                    if (rowNumber > 100) break;
+
+                    var line = streamReader.ReadLine();
+                    _rowExtractor.Extract(line, _skill.TimeZone);
+                    rowNumber++;
                 }
             }
-            _fileName = uploadFileName;
-            _fileContent = Encoding.UTF8.GetBytes(fileContent.ToString());
+            catch (ValidationException exception)
+            {
+                throw new ValidationException(string.Format("Line {0}, Error:{1}", rowNumber, exception.Message), exception);
+            }
+            var fileContent = new byte[streamReader.BaseStream.Length];
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            streamReader.BaseStream.Read(fileContent, 0, (int) streamReader.BaseStream.Length);
+            FileContent = fileContent;
         }
 
-        private static void validateRowByRow(IList<IForecastsFileValidator> validators, IFileRow row)
+        public IWorkload LoadWorkload()
         {
-            if (!ForecastsFileRowCreator.IsFileColumnValid(row))
-            {
-                throw new ValidationException("There are more or less columns than expected.");
-            }
-            for (var i = 0; i < row.Count; i++)
-            {
-                if (!validators[i].Validate(row.Content[i]))
-                    throw new ValidationException(validators[i].ErrorMessage);
-            }
-        }
-
-        private static List<IForecastsFileValidator> setUpForecastsFileValidators()
-        {
-            var validators = new List<IForecastsFileValidator>
-                                 {
-                                     new ForecastsFileSkillNameValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileDateTimeValidator(),
-                                     new ForecastsFileIntegerValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator(),
-                                     new ForecastsFileDoubleValueValidator()
-                                 };
-            return validators;
+            return _skill.WorkloadCollection.FirstOrDefault();
         }
     }
 }

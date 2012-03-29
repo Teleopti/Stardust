@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             {
                 TimeSpan mergedStartTime;
                 TimeSpan mergedEndTime;
-                if (openHours.StartTime.Subtract(existingOpenHours.StartTime) < TimeSpan.Zero)
+                if (openHours.StartTime < existingOpenHours.StartTime)
                 {
                     mergedStartTime = openHours.StartTime;
                     mergedEndTime = existingOpenHours.EndTime;
                     _workloadDayOpenHours[dateOnly] = new TimePeriod(mergedStartTime, mergedEndTime);
                 }
-                if (openHours.EndTime.Subtract(existingOpenHours.EndTime) > TimeSpan.Zero)
+                if (openHours.EndTime > existingOpenHours.EndTime)
                 {
                     mergedStartTime = existingOpenHours.StartTime;
                     mergedEndTime = openHours.EndTime;

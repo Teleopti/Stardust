@@ -1,8 +1,9 @@
-﻿namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
+﻿using Teleopti.Ccc.Domain.Forecasting.Import;
+
+namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public interface IForecastsFileValidator
+    public interface IForecastsFileValidator<T>
     {
-        bool Validate(string value);
-        string ErrorMessage { get; set; }
+        bool TryParse(string value,out ForecastParseResult<T> result);
     }
 }
