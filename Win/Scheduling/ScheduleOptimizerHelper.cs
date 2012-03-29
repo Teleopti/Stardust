@@ -390,13 +390,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return null;
         }
 
-        private static IEffectiveRestriction getEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
-        {
-            var extractor = new RestrictionExtractor(null);
-            extractor.Extract(part);
-            return extractor.CombinedRestriction(options);
-        }
-
         public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
         {
             get { return _allResults; }
