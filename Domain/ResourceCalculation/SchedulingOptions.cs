@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +44,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IScheduleTag TagToUseOnScheduling { get; set; }
         public IScheduleTag TagToUseOnOptimize { get; set; }
 
-    	public SchedulingOptions()
+        public bool ShowTroubleshot { get; set; }
+
+        public SchedulingOptions()
         {
             RefreshRate = 10;
             UseShiftCategoryLimitations = true;
