@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json.Linq;
@@ -29,6 +32,13 @@ namespace Teleopti.Messaging.SignalR
 			FilterManager = new MessageFilterManager();
 			FilterManager.InitializeTypeFilter(typeFilter);
 			IsTypeFilterApplied = true;
+
+			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+		}
+
+		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
 		}
 
 		public IMessageFilterManager FilterManager { get; set; }

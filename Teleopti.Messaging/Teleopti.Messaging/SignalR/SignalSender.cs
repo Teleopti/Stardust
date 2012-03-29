@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SignalR.Client._20.Hubs;
 using Teleopti.Interfaces.Domain;
@@ -19,6 +22,13 @@ namespace Teleopti.Messaging.SignalR
 		public SignalSender(string serverUrl)
 		{
 			_serverUrl = serverUrl;
+
+			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+		}
+
+		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
 		}
 
 		public void Dispose()
