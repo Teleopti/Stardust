@@ -36,35 +36,35 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (!_optimizationPreferences.General.UsePreferences)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.PreferencesOverLimit(new Percent(_optimizationPreferences.General.PreferencesValue));
+            return _restrictionOverLimitDecider.PreferencesOverLimit(new Percent(_optimizationPreferences.General.PreferencesValue)).BrokenDays;
         }
 
         public IList<DateOnly> MustHavesOverLimit()
         {
             if (!_optimizationPreferences.General.UseMustHaves)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.MustHavesOverLimit(new Percent(_optimizationPreferences.General.MustHavesValue));
+            return _restrictionOverLimitDecider.MustHavesOverLimit(new Percent(_optimizationPreferences.General.MustHavesValue)).BrokenDays;
         }
 
         public IList<DateOnly> RotationOverLimit()
         {
             if (!_optimizationPreferences.General.UseRotations)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.RotationOverLimit(new Percent(_optimizationPreferences.General.RotationsValue));
+            return _restrictionOverLimitDecider.RotationOverLimit(new Percent(_optimizationPreferences.General.RotationsValue)).BrokenDays;
         }
 
         public IList<DateOnly> AvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseAvailabilities)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.AvailabilitiesValue));
+            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.AvailabilitiesValue)).BrokenDays;
         }
 
         public IList<DateOnly> StudentAvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseStudentAvailabilities)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue));
+            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue)).BrokenDays;
         }
     }
 }

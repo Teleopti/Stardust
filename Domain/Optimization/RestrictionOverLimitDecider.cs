@@ -18,42 +18,42 @@ namespace Teleopti.Ccc.Domain.Optimization
             _restrictionChecker = restrictionChecker;
         }
 
-        public IList<DateOnly> PreferencesOverLimit(Percent limit)
+        public BrokenRestrictionsInfo PreferencesOverLimit(Percent limit)
         {
             return calculateReturn(limit, _restrictionChecker.CheckPreference);
         }
 
-        public IList<DateOnly> MustHavesOverLimit(Percent limit)
+        public BrokenRestrictionsInfo MustHavesOverLimit(Percent limit)
         {
             return calculateReturn(limit, _restrictionChecker.CheckPreferenceMustHave);
         }
 
-        public IList<DateOnly> RotationOverLimit(Percent limit)
+        public BrokenRestrictionsInfo RotationOverLimit(Percent limit)
         {
             return calculateReturn(limit, _restrictionChecker.CheckRotations);
         }
 
-        public IList<DateOnly> AvailabilitiesOverLimit(Percent limit)
+        public BrokenRestrictionsInfo AvailabilitiesOverLimit(Percent limit)
         {
             return calculateReturn(limit, _restrictionChecker.CheckAvailability);
         }
 
-        public IList<DateOnly> StudentAvailabilitiesOverLimit(Percent limit)
+        public BrokenRestrictionsInfo StudentAvailabilitiesOverLimit(Percent limit)
         {
             return calculateReturn(limit, _restrictionChecker.CheckStudentAvailability);
         }
 
-        private IList<DateOnly> calculateReturn(Percent limit, Func<PermissionState> checkMethod)
+        private BrokenRestrictionsInfo calculateReturn(Percent limit, Func<PermissionState> checkMethod)
         {
             double brokenLimit = calculateBrokenLimit(limit.Value);
-            brokenReturn current = calculateBrokenPercentage(checkMethod);
-            if (current.BrokenPercentage > brokenLimit)
-                return current.BrokenDays;
+            BrokenRestrictionsInfo current = calculateBrokenPercentage(checkMethod);
+            if (current.BrokenPercentage.Value > brokenLimit)
+                return new BrokenRestrictionsInfo(current.BrokenDays, current.BrokenPercentage);
 
-            return new List<DateOnly>();
+            return new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent());
         }
 
-        private brokenReturn calculateBrokenPercentage(Func<PermissionState> checkMethod)
+        private BrokenRestrictionsInfo calculateBrokenPercentage(Func<PermissionState> checkMethod)
         {
             int brokenDays = 0;
             int allDays = 0;
@@ -79,34 +79,34 @@ namespace Teleopti.Ccc.Domain.Optimization
                 retPercentage = brokenDays/(double) allDays;
             }
 
-            return new brokenReturn(brokenDates, retPercentage);
+            return new BrokenRestrictionsInfo(brokenDates, new Percent(retPercentage));
         }
 
         private static double calculateBrokenLimit(double fulFillValue)
         {
             return 1 - fulFillValue;
         }
+    }
 
-        private class brokenReturn
+    public class BrokenRestrictionsInfo
+    {
+        private readonly IList<DateOnly> _brokenDays;
+        private readonly Percent _brokenPercentage;
+
+        public BrokenRestrictionsInfo(IList<DateOnly> brokenDays, Percent brokenPercentage)
         {
-            private readonly IList<DateOnly> _brokenDays;
-            private readonly double _brokenPercentage;
+            _brokenDays = brokenDays;
+            _brokenPercentage = brokenPercentage;
+        }
 
-            public brokenReturn(IList<DateOnly> brokenDays, double brokenPercentage)
-            {
-                _brokenDays = brokenDays;
-                _brokenPercentage = brokenPercentage;
-            }
+        public IList<DateOnly> BrokenDays
+        {
+            get { return _brokenDays; }
+        }
 
-            public IList<DateOnly> BrokenDays
-            {
-                get { return _brokenDays; }
-            }
-
-            public double BrokenPercentage
-            {
-                get { return _brokenPercentage; }
-            }
+        public Percent BrokenPercentage
+        {
+            get { return _brokenPercentage; }
         }
     }
 }
