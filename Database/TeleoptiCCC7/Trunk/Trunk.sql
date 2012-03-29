@@ -96,3 +96,10 @@ AND [WindowsLogOnName] <> ''
 AND [DomainName] <> ''
 
 GO
+ALTER TABLE dbo.Person
+	DROP CONSTRAINT UQ_Person_PartOfUnique
+GO
+ALTER TABLE dbo.Person
+	DROP COLUMN PartOfUnique, WindowsLogOnName, DomainName, ApplicationLogOnName, [Password]
+
+GO
