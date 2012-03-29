@@ -17,20 +17,19 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void CreateDatabase(DatabaseType type, string name)
 		{
-			var scriptFile = ScriptFilePath(type, "Create");
+			var scriptFile = ScriptFilePath(type, _databaseFolder.CreateScriptsPath());
 			CreateDatabaseByScriptFile(scriptFile, type, name);
 		}
 
 		public void CreateAzureDatabase(DatabaseType type, string name)
 		{
-			var scriptFile = ScriptFilePath(type, "Create\\Azure");
+			var scriptFile = ScriptFilePath(type, _databaseFolder.AzureCreateScriptsPath());
 			CreateDatabaseByScriptFile(scriptFile, type, name);
 		}
 
-		private string ScriptFilePath(DatabaseType type, string subFolder)
+		private string ScriptFilePath(DatabaseType type, string path)
 		{
 			var fileName = type.GetName() + ".sql";
-			var path = Path.Combine(_databaseFolder.Path(), subFolder);
 			return Path.Combine(path, fileName);
 		}
 

@@ -9,9 +9,16 @@ AS
 /*
 declare @d smalldatetime
 select @d= dateadd(minute,-3,getdate())
+select @d
 exec [msg].[sp_Scavage_Subscribers] @d
 */
 BEGIN
+--Reset input to SQL Server time
+SELECT
+	@SCAVAGE_DATETIME_WINDOW = ISNULL(DATEADD(MILLISECOND,-CAST(ConfigurationValue as int),GETUTCDATE()),180000)
+FROM msg.configuration
+WHERE ConfigurationId=10 --restartTimeSpan
+
 INSERT INTO msg.Pending(SubscriberId) 
 	SELECT a.SubscriberId FROM msg.Subscriber a
 	WHERE not exists (SELECT 1 FROM msg.Heartbeat b where a.SubscriberId = b.SubscriberId)
@@ -30,4 +37,3 @@ DELETE FROM msg.Heartbeat WHERE ChangedDateTime < @SCAVAGE_DATETIME_WINDOW
 END
 
 GO
-

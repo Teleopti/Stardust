@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
 
@@ -60,9 +62,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I am a supervisor")]
-		public void GivenIAmASupervisorWithMobile()
+		public void GivenIAmASupervisor()
 		{
 			UserFactory.User().Setup(new Supervisor());
+		}
+
+		[Given(@"I have analytics data for today")]
+		public void GivenIHaveAnalyticsDataForToday()
+		{
+			var timeZones = new UtcAndCetTimeZones();
+			var dates = new TodayDate();
+			var intervals = new QuarterOfAnHourInterval();
+			var dataSource = new ExistingDatasources(timeZones);
+			UserFactory.User().Setup(new EternityAndNotDefinedDate());
+			UserFactory.User().Setup(timeZones);
+			UserFactory.User().Setup(dates);
+			UserFactory.User().Setup(intervals);
+			UserFactory.User().Setup(dataSource);
+			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
+		}
+
+		[Given(@"I have analytics data for the current week")]
+		public void GivenIHaveAnalyticsDataForTheCurrentWeek()
+		{
+			var timeZones = new UtcAndCetTimeZones();
+			var dates = new CurrentWeekDates();
+			var intervals = new QuarterOfAnHourInterval();
+			var dataSource = new ExistingDatasources(timeZones);
+			UserFactory.User().Setup(new EternityAndNotDefinedDate());
+			UserFactory.User().Setup(timeZones);
+			UserFactory.User().Setup(dates);
+			UserFactory.User().Setup(intervals);
+			UserFactory.User().Setup(dataSource);
+			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
 
 		[Given(@"I am user without permission to MobileReports")]
@@ -165,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I have several virtual schedule periods")]
 		public void GivenIHaveSeveralVirtualSchedulePeriods()
 		{
-			UserFactory.User().ReplaceSetupByType(new SchedulePeriod(2));
+			UserFactory.User().ReplaceSetupByType<SchedulePeriod>(new SchedulePeriod(2));
 		}
 
 		[Given(@"I do not have a virtual schedule period")]
@@ -466,4 +498,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 	}
+
 }
+
+

@@ -56,7 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			CreateAndPersistTestData();
 			Log.Write("Create and persist test data took " + DateTime.Now.Subtract(createAndPersistTestDataStartTime));
 
-			Log.Write("Test data setup took " + DateTime.Now.Subtract(testDataSetupStartTime));
+			Log.Write("Test data setup took totally " + DateTime.Now.Subtract(testDataSetupStartTime));
+		}
+
+		public static void ClearAnalyticsData()
+		{
+			DataSourceHelper.ClearAnalyticsData();
 		}
 
 		public static void EnsureThreadPrincipal()

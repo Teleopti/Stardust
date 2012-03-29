@@ -139,14 +139,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ShiftType = Resources.AuditingReportShift,
 				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime),
 				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime),
-				// ändra detta när denna är löst/portad https://hibernate.onjira.com/browse/HHH-5845
-				Detail = string.Empty,
-				////////////////////////////////////////////////
+				Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
 				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
 			};
 
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
+				rep.Remove(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(),
+								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  new List<IPerson> { PersonAssignment.Person });
+				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldHaveBlankShiftCategoryWhenFirstDeleteMainShiftAndThenAssignment()
+		{
+			var expected = new ScheduleAuditingReportData
+			{
+				AuditType = Resources.AuditingReportDeleted,
+				ShiftType = Resources.AuditingReportShift,
+				ScheduleEnd = DateTime.MinValue,
+				ScheduleStart = DateTime.MinValue,
+				Detail = string.Empty,
+				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
+				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
+			};
+
+			//remove mainshift
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
+				PersonAssignment.ClearMainShift(rep);
+				uow.PersistAll();
+			}
+			//remove assignment
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);

@@ -9195,6 +9195,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include troubleshooting information.
+        /// </summary>
+        public static string IncludeTroubleshootingInformation {
+            get {
+                return ResourceManager.GetString("IncludeTroubleshootingInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Increase decimals.
         /// </summary>
         public static string IncreaseDecimals {
@@ -13299,6 +13308,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoNodeSelectedExclamation {
             get {
                 return ResourceManager.GetString("NoNodeSelectedExclamation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} agent days could not be scheduled..
+        /// </summary>
+        public static string NoOfAgentDaysCouldNotBeScheduled {
+            get {
+                return ResourceManager.GetString("NoOfAgentDaysCouldNotBeScheduled", resourceCulture);
             }
         }
         

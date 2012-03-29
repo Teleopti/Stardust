@@ -10539,4 +10539,10 @@ These options are activated:
     <value>Remove write protection</value>
     <comment>Remove write protection</comment>
   </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Include troubleshooting information</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} agent days could not be scheduled.</value>
+  </data>
 </root>
