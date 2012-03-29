@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             ISession session = _sessionFactory.OpenSession();
             
             IPerson person = session.CreateCriteria(typeof(IPerson))
-                        .Add(Restrictions.Eq("PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName", applicationLogOnName))
+                        .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName", applicationLogOnName))
                         .SetFetchMode("PermissionInformation.PersonInApplicationRole", FetchMode.Join)
                         .UniqueResult<IPerson>();
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)

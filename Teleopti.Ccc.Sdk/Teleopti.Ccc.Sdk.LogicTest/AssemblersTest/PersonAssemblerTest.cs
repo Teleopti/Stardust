@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             return person;
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyDomainEntityToDto()
         {
             var person = CreatePerson(true);

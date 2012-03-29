@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IChangePasswordView view;
         private IOneWayEncryption oneWayEncryption;
         private IApplicationAuthenticationInfo applicationAuthenticationInfo;
-        private IPermissionInformation permissionInformation;
         private IPasswordPolicy passwordPolicy;
         private IPersonRepository personRepository;
 
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             view = mocks.StrictMock<IChangePasswordView>();
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             oneWayEncryption = mocks.StrictMock<IOneWayEncryption>();
-            permissionInformation = mocks.StrictMock<IPermissionInformation>();
             applicationAuthenticationInfo = mocks.StrictMock<IApplicationAuthenticationInfo>();
             personRepository = mocks.StrictMock<IPersonRepository>();
             target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption);
