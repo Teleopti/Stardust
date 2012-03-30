@@ -202,14 +202,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 UseRotations = true
             };
             var helper = new AgentInfoHelper(person, date, _stateHolder, schedulingOptions, _ruleSetProjectionService);
-            var anotherSchedulingOptions = new SchedulingOptions
-            {
-                UseAvailability = false,
-                UsePreferences = false,
-                UseStudentAvailability = false,
-                UseRotations = false
-            };
-            helper.SchedulePeriodData(anotherSchedulingOptions);
+
+            helper.SchedulePeriodData();
 
             var perPeriod = from l in helper.SchedulePeriod.ShiftCategoryLimitationCollection()
                             where !l.Weekly
@@ -380,14 +374,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _ruleSetProjectionService);
-            var anotherSchedulingOptions = new SchedulingOptions
-                                               {
-                                                   UseAvailability = false,
-                                                   UsePreferences = false,
-                                                   UseStudentAvailability = false,
-                                                   UseRotations = false
-                                               };
-            helper.SchedulePeriodData(anotherSchedulingOptions);
+            
+            helper.SchedulePeriodData();
             if (!helper.Period.HasValue)
                 return;
 
@@ -514,14 +502,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             listViewSchedulePeriod.Items.Add("");
             if (employmentType != EmploymentType.HourlyStaff)
             {
-                createAndAddItem(listViewSchedulePeriod, "xxPreferenceFullFillment", helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewSchedulePeriod, "xxMustHaveFullFillment", helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewSchedulePeriod, "xxRotationFullFillment", helper.RotationFullfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewSchedulePeriod, "xxAvailibilityFullFillment", helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
             }
             else
             {
-                createAndAddItem(listViewSchedulePeriod, "xxStudentAvailabilityFullFillment", helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+                createAndAddItem(listViewSchedulePeriod, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
             }
             
         }

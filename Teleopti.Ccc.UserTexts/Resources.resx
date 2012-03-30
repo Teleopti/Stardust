@@ -10535,4 +10535,24 @@ These options are activated:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Contract time descending</value>
   </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Availability Fulfillment</value>
+    <comment>Availability Fulfillment</comment>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Must Have Fulfillment</value>
+    <comment>Must Have Fulfillment</comment>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Preference Fulfillment</value>
+    <comment>Preference Fulfillment</comment>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Rotation Fulfillment</value>
+    <comment>Rotation Fulfillment</comment>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Student Availability Fulfillment</value>
+    <comment>Student Availability Fulfillment</comment>
+  </data>
 </root>

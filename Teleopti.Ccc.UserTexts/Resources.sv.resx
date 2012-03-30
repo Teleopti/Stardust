@@ -10226,4 +10226,24 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Kontraktstid sjunkande</value>
   </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Tillgänglighetsuppfyllnad</value>
+    <comment>Availability Fulfillment</comment>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Vetouppfyllnad</value>
+    <comment>Must Have Fulfillment</comment>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Önskemålsuppfyllnad</value>
+    <comment>Preference Fulfillment</comment>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Sekvensuppfyllnad</value>
+    <comment>Rotation Fulfillment</comment>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Studenttillgänglighetsuppfyllnad</value>
+    <comment>Student Availability Fulfillment</comment>
+  </data>
 </root>

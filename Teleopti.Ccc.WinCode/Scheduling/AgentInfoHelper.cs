@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private string _daysOffTolerance;
         private Percent _preferenceFulfillment;
         private Percent _mustHavesFulfillment;
-        private Percent _rotationFullfillment;
+        private Percent _rotationFulfillment;
         private Percent _availabilityFulfillment;
         private Percent _studentAvailabilityFulfillment;
 
@@ -214,9 +214,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return new Percent(1 - _preferenceFulfillment.Value); }
         }
 
-        public Percent RotationFullfillment
+        public Percent RotationFulfillment
         {
-            get { return new Percent(1 - _rotationFullfillment.Value); }
+            get { return new Percent(1 - _rotationFulfillment.Value); }
         }
 
         public Percent AvailabilityFulfillment
@@ -239,11 +239,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         //    get { return _currentShiftAllowanceTime; }
         //}
 
-        public void SchedulePeriodData(ISchedulingOptions schedulingOptions)
+        public void SchedulePeriodData()
         {
             if (SchedulePeriod == null)
-                return;
-            if (schedulingOptions == null)
                 return;
 
             if (!SchedulePeriod.IsValid)
@@ -294,7 +292,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(_matrix, new RestrictionChecker());
             _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1)).BrokenPercentage;
             _mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1)).BrokenPercentage;
-            _rotationFullfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1)).BrokenPercentage;
+            _rotationFulfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1)).BrokenPercentage;
             _availabilityFulfillment = restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
             _studentAvailabilityFulfillment = restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
         }

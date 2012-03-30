@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
-            if (rotation == null)
+            if (rotation == null || !rotation.IsRestriction())
                 return PermissionState.None;
 
             PermissionState permissionState = CheckRotationDayOff();
