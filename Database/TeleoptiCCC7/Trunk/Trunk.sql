@@ -33,4 +33,13 @@ ON [dbo].[ShiftTradeSwapDetail] ([Parent])
 INCLUDE ([PersonFrom],[PersonTo])
 GO
 
-
+----------------  
+--Name: AndersF
+--Date: 2012-03-30
+--Desc: #18789 - Performance: The person day off query is now one of the most resource intense things on sql
+----------------  
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonDayOff]') AND name = N'IX_PersonDayOff_Scenario_BU_Anchor')
+CREATE NONCLUSTERED INDEX [IX_PersonDayOff_Scenario_BU_Anchor]
+ON [dbo].[PersonDayOff] ([Scenario],[BusinessUnit],[Anchor])
+INCLUDE ([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[TargetLength],[Flexibility],[Name],[ShortName],[DisplayColor],[PayrollCode])
+GO
