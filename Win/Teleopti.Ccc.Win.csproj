@@ -644,6 +644,7 @@
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ImportForecast\SendCommandToSdk.cs" />
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.cs">
       <SubType>Form</SubType>
     </Compile>

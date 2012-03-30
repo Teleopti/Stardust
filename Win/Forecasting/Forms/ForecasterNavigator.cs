@@ -4,55 +4,48 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.ServiceModel;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.JobHistory;
 using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
 using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using log4net;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
 	public partial class ForecasterNavigator : AbstractNavigator
 	{
-        private ILog _logger = LogManager.GetLogger(typeof(ForecasterNavigator));
 		private TreeNode _lastActionNode;
 		private TreeNode _lastContextMenuNode;
 		private readonly PortalSettings _portalSettings;
 		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
-	    private readonly IImportForecastsRepository _importForecastsRepository;
 	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
-	    private readonly IForecastsRowExtractor _rowExtractor;
+	    private readonly IImportForecastViewFactory _importForecastViewFactory;
+	    private readonly ISendCommandToSdk _sendCommandToSdk;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -88,16 +81,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IRepositoryFactory repositoryFactory, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IQuickForecastViewFactory quickForecastViewFactory, 
-            IImportForecastsRepository importForecastsRepository,
             IJobHistoryViewFactory jobHistoryViewFactory,
-            IForecastsRowExtractor rowExtractor)
+            IImportForecastViewFactory importForecastViewFactory,
+            ISendCommandToSdk sendCommandToSdk)
             : this()
         {
             _portalSettings = portalSettings;
             _quickForecastViewFactory = quickForecastViewFactory;
-            _importForecastsRepository = importForecastsRepository;
             _jobHistoryViewFactory = jobHistoryViewFactory;
-            _rowExtractor = rowExtractor;
+            _importForecastViewFactory = importForecastViewFactory;
+            _sendCommandToSdk = sendCommandToSdk;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1152,7 +1145,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                                 var statusDialog =
                                     new JobStatusView(new JobStatusModel { JobStatusId = Guid.NewGuid()});
                                 statusDialog.Show(this);
-                                statusDialog.SetJobStatusId(executeCommand(dto));
+                                statusDialog.SetJobStatusId(_sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
                             }
                             catch (OptimisticLockException)
                             {
@@ -1168,37 +1161,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
-
-        private Guid executeCommand(CommandDto commandDto)
-        {
-            var sdkAuthentication = new SdkAuthentication();
-            sdkAuthentication.SetSdkAuthenticationHeader();
-
-            var proxy = new Proxy();
-            try
-            {
-                proxy.Open();
-                var result = proxy.ExecuteCommand(commandDto);
-                return result.AffectedId.GetValueOrDefault();
-            }
-            catch (TimeoutException timeoutException)
-            {
-                _logger.Error(string.Concat(commandDto.GetType()," can't reach Sdk due to a timeout."), timeoutException);
-            }
-            catch (CommunicationException exception)
-            {
-                _logger.Error(string.Concat(commandDto.GetType(), " can't reach Sdk."), exception);
-            }
-            catch (Exception exception)
-            {
-                _logger.Error(string.Concat(commandDto.GetType()," notification error."), exception);
-            }
-            finally
-            {
-                ((IDisposable)proxy).Dispose();
-            }
-            return Guid.Empty;
-        }
 
         private static void initializeExportAcrossBusinessUnitsWizard(ExportMultisiteSkillToSkillCommandModel model, IExportAcrossBusinessUnitsSettingsProvider settingProvider)
         {
@@ -1223,10 +1185,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 ViewBase.ShowWarningMessage("No workload available.", Resources.ImportError);
                 return;
             }
-            using (var impForecast = new ImportForecastView(skill, _unitOfWorkFactory, _importForecastsRepository, _dataSourceExceptionHandler, _rowExtractor))
-            {
-                impForecast.ShowDialog(this);
-            }
+            _importForecastViewFactory.Create(skill);
         }
 
         private void toolStripMenuItemSkillsImportForecast_Click(object sender, EventArgs e)

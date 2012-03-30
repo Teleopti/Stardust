@@ -11,7 +11,6 @@ using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Matrix;
 
 namespace Teleopti.Ccc.Win.Main
@@ -35,9 +34,6 @@ namespace Teleopti.Ccc.Win.Main
             builder.RegisterType<PeopleNavigator>();
             builder.RegisterType<SchedulerNavigator>();
             builder.Register(c => c.Resolve<PortalSettingsProvider>().PortalSettings).As<PortalSettings>().As<IPortalSettings>();
-            builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
-            builder.RegisterType<JobHistoryProvider>().As<IJobHistoryProvider>();
-            builder.RegisterType<DetailedJobHistoryProvider>().As<IDetailedJobHistoryProvider>();
         }
     }
 }

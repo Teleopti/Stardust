@@ -5,103 +5,62 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 {
     [TestFixture]
     public class ImportForecastModelTest
     {
-        private IImportForecastModel _target;
+        private ImportForecastModel _target;
         private MockRepository _mocks;
         private ISkill _skill;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IImportForecastsRepository _importForecastsRepository;
-        
+        private byte[] _fileContent;
+
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _skill = SkillFactory.CreateSkillWithWorkloadAndSources();
-            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _importForecastsRepository = _mocks.StrictMock<IImportForecastsRepository>();
-            _target = new ImportForecastModel(_skill, _unitOfWorkFactory, _importForecastsRepository, new ForecastsRowExtractor());
+            _skill = _skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+            _fileContent = new byte[200];
+            _target = new ImportForecastModel();
+            _target.ImportMode = ImportForecastsMode.ImportWorkloadAndStaffing;
+            _target.SelectedSkill = _skill;
         }
 
         [Test]
-        public void ShouldGetSkillName()
+        public void ShouldReturnSelectedSkill()
         {
-            Assert.That(_target.SelectedSkillName, Is.EqualTo("TestSkill"));   
+            Assert.IsNotNull(_target.SelectedSkill);   
         }
 
         [Test]
-        public void ShouldLoadWorkload()
+        public void ShouldGetFileContents()
         {
-            Assert.That(_target.LoadWorkload(), Is.EqualTo(_skill.WorkloadCollection.FirstOrDefault()));
+            _target.FileContent = _fileContent;
+            Assert.IsNotEmpty(_fileContent);
         }
 
         [Test]
-        public void ShouldSaveFileToServer()
+        public void ShouldSetImportMode()
         {
-            var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-            var forecastFile = _mocks.StrictMock<IForecastFile>();
-            var fileId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(() => _importForecastsRepository.Add(forecastFile));
-                Expect.Call(forecastFile.Id).Return(fileId);
-                Expect.Call(unitOfWork.PersistAll());
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mocks.Playback())
-            {
-                Assert.That(_target.SaveValidatedForecastFile(forecastFile), Is.EqualTo(fileId));
-            }
+           Assert.That(_target.ImportMode, Is.EqualTo(ImportForecastsMode.ImportWorkloadAndStaffing));
         }
 
         [Test]
-        public void ShouldValidateValidFile()
+        public void ShouldGetSelectedWorkload()
         {
-            const string file = "Insurance,20120301 12:45,20120301 13:00,17,179,0,4.05";
-            var fileContent = Encoding.UTF8.GetBytes(file);
-            using (var stream = new MemoryStream(fileContent))
-            {
-                var streamReader = new StreamReader(stream);
-                _target.ValidateFile(streamReader);
-            }
-            Assert.That(_target.FileContent, Is.EqualTo(fileContent));
-        }
-
-        [Test]
-        [ExpectedException(typeof(ValidationException))]
-        public void ShouldValidateInvalidFile()
-        {
-            const string file = "Insurance,20120301 12:45,20120301 13:00,17,179";
-            var fileContent = Encoding.UTF8.GetBytes(file);
-            using (var stream = new MemoryStream(fileContent))
-            {
-                var streamReader = new StreamReader(stream);
-                _target.ValidateFile(streamReader);
-            }
-        }
-
-        [Test]
-        [ExpectedException(typeof(ValidationException))]
-        public void ShouldValidateInvalidEmptyFile()
-        {
-            const string file = "";
-            var fileContent = Encoding.UTF8.GetBytes(file);
-            using (var stream = new MemoryStream(fileContent))
-            {
-                var streamReader = new StreamReader(stream);
-                _target.ValidateFile(streamReader);
-            }
+            Assert.That(_target.SelectedWorkload(), Is.EqualTo(_skill.WorkloadCollection.FirstOrDefault()));
         }
     }
 }

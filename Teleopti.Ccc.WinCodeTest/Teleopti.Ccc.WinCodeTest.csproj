@@ -336,6 +336,8 @@
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
     <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\SaveImportForecastFileCommandTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
@@ -836,6 +838,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Forecasting\ImportForecast\InvalidFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Forecasting\ImportForecast\ValidFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Forecasting\ImportForecast\EmptyFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Security\ValidFile.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

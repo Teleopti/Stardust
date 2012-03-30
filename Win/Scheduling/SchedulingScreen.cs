@@ -14,6 +14,7 @@ using System.Windows.Forms.Integration;
 using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -5513,7 +5514,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Cursor = Cursors.WaitCursor;
                 using (PerformanceOutput.ForOperation("Persisting changes"))
                 {
-                    using (new DenormalizerContext(new SendDenormalizeNotificationToSdk()))
+                    using (new DenormalizerContext(new SendDenormalizeNotificationToSdk(_container.Resolve<ISendCommandToSdk>())))
                     {
                         _personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
                         var result = _persister.TryPersist(_schedulerState.Schedules,

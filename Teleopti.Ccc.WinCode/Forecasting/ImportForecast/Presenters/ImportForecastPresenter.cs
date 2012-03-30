@@ -1,63 +1,70 @@
 ﻿using System;
-using System.IO;
-using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 {
     public class ImportForecastPresenter
     {
         private readonly IImportForecastView _view;
-        private readonly IImportForecastModel _model;
+        private readonly ImportForecastModel _model;
+        private readonly ISaveImportForecastFileCommand _saveImportForecastFileCommand;
+        private readonly IValidateImportForecastFileCommand _validateImportForecastFileCommand;
+        private readonly ISendCommandToSdk _sendCommandToSdk;
 
-        public ImportForecastPresenter(IImportForecastView view, IImportForecastModel model)
+        public ImportForecastPresenter(IImportForecastView view, ImportForecastModel model, ISaveImportForecastFileCommand saveImportForecastFileCommand, IValidateImportForecastFileCommand validateImportForecastFileCommand, ISendCommandToSdk sendCommandToSdk)
         {
             _view = view;
             _model = model;
+            _saveImportForecastFileCommand = saveImportForecastFileCommand;
+            _validateImportForecastFileCommand = validateImportForecastFileCommand;
+            _sendCommandToSdk = sendCommandToSdk;
         }
 
-        public string SkillName { get; set; }
-
-        public IWorkload Workload { get; set; }
-
-        public void GetSelectedSkillName()
+        public void Initialize()
         {
-            SkillName = _model.SelectedSkillName;
-        }
+            var skill = _model.SelectedSkill;
+            _view.SetSkillName(skill.Name);
 
-        public Guid SaveForecastFile(string uploadFileName)
-        {
-            return _model.SaveValidatedForecastFile(new ForecastFile(uploadFileName, _model.FileContent));
-        }
-
-        public void ValidateFile(string uploadFileName)
-        {
-            using (var stream = new StreamReader(uploadFileName))
-            {
-                _model.ValidateFile(stream);
-            }
-        }
-
-        public ImportForecastsOptionsDto GetImportForecastOption()
-        {
-            if (_view.IsWorkloadImport)
-                return ImportForecastsOptionsDto.ImportWorkload;
-            if (_view.IsStaffingImport)
-                return ImportForecastsOptionsDto.ImportStaffing;
-            if (_view.IsStaffingAndWorkloadImport)
-                return ImportForecastsOptionsDto.ImportWorkloadAndStaffing;
-            throw new NotSupportedException("Options not supported.");
-        }
-
-        public void PopulateWorkload()
-        {
-            var workload = _model.LoadWorkload();
+            var workload = _model.SelectedWorkload();
             if(workload==null)
                 throw new InvalidOperationException("Workload should not be null.");
-            Workload = workload;
+            _view.SetWorkloadName(workload.Name);
+        }
+
+        public void SetImportType(ImportForecastsMode importMode)
+        {
+            _model.ImportMode = importMode;
+        }
+
+        public void StartImport(string fileName)
+        {
+            _validateImportForecastFileCommand.Execute(fileName);
+            if (_model.HasValidationError)
+            {
+                _view.ShowValidationException(_model.ValidationMessage);
+                _view.EnableImport();
+                return;
+            }
+
+            _saveImportForecastFileCommand.Execute(fileName);
+
+            if (_model.FileId == Guid.Empty)
+            {
+                _view.ShowError("Error occured when trying to import file.");
+                return;
+            }
+            var dto = new ImportForecastsFileCommandDto
+                          {
+                              ImportForecastsMode = (ImportForecastsOptionsDto)(int)_model.ImportMode,
+                              UploadedFileId = _model.FileId,
+                              TargetSkillId = _model.SelectedSkill.Id.GetValueOrDefault()
+                          };
+
+            _view.ShowStatusDialog(_sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
         }
     }
 }

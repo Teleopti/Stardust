@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
+﻿using Teleopti.Interfaces.Messages.General;
+
+namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
     partial class ImportForecastView
     {
@@ -110,6 +112,7 @@
             this.radioButtonImportStaffing.TabIndex = 1;
             this.radioButtonImportStaffing.Text = "xxImportStaffing";
             this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
+            this.radioButtonImportStaffing.CheckedChanged += new System.EventHandler(radioButtonImportStaffing_CheckedChanged);
             // 
             // lblSkillNameColon
             // 
@@ -226,6 +229,7 @@
             this.radioButtonImportWLAndStaffing.TabIndex = 2;
             this.radioButtonImportWLAndStaffing.Text = "xxImportWorkloadAndStaffing";
             this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
+            this.radioButtonImportWLAndStaffing.CheckedChanged += new System.EventHandler(radioButtonImportWLAndStaffing_CheckedChanged);
             // 
             // radioButtonImportWorkload
             // 
@@ -238,6 +242,7 @@
             this.radioButtonImportWorkload.TabStop = true;
             this.radioButtonImportWorkload.Text = "xxImportWorkload";
             this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
+            this.radioButtonImportWorkload.CheckedChanged += new System.EventHandler(radioButtonImportWorkload_CheckedChanged);
             // 
             // labelWorkloadName
             // 

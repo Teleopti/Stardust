@@ -10,6 +10,8 @@ using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
+using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security;
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.Win.Main
             {
                 messageBrokerDisabled = true;
             }
-        	var sendDenormalizeNotification = new SendDenormalizeNotificationToSdk();
+        	var sendDenormalizeNotification = new SendDenormalizeNotificationToSdk(new SendCommandToSdk(new SdkAuthentication()));
         	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
         	var initializeApplication =
         		new InitializeApplication(

@@ -326,6 +326,11 @@
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
+    <Compile Include="Forecasting\ImportForecast\ISendCommandToSdk.cs" />
+    <Compile Include="Forecasting\ImportForecast\Presenters\ISaveImportForecastFileCommand.cs" />
+    <Compile Include="Forecasting\ImportForecast\Presenters\IValidateImportForecastFileCommand.cs" />
+    <Compile Include="Forecasting\ImportForecast\Presenters\SaveImportForecastFileCommand.cs" />
+    <Compile Include="Forecasting\ImportForecast\Presenters\ValidateImportForecastFileCommand.cs" />
     <Compile Include="Forecasting\JobResultDetailModel.cs" />
     <Compile Include="Forecasting\ExportPages\ChildSkillMappingModel.cs" />
     <Compile Include="Forecasting\ExportPages\DestinationSkillModel.cs" />

@@ -1,9 +1,14 @@
-﻿namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views
+﻿using System;
+
+namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views
 {
     public interface IImportForecastView
     {
-        bool IsWorkloadImport { get; }
-        bool IsStaffingImport { get; }
-        bool IsStaffingAndWorkloadImport { get; }
+        void SetWorkloadName(string name);
+        void SetSkillName(string name);
+        void ShowValidationException(string message);
+        void EnableImport();
+        void ShowError(string errorMessage);
+        void ShowStatusDialog(Guid jobId);
     }
 }
