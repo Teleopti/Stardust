@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             using (_mocks.Record())
             {
                 Expect.Call(_analyzeQuery.Run(new[] {row}, TimeSpan.Zero)).Return(queryResult);
-                Expect.Call(queryResult.Period).Return(new DateOnlyPeriod(dateOnly, dateOnly));
                 Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
                 Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
                 Expect.Call(() => _serviceBus.Send()).Constraints(
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             }
             using (_mocks.Playback())
             {
-                _target.Process(new[] {row}, targetSkill);
+                _target.Process(new[] { row }, targetSkill, new DateOnlyPeriod(dateOnly, dateOnly));
             }
         }
     }

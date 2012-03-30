@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     }
                     catch (Exception exception)
                     {
-                        unitOfWork.Clear();
-                        unitOfWork.Merge(jobResult);
                         stepMessage = string.Format(CultureInfo.InvariantCulture,
-                                                        "An error occurred while running import.");
+                                                        "An error occurred while running import to {0} on {1}", targetSkill.Name, dateOnly);
                         _feedback.Error(stepMessage, exception);
                         _feedback.ReportProgress(0, stepMessage);
+                        unitOfWork.Clear();
+                        unitOfWork.Merge(jobResult);
                         endProcessing(unitOfWork);
                         return;
                     }

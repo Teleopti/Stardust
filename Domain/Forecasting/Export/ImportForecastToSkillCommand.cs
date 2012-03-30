@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public interface IImportForecastToSkillCommand
     {
-        void Execute(ISkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods);
+        void Execute(ISkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods, DateOnlyPeriod period);
     }
 
     public class ImportForecastToSkillCommand : IImportForecastToSkillCommand
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
             _sendBusMessage = sendBusMessage;
         }
 
-        public void Execute(ISkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods)
+        public void Execute(ISkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods, DateOnlyPeriod period)
         {
             var result = new List<IForecastsRow>();
             foreach (var skillStaffPeriod in skillStaffPeriods.Values)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                                });
             }
 
-            _sendBusMessage.Process(result, targetSkill);
+            _sendBusMessage.Process(result, targetSkill, period);
         }
     }
 }

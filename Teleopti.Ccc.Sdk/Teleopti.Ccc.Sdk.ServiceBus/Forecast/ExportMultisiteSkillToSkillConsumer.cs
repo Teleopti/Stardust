@@ -71,17 +71,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					}
 					catch (Exception exception)
 					{
+					    var stepMessage = string.Format(CultureInfo.InvariantCulture, "An error occurred while running export {0} for {1}",
+					                                    settings.MultisiteSkillsForExport.Select(m => m.MultisiteSkill.Name).
+					                                        ToArray(), settings.Period);
+                        _feedback.Error(stepMessage, exception);
+                        _feedback.ReportProgress(0, stepMessage);
 						unitOfWork.Clear();
 						unitOfWork.Merge(jobResult);
-						_feedback.Error("An error occurred while running export.", exception);
-                        _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running export."));
 						endProcessing(unitOfWork);
 						return;
 					}
 					stopwatch.Stop();
 					_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Processing export for multisite skill took {0}.",
 					                             stopwatch.Elapsed));
-					jobResult.FinishedOk = true; //At least one period for one multisite skill fell through!
+					jobResult.FinishedOk = true;
 
 					endProcessing(unitOfWork);
 				}

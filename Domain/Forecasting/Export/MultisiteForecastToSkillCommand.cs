@@ -54,18 +54,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     {
                         _feedback.ReportProgress(0,
 							string.Format(CultureInfo.InvariantCulture, "Saving forecast to {0}.", skillExportCombination.TargetSkill.Name));
-                        var daysHasData = new HashSet<DateOnly>();
-                        skillStaffPeriods.Keys.ForEach(d => daysHasData.Add(new DateOnly(d.StartDateTime.Date)));
-                        if (skillSelection.Period.DayCount() != daysHasData.Count)
-                        {
-                            var stepMessage = string.Format(CultureInfo.InvariantCulture,
-                                                            "There are {0} days have no data.",
-                                                                          skillSelection.Period.DayCount() -
-                                                                          daysHasData.Count);
-                            _feedback.Warning(stepMessage);
-                            _feedback.ReportProgress(0, stepMessage);
-                        }
-                        _importForecastToSkillCommand.Execute(skillExportCombination.SourceSkill, skillExportCombination.TargetSkill, skillStaffPeriods);
+                        _importForecastToSkillCommand.Execute(skillExportCombination.SourceSkill, skillExportCombination.TargetSkill, skillStaffPeriods, skillSelection.Period);
                     }
                 }
             }
@@ -74,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
     public interface ISendBusMessage
     {
-        void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill);
+        void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period);
     }
 
     public interface IMultisiteForecastToSkillCommand
