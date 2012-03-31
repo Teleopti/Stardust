@@ -47,21 +47,15 @@ namespace Teleopti.Ccc.WinCode.Forecasting
                 var jobResult = _jobResultRepository.Get(jobResultModel.JobId.GetValueOrDefault());
 
                 return jobResult.Details.Where(d => d.DetailLevel != DetailLevel.Info).OrderByDescending(d => d.Timestamp).Select(m =>
-                                                                                              new JobResultDetailModel
-                                                                                                  {
-                                                                                                      Message =
-                                                                                                          m.Message,
-                                                                                                      Timestamp =
-                                                                                                          TimeZoneHelper.ConvertFromUtc(m.Timestamp),
-                                                                                                      ExceptionMessage =
-                                                                                                          m.ExceptionMessage,
-                                                                                                      ExceptionStackTrace=
-                                                                                                          m.ExceptionStackTrace,
-                                                                                                      InnerExceptionMessage=
-                                                                                                          m.InnerExceptionMessage,
-                                                                                                      InnerExceptionStackTrace=
-                                                                                                          m.InnerExceptionStackTrace
-                                                                                                  }).ToList();
+                        new JobResultDetailModel
+                            {
+                                Message = m.Message,
+                                Timestamp = TimeZoneHelper.ConvertFromUtc(m.Timestamp),
+                                ExceptionMessage = m.ExceptionMessage,
+                                ExceptionStackTrace= m.ExceptionStackTrace,
+                                InnerExceptionMessage= m.InnerExceptionMessage,
+                                InnerExceptionStackTrace= m.InnerExceptionStackTrace
+                            }).ToList();
             }
         }
 

@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         public void ShouldDetectValidationError()
         {
             string fileName = "test.csv";
-            Guid jobId = Guid.NewGuid();
             _model.FileId = Guid.NewGuid();
             _model.HasValidationError = true;
             _model.SelectedSkill = _skill;

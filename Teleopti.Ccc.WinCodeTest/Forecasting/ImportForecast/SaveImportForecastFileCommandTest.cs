@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         }
 
         [Test]
-        public void ShouldSaveForecastFileInDb()
+        public void ShouldSaveForecastFileInDB()
         {
             using (_mocks.Record())
             {
