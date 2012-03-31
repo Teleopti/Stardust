@@ -126,6 +126,7 @@
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
+    <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />
     <Compile Include="Domain\IModifyPassword.cs" />
@@ -838,9 +839,13 @@
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
+    <Compile Include="Messages\General\IForecastsRow.cs" />
+    <Compile Include="Messages\General\ImportForecastsToSkill.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
+    <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\General\RunPayrollExport.cs" />
+    <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />

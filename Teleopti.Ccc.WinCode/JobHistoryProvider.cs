@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 						j =>
 						new JobResultModel
 						{
-							JobCategory = j.JobCategory,
+							JobId = j.Id,
+                            JobCategory = j.JobCategory,
 							Owner = j.Owner.Name.ToString(),
 							Status = determineStatus(j),
 							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp).ToString()

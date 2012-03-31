@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Win.Forecasting;
 using log4net.Config;
 using MbCache.Configuration;
 using Microsoft.Practices.CompositeUI;
@@ -125,6 +126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new NavigationModule());
                 builder.RegisterModule(new BudgetModule());
                 builder.RegisterModule<IntradayModule>();
+                builder.RegisterModule<ForecasterModule>();
                 builder.RegisterModule<QuickForecastModule>();
                 builder.RegisterModule(new ScheduleScreenPersisterModule());
                 builder.RegisterModule(new ScheduleScreenRefresherModule());

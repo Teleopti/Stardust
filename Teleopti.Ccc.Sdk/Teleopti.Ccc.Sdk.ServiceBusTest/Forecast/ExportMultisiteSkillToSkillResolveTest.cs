@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
+			builder.RegisterModule<ImportForecastContainerInstaller>();
 
 			using (var container = builder.Build())
 			{

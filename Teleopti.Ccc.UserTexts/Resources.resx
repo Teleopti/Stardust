@@ -10544,5 +10544,40 @@ These options are activated:
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} agent days could not be scheduled.</value>
+ </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+    <comment>Import</comment>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>Import file name:</value>
+    <comment>Import file name</comment>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>Import Staffing</value>
+    <comment>Import Staffing</comment>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>Import Workload</value>
+    <comment>Import Workload</comment>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>Import Workload and Staffing</value>
+    <comment>Import Workload and Staffing</comment>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>Skill name:</value>
+    <comment>Skill name</comment>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>Workload name:</value>
+    <comment>Workload name</comment>
+  </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Import Forecast</value>
+    <comment>Import Forecast</comment>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>View Job History</value>
   </data>
 </root>

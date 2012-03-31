@@ -99,5 +99,16 @@ namespace Teleopti.Ccc.DomainTest.Common
             target.FinishedOk.Should().Be.True();
             target.HasError().Should().Be.False();
         }
+
+        [Test]
+        public void ShouldHaveNewPeriod()
+        {
+            Assert.That(target.Period, Is.EqualTo(period));
+
+            var newPeriod = new DateOnlyPeriod(2012, 1, 1, 2012, 1, 2);
+            target.Period = newPeriod;
+
+            Assert.That(target.Period, Is.EqualTo(newPeriod));
+        }
     }
 }

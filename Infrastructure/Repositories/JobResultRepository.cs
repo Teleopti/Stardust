@@ -8,12 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IJobResultRepository : IRepository<IJobResult>
-	{
-		ICollection<IJobResult> LoadHistoryWithPaging(PagingDetail pagingDetail, params string[] jobCategories);
-	}
-
-	/// <summary>
+    /// <summary>
     /// Repository for activities
     /// </summary>
     public class JobResultRepository : Repository<IJobResult>, IJobResultRepository
