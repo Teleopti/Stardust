@@ -3186,7 +3186,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
 
             if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
+            {
+                Refresh();
                 return;
+            }
 
             disableAllExceptCancelInRibbon();
 
