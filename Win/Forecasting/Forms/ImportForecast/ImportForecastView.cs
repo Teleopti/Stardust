@@ -48,19 +48,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             }
         }
 
-        void radioButtonImportWLAndStaffing_CheckedChanged(object sender, System.EventArgs e)
+        void radioButtonImportWLAndStaffing_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonImportWLAndStaffing.Checked)
                 Presenter.SetImportType(ImportForecastsMode.ImportWorkloadAndStaffing);
         }
 
-        void radioButtonImportWorkload_CheckedChanged(object sender, System.EventArgs e)
+        void radioButtonImportWorkload_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonImportWorkload.Checked)
                 Presenter.SetImportType(ImportForecastsMode.ImportWorkload);
         }
 
-        void radioButtonImportStaffing_CheckedChanged(object sender, System.EventArgs e)
+        void radioButtonImportStaffing_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonImportStaffing.Checked)
                 Presenter.SetImportType(ImportForecastsMode.ImportStaffing);

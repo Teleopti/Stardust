@@ -2,6 +2,7 @@
 using System.Globalization;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
@@ -55,29 +56,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.SetJobResult(jobResult, _messageBroker);
                 if (skill == null)
                 {
-                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Skill does not exist.");
-                    _feedback.Error(errorMessage);
-                    _feedback.ReportProgress(0, errorMessage);
-                    endProcessing(unitOfWork);
+                    logAndReportValidationError(unitOfWork, "Skill does not exist.");
                     return;
                 }
                 var timeZone = skill.TimeZone;
                 var forecastFile = _importForecastsRepository.Get(message.UploadedFileId);
                 if (forecastFile == null)
                 {
-                     var errorMessage = string.Format(CultureInfo.InvariantCulture,"The uploaded file has no content.");
-                    _feedback.Error(errorMessage);
-                    _feedback.ReportProgress(0, errorMessage);
-                    endProcessing(unitOfWork);
+                    logAndReportValidationError(unitOfWork, "The uploaded file has no content.");
                     return;
                 }
-                var queryResult = _analyzeQuery.Run(_contentProvider.LoadContent(forecastFile.FileContent, timeZone), skill.MidnightBreakOffset);
-                if (!queryResult.Succeeded)
+                IForecastsAnalyzeQueryResult queryResult;
+                try
                 {
-                    var errorMessage = string.Format(CultureInfo.InvariantCulture, "Validation error! {0}", queryResult.ErrorMessage);
-                    _feedback.Error(errorMessage);
-                    _feedback.ReportProgress(0, errorMessage);
-                    endProcessing(unitOfWork);
+                    var content = _contentProvider.LoadContent(forecastFile.FileContent, timeZone);
+                    queryResult = _analyzeQuery.Run(content, skill.MidnightBreakOffset);
+                    if (!queryResult.Succeeded)
+                    {
+                        logAndReportValidationError(unitOfWork, queryResult.ErrorMessage);
+                        return;
+                    }
+                }
+                catch (ValidationException exception)
+                {
+                    logAndReportValidationError(unitOfWork, exception.Message);
                     return;
                 }
                 jobResult.Period = queryResult.Period;
@@ -92,6 +94,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 listOfMessages.ForEach(m => _serviceBus.Send(m));
             }
             _unitOfWorkFactory = null;
+        }
+
+        private void logAndReportValidationError(IUnitOfWork unitOfWork, string errorMessage)
+        {
+            var error = string.Format(CultureInfo.InvariantCulture, "Validation error! {0}", errorMessage);
+            _feedback.Error(error);
+            _feedback.ReportProgress(0, error);
+            endProcessing(unitOfWork);
         }
 
         private static IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,

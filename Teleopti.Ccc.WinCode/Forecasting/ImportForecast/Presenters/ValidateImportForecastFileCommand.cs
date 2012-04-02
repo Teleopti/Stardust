@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
                 try
                 {
                     if (streamReader.Peek() == -1) throw new ValidationException("File is empty.");
-
+                    if (streamReader.BaseStream.Length > 104857600) throw new ValidationException("File should be less than 100MB");
                     while (!streamReader.EndOfStream)
                     {
                         if (rowNumber > 100) break;
