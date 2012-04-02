@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffTemplate _dayOffTemplate;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
+        private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public ExtendReduceDaysOffOptimizer(
@@ -53,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
             IDayOffTemplate dayOffTemplate,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
-            IDayOffOptimizerValidator dayOffOptimizerValidator, 
+            IDayOffOptimizerValidator dayOffOptimizerValidator,
+            IOptimizationOverLimitDecider optimizationOverLimitDecider,
             ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _periodValueCalculator = periodValueCalculator;
@@ -74,11 +76,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             _dayOffTemplate = dayOffTemplate;
             _dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
             _dayOffOptimizerValidator = dayOffOptimizerValidator;
+            _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _schedulingOptionsCreator = schedulingOptionsCreator;
         }
 
         public bool Execute()
         {
+            if (movesOverMaxDaysLimit().Count > 0)
+                return false;
+
             _rollbackService.ClearModificationCollection();
 
             var schedulePeriod = _matrixConverter.SourceMatrix.SchedulePeriod;
@@ -136,24 +142,40 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if(success)
             {
-                // todo ***** change it to if period value better form
+                IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+                if(daysToLock.Count > 0)
+                {
+                    foreach (var dateOnly in daysToLock)
+                    {
+                        sourceMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+                    }
+                    rollbackAndResourceCalculate();
+                    return true;
+                }
+
                 var currentPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
                 if (currentPeriodValue > oldPeriodValue)
                 {
-                    IList<DateOnly> toResourceCalculate = _rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
-                    _rollbackService.Rollback();
-                    foreach (DateOnly dateOnly1 in toResourceCalculate)
-                    {
-                        bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
-                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1, true, considerShortBreaks);
-                        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1.AddDays(1), true, considerShortBreaks);
-                    }
+                    rollbackAndResourceCalculate();
                     return false;
                 }
             }
             
                 
             return success;
+        }
+
+        private void rollbackAndResourceCalculate()
+        {
+            IList<DateOnly> toResourceCalculate =
+                _rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+            _rollbackService.Rollback();
+            foreach (DateOnly dateOnly1 in toResourceCalculate)
+            {
+                bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1, true, considerShortBreaks);
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly1.AddDays(1), true, considerShortBreaks);
+            }
         }
 
         public IPerson Owner
@@ -280,6 +302,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             return removedIllegalDates;
+        }
+
+
+        private IList<DateOnly> movesOverMaxDaysLimit()
+        {
+            return _optimizationOverLimitDecider.OverLimit();
         }
 
         private class changedDay

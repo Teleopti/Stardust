@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, schedulingOptions, dateOnly, considerShortBreaks))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, schedulingOptions, dateOnly, considerShortBreaks, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
 
@@ -90,11 +90,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, schedulingOptions,  dateOnly, considerShortBreaks))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, schedulingOptions, dateOnly, considerShortBreaks, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
-
-            
 
             return sucess;
         }
@@ -108,16 +106,17 @@ namespace Teleopti.Ccc.Domain.Optimization
             WorkShiftLengthHintOption lenghtHint, 
             ISchedulingOptions schedulingOptions,
             DateOnly dateOnly,
-            bool considerShortBreaks)
+            bool considerShortBreaks,
+            IScheduleMatrixPro matrix)
         {
             double oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
             _rollbackService.ClearModificationCollection();
 
             IScheduleDay scheduleDayBefore =
-                (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+                (IScheduleDay)matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             deleteDay(dateOnly);
             IScheduleDay scheduleDayAfter =
-               (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+               (IScheduleDay)matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
 
             IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
@@ -125,31 +124,49 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _resourceOptimizationHelper.ResourceCalculateDate(dateToRecalculate, true, considerShortBreaks);
             }
 
-            _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+            matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 return false;
             }
 
-            double newPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
-            if (newPeriodValue > oldPeriodValue || movesOverMaxDaysLimit().Count > 0)
+            IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+            if (daysToLock.Count > 0)
             {
-                scheduleDayBefore =
-                (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
-                _rollbackService.Rollback();
-                scheduleDayAfter =
-               (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
-                IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
-                foreach (var date in days)
-                {
-                    _resourceOptimizationHelper.ResourceCalculateDate(date, true, considerShortBreaks);
+                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
 
+                foreach (var date in daysToLock)
+                {
+                    matrix.LockPeriod(new DateOnlyPeriod(date, date));
                 }
+                return true;
+            }
+
+            double newPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
+            if (newPeriodValue > oldPeriodValue)
+            {
+                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
                 return false;
             }
 
             return true;
+        }
+
+        private void rollbackAndResourceCalculate(DateOnly dateOnly, bool considerShortBreaks)
+        {
+            IScheduleDay scheduleDayBefore;
+            IScheduleDay scheduleDayAfter;
+            scheduleDayBefore =
+                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            _rollbackService.Rollback();
+            scheduleDayAfter =
+                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
+            foreach (var date in days)
+            {
+                _resourceOptimizationHelper.ResourceCalculateDate(date, true, considerShortBreaks);
+            }
         }
 
         private void deleteDay(DateOnly dateOnly)

@@ -8,6 +8,7 @@ using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
@@ -137,6 +138,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IDayOffOptimizerValidator dayOffOptimizerValidator = new DayOffOptimizerValidator(dayOffRule);
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
+                ICheckerRestriction checkerRestriction = new RestrictionChecker();
+                IOptimizationOverLimitDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences);
 
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
                     personalSkillsPeriodValueCalculator, 
@@ -157,6 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     displayList[0], 
                     conflictHandler, 
                     dayOffOptimizerValidator,
+                    optimizationOverLimitDecider,
                     schedulingOptionsCreator);
 
                 optimizers.Add(optimizer);

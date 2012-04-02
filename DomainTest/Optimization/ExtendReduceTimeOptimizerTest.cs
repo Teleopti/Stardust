@@ -193,8 +193,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 commonMocks(decisionMakerResult);
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
-                    .Return(new List<DateOnly>());
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
+                    .Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()

@@ -224,8 +224,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             studentSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
 
-            var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+            //var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            //var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+            var schedulingOptions = _container.Resolve<ISchedulingOptions>();
 
             using (PerformanceOutput.ForOperation("Scheduling " + unlockedSchedules.Count))
             {
