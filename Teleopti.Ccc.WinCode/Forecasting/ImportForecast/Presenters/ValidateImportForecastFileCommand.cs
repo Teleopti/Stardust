@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
         {
             resetValidationErrors();
 
-            using (var streamReader = new StreamReader(uploadFileName))
+            using (var fs = new FileStream(uploadFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
+                var streamReader = new StreamReader(fs);
                 var rowNumber = 1;
                 try
                 {
