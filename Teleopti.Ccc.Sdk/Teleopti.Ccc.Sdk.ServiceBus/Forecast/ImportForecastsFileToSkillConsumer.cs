@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     logAndReportValidationError(unitOfWork, "The uploaded file has no content.");
                     return;
                 }
+                _feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Validating..."));
                 IForecastsAnalyzeQueryResult queryResult;
                 try
                 {
@@ -85,10 +86,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 jobResult.Period = queryResult.Period;
                 
                 _feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", skill.Name));
-                _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
+                _feedback.ReportProgress(1, string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
 
                 var listOfMessages = generateMessages(message, queryResult);
-                _feedback.ChangeTotalProgress(6 + listOfMessages.Count * 4);
+                _feedback.ChangeTotalProgress(3 + listOfMessages.Count*4);
                 endProcessing(unitOfWork);
 
                 listOfMessages.ForEach(m => _serviceBus.Send(m));

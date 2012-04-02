@@ -33,7 +33,6 @@ using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {

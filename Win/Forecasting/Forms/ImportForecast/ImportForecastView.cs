@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public void ShowStatusDialog(Guid jobId)
         {
             var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId });
-            statusDialog.Show(this);
+            statusDialog.ShowDialog();
         }
 
         private void textBoxImportFileNameTextChanged(object sender, EventArgs e)
