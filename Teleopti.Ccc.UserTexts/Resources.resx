@@ -10548,4 +10548,8 @@ These options are activated:
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
     <value>Export to PDF shifts per day</value>
   </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Show public note</value>
+    <comment>ShowPublicNote</comment>
+  </data>
 </root>

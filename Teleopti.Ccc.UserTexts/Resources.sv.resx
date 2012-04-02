@@ -10258,4 +10258,8 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
     <value>Exportera till PDF skift per dag</value>
   </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Visa publik notering</value>
+    <comment>ShowPublicNotes</comment>
+  </data>
 </root>

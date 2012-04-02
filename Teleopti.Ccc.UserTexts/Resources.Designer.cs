@@ -19487,6 +19487,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show public note.
+        /// </summary>
+        public static string ShowPublicNote {
+            get {
+                return ResourceManager.GetString("ShowPublicNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Quick Access Toolbar Above Ribbon.
         /// </summary>
         public static string ShowQuickAccessToolbarAboveRibbon {
