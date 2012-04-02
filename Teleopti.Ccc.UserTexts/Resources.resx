@@ -10545,4 +10545,7 @@ These options are activated:
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} agent days could not be scheduled.</value>
   </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Export to PDF shifts per day</value>
+  </data>
 </root>

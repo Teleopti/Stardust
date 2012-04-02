@@ -7528,6 +7528,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export to PDF shifts per day.
+        /// </summary>
+        public static string ExportToPDFShiftsPerDay {
+            get {
+                return ResourceManager.GetString("ExportToPDFShiftsPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to scenario.
         /// </summary>
         public static string ExportToScenario {
