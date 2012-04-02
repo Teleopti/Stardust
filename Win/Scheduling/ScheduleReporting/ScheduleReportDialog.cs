@@ -13,9 +13,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
         private readonly ScheduleReportDialogSettings _settings;
         private const string SettingName = "ScheduleReportDialog";
+        private bool _shiftsPerDay;
 
-        public ScheduleReportDialog()
+        public ScheduleReportDialog(bool shiftsPerDay)
         {
+            _shiftsPerDay = shiftsPerDay;
             InitializeComponent();
             if (!DesignMode) SetTexts();
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -35,14 +37,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             get
             {
                 return radioButtonTeamReport.Checked;
-            }
-        }
-
-        public bool ShiftPerDay
-        {
-            get
-            {
-                return radioButtonShiftsPerDay.Checked;
             }
         }
 
@@ -91,6 +85,13 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             reportTypeSetting();
             singleFileSetting();
             detailLevelSetting();
+
+            if(_shiftsPerDay)
+            {
+                groupBox1.Enabled = false;
+                radioButtonTeamReport.Checked = false;
+                radioButtonIndividualReport.Checked = false;
+            }
         }
 
         private void detailLevelSetting()
@@ -142,11 +143,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                 new PersonalSettingDataRepository(uow).PersistSettingValue(_settings);
                 uow.PersistAll();
             }
-        }
-
-        private void radioButtonShiftsPerDay_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

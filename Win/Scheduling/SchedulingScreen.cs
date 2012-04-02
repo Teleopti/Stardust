@@ -7722,28 +7722,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                          rightToLeft, this, path, model);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
-        private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
+        private void ExportToPdf(bool shiftsPerDay)
         {
-            if (e.Button != MouseButtons.Left) return;
-
             bool individualReport;
             bool teamReport;
-            bool shiftsPerDay;
             bool singleFile;
             ScheduleReportDetail detail;
 
             IList<IScheduleDay> selection = _scheduleView.SelectedSchedules();
 
             // Temporary solution for SPI 7833
-            if (selection.Count == 0)
-            {
-                return;
-            }
+            if (selection.Count == 0) return;
 
-            using (var dialog = new ScheduleReportDialog())
+            using (var dialog = new ScheduleReportDialog(shiftsPerDay))
             {
                 dialog.ShowDialog(this);
                 if (dialog.DialogResult != DialogResult.OK)
@@ -7751,7 +7743,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 teamReport = dialog.TeamReport;
                 individualReport = dialog.Individual;
-                shiftsPerDay = dialog.ShiftPerDay;
                 singleFile = dialog.OneFile;
                 detail = dialog.DetailLevel;
             }
@@ -7818,7 +7809,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             manager.ExportIndividual(_schedulerState.TimeZoneInfo, culture, personDic,
                                      period, SchedulerState.SchedulingResultState,
-                                     rightToLeft, detail, this, singleFile, path);
+                                     rightToLeft, detail, this, singleFile, path);   
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
+        private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            ExportToPdf(false);
         }
 
         private void setRestrictionUsage()
@@ -8468,6 +8468,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void ToolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
         {
             sort(e, new SortByContractTimeDescendingCommand(SchedulerState));
+        }
+
+        private void ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            ExportToPdf(true);
         }
     }
 }
