@@ -413,6 +413,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new LicenseRepository(unitOfWork);
         }
 
+        public IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork)
+        {
+            return new RequestHistoryReadOnlyRepository(unitOfWork);
+        }
+
         public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
         {
             return new AgentDayScheduleTagRepository(unitOfWork);

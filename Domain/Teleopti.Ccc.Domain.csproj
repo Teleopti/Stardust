@@ -277,6 +277,7 @@
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\IApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
+    <Compile Include="Repositories\IRequestHistoryReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPublicNoteRepository.cs" />
     <Compile Include="Repositories\IBudgetDayRepository.cs" />
