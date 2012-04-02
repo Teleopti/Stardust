@@ -84,7 +84,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Database
             throw new NotImplementedException();
         }
 
-        //public void SaveLogPost(IEtlLog etlLogItem)
+    	public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	//public void SaveLogPost(IEtlLog etlLogItem)
         //{
             
         //}

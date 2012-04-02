@@ -127,6 +127,22 @@
       <DependentUpon>SpinningProgressControl.cs</DependentUpon>
     </Compile>
     <Compile Include="EtlJobSchedule\SpinningProgress\ToolStripSpinningProgressControl.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\BusinessUnitItem.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\IJobHistory.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\JobHistoryMapper.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\JobHistorySelectionEventArgs.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\JobHistorySelectionViewModel.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\JobHistoryViewModel.cs" />
+    <Compile Include="EtlJobSchedule\ViewModel\JobStepHistoryViewModel.cs" />
+    <Compile Include="EtlJobSchedule\View\JobHistoryMain.xaml.cs">
+      <DependentUpon>JobHistoryMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EtlJobSchedule\View\JobHistorySelection.xaml.cs">
+      <DependentUpon>JobHistorySelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EtlJobSchedule\View\JobHistoryView.xaml.cs">
+      <DependentUpon>JobHistoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StartupConfiguration\StartupConfigurationView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +247,9 @@
     <Content Include="Lib\Ricciolo.Controls.TreeListView.dll" />
     <Content Include="Lib\WPFToolkit.dll" />
     <None Include="Resources\ccc_Cancel_32x32.png" />
+    <Resource Include="Resources\ccc_Left.png" />
+    <Resource Include="Resources\ccc_Refresh.png" />
+    <Resource Include="Resources\ccc_Right.png" />
     <Content Include="Resources\error_16x16.gif" />
     <Content Include="Resources\ok_16x16.gif" />
     <Content Include="Resources\warning_16x16.gif" />
@@ -272,6 +291,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="EtlJobSchedule\View\JobHistoryMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EtlJobSchedule\View\JobHistorySelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EtlJobSchedule\View\JobHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -311,6 +342,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
