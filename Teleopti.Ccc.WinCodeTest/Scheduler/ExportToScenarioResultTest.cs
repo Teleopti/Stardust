@@ -163,6 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Expect.Call(() => scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
             Expect.Call(() => view.ShowDataSourceException(err));
+            Expect.Call(() => view.CloseForm());
             mocks.ReplayAll();
             target.OnConfirm();
             mocks.VerifyAll();
