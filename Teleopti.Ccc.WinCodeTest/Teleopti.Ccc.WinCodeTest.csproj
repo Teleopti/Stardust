@@ -222,6 +222,7 @@
     <Compile Include="Common\Commands\SimpleRepositoryCommandTest.cs" />
     <Compile Include="Common\Commands\TextBoxBehaviorTest.cs" />
     <Compile Include="Common\Commands\TwoStepCommandModelTest.cs" />
+    <Compile Include="Common\CommonAgentNameProviderTest.cs" />
     <Compile Include="Common\CreateLayerViewModelServiceTest.cs" />
     <Compile Include="Common\CustomPanelsTest\Grouping\BaseGroupingPanelTest.cs" />
     <Compile Include="Common\CustomPanelsTest\TesterForPanels.cs" />
@@ -540,6 +541,8 @@
     <Compile Include="Scheduler\Reporting\StringWidthHandlerTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestSelectionChangedTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestViewModelTest.cs" />
+    <Compile Include="Scheduler\Requests\LoadRequestHistoryCommandTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestHistoryViewPresenterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestAuthorizationTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelFilterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelIsEditableSpecificationTest.cs" />
