@@ -2973,10 +2973,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (numberOfDaysToRecalculate == 0 && _uIEnabled)
 				return;
 
-			if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
-				return;
+            if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
+            {
+                Refresh();
+                return;
+            }
 
-			disableAllExceptCancelInRibbon();
+		    disableAllExceptCancelInRibbon();
 
 			if (toolStripProgressBar1.ProgressBar == null) //Somone knows why this is null in some cases?
 				toolStripProgressBar1 = new ToolStripProgressBar();
