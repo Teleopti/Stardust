@@ -622,7 +622,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .Add(Subqueries.Exists(findPeriodMatch(period)))
                         .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
                         .SetFetchMode("PersonPeriodCollection.PersonContract", FetchMode.Join)
-                        .SetFetchMode("PersonPeriodCollection.PersonContract.PartTimePercentage", FetchMode.Join);
+                        .SetFetchMode("PersonPeriodCollection.PersonContract.PartTimePercentage", FetchMode.Join)
+                        .SetFetchMode("PersonPeriodCollection.PersonContract.Contract", FetchMode.Join);
             return ret;
         }
 
