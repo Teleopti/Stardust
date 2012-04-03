@@ -108,5 +108,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(TimeSpan.Zero, target.AverageTaskTime);
         }
 
+        [Test]
+        public void ShouldAddTaskTimeAndAfterTaskTimeToTotalTime()
+        {
+            Assert.That(target.AverageHandlingTaskTime, Is.EqualTo(TimeSpan.FromSeconds(230)));
+        }
     }
 }

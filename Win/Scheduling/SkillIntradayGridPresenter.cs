@@ -277,9 +277,21 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "TimeSpanTotalSecondsReadOnlyCell",
+                                                                    "Payload.TaskData.AverageHandlingTaskTime",
+                                                                    UserTexts.Resources.ForecastedHandlingTime);
+                    gridRow.ChartSeriesSettings = configureSetting("AverageHandlingTaskTime");
+                    _gridRows.Add(_rowManager.AddRow(gridRow));
+
+                    gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "TimeSpanTotalSecondsReadOnlyCell",
                                                                     "Payload.TaskData.AverageTaskTime",
                                                                     UserTexts.Resources.ForecastedTalkTime);
                     gridRow.ChartSeriesSettings = configureSetting("TotalAverageTaskTime");
+                    _gridRows.Add(_rowManager.AddRow(gridRow));
+
+                    gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "TimeSpanTotalSecondsReadOnlyCell",
+                                                                    "Payload.TaskData.AverageAfterTaskTime",
+                                                                    UserTexts.Resources.ForecastedAverageAfterCallWork);
+                    gridRow.ChartSeriesSettings = configureSetting("AverageAfterTaskTime");
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "IntegerReadOnlyCell",
@@ -309,10 +321,24 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _gridRows.Add(_rowManager.AddRow(gridRow));
 
                     gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
+                                                                   "StatisticTask.StatAverageHandleTimeSeconds",
+                                                                   UserTexts.Resources.ActualHandlingTime);
+                    gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageHandleTime");
+                    _gridRows.Add(_rowManager.AddRow(gridRow));
+
+                    gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
                                                                     "StatisticTask.StatAverageTaskTimeSeconds",
                                                                     UserTexts.Resources.ActualTalkTime);
                     gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageTaskTime");
                     _gridRows.Add(_rowManager.AddRow(gridRow));
+
+                    gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
+                                                                   "StatisticTask.StatAverageAfterTaskTimeSeconds",
+                                                                   UserTexts.Resources.ActualAfterCallWorkTime);
+                    gridRow.ChartSeriesSettings = configureSetting("TotalStatisticAverageAfterTaskTime");
+                    _gridRows.Add(_rowManager.AddRow(gridRow));
+
+
                 }
                 else
                 {
