@@ -866,7 +866,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MessageBroker\Core\IMulticastAddressInfo.cs" />
-    <Compile Include="MessageBroker\Core\IMulticastSubscriber.cs" />
+    <Compile Include="MessageBroker\Core\ISubscriber.cs" />
     <Compile Include="MessageBroker\Core\IObjectInserter.cs" />
     <Compile Include="MessageBroker\Core\IObjectReader.cs" />
     <Compile Include="MessageBroker\Core\IPollingManager.cs" />
