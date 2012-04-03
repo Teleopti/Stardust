@@ -2791,9 +2791,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                         return;
 
                     var part = (IScheduleDay) _schedulerState.Schedules[lst[0].Person].ReFetch(lst[0]).Clone();
+                    
                     part.Clear<IScheduleData>();
                     IMainShift mainShift = workShift.ToMainShift(part.DateOnlyAsPeriod.DateOnly,
                                                                  part.Person.PermissionInformation.DefaultTimeZone());
+                   
+                    foreach (var cat in
+                        _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
+                    {
+                        mainShift.ShiftCategory = cat;
+                    }
+                    
                     part.AddMainShift(mainShift);
                     _clipHandlerSchedule.Clear();
                     _clipHandlerSchedule.AddClip(0, 0, part);
