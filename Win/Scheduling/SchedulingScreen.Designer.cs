@@ -164,6 +164,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExportToPDF = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExportToPDFGraphical = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemExportToPDFShiftsPerDay = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemChangeTagRM = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripResultView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemDay = new System.Windows.Forms.ToolStripMenuItem();
@@ -313,7 +314,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.ToolStripMenuItemViewDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFindMatching2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemViewAllowance = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemExportToPDFShiftsPerDay = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.contextMenuViews.SuspendLayout();
             this.contextMenuStripResultView.SuspendLayout();
@@ -357,13 +357,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             // toolStripSpinningProgressControl1
             // 
             this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-            this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+            this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
             this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
             this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
             this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
             this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
             this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-            this.toolStripSpinningProgressControl1.TransitionSegment = 5;
+            this.toolStripSpinningProgressControl1.TransitionSegment = 8;
             this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
             this.toolStripSpinningProgressControl1.Visible = false;
             // 
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
             this.contextMenuViews.Name = "contextMenuStrip1";
-            this.contextMenuViews.Size = new System.Drawing.Size(283, 688);
+            this.contextMenuViews.Size = new System.Drawing.Size(283, 666);
             this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
             // 
             // toolStripMenuItemCut
@@ -1259,6 +1259,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemExportToPDFGraphical.Size = new System.Drawing.Size(218, 22);
             this.toolStripMenuItemExportToPDFGraphical.Text = "xxExportToPDFGraphical";
             this.toolStripMenuItemExportToPDFGraphical.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemExportToPdfGraphicalMouseUp);
+            // 
+            // ToolStripMenuItemExportToPDFShiftsPerDay
+            // 
+            this.ToolStripMenuItemExportToPDFShiftsPerDay.Name = "ToolStripMenuItemExportToPDFShiftsPerDay";
+            this.SetShortcut(this.ToolStripMenuItemExportToPDFShiftsPerDay, System.Windows.Forms.Keys.None);
+            this.ToolStripMenuItemExportToPDFShiftsPerDay.Size = new System.Drawing.Size(218, 22);
+            this.ToolStripMenuItemExportToPDFShiftsPerDay.Text = "xxExportToPDFShiftsPerDay";
+            this.ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp);
             // 
             // toolStripMenuItemChangeTagRM
             // 
@@ -3133,14 +3141,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemViewAllowance.Size = new System.Drawing.Size(205, 22);
             this.toolStripMenuItemViewAllowance.Text = "xxViewAllowance";
             this.toolStripMenuItemViewAllowance.Click += new System.EventHandler(this.toolStripMenuItemViewAllowance_Click);
-            // 
-            // ToolStripMenuItemExportToPDFShiftsPerDay
-            // 
-            this.ToolStripMenuItemExportToPDFShiftsPerDay.Name = "ToolStripMenuItemExportToPDFShiftsPerDay";
-            this.SetShortcut(this.ToolStripMenuItemExportToPDFShiftsPerDay, System.Windows.Forms.Keys.None);
-            this.ToolStripMenuItemExportToPDFShiftsPerDay.Size = new System.Drawing.Size(218, 22);
-            this.ToolStripMenuItemExportToPDFShiftsPerDay.Text = "xxExportToPDFShiftsPerDay";
-            this.ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp);
             // 
             // SchedulingScreen
             // 
