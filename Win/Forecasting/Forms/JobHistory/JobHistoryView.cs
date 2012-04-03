@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 
         private void resizeColumns()
         {
+            if (gridControlJobHistory.Model.ColCount <= 1) return;
             //Argh syncfusion
             var colWidth = (gridControlJobHistory.Width - 12) / gridControlJobHistory.Model.ColCount - 1;
             for (var i = 1; i < gridControlJobHistory.Model.ColCount + 1; i++)
