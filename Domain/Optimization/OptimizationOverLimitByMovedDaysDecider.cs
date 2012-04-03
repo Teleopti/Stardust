@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _originalStateContainer = originalStateContainer;
             _moveMaxDaysOff = moveMaxDaysOff;
             _moveMaxWorkShift = moveMaxWorkShift;
-            _logWriter = new LogWriter<IOptimizationOverLimitDecider>();
+            _logWriter = new LogWriter<IOptimizationOverLimitByRestrictionDecider>();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 

@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         //        Expect.Call(_moveTimeOptimizer1.Execute()).Return(false);
         //        Expect.Call(_moveTimeOptimizer2.Execute()).Return(false);
 
-        //        Expect.Call(_moveTimeOptimizer1.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
-        //        Expect.Call(_moveTimeOptimizer2.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
+        //        Expect.Call(_moveTimeOptimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
+        //        Expect.Call(_moveTimeOptimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
 
         //        Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1).Repeat.Any();
         //        Expect.Call(_moveTimeOptimizer1.ContainerOwner).Return(_person).Repeat.Any();
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_moveTimeOptimizer1.Execute()).Return(false);
                 Expect.Call(_moveTimeOptimizer2.Execute()).Return(false);
 
-                //Expect.Call(_moveTimeOptimizer1.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
-                //Expect.Call(_moveTimeOptimizer2.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
+                //Expect.Call(_moveTimeOptimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
+                //Expect.Call(_moveTimeOptimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
 
                 Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1).Repeat.Any();
                 Expect.Call(_moveTimeOptimizer1.ContainerOwner).Return(_person).Repeat.Any();
@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_moveTimeOptimizer1.Execute()).Return(false);
 
-                //Expect.Call(_moveTimeOptimizer1.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
-                //Expect.Call(_moveTimeOptimizer2.MovedDaysOverMaxDaysLimit()).Return(true).Repeat.Any();
+                //Expect.Call(_moveTimeOptimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
+                //Expect.Call(_moveTimeOptimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
 
                 Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1).Repeat.Any();
                 Expect.Call(_moveTimeOptimizer1.ContainerOwner).Return(_person).Repeat.Any();

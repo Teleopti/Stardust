@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
-        private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
         private readonly ILogWriter _logWriter;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffOptimizerValidator dayOffOptimizerValidator,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
             IScheduleMatrixOriginalStateContainer originalStateContainer,
-            IOptimizationOverLimitDecider optimizationOverLimitDecider,
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
             ISchedulingOptionsCreator schedulingOptionsCreator
             )
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
 
-            if (movesOverMaxDaysLimit().Count > 0)
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
@@ -138,13 +138,19 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+            if(daysOverMax())
+            {
+                rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
+                return false;
+            }
+
+            IList<DateOnly> daysToLock = restrictionsOverMax();
             if (daysToLock.Count > 0)
             {
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
                 foreach (var day in daysToLock)
                 {
-                    //should only lock the days breaking restrictions, so we must return those days from movesOverMaxDaysLimit
+                    //should only lock the days breaking restrictions, so we must return those days from restrictionsOverMax
                     currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
                 }
                 return true;
@@ -161,9 +167,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private IList<DateOnly> movesOverMaxDaysLimit()
+        private IList<DateOnly> restrictionsOverMax()
         {
             return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
+        }
+
+        private bool daysOverMax()
+        {
+            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]

@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
 
                 ICheckerRestriction restrictionChecker = new RestrictionChecker();
-                IOptimizationOverLimitDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences);
+                IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 

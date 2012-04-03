@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class OptimizationOverLimitByRestrictionDeciderTest
     {
-        private IOptimizationOverLimitDecider _target;
+        private IOptimizationOverLimitByRestrictionDecider _target;
         private MockRepository _mocks;
 
         private IScheduleMatrixPro _matrix;
@@ -28,12 +28,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _scheduleDay3;
         private IScheduleDay _scheduleDay4;
 
+        private IScheduleMatrixOriginalStateContainer _originalStateContainer;
+
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
 
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+            _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _restrictionChecker = _mocks.StrictMock<ICheckerRestriction>();
             _optimizationPreferences = new OptimizationPreferences();
             resetPreferences();
@@ -56,7 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _matrix,
                 _restrictionChecker,
-                _optimizationPreferences);
+                _optimizationPreferences,
+                _originalStateContainer);
             Assert.IsNotNull(_target);
         }
 
@@ -77,7 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -98,7 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
 
@@ -120,7 +126,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsFalse(result.Count == 0);
             }
@@ -135,7 +142,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _matrix,
                 _restrictionChecker,
-                _optimizationPreferences);
+                _optimizationPreferences,
+                _originalStateContainer);
             IList<DateOnly> result = _target.OverLimit();
             Assert.IsTrue(result.Count == 0);
         }
@@ -160,7 +168,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -191,7 +200,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -212,7 +222,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -233,7 +244,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsFalse(result.Count == 0);
             }
@@ -248,7 +260,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new OptimizationOverLimitByRestrictionDecider(
                 _matrix,
                 _restrictionChecker,
-                _optimizationPreferences);
+                _optimizationPreferences,
+                _originalStateContainer);
             IList<DateOnly> result = _target.OverLimit();
             Assert.IsTrue(result.Count == 0);
         }
@@ -273,7 +286,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -304,7 +318,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -325,7 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -346,7 +362,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsFalse(result.Count == 0);
             }
@@ -366,7 +383,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -392,7 +410,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -422,7 +441,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -443,7 +463,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -464,7 +485,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsFalse(result.Count == 0);
             }
@@ -484,7 +506,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -510,7 +533,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -540,7 +564,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -561,7 +586,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -582,7 +608,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsFalse(result.Count == 0);
             }
@@ -602,7 +629,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }
@@ -627,7 +655,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = new OptimizationOverLimitByRestrictionDecider(
                     _matrix,
                     _restrictionChecker,
-                    _optimizationPreferences);
+                    _optimizationPreferences,
+                    _originalStateContainer);
                 IList<DateOnly> result = _target.OverLimit();
                 Assert.IsTrue(result.Count == 0);
             }

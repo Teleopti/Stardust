@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IResourceCalculateDaysDecider _decider;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
-        private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         private IScheduleMatrixPro _matrix;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
             _originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _optimizerPreferences = new OptimizationPreferences();
-            _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitDecider>();
+            _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
             _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
 
             _target = new ExtendReduceTimeOptimizer(
@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks(decisionMakerResult);
 
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
+                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -128,6 +130,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks(decisionMakerResult);
 
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
+                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -163,8 +167,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>());
+                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -195,6 +201,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks(decisionMakerResult);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>()).Repeat.Twice();
+                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, false, _effectiveRestriction)).IgnoreArguments()
@@ -228,8 +236,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>());
+                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
+                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
                     .Return(decisionMakerResult);
             }

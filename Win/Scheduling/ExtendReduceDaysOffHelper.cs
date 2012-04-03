@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
                 ICheckerRestriction checkerRestriction = new RestrictionChecker();
-                IOptimizationOverLimitDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences);
+                IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i]);
 
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
                     personalSkillsPeriodValueCalculator, 

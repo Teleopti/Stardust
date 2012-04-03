@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 
             var restrictionChecker = new RestrictionChecker();
-            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizerPreferences);
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizerPreferences, originalStateContainer);
 
             var schedulingOptionsSyncronizer = new SchedulingOptionsCreator();
 

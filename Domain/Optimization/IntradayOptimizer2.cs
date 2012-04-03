@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceCalculateDaysDecider _decider;
-        private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceOptimizationHelper resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceCalculateDaysDecider decider,
-            IOptimizationOverLimitDecider optimizationOverLimitDecider, 
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
             ISchedulingOptionsCreator schedulingOptionsCreator)
         {
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            if (MovedDaysOverMaxDaysLimit().Count > 0)
+            if (RestrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             // Step: get day to move
@@ -127,7 +127,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 lockDay(dateToBeRemoved);
                 return true;
             }
-            if (MovedDaysOverMaxDaysLimit().Count > 0)
+
+            if (RestrictionsOverMax().Count > 0 || daysOverMax())
             {
                 _rollbackService.Rollback();
                 changed.CurrentSchedule =
@@ -154,9 +155,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        public IList<DateOnly> MovedDaysOverMaxDaysLimit()
+        public IList<DateOnly> RestrictionsOverMax()
         {
             return _optimizationOverLimitDecider.OverLimit();
+        }
+
+        private bool daysOverMax()
+        {
+            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
         }
 
         public IPerson ContainerOwner

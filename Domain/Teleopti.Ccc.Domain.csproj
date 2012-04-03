@@ -285,7 +285,6 @@
     <Compile Include="Optimization\GroupPersonSameDayOffsChecker.cs" />
     <Compile Include="Optimization\GroupPersonSameForPersonOnDateChecker.cs" />
     <Compile Include="Optimization\GroupPersonSchedulePeriodChecker.cs" />
-    <Compile Include="Optimization\IOptimizationOverLimitDecider.cs" />
     <Compile Include="Optimization\IPersonExtractor.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak.cs" />
     <Compile Include="Optimization\IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />

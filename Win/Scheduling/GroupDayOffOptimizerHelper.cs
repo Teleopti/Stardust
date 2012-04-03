@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -322,7 +321,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var restrictionChecker = new RestrictionChecker();
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
-            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences);
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
 

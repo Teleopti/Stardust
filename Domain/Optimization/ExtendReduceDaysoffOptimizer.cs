@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffTemplate _dayOffTemplate;
         private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
         private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
-        private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public ExtendReduceDaysOffOptimizer(
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffTemplate dayOffTemplate,
             IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
             IDayOffOptimizerValidator dayOffOptimizerValidator,
-            IOptimizationOverLimitDecider optimizationOverLimitDecider,
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
             ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _periodValueCalculator = periodValueCalculator;
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            if (movesOverMaxDaysLimit().Count > 0)
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             _rollbackService.ClearModificationCollection();
@@ -142,7 +140,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if(success)
             {
-                IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+                if(daysOverMax())
+                {
+                    rollbackAndResourceCalculate();
+                    return false;
+                }
+
+                IList<DateOnly> daysToLock = restrictionsOverMax();
                 if(daysToLock.Count > 0)
                 {
                     foreach (var dateOnly in daysToLock)
@@ -305,9 +309,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 
-        private IList<DateOnly> movesOverMaxDaysLimit()
+        private IList<DateOnly> restrictionsOverMax()
         {
-            return _optimizationOverLimitDecider.OverLimit();
+            return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
+        }
+
+        private bool daysOverMax()
+        {
+            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
         }
 
         private class changedDay

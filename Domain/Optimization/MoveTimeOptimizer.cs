@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using log4net;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -31,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public MoveTimeOptimizer(
@@ -47,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
-            IOptimizationOverLimitDecider optimizationOverLimitDecider, 
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _periodValueCalculator = periodValueCalculator;
@@ -71,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
-            if (MovedDaysOverMaxDaysLimit().Count > 0)
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             double oldPeriodValue = calculatePeriodValue();
@@ -167,7 +164,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                 rollbackAndLockDays(firstDayDate, secondDayDate, dic);
                 return true;
             }
-            if (MovedDaysOverMaxDaysLimit().Count > 0)
+
+            if (daysOverMax())
+            {
+                rollbackAndLockDays(firstDayDate, secondDayDate, dic);
+                return false;
+            }
+
+            if (restrictionsOverMax().Count > 0)
             {
                 rollbackAndLockDays(firstDayDate, secondDayDate, dic);
                 return true;
@@ -222,10 +226,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private IList<DateOnly> MovedDaysOverMaxDaysLimit()
+        private IList<DateOnly> restrictionsOverMax()
         {
             return _optimizationOverLimitDecider.OverLimit();
         }
+
+        private bool daysOverMax()
+        {
+            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+        }
+
 
         public IPerson ContainerOwner
         {

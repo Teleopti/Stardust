@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
-        private readonly IOptimizationOverLimitDecider _optimizationOverLimitDecider;
+        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
         public ExtendReduceTimeOptimizer(
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceOptimizationHelper resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceCalculateDaysDecider decider,
-            IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange, 
-            IOptimizationOverLimitDecider optimizationOverLimitDecider, 
+            IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             ISchedulingOptionsCreator schedulingOptionsCreator)
         {
             _periodValueCalculator = periodValueCalculator;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-            if (movesOverMaxDaysLimit().Count > 0)
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             bool sucess = false;
@@ -131,7 +131,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            IList<DateOnly> daysToLock = movesOverMaxDaysLimit();
+            if(daysOverMax())
+            {
+                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
+                return false;
+            }
+
+            IList<DateOnly> daysToLock = restrictionsOverMax();
             if (daysToLock.Count > 0)
             {
                 rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
@@ -201,9 +207,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private IList<DateOnly> movesOverMaxDaysLimit()
+        private IList<DateOnly> restrictionsOverMax()
         {
             return _optimizationOverLimitDecider.OverLimit();
+        }
+
+        private bool daysOverMax()
+        {
+            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
         }
     }
 }
