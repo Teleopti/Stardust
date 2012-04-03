@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit Text Box</value>
@@ -9917,7 +9917,7 @@ Period</comment>
     <comment>Meetings created by me</comment>
   </data>
   <data name="SendASM" xml:space="preserve">
-    <value>Send Asm</value>
+    <value>Send message (ASM)</value>
     <comment>Send Asm</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
@@ -10221,7 +10221,7 @@ These options are activated:
     <value>Schedule Tags</value>
   </data>
   <data name="WorkWeekStartsAt" xml:space="preserve">
-    <value>Work week starts at</value>
+    <value>Work week starts on</value>
   </data>
   <data name="AutoTag" xml:space="preserve">
     <value>Auto Tag</value>
