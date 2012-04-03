@@ -689,6 +689,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
             var personPeriod = person.PersonPeriodCollection.First();
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.PersonContract));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.PersonContract.Contract));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team.Site));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.Team.Site.BusinessUnit));
