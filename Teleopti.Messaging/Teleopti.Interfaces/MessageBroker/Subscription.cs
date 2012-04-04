@@ -100,7 +100,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public DateTime LowerBoundaryAsDateTime()
 		{
-			return XmlConvert.ToDateTime(LowerBoundary, XmlDateTimeSerializationMode.Unspecified);
+			return AsDateTime(LowerBoundary);
 		}
 
 		/// <summary>
@@ -108,7 +108,17 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public DateTime UpperBoundaryAsDateTime()
 		{
-			return XmlConvert.ToDateTime(UpperBoundary, XmlDateTimeSerializationMode.Unspecified);
+			return AsDateTime(UpperBoundary);
+		}
+
+		///<summary>
+		/// Convert the string to date time.
+		///</summary>
+		///<param name="dateTime"></param>
+		///<returns></returns>
+		public static DateTime AsDateTime(string dateTime)
+		{
+			return XmlConvert.ToDateTime(dateTime.Substring(1), XmlDateTimeSerializationMode.Unspecified);
 		}
 
 		/// <summary>
@@ -124,7 +134,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// </summary>
 		public static string DateToString(DateTime date)
 		{
-			return XmlConvert.ToString(date, XmlDateTimeSerializationMode.Unspecified);
+			return "D" + XmlConvert.ToString(date, XmlDateTimeSerializationMode.Unspecified);
 		}
 
 		private string excludeDatasourceForCertainTypes()
