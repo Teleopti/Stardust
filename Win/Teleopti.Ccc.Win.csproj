@@ -254,6 +254,8 @@
     <Compile Include="Budgeting\AddShrinkageForm.Designer.cs">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Budgeting\Events\BudgetGroupNeedsRefresh.cs" />
+    <Compile Include="Budgeting\Events\BudgetGroupTreeNeedsRefresh.cs" />
     <Compile Include="Budgeting\SetEfficiencyShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Budgeting.Models;
+﻿using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
 using Teleopti.Interfaces.Domain;
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
             _view.DataSource = _model.DataSource;
         }
 
-        private void InitializeShrinkages()
+        public void InitializeShrinkages()
         {
             foreach (var customShrinkage in _model.MainModel.BudgetGroup.CustomShrinkages)
             {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
             }
         }
 
-        private void InitializeEfficiencyShrinkages()
+        public void InitializeEfficiencyShrinkages()
         {
             foreach (var customEfficiencyShrinkage in _model.MainModel.BudgetGroup.CustomEfficiencyShrinkages)
             {
@@ -52,6 +53,11 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
         public void UpdateEfficiencyShrinkageRow(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
         {
             _view.AddEfficiencyShrinkageRow(customEfficiencyShrinkage);
+        }
+
+        public void UpdateBudgetGroup(IBudgetGroup budgetGroup)
+        {
+            _model.MainModel.BudgetGroup = budgetGroup;
         }
     }
 }
