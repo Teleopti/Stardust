@@ -259,6 +259,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingLunchPreferenceToday(startTimeLimitation));
 		}
 
+		[Given(@"I have a availabilty with earliest start time at (.*)")]
+		public void GivenIHaveAAvailabiltyWithEarliestStartTimeAt(int earliestStart)
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliestStart, 0, 0), null);
+			UserFactory.User().Setup(new ExistingAvailability(startTimeLimitation));
+		}
+
+
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
 		{

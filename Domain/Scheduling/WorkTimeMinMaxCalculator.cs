@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (ruleSetBag == null)
 				return null;
 
-			var options = new EffectiveRestrictionOptions(true);
+			var options = new EffectiveRestrictionOptions(true, true);
 			var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}),
 			                                                                     new ScheduleDictionaryLoadOptions(true, false),
 			                                                                     new DateTimePeriod(dateTime, dateTime), scenario);

@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Data\User\ExistingAvailability.cs" />
     <Compile Include="Data\User\ExistingLunchPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBagWithTwoShiftsAndLunch.cs" />
     <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />

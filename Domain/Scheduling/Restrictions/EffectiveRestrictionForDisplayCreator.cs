@@ -39,6 +39,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						                                                                               		preferenceRestriction.
 						                                                                               			ActivityRestrictionCollection)));
 				}
+
+				if (effectiveRestrictionOptions.UseAvailability)
+				{
+					foreach (var availabilityRestriction in scheduleDay.RestrictionCollection().OfType<IAvailabilityRestriction>())
+					{
+						if (availabilityRestriction.NotAvailable)
+							effectiveRestriction =
+								(EffectiveRestriction)effectiveRestriction.Combine(new EffectiveRestriction(availabilityRestriction.StartTimeLimitation,
+								                                                      availabilityRestriction.EndTimeLimitation,
+								                                                      availabilityRestriction.WorkTimeLimitation, null,
+								                                                      new DayOffTemplate(new Description("Not available", "N/A")),
+								                                                      null, new List<IActivityRestriction>()));
+						else
+						{
+							effectiveRestriction =
+								(EffectiveRestriction)effectiveRestriction.Combine(new EffectiveRestriction(availabilityRestriction.StartTimeLimitation,
+																				  availabilityRestriction.EndTimeLimitation,
+																				  availabilityRestriction.WorkTimeLimitation, null,
+																				  null,
+																				  null, new List<IActivityRestriction>()));
+						}
+					}
+				}
 			}
 
 			return effectiveRestriction;

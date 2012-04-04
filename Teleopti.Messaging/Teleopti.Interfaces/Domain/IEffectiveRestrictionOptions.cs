@@ -9,5 +9,10 @@ namespace Teleopti.Interfaces.Domain
 		/// If prefereces should be considered
 		/// </summary>
 		bool UsePreference { get; set; }
+
+		/// <summary>
+		/// If availability should be considered
+		/// </summary>
+		bool UseAvailability { get; set; }
 	}
 }
