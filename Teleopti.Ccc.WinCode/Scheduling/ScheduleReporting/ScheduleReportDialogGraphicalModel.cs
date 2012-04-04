@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 		private bool _team;
 		private bool _individual = true;
 		private bool _oneFileForSelected = true;
+	    private bool _showPublicNote = false;
 		private bool _sortOnAgentName;
 		private bool _sortOnStartTime = true;
 		private bool _sortOnEndTime;
@@ -27,6 +28,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			get { return _oneFileForSelected; }
 			set { _oneFileForSelected = value; }
 		}
+
+	    public bool ShowPublicNote
+	    {
+            get { return _showPublicNote; }
+            set { _showPublicNote = value; }
+	    }
 
 		public bool SortOnAgentName
 		{

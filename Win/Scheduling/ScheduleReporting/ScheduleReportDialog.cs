@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             reportTypeSetting();
             singleFileSetting();
             detailLevelSetting();
+            showPublicNoteSetting();
 
             if(_shiftsPerDay)
             {
@@ -134,6 +135,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             radioButtonTeamReport.Checked = !_settings.IndividualReport;
         }
 
+        private void showPublicNoteSetting()
+        {
+            checkBoxShowPublicNote.Checked = _settings.ShowPublicNote;
+        }
+
         private void radioButtonIndividualReport_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxSingleFile.Enabled = radioButtonIndividualReport.Checked;
@@ -147,6 +153,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             _settings.IndividualReport = radioButtonIndividualReport.Checked;
             _settings.SingleFile = checkBoxSingleFile.Checked;
             _settings.DetailLevel = DetailLevel;
+            _settings.ShowPublicNote = checkBoxShowPublicNote.Checked;
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
