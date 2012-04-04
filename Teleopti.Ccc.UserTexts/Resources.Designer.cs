@@ -4626,6 +4626,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not reach Teleopti Customer Web at the moment!.
+        /// </summary>
+        public static string CouldNotReachTeleoptiCustomerWebAtTheMoment {
+            get {
+                return ResourceManager.GetString("CouldNotReachTeleoptiCustomerWebAtTheMoment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {

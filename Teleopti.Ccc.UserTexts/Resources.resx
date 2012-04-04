@@ -10523,6 +10523,9 @@ These options are activated:
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>The person's roles</value>
   </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Could not reach Teleopti Customer Web at the moment!</value>
+  </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>Request History</value>
   </data>
