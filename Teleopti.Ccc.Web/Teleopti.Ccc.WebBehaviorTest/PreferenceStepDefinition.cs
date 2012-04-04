@@ -267,6 +267,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			contractTimeDiv.InnerHtml.Should().Be.Null();
 		}
 
+		[Then(@"I should see that there are no available shifts")]
+		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
+		{
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			cell.InnerHtml.Should().Contain("No available shifts");
+		}
+
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{

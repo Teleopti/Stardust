@@ -13177,6 +13177,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No available shifts.
+        /// </summary>
+        public static string NoAvailableShifts {
+            get {
+                return ResourceManager.GetString("NoAvailableShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No chart data rows enabled.
         /// </summary>
         public static string NoChartDataRowsEnabled {

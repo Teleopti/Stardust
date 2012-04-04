@@ -205,15 +205,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<DayMappingData, PreferenceDayViewModel>()
 				.ForMember(d => d.Preference, o => o.MapFrom(s =>
-																				{
-																					if (s.DayOffTemplate != null)
-																						return s.DayOffTemplate.Description.Name;
-																					if (s.Absence != null)
-																						return s.Absence.Description.Name;
-																					if (s.ShiftCategory != null)
-																						return s.ShiftCategory.Description.Name;
-																					return null;
-																				}))
+				                                             	{
+				                                             		if (s.DayOffTemplate != null)
+				                                             			return s.DayOffTemplate.Description.Name;
+				                                             		if (s.Absence != null)
+				                                             			return s.Absence.Description.Name;
+				                                             		if (s.ShiftCategory != null)
+				                                             			return s.ShiftCategory.Description.Name;
+				                                             		return null;
+				                                             	}))
 				.ForMember(d => d.PossibleStartTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
 				                                                          	? ""
 				                                                          	: s.WorkTimeMinMax.StartTimeLimitation.
@@ -222,19 +222,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                          	  s.WorkTimeMinMax.StartTimeLimitation.
 				                                                          	  	EndTimeString))
 				.ForMember(d => d.PossibleEndTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-																			? ""
-																			: s.WorkTimeMinMax.EndTimeLimitation.
-																				StartTimeString +
-																			  "-" +
-																			  s.WorkTimeMinMax.EndTimeLimitation.
-																				EndTimeString))
+				                                                        	? ""
+				                                                        	: s.WorkTimeMinMax.EndTimeLimitation.
+				                                                        	  	StartTimeString +
+				                                                        	  "-" +
+				                                                        	  s.WorkTimeMinMax.EndTimeLimitation.
+				                                                        	  	EndTimeString))
 				.ForMember(d => d.PossibleContractTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-																			? ""
-																			: s.WorkTimeMinMax.WorkTimeLimitation.
-																				StartTimeString +
-																			  "-" +
-																			  s.WorkTimeMinMax.WorkTimeLimitation.
-																				EndTimeString))
+				                                                             	? ""
+				                                                             	: s.WorkTimeMinMax.WorkTimeLimitation.
+				                                                             	  	StartTimeString +
+				                                                             	  "-" +
+				                                                             	  s.WorkTimeMinMax.WorkTimeLimitation.
+				                                                             	  	EndTimeString))
+				.ForMember(d => d.ValidationError,
+				           o => o.MapFrom(s => s.WorkTimeMinMax == null ? UserTexts.Resources.NoAvailableShifts : ""))
 				;
 
 			CreateMap<DayMappingData, HeaderViewModel>()

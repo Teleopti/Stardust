@@ -56,9 +56,15 @@
 								{
 									<div class="preference">
 										@preference.Preference
-										<div class="possible-start-times">@preference.PossibleStartTimes</div>
-										<div class="possible-end-times">@preference.PossibleEndTimes</div>
-										<div class="possible-contract-times">@preference.PossibleContractTimes</div>
+										@if (day.Editable && preference.ValidationError != "")
+										{
+											<div class="error">@preference.ValidationError</div>
+										}
+										else {
+											<div class="possible-start-times">@preference.PossibleStartTimes</div>
+											<div class="possible-end-times">@preference.PossibleEndTimes</div>
+											<div class="possible-contract-times">@preference.PossibleContractTimes</div>
+										}
 									</div>
 								}
 								@if (personAssignment != null)

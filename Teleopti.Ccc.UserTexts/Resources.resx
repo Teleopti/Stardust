@@ -10535,4 +10535,8 @@ These options are activated:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Contract time descending</value>
   </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>No available shifts</value>
+    <comment>No available shifts</comment>
+  </data>
 </root>

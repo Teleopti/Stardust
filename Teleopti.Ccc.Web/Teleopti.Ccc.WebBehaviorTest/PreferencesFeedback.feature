@@ -11,9 +11,6 @@ Scenario: Feedback for a day without restrictions
 	And I should see the end time boundry 16 to 17
 	And I should see the contract time boundry 7 to 9  
 
-
-
-
 Scenario: Feedback for a day with day off preference
 	Given I am an agent
 	And I have a shift bag
@@ -85,19 +82,6 @@ Scenario: Feedback for a day with lunch length limitation preference
 	And I should see the end time boundry 17 to 17
 	And I should see the contract time boundry 9 to 9 
 
-
-
-
-Scenario: Feedback for a day with availability
-	Given I am an agent
-	And I have a shift bag
-	And I have availability
-	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts that match the availability
-	And I should see the end time boundry for the shift bag's shifts that match the availability
-	And I should see the minimum contract time for the shift bag's shifts that match the availability
-	And I should see the maximum contract time for the shift bag's shifts that match the availability
-
 Scenario: Feedback for a day with start time limitation availability
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -119,36 +103,30 @@ Scenario: Feedback for a day with work time limitation availability
 	When I view preferences
 	Then I should see the contract time boundry 5 to 7
 
-
-
 Scenario: Feedback for a day with availability and preference
 	Given I am an agent
-	And I have a shift bag
-	And I have availability
-	And I have preference with shift category AM
-	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts of category AM and that match the availability
-	And I should see the end time boundry for the shift bag's shifts of category AM and that match the availability
-	And I should see the minimum contract time for the shift bag's shifts of category AM and that match the availability
-	And I should see the maximum contract time for the shift bag's shifts of category AM and that match the availability
-
-
-
-Scenario: Feedback for a day with a schedule
 	Given I am an agent
-	And I have a shift
+	And I have a shift bag with two categories with shift start from 8 to 10 and from 12 to 14 and end from 16 to 18 and from 12 to 20
+	And I have preference for the first category today
+	And I have a availabilty with earliest start time at 9
 	When I view preferences
-	Then I should see the start time of the shift
-	And I should see the end time of the shift
-	And I should see the contract time of the shift
+	Then I should see the start time boundry 9 to 10
+	And I should see the end time boundry 16 to 18
+	And I should see the contract time boundry 6 to 9
 
 Scenario: Feedback for a day with a schedule, preference and availability
 	Given I am an agent
-	And I have a shift
 	And I have a shift bag
-	And I have preference for shift category AM
-	And I have availability
+	And I have a shift today
+	And I have existing shift category preference
+	And I have a availabilty with earliest start time at 9
 	When I view preferences
-	Then I should see the start time of the shift
-	And I should see the end time of the shift
-	And I should see the contract time of the shift
+	Then I should see my shift
+
+Scenario: Feedback from conflicting preferences and availability
+Given I am an agent
+And I have a shift bag
+And I have a conflicting preference and availability today
+When I view preferences
+Then I should see that there are no available shifts
+

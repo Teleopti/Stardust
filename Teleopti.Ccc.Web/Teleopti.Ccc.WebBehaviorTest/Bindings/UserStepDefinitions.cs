@@ -280,6 +280,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingAvailability(workTimeLimitation));
 		}
 
+		[Given(@"I have a conflicting preference and availability today")]
+		public void GivenIHaveAConflictingPreferenceAndAvailabilityToday()
+		{
+			var startTimeAvailability = new StartTimeLimitation(new TimeSpan(10, 0, 0), null);
+			var startTimePreference = new StartTimeLimitation(null, new TimeSpan(9, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(startTimePreference));
+			UserFactory.User().Setup(new ExistingAvailability(startTimeAvailability));
+		}
+
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
@@ -537,6 +546,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(category1);
 			UserFactory.User().Setup(category2);
 			UserFactory.User().Setup(new RuleSetBagWithTwoCategories(category1, start1, end1, category2, start2, end2));
+		}
+
+		[Given(@"I have a shift bag with two categories with shift start from (.*) to (.*) and from (.*) to (.*) and end from (.*) to (.*) and from (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithTwoCategoriesWithShiftStartFromToAndFromToAndEndFromToAndFromTo(int earliestStart1, int latestStart1, int earliestStart2, int latestStart2, int earliestEnd1, int latestEnd1, int earliestEnd2, int latestEnd2)
+		{
+			var category1 = new FirstShiftCategory();
+			var category2 = new SecondShiftCategory();
+			UserFactory.User().Setup(category1);
+			UserFactory.User().Setup(category2);
+			UserFactory.User().Setup(new RuleSetBagWithTwoCategories(category1, earliestStart1, latestStart1, earliestEnd1, latestEnd1, category2, earliestStart2, latestStart2, earliestEnd2, latestEnd2));
 		}
 
 

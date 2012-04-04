@@ -675,6 +675,15 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 					workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString);
 		}
 
+		[Test]
+		public void ShouldMapValidationErrors()
+		{
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate} };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate).Preference.ValidationError.Should().Be.EqualTo(UserTexts.Resources.NoAvailableShifts);
+		}
 
 		[Test]
 		public void ShouldMapStyleClassViewModelsFromScheduleColors()
