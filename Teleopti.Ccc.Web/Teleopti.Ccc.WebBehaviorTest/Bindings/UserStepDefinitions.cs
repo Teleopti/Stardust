@@ -266,6 +266,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().Setup(new ExistingAvailability(startTimeLimitation));
 		}
 
+		[Given(@"I have a availabilty with latest end time at (.*)")]
+		public void GivenIHaveAAvailabiltyWithLatestEndTimeAt(int latestEnd)
+		{
+			var endTimeLimitation = new EndTimeLimitation(null, new TimeSpan(latestEnd, 0, 0));
+			UserFactory.User().Setup(new ExistingAvailability(endTimeLimitation));
+		}
+
+		[Given(@"I have a availabilty with work time between (.*) and (.*) hours")]
+		public void GivenIHaveAAvailabiltyWithWorkTimeBetween5And7Hours(int shortest, int longest)
+		{
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(shortest, 0, 0), new TimeSpan(longest, 0, 0));
+			UserFactory.User().Setup(new ExistingAvailability(workTimeLimitation));
+		}
+
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()

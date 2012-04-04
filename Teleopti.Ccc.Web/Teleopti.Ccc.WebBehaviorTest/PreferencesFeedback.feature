@@ -108,19 +108,16 @@ Scenario: Feedback for a day with start time limitation availability
 Scenario: Feedback for a day with end time limitation availability
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
-	And I have a availabilty with latest end time at 19
+	And I have a availabilty with latest end time at 21
 	When I view preferences
-	Then I should see the end time boundry 12 to 19
+	Then I should see the end time boundry 12 to 21
 
 Scenario: Feedback for a day with work time limitation availability
 	Given I am an agent
-	And I have a shift bag
-	And I have a availability with work time limitation between 7 and 9 hours
+	And I have a shift bag with start times 8 to 13 and end times 12 to 22
+	And I have a availabilty with work time between 5 and 7 hours
 	When I view preferences
-	Then I should see the start time boundry for the shift bag's shifts matching the preference
-	And I should see the end time boundry for the shift bag's shifts matching the preference
-	And I should see the minimum contract time for the shift bag's shifts matching the preference
-	And I should see the maximum contract time for the shift bag's shifts matching the preference
+	Then I should see the contract time boundry 5 to 7
 
 
 
