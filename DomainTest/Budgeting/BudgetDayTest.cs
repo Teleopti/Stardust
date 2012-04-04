@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -43,6 +42,14 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         public void ShouldHaveDefaultConstructor()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType(),true));
+        }
+
+        [Test]
+        public void ShouldBeAbleToChangeBudgetGroup()
+        {
+            var bg = new BudgetGroup();
+            target.BudgetGroup = bg;
+            Assert.AreEqual(target.BudgetGroup, bg);
         }
 
         [Test]

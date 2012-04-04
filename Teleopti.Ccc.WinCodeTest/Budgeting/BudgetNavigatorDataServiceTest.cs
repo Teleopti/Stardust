@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
@@ -91,6 +92,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			using (mock.Playback())
 			{
 				Assert.AreEqual(budgetGroup1,target.LoadBudgetGroup(budgetGroup));
+                Assert.IsTrue(LazyLoadingManager.IsInitialized(budgetGroup.CustomShrinkages));
+                Assert.IsTrue(LazyLoadingManager.IsInitialized(budgetGroup.CustomEfficiencyShrinkages));
 			}
 		}
 

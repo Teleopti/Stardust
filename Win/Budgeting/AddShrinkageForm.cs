@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
@@ -15,19 +17,35 @@ namespace Teleopti.Ccc.Win.Budgeting
 {
     public partial class AddShrinkageForm : BaseRibbonForm, IAddShrinkageForm
     {
+        private readonly IEventAggregator _eventAggregator;
         internal event EventHandler<CustomEventArgs<CustomShrinkageUpdatedEventArgs>> CustomShrinkageAdded;
         private const int maxLength = 25;
         private string _helpId;
         private readonly AddShrinkagePresenter _presenter;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 
-        public AddShrinkageForm(IBudgetGroup budgetGroup, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+        public AddShrinkageForm(IEventAggregator eventAggregator, IBudgetGroup budgetGroup, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
         {
             InitializeComponent();
             _helpId = Name;
-            if (!DesignMode) SetTexts();
-            _presenter = new AddShrinkagePresenter(this, new AddShrinkageModel(budgetGroup, unitOfWorkFactory, repositoryFactory));
-            _presenter.Initialize();
+            if (!DesignMode)
+            {
+                SetTexts();
+                _eventAggregator = eventAggregator;
+                eventSubscription();
+                _presenter = new AddShrinkagePresenter(this, new AddShrinkageModel(budgetGroup), unitOfWorkFactory, repositoryFactory);
+                _presenter.Initialize();
+            }
+        }
+
+        private void eventSubscription()
+        {
+            _eventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Subscribe(budgetGroupNeedsRefresh);
+        }
+
+        private void budgetGroupNeedsRefresh(IBudgetGroup obj)
+        {
+            _presenter.UpdateBudgetGroup(obj);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -83,6 +101,7 @@ namespace Teleopti.Ccc.Win.Budgeting
                     () =>
                         {
                             saveAddedCustomShrinkage(shrinkageName);
+                            _eventAggregator.GetEvent<BudgetGroupTreeNeedsRefresh>().Publish("AddShrinkageForm");
                             notifySubsribers(handler);
                         });
             }
