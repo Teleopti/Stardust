@@ -7729,6 +7729,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             bool teamReport;
             bool singleFile;
             ScheduleReportDetail detail;
+            bool publicNote;
 
             IList<IScheduleDay> selection = _scheduleView.SelectedSchedules();
 
@@ -7745,6 +7746,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 individualReport = dialog.Individual;
                 singleFile = dialog.OneFile;
                 detail = dialog.DetailLevel;
+                publicNote = dialog.ShowPublicNote;
             }
 
             CultureInfo culture = TeleoptiPrincipal.Current.Regional.Culture;
@@ -7803,7 +7805,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 ScheduleToPdfManager.ExportShiftsPerDay(_schedulerState.TimeZoneInfo, culture, personDic,
                                                         period, SchedulerState.SchedulingResultState,
-                                                        rightToLeft, detail, this, path);
+                                                        rightToLeft, detail, publicNote, this, path);
                 return;
             }
 

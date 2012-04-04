@@ -62,6 +62,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             }
         }
 
+        public bool ShowPublicNote
+        {
+            get { return checkBoxShowPublicNote.Checked; }
+        }
+
         private void buttonAdvCancel_Click(object sender, EventArgs e)
         {
             Close();
@@ -92,6 +97,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                 radioButtonTeamReport.Checked = false;
                 radioButtonIndividualReport.Checked = false;
             }
+            else
+            {
+                checkBoxShowPublicNote.Visible = false;
+            }
+
         }
 
         private void detailLevelSetting()
