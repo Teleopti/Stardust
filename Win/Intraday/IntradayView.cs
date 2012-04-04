@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Win.Intraday
         public void FinishProgress()
         {
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.ReadyThreeDots);
-            toolStripProgressBar1.Visible = false;
             _eventAggregator.GetEvent<IntradayLoadProgress>().Unsubscribe(ReportProgress);
             ribbonControlAdv1.Enabled = true;
             toolStripExDatePicker.Visible = true;
@@ -111,14 +110,9 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void updateProgress(string progressStep)
         {
-            if (toolStripProgressBar1.ProgressBar != null)
-            {
-                toolStripProgressBar1.PerformStep();
-                Refresh();
-                toolStripProgressBar1.ProgressBar.Refresh();
-                toolStripStatusLabelLastUpdate.Text = progressStep;
-                statusStripExLastUpdate.Refresh();
-            }
+            Refresh();
+            toolStripStatusLabelLastUpdate.Text = progressStep;
+            statusStripExLastUpdate.Refresh();   
         }
 
         private void initializeChartSettings()
