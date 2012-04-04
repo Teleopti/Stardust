@@ -18,10 +18,10 @@
         IScenario Scenario { get; }
 
         /// <summary>
-        /// Gets the budget group that the day belongs to
+        /// The budget group that the day belongs to
         /// </summary>
         /// <value>The budget group.</value>
-        IBudgetGroup BudgetGroup { get; }
+        IBudgetGroup BudgetGroup { get; set; }
 
         ///<summary>
         /// The hours a full time equivalent works
