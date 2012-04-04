@@ -117,7 +117,7 @@ namespace Teleopti.Messaging.SignalR
 		public void InstantiateBrokerService()
 		{
 			var connection = new HubConnection(_serverUrl);
-			_proxy = connection.CreateProxy("Teleopti.Ccc.Web.Broker.MessageBrokerHub");
+			_proxy = connection.CreateProxy("messageBrokerHub");
 			
 			connection.Start();
 		}

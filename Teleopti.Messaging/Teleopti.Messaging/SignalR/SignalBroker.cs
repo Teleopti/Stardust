@@ -22,7 +22,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalBroker : IMessageBroker
 	{
 		private const string EventName = "onEventMessage";
-		private const string HubClassName = "Teleopti.Ccc.Web.Broker.MessageBrokerHub";
+		private const string HubClassName = "messageBrokerHub";
 		private IHubProxy _proxy;
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
 
