@@ -117,14 +117,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             if (string.IsNullOrEmpty(value)) return true;
 
-            var tmp = value.ToUpper();
-            bool firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.ToUpper().Contains(tmp);
-            bool lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.ToUpper().Contains(tmp);
-            bool teamFound = TeamBelong != null && TeamBelong.Description.Name.ToUpper().Contains(tmp);
-            bool siteFound = SiteBelong != null && SiteBelong.Description.Name.ToUpper().Contains(tmp);
-            bool skillsFound = !string.IsNullOrEmpty(Skills) && Skills.ToUpper().Contains(tmp);
-            bool emailFound = !string.IsNullOrEmpty(Email) && Email.ToUpper().Contains(tmp);
-            bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) && EmploymentNumber.ToUpper().Contains(tmp);
+            var tmp = value.ToUpper(CultureInfo.CurrentUICulture);
+            bool firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool teamFound = TeamBelong != null && TeamBelong.Description.Name.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool siteFound = SiteBelong != null && SiteBelong.Description.Name.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool skillsFound = !string.IsNullOrEmpty(Skills) && Skills.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool emailFound = !string.IsNullOrEmpty(Email) && Email.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) && EmploymentNumber.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
 
             return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound ||employmentNumberFound;
         }
