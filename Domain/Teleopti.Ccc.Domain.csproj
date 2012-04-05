@@ -150,6 +150,7 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="Common\ScenarioProvider.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
+    <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />
     <Compile Include="Forecasting\Export\IOpenAndSplitSkillCommand.cs" />
     <Compile Include="Forecasting\Export\ISaveForecastToSkillCommand.cs" />
@@ -163,6 +164,20 @@
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\SkillExportCombination.cs" />
     <Compile Include="Forecasting\Export\SkillExportSelection.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileDateTimeValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileDoubleValueValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileIntegerValueValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsRow.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileConstants.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileSkillNameValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
+    <Compile Include="Forecasting\ForecastsFile\ImportForecastsOptions.cs" />
+    <Compile Include="Forecasting\Import\ForecastFile.cs" />
+    <Compile Include="Forecasting\Import\ForecastParseResult.cs" />
+    <Compile Include="Forecasting\Import\ForecastsFileContentProvider.cs" />
+    <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
+    <Compile Include="Forecasting\Import\IForecastFile.cs" />
+    <Compile Include="Forecasting\Import\IsColumnCountInRowValid.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />
@@ -1565,6 +1580,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\LicenseStatus.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
