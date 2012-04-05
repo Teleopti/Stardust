@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new ShiftsModule());
                 builder.RegisterModule(new PersonSelectorModule());
                 builder.RegisterModule(new PermissionsModule());
+                builder.RegisterModule(new RequestHistoryModule());
                 return builder.Build();
             }
 

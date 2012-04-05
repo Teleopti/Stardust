@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit Text Box</value>
@@ -9917,7 +9917,7 @@ Period</comment>
     <comment>Meetings created by me</comment>
   </data>
   <data name="SendASM" xml:space="preserve">
-    <value>Send Asm</value>
+    <value>Send message (ASM)</value>
     <comment>Send Asm</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
@@ -10221,7 +10221,7 @@ These options are activated:
     <value>Schedule Tags</value>
   </data>
   <data name="WorkWeekStartsAt" xml:space="preserve">
-    <value>Work week starts at</value>
+    <value>Work week starts on</value>
   </data>
   <data name="AutoTag" xml:space="preserve">
     <value>Auto Tag</value>
@@ -10523,6 +10523,9 @@ These options are activated:
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>The person's roles</value>
   </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Could not reach Teleopti Customer Web at the moment!</value>
+  </data>
   <data name="RequestHistory" xml:space="preserve">
     <value>Request History</value>
   </data>
@@ -10579,5 +10582,12 @@ These options are activated:
   </data>
   <data name="JobHistoryView" xml:space="preserve">
     <value>View Job History</value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Export to PDF shifts per day</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Show public note</value>
+    <comment>ShowPublicNote</comment>
   </data>
 </root>

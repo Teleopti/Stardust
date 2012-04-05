@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             _target.Save(person);
 
             IPerson fetchedPerson =
-                _target.FetchPerson(person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
+                _target.FetchPerson(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
             Assert.IsNotNull(fetchedPerson);
         }
     }

@@ -13,9 +13,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     public class PermissionInformation : IPermissionInformation
     {
         private IList<IApplicationRole> personInApplicationRole = new List<IApplicationRole>();
-        private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
-        private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
-
         private string defaultTimeZone;
         private ICccTimeZoneInfo _defaultTimeZoneCache;
         private int? culture;
@@ -71,38 +68,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                 return new ReadOnlyCollection<IApplicationRole>(newPersonInApplicationRole);
             }
 
-        }
-
-        public IWindowsAuthenticationInfo WindowsAuthenticationInfo
-        {
-            get
-            {
-                if (_windowsAuthenticationInfo == null)
-                    _windowsAuthenticationInfo = new WindowsAuthenticationInfo();
-                return _windowsAuthenticationInfo;
-            }
-            set
-            {
-                InParameter.NotNull("WindowsAuthenticationInfo", value);
-                _windowsAuthenticationInfo = value;
-                _windowsAuthenticationInfo.SetParent(BelongsTo);
-            }
-        }
-
-        public IApplicationAuthenticationInfo ApplicationAuthenticationInfo
-        {
-            get
-            {
-                if (_applicationAuthenticationInfo == null)
-                    _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
-                return _applicationAuthenticationInfo;
-            }
-            set
-            {
-                InParameter.NotNull("ApplicationAuthenticationInfo", value);
-                _applicationAuthenticationInfo = value;
-                _applicationAuthenticationInfo.SetParent(BelongsTo);
-            }
         }
 
         public IPerson BelongsTo

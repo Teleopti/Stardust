@@ -4626,6 +4626,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not reach Teleopti Customer Web at the moment!.
+        /// </summary>
+        public static string CouldNotReachTeleoptiCustomerWebAtTheMoment {
+            get {
+                return ResourceManager.GetString("CouldNotReachTeleoptiCustomerWebAtTheMoment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -7524,6 +7533,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ExportToPDFGraphical {
             get {
                 return ResourceManager.GetString("ExportToPDFGraphical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to PDF shifts per day.
+        /// </summary>
+        public static string ExportToPDFShiftsPerDay {
+            get {
+                return ResourceManager.GetString("ExportToPDFShiftsPerDay", resourceCulture);
             }
         }
         
@@ -19537,6 +19555,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowPreviousShift {
             get {
                 return ResourceManager.GetString("ShowPreviousShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show public note.
+        /// </summary>
+        public static string ShowPublicNote {
+            get {
+                return ResourceManager.GetString("ShowPublicNote", resourceCulture);
             }
         }
         

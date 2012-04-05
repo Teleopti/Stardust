@@ -251,6 +251,7 @@
     <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommonRoutedCommands.cs" />
+    <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
     <Compile Include="Common\Configuration\ChangePasswordModel.cs" />
@@ -813,6 +814,11 @@
     <Compile Include="Scheduling\IAddOvertimeViewModel.cs" />
     <Compile Include="Scheduling\IAddScheduleLayers.cs" />
     <Compile Include="Scheduling\IViewModelIsValid.cs" />
+    <Compile Include="Scheduling\Requests\IRequestHistoryView.cs" />
+    <Compile Include="Scheduling\Requests\LoadRequestHistoryCommand.cs" />
+    <Compile Include="Scheduling\Requests\RequestHistoryPageChanged.cs" />
+    <Compile Include="Scheduling\Requests\RequestHistoryRequestChanged.cs" />
+    <Compile Include="Scheduling\Requests\RequestHistoryViewPresenter.cs" />
     <Compile Include="Scheduling\ScheduleNavigatorPresenter.cs" />
     <Compile Include="Scheduling\PinnedSkillHelper.cs" />
     <Compile Include="Scheduling\Requests\ApproveRequestFromRequestDetailsView.cs" />

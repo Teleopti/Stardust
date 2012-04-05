@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -5,7 +6,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
     public class BasicState : State
     {
-        private ISessionData _sessionScopeData;
+		[ThreadStatic]
+		private static ISessionData _sessionScopeData;
 
         public override void SetSessionData(ISessionData sessionData)
         {

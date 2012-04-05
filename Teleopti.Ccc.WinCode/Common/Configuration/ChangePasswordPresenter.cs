@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 IPersonRepository personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
                 IPerson person = TeleoptiPrincipal.Current.GetPerson(personRepository);
                 Model = new ChangePasswordModel
-                            {OldEncryptedPassword = person.PermissionInformation.ApplicationAuthenticationInfo.Password};
+                            {OldEncryptedPassword = person.ApplicationAuthenticationInfo.Password};
             }
             _view.SetInputFocus();
         }
@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     _view.ShowValidationError();
                     return;
                 }
-                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-                    ApplicationAuthenticationInfo.Password = Model.NewPassword;
+                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
                 unitOfWork.PersistAll();
             }
             _view.Close();

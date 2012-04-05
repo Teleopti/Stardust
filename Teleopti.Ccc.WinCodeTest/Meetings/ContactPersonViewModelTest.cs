@@ -105,21 +105,21 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.IsTrue(_target.FilterByValue("ob"));
             Assert.IsFalse(_target.FilterByValue("bush"));
             Assert.IsTrue(_target.FilterByValue("barack."));
-            Assert.IsFalse(_target.FilterByValue(".obama"));
+            Assert.IsFalse(_target.FilterByValue(".obamason"));
             Assert.IsTrue(_target.FilterByValue("kill2"));
             Assert.IsFalse(_target.FilterByValue("kill3"));
             Assert.IsTrue(_target.FilterByValue("team2"));
-            Assert.IsFalse(_target.FilterByValue("eam2"));
+            Assert.IsTrue(_target.FilterByValue("eam2"));
             Assert.IsTrue(_target.FilterByValue("site2"));
-            Assert.IsFalse(_target.FilterByValue("ite2"));
+            Assert.IsTrue(_target.FilterByValue("ite2"));
             Assert.IsTrue(_target.FilterByValue("001"));
-            Assert.IsFalse(_target.FilterByValue("123"));
+            Assert.IsFalse(_target.FilterByValue("1123"));
 
-            _target.CurrentDate = new DateOnly(2004,12,31);
+            _target.CurrentDate = new DateOnly(2004, 12, 31);
             Assert.IsTrue(_target.FilterByValue("ob"));
             Assert.IsFalse(_target.FilterByValue("bush"));
             Assert.IsTrue(_target.FilterByValue("barack."));
-            Assert.IsFalse(_target.FilterByValue(".obama"));
+            Assert.IsFalse(_target.FilterByValue(".obamass"));
             Assert.IsFalse(_target.FilterByValue("kill2"));
             Assert.IsFalse(_target.FilterByValue("kill3"));
             Assert.IsFalse(_target.FilterByValue("team2"));
@@ -127,10 +127,10 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.IsFalse(_target.FilterByValue("site2"));
             Assert.IsFalse(_target.FilterByValue("ite2"));
             Assert.IsTrue(_target.FilterByValue("001"));
-            Assert.IsFalse(_target.FilterByValue("123"));
+            Assert.IsFalse(_target.FilterByValue("1123"));
 
             Assert.IsTrue(_target.FilterByPeriod(null));
-            Assert.IsFalse(_target.FilterByPeriod(new DateTime(2004,12,31)));
+            Assert.IsFalse(_target.FilterByPeriod(new DateTime(2004, 12, 31)));
             Assert.IsTrue(_target.FilterByPeriod(new DateTime(2005, 1, 1)));
         }
     }

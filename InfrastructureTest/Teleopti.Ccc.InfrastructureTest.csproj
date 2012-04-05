@@ -233,6 +233,7 @@
     <Compile Include="Repositories\PeopleAndSkillLoaderDeciderForTeamLeaderModeTest.cs" />
     <Compile Include="Repositories\PersonAssignmentCascadeDeleteTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonRequestReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PersonSelectorReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PublicNoteRepositoryTest.cs" />
     <Compile Include="Repositories\AvailableDataRepositoryTest.cs" />

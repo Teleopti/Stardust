@@ -1093,10 +1093,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void MarkForRemove(IPerson person)
         {
-            person.PermissionInformation.WindowsAuthenticationInfo.DomainName = null;
-            person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = null;
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = null;
-            person.PermissionInformation.ApplicationAuthenticationInfo.Password = null;
+            person.WindowsAuthenticationInfo = null;
+            person.ApplicationAuthenticationInfo = null;
             new Repository(UnitOfWork).Remove(person);
         }
 

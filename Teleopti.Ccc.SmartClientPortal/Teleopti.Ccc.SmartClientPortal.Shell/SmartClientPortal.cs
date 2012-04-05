@@ -573,6 +573,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             {
                 MessageDialogs.ShowError(this, exception.Message, UserTexts.Resources.ErrorMessage);
             }
+            catch (Exception exception)
+            {
+                using (var view = new SimpleExceptionHandlerView(exception, UserTexts.Resources.OpenTeleoptiCCC, UserTexts.Resources.CouldNotReachTeleoptiCustomerWebAtTheMoment))
+                {
+                    view.ShowDialog();
+                }
+            }
         }
     }
 }

@@ -99,13 +99,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		    try
 		    {
                 _scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
-                _view.CloseForm();
 		    }
 		    catch (DataSourceException exception)
 		    {
 		        _view.ShowDataSourceException(exception);
 		    }
-			
+            _view.CloseForm();
 		}
 
 		private int noOfAgentsInvolved()

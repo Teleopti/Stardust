@@ -145,7 +145,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 				budgetGroupMainModel.Scenario = scenario;
 				var budgetMain = inner.Resolve<IBudgetGroupMainView>();
 			    var form = (Form)budgetMain;
-				form.Show();
 				//correct event?
 				form.FormClosed += mainFormClosed;
 				innerScopes[budgetMain] = inner;

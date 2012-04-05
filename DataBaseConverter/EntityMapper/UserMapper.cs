@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             newPerson =
                     _existingPersons.FirstOrDefault(
-                        p => (p.PermissionInformation.WindowsAuthenticationInfo.DomainName.ToUpperInvariant() == oldEntity.LoginDomain.ToUpperInvariant() &&
-                              p.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant() == oldEntity.LoginName.ToUpperInvariant()) ||
-                             (p.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant() ==
+                        p => ((p.WindowsAuthenticationInfo != null && p.WindowsAuthenticationInfo.DomainName.ToUpperInvariant() == oldEntity.LoginDomain.ToUpperInvariant()) &&
+                               p.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant() == oldEntity.LoginName.ToUpperInvariant()) ||
+                             (p.ApplicationAuthenticationInfo != null && p.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant() ==
                               oldEntity.LoginName.ToUpperInvariant() &&
                               string.IsNullOrEmpty(oldEntity.LoginDomain)));
             if (newPerson == null)
@@ -81,13 +81,13 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             appAuthInfo.ApplicationLogOnName = oldEntity.LoginName;
             //TODO: convert old password
             appAuthInfo.Password = oldEntity.LoginName;
-            newPerson.PermissionInformation.ApplicationAuthenticationInfo = appAuthInfo;
+            newPerson.ApplicationAuthenticationInfo = appAuthInfo;
             if (!String.IsNullOrEmpty(oldEntity.LoginDomain))
             {
                 WindowsAuthenticationInfo winAuthInfo = new WindowsAuthenticationInfo();
                 winAuthInfo.WindowsLogOnName = oldEntity.LoginName;
                 winAuthInfo.DomainName = oldEntity.LoginDomain;
-                newPerson.PermissionInformation.WindowsAuthenticationInfo = winAuthInfo;
+                newPerson.WindowsAuthenticationInfo = winAuthInfo;
             }
 
             if (oldEntity.IsAdmin)

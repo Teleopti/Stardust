@@ -254,6 +254,8 @@
     <Compile Include="Budgeting\AddShrinkageForm.Designer.cs">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Budgeting\Events\BudgetGroupNeedsRefresh.cs" />
+    <Compile Include="Budgeting\Events\BudgetGroupTreeNeedsRefresh.cs" />
     <Compile Include="Budgeting\SetEfficiencyShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1136,6 +1138,13 @@
     </Compile>
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\RequestHistoryModule.cs" />
+    <Compile Include="Scheduling\RequestHistoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\RequestHistoryView.Designer.cs">
+      <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SchedulerNavigator.cs">
       <SubType>UserControl</SubType>
@@ -2607,6 +2616,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
+      <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IChangePasswordView view;
         private IOneWayEncryption oneWayEncryption;
         private IApplicationAuthenticationInfo applicationAuthenticationInfo;
-        private IPermissionInformation permissionInformation;
         private IPasswordPolicy passwordPolicy;
         private IPersonRepository personRepository;
 
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             view = mocks.StrictMock<IChangePasswordView>();
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             oneWayEncryption = mocks.StrictMock<IOneWayEncryption>();
-            permissionInformation = mocks.StrictMock<IPermissionInformation>();
             applicationAuthenticationInfo = mocks.StrictMock<IApplicationAuthenticationInfo>();
             personRepository = mocks.StrictMock<IPersonRepository>();
             target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption);
@@ -51,8 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
             Expect.Call(personRepository.Get(personId)).Return(person);
-            Expect.Call(person.PermissionInformation).Return(permissionInformation);
-            Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+            Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
             Expect.Call(applicationAuthenticationInfo.Password).Return("currentEncryptedPassword");
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(view.SetInputFocus);
@@ -139,8 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 target.Model.ConfirmPassword = "newNotEncryptedPassword2";
                 target.Save();
                 Assert.AreEqual("newNotEncryptedPassword2",
-                                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.
-                                    PermissionInformation.ApplicationAuthenticationInfo.Password);
+                                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo.Password);
             }
         }
 

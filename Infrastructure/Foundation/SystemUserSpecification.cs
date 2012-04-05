@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         public override bool IsSatisfiedBy(IPerson obj)
         {
             return obj != null &&
-                   obj.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName == SuperUser.UserName;
+                 obj.ApplicationAuthenticationInfo != null &&
+                   obj.ApplicationAuthenticationInfo.ApplicationLogOnName == SuperUser.UserName;
         }
     }
 }

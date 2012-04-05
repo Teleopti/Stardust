@@ -242,6 +242,7 @@
     <Compile Include="Repositories\DenormalizerQueueRepository.cs" />
     <Compile Include="Repositories\IDenormalizerQueueRepository.cs" />
     <Compile Include="Repositories\IScheduleProjectionReadOnlyRepository.cs" />
+    <Compile Include="Repositories\RequestHistoryReadOnlyRepository.cs" />
     <Compile Include="Repositories\PersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\ScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepository.cs" />

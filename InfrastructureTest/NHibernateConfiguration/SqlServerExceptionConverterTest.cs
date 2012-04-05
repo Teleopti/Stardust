@@ -4,6 +4,7 @@ using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -44,8 +45,8 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		private static void addLogonInfo(IPerson person)
 		{
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
-			person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "a";
-			person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "b";
+		    person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+		                                               {ApplicationLogOnName = "a", Password = "b"};
 		}
 
 		[Test]

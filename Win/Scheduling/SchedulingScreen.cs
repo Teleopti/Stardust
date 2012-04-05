@@ -2774,6 +2774,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void pasteShiftFromShiftsSwitch()
         {
             switch (_controlType)
@@ -2792,9 +2793,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                         return;
 
                     var part = (IScheduleDay) _schedulerState.Schedules[lst[0].Person].ReFetch(lst[0]).Clone();
+                    
                     part.Clear<IScheduleData>();
                     IMainShift mainShift = workShift.ToMainShift(part.DateOnlyAsPeriod.DateOnly,
                                                                  part.Person.PermissionInformation.DefaultTimeZone());
+                   
+                    foreach (var cat in
+                        _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
+                    {
+                        mainShift.ShiftCategory = cat;
+                    }
+                    
                     part.AddMainShift(mainShift);
                     _clipHandlerSchedule.Clear();
                     _clipHandlerSchedule.AddClip(0, 0, part);
@@ -3187,7 +3196,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
 
             if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
+            {
+                Refresh();
                 return;
+            }
 
             disableAllExceptCancelInRibbon();
 
@@ -8454,6 +8466,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var allowanceView = new RequestAllowanceView(defaultRequest, new DateOnly(_defaultFilterDate));
                 allowanceView.Show(this);
             }
+        }
+
+        private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
+        {
+            var id = new Guid();
+            var defaultRequest = _requestView.SelectedAdapters().Count > 0
+                                     ? _requestView.SelectedAdapters().First().PersonRequest
+                                     : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+            if (defaultRequest != null)
+                id = defaultRequest.Person.Id.Value;
+
+            var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();
+            presenter.ShowHistory(id, _schedulerState.FilteredPersonDictionary.Values);
         }
 
         private void toolStripExTags_SizeChanged(object sender, EventArgs e)

@@ -1,5 +1,7 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Interfaces.Domain;
@@ -20,24 +22,23 @@ namespace Teleopti.Ccc.WinCode.Budgeting
 
 		public BudgetGroupRootModel GetBudgetRootModels()
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				var root = new BudgetGroupRootModel();
-				var budgetGroups = _budgetGroupRepository.LoadAll();
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var root = new BudgetGroupRootModel();
 
-				foreach (var budgetGroup in budgetGroups)
-				{
-					var groupModel = new BudgetGroupModel(budgetGroup);
-					foreach (var skill in budgetGroup.SkillCollection)
-					{
+                var budgetGroups = _budgetGroupRepository.LoadAll();
+                foreach (var budgetGroup in budgetGroups)
+                {
+                    var groupModel = new BudgetGroupModel(budgetGroup);
+                    foreach (var skill in budgetGroup.SkillCollection)
+                    {
                         if (skill is IMultisiteSkill) continue;
-						groupModel.SkillModels.Add(new SkillModel(skill));
-					}
-					root.BudgetGroups.Add(groupModel);
-				}
-
-				return root;
-			}
+                        groupModel.SkillModels.Add(new SkillModel(skill));
+                    }
+                    root.BudgetGroups.Add(groupModel);
+                }
+                return root;
+            }
 		}
 
 		public void DeleteBudgetGroup(IBudgetGroup budgetGroup)
@@ -54,7 +55,18 @@ namespace Teleopti.Ccc.WinCode.Budgeting
 			if (budgetGroup == null) throw new ArgumentNullException("budgetGroup");
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				return _budgetGroupRepository.Get(budgetGroup.Id.GetValueOrDefault(Guid.Empty));
+                var bg = _budgetGroupRepository.Get(budgetGroup.Id.GetValueOrDefault(Guid.Empty));
+                if (!LazyLoadingManager.IsInitialized(bg.CustomShrinkages))
+                {
+                    LazyLoadingManager.Initialize(bg.CustomShrinkages);
+                    bg.CustomShrinkages.ForEach(LazyLoadingManager.Initialize);
+                }
+                if (!LazyLoadingManager.IsInitialized(bg.CustomEfficiencyShrinkages))
+                {
+                    LazyLoadingManager.Initialize(bg.CustomEfficiencyShrinkages);
+                    bg.CustomEfficiencyShrinkages.ForEach(LazyLoadingManager.Initialize);
+                }
+			    return bg;
 			}
 		}
 	}
