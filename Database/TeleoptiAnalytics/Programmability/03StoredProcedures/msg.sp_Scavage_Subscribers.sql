@@ -7,7 +7,7 @@ CREATE PROCEDURE [msg].[sp_Scavage_Subscribers]
 (@SCAVAGE_DATETIME_WINDOW DATETIME)
 AS
 /*
-declare @d smalldatetime
+declare @d datetime
 select @d= dateadd(minute,-3,getdate())
 select @d
 exec [msg].[sp_Scavage_Subscribers] @d
@@ -15,7 +15,7 @@ exec [msg].[sp_Scavage_Subscribers] @d
 BEGIN
 --Reset input to SQL Server time
 SELECT
-	@SCAVAGE_DATETIME_WINDOW = ISNULL(DATEADD(MILLISECOND,-CAST(ConfigurationValue as int),GETUTCDATE()),180000)
+	@SCAVAGE_DATETIME_WINDOW = ISNULL(DATEADD(MILLISECOND,-CAST(ConfigurationValue as int),GETDATE()),180000)
 FROM msg.configuration
 WHERE ConfigurationId=10 --restartTimeSpan
 
