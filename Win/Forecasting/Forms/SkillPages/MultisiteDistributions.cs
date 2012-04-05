@@ -199,23 +199,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         {
             if (!gridSubSkills.CellModels.ContainsKey("MultiSitePercentCell"))
             {
+                
                 int childCount = skill.ChildSkills.Count;
                 if (childCount == 0) return;
                 gridSubSkills.CellModels.Add("MultiSitePercentCell", initializeMultiSitePercentCell());
                 gridSubSkills.CellModels.Add("PercentReadOnly", initializePercentReadOnlyCell());
                 gridSubSkills.RowCount = childCount + 1;
-
+                
                 double sum = 0d;
                 int i = 0;
 
                 gridSubSkills[i, 1].Text = UserTexts.Resources.Name;
+                gridSubSkills[i, 1].ReadOnly = true;
                 gridSubSkills[i, 2].Text = UserTexts.Resources.Percentage;
+                gridSubSkills[i, 2].ReadOnly = true;
 
                 double[] percent = MultisiteHelper.CalculateLowVarianceDistribution(100, childCount, 2);
 
                 for (i = 1; i <= childCount; i++)
                 {
-                    gridSubSkills[i, 1].CellType = "Static";
+                    gridSubSkills[i, 1].CellType = "Header";
                     gridSubSkills[i, 1].Text = skill.ChildSkills[i - 1].Name;
                     gridSubSkills[i, 1].ReadOnly = true;
 
@@ -224,7 +227,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                     gridSubSkills[i, 2].Tag = skill.ChildSkills[i - 1].Id.Value;
                     sum += percent[i - 1];
                 }
-                gridSubSkills[i, 1].CellType = "Static";
+                gridSubSkills[i, 1].CellType = "Header";
                 gridSubSkills[i, 1].Text = UserTexts.Resources.Total;
                 gridSubSkills[i, 1].ReadOnly = true;
 
