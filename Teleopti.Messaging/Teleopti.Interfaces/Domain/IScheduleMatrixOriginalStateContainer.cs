@@ -37,13 +37,13 @@ namespace Teleopti.Interfaces.Domain
         /// Counts the changed day off days in a schedule matrix.
         /// </summary>
         /// <returns></returns>
-        int CountChangedDayOffs();
+        double ChangedDayOffsPercent();
 
         /// <summary>
         /// Counts the changed workshifts in a schedule matrix.
         /// </summary>
         /// <returns></returns>
-        int CountChangedWorkShifts();
+        double ChangedWorkShiftsPercent();
 
         /// <summary>
         /// Is the workshift changed.

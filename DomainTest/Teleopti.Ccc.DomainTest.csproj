@@ -281,7 +281,6 @@
     <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
-    <Compile Include="Optimization\OptimizationOverLimitByMovedDaysDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />

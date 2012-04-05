@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixPro _matrix;
         private readonly IScheduleDayEquator _scheduleDayEquator;
         private readonly IDictionary<DateOnly, IScheduleDay> _oldPeriodDaysState;
+        private int _originalNumberOfDaysOff;
+        private int _originalNumberOfWorkShifts;
         public bool StillAlive { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -20,7 +22,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             _oldPeriodDaysState = new Dictionary<DateOnly, IScheduleDay>();
             foreach (IScheduleDayPro scheduleDayPro in matrix.EffectivePeriodDays)
             {
-                _oldPeriodDaysState.Add(scheduleDayPro.Day, (IScheduleDay)scheduleDayPro.DaySchedulePart().Clone());
+                var scheduleDay = (IScheduleDay) scheduleDayPro.DaySchedulePart().Clone();
+                var significantPart = scheduleDay.SignificantPart();
+
+                if (significantPart == SchedulePartView.DayOff)
+                    _originalNumberOfDaysOff++;
+                if (significantPart == SchedulePartView.MainShift)
+                    _originalNumberOfWorkShifts++;
+
+                _oldPeriodDaysState.Add(scheduleDayPro.Day, scheduleDay);
             }
             StillAlive = true;
 
@@ -48,30 +58,38 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 
-        public int CountChangedDayOffs()
+        public double ChangedDayOffsPercent()
         {
-            int result = 0;
+            int changedDaysOff = 0;
             foreach (IScheduleDayPro day in _matrix.EffectivePeriodDays)
             {
                 DateOnly key = day.Day;
                 IScheduleDay originalDay = OldPeriodDaysState[key];
                 IScheduleDay currentDay = day.DaySchedulePart();
                 if (!_scheduleDayEquator.DayOffEquals(originalDay, currentDay))
-                    result++;
+                    changedDaysOff++;
             }
-            return result;
+
+            if (_originalNumberOfDaysOff == 0)
+                return 0;
+
+            return (double)changedDaysOff/_originalNumberOfDaysOff;
         }
 
-        public int CountChangedWorkShifts()
+        public double ChangedWorkShiftsPercent()
         {
-            int result = 0;
+            int changedWorkShifts = 0;
             foreach (IScheduleDayPro day in _matrix.EffectivePeriodDays)
             {
                 DateOnly key = day.Day;
                 if (WorkShiftChanged(key))
-                    result++;
+                    changedWorkShifts++;
             }
-            return result;
+
+            if (_originalNumberOfWorkShifts == 0)
+                return 0;
+
+            return (double)changedWorkShifts/_originalNumberOfWorkShifts;
         }
 
         public bool WorkShiftChanged(DateOnly dateOnly)

@@ -41,21 +41,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool MoveMaxDaysOverLimit()
         {
-            if (!_optimizationPreferences.Extra.KeepShifts)
+            if (!_optimizationPreferences.Extra.KeepShifts && _optimizationPreferences.DaysOff.UseKeepExistingDaysOff)
                 return false;
 
-            int changedDaysOff = _originalStateContainer.CountChangedDayOffs();
-            int changedWorkShifts = _originalStateContainer.CountChangedWorkShifts();
-            int numberOfDays = _originalStateContainer.ScheduleMatrix.EffectivePeriodDays.Count;
-            int movedDays = changedDaysOff + changedWorkShifts;
+            if (_optimizationPreferences.Extra.KeepShifts && _optimizationPreferences.Extra.KeepShiftsValue > 1 - _originalStateContainer.ChangedWorkShiftsPercent())
+                return true;
 
-            if (numberOfDays == 0)
-                return false;
+            if (_optimizationPreferences.DaysOff.UseKeepExistingDaysOff && _optimizationPreferences.Extra.KeepShiftsValue > 1 - _originalStateContainer.ChangedDayOffsPercent())
+                return true;
 
-            double movedPercent = (double)movedDays / numberOfDays;
-            double keepPercent = 1 - movedPercent;
-
-            return keepPercent < _optimizationPreferences.Extra.KeepShiftsValue;
+            return false;
         }
 
         private IList<DateOnly> preferencesOverLimit()
