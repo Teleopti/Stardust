@@ -139,7 +139,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public DateTime StartDateAsDateTime()
 		{
-			return XmlConvert.ToDateTime(StartDate, XmlDateTimeSerializationMode.Unspecified);
+			return Subscription.AsDateTime(StartDate);
 		}
 
 		/// <summary>
@@ -148,7 +148,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public DateTime EndDateAsDateTime()
 		{
-			return XmlConvert.ToDateTime(EndDate, XmlDateTimeSerializationMode.Unspecified);
+			return Subscription.AsDateTime(EndDate);
 		}
 
 		/// <summary>
