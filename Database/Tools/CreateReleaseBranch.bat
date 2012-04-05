@@ -1,3 +1,4 @@
+:: Put this bat file elsewhere
 :: Creates a new release branch in the source repository
 @ECHO off
 
@@ -29,7 +30,6 @@ hg pull
 hg update default
 hg branch %releaseBranchName%
 hg ci -m "Creating release %SYSTEMVERSION%"
-hg tag "Starting %SYSTEMVERSION%" -r %releaseBranchName%
 hg update default
 ::hg push
 
