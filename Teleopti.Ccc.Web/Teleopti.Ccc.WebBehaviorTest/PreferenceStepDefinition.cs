@@ -274,6 +274,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			cell.InnerHtml.Should().Contain("No available shifts");
 		}
 
+		[Then(@"I should see the preference feedback")]
+		public void ThenIShouldSeeThePreferenceFeedback()
+		{
+			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var cell = _page.CalendarCellForDate(date);
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
+
+			startTimeDiv.InnerHtml.Should().Not.Be.Empty();
+			endTimeDiv.InnerHtml.Should().Not.Be.Empty();
+			contractTimeDiv.InnerHtml.Should().Not.Be.Empty();
+		}
+
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{

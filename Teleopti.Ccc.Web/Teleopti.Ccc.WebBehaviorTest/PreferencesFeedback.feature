@@ -105,7 +105,6 @@ Scenario: Feedback for a day with work time limitation availability
 
 Scenario: Feedback for a day with availability and preference
 	Given I am an agent
-	Given I am an agent
 	And I have a shift bag with two categories with shift start from 8 to 10 and from 12 to 14 and end from 16 to 18 and from 12 to 20
 	And I have preference for the first category today
 	And I have a availabilty with earliest start time at 9
@@ -124,9 +123,17 @@ Scenario: Feedback for a day with a schedule, preference and availability
 	Then I should see my shift
 
 Scenario: Feedback from conflicting preferences and availability
-Given I am an agent
-And I have a shift bag
-And I have a conflicting preference and availability today
-When I view preferences
-Then I should see that there are no available shifts
+	Given I am an agent
+	And I have a shift bag
+	And I have a conflicting preference and availability today
+	When I view preferences
+	Then I should see that there are no available shifts
 
+Scenario: Feedback from an added preference
+	Given I am an agent
+	And I have an open workflow control set with an allowed standard preference
+	And I have a shift bag
+	And I am viewing preferences
+	When I select an editable day without preference
+	And I select a standard preference
+	Then I should see the preference feedback

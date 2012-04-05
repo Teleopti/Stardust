@@ -682,7 +682,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			result.DayViewModel(data.SelectedDate).Preference.ValidationError.Should().Be.EqualTo(UserTexts.Resources.NoAvailableShifts);
+			result.DayViewModel(data.SelectedDate).Preference.FeedbackError.Should().Be.EqualTo(UserTexts.Resources.NoAvailableShifts);
 		}
 
 		[Test]

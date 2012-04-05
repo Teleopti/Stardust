@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                             	  "-" +
 				                                                             	  s.WorkTimeMinMax.WorkTimeLimitation.
 				                                                             	  	EndTimeString))
-				.ForMember(d => d.ValidationError,
+				.ForMember(d => d.FeedbackError,
 				           o => o.MapFrom(s => s.WorkTimeMinMax == null ? UserTexts.Resources.NoAvailableShifts : ""))
 				;
 

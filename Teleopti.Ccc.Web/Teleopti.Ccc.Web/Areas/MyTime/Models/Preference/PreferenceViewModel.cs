@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string PossibleStartTimes { get; set; }
 		public string PossibleEndTimes { get; set; }
 		public string PossibleContractTimes { get; set; }
-		public string ValidationError{ get; set; }
+		public string FeedbackError { get; set; }
 	}
 
 	public class PersonAssignmentDayViewModel

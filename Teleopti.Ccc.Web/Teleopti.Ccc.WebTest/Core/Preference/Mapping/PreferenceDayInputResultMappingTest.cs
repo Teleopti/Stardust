@@ -1,13 +1,18 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
@@ -15,15 +20,82 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 	[TestFixture]
 	public class PreferenceDayInputResultMappingTest
 	{
+		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
+
 		[SetUp]
 		public void Setup()
 		{
+			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
+
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDayInputResultMappingProfile()));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceDayInputResultMappingProfile(Depend.On(preferenceFeedbackProvider))));
 		}
 
 		[Test]
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
+
+		[Test]
+		public void ShouldMapPossibleStartTimes()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction
+			                                                                    	{
+			                                                                    		Absence = new Absence()
+			                                                                    	});
+			var workTimeMinMax = new WorkTimeMinMax(){StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10))};
+
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.PossibleStartTimes.Should().Be.EqualTo(workTimeMinMax.StartTimeLimitation.StartTimeString + "-" +
+			                                              workTimeMinMax.StartTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapPossibleEndTimes()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction
+			                                                                    	{
+			                                                                    		Absence = new Absence()
+			                                                                    	});
+			var workTimeMinMax = new WorkTimeMinMax() { EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(18), TimeSpan.FromHours(19)) };
+
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.PossibleEndTimes.Should().Be.EqualTo(workTimeMinMax.EndTimeLimitation.StartTimeString + "-" +
+														  workTimeMinMax.EndTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapPossibleContractTimes()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction
+			                                                                    	{
+			                                                                    		Absence = new Absence()
+			                                                                    	});
+			var workTimeMinMax = new WorkTimeMinMax() { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10)) };
+
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.PossibleContractTimes.Should().Be.EqualTo(workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" +
+														  workTimeMinMax.WorkTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapFeedbackError()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
+
+			result.FeedbackError.Should().Be(Resources.NoAvailableShifts);
+		}
+
+
 
 		[Test]
 		public void ShouldMapDate()
@@ -110,6 +182,5 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			result.StyleClassName
 				.Should().Be(Color.Thistle.ToStyleClass());
 		}
-
 	}
 }

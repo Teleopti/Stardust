@@ -85,11 +85,22 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				},
 				data: data,
 				success: function(data, textStatus, jqXHR) {
-					var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
-				preference.text(data.PreferenceRestriction || "");
 					var cell = $('li[data-mytime-date="' + data.Date + '"]');
 					cell.removeClassStartingWith('color_');
 					cell.addClass(data.StyleClassName);
+					
+					var preference = $('.preference', cell);
+					preference.text(data.PreferenceRestriction || "");
+
+					var error = $('.error', cell);
+					error.text(data.FeedbackError || "");
+					
+					var possibleStartTimes = $('.possible-start-times', cell);
+					possibleStartTimes.text(data.PossibleStartTimes || "");
+					var possibleEndTimes = $('.possible-end-times', cell);
+					possibleEndTimes.text(data.PossibleEndTimes || "");
+					var possibleContractTimes = $('.possible-contract-times', cell);
+					possibleContractTimes.text(data.PossibleContractTimes || "");
 				},
 				statusCode404: statusCode404,
 				error: function(jqXHR, textStatus, errorThrown) {
