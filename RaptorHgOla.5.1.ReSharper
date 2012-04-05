@@ -1,6 +1,0 @@
-<Configuration>
-  <CodeStyleSettings>
-    <ExternalPath>..\ProjectSetting\resharperNaming.xml</ExternalPath>
-    <Sharing>EXTERNAL</Sharing>
-  </CodeStyleSettings>
-</Configuration>
