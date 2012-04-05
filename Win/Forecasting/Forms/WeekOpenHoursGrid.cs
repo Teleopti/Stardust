@@ -47,15 +47,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void WeekOpenHoursGrid_KeyDown(object sender, KeyEventArgs e)
         {
-            // Testcode for testing wtf is wrong with turning of Row/Col -Headers.
-            //if (e.KeyCode == Keys.F12)
-            //{
-            //    this.Properties.RowHeaders = !this.Properties.RowHeaders;
-            //    this.Properties.ColHeaders= !this.Properties.ColHeaders;
-            //    e.Handled = true;
-            //}
             GridHelper.HandleSelectionKeys(this, e);
-            //e.Handled = true;
         }
 
         private void WeekOpenHoursGrid_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
@@ -196,19 +188,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
         }
 
-
-        //protected override bool ProcessDialogKey(Keys key)
-        //{
-        //    if (key == Keys.Tab)
-        //    {
-        //        Form owningForm = FindParentForm();
-        //        owningForm.SelectNextControl(this, true, true, true, true);
-        //        return true;
-        //    }
-        //    return base.ProcessDialogKey(key);
-        //}
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
         private void AddOpenHour(int row, TimePeriod period)
         {
@@ -262,10 +241,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             this[0, 0].CellType = "Header";
             this[0, 0].Text = UserTexts.Resources.WeekDay;
-
+            this[0, 0].ReadOnly = true;
             this[0, 1].CellType = "Header";
             this[0, 1].Text = UserTexts.Resources.OpenHours;
-
+            this[0, 1].ReadOnly = true;
             int cellCount = 1;
 
             foreach (DayOfWeek weekDay in _weekDays)
@@ -287,6 +266,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
                 this[cellCount, 0].CellType = "Header";
                 this[cellCount, 0].Text = StringHelper.Capitalize(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(weekDay));
+                this[cellCount, 0].ReadOnly = true;
                 cellCount++;
             }
             ColWidths.ResizeToFit(GridRangeInfo.Cols(0, 0));
