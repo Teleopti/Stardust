@@ -2481,6 +2481,9 @@
     <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryView.resx">
       <DependentUpon>JobHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
+      <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>
     </EmbeddedResource>
