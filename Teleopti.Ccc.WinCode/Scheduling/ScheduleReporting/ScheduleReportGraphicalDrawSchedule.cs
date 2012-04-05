@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
@@ -17,8 +20,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 		private readonly IScheduleDay _part;
 		private readonly bool _rightToLeft;
 		private const int PaddingToSchedule = 5;
+	    private readonly bool _publicNote;
+	    private readonly CultureInfo _cultureInfo;
+        private readonly PdfSolidBrush _brush;
+        private const int RowSpace = 2;
 
-		public ScheduleReportGraphicalDrawSchedule(PdfPage page, int left, int noteWidth, int top, IScheduleDay part, bool rightToLeft)
+		public ScheduleReportGraphicalDrawSchedule(PdfPage page, int left, int noteWidth, int top, IScheduleDay part, bool rightToLeft, bool publicNote, CultureInfo cultureInfo)
 		{
 			_page = page;
 			_left = left;
@@ -26,17 +33,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			_top = top;
 			_part = part;
 			_rightToLeft = rightToLeft;
+		    _publicNote = publicNote;
+		    _cultureInfo = cultureInfo;
+            _brush = new PdfSolidBrush(Color.DimGray);
 		}
 
-		public float Draw(DateTimePeriod timelinePeriod)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public float Draw(DateTimePeriod timelinePeriod)
 		{
 			var pageWidth = _page.GetClientSize().Width;
-			var width = (int)pageWidth - _left - _noteWidth;
+		    var publicNoteWidth = (int) pageWidth - _left;
+		    var scheduleWidth = publicNoteWidth - _noteWidth;
 
 			if (_rightToLeft)
-				_left = (int)(pageWidth - _left - width);
+                _left = (int)(pageWidth - _left - scheduleWidth);
 
-			var projectionRectangle = new Rectangle(_left, _top, width, ScheduleHeight);
+            var projectionRectangle = new Rectangle(_left, _top, scheduleWidth, ScheduleHeight);
 			var layerCollection = _part.ProjectionService().CreateProjection();
 
 			IList<Rectangle> rectangles = new List<Rectangle>();
@@ -64,7 +76,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             DrawHourLines(rectangles, projectionRectangle, timelinePeriod);
 			DrawNoteField(projectionRectangle, (int)pageWidth);
 
-			return _top + ScheduleHeight;
+		    var top = _top + ScheduleHeight;
+
+            if (_publicNote)
+            {
+                var note = _part.PublicNoteCollection().FirstOrDefault();
+                var noteString = note != null ? note.GetScheduleNote(new NoFormatting()) : string.Empty;
+                if (noteString.Length > 0) top = DrawPublicNote(noteString, publicNoteWidth);
+            }
+
+		    return top;
 		}
 
 		private static PdfLinearGradientBrush GradientBrush(Rectangle destinationRectangle, Color color)
@@ -175,5 +196,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				_page.Graphics.DrawLine(pen, p1, p2);	
 			}
 		}
+
+        private int DrawPublicNote(string note, int width)
+        {
+			var format = new PdfStringFormat { RightToLeft = _rightToLeft, WordWrap = PdfWordWrapType.None };
+			const float fontSize = 9f;
+			var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, _cultureInfo);
+            var stringWidthHandler = new StringWidthHandler(font, width);
+            var lines = stringWidthHandler.WordWrap(note);
+            var top = _top + ScheduleHeight;
+
+            for (var i = 0; i < lines.Count(); i++)
+            {
+                var line = lines[i];
+                _page.Graphics.DrawString(line, font, _brush, new RectangleF(_left, top + RowSpace, width, font.Height + RowSpace), format);
+                top = (int)(top + font.Height + RowSpace);
+            }
+
+            return top;
+        }
 	}
 }

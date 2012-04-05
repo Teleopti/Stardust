@@ -35,6 +35,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			_presenter.OnCheckBoxSingleFileCheckedChanged(checkBoxSingleFile.Checked);
 		}
 
+        private void CheckBoxPublicNoteCheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.OnCheckBoxShowPublicNoteCheckedChanged(checkBoxPublicNote.Checked);
+        }
+
 		private void RadioButtonAgentNameCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonSortOnAgentNameCheckedChanged(radioButtonAgentName.Checked);
@@ -92,6 +97,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			checkBoxSingleFile.Enabled = enabled;
 		}
 
+        public void EnableShowPublicNote(bool enabled)
+        {
+            checkBoxPublicNote.Enabled = enabled;
+        }
+
 		public void UpdateFromModel(ScheduleReportDialogGraphicalModel model)
 		{
 			if (model == null)
@@ -100,6 +110,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			radioButtonTeam.Checked = model.Team;
 			radioButtonIndividual.Checked = model.Individual;
 			checkBoxSingleFile.Checked = model.OneFileForSelected;
+		    checkBoxPublicNote.Checked = model.ShowPublicNote;
 
 			radioButtonAgentName.Checked = model.SortOnAgentName;
 			radioButtonStartTime.Checked = model.SortOnStartTime;
@@ -107,6 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
 			EnableSortOptions(model.Team);
 			EnableSingleFile(model.Individual);
+            EnableShowPublicNote(model.Team);
 		}
 	}
 }

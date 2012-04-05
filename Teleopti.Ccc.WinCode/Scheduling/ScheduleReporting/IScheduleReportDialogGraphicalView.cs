@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 		Color BackgroundColor { get; set; }
 		void EnableSortOptions(bool enabled);
 		void EnableSingleFile(bool enabled);
+	    void EnableShowPublicNote(bool enabled);
 		void UpdateFromModel(ScheduleReportDialogGraphicalModel model);
 	}
 }

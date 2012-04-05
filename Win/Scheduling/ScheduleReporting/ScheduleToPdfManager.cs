@@ -86,12 +86,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 		}
 
 		public static void ExportShiftsPerDay(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
-            DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, string path)
+            DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, bool publicNote, Control owner, string path)
         {
             var shiftsPerDayToPdfManager = new ShiftsPerDayToPdfManager();
-            PdfDocument doc = shiftsPerDayToPdfManager.Export(timeZoneInfo, culture, persons,
-                                                              period, stateHolder,
-                                                              rightToLeft, details);
+            PdfDocument doc = shiftsPerDayToPdfManager.Export(timeZoneInfo, culture, persons, period, stateHolder, rightToLeft, details, publicNote);
             openDocument(doc, owner, path);
 
         }
