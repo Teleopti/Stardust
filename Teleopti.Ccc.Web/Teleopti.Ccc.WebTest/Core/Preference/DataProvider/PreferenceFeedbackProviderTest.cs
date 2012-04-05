@@ -19,14 +19,17 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.DataProvider
 		public void ShouldReturnWorkTimeMinMaxForDate()
 		{
 			var workTimeMinMaxCalculator = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var workTimeMinMax = new WorkTimeMinMax();
+			var person = new Person();
 
-			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(scheduleDay)).Return(workTimeMinMax);
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, person, scheduleDay)).Return(workTimeMinMax);
 
-			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator);
+			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, loggedOnUser);
 
-			var result = target.WorkTimeMinMaxForDate(scheduleDay);
+			var result = target.WorkTimeMinMaxForDate(DateOnly.Today, scheduleDay);
 
 			result.Should().Be(workTimeMinMax);
 		}

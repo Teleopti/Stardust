@@ -128,9 +128,11 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 		{
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 			var workTimeMinMax = new WorkTimeMinMax();
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
 
 			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(workTimeMinMax);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today, scheduleDay)).Return(workTimeMinMax);
 
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 

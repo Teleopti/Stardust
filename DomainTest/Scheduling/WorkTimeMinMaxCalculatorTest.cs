@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
 
-			var result = target.WorkTimeMinMax(scheduleDay);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 
 			result.Should().Be.EqualTo(workTimeMineMax);
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
 
-			var result = target.WorkTimeMinMax(scheduleDay);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 
 			result.Should().Be.Null();
 		}
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
 
-			var result = target.WorkTimeMinMax(scheduleDay);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 
 			result.Should().Be.Null();
 		}

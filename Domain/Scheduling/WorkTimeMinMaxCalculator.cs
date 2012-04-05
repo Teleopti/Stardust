@@ -19,11 +19,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMax(IScheduleDay scheduleDay)
+		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
 		{
-			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var person = scheduleDay.Person;
-
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				return null;
