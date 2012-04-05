@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I sign in using my new password")]
 		public void WhenISignInUsingMyNewPassword()
 		{
-			var userName = UserFactory.User().Person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			var signInpage = Browser.Current.Page<SignInPage>();
 			signInpage.SignInApplication(userName, newPassword);
 		}

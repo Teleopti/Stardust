@@ -43,3 +43,71 @@ CREATE NONCLUSTERED INDEX [IX_PersonDayOff_Scenario_BU_Anchor]
 ON [dbo].[PersonDayOff] ([Scenario],[BusinessUnit],[Anchor])
 INCLUDE ([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[TargetLength],[Flexibility],[Name],[ShortName],[DisplayColor],[PayrollCode])
 GO
+--Name: Ola H
+--Date: 2012-03-29
+--Desc: Moving [ApplicationAuthenticationInfo] AND [WindowsAuthenticationInfo]
+-- from Person to own tables
+---------------- 
+CREATE TABLE [dbo].[ApplicationAuthenticationInfo](
+	[Person] [uniqueidentifier] NOT NULL,
+	[ApplicationLogOnName] [nvarchar](50) NOT NULL,
+	[Password] [nvarchar](50) NULL,
+CONSTRAINT [PK_ApplicationAuthenticationInfo] PRIMARY KEY CLUSTERED 
+(
+	[Person] ASC
+)  ,
+CONSTRAINT [UQ_ApplicationLogOnName] UNIQUE NONCLUSTERED 
+(
+	[ApplicationLogOnName] ASC
+))
+GO
+
+ALTER TABLE [dbo].[ApplicationAuthenticationInfo]  WITH CHECK ADD  CONSTRAINT [FK_ApplicationAuthenticationInfo_Person] FOREIGN KEY([Person])
+REFERENCES [dbo].[Person] ([Id])
+GO
+ALTER TABLE [dbo].[ApplicationAuthenticationInfo] CHECK CONSTRAINT [FK_ApplicationAuthenticationInfo_Person]
+GO
+
+CREATE TABLE [dbo].[WindowsAuthenticationInfo](
+	[Person] [uniqueidentifier] NOT NULL,
+	[WindowsLogOnName] [nvarchar](50) NOT NULL,
+	[DomainName] [nvarchar](50) NOT NULL,
+CONSTRAINT [PK_WindowsAuthenticationInfo] PRIMARY KEY CLUSTERED 
+(
+	[Person] ASC
+),
+CONSTRAINT [UQ_LogonNameDomain]UNIQUE NONCLUSTERED 
+(
+	[WindowsLogOnName] ASC,
+	[DomainName] ASC
+))
+
+GO
+
+ALTER TABLE [dbo].[WindowsAuthenticationInfo]  WITH CHECK ADD  CONSTRAINT [FK_WindowsAuthenticationInfo_Person] FOREIGN KEY([Person])
+REFERENCES [dbo].[Person] ([Id])
+GO
+
+ALTER TABLE [dbo].[WindowsAuthenticationInfo] CHECK CONSTRAINT [FK_WindowsAuthenticationInfo_Person]
+GO
+
+INSERT INTO [ApplicationAuthenticationInfo]
+SELECT Id, [ApplicationLogOnName],[Password] From Person
+WHERE [ApplicationLogOnName] IS NOT NULL
+AND [ApplicationLogOnName] <> ''
+
+INSERT INTO [WindowsAuthenticationInfo]
+SELECT Id, [WindowsLogOnName],[DomainName] From Person
+WHERE [WindowsLogOnName] IS NOT NULL
+AND [DomainName] IS NOT NULL 
+AND [WindowsLogOnName] <> ''
+AND [DomainName] <> ''
+
+GO
+ALTER TABLE dbo.Person
+	DROP CONSTRAINT UQ_Person_PartOfUnique
+GO
+ALTER TABLE dbo.Person
+	DROP COLUMN PartOfUnique, WindowsLogOnName, DomainName, ApplicationLogOnName, [Password]
+
+GO

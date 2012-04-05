@@ -44,13 +44,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(personUser.Id, _row0["person_code"]);
             Assert.AreEqual(personUser.Name.FirstName, _row0["person_first_name"]);
             Assert.AreEqual(personUser.Name.LastName, _row0["person_last_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName,
+            Assert.AreEqual(personUser.ApplicationAuthenticationInfo.ApplicationLogOnName,
                             _row0["application_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName,
+            Assert.AreEqual(personUser.WindowsAuthenticationInfo.WindowsLogOnName,
                             _row0["windows_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.DomainName,
+            Assert.AreEqual(personUser.WindowsAuthenticationInfo.DomainName,
                             _row0["windows_domain_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.Password, _row0["password"]);
+            Assert.AreEqual(personUser.ApplicationAuthenticationInfo.Password, _row0["password"]);
             Assert.AreEqual(personUser.Email, _row0["email"]);
             Assert.AreEqual(personUser.PermissionInformation.UICultureLCID().GetValueOrDefault(-1), _row0["language_id"]);
             Assert.AreEqual(System.DBNull.Value, _row0["language_name"]);

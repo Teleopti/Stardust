@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Interfaces.Domain;
 
@@ -96,10 +97,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 
         private static IPerson createPerson(string winLogOn, string domain, string appLogOn)
         {
-            var person = new Person();
-            person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = winLogOn;
-            person.PermissionInformation.WindowsAuthenticationInfo.DomainName = domain;
-            person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = appLogOn;
+            var person = new Person
+                             {
+                                 WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                                 {WindowsLogOnName = winLogOn, DomainName = domain}
+                             };
+
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = appLogOn};
             return person;
         }
     }

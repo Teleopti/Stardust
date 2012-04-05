@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             //Save persons
             if (!_personCreator.Save(_person))
             {
-                _person = _personCreator.FetchPerson(_person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName);
+                _person = _personCreator.FetchPerson(_person.ApplicationAuthenticationInfo.ApplicationLogOnName);
             }
         }
 
