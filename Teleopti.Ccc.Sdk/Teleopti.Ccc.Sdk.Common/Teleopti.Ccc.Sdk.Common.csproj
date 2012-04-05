@@ -148,6 +148,7 @@
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SaveAgentPortalSettingsCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\EmployPersonCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\NewMainShiftCommandDto.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="DataTransferObject\ContractDto.cs" />
     <Compile Include="DataTransferObject\ContractScheduleDto.cs" />
     <Compile Include="DataTransferObject\AgentPortalSettingsDto.cs" />
+    <Compile Include="DataTransferObject\ImportForecastsOptionsDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDetailDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDto.cs" />
     <Compile Include="DataTransferObject\GroupPageDto.cs" />

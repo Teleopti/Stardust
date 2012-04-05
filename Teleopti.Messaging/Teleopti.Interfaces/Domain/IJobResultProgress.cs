@@ -21,5 +21,10 @@ namespace Teleopti.Interfaces.Domain
         /// The id of the payroll result this is progress for.
         ///</summary>
         Guid JobResultId { get; set; }
+        
+        ///<summary>
+        /// The total percentage.
+        ///</summary>
+        int TotalPercentage { get; set; }
     }
 }
