@@ -116,6 +116,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		///</summary>
 		///<param name="dateTime"></param>
 		///<returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static DateTime AsDateTime(string dateTime)
 		{
 			return XmlConvert.ToDateTime(dateTime.Substring(1), XmlDateTimeSerializationMode.Unspecified);
