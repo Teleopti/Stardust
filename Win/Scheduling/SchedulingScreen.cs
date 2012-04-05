@@ -3133,7 +3133,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
-
+				toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
 				if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp))
 				{
 					_scheduleView.Presenter.UpdateFromEditor();
