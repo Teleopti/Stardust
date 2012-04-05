@@ -12,23 +12,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IRuleSetProjectionService _ruleSetProjectionService;
 		private readonly IEffectiveRestrictionForDisplayCreator _effectiveRestrictionCreator;
-		private readonly IScheduleRepository _scheduleRepository;
 
-		public WorkTimeMinMaxCalculator(IRuleSetProjectionService ruleSetProjectionService, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator, IScheduleRepository scheduleRepository)
+		public WorkTimeMinMaxCalculator(IRuleSetProjectionService ruleSetProjectionService, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
 		{
 			_ruleSetProjectionService = ruleSetProjectionService;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_scheduleRepository = scheduleRepository;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly scheduleDate, IScenario scenario)
+		public IWorkTimeMinMax WorkTimeMinMax(IScheduleDay scheduleDay)
 		{
-			var dateTime = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, 0, 0, 0, DateTimeKind.Utc);
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var person = scheduleDay.Person;
 
-			if (person == null)
-				throw new ArgumentNullException("person");
-
-			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(scheduleDate, scheduleDate)).SingleOrDefault();
+			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				return null;
 
@@ -37,18 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return null;
 
 			var options = new EffectiveRestrictionOptions(true, true);
-			var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}),
-			                                                                     new ScheduleDictionaryLoadOptions(true, false),
-			                                                                     new DateTimePeriod(dateTime, dateTime), scenario);
-			var scheduleDay = scheduleDictionary[person].ScheduledDay(scheduleDate);
-			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
 
-			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, scheduleDate, effectiveRestriction);
-		}
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
 
-		public IWorkTimeMinMax WorkTimeMinMax(IScheduleDay scheduleDay)
-		{
-			throw new NotImplementedException();
+			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, date, effectiveRestriction);
 		}
 	}
 }
