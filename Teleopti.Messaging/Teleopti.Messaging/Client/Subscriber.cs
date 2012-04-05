@@ -72,8 +72,16 @@ namespace Teleopti.Messaging.Client
 		/// </summary>
 		public event EventHandler<EventMessageArgs> EventMessageHandler
 		{
-			add { _protocol.EventMessageHandler += value; }
-			remove { _protocol.EventMessageHandler -= value; }
+			add
+			{
+				if (_protocol != null)
+					_protocol.EventMessageHandler += value;
+			}
+			remove
+			{
+				if (_protocol != null)
+					_protocol.EventMessageHandler -= value;
+			}
 		}
 
 		/// <summary>
@@ -81,8 +89,16 @@ namespace Teleopti.Messaging.Client
 		/// </summary>
 		public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionHandler
 		{
-			add { _protocol.UnhandledExceptionHandler += value; }
-			remove { _protocol.UnhandledExceptionHandler -= value; }
+			add
+			{
+				if (_protocol!=null)
+					_protocol.UnhandledExceptionHandler += value;
+			}
+			remove
+			{
+				if (_protocol != null)
+					_protocol.UnhandledExceptionHandler -= value;
+			}
 		}
 
 		/// <summary>

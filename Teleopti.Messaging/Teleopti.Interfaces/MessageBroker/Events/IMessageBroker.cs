@@ -252,12 +252,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         void StopMessageBroker();
 
         /// <summary>
-        /// Gets or sets the subscriber.
-        /// </summary>
-        /// <value>The subscriber.</value>
-        ISubscriber Subscriber { get; set; }
-
-        /// <summary>
         /// Gets or sets the initialized.
         /// </summary>
         /// <value>The initialized.</value>

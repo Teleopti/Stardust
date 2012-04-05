@@ -363,8 +363,6 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public ISubscriber Subscriber { get; set; }
-
 		public int Initialized { get; set; }
 
 		public int RemotingPort { get; set; }
