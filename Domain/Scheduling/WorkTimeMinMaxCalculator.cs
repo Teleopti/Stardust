@@ -45,5 +45,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			return ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, scheduleDate, effectiveRestriction);
 		}
+
+		public IWorkTimeMinMax WorkTimeMinMax(IScheduleDay scheduleDay)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

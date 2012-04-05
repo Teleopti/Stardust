@@ -55,5 +55,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			result.Should().Be.EqualTo(workTimeMineMax);
 		}
+
+
+		[Test]
+		public void ShouldReturnNullIfNoPersonPeriod()
+		{
+			var person = MockRepository.GenerateMock<IPerson>();
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new List<IPersonPeriod>());
+
+			var target = new WorkTimeMinMaxCalculator(null, null, null);
+
+			var result = target.WorkTimeMinMax(person, DateOnly.Today, null);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoRuleSetBag()
+		{
+			var person = MockRepository.GenerateMock<IPerson>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
+			personPeriod.Stub(x => x.RuleSetBag).Return(null);
+
+			var target = new WorkTimeMinMaxCalculator(null, null, null);
+
+			var result = target.WorkTimeMinMax(person, DateOnly.Today, null);
+
+			result.Should().Be.Null();
+		}
+
 	}
 }

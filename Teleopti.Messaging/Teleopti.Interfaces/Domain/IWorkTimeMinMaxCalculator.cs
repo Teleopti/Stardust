@@ -16,5 +16,12 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scenario"></param>
 		/// <returns></returns>
 		IWorkTimeMinMax WorkTimeMinMax(IPerson person, DateOnly scheduleDate, IScenario scenario);
+
+		/// <summary>
+		/// Calculate the min/max work times for a schedule day
+		/// </summary>
+		/// <param name="scheduleDay"></param>
+		/// <returns></returns>
+		IWorkTimeMinMax WorkTimeMinMax(IScheduleDay scheduleDay);
 	}
 }

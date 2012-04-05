@@ -19,10 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_scenarioProvider = scenarioProvider;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMaxForDate(DateOnly date)
+		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator)
 		{
-			return _workTimeMinMaxCalculator.WorkTimeMinMax(_loggedOnUser.CurrentUser(), date,
-			                                                _scenarioProvider.DefaultScenario());
+			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
+		}
+
+		public IWorkTimeMinMax WorkTimeMinMaxForDate(IScheduleDay scheduleDay)
+		{
+			return _workTimeMinMaxCalculator.WorkTimeMinMax(scheduleDay);
 		}
 	}
 }
