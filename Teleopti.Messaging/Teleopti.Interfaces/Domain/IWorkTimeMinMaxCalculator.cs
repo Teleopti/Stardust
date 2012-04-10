@@ -15,6 +15,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="person"></param>
 		/// <param name="scheduleDay"></param>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
 		IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay);
 	}
 }
