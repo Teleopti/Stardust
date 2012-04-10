@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             var statusXml = new LicenseStatusXml();
             var status = new LicenseStatus();
             status.SetId(Guid.NewGuid());
-            status.XmlString = statusXml.XmlDocument.OuterXml;
+            status.XmlString = statusXml.GetNewStatusDocument().OuterXml;
 
             var uow = _mocks.StrictMock<IUnitOfWork>();
             var licenseStatusRep = _mocks.StrictMock<ILicenseStatusRepository>();
