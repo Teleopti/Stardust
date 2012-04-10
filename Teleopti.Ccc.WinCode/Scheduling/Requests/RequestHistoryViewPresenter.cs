@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                     Id = person.Id.Value
                 }).Cast<IRequestPerson>().ToList();
                 _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
+				_loadRequestHistoryCommand.Execute();
                 _requestHistoryView.ShowForm();
-                _loadRequestHistoryCommand.Execute();
             }
             catch (DataSourceException dataSourceException)
             {
