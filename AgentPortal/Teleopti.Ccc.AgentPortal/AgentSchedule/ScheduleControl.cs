@@ -842,5 +842,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                     break;
             }
         }
+
+        private void toolStripMenuItemShiftTradeFilter_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItemShiftTradeFilter.Checked = !toolStripMenuItemShiftTradeFilter.Checked;
+        }
     }
 }

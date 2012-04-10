@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             this.tabPageAdvWeekView = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.tabPageAdvMonthView = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
             this.tabPageAdvTeamView = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+            this.toolStripMenuItemShiftTradeFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.contextmenuStripExScheduleControl.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelSchedule.SuspendLayout();
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             this.toolStripMenuItemOpen,
             this.toolStripMenuItemNewAbsenceRequest,
             this.toolStripMenuItemNewShiftTrade,
+            this.toolStripMenuItemShiftTradeFilter,
             this.toolStripMenuItemNewTextRequest,
             this.toolStripSeparatorDelete,
             this.toolStripMenuItemDelete,
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             this.contextmenuStripExScheduleControl.Name = "contextMenuStripEx1";
             this.contextmenuStripExScheduleControl.ShowCheckMargin = true;
             this.contextmenuStripExScheduleControl.ShowImageMargin = false;
-            this.contextmenuStripExScheduleControl.Size = new System.Drawing.Size(205, 308);
+            this.contextmenuStripExScheduleControl.Size = new System.Drawing.Size(205, 330);
             this.contextmenuStripExScheduleControl.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip_ItemClick);
             // 
             // toolStripMenuItemOpen
@@ -352,6 +354,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             this.tabPageAdvTeamView.Text = "xxTeamView";
             this.tabPageAdvTeamView.ThemesEnabled = true;
             // 
+            // toolStripMenuItemShiftTradeFilter
+            // 
+            this.toolStripMenuItemShiftTradeFilter.Name = "toolStripMenuItemShiftTradeFilter";
+            this.toolStripMenuItemShiftTradeFilter.Size = new System.Drawing.Size(204, 22);
+            this.toolStripMenuItemShiftTradeFilter.Text = "xxShiftTradeFilter";
+            this.toolStripMenuItemShiftTradeFilter.Click += new System.EventHandler(this.toolStripMenuItemShiftTradeFilter_Click);
+            // 
             // ScheduleControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,5 +409,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNewShiftTrade;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNewTextRequest;
         private Teleopti.Ccc.AgentPortal.Common.Controls.CustomScheduleControl scheduleControlMain;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShiftTradeFilter;
     }
 }
