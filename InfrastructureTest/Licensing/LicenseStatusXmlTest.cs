@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -17,44 +18,48 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 		{
             _target = new LicenseStatusXml{CheckDate = new DateTime(2012,2,24), LastValidDate = new DateTime(2012,2,25),StatusOk = true};
 
-		    var xml = _target.XmlDocument;
-            _signedXml = XDocument.Parse(xml.InnerXml);
+		    var xml = _target.GetNewStatusDocument();
+
+			using (var reader = new XmlNodeReader(xml))
+			{
+				_signedXml = XDocument.Load(reader);
+			}
             _target = new LicenseStatusXml(_signedXml);
 		}
 
 		[Test]
 		public void ShouldProvideNewSignedDocument()
 		{
-            Assert.That(_target.XmlDocument.GetElementsByTagName("LicenseStatus"), Is.Not.Empty);
-            Assert.That(_target.XmlDocument.GetElementsByTagName("StatusOk")[0].InnerXml, Is.EqualTo("True"));
-            Assert.That(_target.XmlDocument.GetElementsByTagName("Signature"), Is.Not.Empty);
-            Assert.That(_target.XmlDocument.GetElementsByTagName("SignatureValue"), Is.Not.Empty);
+			var document = _target.GetNewStatusDocument();
+            Assert.That(document.GetElementsByTagName("LicenseStatus"), Is.Not.Empty);
+            Assert.That(document.GetElementsByTagName("StatusOk")[0].InnerXml, Is.EqualTo("True"));
+            Assert.That(document.GetElementsByTagName("Signature"), Is.Not.Empty);
+            Assert.That(document.GetElementsByTagName("SignatureValue"), Is.Not.Empty);
 		}
 
         [Test]
         public void ShouldBePossibleToResignDocument()
         {
-            var signNode = _target.XmlDocument.GetElementsByTagName("SignatureValue");
+            var signNode = _target.GetNewStatusDocument().GetElementsByTagName("SignatureValue");
 
-            var newSignNode = _target.XmlDocument.GetElementsByTagName("SignatureValue");
+            var newSignNode = _target.GetNewStatusDocument().GetElementsByTagName("SignatureValue");
             Assert.That(signNode[0].InnerXml, Is.EqualTo(newSignNode[0].InnerXml));
             _target.LastValidDate = new DateTime(2012,3,15);
             _target.StatusOk = false;
 
-            newSignNode = _target.XmlDocument.GetElementsByTagName("SignatureValue");
+            newSignNode = _target.GetNewStatusDocument().GetElementsByTagName("SignatureValue");
 
             Assert.That(signNode[0].InnerXml, Is.Not.EqualTo(newSignNode[0].InnerXml));
-
         }
 
         [Test]
         public void ShouldBeAbleToReadTheDocument()
         {
-
-            var status =  new LicenseStatusXml(XDocument.Parse(_target.XmlDocument.OuterXml));
-            Assert.That(status.StatusOk, Is.True);
+			using (var reader = new XmlNodeReader(_target.GetNewStatusDocument()))
+			{
+				var status = new LicenseStatusXml(XDocument.Load(reader));
+				Assert.That(status.StatusOk, Is.True);
+        	}
         }
 	}
-
-	
 }
