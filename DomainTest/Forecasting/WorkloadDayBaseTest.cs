@@ -554,7 +554,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 LastCall.Repeat.Once();
 
                 taskOwner.SetDirty();
-                LastCall.Repeat.Times(2);
+                LastCall.Repeat.Once();
 
                 taskOwner.Release();
                 LastCall.Repeat.Once();
@@ -570,6 +570,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.VerifyAll();
         }
+
+		[Test]
+		public void VerifyChangeValuesWithParentInLockedModeFromTaskPeriod()
+		{
+			MockRepository mocks = new MockRepository();
+			ITaskOwner taskOwner = mocks.StrictMock<ITaskOwner>();
+
+			using (mocks.Ordered())
+			{
+				taskOwner.Lock();
+				LastCall.Repeat.Once();
+
+				taskOwner.SetDirty();
+				LastCall.Repeat.Once();
+
+				taskOwner.Release();
+				LastCall.Repeat.Once();
+			}
+
+			mocks.ReplayAll();
+
+			_workloadDayBase.AddParent(taskOwner);
+			_workloadDayBase.Lock();
+			_workloadDayBase.TaskPeriodList[0].Tasks = 900;
+			_workloadDayBase.TaskPeriodList[0].AverageTaskTime = TimeSpan.FromSeconds(5);
+			_workloadDayBase.Release();
+
+			mocks.VerifyAll();
+		}
 
         [Test]
         public void VerifyCurrentDate()
