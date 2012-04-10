@@ -573,7 +573,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
-                _isDirty = true;
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
             }
         }
 
@@ -588,8 +592,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = false;
             }
             else
-            {
-                _isDirty = true;
+			{
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
             }
         }
 
@@ -662,8 +670,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (_initialized) OnAverageTaskTimesChanged();
             }
             else
-            {
-                _isDirty = true;
+			{
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
             }
         }
 
@@ -700,8 +712,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = false;
             }
             else
-            {
-                _isDirty = true;
+			{
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
             }
         }
 
@@ -733,12 +749,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
             }
             else
-            {
-                _isDirty = true;
-                foreach (ITaskOwner taskOwner in Parents)
-                {
-                    taskOwner.SetDirty();
-                }
+			{
+				if (!_isDirty)
+				{
+					_isDirty = true;
+					Parents.ForEach(p => p.SetDirty());
+				}
             }
         }
 
