@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		}
 
 		[Test]
-		public void ShouldTransformWindowsLogonAsEmptyString()
+		public void ShouldTransformWindowsLogOnAsEmptyString()
 		{
 			IPerson personUser = FakeData.UserFactory.CreatePersonUserWithNoWindowsAuthentication();
 			var rows = TransformPersonsToUsersRows(personUser);
@@ -82,7 +82,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		}
 
 		[Test]
-		public void ShouldTransformApplicationLogonAsEmptyString()
+		public void ShouldTransformApplicationLogOnAsEmptyString()
 		{
 			IPerson personUser = FakeData.UserFactory.CreatePersonUserWithNoApplicationAuthentication();
 			var rows = TransformPersonsToUsersRows(personUser);
