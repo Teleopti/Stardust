@@ -9,9 +9,6 @@ GO
 -- Create date: 2012-03-15
 -- Description:	Gets the old requests to show in new window from request view in scheduler
 -- Change Log
-------------------------------------------------
--- When			Who		What
--- =============================================
 CREATE PROCEDURE [ReadModel].[RequestOnPerson]
 @person uniqueidentifier,
 @start_row int,
@@ -22,6 +19,9 @@ SET NOCOUNT ON
 CREATE TABLE #result(
 	[Id] [uniqueidentifier] NOT NULL,
 	[StartDateTime] [datetime] NOT NULL,
+------------------------------------------------
+-- When			Who		What
+-- =============================================
 	[EndDateTime] [datetime] NOT NULL,
 	[FirstName] [nvarchar](100) NOT NULL,
 	[LastName] [nvarchar](100) NOT NULL,
@@ -65,12 +65,16 @@ WHERE p.Id = @person
 UNION
 
 SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNumber, RequestStatus, Subject, Message, DenyReason,
-'' , 'TRADE' as RequestType, ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber, pr.UpdatedOn 
+p3.FirstName + ' ' + p3.LastName, 
+ 'TRADE' as RequestType, ShiftTradeStatus, p2.FirstName, p2.LastName, p2.EmploymentNumber, pr.UpdatedOn 
 FROM PersonRequest pr INNER JOIN Person p
 ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
 INNER JOIN Request r ON r.Parent = pr.Id
 INNER JOIN Person p2 ON p2.Id = pr.UpdatedBy
 INNER JOIN ShiftTradeRequest tr ON tr.Request = r.Id
+INNER JOIN ShiftTradeSwapDetail d ON tr.Request = d.Parent
+INNER JOIN Person p3 ON PersonTo = p3.Id
+
 WHERE p.Id = @person
 
 

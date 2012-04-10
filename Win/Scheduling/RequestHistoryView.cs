@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public int PageSize
         {
-            get { return 50; }
+            get { return 25; }
         }
 
         public void ShowRequestDetails(string details)
@@ -70,7 +70,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxAdvPersons.ValueMember = "Id";
             comboBoxAdvPersons.DisplayMember = "Name";
             comboBoxAdvPersons.DataSource = persons;
+        	var tmp = comboBoxAdvPersons.SelectedValue;
             comboBoxAdvPersons.SelectedValue = preselectedPerson;
+			//if preselectedPerson is not present in list SelectedValue will be null, then  reset back
+			if (comboBoxAdvPersons.SelectedValue == null)
+				comboBoxAdvPersons.SelectedValue = tmp;
         }
 
         public void SetNextEnabledState(bool enabled)
