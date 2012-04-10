@@ -277,17 +277,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the preference feedback")]
 		public void ThenIShouldSeeThePreferenceFeedback()
 		{
+			if (UserFactory.User().HasSetup<StandardPreference>())
+			{
+				ScenarioContext.Current.Pending();
+				return;
+			}
+
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
 			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
 			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
 			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
 
-			startTimeDiv.InnerHtml.Should().Not.Be.Empty();
-			endTimeDiv.InnerHtml.Should().Not.Be.Empty();
-			contractTimeDiv.InnerHtml.Should().Not.Be.Empty();
+			startTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+			endTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+			contractTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
 		}
-
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{
@@ -296,8 +301,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Assert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
-			Assert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
+			EventualAssert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
 		}
 	}
 }

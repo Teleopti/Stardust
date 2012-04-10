@@ -137,3 +137,12 @@ Scenario: Feedback from an added preference
 	When I select an editable day without preference
 	And I select a standard preference
 	Then I should see the preference feedback
+	
+Scenario: Feedback from a deleted preference
+	Given I am an agent
+	And I have an open workflow control set with an allowed standard preference
+	And I have existing standard preference
+	And I am viewing preferences
+	When I select an editable day with standard preference
+	And I click the delete button
+	Then I should see the preference feedback
