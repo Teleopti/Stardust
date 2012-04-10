@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Preference.ViewModelFactory
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 {
 	[TestFixture]
 	public class PreferenceViewModelFactoryTest
@@ -25,6 +25,20 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.ViewModelFactory
 			mapper.Stub(x => x.Map<PreferenceDomainData, PreferenceViewModel>(domainData)).Return(viewModel);
 
 			var result = target.CreateViewModel(DateOnly.Today);
+
+			result.Should().Be.SameInstanceAs(viewModel);
+		}
+
+		[Test]
+		public void ShouldCreateFeedbackDayViewModelByMapping()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var target = new PreferenceViewModelFactory(mapper);
+			var viewModel = new PreferenceDayFeedbackViewModel();
+
+			mapper.Stub(x => x.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today)).Return(viewModel);
+
+			var result = target.CreateDayFeedbackViewModel(DateOnly.Today);
 
 			result.Should().Be.SameInstanceAs(viewModel);
 		}

@@ -16,6 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Ajax = (function ($) {
 
 	var _settings = {};
+	var _requests = [];
 
 	function _ajax(options) {
 
@@ -23,6 +24,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		_setupError(options);
 		_setupCache(options);
 		_setupGlobal(options);
+		_setupRequestStack(options);
 
 		$.ajax(options);
 	}
@@ -75,12 +77,42 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		options.global = options.global || false;
 	}
 
+	function _setupRequestStack(options) {
+
+		var beforeSendCallback = options.beforeSend;
+		options.beforeSend = function (jqXHR) {
+			_requests.push(jqXHR);
+			if (beforeSendCallback)
+				beforeSendCallback(jqXHR);
+		};
+
+		var completeCallback = options.complete;
+		options.complete = function (jqXHR, textStatus) {
+			var index = _requests.indexOf(jqXHR);
+			if (index > -1)
+				_requests.splice(index, 1);
+			if (completeCallback)
+				completeCallback(jqXHR, textStatus);
+		};
+
+	}
+
+	function _ajaxAbortAll() {
+		$(_requests).each(function (idx, jqXHR) {
+			jqXHR.abort();
+		});
+		_requests.length = 0;
+	}
+	
 	return {
 		Init: function (settings) {
 			_settings = settings;
 		},
 		Ajax: function (options) {
 			_ajax(options);
+		},
+		AjaxAbortAll: function () {
+			_ajaxAbortAll();
 		}
 	};
 
@@ -89,6 +121,9 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 $.extend({
 		myTimeAjax: function(options) {
 			Teleopti.MyTimeWeb.Ajax.Ajax(options);
+		},
+		myTimeAjaxAbortAll: function() {
+			Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
 		}
 	})
 	;

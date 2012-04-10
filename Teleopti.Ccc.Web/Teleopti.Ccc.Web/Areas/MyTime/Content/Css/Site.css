@@ -997,6 +997,12 @@ footer p
 	background-repeat: no-repeat;
 	background-position: center
 }
+.loading-small-f8f8f8-A1C7D3
+{
+	background-image: url(../Images/ajax-loader-small-f8f8f8-A1C7D3.gif);
+	background-repeat: no-repeat;
+	background-position: center
+}
 .arrow-down
 {
 	background-image: url(../Images/arrow-down.png);

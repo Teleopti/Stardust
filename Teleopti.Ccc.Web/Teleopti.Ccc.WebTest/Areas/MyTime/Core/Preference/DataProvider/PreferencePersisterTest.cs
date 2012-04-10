@@ -12,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Preference.DataProvider
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 {
 	[TestFixture]
 	public class PreferencePersisterTest

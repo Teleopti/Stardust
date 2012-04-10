@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		public DateOnly Date { get; set; }
 		public IPreferenceDay PreferenceDay { get; set; }
-		public IWorkTimeMinMax WorkTimeMinMax { get; set; }
 		public IScheduleDay ScheduleDay { get; set; }
 		public IVisualLayerCollection Projection { get; set; }
 	}

@@ -178,6 +178,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _loadContent(hashInfo) {
 		_disablePortalControls();
+
+		$.myTimeAjaxAbortAll();
 		$.myTimeAjax({
 			url: hashInfo.hash,
 			global: true,

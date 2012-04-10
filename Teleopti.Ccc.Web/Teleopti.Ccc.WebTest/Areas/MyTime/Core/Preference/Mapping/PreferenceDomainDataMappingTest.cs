@@ -1,24 +1,21 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Core;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
 	[TestFixture]
 	public class PreferenceDomainDataMappingTest
@@ -121,22 +118,6 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.Days.Single().PreferenceDay.Should().Be.SameInstanceAs(preferenceDay);
-		}
-
-		[Test]
-		public void ShouldMapWorkTimeMinMax()
-		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var workTimeMinMax = new WorkTimeMinMax();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
-			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today, scheduleDay)).Return(workTimeMinMax);
-
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.Days.Single().WorkTimeMinMax.Should().Be(workTimeMinMax);
 		}
 
 		[Test]

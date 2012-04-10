@@ -92,5 +92,20 @@ namespace Teleopti.Ccc.WebTest.Controllers
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}
+
+		[Test]
+		public void ShouldGetFeedback()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, null, null);
+			var resultData = new PreferenceDayFeedbackViewModel();
+
+			viewModelFactory.Stub(x => x.CreateDayFeedbackViewModel(DateOnly.Today)).Return(resultData);
+
+			var result = target.Feedback(DateOnly.Today);
+			var data = result.Data as PreferenceDayFeedbackViewModel;
+
+			data.Should().Be.SameInstanceAs(resultData);
+		}
 	}
 }

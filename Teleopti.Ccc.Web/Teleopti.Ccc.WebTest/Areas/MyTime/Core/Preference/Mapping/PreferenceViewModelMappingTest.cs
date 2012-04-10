@@ -18,12 +18,12 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Ccc.WebTest.Core;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
-
 	[TestFixture]
 	public class PreferenceViewModelMappingTest
 	{
@@ -218,6 +218,27 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			result.DayViewModel(data.SelectedDate)
 				.Editable.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFlagFeedbackIfInsidePeriod()
+		{
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotFlagFeedbackIfOutsidePeriod()
+		{
+			data.SelectedDate = DateOnly.Today.AddDays(-1);
+			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.False();
 		}
 
 		[Test]
@@ -628,61 +649,6 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.PreferencePeriod.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldMapPossibleStartTime()
-		{
-			var earliest = new TimeSpan(8, 0, 0);
-			var latest = new TimeSpan(10, 0, 0);
-			var workTimeMinMax = new WorkTimeMinMax {StartTimeLimitation = new StartTimeLimitation(earliest, latest)};
-			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax}};
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.PossibleStartTimes.Should().Be.EqualTo(
-					workTimeMinMax.StartTimeLimitation.StartTimeString + "-" + workTimeMinMax.StartTimeLimitation.EndTimeString);
-		}
-
-		[Test]
-		public void ShouldMapPossibleEndTime()
-		{
-			var earliest = new TimeSpan(16, 0, 0);
-			var latest = new TimeSpan(19, 0, 0);
-			var workTimeMinMax = new WorkTimeMinMax {EndTimeLimitation = new EndTimeLimitation(earliest, latest)};
-			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax}};
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.PossibleEndTimes.Should().Be.EqualTo(
-					workTimeMinMax.EndTimeLimitation.StartTimeString + "-" + workTimeMinMax.EndTimeLimitation.EndTimeString);
-		}
-
-		[Test]
-		public void ShouldMapPossibleContractTime()
-		{
-			var earliest = new TimeSpan(6, 0, 0);
-			var latest = new TimeSpan(9, 0, 0);
-			var workTimeMinMax = new WorkTimeMinMax { WorkTimeLimitation = new WorkTimeLimitation(earliest, latest) };
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, WorkTimeMinMax = workTimeMinMax } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.PossibleContractTimes.Should().Be.EqualTo(
-					workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString);
-		}
-
-		[Test]
-		public void ShouldMapValidationErrors()
-		{
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate} };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate).Preference.FeedbackError.Should().Be.EqualTo(UserTexts.Resources.NoAvailableShifts);
 		}
 
 		[Test]

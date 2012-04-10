@@ -1,4 +1,8 @@
+using System;
+using System.Threading;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -50,5 +54,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_preferencePersister.Delete(date));
 		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult Feedback(DateOnly date)
+		{
+			return Json(_viewModelFactory.CreateDayFeedbackViewModel(date), JsonRequestBehavior.AllowGet);
+		}
+
 	}
 }

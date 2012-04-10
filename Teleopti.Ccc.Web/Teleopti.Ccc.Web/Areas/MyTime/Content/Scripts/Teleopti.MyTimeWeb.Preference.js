@@ -59,81 +59,100 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			;
 	}
 
-	function _ajax(args) {
-		var type = args.type || 'GET',
-		    date = args.date || null, // required
-		    data = args.data || {},
-		    statusCode404 = args.statusCode404
+	function _loadFeedback() {
+		$('li[data-mytime-date].feedback').each(function () {
+			var date = $(this).data('mytime-date');
+			_ajax({
+				url: "Preference/Feedback",
+				type: 'GET',
+				data: { Date: date },
+				date: date
+			});
+		});
+	}
+
+	function _ajax(options) {
+		var type = options.type || 'GET',
+		    date = options.date || null, // required
+		    data = options.data || {},
+		    statusCode404 = options.statusCode404,
+			url = options.url || "Preference/Preference"
 			;
 		$.myTimeAjax({
-				url: "Preference/Preference",
-				dataType: "json",
-				type: type,
-				beforeSend: function() {
-					var cell = $('li[data-mytime-date="' + date + '"]')
-						.addClass('relative')
-						;
-					$('<div>')
-						.addClass('loading overlay')
-						.appendTo(cell)
-						.show()
-						;
-				},
-				complete: function(jqXHR, textStatus) {
-					$('li[data-mytime-date="' + date + '"]').removeClass('relative');
-					$('li[data-mytime-date="' + date + '"] .overlay').remove();
-				},
-				data: data,
-				success: function(data, textStatus, jqXHR) {
-					var cell = $('li[data-mytime-date="' + data.Date + '"]');
+			url: url,
+			dataType: "json",
+			type: type,
+			beforeSend: function () {
+				var cell = $('li[data-mytime-date="' + date + '"]');
+				$('<div>')
+					.addClass('loading-small-f8f8f8-A1C7D3')
+					.addClass('temporary')
+					.appendTo(cell)
+					.show()
+					;
+			},
+			complete: function (jqXHR, textStatus) {
+				$('li[data-mytime-date="' + date + '"] .temporary')
+					.remove();
+			},
+			data: data,
+			success: function (data, textStatus, jqXHR) {
+				var cell = $('li[data-mytime-date="' + data.Date + '"]');
+
+				if (typeof data.PreferenceRestriction != 'undefined') {
+
 					cell.removeClassStartingWith('color_');
 					cell.addClass(data.StyleClassName);
-					
+
 					var preference = $('.preference', cell);
 					preference.text(data.PreferenceRestriction || "");
 
-					var error = $('.error', cell);
-					error.text(data.FeedbackError || "");
-					
-					var possibleStartTimes = $('.possible-start-times', cell);
-					possibleStartTimes.text(data.PossibleStartTimes || "");
-					var possibleEndTimes = $('.possible-end-times', cell);
-					possibleEndTimes.text(data.PossibleEndTimes || "");
-					var possibleContractTimes = $('.possible-contract-times', cell);
-					possibleContractTimes.text(data.PossibleContractTimes || "");
-				},
-				statusCode404: statusCode404,
-				error: function(jqXHR, textStatus, errorThrown) {
-					var cellHtml = $('<h2></h2>')
+				}
+
+				var error = $('.feedback-error', cell);
+				error.text(data.FeedbackError || "");
+
+				var possibleStartTimes = $('.possible-start-times', cell);
+				possibleStartTimes.text(data.PossibleStartTimes || "");
+				var possibleEndTimes = $('.possible-end-times', cell);
+				possibleEndTimes.text(data.PossibleEndTimes || "");
+				var possibleContractTimes = $('.possible-contract-times', cell);
+				possibleContractTimes.text(data.PossibleContractTimes || "");
+			},
+			statusCode404: statusCode404,
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (textStatus == "abort")
+					return;
+				var cellHtml = $('<h2></h2>')
 						.addClass('error');
-					$('li[data-mytime-date="' + date + '"] .preference')
+				$('li[data-mytime-date="' + date + '"] .preference')
 						.html(cellHtml);
-					try {
-						var error = $.parseJSON(jqXHR.responseText);
-						$('<a></a>')
+				try {
+					var error = $.parseJSON(jqXHR.responseText);
+					$('<a></a>')
 							.append(error.ShortMessage + "!")
-							.click(function() {
+							.click(function () {
 								errorInfo.toggle();
 							})
 							.appendTo(cellHtml)
 							;
-						var errorInfo = $('<div></div>')
+					var errorInfo = $('<div></div>')
 							.hide()
 							.width(300)
 							.css({
-									'position': 'absolute',
-									'border': '1px solid #ccc',
-									'background-color': 'white',
-									'padding': '10px'
-								})
+								'position': 'absolute',
+								'border': '1px solid #ccc',
+								'background-color': 'white',
+								'padding': '10px'
+							})
 							.append(error.Message)
 							.insertAfter(cellHtml)
 							;
-					} catch(e) {
-						cellHtml.append("Error!");
-					}
+				} catch (e) {
+					cellHtml.append("Error!");
 				}
-			});
+			}
+		});
 	}
 
 	function _activateSelectable() {
@@ -149,6 +168,10 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		PreferencePartialInit: function () {
 			_initPeriodSelection();
 			_activateSelectable();
+			setTimeout('Teleopti.MyTimeWeb.Preference.LoadFeedback();', 1);
+		},
+		LoadFeedback: function () {
+			_loadFeedback();
 		}
 	};
 

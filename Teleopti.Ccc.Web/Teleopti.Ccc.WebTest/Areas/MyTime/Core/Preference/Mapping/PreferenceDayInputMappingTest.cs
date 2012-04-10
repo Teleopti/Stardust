@@ -12,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
 	[TestFixture]
 	public class PreferenceDayInputMappingTest
