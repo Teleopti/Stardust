@@ -91,10 +91,37 @@ GO
 ALTER TABLE [dbo].[WindowsAuthenticationInfo] CHECK CONSTRAINT [FK_WindowsAuthenticationInfo_Person]
 GO
 
+update Person
+set ApplicationLogOnName = NULL
+where ApplicationLogOnName in (
+								select ApplicationLogOnName 
+								from Person
+								where ApplicationLogOnName is not null
+								and ApplicationLogOnName <> ''
+								group by ApplicationLogOnName
+								having COUNT(*) > 1
+								)
+
+
 INSERT INTO [ApplicationAuthenticationInfo]
 SELECT Id, [ApplicationLogOnName],[Password] From Person
 WHERE [ApplicationLogOnName] IS NOT NULL
 AND [ApplicationLogOnName] <> ''
+
+update Person
+set DomainName = NULL, WindowsLogOnName = NULL
+from Person p
+inner join	(
+			select DomainName,WindowsLogOnName
+			from Person
+			where DomainName is not null
+			and DomainName <> ''
+			and WindowsLogOnName is not null
+			and WindowsLogOnName <> ''
+			group by DomainName,WindowsLogOnName
+			having COUNT(*) > 1
+			) as p2
+			on p.DomainName = p2.DomainName and p.WindowsLogOnName = p2.WindowsLogOnName
 
 INSERT INTO [WindowsAuthenticationInfo]
 SELECT Id, [WindowsLogOnName],[DomainName] From Person
