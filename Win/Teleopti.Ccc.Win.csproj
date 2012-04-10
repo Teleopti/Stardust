@@ -2446,9 +2446,6 @@
     <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
       <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
-      <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>
     </EmbeddedResource>
