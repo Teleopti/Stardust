@@ -123,6 +123,41 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
+		[Test]
+		public void VerifyChangedDayOffsPercent()
+		{
+			IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+
+			IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> {_scheduleDayPro, scheduleDayPro2};
+
+			using(_mocks.Record())
+			{
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
+				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
+				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(_scheduleDayPro);
+				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+				Expect.Call(_part.Clone()).Return(_part).Repeat.Twice();
+				Expect.Call(_part.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_part.SignificantPart()).Return(SchedulePartView.DayOff);
+
+				Expect.Call(_scheduleDayEquator.DayOffEquals(_part, _part)).Return(false);
+				Expect.Call(_scheduleDayEquator.DayOffEquals(_part, _part)).Return(true);
+			}
+
+			double ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
+				ret = _target.ChangedDayOffsPercent();
+			}
+
+			Assert.AreEqual(.5, ret);
+		}
+
         //[Test]
         //public void VerifyScheduleDayEquatorShouldReturnTheNumberOfDayEquatorReturnTrue()
         //{

@@ -669,6 +669,90 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         #endregion
 
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnFalseIfEverythingOk()
+		{
+			_optimizationPreferences.Extra.KeepShifts = true;
+			_optimizationPreferences.Extra.KeepShiftsValue = 1;
+			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
+			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(0);
+				Expect.Call(_originalStateContainer.ChangedDayOffsPercent()).Return(0);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsFalse(ret);
+		}
+
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnTrueIfShiftsOverLimit()
+		{
+			_optimizationPreferences.Extra.KeepShifts = true;
+			_optimizationPreferences.Extra.KeepShiftsValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(.5);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsTrue(ret);
+		}
+
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnTrueIfDaysOffOverLimit()
+		{
+			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
+			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedDayOffsPercent()).Return(.5);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsTrue(ret);
+		}
+
         private void resetPreferences()
         {
             _optimizationPreferences.General.UsePreferences = false;
