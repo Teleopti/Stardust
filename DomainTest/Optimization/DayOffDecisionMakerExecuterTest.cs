@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(result);
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRollbackAndReturnFalseIfRescheduleFails()
 		{
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();

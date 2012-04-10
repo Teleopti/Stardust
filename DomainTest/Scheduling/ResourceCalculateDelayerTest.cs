@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldCalculateLastDateAndNextDateIfDifferntDateAndCounterUnderLimit()
+		public void ShouldCalculateLastDateAndNextDateIfDifferentDateAndCounterUnderLimit()
 		{
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true, true);
 			using (_mocks.Record())

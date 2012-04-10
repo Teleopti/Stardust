@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class ResourceCalculateDelayer : IResourceCalculateDelayer
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly int _calculationFrequenzy;
+		private readonly int _calculationFrequency;
 		private readonly bool _useOccupancyAdjustment;
 		private readonly bool _considerShortBreaks;
 		private DateOnly? _lastDate;
@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public ResourceCalculateDelayer(
 			IResourceOptimizationHelper resourceOptimizationHelper, 
-			int calculationFrequenzy, 
+			int calculationFrequency, 
 			bool useOccupancyAdjustment, 
 			bool considerShortBreaks)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_calculationFrequenzy = calculationFrequenzy;
+			_calculationFrequency = calculationFrequency;
 			_useOccupancyAdjustment = useOccupancyAdjustment;
 			_considerShortBreaks = considerShortBreaks;
 		}
@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (!_lastDate.HasValue)
 				_lastDate = scheduleDateOnly;
-			if (_counter % _calculationFrequenzy == 0 || scheduleDateOnly != _lastDate.Value)
+			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value, _useOccupancyAdjustment, _considerShortBreaks);
-				if (_calculationFrequenzy > 1)
+				if (_calculationFrequency > 1)
 				{
 					_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks);
 				}

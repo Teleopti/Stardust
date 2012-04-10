@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			}
 		}
 
-        public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson)
         {
             var scheduleDictionary = _resultStateHolder.Schedules;
             var totalFairness = scheduleDictionary.FairnessPoints();

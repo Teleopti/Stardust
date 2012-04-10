@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class ScheduleServiceTest
     {
         private MockRepository _mocks;
-        private IResourceOptimizationHelper _resourceOptHelper;
         private IWorkShiftFinderService _workShiftFinder;
         private IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private IShiftCategoryLimitationChecker _shiftCatLimitChecker;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _mocks = new MockRepository();
-            _resourceOptHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _workShiftFinder = _mocks.StrictMock<IWorkShiftFinderService>();
             _scheduleMatrixListCreator = _mocks.StrictMock<IScheduleMatrixListCreator>();
             _shiftCatLimitChecker = _mocks.StrictMock<IShiftCategoryLimitationChecker>();
