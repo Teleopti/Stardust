@@ -473,7 +473,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         protected override void OnAfterPaste()
         {
             _lockUpdate = false;
-            if (_taskOwnerPeriodHelper != null) _taskOwnerPeriodHelper.EndUpdate();
+            if (_taskOwnerPeriodHelper != null)
+            {
+            	_taskOwnerPeriodHelper.EndUpdate();
+            }
+			if (_owner!=null)
+			{
+				_owner.TriggerValuesChanged();
+			}
             InitializeAllGridRowsToChart();
         }
 
