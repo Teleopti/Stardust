@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -97,7 +98,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
                 if (!scheduleDay.IsScheduled())
                 {
-                    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, bestCategory);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, bestCategory, resourceCalculateDelayer);
                     if (!sucess)
                     {
                         return false;

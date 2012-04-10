@@ -659,6 +659,7 @@
     <Compile Include="Scheduling\Note.cs" />
     <Compile Include="Scheduling\NoteByDateSorter.cs" />
     <Compile Include="Scheduling\PersonAbsence.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduler.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecification.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />

@@ -374,9 +374,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
 
             var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
             var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
                                                                                     effectiveRestrictionCreator,
-                                                                                    rollbackServiceDayOffConflict);
+                                                                                    rollbackServiceDayOffConflict,
+																					resourceCalculateDelayer);
 
             
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();

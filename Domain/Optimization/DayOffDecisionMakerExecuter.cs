@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -367,16 +368,18 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
 
                 var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
                 {
-                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, originalShiftCategory);
+					schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, originalShiftCategory, resourceCalculateDelayer);
                     if(!schedulingResult)
-                        schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true);
+						schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, resourceCalculateDelayer);
                 }
                 else
-                    schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true);
+					schedulingResult = _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, resourceCalculateDelayer);
 
                 if (!schedulingResult)
                 {

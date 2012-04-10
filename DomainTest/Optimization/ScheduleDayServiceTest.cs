@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPerson _person;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
         [SetUp]
         public void Setup()
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2009, 1, 1), new List<ISkill>());
             _effectiveRestrictionCreator = _mocks.DynamicMock<IEffectiveRestrictionCreator>();
 			_rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_target = new ScheduleDayService(_scheduleService, _optimizerPreferences.SchedulingOptions, _deleteSchedulePartService, _resourceOptimizationHelper, _effectiveRestrictionCreator, _rollbackService);
         }
 
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_newSchedulePart.Period).Return(period).Repeat.Any();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments()
                     .Return(effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
  
             }
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 LastCall.Repeat.Once();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments().Return(
                     effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer))
+					.IgnoreArguments().Return(true);
             }
 
             using (_mocks.Playback())
@@ -125,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 LastCall.Repeat.Once();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments()
                     .Return(effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _optimizerPreferences.SchedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(false);
             }
 

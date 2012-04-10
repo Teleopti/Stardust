@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IWorkflowControlSet _workflowControlSet;
         private IEffectiveRestrictionCreator _restrictionCreator;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
         [SetUp]
         public void Setup()
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _modifyRollback = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _restrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _options = new SchedulingOptions();
-            _target = new ScheduleService(_resourceOptHelper, _workShiftFinder, _scheduleMatrixListCreator, _shiftCatLimitChecker, _modifyRollback, _restrictionCreator);
+            _target = new ScheduleService(_workShiftFinder, _scheduleMatrixListCreator, _shiftCatLimitChecker, _modifyRollback, _restrictionCreator);
 
             _part = _mocks.StrictMock<IScheduleDay>();
             
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _workflowControlSet = _mocks.StrictMock<IWorkflowControlSet>();
             _person.WorkflowControlSet = _workflowControlSet;
             _scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
         }
     
 
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Expect.Call(_part.IsScheduled()).Return(true);
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction), Is.True);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.True);
             _mocks.VerifyAll();
         }
 
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, effectiveRestriction), Is.False);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, effectiveRestriction, _resourceCalculateDelayer), Is.False);
             Assert.That(_target.FinderResults.Count, Is.GreaterThan(0));
             _target.ClearFinderResults();
             Assert.That(_target.FinderResults.Count, Is.EqualTo(0));
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.Person).Return(_person);
             Expect.Call(_effectiveRestriction.NotAvailable).Return(true);
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction), Is.False);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -108,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> {_part})).Return(new List<IScheduleMatrixPro>());
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction), Is.False);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
                                                                                         new DateOnly(2011, 4, 18))).Repeat.Times(3);
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction), Is.False);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.False);
             Assert.That(_target.FinderResults.Count,Is.GreaterThan(0));
             _mocks.VerifyAll();
         }
@@ -160,14 +162,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() => _part.AddMainShift(mainShift));
             Expect.Call(() => _modifyRollback.Modify(_part));
-            Expect.Call(() => _resourceOptHelper.ResourceCalculateDate(new DateOnly(2011, 4, 18), true, true));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
-            Expect.Call(() => _resourceOptHelper.ResourceCalculateDate(new DateOnly(2011, 4, 19), true, true));
             Expect.Call(_restrictionCreator.GetEffectiveRestriction(null, _options)).IgnoreArguments().Return(_effectiveRestriction);
+        	Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period)).Return(false);
+			
 
             _mocks.ReplayAll();
             Assert.IsNull(_options.ShiftCategory);
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, shiftCategory), Is.True);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, shiftCategory, _resourceCalculateDelayer), Is.True);
             Assert.IsNull(_options.ShiftCategory);
             _mocks.VerifyAll();
         }
@@ -198,12 +200,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() =>_part.AddMainShift(mainShift));
             Expect.Call(() => _modifyRollback.Modify(_part));
-            Expect.Call(() => _resourceOptHelper.ResourceCalculateDate(new DateOnly(2011, 4, 18), true, true));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
-            Expect.Call(() => _resourceOptHelper.ResourceCalculateDate(new DateOnly(2011, 4, 19), true, true));
+			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period)).Return(false);
 
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction), Is.True);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, _effectiveRestriction, _resourceCalculateDelayer), Is.True);
             _mocks.VerifyAll();
         }
 
@@ -220,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.Person).Return(_person);
             Expect.Call(_effectiveRestriction.NotAvailable).Return(true);
             _mocks.ReplayAll();
-            Assert.That(_target.SchedulePersonOnDay(_part, _options, true, cat), Is.False);
+			Assert.That(_target.SchedulePersonOnDay(_part, _options, true, cat, _resourceCalculateDelayer), Is.False);
             _mocks.VerifyAll();
         
         }

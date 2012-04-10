@@ -8,6 +8,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
 
+
             foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
             {
                 if (!matrixOriginalStateContainer.StillAlive)
@@ -42,7 +44,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         var effectiveRestriction =
                             effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-                        result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, false, effectiveRestriction);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+
+						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer);
                     }
                     if (!result)
                     {

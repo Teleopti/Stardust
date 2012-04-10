@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestriction _effectiveRestriction;
     	private IScheduleService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
+    	private IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private IResourceCalculateDelayer _resourceCalculateDelayer;
 
         [SetUp]
         public void Setup()
@@ -35,8 +37,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+        	_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder,
-				_effectiveRestrictionCreator, _scheduleService);
+				_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
+        	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation()
@@ -102,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Record())
             {
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -156,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
            }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-				            _effectiveRestrictionCreator, _scheduleService);
+							_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
             
             using (_mocks.Playback())
             {
@@ -184,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-				                                _effectiveRestrictionCreator, _scheduleService);
+												_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -249,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-				                        _effectiveRestrictionCreator, _scheduleService);
+										_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -311,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			//var periodForPart2 = new DateOnlyAsDateTimePeriod(date12, _timeZoneInfo);
             using (_mocks.Record())
             {
-                Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -343,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-				                                _effectiveRestrictionCreator, _scheduleService);
+												_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -379,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date1, _timeZoneInfo)).Repeat.AtLeastOnce();
                 Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
             }
-			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -423,7 +427,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var part3 = _mocks.StrictMock<IScheduleDay>();
             var part4 = _mocks.StrictMock<IScheduleDay>();
             IList<IScheduleDay> parts = new List<IScheduleDay> {part1, part2, part3, part4};
-			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Record())
             {
@@ -454,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IList<ISkillDay> lst = new List<ISkillDay> { skillDay1, skillDay2 };
 
-            _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             IList<ISkillDay> lstToExclude = new List<ISkillDay>();
 

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
         private IEffectiveRestriction _effectiveRestriction;
         private ISchedulePartModifyAndRollbackService _rollbackService;
+    	private IResourceCalculateDelayer _resourceCalculateDelayer;
 
         [SetUp]
         public void Setup()
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestrictionCreator = _mock.StrictMock<IEffectiveRestrictionCreator>();
             _schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _target = new DayOffOptimizerConflictHandler(_scheduleMatrixPro, _scheduleService, _effectiveRestrictionCreator, _rollbackService);
+        	_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
+			_target = new DayOffOptimizerConflictHandler(_scheduleMatrixPro, _scheduleService, _effectiveRestrictionCreator, _rollbackService, _resourceCalculateDelayer);
             _dateOnly = new DateOnly(2011, 1, 10);
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).Return(true);
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
             }
 
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).Return(false);
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
                 Expect.Call(() => _rollbackService.Rollback());
 
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).Return(true);
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
             }
 
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).Return(false);
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
                 Expect.Call(() => _rollbackService.Rollback());
 
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction)).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).Return(false);
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
                 Expect.Call(() => _rollbackService.Rollback());
             }

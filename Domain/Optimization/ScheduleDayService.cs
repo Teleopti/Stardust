@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -16,24 +17,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     	private ScheduleDayService() { }
 
-        public ScheduleDayService(IScheduleService scheduleService,
-                                  ISchedulingOptions schedulingOptions,
-                                  IDeleteSchedulePartService deleteSchedulePartService,
-                                  IResourceOptimizationHelper resourceOptimizationHelper,
-                                  IEffectiveRestrictionCreator effectiveRestrictionCreator,
+		public ScheduleDayService(IScheduleService scheduleService,
+								  ISchedulingOptions schedulingOptions,
+								  IDeleteSchedulePartService deleteSchedulePartService,
+								  IResourceOptimizationHelper resourceOptimizationHelper,
+								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService
 			)
-            : this()
-        {
-        	_scheduleService = scheduleService;
-            _schedulingOptions = schedulingOptions;
-            _deleteSchedulePartService = deleteSchedulePartService;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _effectiveRestrictionCreator = effectiveRestrictionCreator;
-        	_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-        }
+			: this()
+		{
+			_scheduleService = scheduleService;
+			_schedulingOptions = schedulingOptions;
+			_deleteSchedulePartService = deleteSchedulePartService;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+		}
 
-        public bool RescheduleDay(IScheduleDay schedulePart)
+    	public bool RescheduleDay(IScheduleDay schedulePart)
         {
             var originalDay = (IScheduleDay) schedulePart.Clone();
             var partList = new List<IScheduleDay> { schedulePart };
@@ -54,7 +55,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, _schedulingOptions);
 
-            return _scheduleService.SchedulePersonOnDay(schedulePart, _schedulingOptions, true, effectiveRestriction);
+        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+        	                                                            _schedulingOptions.ConsiderShortBreaks);
+			return _scheduleService.SchedulePersonOnDay(schedulePart, _schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
         }
 
         public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList)
@@ -73,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ICollection<DateOnly> daysToRecalculate = new HashSet<DateOnly>();
             foreach (var part in schedulePartList)
             {
-                DateOnly date = new DateOnly(part.Period.LocalStartDateTime);
+                var date = new DateOnly(part.Period.LocalStartDateTime);
                 daysToRecalculate.Add(date);
                 daysToRecalculate.Add(date.AddDays(1));
             }

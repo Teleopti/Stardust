@@ -204,6 +204,7 @@
     <Compile Include="Domain\IJobResultDetail.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
+    <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRevision.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />

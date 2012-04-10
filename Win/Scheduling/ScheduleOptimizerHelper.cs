@@ -291,7 +291,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                                                      new ScheduleTagSetter
                                                                                                          (options.
                                                                                                               TagToUseOnScheduling)),
-                                                            _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder);
+                                                            _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder,
+															new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, options.ConsiderShortBreaks));
 
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
@@ -1107,9 +1108,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
 
             var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+
             var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
                                                                                     effectiveRestrictionCreator,
-                                                                                    rollbackServiceDayOffConflict);
+                                                                                    rollbackServiceDayOffConflict,
+																					resourceCalculateDelayer);
 
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
 
@@ -1122,7 +1126,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
                                                     new DeleteSchedulePartService(_stateHolder), rollbackService,
-                                                    scheduleService, WorkShiftFinderResultHolder);
+                                                    scheduleService, WorkShiftFinderResultHolder,
+													resourceCalculateDelayer);
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,

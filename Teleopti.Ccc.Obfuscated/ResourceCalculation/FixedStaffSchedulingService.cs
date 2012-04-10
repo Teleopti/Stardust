@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly IScheduleService _scheduleService;
     	private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
     	private readonly IDayOffScheduler _dayOffScheduler;
+    	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
     	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
 			IAbsencePreferenceScheduler absencePreferenceScheduler, 
-            IDayOffScheduler dayOffScheduler)
+            IDayOffScheduler dayOffScheduler,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
@@ -50,7 +53,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			if (dayOffScheduler == null)
 				throw new ArgumentNullException("dayOffScheduler");
 			_dayOffScheduler = dayOffScheduler;
-			
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+
 			_absencePreferenceScheduler.DayScheduled += schedulerDayScheduled;
 			_dayOffScheduler.DayScheduled += schedulerDayScheduled;
 		}
@@ -89,9 +93,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
         {
-           var result = true;
+        	var result = true;
+        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+        	                                                            useOccupancyAdjustment,
+        	                                                            schedulingOptions.ConsiderShortBreaks);
 
-           var dates = GetAllDates(selectedParts);
+			var dates = GetAllDates(selectedParts);
 			foreach (DateOnly date in dates)
 			{
 			    DateOnly theDate = date;
@@ -120,8 +127,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
                                 schedulePart, schedulingOptions);
 
-                            bool schedulePersonOnDayResult = 
-                                _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction);
+                            bool schedulePersonOnDayResult =
+								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer);
 
                             result = result && schedulePersonOnDayResult;
                             if (!result && breakIfPersonCannotSchedule)

@@ -38,11 +38,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         private IList<IPerson> _selectedPersons;
         private BackgroundWorker _bgWorker;
         private ISchedulingOptions _schedulingOptions;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
         [SetUp]
         public void Setup()
     	{
 			_mock = new MockRepository();
+			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_shiftCategory = new ShiftCategory("kat");
     		_person1 = _mock.StrictMock<IPerson>();
 			_person2 = _mock.StrictMock<IPerson>();
@@ -107,21 +109,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory)).Return(true);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
+					.Return(true);
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 		    }
 
@@ -143,13 +146,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(false);
 				Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
@@ -157,13 +160,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				
 			}
@@ -187,13 +190,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				
 				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
 				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory))
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
 				
 			}

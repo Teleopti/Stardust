@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -27,31 +28,39 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
+    	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-        private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
+    	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
-            IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService)
+            IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _scheduleService = scheduleService;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
         {
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+																		useOccupancyAdjustment,
+																		schedulingOptions.ConsiderShortBreaks);
+
             schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-            doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true);
+			doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true, resourceCalculateDelayer);
 
             schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-            doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true);
+			doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true, resourceCalculateDelayer);
 
             schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-            return doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, false);
+
+			return doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, false, resourceCalculateDelayer);
         }
 
 
@@ -80,7 +89,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             }
         }
 
-        private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours)
+        private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer)
         {
 			bool everyPersonScheduled = true;
 			bool tempOnlyShiftsWhenUnderstaffed =
@@ -121,7 +130,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					if (part != null)
 					{
 						var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
-                        schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, useOccupancyAdjustment, effectiveRestriction);
+						schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer);
 						everyPersonScheduled = everyPersonScheduled && schedulePersonOnDayResult;
 
 					}

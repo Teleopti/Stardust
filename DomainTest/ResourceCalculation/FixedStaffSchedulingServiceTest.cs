@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private ISchedulingOptions _schedulingOptions;
 		private IAbsencePreferenceScheduler _absencePreferenseScheduler;
 		private IDayOffScheduler _dayOffScheduler;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +49,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
 			_absencePreferenseScheduler = _mocks.StrictMock<IAbsencePreferenceScheduler>();
 			_dayOffScheduler = _mocks.StrictMock<IDayOffScheduler>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 
 			Expect.Call(() => _absencePreferenseScheduler.DayScheduled += null).IgnoreArguments();
 			Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
@@ -56,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
                                                                  _absencePreferenseScheduler,
-                                                                 _dayOffScheduler);
+																 _dayOffScheduler, _resourceOptimizationHelper);
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -75,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
                                                                  _absencePreferenseScheduler,
-                                                                 null);
+																 null, _resourceOptimizationHelper);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -85,8 +89,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _dayOffsInPeriodCalculator,
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
-                                                                 null, 
-                                                                 _dayOffScheduler);	
+                                                                 null,
+																 _dayOffScheduler, _resourceOptimizationHelper);	
 		}
 
 		[Test]
@@ -126,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(part4.DateOnlyAsPeriod).Return(period1).Repeat.AtLeastOnce();
 			Expect.Call(part1.PersonDayOffCollection()).Return(dayOffCollection).Repeat.Any();
 
-            Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction)).IgnoreArguments().Repeat.AtLeastOnce()
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments().Repeat.AtLeastOnce()
                 .Return(true);
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
@@ -179,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(part2.Person).Return(person).Repeat.AtLeastOnce();
 			Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo)).Repeat.AtLeastOnce();
 			Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 3), _timeZoneInfo)).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction))
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer))
                 .Return(true).IgnoreArguments();
 
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
