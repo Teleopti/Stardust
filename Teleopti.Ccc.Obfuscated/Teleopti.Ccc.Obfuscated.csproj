@@ -127,6 +127,7 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculationResultHolder.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
+    <Compile Include="Security\LicenseStatusConstants.cs" />
     <Compile Include="Security\SuperUser.cs" />
   </ItemGroup>
   <ItemGroup>
