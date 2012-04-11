@@ -141,6 +141,7 @@ Scenario: Feedback from an added preference
 Scenario: Feedback from a deleted preference
 	Given I am an agent
 	And I have an open workflow control set with an allowed standard preference
+	And I have a shift bag
 	And I have existing standard preference
 	And I am viewing preferences
 	When I select an editable day with standard preference

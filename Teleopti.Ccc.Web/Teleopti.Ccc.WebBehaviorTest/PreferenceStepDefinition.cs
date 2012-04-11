@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
@@ -271,18 +272,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			cell.InnerHtml.Should().Contain("No available shifts");
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(Resources.NoAvailableShifts));
 		}
 
 		[Then(@"I should see the preference feedback")]
 		public void ThenIShouldSeeThePreferenceFeedback()
 		{
-			if (UserFactory.User().HasSetup<StandardPreference>())
-			{
-				ScenarioContext.Current.Pending();
-				return;
-			}
-
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
 			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));

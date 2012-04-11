@@ -470,14 +470,16 @@ this.ScenarioSetup(scenarioInfo);
 #line 143
  testRunner.And("I have an open workflow control set with an allowed standard preference");
 #line 144
- testRunner.And("I have existing standard preference");
+ testRunner.And("I have a shift bag");
 #line 145
- testRunner.And("I am viewing preferences");
+ testRunner.And("I have existing standard preference");
 #line 146
- testRunner.When("I select an editable day with standard preference");
+ testRunner.And("I am viewing preferences");
 #line 147
- testRunner.And("I click the delete button");
+ testRunner.When("I select an editable day with standard preference");
 #line 148
+ testRunner.And("I click the delete button");
+#line 149
  testRunner.Then("I should see the preference feedback");
 #line hidden
             this.ScenarioCleanup();
