@@ -89,9 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, string path)
         {
             var shiftsPerDayToPdfManager = new ShiftsPerDayToPdfManager();
-            PdfDocument doc = shiftsPerDayToPdfManager.Export(timeZoneInfo, culture, persons,
-                                                              period, stateHolder,
-                                                              rightToLeft, details);
+            PdfDocument doc = shiftsPerDayToPdfManager.Export(timeZoneInfo, culture, persons, period, stateHolder, details);
             openDocument(doc, owner, path);
 
         }
@@ -384,33 +382,22 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void drawRowHeader(RectangleF rect, string text, CultureInfo cultureInfo)
         {
-            var format = new PdfStringFormat
-                             {
-                                 RightToLeft = _rtl,
-                                 Alignment = PdfTextAlignment.Left,
-                                 LineAlignment = PdfVerticalAlignment.Middle
-                             };
+            var format = new CccPdfStringFormat {Alignment = PdfTextAlignment.Left, LineAlignment = PdfVerticalAlignment.Middle};
             const float fontSize = 8f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
-            _graphics.DrawString(text, font, _brush, rect, format);
+            _graphics.DrawString(text, font, _brush, rect, format.PdfStringFormat);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private float drawReportHeader(float top, float width, string text, CultureInfo cultureInfo)
         {
-            var format = new PdfStringFormat
-                             {
-                                 RightToLeft = _rtl,
-                                 Alignment = PdfTextAlignment.Left,
-                                 LineAlignment = PdfVerticalAlignment.Middle
-                             };
-
+            var format = new CccPdfStringFormat {Alignment = PdfTextAlignment.Left, LineAlignment = PdfVerticalAlignment.Middle};
             const float fontSize = 14f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
             var headerRect = new RectangleF(0, top + RowSpace, width, fontSize + 4);
             PdfBrush backGround = new PdfSolidBrush(Color.PowderBlue);
             _graphics.DrawRectangle(backGround, headerRect);
-            _graphics.DrawString(text, font, _brush, headerRect, format);
+            _graphics.DrawString(text, font, _brush, headerRect, format.PdfStringFormat);
             return top + fontSize + 4 + RowSpace;
         }
 
@@ -425,13 +412,9 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             var brush = new PdfSolidBrush(Color.Gray);
             const float fontSize = 6f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
-            var format = new PdfStringFormat
-                             {
-                                 RightToLeft = _rtl,
-                                 Alignment = PdfTextAlignment.Center,
-                                 LineAlignment = PdfVerticalAlignment.Bottom
-                             };
-            footer.Graphics.DrawString(footerText, font, brush, rect, format);
+
+            var format = new CccPdfStringFormat {Alignment = PdfTextAlignment.Center, LineAlignment = PdfVerticalAlignment.Bottom};
+            footer.Graphics.DrawString(footerText, font, brush, rect, format.PdfStringFormat);
 
             doc.Template.Bottom = footer;
         }
@@ -446,13 +429,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             const float fontSize = 6f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
-            var format = new PdfStringFormat
-                             {
-                                 RightToLeft = _rtl,
-                                 LineAlignment = PdfVerticalAlignment.Top,
-                                 Alignment = PdfTextAlignment.Right
-                             };
-            
+
+            var format = new CccPdfStringFormat {LineAlignment = PdfVerticalAlignment.Top, Alignment = PdfTextAlignment.Right};
 			var pageNumber = new PdfPageNumberField(font, brush);
 
 			var count = new PdfPageCountField(font, brush);
@@ -462,7 +440,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
            
             var compositeField = new PdfCompositeField(font, brush, Resources.CreatedPageOf, createdDate, pageNumber, count)
                                      {
-                                         StringFormat = format,
+                                         StringFormat = format.PdfStringFormat,
                                          Bounds = header.Bounds
                                      };
             compositeField.Draw(header.Graphics);
