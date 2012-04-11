@@ -1179,6 +1179,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
         {
+            if (_backgroundWorker.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+
             if (_backgroundWorker.IsBusy)
                 _backgroundWorker.ReportProgress(-e.PercentageCompleted);
         }
