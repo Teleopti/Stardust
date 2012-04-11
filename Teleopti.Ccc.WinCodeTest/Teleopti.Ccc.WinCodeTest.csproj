@@ -638,10 +638,6 @@
     </Compile>
     <Compile Include="Tracking\DefaultTrackerTest.cs" />
     <Compile Include="Settings\TrackerViewTest.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTestClass.cs">
-    </Compile>
-    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTest.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewCheckBoxExtenderTest.cs" />
     <Compile Include="Common\CustomEventArgsTest.cs" />
     <Compile Include="Common\DateTimePeriodControllerTest.cs" />
     <Compile Include="Common\Clipboard\PasteBehaviorTest.cs" />
@@ -726,9 +722,6 @@
     <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
     <Compile Include="Common\Collections\TreeNodeAdvDisplayInfoTest.cs" />
     <Compile Include="Common\Collections\TreeNodeDisplayInfoTest.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewAdvBinderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
@@ -746,7 +739,6 @@
     <Compile Include="Common\Collections\TreeItemTest.cs" />
     <Compile Include="Common\CommonStateHolderTest.cs" />
     <Compile Include="Common\PasteOptionsTest.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewBinderTest.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
     <Compile Include="Forecasting\OpenHourHelperTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillPropertiesPagesTest.cs" />
