@@ -57,20 +57,22 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 			var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
 
 			if (selectedGroupBarItem == item)
-				_clientPortalCallback.SelectedModule(selectedGroupBarItem, false);
+				_clientPortalCallback.SelectedModule(selectedGroupBarItem, _startup);
 		}
 
         void GroupBarModulesGroupBarItemSelected(object sender, EventArgs e)
         {
             var selectedGroupBarItem = groupBarModules.GroupBarItems[groupBarModules.SelectedItem];
             LastModule = selectedGroupBarItem.Tag.ToString();
-            _clientPortalCallback.SelectedModule(selectedGroupBarItem, false);
+            _clientPortalCallback.SelectedModule(selectedGroupBarItem, _startup);
         }
 
         public string LastModule { get; set; }
 
         public void StartupModule(string module)
         {
+        	_startup = true;
+
         	groupBarModules.SelectedItem = -1;
             if(module==null)
             {
@@ -78,6 +80,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
 				{
 					groupBarModules.SelectedItem = 0;
 				}
+            	_startup = false;
             	return;
             }
 
@@ -90,11 +93,14 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
                 }
                 index++;
             }
+        	_startup = false;
         }
 
         // fulfix because when changing Theme in Windows these will be created again
         private bool _created;
-        public void CreateGroupBars()
+    	private bool _startup;
+
+    	public void CreateGroupBars()
         {
             if(_created) return;
             groupBarModules.GroupBarItems.AddRange(_presenter.GetItems().Select(CreateGroupBar).ToArray());
