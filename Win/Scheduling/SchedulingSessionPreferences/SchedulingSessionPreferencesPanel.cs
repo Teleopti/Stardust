@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if(!reschedule)
             {
-                tableLayoutPanel1.RowStyles[tableLayoutPanel1.GetRow(groupBoxKeep)].Height = 0;
+
             }
             else
             {
@@ -111,12 +111,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             get { return groupBoxShiftCategory.Visible; }
             set { groupBoxShiftCategory.Visible = value; }
-        }
-
-        public bool RefreshScreenVisible
-        {
-            get { return tableLayoutPanelRefreshScreen.Visible; }
-            set { tableLayoutPanelRefreshScreen.Visible = value; }
         }
 
         #region IDataExchange Members
@@ -265,18 +259,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             else
                 _localSchedulingOptions.ShiftCategory = null;
 
-            if(radioButtonKeepNone.Checked)
-            {
-                _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.None;
-            }
-            else
-            {
-                if (radioButtonKeepShiftCategory.Checked)
-                    _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-                else
-                    _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
-            }
-
+            
             if (!checkBoxUseBlockScheduling.Checked)
                 _localSchedulingOptions.UseBlockScheduling = BlockFinderType.None;
             else
@@ -354,21 +337,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 comboBoxAdvShiftCategory.SelectedItem = _localSchedulingOptions.ShiftCategory;
 
             comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
-            switch (_localSchedulingOptions.RescheduleOptions)
-            {
-                case OptimizationRestriction.None:
-                    radioButtonKeepNone.Checked = true;
-                    break;
-
-                case OptimizationRestriction.KeepShiftCategory:
-                    radioButtonKeepShiftCategory.Checked = true;
-                    break;
-
-                case OptimizationRestriction.KeepStartAndEndTime:
-                    radioButtonKeepStartAndEndTime.Checked = true;
-                    break;
-            }
-
+            
             trackBar1.Value = (int)(_localSchedulingOptions.Fairness.Value*100);
 
             switch (_localSchedulingOptions.UseBlockScheduling)

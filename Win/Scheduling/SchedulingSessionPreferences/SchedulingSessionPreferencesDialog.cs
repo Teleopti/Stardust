@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // don not use for now in scheduling
             if (!_backToLegal)
                 tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
-            schedulingSessionPreferencesPanel1.RefreshScreenVisible = true;
             schedulingSessionPreferencesPanel1.ShiftCategoryVisible = true;
             schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = true;
             schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = true;

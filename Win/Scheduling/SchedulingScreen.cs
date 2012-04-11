@@ -1210,7 +1210,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState),
 														   _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
 			{
-				options.Height = 600;
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
 					//_currentSchedulingOptions = options.CurrentOptions;
@@ -4139,10 +4138,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			 false, false, groupPages,
 																			 _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
 				{
-					options.Height = 600;
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
-						//_currentSchedulingOptions = options.CurrentOptions;
 						_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff;
 						options.Refresh();
 
@@ -4183,7 +4180,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules, _schedulerState.CommonStateHolder.ShiftCategories,
 						false, false, groupPages, _currentSchedulingScreenSettings, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
 				{
-					options.Height = 600;
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
 						//_currentSchedulingOptions = options.CurrentOptions;
