@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         private IList<IActivity> _activities;
         private IList<IRtaStateGroup> _rtaStateGroups;
         private IList<IStateGroupActivityAlarm> _stateGroupActivityAlarms;
+        private readonly IList<IStateGroupActivityAlarm> _stateGroupActivityAlarmsToAdd = new List<IStateGroupActivityAlarm>();
+        private readonly IList<IStateGroupActivityAlarm> _stateGroupActivityAlarmsToRemove = new List<IStateGroupActivityAlarm>();
         private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
         private readonly IMessageBroker _messageBroker;
         private readonly IManageAlarmSituationView _manageAlarmSituationView;
@@ -111,6 +113,25 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
             _manageAlarmSituationView.RefreshGrid();
         }
+
+		public void OnSave()
+		{
+			foreach (var stateGroupActivityAlarm in _stateGroupActivityAlarmsToRemove)
+			{
+				if (stateGroupActivityAlarm.Id.HasValue)
+				{
+					_stateGroupActivityAlarmRepository.Remove(stateGroupActivityAlarm);
+				}
+			}
+
+			foreach (var stateGroupActivityAlarm in _stateGroupActivityAlarmsToAdd)
+			{
+				_stateGroupActivityAlarmRepository.Add(stateGroupActivityAlarm);
+			}
+
+			_stateGroupActivityAlarmsToAdd.Clear();
+			_stateGroupActivityAlarmsToRemove.Clear();
+		}
 
         public int RowCount
         {
@@ -263,7 +284,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 e.Style.Text = activity.Name; 
             }
-           
         }
 
         /// <summary>
@@ -307,28 +327,28 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
             string s = e.Style.Text;
             IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
+
             var rtaStateGroup = _rtaStateGroups[e.ColIndex - 1];
             var activity = _activities[e.RowIndex - 1];
             IStateGroupActivityAlarm stateGroupActivityAlarm =
                 _stateGroupActivityAlarms.SingleOrDefault(
                     item => isActivityMatch(item,activity) && isStateGroupMatch(item,rtaStateGroup));
 
-            if (stateGroupActivityAlarm == null)
-            {//insert
-
+            if (stateGroupActivityAlarm == null && alarmType!=null)
+            {
                 stateGroupActivityAlarm = new StateGroupActivityAlarm(rtaStateGroup, activity);
                 stateGroupActivityAlarm.AlarmType = alarmType;
                 _stateGroupActivityAlarms.Add(stateGroupActivityAlarm);
-                _stateGroupActivityAlarmRepository.Add(stateGroupActivityAlarm);
+				_stateGroupActivityAlarmsToAdd.Add(stateGroupActivityAlarm);
             }
-            else if (alarmType == null)
-            {//delete
+			else if (stateGroupActivityAlarm != null && alarmType == null)
+            {
                 _stateGroupActivityAlarms.Remove(stateGroupActivityAlarm);
-                _stateGroupActivityAlarmRepository.Remove(stateGroupActivityAlarm );
-                
+				_stateGroupActivityAlarmsToRemove.Add(stateGroupActivityAlarm);
+            	_stateGroupActivityAlarmsToAdd.Remove(stateGroupActivityAlarm);
             }
-            else
-            {//update
+            else if (stateGroupActivityAlarm!=null)
+            {
                  stateGroupActivityAlarm.AlarmType = alarmType;
             }
            
