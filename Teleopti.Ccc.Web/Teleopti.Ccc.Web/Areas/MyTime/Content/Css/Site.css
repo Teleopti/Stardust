@@ -983,26 +983,28 @@ footer p
 {
 	background-image: url(../Images/ajax-loader.gif);
 	background-repeat: no-repeat;
-	background-position: center
+	background-position: center;
 }
 .loading-gradient
 {
 	background-image: url(../Images/alpha-gradient.png);
 	background-repeat: no-repeat;
-	background-position: center
+	background-position: center;
 }
 .loading-small
 {
 	background-image: url(../Images/ajax-loader-small.gif);
 	background-repeat: no-repeat;
-	background-position: center
+	background-position: center;
 }
+/*
 .loading-small-f8f8f8-A1C7D3
 {
 	background-image: url(../Images/ajax-loader-small-f8f8f8-A1C7D3.gif);
 	background-repeat: no-repeat;
-	background-position: center
+	background-position: center;
 }
+*/
 .arrow-down
 {
 	background-image: url(../Images/arrow-down.png);

@@ -12,7 +12,8 @@
 	border-right-color: white;
 }
 
-.calendarview-week li .loading-small-f8f8f8-A1C7D3 {
+.calendarview-week li .loading-small-gray-blue
+{
 	position: absolute;
 	top: 20px;
 	right: 0;

@@ -78,26 +78,40 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		    statusCode404 = options.statusCode404,
 			url = options.url || "Preference/Preference"
 			;
+		var cell = $('li[data-mytime-date="' + date + '"]');
 		$.myTimeAjax({
 			url: url,
 			dataType: "json",
 			type: type,
-			beforeSend: function () {
-				var cell = $('li[data-mytime-date="' + date + '"]');
-				$('<div>')
-					.addClass('loading-small-f8f8f8-A1C7D3')
+			beforeSend: function (jqXHR) {
+
+				var currentRequest = cell.data('request');
+				if (currentRequest) {
+					currentRequest.abort();
+				}
+
+				cell.data('request', jqXHR);
+
+				$('#loading-small-gray-blue')
+					.clone()
+					.removeAttr('id')
+					.removeClass('template')
+					.addClass('loading-small-gray-blue')
 					.addClass('temporary')
 					.appendTo(cell)
-					.show()
 					;
+
 			},
 			complete: function (jqXHR, textStatus) {
-				$('li[data-mytime-date="' + date + '"] .temporary')
+
+				cell.data('request', null);
+
+				$('.temporary', cell)
 					.remove();
+
 			},
 			data: data,
 			success: function (data, textStatus, jqXHR) {
-				var cell = $('li[data-mytime-date="' + data.Date + '"]');
 
 				if (typeof data.PreferenceRestriction != 'undefined') {
 
@@ -118,39 +132,48 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				possibleEndTimes.text(data.PossibleEndTimes || "");
 				var possibleContractTimes = $('.possible-contract-times', cell);
 				possibleContractTimes.text(data.PossibleContractTimes || "");
+
 			},
 			statusCode404: statusCode404,
 			error: function (jqXHR, textStatus, errorThrown) {
+
 				if (textStatus == "abort")
 					return;
+
 				var cellHtml = $('<h2></h2>')
-						.addClass('error');
-				$('li[data-mytime-date="' + date + '"] .preference')
-						.html(cellHtml);
+					.addClass('error');
+
+				$('.preference', cell)
+					.html(cellHtml);
+
+				var error = "Error!";
 				try {
-					var error = $.parseJSON(jqXHR.responseText);
-					$('<a></a>')
-							.append(error.ShortMessage + "!")
-							.click(function () {
-								errorInfo.toggle();
-							})
-							.appendTo(cellHtml)
-							;
-					var errorInfo = $('<div></div>')
-							.hide()
-							.width(300)
-							.css({
-								'position': 'absolute',
-								'border': '1px solid #ccc',
-								'background-color': 'white',
-								'padding': '10px'
-							})
-							.append(error.Message)
-							.insertAfter(cellHtml)
-							;
+					error = $.parseJSON(jqXHR.responseText);
 				} catch (e) {
-					cellHtml.append("Error!");
+					cellHtml.append(error);
+					return;
 				}
+
+				$('<a></a>')
+					.append(error.ShortMessage + "!")
+					.click(function () {
+						errorInfo.toggle();
+					})
+					.appendTo(cellHtml)
+					;
+				var errorInfo = $('<div></div>')
+					.hide()
+					.width(300)
+					.css({
+						'position': 'absolute',
+						'border': '1px solid #ccc',
+						'background-color': 'white',
+						'padding': '10px'
+					})
+					.append(error.Message)
+					.insertAfter(cellHtml)
+					;
+
 			}
 		});
 	}
@@ -168,7 +191,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		PreferencePartialInit: function () {
 			_initPeriodSelection();
 			_activateSelectable();
-			setTimeout('Teleopti.MyTimeWeb.Preference.LoadFeedback();', 1);
+			setTimeout('Teleopti.MyTimeWeb.Preference.LoadFeedback();', 300);
 		},
 		LoadFeedback: function () {
 			_loadFeedback();
@@ -178,4 +201,3 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 })(jQuery);
 
 $(function () { Teleopti.MyTimeWeb.Preference.Init(); });
-

@@ -181,16 +181,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		$.myTimeAjaxAbortAll();
 		$.myTimeAjax({
-			url: hashInfo.hash,
-			global: true,
-			success: function (html) {
-				$('#body-inner').html(html);
-				var partialFn = _partialViewInitCallback[hashInfo.actionHash];
-				if ($.isFunction(partialFn))
-					partialFn();
-			}
-		})
-			;
+				url: hashInfo.hash,
+				global: true,
+				success: function(html) {
+					$('#body-inner').html(html);
+					var partialFn = _partialViewInitCallback[hashInfo.actionHash];
+					if ($.isFunction(partialFn))
+						partialFn();
+				}
+			});
 	}
 
 	return {
