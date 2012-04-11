@@ -43,8 +43,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                             TargetSkillId = targetSkill.Id.GetValueOrDefault(),
                             JobId = _feedback.JobId()
                         }, result, period);
-            
-            listOfMessages.ForEach(m => _serviceBus.Send(m));
+            var currentSendingMsg = new OpenAndSplitTargetSkill { Date = new DateTime() };
+            try
+            {
+                listOfMessages.ForEach(m =>
+                                           {
+                                               currentSendingMsg = m;
+                                               _serviceBus.Send(m);
+                                           });
+            }
+            catch (Exception e)
+            {
+                var error = string.Format(CultureInfo.InvariantCulture,
+                                          "Import of {0} is failed due to a service bus error: {1}. ", currentSendingMsg.Date,
+                                          e.Message);
+                _feedback.Error(error);
+                _feedback.ReportProgress(0, error);
+            }
         }
 
         private static IEnumerable<OpenAndSplitTargetSkill> generateMessages(OpenAndSplitTargetSkill messageTemplate,

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 {
     [TestFixture]
-    public class ForecastsFileRowTest
+    public class ForecastsRowTest
     {
         private ForecastsRow _row;
 
@@ -41,6 +42,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.That(_row.Agents, Is.EqualTo(agents));
             Assert.That(_row.LocalDateTimeFrom, Is.EqualTo(localDateTimeFrom));
             Assert.That(_row.LocalDateTimeTo, Is.EqualTo(localDateTimeTo));
+        }
+
+        [Test]
+        public void ShouldDeserializeFromConstructor()
+        {
+            const string row = "Insurance,20120326 02:00,20120326 02:15,20120326 02:00,20120326 02:15,17,179,0,4.05, ";
+            var forecastsRow = new ForecastsRow(row);
+
+            Assert.That(forecastsRow.SkillName, Is.EqualTo("Insurance"));
+            Assert.That(forecastsRow.TaskTime, Is.EqualTo(179));
+            Assert.That(forecastsRow.Tasks, Is.EqualTo(17));
+            Assert.That(forecastsRow.AfterTaskTime, Is.EqualTo(0));
+            Assert.That(forecastsRow.Agents, Is.EqualTo(4.05));
+            Assert.That(forecastsRow.LocalDateTimeFrom,
+                        Is.EqualTo(DateTime.ParseExact("20120326 02:00", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture)));
+            Assert.That(forecastsRow.LocalDateTimeTo,
+                        Is.EqualTo(DateTime.ParseExact("20120326 02:15", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture)));
+            Assert.That(forecastsRow.UtcDateTimeFrom,
+                        Is.EqualTo(
+                            new DateTime(
+                                DateTime.ParseExact("20120326 02:00", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture).
+                                    Ticks, DateTimeKind.Utc)));
+            Assert.That(forecastsRow.UtcDateTimeTo,
+                        Is.EqualTo(
+                            new DateTime(
+                                DateTime.ParseExact("20120326 02:15", "yyyyMMdd HH:mm", CultureInfo.InvariantCulture).
+                                    Ticks, DateTimeKind.Utc)));
+            Assert.That(forecastsRow.Shrinkage, Is.Null);
         }
     }
 }

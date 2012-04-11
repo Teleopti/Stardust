@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             {
                 Expect.Call(() => _validateImportForecastFileCommand.Execute(fileName));
                 Expect.Call(() => _view.ShowValidationException(null));
-                Expect.Call(() => _view.EnableImport());
             }
             using(_mocks.Playback())
             {

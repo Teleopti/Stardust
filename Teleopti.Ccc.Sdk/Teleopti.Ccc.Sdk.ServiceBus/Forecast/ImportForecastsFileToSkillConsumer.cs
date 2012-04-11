@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.Serialization;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -7,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
@@ -56,14 +59,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.SetJobResult(jobResult, _messageBroker);
                 if (skill == null)
                 {
-                    logAndReportValidationError(unitOfWork, "Skill does not exist.");
+                    logAndReportValidationError(unitOfWork,jobResult, "Skill does not exist.");
                     return;
                 }
                 var timeZone = skill.TimeZone;
                 var forecastFile = _importForecastsRepository.Get(message.UploadedFileId);
                 if (forecastFile == null)
                 {
-                    logAndReportValidationError(unitOfWork, "The uploaded file has no content.");
+                    logAndReportValidationError(unitOfWork,jobResult, "The uploaded file has no content.");
                     return;
                 }
                 _feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Validating..."));
@@ -74,13 +77,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                     queryResult = _analyzeQuery.Run(content, skill.MidnightBreakOffset);
                     if (!queryResult.Succeeded)
                     {
-                        logAndReportValidationError(unitOfWork, queryResult.ErrorMessage);
+                        logAndReportValidationError(unitOfWork,jobResult, queryResult.ErrorMessage);
                         return;
                     }
                 }
                 catch (ValidationException exception)
                 {
-                    logAndReportValidationError(unitOfWork, exception.Message);
+                    logAndReportValidationError(unitOfWork,jobResult, exception.Message);
                     return;
                 }
                 jobResult.Period = queryResult.Period;
@@ -91,17 +94,52 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 var listOfMessages = generateMessages(message, queryResult);
                 _feedback.ChangeTotalProgress(3 + listOfMessages.Count*4);
                 endProcessing(unitOfWork);
-
-                listOfMessages.ForEach(m => _serviceBus.Send(m));
+                var currentSendingMsg = new OpenAndSplitTargetSkill{Date = new DateTime()};
+                try
+                {
+                    listOfMessages.ForEach(m =>
+                                               {
+                                                   currentSendingMsg = m;
+                                                   _serviceBus.Send(m);
+                                               });
+                }
+                catch (SerializationException e)
+                {
+                    notifyServiceBusErrors(currentSendingMsg, e);
+                }
+                catch (Exception e)
+                {
+                    notifyServiceBusErrors(currentSendingMsg, e);
+                }
             }
             _unitOfWorkFactory = null;
+            _feedback.Dispose();
         }
 
-        private void logAndReportValidationError(IUnitOfWork unitOfWork, string errorMessage)
+        private void notifyServiceBusErrors(OpenAndSplitTargetSkill message, Exception e)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var job = _jobResultRepository.Get(message.JobId);
+                _feedback.SetJobResult(job, _messageBroker);
+                var error = string.Format(CultureInfo.InvariantCulture,
+                                          "Import of {0} is failed due to a service bus error: {1}. ", message.Date,
+                                          e.Message);
+                _feedback.Error(error);
+                _feedback.ReportProgress(0, error);
+                uow.Clear();
+                uow.Merge(job);
+                uow.PersistAll();
+            }
+        }
+
+        private void logAndReportValidationError(IUnitOfWork unitOfWork, IJobResult jobResult, string errorMessage)
         {
             var error = string.Format(CultureInfo.InvariantCulture, "Validation error! {0}", errorMessage);
             _feedback.Error(error);
             _feedback.ReportProgress(0, error);
+            unitOfWork.Clear();
+            unitOfWork.Merge(jobResult);
             endProcessing(unitOfWork);
         }
 
@@ -130,10 +168,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             return listOfMessages;
         }
 
-        private void endProcessing(IUnitOfWork unitOfWork)
+        private static void endProcessing(IUnitOfWork unitOfWork)
         {
             unitOfWork.PersistAll();
-            _feedback.Dispose();
         }
     }
 }
