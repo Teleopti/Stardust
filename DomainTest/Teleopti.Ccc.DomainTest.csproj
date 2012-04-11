@@ -165,7 +165,7 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidatorTest.cs" />
     <Compile Include="Forecasting\Import\ForecastFileTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsFileContentProviderTest.cs" />
-    <Compile Include="Forecasting\Import\ForecastsFileRowTest.cs" />
+    <Compile Include="Forecasting\Import\ForecastsRowTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\MultisiteDayCloneIssueTest.cs" />
     <Compile Include="Forecasting\OpenForWorkTest.cs" />

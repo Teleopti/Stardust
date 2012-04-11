@@ -200,6 +200,7 @@
     <Compile Include="Factory\ContractScheduleFactory.cs" />
     <Compile Include="Factory\IAuthorizationProvider.cs" />
     <Compile Include="Factory\IPersistPersonRequest.cs" />
+    <Compile Include="Factory\LargeForecastsRowCollectionSerializer.cs" />
     <Compile Include="Factory\PersistPersonRequest.cs" />
     <Compile Include="Factory\PlanningTimeBankFactory.cs" />
     <Compile Include="Factory\PreferenceRestrictionConstructor.cs" />
