@@ -206,9 +206,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             var rtaStateGroup = _rtaStateGroups[e.ColIndex - 1];
             var activity = _activities[e.RowIndex - 1];
             IStateGroupActivityAlarm stateGroupActivityAlarm =
-                _stateGroupActivityAlarms.SingleOrDefault(
-                    item => ((item.StateGroup == null && rtaStateGroup == null) || (item.StateGroup != null && item.StateGroup.Equals(rtaStateGroup))) && 
-                        ((item.Activity==null && activity==null) || (item.Activity!=null && item.Activity.Equals(activity))));
+                _stateGroupActivityAlarms.SingleOrDefault(item => isActivityMatch(item,activity) && isStateGroupMatch(item,rtaStateGroup));
             if (stateGroupActivityAlarm != null)
             {
                 e.Style.CellValue = stateGroupActivityAlarm.AlarmType.Description.Name;
@@ -219,6 +217,32 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 e.Style.BackColor = Color.DarkGray;
             }
         }
+
+		private static bool isStateGroupMatch(IStateGroupActivityAlarm stateGroupActivityAlarm, IRtaStateGroup rtaStateGroup)
+		{
+			if (stateGroupActivityAlarm.StateGroup == null && rtaStateGroup == null)
+			{
+				return true;
+			}
+			if (stateGroupActivityAlarm.StateGroup == null || rtaStateGroup == null)
+			{
+				return false;
+			}
+			return stateGroupActivityAlarm.StateGroup.Equals(rtaStateGroup);
+		}
+
+		private static bool isActivityMatch(IStateGroupActivityAlarm stateGroupActivityAlarm, IActivity activity)
+		{
+			if (stateGroupActivityAlarm.Activity == null && activity == null)
+			{
+				return true;
+			}
+			if (stateGroupActivityAlarm.Activity == null || activity == null)
+			{
+				return false;
+			}
+			return stateGroupActivityAlarm.Activity.Equals(activity);
+		}
 
         /// <summary>
         /// set the rowheadername
@@ -287,8 +311,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             var activity = _activities[e.RowIndex - 1];
             IStateGroupActivityAlarm stateGroupActivityAlarm =
                 _stateGroupActivityAlarms.SingleOrDefault(
-                    item => ((item.StateGroup==null && rtaStateGroup==null) || (item.StateGroup!=null && item.StateGroup.Equals(rtaStateGroup))) && 
-                        ((item.Activity==null && activity==null) || (item.Activity!=null && item.Activity.Equals(activity))));
+                    item => isActivityMatch(item,activity) && isStateGroupMatch(item,rtaStateGroup));
 
             if (stateGroupActivityAlarm == null)
             {//insert
@@ -355,8 +378,4 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
         }
     }
-
- 
 }
- 
-				
