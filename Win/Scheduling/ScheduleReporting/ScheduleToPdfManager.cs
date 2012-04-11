@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
     {
         private PdfGraphics _graphics;
         private PdfSolidBrush _brush;
+        private PdfSolidBrush _greyBrush;
         private PdfPen _pen;
         private float _scheduleColumnWidth;
         private float _headerColumnWidth;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             var fullWeekPeriod = new DateOnlyPeriod(outerStart, outerEnd);
 
             _brush = new PdfSolidBrush(Color.DimGray);
+            _greyBrush = new PdfSolidBrush(Color.Gray);
             _pen = new PdfPen(Color.Gray, 1);
             _rtl = rightToLeft;
 
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 		}
 
 		public static void ExportShiftsPerDay(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
-            DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, string path)
+            DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, ScheduleReportDetail details, Control owner, string path)
         {
             var shiftsPerDayToPdfManager = new ShiftsPerDayToPdfManager();
             PdfDocument doc = shiftsPerDayToPdfManager.Export(timeZoneInfo, culture, persons, period, stateHolder, details);
@@ -107,6 +109,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             var fullWeekPeriod = new DateOnlyPeriod(outerStart, outerEnd);
 
             _brush = new PdfSolidBrush(Color.DimGray);
+            _greyBrush = new PdfSolidBrush(Color.Gray);
             _pen = new PdfPen(Color.Gray, 1);
             _rtl = rightToLeft;
 
@@ -409,12 +412,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             //Create a page template
             var footer = new PdfPageTemplateElement(rect);
 
-            var brush = new PdfSolidBrush(Color.Gray);
             const float fontSize = 6f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
 
             var format = new CccPdfStringFormat {Alignment = PdfTextAlignment.Center, LineAlignment = PdfVerticalAlignment.Bottom};
-            footer.Graphics.DrawString(footerText, font, brush, rect, format.PdfStringFormat);
+            footer.Graphics.DrawString(footerText, font, _greyBrush, rect, format.PdfStringFormat);
 
             doc.Template.Bottom = footer;
         }
@@ -425,20 +427,19 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             var rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
             var header = new PdfPageTemplateElement(rect);
-            var brush = new PdfSolidBrush(Color.Gray);
 
             const float fontSize = 6f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, cultureInfo);
 
             var format = new CccPdfStringFormat {LineAlignment = PdfVerticalAlignment.Top, Alignment = PdfTextAlignment.Right};
-			var pageNumber = new PdfPageNumberField(font, brush);
+            var pageNumber = new PdfPageNumberField(font, _greyBrush);
 
-			var count = new PdfPageCountField(font, brush);
+            var count = new PdfPageCountField(font, _greyBrush);
 
-            var createdDate = new PdfCreationDateField(font, brush);
+            var createdDate = new PdfCreationDateField(font, _greyBrush);
             createdDate.DateFormatString = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
-           
-            var compositeField = new PdfCompositeField(font, brush, Resources.CreatedPageOf, createdDate, pageNumber, count)
+
+            var compositeField = new PdfCompositeField(font, _greyBrush, Resources.CreatedPageOf, createdDate, pageNumber, count)
                                      {
                                          StringFormat = format.PdfStringFormat,
                                          Bounds = header.Bounds
