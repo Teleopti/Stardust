@@ -1,11 +1,12 @@
 using System;
+using System.ComponentModel;
 
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Eventargs
     /// </summary>
-    public class BlockSchedulingServiceEventArgs : EventArgs
+    public class BlockSchedulingServiceEventArgs : CancelEventArgs
     {
         /// <summary>
         /// Gets or sets the percentage completed.
