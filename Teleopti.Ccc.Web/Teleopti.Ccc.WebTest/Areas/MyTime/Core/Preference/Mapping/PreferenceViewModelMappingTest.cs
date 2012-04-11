@@ -221,7 +221,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldFlagFeedbackIfInsidePeriod()
+		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
 		{
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
@@ -230,10 +243,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldNotFlagFeedbackIfOutsidePeriod()
+		public void ShouldNotFlagFeedbackIfOutsidePeriodAndNotScheduled()
 		{
 			data.SelectedDate = DateOnly.Today.AddDays(-1);
 			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.DayViewModel(data.SelectedDate)
+				.Feedback.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotFlagFeedbackIfScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
