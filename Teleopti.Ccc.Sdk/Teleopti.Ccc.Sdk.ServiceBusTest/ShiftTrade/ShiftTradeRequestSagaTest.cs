@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
-                    new List<IBusinessRuleResponse>{rule});
+                    new List<IBusinessRuleResponse>{rule,rule});
 				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                 Assert.AreEqual(true, personRequest.IsPending);
                 Assert.AreEqual(false, personRequest.IsApproved);
                 Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-                Assert.IsTrue(personRequest.Message.Contains("aja baja!"));
+				personRequest.Message.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\naja baja!\r\n");
             }
         }
 
