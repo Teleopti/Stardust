@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void SaveChanges()
         {
-            //the managealarmsSituations presenter saves the values to the repositorys
+            _view.Presenter.OnSave();
         }
 
         public void Unload()
