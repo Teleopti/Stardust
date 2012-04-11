@@ -7824,8 +7824,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (shiftsPerDay)
             {
                 ScheduleToPdfManager.ExportShiftsPerDay(_schedulerState.TimeZoneInfo, culture, personDic,
-                                                        period, SchedulerState.SchedulingResultState,
-                                                        rightToLeft, detail, this, path);
+									 period, SchedulerState.SchedulingResultState, detail, this, path);
                 return;
             }
 
