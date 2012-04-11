@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -96,12 +99,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     }
                 }
             }
-            catch (ValidationException ex)
-            {
-                ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
-                DialogResult = DialogResult.None;
-                return;
-            }
+			catch (ValidationException ex)
+			{
+				ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
+				DialogResult = DialogResult.None;
+				return;
+			}
+			catch (OptimisticLockException)
+			{
+				ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+				DialogResult = DialogResult.None;
+				Close();
+				return;
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				FormKill();
+			}
+			catch (Exception exception)
+			{
+				if (exception.InnerException != null && exception.InnerException is SqlException)
+					if (exception.InnerException.Message.Contains("IX_KpiTarget"))
+					{
+						ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+						DialogResult = DialogResult.None;
+						Close();
+						return;
+					}
+				throw;
+			}
 
             DialogResult = canClose ? DialogResult.OK : DialogResult.None;
         }

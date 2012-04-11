@@ -151,6 +151,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
             Assert.AreEqual(2, rtaStateGroups.Count);
 
+			_target.OnSave();
+
             mocks.VerifyAll();
         }
 
