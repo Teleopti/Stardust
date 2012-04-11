@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<MobileReportsAreaModule>();
 
 			builder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
+			builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true, SingleInstanceRuleSetProjectionService = true });
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();

@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	public class RuleSetModule : Module
 	{
 		public bool CacheRuleSetProjection { get; set; }
+		public bool SingleInstanceRuleSetProjectionService { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -20,19 +21,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				 .SingleInstance();
 			if (CacheRuleSetProjection)
 			{
-				builder.Register(componentContext =>
-				                 componentContext.Resolve<IMbCacheFactory>()
-				                 	.Create<IRuleSetProjectionService>(componentContext.Resolve<IShiftCreatorService>())
+				var ruleSetProjectionService = builder.Register(componentContext =>
+				                              componentContext.Resolve<IMbCacheFactory>()
+				                              	.Create<IRuleSetProjectionService>(componentContext.Resolve<IShiftCreatorService>())
 					)
 					.OnRelease(inValidateCache)
-					.As<IRuleSetProjectionService>()
-					.SingleInstance();
+					.As<IRuleSetProjectionService>();
+				if (SingleInstanceRuleSetProjectionService)
+					ruleSetProjectionService.SingleInstance();
+				else
+					ruleSetProjectionService.InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<RuleSetProjectionService>()
-					.As<IRuleSetProjectionService>()
-					.SingleInstance();
+				var ruleSetProjectionService = builder.RegisterType<RuleSetProjectionService>()
+					.As<IRuleSetProjectionService>();
+				if (SingleInstanceRuleSetProjectionService)
+					ruleSetProjectionService.SingleInstance();
+				else
+					ruleSetProjectionService.InstancePerLifetimeScope();
 			}
 		}
 
