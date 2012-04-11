@@ -579,6 +579,7 @@
     <Compile Include="Scheduler\PersistConflictTest.cs" />
     <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
     <Compile Include="Scheduler\PinnedSkillHelperTests.cs" />
+    <Compile Include="Scheduler\Reporting\CCCPdfStringFormatTest.cs" />
     <Compile Include="Scheduler\Reporting\PdfFontManagerTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimeVersusTargetTimeReportDataTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduleReportDialogGraphicalModelTest.cs" />
