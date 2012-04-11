@@ -69,19 +69,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Forecasting.Forms.ExportPages.JobStatusView.SetMessage(System.String)")]
         private void buttonAdvImportClick(object sender, EventArgs e)
         {
-            buttonAdvImport.Enabled = false;
-
             Presenter.StartImport(textBoxImportFileName.Text);
         }
 
         public void ShowValidationException(string message)
         {
             ShowErrorMessage(message, UserTexts.Resources.ValidationError);
-        }
-
-        public void EnableImport()
-        {
-            buttonAdvImport.Enabled = true;
         }
 
         public void ShowError(string errorMessage)
@@ -97,8 +90,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         private void textBoxImportFileNameTextChanged(object sender, EventArgs e)
         {
-            if (File.Exists(textBoxImportFileName.Text))
-                buttonAdvImport.Enabled = true;
+            buttonAdvImport.Enabled = File.Exists(textBoxImportFileName.Text);
         }
     }
 }
