@@ -959,11 +959,6 @@
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\TrackerView.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewAdvBinder.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtender.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewCheckBoxExtender.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Common\DateTimePeriodController.cs" />
     <Compile Include="Common\FilterAdvancedSetting.cs" />
     <Compile Include="Common\FilterBoxAdvancedFilter.cs" />
@@ -1094,8 +1089,6 @@
     <Compile Include="Common\Collections\TreeItemEntityHelper.cs" />
     <Compile Include="Common\Collections\TreeItemEventArgs.cs" />
     <Compile Include="Common\CommonStateHolder.cs" />
-    <Compile Include="Common\ControlBinders\ITreeControlBinder.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewBinder.cs" />
     <Compile Include="Common\DailyAssignmentList.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
     <Compile Include="Common\PasteOptions.cs" />
@@ -1335,10 +1328,6 @@
     <None Include="Meetings\MeetingsClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="ShiftCreator\ShiftCreator.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Common\ControlBinders\!ReadMe.txt" />
-    <Content Include="Common\ControlExtenders\!ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scheduling\ShiftEditor\" />
