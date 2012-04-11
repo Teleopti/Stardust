@@ -43,22 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                 			return s.Restriction.ShiftCategory.DisplayColor.ToStyleClass();
 				                                                 		return null;
 				                                                 	}))
-				.ForMember(d => d.PossibleStartTimes, o => o.Ignore())
-				.ForMember(d => d.PossibleEndTimes, o => o.Ignore())
-				.ForMember(d => d.PossibleContractTimes, o => o.Ignore())
-				.ForMember(d => d.FeedbackError, o => o.Ignore())
-				.AfterMap((s, d) =>
-				          	{
-				          		var workTimeMinMax = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s.RestrictionDate);
-								if (workTimeMinMax == null)
-								{
-									d.FeedbackError = Resources.NoAvailableShifts;
-									return;
-								}
-				          		d.PossibleStartTimes = workTimeMinMax.StartTimeLimitation.StartTimeString + "-" + workTimeMinMax.StartTimeLimitation.EndTimeString;
-								d.PossibleEndTimes = workTimeMinMax.EndTimeLimitation.StartTimeString + "-" + workTimeMinMax.EndTimeLimitation.EndTimeString;
-								d.PossibleContractTimes = workTimeMinMax.WorkTimeLimitation.StartTimeString + "-" + workTimeMinMax.WorkTimeLimitation.EndTimeString;
-				          	})
 				;
 		}
 	}
