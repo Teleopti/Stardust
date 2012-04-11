@@ -835,6 +835,7 @@
     <Compile Include="Scheduling\Requests\RequestDetailsShiftTradePresenter.cs" />
     <Compile Include="Scheduling\Requests\ShowRequestDetailsView.cs" />
     <Compile Include="Scheduling\RestrictionSummary\PreferenceNightRestChecker.cs" />
+    <Compile Include="Scheduling\ScheduleReporting\CccPdfStringFormat.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IScheduledTimeVersusTargetTimeReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IScheduleReportDialogGraphicalView.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimeVersusTargetTimeReportData.cs" />
