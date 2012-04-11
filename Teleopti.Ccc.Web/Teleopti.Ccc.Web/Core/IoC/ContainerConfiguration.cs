@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
+using MbCache.Configuration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<MyTimeAreaModule>();
 			builder.RegisterModule<StartAreaModule>();
-			builder.RegisterModule<RuleSetModule>();
 			builder.RegisterModule<MobileReportsAreaModule>();
 
+			builder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
+			builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
