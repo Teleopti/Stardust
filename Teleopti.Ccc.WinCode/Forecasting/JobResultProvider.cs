@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
 		private static string determineStatus(IJobResult jobResult)
 		{
-			if (jobResult.FinishedOk)
+            if (jobResult.HasError())
+                return UserTexts.Resources.Error;
+            if (jobResult.IsWorking())
+                return UserTexts.Resources.WorkingThreeDots;
+            if (jobResult.FinishedOk)
 				return UserTexts.Resources.Done;
-			if (jobResult.HasError())
-				return UserTexts.Resources.Error;
-			if (jobResult.IsWorking())
-				return UserTexts.Resources.WorkingThreeDots;
 			return UserTexts.Resources.WaitingThreeDots;
 		}
 	}

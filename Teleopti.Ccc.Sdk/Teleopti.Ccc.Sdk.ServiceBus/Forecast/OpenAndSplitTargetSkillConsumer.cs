@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 {
                     var openHours = new TimePeriod(message.StartOpenHour, message.EndOpenHour);
                     var dateOnly = new DateOnly(message.Date);
-                    try { 
-                    _command.Execute(targetSkill, new DateOnlyPeriod(dateOnly, dateOnly), new[] {openHours});
+                    try
+                    {
+                        _command.Execute(targetSkill, new DateOnlyPeriod(dateOnly, dateOnly), new[] { openHours });
                     }
                     catch (Exception exception)
                     {
@@ -67,27 +68,52 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                                            targetSkill.Name, message.Date));
                     endProcessing(unitOfWork);
                 }
+                var currentSendingMsg = new ImportForecastsToSkill{Date = new DateTime()};
+                try
+                {
+                   currentSendingMsg =  new ImportForecastsToSkill
+                        {
+                            BusinessUnitId = message.BusinessUnitId,
+                            Datasource = message.Datasource,
+                            JobId = message.JobId,
+                            OwnerPersonId = message.OwnerPersonId,
+                            Date = message.Date,
+                            TargetSkillId = message.TargetSkillId,
+                            Forecasts = message.Forecasts,
+                            Timestamp = message.Timestamp,
+                            ImportMode = message.ImportMode
+                        };
+                   _serviceBus.Send(currentSendingMsg);
+                }
+                catch (Exception e)
+                {
+                    notifyServiceBusErrors(currentSendingMsg, e);
+                }
             }
-            _serviceBus.Send(new ImportForecastsToSkill
-            {
-                BusinessUnitId = message.BusinessUnitId,
-                Datasource = message.Datasource,
-                JobId = message.JobId,
-                OwnerPersonId = message.OwnerPersonId,
-                Date = message.Date,
-                TargetSkillId = message.TargetSkillId,
-                Forecasts = message.Forecasts,
-                Timestamp = message.Timestamp,
-                ImportMode = message.ImportMode
-            });
-
             _unitOfWorkFactory = null;
+            _feedback.Dispose();
         }
 
-        private void endProcessing(IUnitOfWork unitOfWork)
+        private void notifyServiceBusErrors(ImportForecastsToSkill message, Exception e)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var job = _jobResultRepository.Get(message.JobId);
+                _feedback.SetJobResult(job, _messageBroker);
+                var error = string.Format(CultureInfo.InvariantCulture,
+                                         "Import of {0} is failed due to a service bus error: {1}. ", message.Date,
+                                         e.Message);
+                _feedback.Error(error);
+                _feedback.ReportProgress(0, error);
+                uow.Clear();
+                uow.Merge(job);
+                uow.PersistAll();
+            }
+        }
+
+        private static void endProcessing(IUnitOfWork unitOfWork)
         {
             unitOfWork.PersistAll();
-            _feedback.Dispose();
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
-using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
@@ -335,29 +333,7 @@ namespace Teleopti.Support.LicTool
 
 			try
 			{
-				var parms = new CspParameters(1)
-				{
-					Flags = CspProviderFlags.UseMachineKeyStore,
-					KeyContainerName = XmlLicense.ContainerName,
-					KeyNumber = 2
-				};
-
-				using (var csp = new RSACryptoServiceProvider(parms))
-				{
-					var sxml = new SignedXml(xdoc) { SigningKey = csp };
-
-					sxml.SignedInfo.CanonicalizationMethod = SignedXml.XmlDsigCanonicalizationUrl;
-
-					var r = new Reference("");
-					r.AddTransform(new XmlDsigEnvelopedSignatureTransform(false));
-
-					sxml.AddReference(r);
-
-					sxml.ComputeSignature();
-
-					XmlElement sig = sxml.GetXml();
-					xdoc.DocumentElement.AppendChild(sig);
-				}
+				XmlLicense.Sign(xdoc, new CryptoSettingsFromMachineStore(XmlLicense.ContainerName));
 			}
 			catch (CryptographicException ex)
 			{

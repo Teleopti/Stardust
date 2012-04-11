@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			var page = doc.Pages.Add();
 			_culture = CultureInfo.GetCultureInfo("en-US");
 			_font = PdfFontManager.GetFont(14f, PdfFontStyle.Regular, _culture );
-			_drawHeader = new ScheduleReportDrawHeader(page, UserTexts.Resources.Test, false, CultureInfo.GetCultureInfo("en-US"));
+			_drawHeader = new ScheduleReportDrawHeader(page, UserTexts.Resources.Test, CultureInfo.GetCultureInfo("en-US"));
 		}
 
 		[Test]

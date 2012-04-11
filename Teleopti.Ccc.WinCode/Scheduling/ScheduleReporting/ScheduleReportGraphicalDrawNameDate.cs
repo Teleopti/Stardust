@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 		public float DrawHeader(string value)
 		{
 			_top = _top + Padding;
-			var format = new PdfStringFormat { RightToLeft = _rightToLeft };
+		    var format = new CccPdfStringFormat();
 			const float fontSize = 10f;
 			var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, _cultureInfo);
 			_columnWidth = font.MeasureString(value).Width + Padding;
@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			if(_rightToLeft)
 				left = (int)(_page.GetClientSize().Width - _columnWidth);
 
-			_page.Graphics.DrawString(_text, font, _brush, new RectangleF(left, _top, left + _columnWidth, font.Height + Padding), format);
+			_page.Graphics.DrawString(_text, font, _brush, new RectangleF(left, _top, left + _columnWidth, font.Height + Padding), format.PdfStringFormat);
 			return _top + font.Height + Padding;	
 		}
 
 		public float DrawData(int width)
 		{
-			var format = new PdfStringFormat { RightToLeft = _rightToLeft, WordWrap = PdfWordWrapType.None };
+		    var format = new CccPdfStringFormat {WordWrapType = PdfWordWrapType.None};
 			const float fontSize = 9f;
 			var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, _cultureInfo);
 			var left = 0;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			if(_rightToLeft)
 				left = (int)(_page.GetClientSize().Width - width);
 	
-			_page.Graphics.DrawString(_text, font, _brush, new RectangleF(left, _top + RowSpace, left + width, font.Height + RowSpace), format);
+			_page.Graphics.DrawString(_text, font, _brush, new RectangleF(left, _top + RowSpace, left + width, font.Height + RowSpace), format.PdfStringFormat);
 			return _top + font.Height + RowSpace;
 		}
 

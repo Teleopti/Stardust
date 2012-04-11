@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			return previousDateOnly.Date.AddDays(2).IsDaylightSavingTime() != dateOnly.Date.AddDays(2).IsDaylightSavingTime();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduleReportDrawHeader.#ctor(Syncfusion.Pdf.PdfPage,System.String,System.Boolean,System.Globalization.CultureInfo)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduleReportDrawHeader.#ctor(Syncfusion.Pdf.PdfPage,System.String,System.Globalization.CultureInfo)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduleReportDrawHeader.#ctor(Syncfusion.Pdf.PdfPage,System.String,System.Boolean,System.Globalization.CultureInfo)")]
 		private float NewPageTeamView(PdfDocument doc, DateOnly dateOnly, float top, bool newReport, bool rightToLeft, CultureInfo culture, out PdfPage page)
 		{
 			if (doc == null)
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
 			if (newReport)
 			{
-				var drawHeader = new ScheduleReportDrawHeader(page, _reportTitle, rightToLeft, culture);
+				var drawHeader = new ScheduleReportDrawHeader(page, _reportTitle, culture);
 				top = drawHeader.Draw();
 			}
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			_reportTitle = _persons[person];
 
 			//if (newReport)
-			var drawHeader = new ScheduleReportDrawHeader(page, _reportTitle, rightToLeft, culture);
+			var drawHeader = new ScheduleReportDrawHeader(page, _reportTitle, culture);
 			var top = drawHeader.Draw();
 
 			var drawNameDate = new ScheduleReportGraphicalDrawNameDate(page, top, Resources.Date, rightToLeft, culture);

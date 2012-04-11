@@ -1,13 +1,10 @@
-﻿#region Imports
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Licensing;
-
-#endregion
 
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
@@ -17,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
     {
         private const string folder = "Licensing\\";
         private const string teleoptiCccUnsignedLicenseFileName = folder + "TeleoptiCCCUnsignedLicense.xml";
-        private const string teleoptiCccLicenseFileName = "TeleoptiCCCLicense.xml";
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
@@ -51,9 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [Test]
         public void VerifySignErrorWhenFileExists()
         {
-            string nonExistentFile = Path.GetRandomFileName();
-            int exitCode = XmlLicense.Sign(nonExistentFile, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           Path.GetRandomFileName());
+			int exitCode = XmlLicense.Sign(null, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.FileNotFound, exitCode);
         }
 
@@ -61,28 +55,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySigning()
         {
-            int exitCode = XmlLicense.Sign(teleoptiCccUnsignedLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           teleoptiCccLicenseFileName);
+			XmlDocument doc = new XmlDocument();
+			doc.Load(teleoptiCccUnsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
-            File.Delete(teleoptiCccLicenseFileName);
         }
 
         [Test]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySignature()
-        {
-            int exitCode = XmlLicense.Sign(teleoptiCccUnsignedLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           teleoptiCccLicenseFileName);
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(teleoptiCccUnsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            XDocument signedXml = XDocument.Load(teleoptiCccLicenseFileName);
+			XDocument signedXml;
+			using (var reader = new XmlNodeReader(doc))
+			{
+				signedXml = XDocument.Load(reader);
+			}
+
             IXmlLicense xmlLicense = new XmlLicense(signedXml, XmlLicenseTestSetupFixture.PublicKeyXmlString);
             Assert.AreEqual("This license is stolen!", xmlLicense.CustomerName);
             Assert.AreEqual("TeleoptiCCC", xmlLicense.SchemaName);
-
-            File.Delete(teleoptiCccLicenseFileName);
         }
 
         /// <summary>
@@ -100,12 +98,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             )]
         public void VerifySignatureInvalidWhenWrongSingingKey()
         {
-            int exitCode = XmlLicense.Sign(teleoptiCccUnsignedLicenseFileName, "nonexistantcontainer",
-                                           teleoptiCccLicenseFileName);
+			XmlDocument doc = new XmlDocument();
+			doc.Load(teleoptiCccUnsignedLicenseFileName);
+
+            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore("nonexistantcontainer"));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            XDocument signedXml = XDocument.Load(teleoptiCccLicenseFileName);
-            bool exceptionThrown = false;
+        	XDocument signedXml;
+        	using (var reader = new XmlNodeReader(doc))
+			{
+				signedXml = XDocument.Load(reader);
+			}
+        	bool exceptionThrown = false;
             try
             {
                 new XmlLicense(signedXml, XmlLicenseTestSetupFixture.PublicKeyXmlString);
@@ -115,21 +119,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 exceptionThrown = true;
             }
             Assert.IsTrue(exceptionThrown);
-
-            File.Delete(teleoptiCccLicenseFileName);
         }
 
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifySignatureInvalidWhenModified()
-        {
-            int exitCode = XmlLicense.Sign(teleoptiCccUnsignedLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           teleoptiCccLicenseFileName);
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(teleoptiCccUnsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            XDocument signedXml = XDocument.Load(teleoptiCccLicenseFileName);
+			XDocument signedXml;
+			using (var reader = new XmlNodeReader(doc))
+			{
+				signedXml = XDocument.Load(reader);
+			}
 
             XElement maxActiveAgentsElement = signedXml.XPathSelectElement("License/MaxActiveAgents");
             Assert.AreEqual("10000", maxActiveAgentsElement.Value);
@@ -147,8 +154,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 exceptionThrown = true;
             }
             Assert.IsTrue(exceptionThrown);
-
-            File.Delete(teleoptiCccLicenseFileName);
         }
 
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]

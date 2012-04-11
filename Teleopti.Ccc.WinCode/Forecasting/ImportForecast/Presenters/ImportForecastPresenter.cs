@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
             if (_model.HasValidationError)
             {
                 _view.ShowValidationException(_model.ValidationMessage);
-                _view.EnableImport();
                 return;
             }
 
