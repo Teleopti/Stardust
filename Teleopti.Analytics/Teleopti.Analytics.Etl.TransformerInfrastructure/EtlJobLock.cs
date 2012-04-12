@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			string computerName = Environment.MachineName;
 			DateTime startTime = DateTime.Now;
 			string sqlText = "insert into mart.sys_etl_running_lock ";
-			sqlText += string.Format("select {0},{1},{2},{3}", computerName, startTime, jobName, isStartByService);
+			sqlText += string.Format("select '{0}','{1}','{2}',{3}", computerName, startTime, jobName, isStartByService ? 1 : 0);
 			sqlCommand.CommandType = CommandType.Text;
 			sqlCommand.CommandText = sqlText;
 			sqlCommand.ExecuteNonQuery();

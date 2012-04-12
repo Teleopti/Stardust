@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Database;
 using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
@@ -39,60 +44,50 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
             else
             {
                 // Job execution ready
-                var job = e.Result as IJob;
-                if (job != null)
+				var jobExecutionState = e.Result as JobExecutionState;
+                if (jobExecutionState != null)
                 {
-                    job.NotifyJobExecutionReady();
-                    JobStoppedRunning(sender, new AlarmEventArgs(job));
-                    
+                    jobExecutionState.Job.NotifyJobExecutionReady();
+                    JobStoppedRunning(sender, new AlarmEventArgs(jobExecutionState.Job));
+					notifyUser(jobExecutionState);
                 }
             }
         }
 
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
+		private void notifyUser(JobExecutionState jobExecutionState)
+    	{
+			if (jobExecutionState.IsEtlJobLocked)
+			{
+				var msg = new StringBuilder("Another job is running at the moment. Please try again later.\n\n");
+				msg.Append(string.Format("Server name: {0}\n", jobExecutionState.EtlRunningInformation.ComputerName));
+				msg.Append(string.Format("Job Name: {0}\n", jobExecutionState.EtlRunningInformation.JobName));
+				msg.Append(string.Format("Start Time: {0}\n", jobExecutionState.EtlRunningInformation.StartTime));
+				msg.Append(string.Format("Run By ETL Service: {0}\n",
+				                         jobExecutionState.EtlRunningInformation.IsStartedByService ? "Yes" : "No"));
+				MessageBox.Show(msg.ToString(), "Information", MessageBoxButtons.OK);
+			}
+    	}
+
+    	private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			var job = (JobBase)e.Argument;
         	SetCultureOnThread(job);
-            
-            bool firstBuRun = true;
-            IList<IBusinessUnit> businessUnitCollection = job.JobParameters.Helper.BusinessUnitCollection;
-            // Iterate through bu list and run job for each bu.
-            if (businessUnitCollection != null && businessUnitCollection.Count > 0)
-            {
-                IBusinessUnit lastBuToRun = businessUnitCollection[businessUnitCollection.Count - 1];
-                foreach (IBusinessUnit businessUnit in businessUnitCollection)
-                {
-                    DateTime startTime = DateTime.Now;
-                    IJobResult jobResult = job.Run(businessUnit, jobStepsNotToRun, jobResultCollection, firstBuRun, businessUnit.Id == lastBuToRun.Id);
-                    jobResult.EndTime = DateTime.Now;
-                    jobResult.StartTime = startTime;
-
-                    jobResultCollection.Add(jobResult);
-                    firstBuRun = false;
-                }
-            }
-
-			var rep = new Repository(ConfigurationManager.AppSettings["datamartConnectionString"]);
-
-            if (jobResultCollection.Count > 0)
-            {
-                foreach (IJobResult jobResult in jobResultCollection)
-                {
-                    IEtlLog etlLogItem = new EtlLog(rep);
-                    etlLogItem.Init(-1, jobResult.StartTime, jobResult.EndTime);
-
-                    foreach (IJobStepResult jobStepResult in jobResult.JobStepResultCollection)
-                    {
-                        etlLogItem.PersistJobStep(jobStepResult);
-                    }
-
-                    etlLogItem.Persist(jobResult);
-                }
-            }
-
-            e.Result = job;
+        	string connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+        	var repository = new Repository(connectionString);
+        	var runController = new RunController(repository);
+        	IEtlRunningInformation etlRunningInformation;
+			if (runController.CanIRunAJob(out etlRunningInformation))
+			{
+				runController.StartEtlJobRunLock(job.Name, false, new EtlJobLock(connectionString));
+				var jobRunner=new JobRunner();
+				IList<IBusinessUnit> businessUnits = job.JobParameters.Helper.BusinessUnitCollection;
+				IList<IJobResult> jobResults = jobRunner.Run(job, businessUnits, jobResultCollection, jobStepsNotToRun);
+				jobRunner.SaveResult(jobResults, repository, -1);
+				runController.Dispose();
+			}
+			e.Result = new JobExecutionState(etlRunningInformation,job);
         }
 
     	private static void SetCultureOnThread(JobBase job)
@@ -115,4 +110,19 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
             GC.SuppressFinalize(this);
         }
     }
+	internal class JobExecutionState
+	{
+		public JobExecutionState(IEtlRunningInformation etlRunningInformation, IJob job)
+		{
+			EtlRunningInformation = etlRunningInformation;
+			Job = job;
+		}
+
+		public bool IsEtlJobLocked
+		{
+			get { return EtlRunningInformation != null; }
+		}
+		public IEtlRunningInformation EtlRunningInformation { get; set; }
+		public IJob Job { get; set; }
+	}
 }
