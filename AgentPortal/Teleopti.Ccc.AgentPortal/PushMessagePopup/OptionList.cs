@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
 
         private void CreateRadioButton(string item)
         {
-            var button = new RadioButton {Checked = false, Text = item};
+            var button = new RadioButton {Checked = false, Text = item, AutoSize = true};
             button.CheckedChanged += button_CheckedChanged;
             panel1.Controls.Add(button);
         }
