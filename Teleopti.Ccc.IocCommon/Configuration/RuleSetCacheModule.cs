@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		public RuleSetCacheModule(MbCacheModule mbCacheModule) {
 			if (mbCacheModule == null)
-				throw new ArgumentException();
+				throw new ArgumentException("MbCacheModule required", "mbCacheModule");
 			_cacheBuilder = mbCacheModule.Builder;
 		}
 
