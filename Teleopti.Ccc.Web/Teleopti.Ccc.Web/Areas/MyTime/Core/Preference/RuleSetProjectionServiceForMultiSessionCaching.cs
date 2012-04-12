@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
-		public IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet)
+		public virtual IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet)
 		{
 			var result = _service.ProjectionCollection(ruleSet);
 			if (result == null)

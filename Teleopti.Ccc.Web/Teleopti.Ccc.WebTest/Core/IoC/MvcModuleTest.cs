@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
 		{
 			var result = requestContainer.Resolve<IRuleSetProjectionService>();
-			result.GetType().Should().Be(typeof (RuleSetProjectionServiceForMultiSessionCaching));
+			result.GetType().Should().Be.AssignableTo<RuleSetProjectionServiceForMultiSessionCaching>();
 		}
 
 	}
