@@ -61,16 +61,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
 				if (!configHandler.IsConfigurationValid)
 				{
-					var culture = configHandler.BaseConfiguration.CultureId.HasValue
-					              	? configHandler.BaseConfiguration.CultureId.Value.ToString(CultureInfo.InvariantCulture)
-					              	: "null";
-					var intervalLength = configHandler.BaseConfiguration.IntervalLength.HasValue
-					                     	? configHandler.BaseConfiguration.IntervalLength.Value.ToString(CultureInfo.InvariantCulture)
-					                     	: "null";
-					var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
-					Log.WarnFormat(CultureInfo.InvariantCulture,
-					               "ETL Service could not run any jobs due to invalid base configuration. Please start the manual ETL Tool and configure. (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'.)",
-					               culture, intervalLength, timeZone);
+					LogInvalidConfiguration(configHandler);
 					return;
 				}
 
@@ -94,6 +85,20 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			{
 				_timer.Start();
 			}
+		}
+
+		private static void LogInvalidConfiguration(ConfigurationHandler configHandler)
+		{
+			var culture = configHandler.BaseConfiguration.CultureId.HasValue
+			              	? configHandler.BaseConfiguration.CultureId.Value.ToString(CultureInfo.InvariantCulture)
+			              	: "null";
+			var intervalLength = configHandler.BaseConfiguration.IntervalLength.HasValue
+			                     	? configHandler.BaseConfiguration.IntervalLength.Value.ToString(CultureInfo.InvariantCulture)
+			                     	: "null";
+			var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
+			Log.WarnFormat(CultureInfo.InvariantCulture,
+			               "ETL Service could not run any jobs due to invalid base configuration. Please start the manual ETL Tool and configure. (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'.)",
+			               culture, intervalLength, timeZone);
 		}
 
 		public void Dispose()

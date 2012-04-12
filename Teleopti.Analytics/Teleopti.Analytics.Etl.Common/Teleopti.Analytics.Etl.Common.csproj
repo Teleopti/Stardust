@@ -84,8 +84,11 @@
     <Compile Include="Database\Repository.cs" />
     <Compile Include="Database\EtlSchedules\EtlSchedule.cs" />
     <Compile Include="Database\EtlSchedules\EtlScheduleCollection.cs" />
+    <Compile Include="EtlRunningInformation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="JobRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunController.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

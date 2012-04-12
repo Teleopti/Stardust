@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 {
 	internal class RunJob
 	{
-		private static readonly ILog _log = LogManager.GetLogger(typeof(SchedulePriority));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(RunJob));
 		private readonly string _timeZoneId;
 		private readonly int _intervalLengthMinutes;
 		private readonly string _cube;
@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Run(IEtlSchedule etlScheduleToRun, ILogRepository repository, JobHelper jobHelper)
 		{
-			_log.Info("Starting schedule " + etlScheduleToRun.ScheduleName);
+			Log.Info("Starting schedule " + etlScheduleToRun.ScheduleName);
 
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
