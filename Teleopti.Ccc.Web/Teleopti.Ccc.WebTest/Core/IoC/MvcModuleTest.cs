@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
@@ -383,5 +384,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var result = requestContainer.Resolve<IWorkTimeMinMaxCalculator>();
 			result.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
+		{
+			var result = requestContainer.Resolve<IRuleSetProjectionService>();
+			result.GetType().Should().Be(typeof (RuleSetProjectionServiceForMultiSessionCaching));
+		}
+
 	}
 }

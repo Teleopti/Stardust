@@ -164,7 +164,6 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
-    <Compile Include="Areas\MyTime\Controllers\PreferenceDayHub.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IPersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
@@ -172,6 +171,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\RuleSetProjectionServiceForMultiSessionCaching.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />

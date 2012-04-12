@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	public class RuleSetModule : Module
 	{
 		public bool CacheRuleSetProjection { get; set; }
-		public bool SingleInstanceRuleSetProjectionService { get; set; }
+		public bool RegisterRuleSetProjectionService { get; set; }
+
+		public RuleSetModule() { RegisterRuleSetProjectionService = true; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -19,27 +21,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCreatorService>()
 				 .As<IShiftCreatorService>()
 				 .SingleInstance();
-			if (CacheRuleSetProjection)
+
+			if (RegisterRuleSetProjectionService)
 			{
-				var ruleSetProjectionService = builder.Register(componentContext =>
-				                              componentContext.Resolve<IMbCacheFactory>()
-				                              	.Create<IRuleSetProjectionService>(componentContext.Resolve<IShiftCreatorService>())
-					)
-					.OnRelease(inValidateCache)
-					.As<IRuleSetProjectionService>();
-				if (SingleInstanceRuleSetProjectionService)
-					ruleSetProjectionService.SingleInstance();
+				if (CacheRuleSetProjection)
+				{
+					builder.Register(componentContext =>
+									 componentContext.Resolve<IMbCacheFactory>()
+										.Create<IRuleSetProjectionService>(componentContext.Resolve<IShiftCreatorService>())
+						)
+						.OnRelease(inValidateCache)
+						.As<IRuleSetProjectionService>()
+						.InstancePerLifetimeScope();
+				}
 				else
-					ruleSetProjectionService.InstancePerLifetimeScope();
-			}
-			else
-			{
-				var ruleSetProjectionService = builder.RegisterType<RuleSetProjectionService>()
-					.As<IRuleSetProjectionService>();
-				if (SingleInstanceRuleSetProjectionService)
-					ruleSetProjectionService.SingleInstance();
-				else
-					ruleSetProjectionService.InstancePerLifetimeScope();
+				{
+					builder.RegisterType<RuleSetProjectionService>()
+						.As<IRuleSetProjectionService>()
+						.InstancePerLifetimeScope();
+				}
 			}
 		}
 

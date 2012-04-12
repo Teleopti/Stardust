@@ -5,11 +5,15 @@ using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -34,7 +38,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<MobileReportsAreaModule>();
 
 			builder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true, SingleInstanceRuleSetProjectionService = true });
+			builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = false, RegisterRuleSetProjectionService = false });
+
+			builder.RegisterType<RuleSetProjectionService>()
+				.Named<IRuleSetProjectionService>("implementor");
+			builder.RegisterDecorator<IRuleSetProjectionService>((c, inner) => new RuleSetProjectionServiceForMultiSessionCaching(inner, c.Resolve<ILazyLoadingManager>()), "implementor")
+				.As<IRuleSetProjectionService>()
+				;
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
