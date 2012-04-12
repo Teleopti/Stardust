@@ -313,5 +313,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <returns>The business units.</returns>
         [OperationContract]
         ICollection<BusinessUnitDto> GetBusinessUnitsByQuery(QueryDto queryDto);
+
+        /// <summary>
+        /// Find people available for shift trade request.
+        /// </summary>
+        /// <param name="queryDto">The query.</param>
+        [OperationContract]
+        ICollection<PersonDto> GetPeopleForShiftTradeByQuery(QueryDto queryDto);
     }
 }
