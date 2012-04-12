@@ -25,8 +25,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void VerifyProjectionServiceIsCached()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			containerBuilder.RegisterModule(mbCacheModule);
+			containerBuilder.RegisterModule(new RuleSetModule());
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -42,8 +44,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ProjectionServiceIsCachedPerScope()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			containerBuilder.RegisterModule(mbCacheModule);
+			containerBuilder.RegisterModule(new RuleSetModule());
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
 			var wsRs = createRuleset(true);
 
 			using (var container = containerBuilder.Build())
@@ -66,8 +70,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			containerBuilder.RegisterModule(mbCacheModule);
+			containerBuilder.RegisterModule(new RuleSetModule());
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
 			var wsRs = createRuleset(true);
 
 			using (var container = containerBuilder.Build())
@@ -87,8 +93,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void VerifyProjectionServiceIsNotCached()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = false });
+			containerBuilder.RegisterModule(new MbCacheModule(new AspNetCache(20)));
+			containerBuilder.RegisterModule(new RuleSetModule());
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -101,8 +107,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldNotCacheRuleSetWithNoId()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-			containerBuilder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			containerBuilder.RegisterModule(mbCacheModule);
+			containerBuilder.RegisterModule(new RuleSetModule());
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
 			var wsRs = createRuleset(false);
 
 			using (var container = containerBuilder.Build())

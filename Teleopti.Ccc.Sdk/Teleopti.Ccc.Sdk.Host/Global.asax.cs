@@ -132,10 +132,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         private static ContainerBuilder buildIoc()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new MbCacheModule { Cache = new AspNetCache(20) });
-            builder.RegisterModule(new EncryptionModule());
-            builder.RegisterModule(new RuleSetModule { CacheRuleSetProjection = true });
-            builder.RegisterModule<AuthenticationModule>();
+
+        	var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			builder.RegisterModule(mbCacheModule);
+        	builder.RegisterModule<RuleSetModule>();
+			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
+			builder.RegisterModule<EncryptionModule>();
+			builder.RegisterModule<AuthenticationModule>();
             builder.RegisterModule<AssemblerModule>();
             builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<UnitOfWorkModule>();

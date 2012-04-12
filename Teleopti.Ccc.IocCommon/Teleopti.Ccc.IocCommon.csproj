@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AuthenticationModule.cs" />
+    <Compile Include="Configuration\RuleSetCacheModule.cs" />
     <Compile Include="Configuration\DateAndTimeModule.cs" />
     <Compile Include="Configuration\EncryptionModule.cs" />
     <Compile Include="Configuration\InitializeModule.cs" />
