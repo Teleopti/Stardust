@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool HideGraph { get; set; }
         bool HideResult { get; set; }
         bool HideRibbonTexts { get; set; }
-        string SelectedFairnessGroupingKey { get; set; }
         IList<Guid> PinnedSkillTabs { get; }
     }
 }

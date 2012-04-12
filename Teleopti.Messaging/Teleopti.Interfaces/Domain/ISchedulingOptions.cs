@@ -318,5 +318,13 @@ namespace Teleopti.Interfaces.Domain
         ///<summary>
         ///</summary>
         IScheduleTag TagToUseOnOptimize { get; set; }
+
+		/// <summary>
+		/// Gets or sets the resource calculate frequency.
+		/// </summary>
+		/// <value>
+		/// The resource calculate frequency.
+		/// </value>
+		int ResourceCalculateFrequency { get; set; }
     }
 }

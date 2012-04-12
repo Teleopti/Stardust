@@ -10555,4 +10555,8 @@ These options are activated:
     <value>Student Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
   </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Resource Calculate Every:</value>
+    <comment>Resource Calculate Every:</comment>
+  </data>
 </root>

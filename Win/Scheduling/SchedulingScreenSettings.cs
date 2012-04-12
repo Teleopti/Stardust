@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _hideRibbonTexts;
         private Guid? _defaultScheduleTag;
         private OptimizeActivitiesSettings _optimizeActivitiesSettings = new OptimizeActivitiesSettings();
-        private string _selectedFairnessGroupingKey;
+
         private IList<Guid> _pinnedSkills;
 
         public Guid? DefaultScheduleTag
@@ -72,12 +72,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get { return _hideRibbonTexts; }
             set { _hideRibbonTexts = value; }
-        }
-
-        public string SelectedFairnessGroupingKey
-        {
-            get { return _selectedFairnessGroupingKey; }
-            set { _selectedFairnessGroupingKey = value; }
         }
 
         public IList<Guid> PinnedSkillTabs

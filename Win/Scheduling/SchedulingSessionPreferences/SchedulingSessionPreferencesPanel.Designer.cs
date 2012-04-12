@@ -82,6 +82,10 @@
 			this.tabPageGeneral = new System.Windows.Forms.TabPage();
 			this.tabPageAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelScheduleOrSchedules1 = new System.Windows.Forms.Label();
+			this.numericUpDownResourceCalculateEvery = new System.Windows.Forms.NumericUpDown();
+			this.labelResourceCalculateEveryColon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanelRefreshScreen.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
@@ -107,6 +111,8 @@
 			this.tabPageGeneral.SuspendLayout();
 			this.tabPageAdvanced.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.tableLayoutPanel8.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -128,7 +134,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 288F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 710);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 626);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanelRefreshScreen
@@ -152,11 +158,11 @@
 			// 
 			// label2
 			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label2.Location = new System.Drawing.Point(391, 0);
 			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(153, 28);
+			this.label2.Size = new System.Drawing.Size(154, 28);
 			this.label2.TabIndex = 19;
 			this.label2.Text = "xxScheduleOrSchedules";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -188,11 +194,11 @@
 			// 
 			// label1
 			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.Location = new System.Drawing.Point(16, 0);
 			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(183, 28);
+			this.label1.Size = new System.Drawing.Size(260, 28);
 			this.label1.TabIndex = 17;
 			this.label1.Text = "xxRefreshScreenEveryColon";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -650,7 +656,7 @@
 			this.comboBoxAdvShiftCategory.Margin = new System.Windows.Forms.Padding(4);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(230, 19);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(230, 24);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 1;
@@ -758,7 +764,7 @@
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(37, 156);
 			this.comboBoxGroupingFairness.Margin = new System.Windows.Forms.Padding(4);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(230, 19);
+			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(230, 24);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGroupingFairness.TabIndex = 22;
 			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGroupingFairnessSelectedIndexChanged);
@@ -820,7 +826,7 @@
 			this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(573, 747);
+			this.tabControl1.Size = new System.Drawing.Size(573, 663);
 			this.tabControl1.TabIndex = 1;
 			// 
 			// tabPageGeneral
@@ -830,7 +836,7 @@
 			this.tabPageGeneral.Margin = new System.Windows.Forms.Padding(4);
 			this.tabPageGeneral.Name = "tabPageGeneral";
 			this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(4);
-			this.tabPageGeneral.Size = new System.Drawing.Size(565, 718);
+			this.tabPageGeneral.Size = new System.Drawing.Size(565, 634);
 			this.tabPageGeneral.TabIndex = 0;
 			this.tabPageGeneral.Text = "xxGeneral";
 			this.tabPageGeneral.UseVisualStyleBackColor = true;
@@ -842,7 +848,7 @@
 			this.tabPageAdvanced.Margin = new System.Windows.Forms.Padding(4);
 			this.tabPageAdvanced.Name = "tabPageAdvanced";
 			this.tabPageAdvanced.Padding = new System.Windows.Forms.Padding(4);
-			this.tabPageAdvanced.Size = new System.Drawing.Size(565, 718);
+			this.tabPageAdvanced.Size = new System.Drawing.Size(565, 634);
 			this.tabPageAdvanced.TabIndex = 1;
 			this.tabPageAdvanced.Text = "xxAdvanced";
 			this.tabPageAdvanced.UseVisualStyleBackColor = true;
@@ -851,6 +857,7 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel8, 0, 3);
 			this.tableLayoutPanel3.Controls.Add(this.groupBox2, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.groupBoxShiftCategory, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.groupBox7, 0, 2);
@@ -858,13 +865,80 @@
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(4, 4);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 4;
+			this.tableLayoutPanel3.RowCount = 5;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 154F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 222F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(557, 710);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(557, 626);
 			this.tableLayoutPanel3.TabIndex = 0;
+			// 
+			// tableLayoutPanel8
+			// 
+			this.tableLayoutPanel8.ColumnCount = 4;
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules1, 1, 0);
+			this.tableLayoutPanel8.Controls.Add(this.numericUpDownResourceCalculateEvery, 1, 0);
+			this.tableLayoutPanel8.Controls.Add(this.labelResourceCalculateEveryColon, 1, 0);
+			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(4, 549);
+			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(4);
+			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+			this.tableLayoutPanel8.RowCount = 1;
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(549, 28);
+			this.tableLayoutPanel8.TabIndex = 21;
+			// 
+			// labelScheduleOrSchedules1
+			// 
+			this.labelScheduleOrSchedules1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelScheduleOrSchedules1.Location = new System.Drawing.Point(391, 0);
+			this.labelScheduleOrSchedules1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.labelScheduleOrSchedules1.Name = "labelScheduleOrSchedules1";
+			this.labelScheduleOrSchedules1.Size = new System.Drawing.Size(154, 28);
+			this.labelScheduleOrSchedules1.TabIndex = 19;
+			this.labelScheduleOrSchedules1.Text = "xxScheduleOrSchedules";
+			this.labelScheduleOrSchedules1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericUpDownResourceCalculateEvery
+			// 
+			this.numericUpDownResourceCalculateEvery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.numericUpDownResourceCalculateEvery.Location = new System.Drawing.Point(284, 4);
+			this.numericUpDownResourceCalculateEvery.Margin = new System.Windows.Forms.Padding(4);
+			this.numericUpDownResourceCalculateEvery.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+			this.numericUpDownResourceCalculateEvery.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDownResourceCalculateEvery.Name = "numericUpDownResourceCalculateEvery";
+			this.numericUpDownResourceCalculateEvery.Size = new System.Drawing.Size(67, 22);
+			this.numericUpDownResourceCalculateEvery.TabIndex = 19;
+			this.numericUpDownResourceCalculateEvery.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownResourceCalculateEvery.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// labelResourceCalculateEveryColon
+			// 
+			this.labelResourceCalculateEveryColon.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelResourceCalculateEveryColon.Location = new System.Drawing.Point(16, 0);
+			this.labelResourceCalculateEveryColon.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.labelResourceCalculateEveryColon.Name = "labelResourceCalculateEveryColon";
+			this.labelResourceCalculateEveryColon.Size = new System.Drawing.Size(260, 28);
+			this.labelResourceCalculateEveryColon.TabIndex = 17;
+			this.labelResourceCalculateEveryColon.Text = "xxResourceCalculateEveryColon";
+			this.labelResourceCalculateEveryColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SchedulingSessionPreferencesPanel
 			// 
@@ -874,7 +948,7 @@
 			this.Controls.Add(this.tabControl1);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "SchedulingSessionPreferencesPanel";
-			this.Size = new System.Drawing.Size(573, 747);
+			this.Size = new System.Drawing.Size(573, 663);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanelRefreshScreen.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).EndInit();
@@ -908,6 +982,8 @@
 			this.tabPageGeneral.ResumeLayout(false);
 			this.tabPageAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel8.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -967,5 +1043,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTagWith;
         private System.Windows.Forms.Label label6;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvTag;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+		private System.Windows.Forms.Label labelScheduleOrSchedules1;
+		private System.Windows.Forms.NumericUpDown numericUpDownResourceCalculateEvery;
+		private System.Windows.Forms.Label labelResourceCalculateEveryColon;
     }
 }

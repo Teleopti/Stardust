@@ -1,24 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SchedulingOptions : ISchedulingOptions
     {
-        private bool _useRotations = true;
+		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
+		private bool _usePreferencesMustHaveOnly;
+		private bool _considerShortBreaks = true;
+        private bool _useRotations;
         private bool _rotationDaysOnly;
         private WorkShiftLengthHintOption _workShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
-        private bool _useAvailability = true;
+        private bool _useAvailability;
         private bool _availabilityDaysOnly;
-        private bool _usePreferences = true;
+        private bool _usePreferences;
         private bool _preferencesDaysOnly;
         private bool _addContractScheduleDaysOff = true;
         private DateTimePeriod? _specificStartAndEndTime;
         private OptimizationRestriction _rescheduleOptions = OptimizationRestriction.None;
-        private BlockFinderType _blockFinderType = BlockFinderType.None;
+        private BlockFinderType _blockFinderType;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
         public bool OnlyShiftsWhenUnderstaffed { get; set; }
@@ -26,37 +28,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IShiftCategory ShiftCategory { get; set; }
         public IDayOffTemplate DayOffTemplate { get; set; }
         public bool UseShiftCategoryLimitations { get; set; }
-        private bool _usePreferencesMustHaveOnly;
         public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
 		public bool UseGroupScheduling { get; set; }
 		public IGroupPage GroupOnGroupPage { get; set; }
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPage GroupPageForShiftCategoryFairness { get; set; }
-
         public int RefreshRate { get; set; }
-        private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
 		public bool UseMaxSeats { get; set; }
 		public bool DoNotBreakMaxSeats { get; set; }
-        private bool _considerShortBreaks = true;
         public bool UseSameDayOffs { get; set; }
         public bool UseGroupOptimizing { get; set; }
         public BlockFinderType UseBlockOptimizing { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
         public IScheduleTag TagToUseOnOptimize { get; set; }
+    	public int ResourceCalculateFrequency { get; set; }
 
-    	public SchedulingOptions()
-        {
-            RefreshRate = 10;
-            UseShiftCategoryLimitations = true;
-            UseMinimumPersons = true;
-            UseMaximumPersons = true;
-    		UseMaxSeats = true;
-    	    TagToUseOnScheduling = NullScheduleTag.Instance;
-            TagToUseOnOptimize = NullScheduleTag.Instance;
-    	    //UseGroupOptimizing = true;
-    	    //UseSameDayOffs = true;
-        }
+		public SchedulingOptions()
+		{
+			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPage>());
+			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>(), new List<IGroupPage>());
+		}
 
     	public BlockFinderType UseBlockScheduling
         {

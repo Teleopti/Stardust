@@ -91,12 +91,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			//Call backToLegalState for days off
 		}
 
-        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
         {
         	var result = true;
-        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-        	                                                            useOccupancyAdjustment,
-        	                                                            schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(
+				_resourceOptimizationHelper, 
+				schedulingOptions.ResourceCalculateFrequency,
+				useOccupancyAdjustment,
+				schedulingOptions.ConsiderShortBreaks);
 
 			var dates = GetAllDates(selectedParts);
 			foreach (DateOnly date in dates)

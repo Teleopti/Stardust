@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 {
@@ -14,8 +20,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly IDayOffPlannerRules _dayOffPlannerRules;
         private readonly bool _backToLegal;
     	private readonly IList<IGroupPage> _groupPages;
-        private readonly SchedulingScreenSettings _currentSchedulingScreenSettings;
         private readonly IList<IScheduleTag> _scheduleTags;
+    	private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
+		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
+    	
 
         private readonly bool _reschedule;
 
@@ -32,7 +40,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             
             _backToLegal = backToLegal;
         	_groupPages = groupPages;
-            _currentSchedulingScreenSettings = currentSchedulingScreenSettings;
             _scheduleTags = scheduleTags;
         }
 
@@ -47,10 +54,51 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             get { return _schedulingOptions; }
         }
 
+		private void loadPersonalSettings()
+		{
+			try
+			{
+				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var settingRepository = new PersonalSettingDataRepository(uow);
+					_defaultGeneralSettings = settingRepository.FindValueByKey("SchedulingOptionsGeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
+					_defaultAdvancedSettings = settingRepository.FindValueByKey("SchedulingOptionsAdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
+				}
+			}
+			catch (DataSourceException)
+			{
+			}
+
+			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
+			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories, _groupPages);
+		}
+
+		private void savePersonalSettings()
+		{
+			_defaultGeneralSettings.MapFrom(_schedulingOptions);
+			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
+
+			try
+			{
+				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultGeneralSettings);
+					uow.PersistAll();
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedSettings);
+					uow.PersistAll();
+				}
+			}
+			catch (DataSourceException)
+			{
+			}
+		}
+
         private void Form_Load(object sender, EventArgs e)
         {
-            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule, _backToLegal,_groupPages, 
-                _currentSchedulingScreenSettings, false, _scheduleTags);
+        	loadPersonalSettings();
+
+            schedulingSessionPreferencesPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule, 
+				_backToLegal,_groupPages, false, _scheduleTags);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
             dayOffPreferencesPanel1.Initialize(_dayOffPlannerRules);
@@ -95,6 +143,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
                 DialogResult = System.Windows.Forms.DialogResult.OK;
+            	savePersonalSettings();
             }
 
             Close();
