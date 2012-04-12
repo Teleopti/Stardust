@@ -94,12 +94,17 @@
     <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.0.0\lib\Esent.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=0.1.3708.26234, Culture=neutral, PublicKeyToken=bb9148a82fc72dee, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\mbcache\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=0.9.6.40492, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=0.9.6.40492, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.PersistentHashTable, Version=1.7.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\3.5\Rhino.PersistentHashTable.dll</HintPath>
@@ -259,8 +264,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y
-xcopy "$(ProjectDir)..\..\mbcache\linfu\*" "$(TargetDir)" /y /r</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

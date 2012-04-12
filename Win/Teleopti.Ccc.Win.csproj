@@ -93,12 +93,17 @@
     <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\AutoFac\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=0.1.3708.26234, Culture=neutral, PublicKeyToken=bb9148a82fc72dee, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\mbcache\MbCache.dll</HintPath>
+    <Reference Include="MbCache">
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
