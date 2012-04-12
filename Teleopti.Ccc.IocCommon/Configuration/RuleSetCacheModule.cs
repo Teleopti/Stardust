@@ -1,3 +1,4 @@
+using System;
 using Autofac;
 using MbCache.Configuration;
 using MbCache.Core;
@@ -11,6 +12,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private readonly CacheBuilder _cacheBuilder;
 
 		public RuleSetCacheModule(MbCacheModule mbCacheModule) {
+			if (mbCacheModule == null)
+				throw new ArgumentException();
 			_cacheBuilder = mbCacheModule.Builder;
 		}
 
