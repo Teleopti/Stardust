@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
