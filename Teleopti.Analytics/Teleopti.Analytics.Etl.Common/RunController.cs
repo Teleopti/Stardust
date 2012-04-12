@@ -1,9 +1,13 @@
+using System;
+using System.Configuration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.Common
 {
-	public class RunController
+	public class RunController:IDisposable
 	{
+		private IEtlJobLock _etlJobLock;
 		private readonly IRunControllerRepository _repository;
 
 		public RunController(IRunControllerRepository repository)
@@ -16,9 +20,15 @@ namespace Teleopti.Analytics.Etl.Common
 			return !_repository.IsAnotherEtlRunningAJob(out etlRunningInformation); 
 		}
 
-		public void StartEtlJobRunLock()
+		public void StartEtlJobRunLock(string jobName, bool isStartByService, IEtlJobLock etlJobLock)
 		{
-			throw new System.NotImplementedException();
+			_etlJobLock = etlJobLock;
+			_etlJobLock.CreateLock(jobName,isStartByService);
+		}
+
+		public void Dispose()
+		{
+			_etlJobLock.Dispose();
 		}
 	}
 }

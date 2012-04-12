@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 
 namespace Teleopti.Analytics.Etl.CommonTest
@@ -49,8 +50,13 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		[Test]
 		public void ShouldStartEtlLock()
 		{
-			
-			_target.StartEtlJobRunLock();
+			_target=new RunController(null);
+			const string jobName = "Job name 1";
+			var etlJobLock = MockRepository.GenerateMock<IEtlJobLock>();
+			etlJobLock.Expect(x => x.CreateLock(jobName, true));
+			_target.StartEtlJobRunLock(jobName, true, etlJobLock);
+
+			etlJobLock.VerifyAllExpectations();
 		}
 	}
 
