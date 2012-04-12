@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                                                                                    targetSkill.WorkloadCollection.First());
 
                 var workloadDay = workloadDays.FirstOrDefault(d => d.CurrentDate.Equals(dateOnly));
-                if (workloadDay == null) break;
+                if (workloadDay == null) continue;
                 var skillDay = (ISkillDay) workloadDay.Parent;
                 workloadDay.Lock();
                 foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
