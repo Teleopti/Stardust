@@ -46,6 +46,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Expect.Call(_commonAgentNameSettings.BuildCommonNameDescription(person)).Return("");
             Expect.Call(person.Id).Return(guid);
             Expect.Call(() => _requestHistoryView.FillPersonCombo(new List<IRequestPerson>(), guid)).IgnoreArguments();
+        	Expect.Call(_requestHistoryView.PageSize).Return(50);
+			Expect.Call(_requestHistoryView.StartRow).Return(1).Repeat.AtLeastOnce();
+			Expect.Call(() => _requestHistoryView.SetNextEnabledState(false));
+			Expect.Call(_requestHistoryView.TotalCount).Return(40);
+			Expect.Call(() => _requestHistoryView.SetPreviousEnabledState(false));
             Expect.Call(_requestHistoryView.ShowForm);
             Expect.Call(() => _loadRequestHistoryCommand.Execute());
             _mocks.ReplayAll();

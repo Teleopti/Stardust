@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 }).Cast<IRequestPerson>().ToList();
                 _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
 				_loadRequestHistoryCommand.Execute();
+				UpdateNextPreviousState(_requestHistoryView.PageSize);
                 _requestHistoryView.ShowForm();
             }
             catch (DataSourceException dataSourceException)
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 _requestHistoryView.ShowDataSourceException(dataSourceException);
                 return;
             }
+			
         }
     }
 
