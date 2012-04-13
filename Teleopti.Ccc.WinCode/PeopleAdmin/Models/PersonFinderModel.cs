@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             _personFinderReadOnlyRepository.Find(SearchCriteria);
             var today = new DateOnly(DateTime.Today);
+        	var bu = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id;
             var auth = TeleoptiPrincipal.Current.PrincipalAuthorization;
             foreach (var personFinderDisplayRow in SearchCriteria.DisplayRows)
             {
@@ -36,6 +37,10 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                         !auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, today,
                                          personFinderDisplayRow);
                 }
+				if(personFinderDisplayRow.BusinessUnitId != new Guid() )
+				{
+					personFinderDisplayRow.Grayed = personFinderDisplayRow.BusinessUnitId != bu;
+				}
             }
         }
     }
