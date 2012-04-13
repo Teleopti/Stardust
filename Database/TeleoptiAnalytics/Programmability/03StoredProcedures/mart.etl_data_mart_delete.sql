@@ -7,7 +7,7 @@ GO
 -- Author:		JN
 -- Create date: 2008-02-19
 -- Description:	Delete data in all dimension and fact tables
---
+-- exec [mart].[etl_data_mart_delete] 1
 -- ---Change Log---
 -- 2009-02-11 New Mart schema KJ
 -- 2010-08-17 change order for dim_scorecard, removed fact_contract
@@ -46,6 +46,9 @@ BEGIN
 	TRUNCATE TABLE mart.fact_schedule_deviation
 	TRUNCATE TABLE mart.fact_schedule_day_count
 	TRUNCATE TABLE mart.fact_schedule_preference
+	TRUNCATE TABLE mart.fact_request
+	TRUNCATE TABLE mart.fact_requested_days
+	
 	
 	-- Delete data from dim tables
 	DELETE FROM mart.dim_day_off
