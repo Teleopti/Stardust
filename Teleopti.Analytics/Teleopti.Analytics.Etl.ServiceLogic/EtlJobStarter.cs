@@ -74,7 +74,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				{
 					var runJob = new RunJob(configHandler.BaseConfiguration.TimeZoneCode,
 					                        configHandler.BaseConfiguration.IntervalLength.Value, _cube, _pmInstallation);
-					runJob.Run(scheduleToRun, rep, _jobHelper);
+					runJob.Run(scheduleToRun, rep, _jobHelper, _connectionString);
 				}
 			}
 			catch (Exception ex)

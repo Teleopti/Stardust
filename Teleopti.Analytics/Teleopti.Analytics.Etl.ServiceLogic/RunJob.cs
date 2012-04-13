@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Database;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
 using Teleopti.Analytics.Etl.Interfaces.Common;
@@ -30,7 +33,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		public void Run(IEtlSchedule etlScheduleToRun, ILogRepository repository, JobHelper jobHelper)
+		public void Run(IEtlSchedule etlScheduleToRun, ILogRepository repository, JobHelper jobHelper, string connectionString)
 		{
 			Log.Info("Starting schedule " + etlScheduleToRun.ScheduleName);
 
@@ -62,38 +65,17 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 
 			if (jobToRun == null) throw new Exception("Jobname in schedule does not exist");
 
-			bool firstBuRun = true;
-			IList<IBusinessUnit> businessUnitCollection = jobHelper.BusinessUnitCollection;
-			// Iterate through bu list and run job for each bu.
-			if (businessUnitCollection != null && businessUnitCollection.Count > 0)
+
+			var runController = new RunController((IRunControllerRepository) repository);
+			IEtlRunningInformation etlRunningInformation;
+			if (runController.CanIRunAJob(out etlRunningInformation))
 			{
-				IBusinessUnit lastBuToRun = businessUnitCollection[businessUnitCollection.Count - 1];
-				foreach (IBusinessUnit businessUnit in jobHelper.BusinessUnitCollection)
-				{
-					DateTime startTime = DateTime.Now;
-					IJobResult jobResult = jobToRun.Run(businessUnit, jobStepsNotToRun, jobResultCollection, firstBuRun, businessUnit.Id == lastBuToRun.Id);
-					jobResult.EndTime = DateTime.Now;
-					jobResult.StartTime = startTime;
-
-					jobResultCollection.Add(jobResult);
-					firstBuRun = false;
-				}
-			}
-
-			if (jobResultCollection.Count > 0)
-			{
-				foreach (IJobResult jobResult in jobResultCollection)
-				{
-					IEtlLog etlLogItem = new EtlLog(repository);
-					etlLogItem.Init(etlScheduleToRun.ScheduleId, jobResult.StartTime, jobResult.EndTime);
-
-					foreach (var runLoadStepInfo in jobResult.JobStepResultCollection)
-					{
-						etlLogItem.PersistJobStep(runLoadStepInfo);
-					}
-
-					etlLogItem.Persist(jobResult);
-				}
+				runController.StartEtlJobRunLock(jobToRun.Name, false, new EtlJobLock(connectionString));
+				var jobRunner = new JobRunner();
+				IList<IBusinessUnit> businessUnits = jobHelper.BusinessUnitCollection;
+				IList<IJobResult> jobResults = jobRunner.Run(jobToRun, businessUnits, jobResultCollection, jobStepsNotToRun);
+				jobRunner.SaveResult(jobResults, repository, etlScheduleToRun.ScheduleId);
+				runController.Dispose();
 			}
 		}
 
