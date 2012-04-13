@@ -4626,6 +4626,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not reach Teleopti Customer Web at the moment!.
+        /// </summary>
+        public static string CouldNotReachTeleoptiCustomerWebAtTheMoment {
+            get {
+                return ResourceManager.GetString("CouldNotReachTeleoptiCustomerWebAtTheMoment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {
@@ -7528,6 +7537,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export to PDF shifts per day.
+        /// </summary>
+        public static string ExportToPDFShiftsPerDay {
+            get {
+                return ResourceManager.GetString("ExportToPDFShiftsPerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to scenario.
         /// </summary>
         public static string ExportToScenario {
@@ -9104,6 +9122,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {
@@ -9113,11 +9140,56 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import file name:.
+        /// </summary>
+        public static string ImportFileNameColon {
+            get {
+                return ResourceManager.GetString("ImportFileNameColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Forecast.
+        /// </summary>
+        public static string ImportForecast {
+            get {
+                return ResourceManager.GetString("ImportForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Queue From File.
         /// </summary>
         public static string ImportQueueFromFile {
             get {
                 return ResourceManager.GetString("ImportQueueFromFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Staffing.
+        /// </summary>
+        public static string ImportStaffing {
+            get {
+                return ResourceManager.GetString("ImportStaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Workload.
+        /// </summary>
+        public static string ImportWorkload {
+            get {
+                return ResourceManager.GetString("ImportWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Workload and Staffing.
+        /// </summary>
+        public static string ImportWorkloadAndStaffing {
+            get {
+                return ResourceManager.GetString("ImportWorkloadAndStaffing", resourceCulture);
             }
         }
         
@@ -9191,6 +9263,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IncludeTemplates {
             get {
                 return ResourceManager.GetString("IncludeTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include troubleshooting information.
+        /// </summary>
+        public static string IncludeTroubleshootingInformation {
+            get {
+                return ResourceManager.GetString("IncludeTroubleshootingInformation", resourceCulture);
             }
         }
         
@@ -9704,6 +9785,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string JobHistory {
             get {
                 return ResourceManager.GetString("JobHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Job History.
+        /// </summary>
+        public static string JobHistoryView {
+            get {
+                return ResourceManager.GetString("JobHistoryView", resourceCulture);
             }
         }
         
@@ -13312,6 +13402,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} agent days could not be scheduled..
+        /// </summary>
+        public static string NoOfAgentDaysCouldNotBeScheduled {
+            get {
+                return ResourceManager.GetString("NoOfAgentDaysCouldNotBeScheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No optional column is selected!.
         /// </summary>
         public static string NoOptionalColumnIsSelected {
@@ -16471,6 +16570,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove write protection.
+        /// </summary>
+        public static string RemoveWriteProtection {
+            get {
+                return ResourceManager.GetString("RemoveWriteProtection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
         public static string Rename {
@@ -19460,6 +19568,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show public note.
+        /// </summary>
+        public static string ShowPublicNote {
+            get {
+                return ResourceManager.GetString("ShowPublicNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Quick Access Toolbar Above Ribbon.
         /// </summary>
         public static string ShowQuickAccessToolbarAboveRibbon {
@@ -19690,6 +19807,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillLoaded {
             get {
                 return ResourceManager.GetString("SkillLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill name:.
+        /// </summary>
+        public static string SkillNameColon {
+            get {
+                return ResourceManager.GetString("SkillNameColon", resourceCulture);
             }
         }
         
@@ -23375,6 +23501,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WorkloadDayTemplates {
             get {
                 return ResourceManager.GetString("WorkloadDayTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workload name:.
+        /// </summary>
+        public static string WorkloadNameColon {
+            get {
+                return ResourceManager.GetString("WorkloadNameColon", resourceCulture);
             }
         }
         

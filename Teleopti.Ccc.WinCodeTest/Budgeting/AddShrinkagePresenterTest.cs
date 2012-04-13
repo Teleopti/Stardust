@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             var budgetGroup = new BudgetGroup();
             _shrinkage = new CustomShrinkage("Vacation");
             budgetGroup.AddCustomShrinkage(_shrinkage);
-            _model = _mock.StrictMock<AddShrinkageModel>(budgetGroup, _unitOfWorkFactory, _repositoryFactory);
-            _target = new AddShrinkagePresenter(_view, _model);
+            _model = _mock.StrictMock<AddShrinkageModel>(budgetGroup);
+            _target = new AddShrinkagePresenter(_view, _model, _unitOfWorkFactory, _repositoryFactory);
         }
 
         [Test]
@@ -87,9 +87,10 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldSaveCustomShrinkage()
         {
+            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             using(_mock.Record())
             {
-                Expect.Call(() => _model.Save(_shrinkage));
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             }
             using(_mock.Playback())
             {

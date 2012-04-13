@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+   namespace="Teleopti.Ccc.Domain.Forecasting"
+   assembly="Teleopti.Ccc.Domain">
+  <class name="ForecastFile">
+    <property name="File_Data" type="BinaryBlob"></property>
+  </class>
+</hibernate-mapping>

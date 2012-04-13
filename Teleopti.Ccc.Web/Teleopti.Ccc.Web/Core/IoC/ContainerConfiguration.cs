@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<MobileReportsAreaModule>();
 
-        	var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+        	var mbCacheModule = new MbCacheModule(new AspNetCache(20, new FixedNumberOfLockObjects(100)));
 			builder.RegisterModule(mbCacheModule);
         	builder.RegisterModule<RuleSetModule>();
 

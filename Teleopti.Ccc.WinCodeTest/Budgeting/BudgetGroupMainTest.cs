@@ -297,5 +297,12 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             }
         }
 
+        [Test]
+        public void ShouldUpdateBudgetGroup()
+        {
+            var bg = new BudgetGroup();
+            _target.UpdateBudgetGroup(bg);
+            Assert.That(_model.BudgetGroup, Is.EqualTo(bg));
+        }
 	}
 }

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
         private readonly IPerson _owner;
         private readonly DateTime _timestamp;
         private readonly string _jobCategory;
-        private readonly DateOnlyPeriod _period;
+        private DateOnlyPeriod _period;
         private readonly IList<IJobResultDetail> _details = new List<IJobResultDetail>();
         private bool _finishedOk;
 
@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual DateOnlyPeriod Period
         {
             get { return _period; }
+            set { _period = value; }
         }
 
         public virtual DateTime Timestamp
@@ -87,5 +88,6 @@ namespace Teleopti.Ccc.Domain.Common
     {
         public const string MultisiteExport = "MultisiteExport";
         public const string QuickForecast = "QuickForecast";
+        public const string ForecastsImport = "ForecastsImport";
     }
 }

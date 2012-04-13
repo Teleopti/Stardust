@@ -3,6 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
+	[Serializable]
 	public class SessionSpecificData
 	{
 		public SessionSpecificData(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)

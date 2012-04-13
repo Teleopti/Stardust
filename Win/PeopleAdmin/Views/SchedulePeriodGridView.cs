@@ -654,7 +654,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             _startDateColumn = new EditableDateOnlyColumnForPeriodGrids<SchedulePeriodModel>("PeriodDate",
                                                                                                        UserTexts.
                                                                                                            Resources.
-                                                                                                           StartDate);
+                                                                                                           Date);
             _startDateColumn.CellDisplayChanged += ParentColumn_CellDisplayChanged;
             _startDateColumn.CellChanged += ParentColumn_CellChanged;
             _startDateColumn.ColumnComparer = new SchedulePeriodStartDateComparer();

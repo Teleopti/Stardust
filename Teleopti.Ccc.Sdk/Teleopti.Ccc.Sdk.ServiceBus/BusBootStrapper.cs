@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	build.RegisterModule<RequestContainerInstaller>();
         	build.RegisterModule<SchedulingContainerInstaller>();
         	build.RegisterModule<ExportForecastContainerInstaller>();
+        	build.RegisterModule<ImportForecastContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 
 			build.Update(Container);

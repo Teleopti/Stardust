@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Syncfusion.Windows.Forms.Grid.GridStyleInfo gridStyleInfo1 = new Syncfusion.Windows.Forms.Grid.GridStyleInfo();
+            Syncfusion.Windows.Forms.Grid.GridStyleInfo gridStyleInfo2 = new Syncfusion.Windows.Forms.Grid.GridStyleInfo();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JobHistoryView));
             this.gridControlJobHistory = new Syncfusion.Windows.Forms.Grid.GridDataBoundGrid();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -52,8 +52,14 @@
             // 
             this.gridControlJobHistory.AllowDragSelectedCols = true;
             this.gridControlJobHistory.AllowResizeToFit = false;
+            this.gridControlJobHistory.AllowSelection = Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row;
             this.gridControlJobHistory.BackColor = System.Drawing.Color.White;
             this.tableLayoutPanel1.SetColumnSpan(this.gridControlJobHistory, 4);
+            this.gridControlJobHistory.ControllerOptions = ((Syncfusion.Windows.Forms.Grid.GridControllerOptions)((((((Syncfusion.Windows.Forms.Grid.GridControllerOptions.ClickCells | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragSelectRowOrColumn) 
+            | Syncfusion.Windows.Forms.Grid.GridControllerOptions.SelectCells) 
+            | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ExcelLikeSelection) 
+            | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ResizeCells) 
+            | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragColumnHeader)));
             this.gridControlJobHistory.DefaultColWidth = 80;
             this.gridControlJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControlJobHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -71,17 +77,18 @@
             this.gridControlJobHistory.SmartSizeBox = false;
             this.gridControlJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
             this.gridControlJobHistory.TabIndex = 1;
-            gridStyleInfo1.Font.Bold = false;
-            gridStyleInfo1.Font.Facename = "Microsoft Sans Serif";
-            gridStyleInfo1.Font.Italic = false;
-            gridStyleInfo1.Font.Size = 8.25F;
-            gridStyleInfo1.Font.Strikeout = false;
-            gridStyleInfo1.Font.Underline = false;
-            this.gridControlJobHistory.TableStyle = gridStyleInfo1;
+            gridStyleInfo2.Font.Bold = false;
+            gridStyleInfo2.Font.Facename = "Microsoft Sans Serif";
+            gridStyleInfo2.Font.Italic = false;
+            gridStyleInfo2.Font.Size = 8.25F;
+            gridStyleInfo2.Font.Strikeout = false;
+            gridStyleInfo2.Font.Underline = false;
+            this.gridControlJobHistory.TableStyle = gridStyleInfo2;
             this.gridControlJobHistory.Text = "gridControlJobHistory";
             this.gridControlJobHistory.ThemesEnabled = true;
             this.gridControlJobHistory.UseListChangedEvent = true;
             this.gridControlJobHistory.UseRightToLeftCompatibleTextBox = true;
+            this.gridControlJobHistory.CellDoubleClick += new Syncfusion.Windows.Forms.Grid.GridCellClickEventHandler(this.gridControlCell_DoubleClick);
             // 
             // tableLayoutPanel1
             // 
@@ -210,7 +217,7 @@
             this.toolStripButtonReloadHistory});
             this.toolStripEx1.Location = new System.Drawing.Point(0, 1);
             this.toolStripEx1.Name = "toolStripEx1";
-            this.toolStripEx1.Size = new System.Drawing.Size(67, 63);
+            this.toolStripEx1.Size = new System.Drawing.Size(98, 63);
             this.toolStripEx1.TabIndex = 0;
             // 
             // toolStripButtonReloadHistory

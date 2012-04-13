@@ -8,64 +8,88 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
 {
-    [TestFixture]
-    public class UserTransformerTest
-    {
-        private UserTransformer _target;
-        private IList<IPerson> _personCollection;
-        private DataRow _row0;
-        private DataRow _row1;
+	[TestFixture]
+	public class UserTransformerTest
+	{
+		private UserTransformer _target;
 
-        [SetUp]
-        public void Setup()
-        {
-            _personCollection = FakeData.UserFactory.CreatePersonUserCollection();
-            _target = new UserTransformer();
+		[SetUp]
+		public void Setup()
+		{
+			_target = new UserTransformer();
+		}
 
-            using (DataTable table = new DataTable())
-            {
-                table.Locale = Thread.CurrentThread.CurrentCulture;
-                UserInfrastructure.AddColumnsToDataTable(table);
+		private DataRowCollection TransformPersonsToUsersRows(IPerson person)
+		{
+			using (var table = new DataTable())
+			{
+				table.Locale = Thread.CurrentThread.CurrentCulture;
+				UserInfrastructure.AddColumnsToDataTable(table);
 
-                _target.Transform(_personCollection, table);
+				_target.Transform(new List<IPerson> { person }, table);
 
-                Assert.AreEqual(2, table.Rows.Count);
-                _row0 = table.Rows[0];
-                _row1 = table.Rows[1];
-            }
-            
-        }
+				return table.Rows;
+			}
+		}
 
-        [Test]
-        public void VerifyUser()
-        {
-            IPerson personUser = _personCollection[0];
+		[Test]
+		public void VerifyUser()
+		{
+			IPerson personUser = FakeData.UserFactory.CreatePersonUser();
+			var rows = TransformPersonsToUsersRows(personUser);
+			
+			Assert.AreEqual(1, rows.Count);
+			DataRow row = rows[0];
 
-            Assert.AreEqual(personUser.Id, _row0["person_code"]);
-            Assert.AreEqual(personUser.Name.FirstName, _row0["person_first_name"]);
-            Assert.AreEqual(personUser.Name.LastName, _row0["person_last_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName,
-                            _row0["application_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName,
-                            _row0["windows_logon_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.WindowsAuthenticationInfo.DomainName,
-                            _row0["windows_domain_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.ApplicationAuthenticationInfo.Password, _row0["password"]);
-            Assert.AreEqual(personUser.Email, _row0["email"]);
-            Assert.AreEqual(personUser.PermissionInformation.UICultureLCID().GetValueOrDefault(-1), _row0["language_id"]);
-            Assert.AreEqual(System.DBNull.Value, _row0["language_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.CultureLCID().GetValueOrDefault(-1), _row0["culture"]);
-            Assert.AreEqual(personUser.UpdatedOn, _row0["datasource_update_date"]);
-        }
+			Assert.AreEqual(personUser.Id, row["person_code"]);
+			Assert.AreEqual(personUser.Name.FirstName, row["person_first_name"]);
+			Assert.AreEqual(personUser.Name.LastName, row["person_last_name"]);
+			Assert.AreEqual(personUser.ApplicationAuthenticationInfo.ApplicationLogOnName,
+							row["application_logon_name"]);
+			Assert.AreEqual(personUser.WindowsAuthenticationInfo.WindowsLogOnName,
+							row["windows_logon_name"]);
+			Assert.AreEqual(personUser.WindowsAuthenticationInfo.DomainName,
+							row["windows_domain_name"]);
+			Assert.AreEqual(personUser.ApplicationAuthenticationInfo.Password, row["password"]);
+			Assert.AreEqual(personUser.Email, row["email"]);
+			Assert.AreEqual(personUser.PermissionInformation.UICultureLCID().GetValueOrDefault(-1), row["language_id"]);
+			Assert.AreEqual(System.DBNull.Value, row["language_name"]);
+			Assert.AreEqual(personUser.PermissionInformation.CultureLCID().GetValueOrDefault(-1), row["culture"]);
+			Assert.AreEqual(personUser.UpdatedOn, row["datasource_update_date"]);
+		}
 
-        [Test]
-        public void VerifyUserWithoutCultureSet()
-        {
-            IPerson personUser = _personCollection[1];
+		[Test]
+		public void VerifyUserWithoutCultureSet()
+		{
+			IPerson personUser = FakeData.UserFactory.CreatePersonUserWithNoCultureSet();
+			var rows = TransformPersonsToUsersRows(personUser);
+			DataRow row = rows[0];
 
-            Assert.AreEqual(personUser.PermissionInformation.UICultureLCID().GetValueOrDefault(-1), _row1["language_id"]);
-            Assert.AreEqual(System.DBNull.Value, _row1["language_name"]);
-            Assert.AreEqual(personUser.PermissionInformation.CultureLCID().GetValueOrDefault(-1), _row1["culture"]);
-        }
-    }
+			Assert.AreEqual(personUser.PermissionInformation.UICultureLCID().GetValueOrDefault(-1), row["language_id"]);
+			Assert.AreEqual(System.DBNull.Value, row["language_name"]);
+			Assert.AreEqual(personUser.PermissionInformation.CultureLCID().GetValueOrDefault(-1), row["culture"]);
+		}
+
+		[Test]
+		public void ShouldTransformWindowsLogOnAsEmptyString()
+		{
+			IPerson personUser = FakeData.UserFactory.CreatePersonUserWithNoWindowsAuthentication();
+			var rows = TransformPersonsToUsersRows(personUser);
+			DataRow row = rows[0];
+
+			Assert.AreEqual(string.Empty, row["windows_logon_name"]);
+			Assert.AreEqual(string.Empty, row["windows_domain_name"]);
+		}
+
+		[Test]
+		public void ShouldTransformApplicationLogOnAsEmptyString()
+		{
+			IPerson personUser = FakeData.UserFactory.CreatePersonUserWithNoApplicationAuthentication();
+			var rows = TransformPersonsToUsersRows(personUser);
+			DataRow row = rows[0];
+
+			Assert.AreEqual(string.Empty, row["application_logon_name"]);
+			Assert.AreEqual(string.Empty, row["password"]);
+		}
+	}
 }

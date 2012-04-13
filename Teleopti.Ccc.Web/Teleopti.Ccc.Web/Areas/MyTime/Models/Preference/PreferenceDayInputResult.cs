@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	{
 		public string Date { get; set; }
 		public string PreferenceRestriction { get; set; }
-		public string StyleClassName { get; set; }
+		public string HexColor { get; set; }
 	}
 }
 

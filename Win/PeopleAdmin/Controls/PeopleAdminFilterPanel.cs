@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private void peopleAdminFilterPanelLoad(object sender, EventArgs e)
         {
             _personSelectorPresenter.ApplicationFunction = _myApplicationFunction;
+        	_personSelectorPresenter.ShowUsers = true;
+        	_personSelectorPresenter.ShowPersons = true;
             var view = (Control)_personSelectorPresenter.View;
             tableLayoutPanel1.Controls.Add(view);
             view.Dock = DockStyle.Fill;
