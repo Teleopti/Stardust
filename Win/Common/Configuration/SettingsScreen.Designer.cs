@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panel1 = new System.Windows.Forms.Panel();
             this.treeViewOptions = new System.Windows.Forms.TreeView();
             this.PanelContent = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.kpiSettings1 = new KpiSettings();
+            this.kpiSettings1 = new Teleopti.Ccc.Win.Common.Configuration.KpiSettings();
             this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panel2.CausesValidation = false;
             this.panel2.Controls.Add(this.tableLayoutPanel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(16, 697);
+            this.panel2.Location = new System.Drawing.Point(16, 654);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1124, 30);
+            this.panel2.Size = new System.Drawing.Size(968, 30);
             this.panel2.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -80,14 +80,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1124, 30);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(968, 30);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // buttonAdvOK
             // 
             this.buttonAdvOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonAdvOK.Location = new System.Drawing.Point(884, 3);
+            this.buttonAdvOK.Location = new System.Drawing.Point(728, 3);
             this.buttonAdvOK.Name = "buttonAdvOK";
             this.buttonAdvOK.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.buttonAdvOK.Size = new System.Drawing.Size(75, 23);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvCancel.CausesValidation = false;
             this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonAdvCancel.Location = new System.Drawing.Point(1046, 3);
+            this.buttonAdvCancel.Location = new System.Drawing.Point(890, 3);
             this.buttonAdvCancel.Name = "buttonAdvCancel";
             this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonAdvCancel.TabIndex = 1;
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvApply.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonAdvApply.Location = new System.Drawing.Point(965, 3);
+            this.buttonAdvApply.Location = new System.Drawing.Point(809, 3);
             this.buttonAdvApply.Name = "buttonAdvApply";
             this.buttonAdvApply.Size = new System.Drawing.Size(75, 23);
             this.buttonAdvApply.TabIndex = 2;
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(16, 44);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(185, 653);
+            this.panel1.Size = new System.Drawing.Size(185, 610);
             this.panel1.TabIndex = 4;
             // 
             // treeViewOptions
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.treeViewOptions.Location = new System.Drawing.Point(0, 0);
             this.treeViewOptions.Name = "treeViewOptions";
             this.treeViewOptions.ShowLines = false;
-            this.treeViewOptions.Size = new System.Drawing.Size(183, 651);
+            this.treeViewOptions.Size = new System.Drawing.Size(183, 608);
             this.treeViewOptions.TabIndex = 0;
             // 
             // PanelContent
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.PanelContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelContent.Location = new System.Drawing.Point(201, 44);
             this.PanelContent.Name = "PanelContent";
-            this.PanelContent.Size = new System.Drawing.Size(939, 653);
+            this.PanelContent.Size = new System.Drawing.Size(783, 610);
             this.PanelContent.TabIndex = 5;
             // 
             // kpiSettings1
@@ -165,12 +165,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.kpiSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.kpiSettings1.Location = new System.Drawing.Point(0, 0);
             this.kpiSettings1.Name = "kpiSettings1";
-            this.kpiSettings1.Size = new System.Drawing.Size(939, 653);
+            this.kpiSettings1.Size = new System.Drawing.Size(783, 610);
             this.kpiSettings1.TabIndex = 0;
             // 
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
@@ -179,7 +180,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
-            this.ribbonControlAdv1.Size = new System.Drawing.Size(1154, 33);
+            this.ribbonControlAdv1.SelectedTab = null;
+            this.ribbonControlAdv1.ShowMinimizeButton = false;
+            this.ribbonControlAdv1.Size = new System.Drawing.Size(998, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
             this.ribbonControlAdv1.TabIndex = 1;
             this.ribbonControlAdv1.Text = "ribbonControlAdv1";
@@ -191,7 +194,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.buttonAdvCancel;
-            this.ClientSize = new System.Drawing.Size(1156, 743);
+            this.ClientSize = new System.Drawing.Size(1000, 700);
             this.Controls.Add(this.ribbonControlAdv1);
             this.Controls.Add(this.PanelContent);
             this.Controls.Add(this.panel1);
@@ -203,6 +206,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "xxOptions";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

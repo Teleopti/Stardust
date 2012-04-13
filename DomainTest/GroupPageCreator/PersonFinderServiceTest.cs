@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -73,8 +74,9 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             //Exposure of a bug 
             var applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
             var per = PersonFactory.CreatePersonWithWindowsPermissionInfo("tommy", "TOPTI");
-            per.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = "pa";
-            per.PermissionInformation.WindowsAuthenticationInfo.DomainName = "a";
+            per.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                    {ApplicationLogOnName = "pa", Password = "pass"};
+            per.WindowsAuthenticationInfo.DomainName = "a";
             var isolatedtarget = new PersonFinderService(new PersonIndexBuilder(applicationFunction, new List<IPerson>{per}, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1)));
             var result = isolatedtarget.Find("apa");
             result.Count.Should().Be.EqualTo(0);

@@ -19,7 +19,7 @@ Scenario: Enter Application without permission
 Scenario: Logout from application
 	Given I am a supervisor
 	And I view MobileReports
-	And I click Signout button
+	When I click the signout button
 	Then I should be signed out
 
 Scenario: Enter Application with report preference
@@ -31,12 +31,15 @@ Scenario: Enter Application with report preference
 
 Scenario: View Report
 	Given I am a supervisor
+	And I have analytics data for today
+	And I have analytics fact queue data
 	When I view ReportSettings
 	And I select a report
+	And I select date today
 	And I check type Graph
 	And I check type Table
 	And I click View Report Button
-	Then I should se a report
+	Then I should see a report
 	And I should see a graph 
 	And I should see a table
 
@@ -50,6 +53,8 @@ Scenario: Select date in date-picker
 
 Scenario: Select skill in skill-picker
 	Given I am a supervisor
+	And I have analytics data for today
+	And I have skill analytics data
 	When I view ReportSettings
 	And I open the skill-picker
 	And I select a skill
@@ -66,14 +71,16 @@ Scenario: Select all skills item in skill-picker
 
 Scenario: Navigate within report view to previous day
 	Given I am a supervisor
-	When I am view a Report
-	And I click previous date
+	And I have analytics data for the current week
+	And I am viewing a report
+	When I click previous date
 	Then I should see a report for previous date
 
 Scenario: Navigate within report view to next day
 	Given I am a supervisor
-	When I am view a Report
-	And I click next date
+	And I have analytics data for the current week
+	And I am viewing a report
+	When I click next date
 	Then I should see a report for next date
 
 Scenario: Enter Application with partial access to reports
@@ -84,5 +91,7 @@ Scenario: Enter Application with partial access to reports
 Scenario: Tabledata shows sunday as first day of week for US culture
 	Given I am a supervisor
 	And I am american
-	When I am view a Report with week data
+	And I have analytics data for the current week
+	And I have analytics fact queue data
+	When I view a report with week data
 	Then I should see sunday as the first day of week in tabledata

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.WinCode.Common;
@@ -96,11 +95,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         {
             if (!String.IsNullOrEmpty(inputEmail))
             {
-                string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                                  @".)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)$";
-                Regex re = new Regex(strRegex);
-                return re.IsMatch(inputEmail);
+            	return inputEmail.Contains("@");
             }
             return true;
         }

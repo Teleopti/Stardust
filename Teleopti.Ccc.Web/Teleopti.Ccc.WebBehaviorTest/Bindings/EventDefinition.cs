@@ -61,6 +61,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualTimeouts.Set(TimeSpan.FromSeconds(5));
 		}
 
+		[BeforeScenario]
+		public static void BeforeScenario()
+		{
+			TestDataSetup.ClearAnalyticsData();
+		}
+
 		[AfterTestRun]
 		public static void AfterTestRun() { TestSiteConfigurationSetup.TearDown(); }
 	}

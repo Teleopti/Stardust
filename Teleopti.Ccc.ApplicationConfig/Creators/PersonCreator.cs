@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             person.PermissionInformation.SetDefaultTimeZone(timeZone);
             person.PermissionInformation.SetCulture(cultureInfo);
             person.PermissionInformation.SetUICulture(cultureInfo);
-            person.PermissionInformation.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                                              {
                                                                                  ApplicationLogOnName = logOnName,
                                                                                  Password = password
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             ISession session = _sessionFactory.OpenSession();
 
             IPerson foundPerson = (IPerson)session.CreateCriteria(typeof (IPerson))
-                .Add(Restrictions.Eq("PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName",
-                                   person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName))
+                .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName",
+                                   person.ApplicationAuthenticationInfo.ApplicationLogOnName))
                 .UniqueResult();
 
             if (foundPerson == null)
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             ISession session = _sessionFactory.OpenSession();
             
             IPerson person = session.CreateCriteria(typeof(IPerson))
-                        .Add(Restrictions.Eq("PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName", applicationLogOnName))
+                        .Add(Restrictions.Eq("ApplicationAuthenticationInfo.ApplicationLogOnName", applicationLogOnName))
                         .SetFetchMode("PermissionInformation.PersonInApplicationRole", FetchMode.Join)
                         .UniqueResult<IPerson>();
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)

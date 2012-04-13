@@ -20,16 +20,20 @@ namespace Teleopti.Analytics.Etl.Transformer
                 row["person_code"] = person.Id;
                 row["person_first_name"] = person.Name.FirstName;
                 row["person_last_name"] = person.Name.LastName;
-                row["application_logon_name"] =
-                    person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
-                row["windows_logon_name"] =
-                    person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName;
-                row["windows_domain_name"] =
-                    person.PermissionInformation.WindowsAuthenticationInfo.DomainName;
-                row["password"] = person.PermissionInformation.ApplicationAuthenticationInfo.Password;
+            	row["application_logon_name"] = person.ApplicationAuthenticationInfo == null
+            	                                	? string.Empty
+            	                                	: person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+            	row["password"] = person.ApplicationAuthenticationInfo == null
+            	                  	? string.Empty
+            	                  	: person.ApplicationAuthenticationInfo.Password;
+            	row["windows_logon_name"] = person.WindowsAuthenticationInfo == null
+            	                            	? string.Empty
+            	                            	: person.WindowsAuthenticationInfo.WindowsLogOnName;
+            	row["windows_domain_name"] = person.WindowsAuthenticationInfo == null
+            	                             	? string.Empty
+            	                             	: person.WindowsAuthenticationInfo.DomainName;
                 row["email"] = person.Email;
                 row["language_id"] = person.PermissionInformation.UICultureLCID().GetValueOrDefault(-1);
-                //row["language_name"] = CultureInfo.GetCultureInfo(person.PermissionInformation.UICultureLCID().GetValueOrDefault(1033)).ToString();
                 row["language_name"] = System.DBNull.Value;
                 row["culture"] = person.PermissionInformation.CultureLCID().GetValueOrDefault(-1);
                 row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(person);

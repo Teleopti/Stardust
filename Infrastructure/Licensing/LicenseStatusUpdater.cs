@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 status.StatusOk = true;
                 status.AlmostTooMany = licenseService.IsThisAlmostTooManyActiveAgents(numberOfActiveAgents);
                 status.NumberOfActiveAgents = numberOfActiveAgents;
-                _licenseStatusRepositories.SaveLicenseStatus(status.XmlDocument.OuterXml);
+                _licenseStatusRepositories.SaveLicenseStatus(status.GetNewStatusDocument().OuterXml);
                 return 1;
             }
             catch (TooManyActiveAgentsException)
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                         status.StatusOk = false;
                         status.AlmostTooMany = false;
                         status.NumberOfActiveAgents = numberOfActiveAgents;
-                        _licenseStatusRepositories.SaveLicenseStatus(status.XmlDocument.OuterXml);
+                        _licenseStatusRepositories.SaveLicenseStatus(status.GetNewStatusDocument().OuterXml);
                         return 1;
                     }
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                         status.NumberOfActiveAgents = numberOfActiveAgents;
                         status.CheckDate = DateTime.Today.Date;
                         status.DaysLeft = (int)(status.LastValidDate.Date - DateTime.Today.Date).TotalDays - 1;
-                        _licenseStatusRepositories.SaveLicenseStatus(status.XmlDocument.OuterXml);
+                        _licenseStatusRepositories.SaveLicenseStatus(status.GetNewStatusDocument().OuterXml);
                         return 1;
                     }
                 }

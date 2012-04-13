@@ -32,9 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyDefaultProperties()
         {
             Assert.AreEqual(0, target.ApplicationRoleCollection.Count);
-            Assert.IsNotNull(target.WindowsAuthenticationInfo);
-            Assert.IsNotNull(target.ApplicationAuthenticationInfo);
-            Assert.AreEqual(Thread.CurrentThread.CurrentCulture, target.Culture());
+           Assert.AreEqual(Thread.CurrentThread.CurrentCulture, target.Culture());
             Assert.AreEqual(Thread.CurrentThread.CurrentUICulture, target.UICulture());
             Assert.AreEqual(TimeZoneInfo.Local.Id, ((PermissionInformation)target).DefaultTimeZone().Id);
         }
@@ -104,33 +102,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         {
             target.ApplicationRoleCollection.Add(new ApplicationRole());
         }
-        #endregion
-
-        #region Authentication Info
-        [Test]
-        public void CanAddAuthenticationInfoAndParentSetToPerson()
-        {
-            ApplicationAuthenticationInfo authInfo = new ApplicationAuthenticationInfo();
-            target.ApplicationAuthenticationInfo = authInfo;
-            Assert.IsNotNull(target.ApplicationAuthenticationInfo);
-            Assert.AreEqual(authInfo, target.ApplicationAuthenticationInfo);
-            Assert.AreSame(person, target.ApplicationAuthenticationInfo.Parent);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotAddNullAsApplicationAuthenticationInfo()
-        {
-            target.ApplicationAuthenticationInfo = null;
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotAddNullAsWindowsAuthenticationInfo()
-        {
-            target.WindowsAuthenticationInfo = null;
-        }
-
         #endregion
 
         #region Time zone

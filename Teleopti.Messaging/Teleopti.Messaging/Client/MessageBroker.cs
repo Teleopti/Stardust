@@ -123,19 +123,25 @@ namespace Teleopti.Messaging.Client
             RetrieveBrokerServiceHandle();
             RegisterUserWithBrokerService();
             RetrieveSubscriberId();
-            if (Subscriber != null)
-            {
-                Subscriber.UnhandledExceptionHandler -= OnUnhandledExceptionHandler;
-                Subscriber.EventMessageHandler -= OnEventMessage;
-                Subscriber.Dispose();
-            }
+            DisposeOldSubscriber();
             ISocketInfo socketInformation = RetrieveSocketInformation();
             Subscriber = CreateSubscriber(socketInformation);
             Subscriber.UnhandledExceptionHandler += OnUnhandledExceptionHandler;
             Subscriber.EventMessageHandler += OnEventMessage;
         }
 
-        private void CreateDispatcher()
+		protected override void DisposeOldSubscriber()
+		{
+			if (Subscriber != null)
+			{
+				Subscriber.UnhandledExceptionHandler -= OnUnhandledExceptionHandler;
+				Subscriber.EventMessageHandler -= OnEventMessage;
+				Subscriber.Dispose();
+				Subscriber = null;
+			}
+		}
+
+    	private void CreateDispatcher()
         {
             Dispatcher = new MessageDispatcher(this, BrokerService, FilterManager);
             MessageRegistrationManager.BrokerService = BrokerService;

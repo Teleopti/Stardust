@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 			var logOnOff = new LogOnOff(new PrincipalManager());
             dataSourceContainer.LogOn(
-                convertPerson.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName,
-                convertPerson.PermissionInformation.ApplicationAuthenticationInfo.Password);
+                convertPerson.ApplicationAuthenticationInfo.ApplicationLogOnName,
+                convertPerson.ApplicationAuthenticationInfo.Password);
 
             logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, AuthenticationTypeOption.Application);
 

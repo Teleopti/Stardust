@@ -33,15 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                        			return s.Restriction.ShiftCategory.Description.Name;
 				                                                        		return null;
 				                                                        	}))
-				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+				.ForMember(d => d.HexColor, o => o.MapFrom(s =>
 				                                                 	{
 				                                                 		if (s.Restriction.DayOffTemplate != null)
-				                                                 			return s.Restriction.DayOffTemplate.DisplayColor.ToStyleClass();
+																			return s.Restriction.DayOffTemplate.DisplayColor.ToHtml();
 				                                                 		if (s.Restriction.Absence != null)
-				                                                 			return s.Restriction.Absence.DisplayColor.ToStyleClass();
+																			return s.Restriction.Absence.DisplayColor.ToHtml();
 				                                                 		if (s.Restriction.ShiftCategory != null)
-				                                                 			return s.Restriction.ShiftCategory.DisplayColor.ToStyleClass();
-				                                                 		return null;
+																			return s.Restriction.ShiftCategory.DisplayColor.ToHtml();
+				                                                 		return "";
 				                                                 	}))
 				;
 		}

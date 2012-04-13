@@ -150,5 +150,10 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			unitOfWork.PersistAll();
             _view.UpdateEfficiencyShrinkageProperty(_model.BudgetGroup.GetEfficiencyShrinkage(eventArgs.Id.GetValueOrDefault()));
 		}
+
+	    public void UpdateBudgetGroup(IBudgetGroup budgetGroup)
+	    {
+	        _model.BudgetGroup = budgetGroup;
+	    }
 	}
 }

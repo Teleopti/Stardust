@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IScheduleDayService _scheduleDayService;
         private readonly IBlockFinderFactory _blockFinderFactory;
         private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
             IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory, IOptimizerOriginalPreferences optimizerPreferences)
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
             bool success = true;
+            _cancelMe = false;
             IList<IBlockFinder> finders = CreateFinders(matrixList, blockFinderType);
 
             IBlockFinderResult result;
@@ -91,6 +93,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 validBlockFound = false;
                 foreach (var blockFinder in finders.GetRandom(finders.Count, true))
                 {
+                    if (_cancelMe) return false;
+
                     result = blockFinder.NextBlock();
                     if (result.WorkShiftFinderResult.Count > 0)
                     {
@@ -195,6 +199,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (temp != null)
             {
                 temp(this, args);
+                if (args.Cancel) _cancelMe = true;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
     public partial class JobHistoryView : BaseRibbonForm, IJobHistoryView
     {
         private JobHistoryPresenter _presenter;
+        private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 
         public JobHistoryView()
         {
@@ -44,7 +46,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 			gridControlJobHistory.DataSource = jobResultModels;
     	}
 
-    	public void TogglePrevious(bool enabled)
+        public void BindJobDetailData(IList<DetailedJobHistoryResultModel> jobHistoryEntries)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TogglePrevious(bool enabled)
     	{
     		linkLabelPrevious.Enabled = enabled;
     	}
@@ -66,6 +73,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 
         private void resizeColumns()
         {
+            if (gridControlJobHistory.Model.ColCount <= 1) return;
             //Argh syncfusion
             var colWidth = (gridControlJobHistory.Width - 12) / gridControlJobHistory.Model.ColCount - 1;
             for (var i = 1; i < gridControlJobHistory.Model.ColCount + 1; i++)
@@ -134,5 +142,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 		{
 			_presenter.Next();
 		}
+
+        private void gridControlCell_DoubleClick(object sender, GridCellClickEventArgs e)
+        {
+            GridRangeInfoList ranges = this.gridControlJobHistory.Selections.GetSelectedRows(true, false);
+
+            _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
+            {
+                using (var view = new DetailedJobHistoryView())
+                {
+                    var temp = (IList)gridControlJobHistory.DataSource;
+                    var jobResult = (JobResultModel)temp[e.RowIndex-1];
+                    view.JobId = jobResult.JobId;
+                    view.JobType = jobResult.JobCategory;
+                    view.LoadJobHistoryData(jobResult);
+                    view.Text = jobResult.JobCategory;
+                    view.ShowDialog(this);
+                }
+            });
+        }
     }
 }

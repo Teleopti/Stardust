@@ -106,8 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_dic.Scenario).Return(_scenario).Repeat.Any();
             }
 
-            PdfDocument ret = _target.Export(_timeZoneInfo, CultureInfo.GetCultureInfo("zh-CN"), _persons, _period, _stateHolder, true,
-                           ScheduleReportDetail.All);
+            PdfDocument ret = _target.Export(_timeZoneInfo, CultureInfo.GetCultureInfo("zh-CN"), _persons, _period, _stateHolder, ScheduleReportDetail.All);
 
             Assert.IsNotNull(ret);
             
@@ -126,8 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 
             }
 
-            PdfDocument ret = _target.Export(_timeZoneInfo, CultureInfo.GetCultureInfo("en-US"), _persons, _period, _stateHolder, true,
-                           ScheduleReportDetail.All);
+            PdfDocument ret = _target.Export(_timeZoneInfo, CultureInfo.GetCultureInfo("en-US"), _persons, _period, _stateHolder, ScheduleReportDetail.All);
 
             Assert.IsNotNull(ret);
 

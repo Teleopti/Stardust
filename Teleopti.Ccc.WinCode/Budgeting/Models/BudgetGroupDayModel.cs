@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 
 		public BudgetGroupMainModel MainModel
 		{
-			get { return _mainModel; }
+            get { return _mainModel; }
 		}
 
 		public void Recalculate()

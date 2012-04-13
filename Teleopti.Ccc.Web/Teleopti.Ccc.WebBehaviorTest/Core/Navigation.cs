@@ -165,6 +165,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Current.GoTo("about:blank");
 		}
 
+		public static void CreateCorruptCookie()
+		{
+			GoTo("Test/CorruptMyCookie");
+		}
+
+		public static void CreateNonExistingDatabaseCookie()
+		{
+			GoTo("Test/NonExistingDatasourceCookie");
+		}
+
 		public static void ExpireMyCookie()
 		{
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
