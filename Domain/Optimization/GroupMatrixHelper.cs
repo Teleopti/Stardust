@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             foreach (var dateOnly in daysOffToRemove)
             {
-                if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, allMatrixes))
+                if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, _allMatrixes))
                 {
                     schedulePartModifyAndRollbackService.Rollback();
                     return false;

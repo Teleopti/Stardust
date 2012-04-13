@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             using (_mock.Playback())
             {
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
             }
         }
 
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             using (_mock.Playback())
             {
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
             }
         }
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             using (_mock.Playback())
             {
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
             }
         }
 
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             using (_mock.Playback())
             {
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
             }
         }
 
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             using (_mock.Playback())
             {
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _selectedPersons, _bgWorker);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker);
             }   
         }
 

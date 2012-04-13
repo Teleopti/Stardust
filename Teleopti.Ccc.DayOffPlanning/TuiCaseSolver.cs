@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         private readonly int _maxIterations;
         private readonly Random _random;
 
-        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations, int randomSeed)
+        public TuiCaseSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations, int randomSeed)
         {
             _maxIterations = maxIterations;
             _functions = functions;

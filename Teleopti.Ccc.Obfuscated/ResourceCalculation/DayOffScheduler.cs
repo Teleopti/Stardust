@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public DayOffScheduler(
-            ISchedulingResultStateHolder schedulingResultStateHolder, 
             IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
             ISchedulingOptions schedulingOptions,

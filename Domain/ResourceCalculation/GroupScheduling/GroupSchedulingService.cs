@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool ScheduleOneDay(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson)
+		public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
         {
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 

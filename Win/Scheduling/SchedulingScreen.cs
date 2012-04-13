@@ -1299,9 +1299,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            _schedulerState.CommonStateHolder.ShiftCategories, false,
 														   true, _scheduleOptimizerHelper.CreateGroupPages(_scheduleView, _schedulerState), 
 														   _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
-                                                                                                     _schedulerState),
-                                                           _currentSchedulingScreenSettings,
-                                                           _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
             {
                 if (options.ShowDialog(this) == DialogResult.OK)
                 {
@@ -1426,7 +1423,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 using (var optimizationPreferencesDialog =
                     new OptimizationPreferencesDialog(_optimizationPreferences, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
-                                                           _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4423,10 +4419,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 IList<IGroupPage> groupPages = _cachedGroupPages;
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
-                                                                            _schedulerState.CommonStateHolder.
+                                                                            _schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
-                                                                            _schedulerState.CommonStateHolder.
-                                                                                ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4435,8 +4429,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         options.Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
-                                                    new SchedulingAndOptimizeArgugument(
-                                                        _scheduleView.SelectedSchedules()), true);
+                                                    new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules());
                     }
                 }
             }
@@ -4474,8 +4467,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 using (var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules, _schedulerState.CommonStateHolder.ShiftCategories,
 						false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
-                                                           false, false, groupPages, _currentSchedulingScreenSettings,
-                                                           _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
@@ -4487,8 +4478,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                         Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
-                                                    new SchedulingAndOptimizeArgugument(
-                                                        _scheduleView.SelectedSchedules()), true);
+                                                    new SchedulingAndOptimizeArgument(
+                                                        _scheduleView.SelectedSchedules());
                     }
                 }
             }
@@ -4626,7 +4617,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             if (schedulingOptions.UseGroupScheduling)
 								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll);
                             else
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, true, _backgroundWorkerScheduling);
+								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, schedulingOptions, _backgroundWorkerScheduling);
                                                                                   
 
                             break;
@@ -4862,8 +4853,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					IList<IScheduleMatrixPro> matrixList =
                         OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
-                                                                                                      SchedulingResultState,
-                                                                                                  _container);
 
                     _scheduleOptimizerHelper.GetBackToLegalState(matrixList,
                                                                  _schedulerState,
@@ -4878,7 +4867,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)
-                        optimizerPreferences.SchedulingOptions.UseBlockScheduling == BlockFinderType.SchedulePeriod)
                     {
                         _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
                     }

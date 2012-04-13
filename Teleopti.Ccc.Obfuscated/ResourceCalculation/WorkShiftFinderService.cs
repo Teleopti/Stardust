@@ -77,18 +77,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
-                result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix);
+				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
 
-            if(result == null && effectiveRestriction.IsRestriction)
-            {
-                _shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
-                if (_shiftList == null || _shiftList.Count == 0)
-                {
-                    loggFilterResult(UserTexts.Resources.NoWorkShiftsWereAvailable, 0, 0);
-                    return null;
-                }
-                result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions);
-            }
             return result;
         }
 
