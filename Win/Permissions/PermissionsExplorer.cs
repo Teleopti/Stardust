@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +8,7 @@ using Autofac;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -1121,32 +1123,39 @@ namespace Teleopti.Ccc.Win.Permissions
                 IEnumerable<IPerson> enumerable = people.Except(personList);
 
                 listViewPeople.BeginUpdate();
-                foreach (IPerson person in enumerable)
+
+                using (PerformanceOutput.ForOperation("Populating Agents"))
                 {
-                    // Create a new person and add to listViewPeople.
-                    ListViewItem newPerson = new ExtentListItem
-                                                 {
-                                                     Text = person.Name.FirstName,
-                                                     TagObject = person,
-                                                     Tag = 1
-                                                 }
-                    ;
+                    IList<ListViewItem> listViewItems = new List<ListViewItem>();
 
-                    var lastName = new ListViewItem.ListViewSubItem
-                                                                {
-                                                                    Text = person.Name.LastName,
-                                                                    Tag = person
-                                                                }
-                    ;
+                    foreach (IPerson person in enumerable)
+                    {
+                        // Create a new person and add to listViewPeople.
+                        ListViewItem newPerson = new ExtentListItem
+                        {
+                            Text = person.Name.FirstName,
+                            TagObject = person,
+                            Tag = 1
+                        }
+                        ;
 
-                    var teamName = new ListViewItem.ListViewSubItem
-                                    {
-                                        Text = PermissionsExplorerHelper.GetCurrentTeamForPerson(person.Id)
-                                    };
-                    newPerson.SubItems.AddRange(new[] { lastName, teamName });
-                    listViewPeople.Items.Add(newPerson);
+                        var lastName = new ListViewItem.ListViewSubItem
+                        {
+                            Text = person.Name.LastName,
+                            Tag = person
+                        }
+                        ;
+
+                        var teamName = new ListViewItem.ListViewSubItem
+                        {
+                            Text = PermissionsExplorerHelper.GetCurrentTeamForPerson(person.Id)
+                        };
+                        newPerson.SubItems.AddRange(new[] { lastName, teamName });
+                        listViewItems.Add(newPerson);
+                        //listViewPeople.Items.Add(newPerson);
+                    }
+                    listViewPeople.Items.AddRange(listViewItems.ToArray());
                 }
-                listViewPeople.Sort();
                 listViewPeople.EndUpdate();
 
                 // Show number of peoples assigned.
