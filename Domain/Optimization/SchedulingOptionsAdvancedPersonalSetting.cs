@@ -62,6 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			_fairnessValue = schedulingOptions.Fairness.Value;
 			_fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
+			if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
+				_resourceCalculateFrequency = 1;
 			_resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
 		}
 	}

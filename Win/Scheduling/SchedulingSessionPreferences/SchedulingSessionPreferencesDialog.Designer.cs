@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.ribbonControlAdv1.Margin = new System.Windows.Forms.Padding(4);
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MinimumSize = new System.Drawing.Size(0, 41);
@@ -83,12 +83,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.tableLayoutPanel1.Controls.Add(this.tabControlTopLevel, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 42);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(611, 746);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(611, 684);
 			this.tableLayoutPanel1.TabIndex = 4;
 			// 
 			// tableLayoutPanel2
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonOK, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonCancel, 1, 0);
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(374, 704);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(374, 642);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOK.Location = new System.Drawing.Point(4, 4);
-			this.buttonOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.buttonOK.Margin = new System.Windows.Forms.Padding(4);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(100, 28);
 			this.buttonOK.TabIndex = 10;
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Location = new System.Drawing.Point(120, 4);
-			this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(100, 28);
 			this.buttonCancel.TabIndex = 10;
@@ -141,10 +141,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.tabControlTopLevel.ImageList = this.imageList1;
 			this.tabControlTopLevel.ItemSize = new System.Drawing.Size(111, 22);
 			this.tabControlTopLevel.Location = new System.Drawing.Point(4, 4);
-			this.tabControlTopLevel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tabControlTopLevel.Margin = new System.Windows.Forms.Padding(4);
 			this.tabControlTopLevel.Name = "tabControlTopLevel";
 			this.tabControlTopLevel.SelectedIndex = 0;
-			this.tabControlTopLevel.Size = new System.Drawing.Size(603, 689);
+			this.tabControlTopLevel.Size = new System.Drawing.Size(603, 627);
 			this.tabControlTopLevel.TabIndex = 6;
 			this.tabControlTopLevel.Click += new System.EventHandler(this.tabControlTopLevel_Click);
 			// 
@@ -152,10 +152,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			this.tabPageSchedulingOptions.Controls.Add(this.schedulingSessionPreferencesPanel1);
 			this.tabPageSchedulingOptions.Location = new System.Drawing.Point(4, 26);
-			this.tabPageSchedulingOptions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tabPageSchedulingOptions.Margin = new System.Windows.Forms.Padding(4);
 			this.tabPageSchedulingOptions.Name = "tabPageSchedulingOptions";
-			this.tabPageSchedulingOptions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.tabPageSchedulingOptions.Size = new System.Drawing.Size(595, 659);
+			this.tabPageSchedulingOptions.Padding = new System.Windows.Forms.Padding(4);
+			this.tabPageSchedulingOptions.Size = new System.Drawing.Size(595, 597);
 			this.tabPageSchedulingOptions.TabIndex = 0;
 			this.tabPageSchedulingOptions.Text = "xxSchedulingOptions";
 			this.tabPageSchedulingOptions.UseVisualStyleBackColor = true;
@@ -166,14 +166,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.schedulingSessionPreferencesPanel1.BetweenDayOffVisible = true;
 			this.schedulingSessionPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.schedulingSessionPreferencesPanel1.Location = new System.Drawing.Point(4, 4);
-			this.schedulingSessionPreferencesPanel1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.schedulingSessionPreferencesPanel1.Margin = new System.Windows.Forms.Padding(5);
 			this.schedulingSessionPreferencesPanel1.Name = "schedulingSessionPreferencesPanel1";
 			this.schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = false;
 			this.schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = false;
 			this.schedulingSessionPreferencesPanel1.ScheduleOnlyRotationDaysVisible = false;
 			this.schedulingSessionPreferencesPanel1.SchedulePeriodVisible = true;
 			this.schedulingSessionPreferencesPanel1.ShiftCategoryVisible = false;
-			this.schedulingSessionPreferencesPanel1.Size = new System.Drawing.Size(587, 651);
+			this.schedulingSessionPreferencesPanel1.Size = new System.Drawing.Size(587, 589);
 			this.schedulingSessionPreferencesPanel1.TabIndex = 5;
 			this.schedulingSessionPreferencesPanel1.UseBlockSchedulingVisible = true;
 			this.schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = true;
@@ -183,10 +183,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.tabPageDayOffPlanningOptions.Controls.Add(this.dayOffPreferencesPanel1);
 			this.tabPageDayOffPlanningOptions.ImageKey = "on";
 			this.tabPageDayOffPlanningOptions.Location = new System.Drawing.Point(4, 26);
-			this.tabPageDayOffPlanningOptions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.tabPageDayOffPlanningOptions.Margin = new System.Windows.Forms.Padding(4);
 			this.tabPageDayOffPlanningOptions.Name = "tabPageDayOffPlanningOptions";
-			this.tabPageDayOffPlanningOptions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(593, 802);
+			this.tabPageDayOffPlanningOptions.Padding = new System.Windows.Forms.Padding(4);
+			this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(595, 597);
 			this.tabPageDayOffPlanningOptions.TabIndex = 1;
 			this.tabPageDayOffPlanningOptions.Text = "xxDayOffPlannerOptions";
 			this.tabPageDayOffPlanningOptions.UseVisualStyleBackColor = true;
@@ -197,9 +197,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
 			this.dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
 			this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(4, 4);
-			this.dayOffPreferencesPanel1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.dayOffPreferencesPanel1.Margin = new System.Windows.Forms.Padding(5);
 			this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(585, 794);
+			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(587, 589);
 			this.dayOffPreferencesPanel1.TabIndex = 5;
 			this.dayOffPreferencesPanel1.StatusChanged += new System.EventHandler<System.EventArgs>(this.dayOffPreferencesPanel1_StatusChanged);
 			// 
@@ -214,11 +214,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(623, 794);
+			this.ClientSize = new System.Drawing.Size(623, 732);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(351, 48);

@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.PreferencesDaysOnly = _preferenceDaysOnly;
 			schedulingOptions.UsePreferencesMustHaveOnly = _useMustHavesOnly;
 			schedulingOptions.UseShiftCategoryLimitations = _useShiftCategoryLimitations;
+			if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
+				_screenRefreshRate = 10;
 			schedulingOptions.RefreshRate = _screenRefreshRate;
 		}
 

@@ -120,7 +120,7 @@
 			this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelRefreshScreen, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelRefreshScreen, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelTagWith, 0, 0);
@@ -132,8 +132,8 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 288F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 626);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -147,8 +147,8 @@
 			this.tableLayoutPanelRefreshScreen.Controls.Add(this.label2, 1, 0);
 			this.tableLayoutPanelRefreshScreen.Controls.Add(this.numericUpDownRefreshRate, 1, 0);
 			this.tableLayoutPanelRefreshScreen.Controls.Add(this.label1, 1, 0);
-			this.tableLayoutPanelRefreshScreen.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanelRefreshScreen.Location = new System.Drawing.Point(4, 586);
+			this.tableLayoutPanelRefreshScreen.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableLayoutPanelRefreshScreen.Location = new System.Drawing.Point(4, 590);
 			this.tableLayoutPanelRefreshScreen.Margin = new System.Windows.Forms.Padding(4);
 			this.tableLayoutPanelRefreshScreen.Name = "tableLayoutPanelRefreshScreen";
 			this.tableLayoutPanelRefreshScreen.RowCount = 1;
@@ -857,7 +857,7 @@
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel8, 0, 3);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel8, 0, 4);
 			this.tableLayoutPanel3.Controls.Add(this.groupBox2, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.groupBoxShiftCategory, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.groupBox7, 0, 2);
@@ -869,8 +869,8 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 154F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 222F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(557, 626);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
@@ -884,8 +884,8 @@
 			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules1, 1, 0);
 			this.tableLayoutPanel8.Controls.Add(this.numericUpDownResourceCalculateEvery, 1, 0);
 			this.tableLayoutPanel8.Controls.Add(this.labelResourceCalculateEveryColon, 1, 0);
-			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(4, 549);
+			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(4, 590);
 			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(4);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 1;
@@ -910,7 +910,7 @@
 			this.numericUpDownResourceCalculateEvery.Location = new System.Drawing.Point(284, 4);
 			this.numericUpDownResourceCalculateEvery.Margin = new System.Windows.Forms.Padding(4);
 			this.numericUpDownResourceCalculateEvery.Maximum = new decimal(new int[] {
-            999,
+            10,
             0,
             0,
             0});
