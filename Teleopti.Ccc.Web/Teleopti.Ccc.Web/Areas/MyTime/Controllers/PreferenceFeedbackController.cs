@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
+		[AsyncTimeout(1000 * 60 * 5)]
 		public void FeedbackAsync(DateOnly date)
 		{
 			AsyncManager.OutstandingOperations.Increment();
