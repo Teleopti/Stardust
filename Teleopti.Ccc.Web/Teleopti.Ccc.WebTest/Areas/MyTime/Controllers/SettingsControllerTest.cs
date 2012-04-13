@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	public class SettingsControllerTest
