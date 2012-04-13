@@ -10,6 +10,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="MyTime" physicalDirectory="../Azure/Temp/AzureContent/MyTime" />
         <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
         <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
+		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
         <Bindings>
 <!--          <Binding name="HttpIn" endpointName="HttpIn" /> -->
           <Binding name="HttpsIn" endpointName="HttpsIn" />
@@ -30,7 +31,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<Import moduleName="RemoteForwarder" />
     </Imports>
     <Startup>
-      <Task commandLine="IIS7ConfigAgentPortalWeb.cmd" executionContext="elevated" taskType="background" />
+      <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
     </Startup>
   </WebRole>

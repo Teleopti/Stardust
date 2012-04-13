@@ -204,14 +204,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					cmd.ExecuteNonQuery();
 			}
 
-
 			var appSchema = new SchemaExport(_applicationConfiguration);
 			appSchema.Create(false, true);
-			if (_statisticConfiguration != null)
-			{
-				var statSchema = new SchemaExport(_statisticConfiguration);
-				statSchema.Create(false, true);
-			}
 		}
 
 		private static Configuration createStatisticConfiguration(string file, XElement rootElement)

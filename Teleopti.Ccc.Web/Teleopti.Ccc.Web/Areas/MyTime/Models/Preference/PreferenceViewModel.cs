@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -38,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public bool Feedback { get; set; }
 		public HeaderViewModel Header { get; set; }
 		public string StyleClassName { get; set; }
+		public string BorderColor { get; set; }
 		public PreferenceDayViewModel Preference { get; set; }
 		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
 		public DayOffDayViewModel DayOff { get; set; }

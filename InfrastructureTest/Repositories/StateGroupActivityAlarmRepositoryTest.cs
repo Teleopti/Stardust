@@ -21,15 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IActivity activity;
         private IRtaStateGroup stateGroup;
         private IAlarmType alarmType;
+    	private IGroupingActivity groupAct;
 
-        protected override void ConcreteSetup()
+    	protected override void ConcreteSetup()
         {
-            GroupingActivity groupAct = new GroupingActivity("f");
+            groupAct = new GroupingActivity("f");
             PersistAndRemoveFromUnitOfWork(groupAct);
-
-            activity = ActivityFactory.CreateActivity("roger", Color.White);
-            activity.GroupingActivity = groupAct;
-            PersistAndRemoveFromUnitOfWork(activity);
 
             stateGroup = new RtaStateGroup("state group", true, true);
             PersistAndRemoveFromUnitOfWork(stateGroup);
@@ -46,6 +43,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IStateGroupActivityAlarm CreateAggregateWithCorrectBusinessUnit()
         {
+			activity = ActivityFactory.CreateActivity("roger", Color.White);
+			activity.GroupingActivity = groupAct;
+			PersistAndRemoveFromUnitOfWork(activity);
+
             IStateGroupActivityAlarm stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity);
             stateGroupActivityAlarm.AlarmType = alarmType;
             return stateGroupActivityAlarm;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void VerifyAggregateGraphProperties(IStateGroupActivityAlarm loadedAggregateFromDatabase)
         {
             IStateGroupActivityAlarm org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Activity.Id, loadedAggregateFromDatabase.Activity.Id);
+            Assert.AreEqual(org.Activity.Description.Name, loadedAggregateFromDatabase.Activity.Description.Name);
             Assert.AreEqual(org.AlarmType.Id, loadedAggregateFromDatabase.AlarmType.Id);
             Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
         }

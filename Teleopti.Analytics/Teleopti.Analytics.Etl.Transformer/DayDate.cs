@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Teleopti.Analytics.ReportTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
@@ -34,8 +35,8 @@ namespace Teleopti.Analytics.Etl.Transformer
             _weekNumber = DateHelper.WeekNumber(date, culture);
 			_yearWeek = GetYearWeek(_weekNumber);
             _quarter = GetQuarterFromDate();
-            _monthResourceKey = GetMonthResourceKey();
-            _weekdayResourceKey = GetWeekDayResourceKey();
+        	_monthResourceKey = _month.GetMonthResourceKey();
+            _weekdayResourceKey = _weekdayNumber.GetWeekDayResourceKey();
         }
 
         private DayDate()
@@ -114,37 +115,9 @@ namespace Teleopti.Analytics.Etl.Transformer
             return ret;
         }
 
-        private string GetQuarterFromDate()
-        {
-            string quarter = "";
-            switch (_month)
-            {
-                case 1:
-                case 2:
-                case 3:
-                    quarter = "1";
-                    break;
-                case 4:
-                case 5:
-                case 6:
-                    quarter = "2";
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                    quarter = "3";
-                    break;
-                case 10:
-                case 11:
-                case 12:
-                    quarter = "4";
-                    break;
-            }
+        private string GetQuarterFromDate() { return String.Concat(_year.ToString(CultureInfo.InvariantCulture), "Q", DateHelper.GetQuarter(_month)); }
 
-            return String.Concat(_year.ToString(CultureInfo.InvariantCulture), "Q", quarter);
-        }
-
-        private string GetYearWeek(int week)
+    	private string GetYearWeek(int week)
         {
             string datePart = week.ToString(CultureInfo.InvariantCulture);
         	if (datePart.Length < 2)
@@ -157,70 +130,14 @@ namespace Teleopti.Analytics.Etl.Transformer
 			return string.Format(CultureInfo.InvariantCulture, "{0}{1}", year, datePart);
         }
 
-		  private string GetYearMonth(int month)
-		  {
-			  string datePart = month.ToString(CultureInfo.InvariantCulture);
-			  if (datePart.Length < 2)
-			  {
-				  datePart = String.Concat("0", datePart);
-			  }
-			  return _year + datePart;
-		  }
-
-        private string GetMonthResourceKey()
-        {
-            switch (_month)
-            {
-                case 1:
-                    return "ResMonthJanuary";
-                case 2:
-                    return "ResMonthFebruary";
-                case 3:
-                    return "ResMonthMarch";
-                case 4:
-                    return "ResMonthApril";
-                case 5:
-                    return "ResMonthMay";
-                case 6:
-                    return "ResMonthJune";
-                case 7:
-                    return "ResMonthJuly";
-                case 8:
-                    return "ResMonthAugust";
-                case 9:
-                    return "ResMonthSeptember";
-                case 10:
-                    return "ResMonthOctober";
-                case 11:
-                    return "ResMonthNovember";
-                case 12:
-                    return "ResMonthDecember";
-                default:
-                    return "";
-            }
-        }
-
-        private string GetWeekDayResourceKey()
-        {
-            switch (_weekdayNumber)
-            {
-                case 1:
-                    return "ResDayOfWeekMonday";
-                case 2:
-                    return "ResDayOfWeekTuesday";
-                case 3:
-                    return "ResDayOfWeekWednesday";
-                case 4:
-                    return "ResDayOfWeekThursday";
-                case 5:
-                    return "ResDayOfWeekFriday";
-                case 6:
-                    return "ResDayOfWeekSaturday";
-                case 7:
-                    return "ResDayOfWeekSunday";
-                default:
-                    return "";
-            }
-        }
+		private string GetYearMonth(int month)
+		{
+			string datePart = month.ToString(CultureInfo.InvariantCulture);
+			if (datePart.Length < 2)
+			{
+				datePart = String.Concat("0", datePart);
+			}
+			return _year + datePart;
+		}
     }
 }

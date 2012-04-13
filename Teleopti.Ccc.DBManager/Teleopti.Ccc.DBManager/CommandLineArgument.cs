@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DBManager
         private string _businessUnitName;
         private bool _willAddTrunk;
         private string _pathToDbManager = string.Empty;
-        private bool _addDatFiles = true;
 
         private CommandLineArgument() { }
 
@@ -91,18 +90,9 @@ namespace Teleopti.Ccc.DBManager
                     case "-F":
                         _pathToDbManager = switchValue;
                         break;
-                    case "-A": //som i Apa
-                        _addDatFiles = false;
-                        break;
-
                 }
                 
             }
-        }
-
-        public bool AddDatFiles
-        {
-            get { return _addDatFiles; }
         }
 
         public string PathToDbManager

@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static readonly string AgentPortalWebNhibConfPath = Path.Combine(IniFileInfo.SitePath, "bin");
 		private static readonly string TargetTestDataNHibFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.nhib.xml");
-		private static readonly string TestDataAutoFacOverrideonfigurationFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.autofac.config");
-
 
 		public static Uri Url;
 		
@@ -27,8 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void Setup()
 		{
 			var startTime = DateTime.Now;
-			
-			addTestDataAutoFacOverrideFile();
 
 			if (IniFileInfo.CassiniDev)
 			{
@@ -55,8 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			RemoveTestDataNHibFile();
 			RevertBackedUpNHibFiles();
-
-			removeTestDataAutoFacOverrideFile();
 		}
 
 		public static void RestartApplication()
@@ -108,16 +102,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			                                   		File.SetAttributes(f, FileAttributes.Archive);
 			                                   		File.Move(f, newFile);
 			                                   	});
-		}
-
-		private static void addTestDataAutoFacOverrideFile()
-		{
-			File.Copy("Data\\TestData.autofac.config", TestDataAutoFacOverrideonfigurationFile, true);
-		}
-
-		private static void removeTestDataAutoFacOverrideFile()
-		{
-			File.Delete(TestDataAutoFacOverrideonfigurationFile);
 		}
 	}
 }

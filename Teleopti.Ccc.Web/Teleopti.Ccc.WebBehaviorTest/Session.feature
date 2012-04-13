@@ -42,3 +42,23 @@ Scenario: Signed out when navigating to next period when cookie is expired
 	When my cookie expires
 	And I click next virtual schedule period button
 	Then I should not be signed in
+
+Scenario: Corrupt cookie due to upgrade should be overwritten by a logon
+	Given I am a user with a single business unit
+	When I sign in by user name
+	And My cookie gets corrupt
+	And I navigate to an application page
+	Then I should not be signed in
+	When I sign in by user name
+	And I navigate to an application page
+	Then I should be signed in
+
+Scenario: Corrupt cookie due to no longer existing database should be overwritten by a logon
+	Given I am a user with a single business unit
+	When I sign in by user name
+	And My cookie gets pointed to non existing database
+	And I navigate to an application page
+	Then I should not be signed in
+	When I sign in by user name
+	And I navigate to an application page
+	Then I should be signed in

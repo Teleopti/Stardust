@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
@@ -15,6 +17,7 @@ using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Wizard = Teleopti.Ccc.Win.Common.PropertyPageAndWizard.Wizard;
@@ -29,12 +32,14 @@ namespace Teleopti.Ccc.Win.Budgeting
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler;
+	    private readonly IEventAggregator _globalEventAggregator;
 
-        public BudgetGroupGroupNavigatorView(IBudgetGroupMainViewFactory budgetGroupMainViewFactory, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler)
+	    public BudgetGroupGroupNavigatorView(IBudgetGroupMainViewFactory budgetGroupMainViewFactory,IEventAggregatorLocator eventAggregatorLocator, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler)
 		{
             _dataSourceExceptionHandler = dataSourceExceptionHandler;
 			_budgetGroupMainViewFactory = budgetGroupMainViewFactory;
-	        _repositoryFactory = repositoryFactory;
+            _globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
+            _repositoryFactory = repositoryFactory;
 	        _unitOfWorkFactory = unitOfWorkFactory;
 		    InitializeComponent();
 			
@@ -42,10 +47,27 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				SetTexts();
 				CheckPermissons();
+			    eventSubscription();
 			}
 		}
 
-		private void CheckPermissons()
+        private void eventSubscription()
+        {
+            _globalEventAggregator.GetEvent<BudgetGroupTreeNeedsRefresh>().Subscribe(budgetGroupTreeNeedsRefresh);
+        }
+
+        private void budgetGroupTreeNeedsRefresh(string obj)
+        {
+            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var selectedBudgetGroup = SelectedModel.ContainedEntity;
+                if (selectedBudgetGroup == null) return;
+                var budgetGroup = _repositoryFactory.CreateBudgetGroupRepository(uow).Get(selectedBudgetGroup.Id.GetValueOrDefault());
+                UpdateTree(budgetGroup);
+            }
+        }
+
+	    private void CheckPermissons()
 		{
             splitContainer1.Visible = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenBudgets);
 		}
@@ -110,13 +132,13 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			foreach (TreeNodeAdv node in treeViewAdvBudgetGroups.Nodes)
 			{
-				node.Expand();
+                node.Expand();
 				foreach (TreeNodeAdv budgetNode in node.Nodes)
 				{
 					if (createdNode.Equals(((IBudgetModel)budgetNode.Tag).ContainedEntity))
 					{
 						treeViewAdvBudgetGroups.SelectedNode = budgetNode;
-						budgetNode.Expand();
+                        budgetNode.Expand();
 					}
 				}
 			}
@@ -138,7 +160,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			foreach (var budgetGroup in budgetGroupRootModel.BudgetGroups)
 			{
-				var budgetNode = new TreeNodeAdv(budgetGroup.DisplayName)
+                var budgetNode = new TreeNodeAdv(budgetGroup.DisplayName)
 				{
 					Tag = budgetGroup,
 					LeftImageIndices = new[] { budgetGroup.ImageIndex },
@@ -198,6 +220,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			if (ViewBase.ShowYesNoMessage(questionString, UserTexts.Resources.Delete) != DialogResult.Yes) return;
             
             var attemptSucceeded = _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(Presenter.DeleteBudgetGroup);
+            _globalEventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Publish(Presenter.LoadBudgetGroup());
             if (!attemptSucceeded) return;
 
             var node = treeViewAdvBudgetGroups.SelectedNode.Parent;
@@ -235,6 +258,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				}
                 
                 UpdateTree(page.AggregateRootObject);
+                _globalEventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Publish(page.AggregateRootObject);
                 
 			}});
 		}

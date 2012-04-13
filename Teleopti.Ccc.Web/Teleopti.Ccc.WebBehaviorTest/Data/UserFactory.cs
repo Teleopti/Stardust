@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -21,10 +24,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
 
-		private readonly ICollection<IDataSetup> _dataSetups = new List<IDataSetup>();
+		private readonly IList<IDataSetup> _dataSetups = new List<IDataSetup>();
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
-		private readonly ICollection<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
-		private readonly ICollection<IPostSetup> _postSetups = new List<IPostSetup>();
+		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
+		private readonly IList<IPostSetup> _postSetups = new List<IPostSetup>();
+		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 
 		private readonly ICollection<UserFactory> _colleagues = new List<UserFactory>();
 		private UserFactory _teamColleague;
@@ -79,13 +83,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_userSetups.Add(setup);
 		}
 
-		public void ReplaceSetupByType<T>(T setup) where T : IUserSetup
+		public void ReplaceSetupByType<T>(IUserSetup setup)
 		{
-			var existing = _userSetups
-				.Where(s => setup.GetType() == s.GetType())
-				.Select((s, i) => new {s, i}).Single();
-			_userSetups.Remove(existing.s);
-			_userSetups.Insert(existing.i, setup);
+			ReplaceSetupByType<T, IUserSetup>(_userSetups, setup);
 		}
 
 		public void Setup(IDataSetup setup)
@@ -101,6 +101,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public void Setup(IPostSetup postSetup)
 		{
 			_postSetups.Add(postSetup);
+		}
+
+		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
+		{
+			_analyticsDataFactory.Setup(analyticsDataSetup);
+		}
+
+		private void ReplaceSetupByType<TReplace, TSetup>(IList<TSetup> setups, TSetup setup)
+		{
+			var existing = setups
+				.Where(s => typeof(TReplace).IsAssignableFrom(s.GetType()))
+				.Select((s, i) => new { s, i }).Single();
+			setups.Remove(existing.s);
+			setups.Insert(existing.i, setup);
 		}
 
 		public void SetupCulture(IUserSetup setup)
@@ -149,13 +163,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestDataSetup.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
 
 			_postSetups.ForEach(s => s.Apply(person, culture));
+
+			_analyticsDataFactory.Persist(culture);
 		}
 
-		private IEnumerable<object> AllSpecs { get { return _userSetups.Cast<object>().Union(_userDataSetups).Union(_postSetups).Union(_dataSetups); } }
-		private IEnumerable<T> QueryUserData<T>() { return from s in AllSpecs where typeof (T).IsAssignableFrom(s.GetType()) select (T) s; }
+		private IEnumerable<object> AllSpecs
+		{
+			get
+			{
+				return _userSetups.Cast<object>()
+					.Union(_analyticsDataFactory.Setups)
+					.Union(_userDataSetups)
+					.Union(_postSetups)
+					.Union(_dataSetups)
+					;
+			}
+		}
 
-		public bool HasSetup<T>() { return QueryUserData<T>().Any(); }
-		public T UserData<T>() { return QueryUserData<T>().SingleOrDefault(); }
+		private IEnumerable<T> QueryData<T>()
+		{
+			return from s in AllSpecs where typeof (T).IsAssignableFrom(s.GetType()) select (T) s;
+		}
+
+		public bool HasSetup<T>()
+		{
+			return QueryData<T>().Any();
+		}
+
+		public T UserData<T>()
+		{
+			return QueryData<T>().SingleOrDefault();
+		}
 
 	}
 }

@@ -173,6 +173,7 @@ MKDIR "%DYNAMICCONTENT%\SDK"
 MKDIR "%DYNAMICCONTENT%\ServiceBus"
 MKDIR "%DYNAMICCONTENT%\PMService"
 MKDIR "%DYNAMICCONTENT%\Web"
+MKDIR "%DYNAMICCONTENT%\Broker"
 
 ::Del Checked In and Add corresponding Dynamic Artifacts
 DEL /F /Q "%WISESOURCEFILE%\ETL\Service\TeleoptiCCC7.nhib.xml"
@@ -237,10 +238,10 @@ COPY "%ARTIFACTDIR%\AnalyticsWeb.config" "%DYNAMICCONTENT%\Analytics\web.config"
 DEL /F /Q "%WISESOURCEFILE%\PMService\web.config"
 COPY "%ARTIFACTDIR%\PMWeb.config" "%DYNAMICCONTENT%\PMService\web.config"
 
-DEL /F /Q "%WISESOURCEFILE%\
+DEL /F /Q "%WISESOURCEFILE%\RTA\web.config"
 COPY "%ARTIFACTDIR%\RTAWeb.config" "%DYNAMICCONTENT%\RTA\web.config"
 
-DEL /F /Q "%WISESOURCEFILE%\
+DEL /F /Q "%WISESOURCEFILE%\SDK\web.config"
 COPY "%ARTIFACTDIR%\SDKWeb.config" "%DYNAMICCONTENT%\SDK\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
@@ -251,6 +252,9 @@ COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
 COPY "%ARTIFACTDIR%\TeleoptiCCC7Web.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
+
+DEL /F /Q "%WISESOURCEFILE%\Broker\web.config"
+COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"
 
 ::Non-Dynamic Artifacts
 COPY "%ARTIFACTDIR%\CccAppConfig.config" "%WISESOURCEFILE%\ApplicationConfiguration\CccAppConfig.exe.config"

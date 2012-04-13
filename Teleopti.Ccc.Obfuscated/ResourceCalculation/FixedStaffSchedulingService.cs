@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-        void DayOffScheduling(IList<IScheduleDay> selectedParts, ISchedulePartModifyAndRollbackService rollbackService);
+        void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService);
         bool DoTheScheduling(IList<IScheduleDay> selectedParts, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
     }
 
@@ -75,16 +75,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _finderResults.Clear();
             _scheduleService.ClearFinderResults();
         }
-	   
-        public void DayOffScheduling(IList<IScheduleDay> selectedParts,  ISchedulePartModifyAndRollbackService rollbackService)
-        {
-        	var dates = GetAllDates(selectedParts);
-        	var persons = GetAllPersons(selectedParts);
-			_absencePreferenceScheduler.AddPreferredAbsence(dates, persons);
-            _dayOffScheduler.DayOffScheduling(selectedParts, dates, persons, rollbackService);
 
-			//Call backToLegalState for days off
-		}
+        public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService)
+        {
+            _absencePreferenceScheduler.AddPreferredAbsence(matrixList);
+            _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService);
+        }
 
         public bool DoTheScheduling(IList<IScheduleDay> selectedParts, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
         {
@@ -99,40 +95,45 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			    
 				while (person != null)
 				{
-					var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-					if (!virtualSchedulePeriod.IsValid)
-					{
-						persons.Remove(person);
-						person = GetRandomPerson(persons.ToArray());
-						continue;
-					}
-
-					if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
-					{
-                        IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
-
-                        var thePerson = person;
-                        var exists = selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));
-
-                        if (exists != null)
+                    IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
+                    if (!schedulePart.IsScheduled())
+                    {
+                        var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
+                        if (!virtualSchedulePeriod.IsValid)
                         {
-                            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
-                                schedulePart, _schedulingOptions);
-
-                            bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
-                                                                                                  useOccupancyAdjustment,
-                                                                                                  effectiveRestriction);
-
-                            result = result && schedulePersonOnDayResult;
-                            if (!result && breakIfPersonCannotSchedule)
-                                return false;
-
-                            var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
-                            OnDayScheduled(eventArgs);
-                            if (eventArgs.Cancel) return result;
+                            persons.Remove(person);
+                            person = GetRandomPerson(persons.ToArray());
+                            continue;
                         }
 
-					}
+                        if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
+                        {
+
+
+                            var thePerson = person;
+                            var exists = selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));
+
+                            if (exists != null)
+                            {
+                                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
+                                    schedulePart, _schedulingOptions);
+
+                                bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
+                                                                                                      useOccupancyAdjustment,
+                                                                                                      effectiveRestriction);
+
+                                result = result && schedulePersonOnDayResult;
+                                if (!result && breakIfPersonCannotSchedule)
+                                    return false;
+
+                                var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
+                                OnDayScheduled(eventArgs);
+                                if (eventArgs.Cancel) return result;
+                            }
+
+                        }
+                    }
+                        
 
 					persons.Remove(person);
 					person = GetRandomPerson(persons.ToArray());

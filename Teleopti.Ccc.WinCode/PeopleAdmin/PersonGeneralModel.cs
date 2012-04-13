@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -304,79 +305,93 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         /// </remarks>
         public string WindowsLogOnName
         {
-            get { return ContainedEntity.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName; }
+            get
+            {
+                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
+                return ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                ContainedEntity.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = value;
+                if (ContainedEntity.WindowsAuthenticationInfo == null)
+                    ContainedEntity.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { WindowsLogOnName = value };
+                else
+                    ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName = value;
+                checkWinLogon();
             }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the domain.
-        /// </summary>
-        /// <value>The name of the domain.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
         public string DomainName
         {
-            get { return ContainedEntity.PermissionInformation.WindowsAuthenticationInfo.DomainName; }
+            get
+            {
+                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
+                return ContainedEntity.WindowsAuthenticationInfo.DomainName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                ContainedEntity.PermissionInformation.WindowsAuthenticationInfo.DomainName = value;
+                if (ContainedEntity.WindowsAuthenticationInfo == null)
+                    ContainedEntity.WindowsAuthenticationInfo = new WindowsAuthenticationInfo {DomainName = value};
+                else
+                    ContainedEntity.WindowsAuthenticationInfo.DomainName = value;
+                checkWinLogon();
             }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the application log on.
-        /// </summary>
-        /// <value>The name of the application log on.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
+        private void checkWinLogon()
+        {
+            if (ContainedEntity.WindowsAuthenticationInfo != null)
+            {
+                if(string.IsNullOrEmpty(ContainedEntity.WindowsAuthenticationInfo.DomainName) 
+                    && string.IsNullOrEmpty(ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName))
+                ContainedEntity.WindowsAuthenticationInfo = null;
+            }
+        }
         public string ApplicationLogOnName
         {
-            get { return ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName; }
+            get
+            {
+                if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
+                return ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
+                
                 if (string.IsNullOrEmpty(value))
                 {
+                    ContainedEntity.ApplicationAuthenticationInfo = null;
                     _isValid = true;
                     return;
                 }
+                if (ContainedEntity.ApplicationAuthenticationInfo == null)
+                    ContainedEntity.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                                        {ApplicationLogOnName = value};
+                else
+                    ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
                 var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-                _isValid = ContainedEntity.ChangePassword(ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
+                _isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
                 if (!_isValid) //Is there a better solution for this?
                     writeMessage();
             }
         }
 
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        /// <value>The password.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "result")]
         public string Password
         {
-            get { return ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.Password; }
+            get
+            {
+                if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
+                return ContainedEntity.ApplicationAuthenticationInfo.Password;
+            }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                if(string.IsNullOrEmpty(ContainedEntity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName))
+                if (ContainedEntity.ApplicationAuthenticationInfo == null || string.IsNullOrEmpty(ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName))
                 {
                     _isValid = true;
                     return;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -35,37 +36,37 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			target = new OpenAndSplitSkillCommand(scenarioProvider, skillDayRepository, workloadDayHelper);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldOpenSkillDaysAndSplitIntoIntervals()
-		{
-			var period = new DateOnlyPeriod(2011, 1, 1, 2011, 6, 30);
-			var targetScenario = ScenarioFactory.CreateScenarioAggregate();
-			var skillDay = SkillDayFactory.CreateSkillDay(targetSkill, period.StartDate, targetScenario);
-			skillDay.SkillDayCalculator = new SkillDayCalculator(targetSkill, new[] { skillDay }, period);
-			skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldOpenSkillDaysAndSplitIntoIntervals()
+        {
+            var period = new DateOnlyPeriod(2011, 1, 1, 2011, 6, 30);
+            var targetScenario = ScenarioFactory.CreateScenarioAggregate();
+            var skillDay = SkillDayFactory.CreateSkillDay(targetSkill, period.StartDate, targetScenario);
+            skillDay.SkillDayCalculator = new SkillDayCalculator(targetSkill, new[] { skillDay }, period);
+            skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
 
-			targetSkill.RemoveWorkload(targetSkill.WorkloadCollection.First());
-			targetSkill.AddWorkload(skillDay.WorkloadDayCollection[0].Workload);
+            targetSkill.RemoveWorkload(targetSkill.WorkloadCollection.First());
+            targetSkill.AddWorkload(skillDay.WorkloadDayCollection[0].Workload);
 
-			var secondBusinessUnit = mocks.DynamicMock<IBusinessUnit>();
+            var secondBusinessUnit = mocks.DynamicMock<IBusinessUnit>();
 
-			ReflectionHelper.SetBusinessUnit(targetSkill, secondBusinessUnit);
+            ReflectionHelper.SetBusinessUnit(targetSkill, secondBusinessUnit);
 
-			using (mocks.Record())
-			{
-				Expect.Call(scenarioProvider.DefaultScenario(secondBusinessUnit)).Return(targetScenario);
-				Expect.Call(skillDayRepository.FindRange(period, targetSkill, targetScenario)).Return(new[] { skillDay });
-				Expect.Call(skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, targetSkill, targetScenario, true)).
-					Return(new[] { skillDay });
-			}
-			using (mocks.Playback())
-			{
-				target.Execute(targetSkill, period);
-				skillDay.SkillDataPeriodCollection.Count.Should().Be.EqualTo(60);
-				skillDay.WorkloadDayCollection[0].OpenTaskPeriodList.Count.Should().Be.EqualTo(96);
+            using (mocks.Record())
+            {
+                Expect.Call(scenarioProvider.DefaultScenario(secondBusinessUnit)).Return(targetScenario);
+                Expect.Call(skillDayRepository.FindRange(period, targetSkill, targetScenario)).Return(new[] { skillDay });
+                Expect.Call(skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, targetSkill, targetScenario, true)).
+                    Return(new[] { skillDay });
+            }
+            using (mocks.Playback())
+            {
+                target.Execute(targetSkill, period, new List<TimePeriod> {new TimePeriod(6, 0, 8, 0)});
+                skillDay.SkillDataPeriodCollection.Count.Should().Be.EqualTo(60);
+                skillDay.WorkloadDayCollection[0].OpenTaskPeriodList.Count.Should().Be.EqualTo(8);
 
-				((IBelongsToBusinessUnit)skillDay).BusinessUnit.Should().Be.EqualTo(secondBusinessUnit);
-			}
-		}
+                ((IBelongsToBusinessUnit)skillDay).BusinessUnit.Should().Be.EqualTo(secondBusinessUnit);
+            }
+        }
 	}
 }

@@ -42,25 +42,14 @@ namespace Teleopti.Messaging.Client
 
         // Private fields
         private Int32 _initialized = -1;
-        private Int32 _remotingPort;
-        private Int32 _messagingPort;
-        private Int32 _threads;
-        private Int32 _userId;
-        private Guid _subscriberId;
-        private string _server;
+    	private string _server;
         private string _connectionString;
-        private bool _isTypeFilterApplied;
-        private MessagingProtocol _messagingProtocol;
-        private CustomThreadPool _customThreadPool = new CustomThreadPool(1, "Message Broker Thread");
+    	private CustomThreadPool _customThreadPool = new CustomThreadPool(1, "Message Broker Thread");
         private EventHandler<EventMessageArgs> _eventMessage;
         private EventHandler<UnhandledExceptionEventArgs> _exceptionHandler;
         private IBrokerService _brokerService;
-        private ISubscriber _subscriber;
-        private IMessageDispatcher _dispatcher;
-        private IMessageRegistrationManager _messageRegistrationManager;
-        private IMessageFilterManager _filterManager = new MessageFilterManager();
-        private IStaticDataManager _staticDataManager;
-        private readonly static object _heartbeatTimerLock = new object();
+    	private IMessageFilterManager _filterManager = new MessageFilterManager();
+    	private readonly static object _heartbeatTimerLock = new object();
         private DateTime _lastHeartbeat;
         private Thread _heartbeatThread;
         private Timer _timer;
@@ -128,8 +117,7 @@ namespace Teleopti.Messaging.Client
             }
             if (!String.IsNullOrEmpty(ConnectionString) && Initialized == 0)
             {
-                if (Subscriber != null)
-                    Subscriber.Dispose();
+                DisposeOldSubscriber();
             }
             try
             {
@@ -142,6 +130,10 @@ namespace Teleopti.Messaging.Client
             BrokerService = null;
             Initialized = -1;
         }
+
+		protected virtual void DisposeOldSubscriber()
+		{
+		}
 
         protected virtual void UnregisterClient()
         {
@@ -185,27 +177,19 @@ namespace Teleopti.Messaging.Client
             set { _brokerService = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the dispatcher.
-        /// </summary>
-        /// <value>The dispatcher.</value>
-        public IMessageDispatcher Dispatcher
-        {
-            get { return _dispatcher; }
-            set { _dispatcher = value; }
-        }
+    	/// <summary>
+    	/// Gets or sets the dispatcher.
+    	/// </summary>
+    	/// <value>The dispatcher.</value>
+    	public IMessageDispatcher Dispatcher { get; set; }
 
-        /// <summary>
-        /// Gets or sets the message registration.
-        /// </summary>
-        /// <value>The message registration.</value>
-        public IMessageRegistrationManager MessageRegistrationManager
-        {
-            get { return _messageRegistrationManager; }
-            set { _messageRegistrationManager = value; }
-        }
+    	/// <summary>
+    	/// Gets or sets the message registration.
+    	/// </summary>
+    	/// <value>The message registration.</value>
+    	public IMessageRegistrationManager MessageRegistrationManager { get; set; }
 
-        /// <summary>
+    	/// <summary>
         /// Gets or sets the filter manager.
         /// </summary>
         /// <value>The filter manager.</value>
@@ -215,63 +199,35 @@ namespace Teleopti.Messaging.Client
             set { _filterManager = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the static data.
-        /// </summary>
-        /// <value>The static data.</value>
-        public IStaticDataManager StaticData
-        {
-            get { return _staticDataManager; }
-            set { _staticDataManager = value; }
-        }
+    	/// <summary>
+    	/// Gets or sets the static data.
+    	/// </summary>
+    	/// <value>The static data.</value>
+    	public IStaticDataManager StaticData { get; set; }
 
-        /// <summary>
-        /// Gets or sets the subscriber.
-        /// </summary>
-        /// <value>The subscriber.</value>
-        public ISubscriber Subscriber
-        {
-            get { return _subscriber; }
-            set { _subscriber = value; }
-        }
+    	/// <summary>
+    	/// Gets or sets the subscriber.
+    	/// </summary>
+    	/// <value>The subscriber.</value>
+    	protected ISubscriber Subscriber { get; set; }
 
-        public int Initialized
+    	public int Initialized
         {
             get { return _initialized; }
             set { _initialized = value; }
         }
 
-        public int RemotingPort
-        {
-            get { return _remotingPort; }
-            set { _remotingPort = value; }
-        }
+    	public int RemotingPort { get; set; }
 
-        public int Threads
-        {
-            get { return _threads; }
-            set { _threads = value; }
-        }
+    	public int Threads { get; set; }
 
-        public int UserId
-        {
-            get { return _userId; }
-            set { _userId = value; }
-        }
+    	public int UserId { get; set; }
 
-        public MessagingProtocol MessagingProtocol
-        {
-            get { return _messagingProtocol; }
-            set { _messagingProtocol = value; }
-        }
+    	public MessagingProtocol MessagingProtocol { get; set; }
 
-        public int MessagingPort
-        {
-            get { return _messagingPort; }
-            set { _messagingPort = value; }
-        }
+    	public int MessagingPort { get; set; }
 
-        public string Server
+    	public string Server
         {
             get { return _server; }
             set { _server = value; }
@@ -283,25 +239,17 @@ namespace Teleopti.Messaging.Client
             set { _connectionString = value; }
         }
 
-        public Guid SubscriberId
-        {
-            get { return _subscriberId; }
-            set { _subscriberId = value; }
-        }
+    	public Guid SubscriberId { get; set; }
 
-        public CustomThreadPool CustomThreadPool
+    	public CustomThreadPool CustomThreadPool
         {
             get { return _customThreadPool; }
             set { _customThreadPool = value; }
         }
 
-        public bool IsTypeFilterApplied
-        {
-            get { return _isTypeFilterApplied; }
-            set { _isTypeFilterApplied = value; }
-        }
+    	public bool IsTypeFilterApplied { get; set; }
 
-        public bool IsInitialized
+    	public bool IsInitialized
         {
             get { return (Initialized == 0 ? true : false); }
         }

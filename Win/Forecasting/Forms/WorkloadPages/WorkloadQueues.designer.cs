@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.listViewQueues = new System.Windows.Forms.ListView();
             this.columnHeaderDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLogObject = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderQueue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonImport = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxExFilter)).BeginInit();
@@ -103,8 +104,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.listViewQueues.Activation = System.Windows.Forms.ItemActivation.TwoClick;
             this.listViewQueues.CheckBoxes = true;
             this.listViewQueues.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderDescription,
-            this.columnHeaderLogObject});
+            this.columnHeaderQueue,
+            this.columnHeaderLogObject,
+            this.columnHeaderDescription});
             this.tableLayoutPanel2.SetColumnSpan(this.listViewQueues, 2);
             this.listViewQueues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewQueues.FullRowSelect = true;
@@ -123,15 +125,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.listViewQueues.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewQueues_ColumnClick);
             this.listViewQueues.Resize += new System.EventHandler(this.listViewQueues_Resize);
             // 
-            // columnHeaderDescription
+            // columnHeaderQueue
             // 
-            this.columnHeaderDescription.Text = "xxDescription";
-            this.columnHeaderDescription.Width = 100;
+            this.columnHeaderQueue.Text = "xxQueue";
+            this.columnHeaderQueue.Width = 100;
             // 
             // columnHeaderLogObject
             // 
             this.columnHeaderLogObject.Text = "xxLogObject";
             this.columnHeaderLogObject.Width = 116;
+            // 
+            // columnHeaderDescription
+            // 
+            this.columnHeaderDescription.Text = "xxDescription";
+            this.columnHeaderDescription.Width = 116;
             // 
             // buttonImport
             // 
@@ -172,6 +179,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         private System.Windows.Forms.ListView listViewQueues;
         private System.Windows.Forms.ColumnHeader columnHeaderDescription;
         private System.Windows.Forms.ColumnHeader columnHeaderLogObject;
+        private System.Windows.Forms.ColumnHeader columnHeaderQueue;
         private Syncfusion.Windows.Forms.ButtonAdv buttonImport;
 
     }

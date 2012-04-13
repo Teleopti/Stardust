@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		public IDataSource RetrieveDataSourceByName(string dataSourceName)
 		{
-			return _applicationData.RegisteredDataSourceCollection.Where(x => x.DataSourceName.Equals(dataSourceName)).First();
+			return _applicationData.RegisteredDataSourceCollection.FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
 		}
 	}
 }

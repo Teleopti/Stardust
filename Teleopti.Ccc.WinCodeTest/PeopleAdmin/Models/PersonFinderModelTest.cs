@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -35,11 +36,14 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             _searchCriteria = new PersonFinderSearchCriteria(PersonFinderField.All, "aa", 5,
                                                              new DateOnly(DateTime.Today.AddMonths(-2)),2,0);
+			_searchCriteria.SetRow(0, new PersonFinderDisplayRow { BusinessUnitId = Guid.NewGuid(), PersonId = new Guid() });
+			_searchCriteria.SetRow(1, new PersonFinderDisplayRow{BusinessUnitId = new Guid(), PersonId = Guid.NewGuid()});
             _target = new PersonFinderModel(_personFinderReadOnlyRepository, _searchCriteria);
             
             Expect.Call(() => _personFinderReadOnlyRepository.Find(_searchCriteria));
             _mocks.ReplayAll();
             _target.Find();
+			Assert.That(_searchCriteria.DisplayRows[0].Grayed, Is.True);
             _mocks.VerifyAll();
         }   
     }

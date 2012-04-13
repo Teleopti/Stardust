@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 _target = new PersonSelectorReadOnlyRepository(uow);
                 var nodes = _target.GetOrganization(new DateOnly(2012,1,27),true );
-                Assert.That(nodes.Count, Is.EqualTo(0));
+                Assert.That(nodes, Is.Not.Null);
             }
         }
 

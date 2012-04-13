@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Sign in")]
-    [NUnit.Framework.CategoryAttribute("signin")]
     public partial class SignInFeature
     {
         
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sign in", "In order to access the site\r\nAs a user that is not signed in\r\nI want to be able t" +
-                    "o sign in", ProgrammingLanguage.CSharp, new string[] {
-                        "signin"});
+                    "o sign in", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -72,15 +70,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void SignInWithAUserWithMultipleBusinessUnitsByUserName()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by user name", ((string[])(null)));
-#line 7
+#line 6
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 7
  testRunner.Given("I am a user with multiple business units");
-#line 9
+#line 8
  testRunner.When("I sign in by user name");
-#line 10
+#line 9
  testRunner.And("I select a business unit");
-#line 11
+#line 10
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -93,13 +91,13 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by user name and I should be directed " +
                     "into that business unit direct without having to select it", ((string[])(null)));
-#line 13
+#line 12
 this.ScenarioSetup(scenarioInfo);
-#line 14
+#line 13
  testRunner.Given("I am a user with a single business unit");
-#line 15
+#line 14
  testRunner.When("I sign in by user name");
-#line 16
+#line 15
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -110,15 +108,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SignInWithAUserWithMultipleBusinessUnitsByWindowsCredentials()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by Windows credentials", ((string[])(null)));
-#line 18
+#line 17
 this.ScenarioSetup(scenarioInfo);
-#line 19
+#line 18
  testRunner.Given("I am a user with multiple business units");
-#line 20
+#line 19
  testRunner.When("I sign in by Windows credentials");
-#line 21
+#line 20
  testRunner.And("I select a business unit");
-#line 22
+#line 21
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -131,13 +129,13 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by Windows credentials and I should be" +
                     " directed into that business unit direct without having to select it", ((string[])(null)));
-#line 24
+#line 23
 this.ScenarioSetup(scenarioInfo);
-#line 25
+#line 24
  testRunner.Given("I am a user with a single business unit");
-#line 26
+#line 25
  testRunner.When("I sign in by Windows credentials");
-#line 27
+#line 26
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -148,13 +146,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SignInWithWrongPasswordShouldGiveMeAnInformativeError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", ((string[])(null)));
-#line 29
+#line 28
 this.ScenarioSetup(scenarioInfo);
-#line 30
+#line 29
  testRunner.Given("I am a user with a single business unit");
-#line 31
+#line 30
  testRunner.When("I sign in by user name and wrong password");
-#line 32
+#line 31
  testRunner.Then("I should see an log on error");
 #line hidden
             this.ScenarioCleanup();
@@ -165,13 +163,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SignInWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in without permission", ((string[])(null)));
-#line 34
+#line 33
 this.ScenarioSetup(scenarioInfo);
-#line 35
+#line 34
  testRunner.Given("I dont have permission to sign in");
-#line 36
+#line 35
  testRunner.When("I sign in by user name");
-#line 37
+#line 36
  testRunner.Then("I should not be signed in");
 #line hidden
             this.ScenarioCleanup();
