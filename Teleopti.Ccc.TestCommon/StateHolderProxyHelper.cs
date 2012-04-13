@@ -187,6 +187,8 @@ namespace Teleopti.Ccc.TestCommon
             person.PermissionInformation.AddApplicationRole(role);
             person.PermissionInformation.SetDefaultTimeZone(
                 new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                       {ApplicationLogOnName = "App", Password = "User"};
             return person;
         }
     }

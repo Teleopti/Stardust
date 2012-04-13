@@ -11,7 +11,6 @@ using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.DomainTest.FakeData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 

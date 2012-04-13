@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 {
     public class BudgetDay : AggregateRootWithBusinessUnit, IBudgetDay
     {
-        private readonly IBudgetGroup _budgetGroup;
+        private IBudgetGroup _budgetGroup;
         private readonly IScenario _scenario;
         private readonly DateOnly _day;
         private double _fulltimeEquivalentHours;
@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
         public virtual IBudgetGroup BudgetGroup
         {
             get { return _budgetGroup; }
+            set { _budgetGroup = value; }
         }
 
         public virtual double FulltimeEquivalentHours

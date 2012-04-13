@@ -163,23 +163,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 																		if (s.ScheduleDay != null)
 																		{
 																			if (s.HasDayOffUnderAbsence)
-																				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass()
-																					   + " " + StyleClasses.Striped;
-																			if (s.SignificantPart == SchedulePartView.FullDayAbsence)
-																				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToStyleClass();
-																			if (s.SignificantPart == SchedulePartView.MainShift)
-																				return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass();
+																				return StyleClasses.Striped;
 																			if (s.SignificantPart == SchedulePartView.DayOff)
 																				return StyleClasses.DayOff + " " + StyleClasses.Striped;
 																		}
-																		if (s.ShiftCategory != null)
-																			return s.ShiftCategory.DisplayColor.ToStyleClass();
-																		if (s.Absence != null)
-																			return s.Absence.DisplayColor.ToStyleClass();
-																		if (s.DayOffTemplate != null)
-																			return s.DayOffTemplate.DisplayColor.ToStyleClass();
 				                                                 		return null;
 				                                                 	}))
+				.ForMember(d=>d.BorderColor,o=>o.MapFrom(s=>
+															{
+																if (s.ScheduleDay != null)
+																{
+																	if (s.HasDayOffUnderAbsence)
+																		return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+																	if (s.SignificantPart == SchedulePartView.FullDayAbsence)
+																		return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+																	if (s.SignificantPart == SchedulePartView.MainShift)
+																		return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
+																	if (s.SignificantPart == SchedulePartView.DayOff)
+																		return null;
+																}
+																if (s.ShiftCategory != null)
+																	return s.ShiftCategory.DisplayColor.ToHtml();
+																if (s.Absence != null)
+																	return s.Absence.DisplayColor.ToHtml();
+																if (s.DayOffTemplate != null)
+																	return s.DayOffTemplate.DisplayColor.ToHtml();
+																return null;
+															}))
 				.ForMember(d => d.Preference, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.None ? s : null))
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))

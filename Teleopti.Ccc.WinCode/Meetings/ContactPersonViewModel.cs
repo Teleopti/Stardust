@@ -117,14 +117,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             if (string.IsNullOrEmpty(value)) return true;
 
-            bool firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.StartsWith(value, true, CultureInfo.CurrentUICulture);
-            bool lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.StartsWith(value, true, CultureInfo.CurrentUICulture);
-            bool teamFound = !(TeamBelong == null) && TeamBelong.Description.Name.StartsWith(value, true, CultureInfo.CurrentUICulture);
-            bool siteFound = !(SiteBelong == null) && SiteBelong.Description.Name.StartsWith(value, true, CultureInfo.CurrentUICulture);
-            bool skillsFound = !string.IsNullOrEmpty(Skills) && Skills.Contains(value);
-            bool emailFound = !string.IsNullOrEmpty(Email) && Email.StartsWith(value, true, CultureInfo.CurrentUICulture);
-            bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) &&
-                                         EmploymentNumber.StartsWith(value, true, CultureInfo.CurrentUICulture);
+            var tmp = value.ToUpper(CultureInfo.CurrentUICulture);
+            bool firstNameFound = !string.IsNullOrEmpty(FirstName) && FirstName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool lastNameFound = !string.IsNullOrEmpty(LastName) && LastName.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool teamFound = TeamBelong != null && TeamBelong.Description.Name.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool siteFound = SiteBelong != null && SiteBelong.Description.Name.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool skillsFound = !string.IsNullOrEmpty(Skills) && Skills.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool emailFound = !string.IsNullOrEmpty(Email) && Email.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
+            bool employmentNumberFound = !string.IsNullOrEmpty(EmploymentNumber) && EmploymentNumber.ToUpper(CultureInfo.CurrentUICulture).Contains(tmp);
 
             return firstNameFound || lastNameFound || teamFound || siteFound || skillsFound || emailFound ||employmentNumberFound;
         }

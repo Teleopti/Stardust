@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Interfaces.Domain;
@@ -26,19 +27,9 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
     {
         public static IPersonAssignment GetPersonAssignmentForLayer(ISchedulePart schedule, ILayer layer)
         {
-            IPersonAssignment pAssign = null;
-            IList<IPersonAssignment> pAssignCollection = schedule.PersonAssignmentCollection();
+        	IList<IPersonAssignment> pAssignCollection = schedule.PersonAssignmentCollection();
 
-            foreach (IPersonAssignment personAssignment in pAssignCollection)
-            {
-
-                if (personAssignment.Period.Contains(layer.Period))
-                {
-                    pAssign = personAssignment;
-                    break;
-                }
-            }
-            return pAssign;
+        	return pAssignCollection.FirstOrDefault(personAssignment => personAssignment.Period.Intersect(layer.Period));
         }
 
 

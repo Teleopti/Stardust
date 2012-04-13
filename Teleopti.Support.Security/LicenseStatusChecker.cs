@@ -53,7 +53,7 @@ namespace Teleopti.Support.Security
                                      DaysLeft = 30
                                  };
 
-                var value = status.XmlDocument.OuterXml;
+                var value = status.GetNewStatusDocument().OuterXml;
                 try
                 {
                     command = connection.CreateCommand();

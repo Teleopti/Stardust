@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Win.Intraday
         public void FinishProgress()
         {
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.ReadyThreeDots);
-            toolStripProgressBar1.Visible = false;
             _eventAggregator.GetEvent<IntradayLoadProgress>().Unsubscribe(ReportProgress);
             ribbonControlAdv1.Enabled = true;
             toolStripExDatePicker.Visible = true;
@@ -111,14 +110,9 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void updateProgress(string progressStep)
         {
-            if (toolStripProgressBar1.ProgressBar != null)
-            {
-                toolStripProgressBar1.PerformStep();
-                Refresh();
-                toolStripProgressBar1.ProgressBar.Refresh();
-                toolStripStatusLabelLastUpdate.Text = progressStep;
-                statusStripExLastUpdate.Refresh();
-            }
+            Refresh();
+            toolStripStatusLabelLastUpdate.Text = progressStep;
+            statusStripExLastUpdate.Refresh();   
         }
 
         private void initializeChartSettings()
@@ -245,13 +239,13 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void toolStripButtonNewView_Click(object sender, EventArgs e)
         {
-            _settingManager.UpdatePreviousDockingState();
-            var ctrl = new PromptTextBox(new object(), "", Resources.View, 50);
-            ctrl.NameThisView += ctrl_NameThisView;
-            ctrl.ShowDialog(this);
+        	_settingManager.UpdatePreviousDockingState();
+        	var ctrl = new PromptTextBox(new object(), "", Resources.View, 50);
+        	ctrl.NameThisView += ctrl_NameThisView;
+        	ctrl.ShowDialog(this);
         }
 
-        private void teleoptiToolStripGalleryViews_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
+    	private void teleoptiToolStripGalleryViews_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
         {
 			
             if (!((IntradaySetting)_previousClickedGalleryItem.Tag).Name.Equals(_settingManager.DefaultSetting().Name)) 
@@ -316,6 +310,13 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void ctrl_NameThisView(object sender, CustomEventArgs<TupleItem> e)
         {
+			var prompt = sender as PromptTextBox;
+			if (prompt != null)
+			{
+				prompt.NameThisView -= ctrl_NameThisView;
+				prompt.Dispose();
+			}
+
             try
             {
                 _settingManager.Persist(e.Value.Text);
@@ -335,8 +336,6 @@ namespace Teleopti.Ccc.Win.Intraday
             _previousClickedGalleryItem = item;
             toolStripExLayouts.Refresh();
         }
-
-        
 
 		private ToolStripGalleryItem FindGalleryItemByName(string name)
     	{

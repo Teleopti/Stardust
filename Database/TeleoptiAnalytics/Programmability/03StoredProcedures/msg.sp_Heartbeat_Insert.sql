@@ -15,6 +15,9 @@ CREATE PROC [msg].[sp_Heartbeat_Insert]
 	@ChangedDateTime datetime
 AS
 BEGIN
+--reset input to SQL Server time
+SELECT @ChangedDateTime = GETDATE()
+
 IF(@HeartbeatId = '00000000-0000-0000-0000-000000000000')
 	BEGIN
 		SET @HeartbeatId = newid()

@@ -6,9 +6,9 @@ GO
 CREATE PROCEDURE [msg].[sp_Scavage_Events]
 AS
 BEGIN
-	DELETE FROM msg.[Log] WHERE LogId NOT IN (SELECT top 1000 LogId FROM msg.[Log])
-	DELETE FROM Msg.[Event] WHERE EventId NOT IN (SELECT top 1000 EventId FROM Msg.[Event])
-	DELETE FROM Msg.Receipt WHERE ReceiptId NOT IN (SELECT top 1000 ReceiptId FROM Msg.Receipt)
+	DELETE FROM msg.[Log] WHERE LogId NOT IN (SELECT top 1000 LogId FROM msg.[Log] ORDER BY ChangedDateTime DESC)
+	DELETE FROM Msg.[Event] WHERE EventId NOT IN (SELECT top 1000 EventId FROM Msg.[Event] ORDER BY ChangedDateTime DESC)
+	DELETE FROM Msg.Receipt WHERE ReceiptId NOT IN (SELECT top 1000 ReceiptId FROM Msg.Receipt ORDER BY ChangedDateTime DESC)
 
 END
 

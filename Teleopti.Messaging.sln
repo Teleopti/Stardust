@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{810390F8-24FD-4648-8C21-45AEA374B581}"
+	ProjectSection(SolutionItems) = preProject
+		Teleopti.Messaging\CodeAnalysisDictionary.xml = Teleopti.Messaging\CodeAnalysisDictionary.xml
+		Teleopti.Messaging\copyfiles.bat = Teleopti.Messaging\copyfiles.bat
+		Teleopti.Messaging\CoverageReport.xsl = Teleopti.Messaging\CoverageReport.xsl
+		Teleopti.Messaging\CruiseControl.FxCop = Teleopti.Messaging\CruiseControl.FxCop
+		Teleopti.Messaging\SourceMonitorCommands.xml = Teleopti.Messaging\SourceMonitorCommands.xml
+		Teleopti.Messaging\SourceMonitorSummaryGeneration.xsl = Teleopti.Messaging\SourceMonitorSummaryGeneration.xsl
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging", "Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj", "{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging.Management", "Teleopti.Messaging\Teleopti.Messaging.Management\Teleopti.Messaging.Management.csproj", "{77F53055-9FD8-489E-B697-5525A40519BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging.Svc", "Teleopti.Messaging\Teleopti.Messaging.Svc\Teleopti.Messaging.Svc.csproj", "{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Logging", "Teleopti.Messaging\Teleopti.Logging\Teleopti.Logging.csproj", "{CB1C6762-D934-4EC0-9344-E8AA4ABCFAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Core", "Teleopti.Messaging\Teleopti.Core\Teleopti.Core.csproj", "{7C03979A-6973-4D71-BF6B-27585CC933B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Interfaces", "Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj", "{8D2565F2-7C44-45B7-96AD-2CD900E033A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB1C6762-D934-4EC0-9344-E8AA4ABCFAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB1C6762-D934-4EC0-9344-E8AA4ABCFAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB1C6762-D934-4EC0-9344-E8AA4ABCFAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB1C6762-D934-4EC0-9344-E8AA4ABCFAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C03979A-6973-4D71-BF6B-27585CC933B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C03979A-6973-4D71-BF6B-27585CC933B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C03979A-6973-4D71-BF6B-27585CC933B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C03979A-6973-4D71-BF6B-27585CC933B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D2565F2-7C44-45B7-96AD-2CD900E033A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D2565F2-7C44-45B7-96AD-2CD900E033A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D2565F2-7C44-45B7-96AD-2CD900E033A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D2565F2-7C44-45B7-96AD-2CD900E033A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = 
+	EndGlobalSection
+EndGlobal

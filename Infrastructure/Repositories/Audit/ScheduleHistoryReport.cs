@@ -78,7 +78,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			if (auditedAssignment.Entity.MainShift == null)
 			{
-				ret.Detail = string.Empty;
+				// Ta bort detta if-block när denna är löst/portad https://hibernate.onjira.com/browse/HHH-5845
+				// Sätt då istället bara string.Empty på detail.
+				if (auditedAssignment.Operation == RevisionType.Deleted)
+				{
+					var shiftCategory = fetchShiftCategory(auditedAssignment.Entity.Id.Value, auditedAssignment.RevisionEntity.Id);
+					ret.Detail = shiftCategory == null ? string.Empty : shiftCategory.Description.Name;
+				}
+				else
+				{
+					ret.Detail = string.Empty;					
+				}
 			}
 			else
 			{
@@ -97,6 +107,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			}
 
 			return ret;
+		}
+
+		private IShiftCategory fetchShiftCategory(Guid personAssignmentId, long revision)
+		{
+			const string shiftCategoryHql = @"select ms.ShiftCategory_Id from Teleopti.Ccc.Domain.Scheduling.Assignment.MainShift_AUD ms
+												where ms.originalId.Id = :paId and ms.originalId.REV = :rev";
+			var scId = session().CreateQuery(shiftCategoryHql)
+							.SetGuid("paId", personAssignmentId) //mainshift and personassignment has same id
+							.SetInt64("rev", revision)
+							.UniqueResult();
+			return scId == null ? null : session().Get<ShiftCategory>(scId);
 		}
 
 		private ScheduleAuditingReportData createDayOffAuditingData(IRevisionEntityInfo<PersonDayOff, Revision> auditedDayOff)

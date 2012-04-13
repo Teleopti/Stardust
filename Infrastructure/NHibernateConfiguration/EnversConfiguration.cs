@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var eventListener = new TeleoptiAuditEventListener(_auditSettingProvider);
 			var fluentCfg = new FluentConfiguration();
 			configureSchedule(fluentCfg);
-			nhibConfiguration.SetProperty(ConfigurationKey.StoreDataAtDelete, "true");
-			nhibConfiguration.SetProperty(ConfigurationKey.DoNotAuditOptimisticLockingField, "false");
-			nhibConfiguration.SetProperty(ConfigurationKey.DefaultSchema, AuditingSchema);
 			fluentCfg.SetRevisionEntity<Revision>(rev => rev.Id, rev => rev.ModifiedAt, new RevisionListener(new UnsafePersonProvider()));
-			nhibConfiguration.IntegrateWithEnvers(eventListener, fluentCfg);
+			nhibConfiguration.SetProperty(ConfigurationKey.StoreDataAtDelete, "true")
+								.SetProperty(ConfigurationKey.DoNotAuditOptimisticLockingField, "false")
+								.SetProperty(ConfigurationKey.DefaultSchema, AuditingSchema)
+								.IntegrateWithEnvers(eventListener, fluentCfg);
 		}
 
 		private static void configureSchedule(FluentConfiguration fluentCfg)

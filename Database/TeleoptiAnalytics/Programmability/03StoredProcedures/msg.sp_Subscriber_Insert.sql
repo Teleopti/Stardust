@@ -17,6 +17,9 @@ CREATE PROC [msg].[sp_Subscriber_Insert]
 	@ChangedDateTime datetime
 AS
 BEGIN
+--reset input to SQL Server time
+SELECT @ChangedDateTime = GETDATE()
+
 IF(@SubscriberId = '00000000-0000-0000-0000-000000000000')
 	BEGIN
 		SET @SubscriberId = newid()

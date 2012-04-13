@@ -197,13 +197,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 sb.AppendLine();
                 sb.Append(UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule",
                                                                         culture)).Append(":").AppendLine();
-                foreach (IBusinessRuleResponse brokenBusinessRule in brokenBusinessRules)
+                foreach (var brokenBusinessRuleMessage in brokenBusinessRules.Select(m => m.Message).Distinct())
                 {
-                    sb.AppendLine(brokenBusinessRule.Message);
+                    sb.AppendLine(brokenBusinessRuleMessage);
                     if (Logger.IsWarnEnabled)
                     {
                         Logger.WarnFormat("The following message is from a broken rule: {0}",
-                                      brokenBusinessRule.Message);
+                                      brokenBusinessRuleMessage);
                     }
                 }
 

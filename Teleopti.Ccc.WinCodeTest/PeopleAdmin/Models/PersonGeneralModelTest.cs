@@ -22,13 +22,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         private MockRepository _mocks;
         private IPrincipalAuthorization _principalAuthorization;
 
-        /// <summary>
-        /// Tests the init.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [SetUp]
         public void TestInit()
         {
@@ -53,13 +46,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(_target.FirstName, "FirstName");
         }
 
-        /// <summary>
-        /// Verifies the first name of the set.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetFirstName()
         {
@@ -73,13 +59,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreSame(setValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the last name of the set.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetLastName()
         {
@@ -106,13 +85,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(_base.Name.ToString(), getValue);
         }
 
-        /// <summary>
-        /// Verifies the set email.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetEmail()
         {
@@ -127,13 +99,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreSame(setValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the set employee number.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetEmployeeNumber()
         {
@@ -147,13 +112,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(setValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the set note.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetNote()
         {
@@ -167,13 +125,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(setValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the set language.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetLanguage()
         {
@@ -195,13 +146,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(getValue, _target.Language);
         }
 
-        /// <summary>
-        /// Verifies the set culture.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetCulture()
         {
@@ -224,13 +168,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(getValue, _target.Culture);
         }
 
-        /// <summary>
-        /// Verifies the set time zone.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetTimeZone()
         {
@@ -261,13 +198,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(PersonGeneralModel.NullWorkflowControlSet, _target.WorkflowControlSet);
         }
 
-        /// <summary>
-        /// Verifies the name of the windows log on.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
         [Test]
         public void VerifyWindowsLogOnName()
         {
@@ -285,13 +215,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(setValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the name of the domain.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
         [Test]
         public void VerifyDomainName()
         {
@@ -316,12 +239,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
             _base = _mocks.StrictMock<IPerson>();
             var userDetail = _mocks.StrictMock<IUserDetail>();
-            var permission = _mocks.StrictMock<IPermissionInformation>();
             var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(3);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(3);
+                Expect.Call(_base.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
                 Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
                 Expect.Call(authInfo.Password).Return("");
                 Expect.Call(authInfo.ApplicationLogOnName).Return("AppUser123");
@@ -348,16 +269,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string setValue = "";
             _base = _mocks.StrictMock<IPerson>();
             var userDetail = _mocks.StrictMock<IUserDetail>();
-            var permission = _mocks.StrictMock<IPermissionInformation>();
-            var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission).Repeat.Times(1);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Times(1);
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                    new DateOnly(DateTime.Today), _base)).Return(true);
-                Expect.Call(() => authInfo.ApplicationLogOnName = setValue);
+                Expect.Call(() => _base.ApplicationAuthenticationInfo = null);
             }
             using (_mocks.Playback())
             {
@@ -367,25 +284,16 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Verifies the password.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
         [Test]
         public void VerifyPassword()
         {
             const string setValue = "passwordX07";
             _base = _mocks.StrictMock<IPerson>();
             var userDetail = _mocks.StrictMock<IUserDetail>();
-            var permission = _mocks.StrictMock<IPermissionInformation>();
             var authInfo = _mocks.StrictMock<IApplicationAuthenticationInfo>();
             using (_mocks.Record())
             {
-                Expect.Call(_base.PermissionInformation).Return(permission);
-                Expect.Call(permission.ApplicationAuthenticationInfo).Return(authInfo);
+                Expect.Call(_base.ApplicationAuthenticationInfo).Return(authInfo).Repeat.Twice();
                 Expect.Call(authInfo.ApplicationLogOnName).Return("userX07");
                 Expect.Call(
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
@@ -398,13 +306,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Verifies the set is agent.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetIsAgent()
         {
@@ -417,13 +318,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(expectedValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the set is user.
-        /// </summary>
-        /// <remarks>
-        /// Created by: sumeda herath
-        /// Created date: 2008-02-05
-        /// </remarks>
         [Test]
         public void VerifySetIsUser()
         {
@@ -437,13 +331,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(expectedValue, getValue);
         }
 
-        /// <summary>
-        /// Verifies the terminal date.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-07-02
-        /// </remarks>
         [Test]
         public void VerifyTerminalDate()
         {
@@ -540,10 +427,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void ShouldNotChangeIfUserHasNoPermissionToChangeLogOnAndPassword()
         {
             const string oldLogOnInfo = "oldLogOnInfo";
-            _base.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = oldLogOnInfo;
-            _base.PermissionInformation.ApplicationAuthenticationInfo.Password = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.DomainName = oldLogOnInfo;
-            _base.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = oldLogOnInfo;
+            _base.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                      {ApplicationLogOnName = oldLogOnInfo, Password = oldLogOnInfo};
+            _base.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                  {DomainName = oldLogOnInfo, WindowsLogOnName = oldLogOnInfo};
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                     new DateOnly(DateTime.Today), _base)).Return(false);

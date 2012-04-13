@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         originalShiftCategory = originalMainShift.ShiftCategory;
                 }
 
-                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, options);
+                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(originalScheduleDay, options);
 
                 bool schedulingResult;
                 if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)

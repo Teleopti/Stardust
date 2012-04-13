@@ -37,9 +37,9 @@ namespace Teleopti.Messaging.Coders
         /// <returns></returns>
         public byte[] Encode(IJobResultProgress item)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string message = item.Message;
+            var message = item.Message;
             if (string.IsNullOrEmpty(message))
                 message = "-";
 
@@ -49,8 +49,9 @@ namespace Teleopti.Messaging.Coders
             sb.Append(Consts.Separator);
             sb.Append(message);
             sb.Append(Consts.Separator);
+            sb.Append(item.TotalPercentage.ToString(CultureInfo.InvariantCulture));
 
-            List<Byte> encodedList = new List<byte>();
+            var encodedList = new List<byte>();
             encodedList.AddRange(_encoding.GetBytes(sb.ToString()));
             
             byte[] buf = encodedList.ToArray();

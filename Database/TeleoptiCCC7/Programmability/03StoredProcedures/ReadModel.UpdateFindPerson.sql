@@ -44,11 +44,11 @@ FROM Person WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, WindowsLogOnName, '', NULL, NULL, NULL  
-FROM Person WHERE IsDeleted = 0
+FROM Person INNER JOIN WindowsAuthenticationInfo On Id = Person AND IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, ApplicationLogOnName, '', NULL, NULL, NULL  
-FROM Person WHERE IsDeleted = 0
+FROM Person INNER JOIN ApplicationAuthenticationInfo On Id = Person AND IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ptp.Name, 'PartTimePercentage', NULL, NULL, NULL  

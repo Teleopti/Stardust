@@ -12,17 +12,15 @@ namespace Teleopti.Ccc.DBManager
 {
     class Program
     {
-        private static TextWriter _logger;
-        private static int _currentDatabaseBuildNumber;
         private static SqlConnection _sqlConnection;
         private static DatabaseFolder _databaseFolder;
         private static CommandLineArgument _commandLineArgument;
-        private static string _fileName;
-        private const int CommandTimeout = 900; //Command Timeout for Create + Release scripts
         private static bool _isAzure;
         private const string AzureEdition = "SQL Azure";
-        
-        /// <summary>
+    	private static MyLogger _logger;
+    	private static DatabaseVersionInformation _databaseVersionInformation;
+
+    	/// <summary>
         /// Mains the specified args.
         /// Usage:
         /// DBManager.exe (-c) [*Database name] [Login name] [Password] [Server name]
@@ -38,9 +36,8 @@ namespace Teleopti.Ccc.DBManager
         {
             try
             {
-                DateTime nowDateTime = DateTime.Now;
+				_logger = new MyLogger();
 
-                _logger = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManager_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
                 // hhmmss
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string versionNumber = version.ToString();
@@ -96,7 +93,9 @@ namespace Teleopti.Ccc.DBManager
                         _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionString);
                         _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
-                        //Set permissions of the newly application user on db.
+						_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
+
+						//Set permissions of the newly application user on db.
                         if (_commandLineArgument.WillCreateNewDatabase)
                         {
                             CreateDefaultVersionInformation();
@@ -113,12 +112,12 @@ namespace Teleopti.Ccc.DBManager
                             }
 
                             //Add Released DDL
-                            applyReleases(_commandLineArgument.TargetDatabaseTypeName);
+                            applyReleases(_commandLineArgument.TargetDatabaseType);
                             //Add upcoming DDL (Trunk)
                             if (_commandLineArgument.WillAddTrunk)
-                                applyTrunk(_commandLineArgument.TargetDatabaseTypeName);
+								applyTrunk(_commandLineArgument.TargetDatabaseType);
                             //Add Programmabilty
-                            applyProgrammability(_commandLineArgument.TargetDatabaseTypeName);
+							applyProgrammability(_commandLineArgument.TargetDatabaseType);
                         }
                         else
                         {
@@ -164,18 +163,12 @@ namespace Teleopti.Ccc.DBManager
             catch (Exception e)
             {
                 logWrite("An error occurred:");
-                if (_fileName != "")
-                {
-                    logWrite("Last opened script file: ");
-                    logWrite(_fileName);
-                }
                 logWrite(e.Message);
                 return -1;
             }
             finally
             {
-                _logger.Close();
-
+                _logger.Dispose();
             }
         }
 
@@ -186,105 +179,38 @@ namespace Teleopti.Ccc.DBManager
 
         private static void logWrite(string s)
         {
-            Console.Out.WriteLine(s);
-            _logger.WriteLine(s);
+        	_logger.Write(s);
         }
 
-        /// <summary>
-        /// Applies the releases.
-        /// </summary>
-        /// <param name="databaseTypeName">Name of the database type.</param>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-09-23
-        /// </remarks>
-        private static void applyReleases(string databaseTypeName)
+		public class MyLogger : ILog, IDisposable
+		{
+			private readonly TextWriter _logFile;
+
+			public MyLogger()
+			{
+				var nowDateTime = DateTime.Now;
+				_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManager_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+			}
+
+			public void Write(string message)
+			{
+				Console.Out.WriteLine(message);
+				_logFile.WriteLine(message);
+			}
+
+			public void Dispose()
+			{
+				if (_logFile == null)
+					return;
+				_logFile.Close();
+				_logFile.Dispose();
+			}
+		}
+
+        private static void applyReleases(DatabaseType databaseType)
         {
-            _currentDatabaseBuildNumber = GetDatabaseBuildNumber();
-            string releasesPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Releases";
-            if (Directory.Exists(releasesPath))
-            {
-                DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(releasesPath);
-                FileInfo[] scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
-
-                foreach (FileInfo scriptFile in scriptFiles)
-                {
-                    //Check the versionnumber
-                    string releaseName = scriptFile.Name.Replace(".sql", "");
-                    int releaseNumber = Convert.ToInt32(releaseName, CultureInfo.CurrentCulture);
-
-                    //Always add release files (DDL and src-code)
-                    if (releaseNumber > _currentDatabaseBuildNumber)
-                    {
-                        logWrite("Applying Release " + releaseName + "...");
-                        _fileName = scriptFile.FullName;
-                        string sql;
-                        using (TextReader textReader = new StreamReader(_fileName))
-                        {
-                            sql = textReader.ReadToEnd();
-                        }
-                        executeBatchSQL(sql);
-
-                        //Don't add data If AddDataFiles is false. Used by Nightly builds
-                        if (_commandLineArgument.AddDatFiles)
-                            executeDatFile(scriptFile);
-                    }
-                }
-            }
-        }
-
-        private static void executeDatFile(FileSystemInfo scriptFile)
-        {
-            _fileName = scriptFile.FullName.Replace(".sql", ".dat");
-            try
-            {
-                using (TextReader datReader = new StreamReader(_fileName))
-                {
-                    string datSql = datReader.ReadToEnd();
-                    executeBatchSQL(datSql);
-                }
-            }
-            catch (IOException)
-            {
-                //logWrite("Cannot find file " + datFile);
-            }
-        }
-
-
-        private static void executeBatchSQL(string sql)
-        {
-            SqlTransaction transaction = _sqlConnection.BeginTransaction();
-            Regex regex = new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            string[] lines = regex.Split(sql);
-
-            using (SqlCommand sqlCommand = _sqlConnection.CreateCommand())
-            {
-                sqlCommand.Connection = _sqlConnection;
-                sqlCommand.CommandTimeout = CommandTimeout;
-                sqlCommand.Transaction = transaction;
-
-                foreach (string line in lines)
-                {
-                    if (line.Length > 0)
-                    {
-                        sqlCommand.CommandText = line;
-                        sqlCommand.CommandType = CommandType.Text;
-
-                        try
-                        {
-                            sqlCommand.ExecuteNonQuery();
-                        }
-                        catch (SqlException e)
-                        {
-                            logWrite(e.Message);
-                            transaction.Rollback();
-                            break;
-                            //In this case stop the whole thing
-                        }
-                    }
-                }
-                transaction.Commit();
-            }
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyReleases(databaseType);
         }
 
         private static void applyAzureStartDDL(string databaseTypeName)
@@ -299,80 +225,28 @@ namespace Teleopti.Ccc.DBManager
             {
                 sql = sqlTextReader.ReadToEnd();
             }
+
             executeBatchSQL(sql);
         }
 
+    	private static void executeBatchSQL(string sql)
+    	{
+			new SqlBatchExecutor(_sqlConnection,_logger).ExecuteBatchSql(sql);
+    	}
 
-        private static void applyTrunk(string databaseTypeName)
+		private static void applyTrunk(DatabaseType databaseType)
         {
-            logWrite("Applying Trunk...");
-            string trunkPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Trunk";
-            if (Directory.Exists(trunkPath))
-            {
-                string sqlFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.sql", trunkPath);
-                string datFile = string.Format(CultureInfo.CurrentCulture, @"{0}\Trunk.dat", trunkPath);
-
-                string sql;
-                using (TextReader sqlTextReader = new StreamReader(sqlFile))
-                {
-                    sql = sqlTextReader.ReadToEnd();
-                }
-
-                //Always DDL and src-code
-                executeBatchSQL(sql);
-
-                //Add data If AddDataFiles is true. Used by Nightly builds (-A)
-                if (_commandLineArgument.AddDatFiles)
-                {
-                    if (File.Exists(datFile))
-                    {
-                        string dat;
-                        using (TextReader datTextReader = new StreamReader(datFile))
-                        {
-                            dat = datTextReader.ReadToEnd();
-                        }
-                        executeBatchSQL(dat);
-                    }
-                }
-            }
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyTrunk(databaseType);
         }
 
+		private static void applyProgrammability(DatabaseType databaseType)
+		{
+			new DatabaseSchemaCreator(_databaseVersionInformation, _sqlConnection, _databaseFolder, _logger)
+				.ApplyProgrammability(databaseType);
+		}
 
-        private static void applyProgrammability(string databaseTypeName)
-        {
-            string progPath = _databaseFolder.Path() + @"\" + databaseTypeName + @"\Programmability";
-            string[] directories = Directory.GetDirectories(progPath);
-
-            foreach (string directory in directories)
-            {
-                if (Directory.Exists(directory))
-                {
-                    DirectoryInfo scriptsDirectoryInfo = new DirectoryInfo(directory);
-                    FileInfo[] scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
-
-                    logWrite(string.Format("Adding programmability directory '{0}'", scriptsDirectoryInfo.Name));
-
-                    foreach (FileInfo scriptFile in scriptFiles)
-                    {
-                        _fileName = scriptFile.FullName;
-                        string sql;
-                        using(TextReader textReader = new StreamReader(_fileName))
-                        {
-                            sql = textReader.ReadToEnd();
-                        }
-                        executeBatchSQL(sql);
-                    }
-                }
-            }
-        }
-
-        private static int GetDatabaseBuildNumber()
-        {
-            using(SqlCommand sqlCommand = new SqlCommand("SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]", _sqlConnection))
-            {
-                return (int)sqlCommand.ExecuteScalar();
-            }
-        }
+        private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseBuildNumber(); }
 
         private static bool VersionTableExists()
         {
@@ -426,7 +300,7 @@ namespace Teleopti.Ccc.DBManager
         {
             logWrite("Creating database " + databaseName + "...");
 
-        	var creator = new DatabaseCreator(new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager)), _sqlConnection);
+        	var creator = new DatabaseCreator(_databaseFolder, _sqlConnection);
 			if (_isAzure)
 				creator.CreateAzureDatabase(databaseType, databaseName);
 			else
@@ -519,16 +393,11 @@ namespace Teleopti.Ccc.DBManager
 
         private static void CreateDefaultVersionInformation()
         {
-            logWrite("Creating database version table and setting inital version to 0...");
-            string fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\CreateDatabaseVersion.sql", _databaseFolder.Path());
-            TextReader textReader = new StreamReader(fileName);
-            string sql = textReader.ReadToEnd();
-            textReader.Close();
-            SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+        	logWrite("Creating database version table and setting inital version to 0...");
+			_databaseVersionInformation.CreateTable();
         }
 
-        private static SqlConnection ConnectAndOpen(string connectionString)
+    	private static SqlConnection ConnectAndOpen(string connectionString)
         {
             SqlConnection sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();

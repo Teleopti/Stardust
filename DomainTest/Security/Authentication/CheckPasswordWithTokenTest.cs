@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         private ICheckPassword target;
         private IOneWayEncryption encryption;
         private IApplicationAuthenticationInfo applicationAuthenticationInfo;
-        private IPermissionInformation permissionInformation;
         private IPerson person;
         private IUserDetail userDetail;
         private ICheckBruteForce checkBruteForce;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             encryption = mocks.StrictMock<IOneWayEncryption>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
-            permissionInformation = mocks.StrictMock<IPermissionInformation>();
             applicationAuthenticationInfo =
                 mocks.StrictMock<IApplicationAuthenticationInfo>();
             checkBruteForce = mocks.StrictMock<ICheckBruteForce>();
@@ -48,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 Expect.Call(encryption.EncryptStringWithBase64(passphrase, logOn)).Return(password);
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation);
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo);
                 Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return(logOn);
                 Expect.Call(passphraseProvider.Passphrase()).Return(passphrase);
             }
@@ -72,8 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 Expect.Call(encryption.EncryptString(password)).Return(password);
                 Expect.Call(encryption.EncryptStringWithBase64(passphrase, logOn)).Return("invalidauthpass");
                 Expect.Call(userDetail.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Twice();
-                Expect.Call(permissionInformation.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Twice();
+                Expect.Call(person.ApplicationAuthenticationInfo).Return(applicationAuthenticationInfo).Repeat.Twice();
                 Expect.Call(applicationAuthenticationInfo.Password).Return("invalidpass");
 				Expect.Call(applicationAuthenticationInfo.ApplicationLogOnName).Return(logOn);
 				Expect.Call(passphraseProvider.Passphrase()).Return(passphrase);

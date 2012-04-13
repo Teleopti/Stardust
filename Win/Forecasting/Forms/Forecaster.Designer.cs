@@ -311,6 +311,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonSave2));
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
+			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -333,6 +334,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripButtonExit,
             this.toolStripButtonSystemOptions});
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
+			this.ribbonControlAdv1.ShowMinimizeButton = false;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1272, 160);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartMenu";
 			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
@@ -390,7 +392,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// toolStripExDatePicker
 			// 
-			this.toolStripExDatePicker.AutoSize = false;
 			this.ribbonControlAdv1.SetDescription(this.toolStripExDatePicker, "");
 			this.toolStripExDatePicker.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripExDatePicker.ForeColor = System.Drawing.Color.MidnightBlue;
@@ -400,7 +401,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExDatePicker.Name = "toolStripExDatePicker";
 			this.toolStripExDatePicker.ShowCaption = true;
 			this.toolStripExDatePicker.ShowLauncher = false;
-			this.toolStripExDatePicker.Size = new System.Drawing.Size(154, 98);
+			this.toolStripExDatePicker.Size = new System.Drawing.Size(38, 98);
 			this.toolStripExDatePicker.TabIndex = 3;
 			this.toolStripExDatePicker.Text = "xxDateNavigation";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExDatePicker, true);
@@ -413,7 +414,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExZoomBtns.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripExZoomBtns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExZoomBtns.Image = null;
-			this.toolStripExZoomBtns.Location = new System.Drawing.Point(283, 1);
+			this.toolStripExZoomBtns.Location = new System.Drawing.Point(167, 1);
 			this.toolStripExZoomBtns.Name = "toolStripExZoomBtns";
 			this.toolStripExZoomBtns.ShowLauncher = false;
 			this.toolStripExZoomBtns.Size = new System.Drawing.Size(106, 98);
@@ -432,7 +433,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExWorkflow.ImageScalingSize = new System.Drawing.Size(25, 25);
 			this.toolStripExWorkflow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonForecastWorkflow});
-			this.toolStripExWorkflow.Location = new System.Drawing.Point(391, 1);
+			this.toolStripExWorkflow.Location = new System.Drawing.Point(275, 1);
 			this.toolStripExWorkflow.Name = "toolStripExWorkflow";
 			this.toolStripExWorkflow.ShowLauncher = false;
 			this.toolStripExWorkflow.Size = new System.Drawing.Size(122, 98);
@@ -468,7 +469,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripButtonIncreaseDecimals,
             this.toolStripButtonDecreaseDecimals});
 			this.toolStripExNumber.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
-			this.toolStripExNumber.Location = new System.Drawing.Point(515, 1);
+			this.toolStripExNumber.Location = new System.Drawing.Point(399, 1);
 			this.toolStripExNumber.Name = "toolStripExNumber";
 			this.toolStripExNumber.ShowLauncher = false;
 			this.toolStripExNumber.Size = new System.Drawing.Size(167, 98);
@@ -518,7 +519,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripButtonShowGraph,
             this.toolStripButtonShowSkillView});
 			this.toolStripExShow.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-			this.toolStripExShow.Location = new System.Drawing.Point(684, 1);
+			this.toolStripExShow.Location = new System.Drawing.Point(568, 1);
 			this.toolStripExShow.Name = "toolStripExShow";
 			this.toolStripExShow.ShowLauncher = false;
 			this.toolStripExShow.Size = new System.Drawing.Size(119, 98);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +8,7 @@ using Autofac;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -1123,30 +1125,38 @@ namespace Teleopti.Ccc.Win.Permissions
                 IEnumerable<IPersonInRole> enumerable = people.Except(personList);
 
                 listViewPeople.BeginUpdate();
-                foreach (IPersonInRole person in enumerable)
+                using (PerformanceOutput.ForOperation("Populating Agents"))
                 {
-                    // Create a new person and add to listViewPeople.
-                    ListViewItem newPerson = new ExtentListItem
-                                                 {
+                    IList<ListViewItem> listViewItems = new List<ListViewItem>();
+
+                foreach (IPersonInRole person in enumerable)
+
+                    {
+                        // Create a new person and add to listViewPeople.
+                        ListViewItem newPerson = new ExtentListItem
+                        {
                                                      Text = person.FirstName,
-                                                     TagObject = person,
-                                                     Tag = 1
-                                                 }
-                    ;
+                            TagObject = person,
+                            Tag = 1
+                        }
+                        ;
 
-                    var lastName = new ListViewItem.ListViewSubItem
-                                                                {
+                        var lastName = new ListViewItem.ListViewSubItem
+                        {
                                                                     Text = person.LastName,
-                                                                    Tag = person
-                                                                }
-                    ;
+                            Tag = person
+                        }
+                        ;
 
-                    var teamName = new ListViewItem.ListViewSubItem
+                        var teamName = new ListViewItem.ListViewSubItem
                                        {
                                            Text = person.Team 
-                                    };
-                    newPerson.SubItems.AddRange(new[] { lastName, teamName });
-                    listViewPeople.Items.Add(newPerson);
+                        };
+                        newPerson.SubItems.AddRange(new[] { lastName, teamName });
+                        listViewItems.Add(newPerson);
+                        //listViewPeople.Items.Add(newPerson);
+                    }
+                    listViewPeople.Items.AddRange(listViewItems.ToArray());
                 }
                 listViewPeople.Sort();
                 listViewPeople.EndUpdate();
@@ -2374,7 +2384,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void permissionsExplorerKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.N && (e.Alt))
+            if (e.KeyCode == Keys.M && (e.Alt))
             {
                 toolStripExViewer.Visible = !toolStripExViewer.Visible;
             }

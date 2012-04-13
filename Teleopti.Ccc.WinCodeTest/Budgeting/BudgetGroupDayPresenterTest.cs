@@ -119,5 +119,31 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				target.Initialize();
 			}
 		}
+
+        [Test]
+        public void ShouldReloadShrinkages()
+        {
+            using (mock.Record())
+            {
+                Expect.Call(() => view.AddShrinkageRow(null)).IgnoreArguments().Repeat.Any();
+            }
+            using (mock.Playback())
+            {
+                target.InitializeShrinkages();
+            }
+        }
+        
+        [Test]
+        public void ShouldReloadEfficiencyShrinkages()
+        {
+            using (mock.Record())
+            {
+                Expect.Call(() => view.AddEfficiencyShrinkageRow(null)).IgnoreArguments().Repeat.Any();
+            }
+            using (mock.Playback())
+            {
+                target.InitializeEfficiencyShrinkages();
+            }
+        }
 	}
 }

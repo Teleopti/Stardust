@@ -10245,4 +10245,21 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ContractTimeDesc" xml:space="preserve">
     <value>Kontraktstid sjunkande</value>
   </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Ta bort skrivskydd</value>
+    <comment>Remove write protection</comment>
+  </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Inkludera felsökningsinformation</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} agentdagar kunde inte schemaläggas.</value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Exportera till PDF skift per dag</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Visa publik notering</value>
+    <comment>ShowPublicNotes</comment>
+  </data>
 </root>

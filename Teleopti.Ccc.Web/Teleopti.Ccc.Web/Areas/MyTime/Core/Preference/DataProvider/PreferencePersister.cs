@@ -34,6 +34,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			else
 			{
 				_mapper.Map(input, preferenceDay);
+
+				//Clear existing extended preferences and must haves util MyTimeWeb supports them
+				if (preferenceDay.Restriction != null)
+				{
+					preferenceDay.Restriction.StartTimeLimitation = new StartTimeLimitation();
+					preferenceDay.Restriction.EndTimeLimitation = new EndTimeLimitation();
+					preferenceDay.Restriction.WorkTimeLimitation = new WorkTimeLimitation();
+					var activityRestrictionCollection =
+						preferenceDay.Restriction.ActivityRestrictionCollection.CopyEnumerable<IActivityRestriction>();
+					foreach (var activityRestriction in activityRestrictionCollection)
+						preferenceDay.Restriction.RemoveActivityRestriction(activityRestriction);
+					preferenceDay.Restriction.MustHave = false;
+					preferenceDay.TemplateName = null;
+				}
 			}
 			return _mapper.Map<IPreferenceDay, PreferenceDayInputResult>(preferenceDay);
 		}
@@ -45,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				throw new HttpException(404, "Preference not found");
 
 			_preferenceDayRepository.Remove(preferences.Single());
-			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat() };
+			return new PreferenceDayInputResult { Date = date.ToFixedClientDateOnlyFormat(), HexColor = ""};
 		}
 	}
 }

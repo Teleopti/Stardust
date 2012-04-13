@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture,
 				                             "Incoming number of child skills for multisite skill {0}: {1}.", message.MultisiteSkillSelections.MultisiteSkillId,
 				                             message.MultisiteSkillSelections.ChildSkillSelections.Count()));
-				_feedback.ReportProgress(0,
+				_feedback.ReportProgress(1,
 				                         string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
 				                                       message.MultisiteSkillSelections.MultisiteSkillId, message.Period));
 
@@ -71,17 +71,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					}
 					catch (Exception exception)
 					{
+					    var stepMessage = string.Format(CultureInfo.InvariantCulture, "An error occurred while running export {0} for {1}",
+					                                    settings.MultisiteSkillsForExport.Select(m => m.MultisiteSkill.Name).
+					                                        ToArray(), settings.Period);
+                        _feedback.Error(stepMessage, exception);
+                        _feedback.ReportProgress(0, stepMessage);
 						unitOfWork.Clear();
 						unitOfWork.Merge(jobResult);
-						_feedback.Error("An error occurred while running export.", exception);
-                        _feedback.ReportProgress(0, string.Format(CultureInfo.InvariantCulture, "An error occurred while running export."));
 						endProcessing(unitOfWork);
 						return;
 					}
 					stopwatch.Stop();
 					_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Processing export for multisite skill took {0}.",
 					                             stopwatch.Elapsed));
-					jobResult.FinishedOk = true; //At least one period for one multisite skill fell through!
+					jobResult.FinishedOk = true;
 
 					endProcessing(unitOfWork);
 				}
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			}
 			selections.Add(export);
 
-		    var selection = new SkillExportSelection(selections) {Period = message.Period, Incremental = message.IncreaseProgressBy};
+		    var selection = new SkillExportSelection(selections) {Period = message.Period};
 		    return selection;
 		}
 	}

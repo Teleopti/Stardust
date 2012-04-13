@@ -14,30 +14,32 @@ using Teleopti.Ccc.SyncfusionGridBinding;
 using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Budgeting
 {
 	public partial class BudgetGroupDayView : BaseUserControl, IBudgetGroupDayView, ISelectedBudgetDays
 	{
-		private readonly IEventAggregator _eventAggregator;
+		private readonly IEventAggregator _localEventAggregator;
 		private readonly BudgetDayReassociator _budgetDayReassociator;
 	    private readonly IBudgetPermissionService _budgetPermissionService;
 	    private ColumnEntityBinder<IBudgetGroupDayDetailModel> _entityBinder;
 		private GridRowSection<IBudgetGroupDayDetailModel> _shrinkageSection;
         private GridRowSection<IBudgetGroupDayDetailModel> _efficiencyShrinkageSection;
         private IList<double> _modifiedItems;
+	    private readonly IEventAggregator _globalEventAggregator;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
-		public BudgetGroupDayView(IEventAggregator eventAggregator, BudgetDayReassociator budgetDayReassociator, IBudgetPermissionService budgetPermissionService)
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
+		public BudgetGroupDayView(IEventAggregatorLocator eventAggregatorLocator, BudgetDayReassociator budgetDayReassociator, IBudgetPermissionService budgetPermissionService)
 		{
-			_eventAggregator = eventAggregator;
-			_budgetDayReassociator = budgetDayReassociator;
+            _localEventAggregator = eventAggregatorLocator.LocalAggregator();
+            _globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
+            _budgetDayReassociator = budgetDayReassociator;
 		    _budgetPermissionService = budgetPermissionService;
 		    InitializeComponent();
 			InitializeGrid();
@@ -69,21 +71,30 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private void EventSubscription()
 		{
-			_eventAggregator.GetEvent<ShrinkageRowAdded>().Subscribe(ShrinkageRowAdded);
-			_eventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Subscribe(EfficiencyShrinkageRowAdded);
-			_eventAggregator.GetEvent<ShrinkageRowsDeleted>().Subscribe(ShrinkageRowsDeleted);
-			_eventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted);
-			_eventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
-			_eventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
-			_eventAggregator.GetEvent<BeginBudgetDaysUpdate>().Subscribe(OnBeginBudgetDaysUpdate);
-			_eventAggregator.GetEvent<EndBudgetDaysUpdate>().Subscribe(OnEndBudgetDaysUpdate);
-			_eventAggregator.GetEvent<ExitEditMode>().Subscribe(OnExitEditMode);
-			_eventAggregator.GetEvent<ViewsClipboardAction>().Subscribe(OnViewsClipboardAction);
-			_eventAggregator.GetEvent<UpdateShrinkageProperty>().Subscribe(UpdateShrinkageProperty);
-            _eventAggregator.GetEvent<UpdateEfficiencyShrinkageProperty>().Subscribe(UpdateEfficiencyShrinkageProperty);
+			_localEventAggregator.GetEvent<ShrinkageRowAdded>().Subscribe(ShrinkageRowAdded);
+			_localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Subscribe(EfficiencyShrinkageRowAdded);
+			_localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Subscribe(ShrinkageRowsDeleted);
+			_localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted);
+			_localEventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
+			_localEventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
+			_localEventAggregator.GetEvent<BeginBudgetDaysUpdate>().Subscribe(OnBeginBudgetDaysUpdate);
+			_localEventAggregator.GetEvent<EndBudgetDaysUpdate>().Subscribe(OnEndBudgetDaysUpdate);
+			_localEventAggregator.GetEvent<ExitEditMode>().Subscribe(OnExitEditMode);
+			_localEventAggregator.GetEvent<ViewsClipboardAction>().Subscribe(OnViewsClipboardAction);
+			_localEventAggregator.GetEvent<UpdateShrinkageProperty>().Subscribe(UpdateShrinkageProperty);
+            _localEventAggregator.GetEvent<UpdateEfficiencyShrinkageProperty>().Subscribe(UpdateEfficiencyShrinkageProperty);
+            _globalEventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Subscribe(budgetGroupNeedsRefresh);
 		}
 
-        private void UpdateEfficiencyShrinkageProperty(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
+	    private void budgetGroupNeedsRefresh(IBudgetGroup budgetGroup)
+	    {
+            Presenter.UpdateBudgetGroup(budgetGroup);
+            gridControlDayView.SuspendInvalidate();
+	        reloadShrinkageSections();
+            gridControlDayView.ResumeInvalidate();
+	    }
+
+	    private void UpdateEfficiencyShrinkageProperty(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
 		{
             Presenter.RecalculateAll();
             _efficiencyShrinkageSection.UpdateRowHeaderTextWithTag(customEfficiencyShrinkage, customEfficiencyShrinkage.ShrinkageName + " (%)");
@@ -511,12 +522,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private void toolStripMenuItemAddShrinkageRow_Click(object sender, EventArgs e)
 		{
-			_eventAggregator.GetEvent<AddShrinkageRow>().Publish(string.Empty);
+			_localEventAggregator.GetEvent<AddShrinkageRow>().Publish(string.Empty);
 		}
 
 		private void toolStripMenuItemAddEfficiencyShrinkageRow_Click(object sender, EventArgs e)
 		{
-			_eventAggregator.GetEvent<AddEfficiencyShrinkageRow>().Publish(string.Empty);
+			_localEventAggregator.GetEvent<AddEfficiencyShrinkageRow>().Publish(string.Empty);
 		}
 
 		private void gridControlDayView_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
@@ -533,7 +544,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				itemsToDelete.Add((ICustomShrinkage)gridRow.Tag);
 			}
-			_eventAggregator.GetEvent<DeleteCustomShrinkages>().Publish(itemsToDelete);
+			_localEventAggregator.GetEvent<DeleteCustomShrinkages>().Publish(itemsToDelete);
 		}
 
 		private void toolStripMenuItemDeleteEfficiencyShrinkageRow_Click(object sender, EventArgs e)
@@ -544,7 +555,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				itemsToDelete.Add((ICustomEfficiencyShrinkage)gridRow.Tag);
 			}
-			_eventAggregator.GetEvent<DeleteCustomEfficiencyShrinkages>().Publish(itemsToDelete);
+			_localEventAggregator.GetEvent<DeleteCustomEfficiencyShrinkages>().Publish(itemsToDelete);
 		}
 
 		public IEnumerable<IBudgetGroupDayDetailModel> Find()
@@ -554,12 +565,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private void toolStripMenuItemLoadForcastToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			_eventAggregator.GetEvent<LoadForecastedHours>().Publish("from day");
+			_localEventAggregator.GetEvent<LoadForecastedHours>().Publish("from day");
 		}
 
 		private void toolStripMenuItemLoadStaffEmployed_Click(object sender, EventArgs e)
 		{
-			_eventAggregator.GetEvent<LoadStaffEmployed>().Publish("from day");
+			_localEventAggregator.GetEvent<LoadStaffEmployed>().Publish("from day");
 		}
 
         private void toolStripMenuItemModifySelection_Paint(object sender, PaintEventArgs e)
@@ -608,12 +619,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private void gridControlDayView_ClipboardCopy(object sender, GridCutPasteEventArgs e)
 		{
-			_eventAggregator.GetEvent<UpdateClipboardStatus>().Publish(new ClipboardStatusEventModel { ClipboardAction = ClipboardAction.Paste, Enabled = true });
+			_localEventAggregator.GetEvent<UpdateClipboardStatus>().Publish(new ClipboardStatusEventModel { ClipboardAction = ClipboardAction.Paste, Enabled = true });
 		}
 
 		private void gridControlDayView_ClipboardCut(object sender, GridCutPasteEventArgs e)
 		{
-			_eventAggregator.GetEvent<UpdateClipboardStatus>().Publish(new ClipboardStatusEventModel { ClipboardAction = ClipboardAction.Paste, Enabled = true });
+			_localEventAggregator.GetEvent<UpdateClipboardStatus>().Publish(new ClipboardStatusEventModel { ClipboardAction = ClipboardAction.Paste, Enabled = true });
 		}
 
 		private void toolStriUpdateShrinkageRow_Click(object sender, EventArgs e)
@@ -623,7 +634,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var shrinkage = rows.First();
 			if (shrinkage != null)
 			{
-				_eventAggregator.GetEvent<ChangeCustomShrinkage>().Publish((ICustomShrinkage)shrinkage.Tag);
+				_localEventAggregator.GetEvent<ChangeCustomShrinkage>().Publish((ICustomShrinkage)shrinkage.Tag);
 			}
 		}
 
@@ -634,9 +645,17 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var efficiency = rows.First();
 			if (efficiency != null)
 			{
-				_eventAggregator.GetEvent<ChangeCustomEfficiencyShrinkage>().Publish((ICustomEfficiencyShrinkage)efficiency.Tag);
+				_localEventAggregator.GetEvent<ChangeCustomEfficiencyShrinkage>().Publish((ICustomEfficiencyShrinkage)efficiency.Tag);
 			}
 		}
+
+        private void reloadShrinkageSections()
+        {
+            _shrinkageSection.ClearRows();
+            _efficiencyShrinkageSection.ClearRows();
+            Presenter.InitializeShrinkages();
+            Presenter.InitializeEfficiencyShrinkages();
+        }
 
 	    private void budgetGroupDayViewMenu_Opening(object sender, CancelEventArgs e)
 	    {

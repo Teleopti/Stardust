@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Xml;
 using System.Xml.Linq;
 using NHibernate;
 using NUnit.Framework;
@@ -34,17 +35,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [ExpectedException(typeof (SignatureValidationException))]
         public void VerifyConstructor()
         {
-            string licenseFileName = Path.GetTempFileName();
+			XmlDocument doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
+            int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            var reader = new StreamReader(licenseFileName);
-            string licenseXmlString = reader.ReadToEnd();
-            reader.Close();
-
-            ILicense license = new License {XmlString = licenseXmlString};
+            ILicense license = new License {XmlString = doc.OuterXml};
 
         	var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
@@ -102,14 +99,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [Test]
         public void VerifyCreationOfValidLicense()
         {
-            string licenseFileName = Path.GetTempFileName();
+			XmlDocument doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            _licenseService = new XmlLicenseService(licenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 10);
-
+			using (var reader = new XmlNodeReader(doc))
+			{
+				_licenseService = new XmlLicenseService(XDocument.Load(reader), XmlLicenseTestSetupFixture.PublicKeyXmlString, 10);
+        	}
+            
             Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
             Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
             Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
@@ -147,13 +147,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         public void VerifyCreationOfPilotCustomerLicense()
         {
             const string unsignedPilotCustomersLicenseFileName = folder + "TeleoptiCCCPilotCustomersUnsignedLicense.xml";
-            string licenseFileName = Path.GetTempFileName();
-
-            int exitCode = XmlLicense.Sign(unsignedPilotCustomersLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName, licenseFileName);
+            
+			XmlDocument doc = new XmlDocument();
+			doc.Load(unsignedPilotCustomersLicenseFileName);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            _licenseService = new XmlLicenseService(licenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
+        	using (var reader = new XmlNodeReader(doc))
+			{
+				_licenseService = new XmlLicenseService(XDocument.Load(reader),
+														XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
+        	}
 
             Assert.AreEqual("This pilot license is stolen!", _licenseService.CustomerName);
             Assert.GreaterOrEqual(new TimeSpan(31, 0, 0, 0), _licenseService.ExpirationGracePeriod);
@@ -183,7 +187,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.IsTrue(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
             Assert.IsFalse(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
-            File.Delete(licenseFileName);
         }
 
         /// <summary>
@@ -193,15 +196,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         public void VerifyCreationOfFreemiumLicense()
         {
             const string unsignedFreemiumLicenseFileName = folder + "TeleoptiCCCFreemiumUnsignedLicense.xml";
-            string licenseFileName = Path.GetTempFileName();
+            
+			XmlDocument doc = new XmlDocument();
+			doc.Load(unsignedFreemiumLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(unsignedFreemiumLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName, licenseFileName);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            XDocument licenseXml = XDocument.Load(licenseFileName);
-            _licenseService = new XmlLicenseService(licenseXml, XmlLicenseTestSetupFixture.PublicKeyXmlString, 1);
-
+			using (var reader = new XmlNodeReader(doc))
+			{
+				XDocument licenseXml = XDocument.Load(reader);
+				_licenseService = new XmlLicenseService(licenseXml, XmlLicenseTestSetupFixture.PublicKeyXmlString, 1);
+        	}
+            
             Assert.AreEqual("This freemium license is stolen!", _licenseService.CustomerName);
             Assert.AreEqual(new TimeSpan(0, 20, 0, 0, 0), _licenseService.ExpirationGracePeriod);
             Assert.AreEqual(1, _licenseService.MaxActiveAgents);
@@ -229,7 +236,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.IsFalse(_licenseService.TeleoptiCccPilotCustomersReportsEnabled);
 
             Assert.IsTrue(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
-            File.Delete(licenseFileName);
         }
 
         [Test, ExpectedException(typeof (LicenseMissingException))]
@@ -237,9 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyLicenseFileMissingHandling()
         {
-            string nonExistantFileName = Path.GetRandomFileName();
-
-            new XmlLicenseService(nonExistantFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432);
+            new XmlLicenseService(null, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432);
         }
 
 
@@ -249,14 +253,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         public void VerifyLicenseExpired()
         {
             const string unsignedExpiredLicenseFileName = folder + "TeleoptiCCCExpiredUnsignedLicense.xml";
-            string expiredLicenseFileName = Path.GetTempFileName();
+            
+			XmlDocument doc = new XmlDocument();
+			doc.Load(unsignedExpiredLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(unsignedExpiredLicenseFileName,
-                                           XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           expiredLicenseFileName);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
-            new XmlLicenseService(expiredLicenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
+            new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
         }
 
         [Test]
@@ -265,15 +269,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             string licenseFileName = Path.GetTempFileName();
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
+        	var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
             Assert.AreEqual((int) ExitCode.Success, exitCode);
 
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
             const int numberOfActiveAgents = 100;
-               
-            //ILicense oldLicense = new License {XmlString = "<foo></foo>"};
+
+			using (var writer = new XmlTextWriter(licenseFileName, System.Text.Encoding.Unicode))
+			{
+				doc.WriteTo(writer);
+				writer.Flush();
+			}
 
         	using(_mocks.Record())
             {
@@ -287,16 +297,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                     XmlLicenseService.SaveNewLicense(licenseFileName, licenseRepository,
                                                      XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
                 Assert.AreEqual(10000, licenseService.MaxActiveAgents);
+				File.Delete(licenseFileName);
             }
         }
 
         [Test]
         public void VerifySave2()
-        {
-            string licenseFileName = Path.GetTempFileName();
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+		{
+			string licenseFileName = Path.GetTempFileName();
+
+			var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
+
+			using (var writer = new XmlTextWriter(licenseFileName, System.Text.Encoding.Unicode))
+			{
+				doc.WriteTo(writer);
+				writer.Flush();
+			}
 
             var uow = _mocks.DynamicMock<IUnitOfWork>();
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
@@ -315,6 +335,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using(_mocks.Playback())
             {
                 XmlLicenseService.SaveNewLicense(licenseFileName, uow, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+				File.Delete(licenseFileName);
             }
         }
 
@@ -322,9 +343,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         public void VerifySaveThrowsExceptionWhenHibernateError()
         {
             string licenseFileName = Path.GetTempFileName();
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
-            Assert.AreEqual((int)ExitCode.Success, exitCode);
+
+			var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
+
+			using (var writer = new XmlTextWriter(licenseFileName, System.Text.Encoding.Unicode))
+			{
+				doc.WriteTo(writer);
+				writer.Flush();
+			}
 
             var uow = _mocks.DynamicMock<IUnitOfWork>(); 
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
@@ -352,15 +382,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             string licenseFileName = Path.GetTempFileName();
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
+
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
+
+			using (var writer = new XmlTextWriter(licenseFileName, System.Text.Encoding.Unicode))
+			{
+				doc.WriteTo(writer);
+				writer.Flush();
+			}
 
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
             Expect.Call(personRepository.NumberOfActiveAgents()).Return(20000);
-
-           // ILicense oldLicense = new License {XmlString = "<foo></foo>"};
 
         	licenseRepository.Add(new License());
             LastCall.IgnoreArguments();
@@ -373,13 +409,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [Test]
         public void VerifyActiveAgentsCheck()
         {
-            string licenseFileName = Path.GetTempFileName();
+			var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            _licenseService = new XmlLicenseService(licenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
+			using (var reader = new XmlNodeReader(doc))
+			{
+				_licenseService = new XmlLicenseService(XDocument.Load(reader), XmlLicenseTestSetupFixture.PublicKeyXmlString, 100);
+        	}
 
             Assert.IsTrue(_licenseService.IsThisTooManyActiveAgents(11100));
             Assert.IsTrue(_licenseService.IsThisAlmostTooManyActiveAgents(10100));
@@ -390,25 +429,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyActiveAgentsException()
         {
-            string licenseFileName = Path.GetTempFileName();
+            var doc = new XmlDocument();
+			doc.Load(unsignedLicenseFileName);
 
-            int exitCode = XmlLicense.Sign(unsignedLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-                                           licenseFileName);
-            Assert.AreEqual((int) ExitCode.Success, exitCode);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
+			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-            new XmlLicenseService(licenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100);
+            new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100);
         }
 
 		[Test]
 		public void ShouldRecalculateMaxAgentsIfSeatType()
 		{
-			string licenseFileName = Path.GetTempFileName();
+			var doc = new XmlDocument();
+			doc.Load(unsignedSeatLicenseFileName);
 
-			int exitCode = XmlLicense.Sign(unsignedSeatLicenseFileName, XmlLicenseTestSetupFixture.TestKeyContainterName,
-										   licenseFileName);
+			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-			_licenseService = new XmlLicenseService(licenseFileName, XmlLicenseTestSetupFixture.PublicKeyXmlString, 1500);
+			using (var reader = new XmlNodeReader(doc))
+			{
+				_licenseService = new XmlLicenseService(XDocument.Load(reader), XmlLicenseTestSetupFixture.PublicKeyXmlString, 1500);
+			}
 
 			Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
 			Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
