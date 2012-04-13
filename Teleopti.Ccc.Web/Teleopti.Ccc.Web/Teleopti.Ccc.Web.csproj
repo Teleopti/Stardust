@@ -164,6 +164,7 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IPersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />

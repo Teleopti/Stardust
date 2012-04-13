@@ -213,6 +213,7 @@
     <Compile Include="Foundation\ApplicationData.cs" />
     <Compile Include="NHibernateConfiguration\AuditSetter.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfiguration.cs" />
+    <Compile Include="NHibernateConfiguration\HybridWebSessionContext.cs" />
     <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />

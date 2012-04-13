@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
-			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>();
+			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
 		}

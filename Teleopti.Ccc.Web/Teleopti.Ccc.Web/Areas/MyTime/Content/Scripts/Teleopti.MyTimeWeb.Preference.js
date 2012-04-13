@@ -76,7 +76,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 
 	function _loadFeedbackForDate(date) {
 		_ajax({
-			url: "Preference/Feedback",
+			url: "PreferenceFeedback/Feedback",
 			type: 'GET',
 			data: { Date: date },
 			date: date,

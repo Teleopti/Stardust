@@ -329,8 +329,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePreferenceFeedbackProvider()
 		{
-			var result = requestContainer.Resolve<IPreferenceFeedbackProvider>();
-			result.Should().Not.Be.Null();
+			var result1 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result1.Should().Not.Be.Null();
+			var result2 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result2.Should().Be.SameInstanceAs(result1);
 		}
 
 		[Test]
