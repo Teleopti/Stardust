@@ -321,7 +321,7 @@
     <None Include="ClassDiagrams\CodersClassDiagram.cd" />
     <None Include="ClassDiagrams\DALClassDiagram.cd" />
     <None Include="ClassDiagrams\EventsClassDiagram.cd" />
-    <None Include="packages.config" />
+    <Content Include="packages.config" />
     <None Include="Teleopti.Messaging.pfx" />
   </ItemGroup>
   <ItemGroup>
