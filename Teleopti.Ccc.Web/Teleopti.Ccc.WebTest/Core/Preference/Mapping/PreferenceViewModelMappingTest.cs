@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Be(Color.PapayaWhip.ToStyleClass());
+				.BorderColor.Should().Be(Color.PapayaWhip.ToHtml());
 		}
 
 		[Test]
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Be(Color.SpringGreen.ToStyleClass());
+				.BorderColor.Should().Be(Color.SpringGreen.ToHtml());
 		}
 
 		[Test]
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Be(Color.SaddleBrown.ToStyleClass());
+				.BorderColor.Should().Be(Color.SaddleBrown.ToHtml());
 		}
 
 		[Test]
@@ -467,7 +467,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Be(Color.Coral.ToStyleClass());
+				.BorderColor.Should().Be(Color.Coral.ToHtml());
 		}
 
 		[Test]
@@ -564,8 +564,7 @@ namespace Teleopti.Ccc.WebTest.Core.Preference.Mapping
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Be(Color.DarkMagenta.ToStyleClass());
+			result.DayViewModel(data.SelectedDate).BorderColor.Should().Be(Color.DarkMagenta.ToHtml());
 		}
 
 		[Test]

@@ -578,7 +578,7 @@ namespace Teleopti.Ccc.Win.Shifts
                     var selectedBag = currentNode.TagObject as IRuleSetBag;
                     if (selectedBag != null)
                     {
-                        selectedRuleSets.AddRange(selectedBag.RuleSetCollection);
+                        selectedRuleSets.AddRange(selectedBag.RuleSetCollection.OrderBy(r => r.Description.Name).ToList());
                         selectedRuleSetBags.Add(selectedBag);
                     }
                 }

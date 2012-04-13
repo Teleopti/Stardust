@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Win.Budgeting.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 {
     public partial class EditShrinkageForm : BaseRibbonForm, IEditShrinkageForm
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly ICustomShrinkage _customShrinkage;
         internal event EventHandler<CustomEventArgs<CustomShrinkageUpdatedEventArgs>> CustomShrinkageUpdated;
         private const int maxLength = 25;
@@ -22,8 +25,9 @@ namespace Teleopti.Ccc.Win.Budgeting
         private readonly EditShrinkagePresenter _presenter;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 
-        public EditShrinkageForm(ICustomShrinkage  customShrinkage, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+        public EditShrinkageForm(IEventAggregator eventAggregator, ICustomShrinkage  customShrinkage, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
         {
+            _eventAggregator = eventAggregator;
             _customShrinkage = customShrinkage;
             InParameter.NotNull("customShrinkage", customShrinkage);
             InitializeComponent();
@@ -99,6 +103,7 @@ namespace Teleopti.Ccc.Win.Budgeting
                     () =>
                         {
                             saveUpdatedCustomShrinkage(shrinkageName);
+                            _eventAggregator.GetEvent<BudgetGroupTreeNeedsRefresh>().Publish("saveUpdatedCustomShrinkage");
                             notifySubsribers(handler);
                         });
             }

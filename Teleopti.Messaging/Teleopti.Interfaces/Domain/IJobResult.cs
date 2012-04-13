@@ -16,7 +16,7 @@ namespace Teleopti.Interfaces.Domain
         ///<summary>
         /// The period.
         ///</summary>
-        DateOnlyPeriod Period { get; }
+        DateOnlyPeriod Period { get; set; }
 
         /// <summary>
         /// The start time for this job.

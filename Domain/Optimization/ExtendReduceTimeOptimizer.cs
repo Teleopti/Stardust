@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
+
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
                 return false;

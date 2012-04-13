@@ -2,6 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -43,10 +44,26 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personDto.EmploymentNumber = entity.EmploymentNumber;
             personDto.CultureLanguageId = entity.PermissionInformation.CultureLCID();
             personDto.UICultureLanguageId = entity.PermissionInformation.UICultureLCID();
-            personDto.ApplicationLogOnName = entity.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName;
-            personDto.ApplicationLogOnPassword = entity.PermissionInformation.ApplicationAuthenticationInfo.Password;
-            personDto.WindowsDomain = entity.PermissionInformation.WindowsAuthenticationInfo.DomainName;
-            personDto.WindowsLogOnName = entity.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName;
+            if (entity.ApplicationAuthenticationInfo != null)
+            {
+                personDto.ApplicationLogOnName = entity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+                personDto.ApplicationLogOnPassword = entity.ApplicationAuthenticationInfo.Password;
+            }
+            else
+            {
+                personDto.ApplicationLogOnName = "";
+                personDto.ApplicationLogOnPassword = "";
+            }
+            if (entity.WindowsAuthenticationInfo != null)
+            {
+                personDto.WindowsDomain = entity.WindowsAuthenticationInfo.DomainName;
+                personDto.WindowsLogOnName = entity.WindowsAuthenticationInfo.WindowsLogOnName;
+            }
+            else
+            {
+                personDto.WindowsDomain = "";
+                personDto.WindowsLogOnName = "";
+            }
             personDto.Note = entity.Note;
             personDto.IsDeleted = ((IDeleteTag)entity).IsDeleted;
             
@@ -107,18 +124,22 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 throw new ArgumentException("Timezone cannot be empty");
             if (dto.UICultureLanguageId.HasValue)
                 person.PermissionInformation.SetUICulture(new CultureInfo(dto.UICultureLanguageId.Value));
-            if (!string.IsNullOrEmpty(dto.ApplicationLogOnName))
-                person.PermissionInformation.ApplicationAuthenticationInfo.ApplicationLogOnName = dto.ApplicationLogOnName;
-            if (!string.IsNullOrEmpty(dto.ApplicationLogOnPassword))
-                person.PermissionInformation.ApplicationAuthenticationInfo.Password = dto.ApplicationLogOnPassword;
+            if (!string.IsNullOrEmpty(dto.ApplicationLogOnName) && !string.IsNullOrEmpty(dto.ApplicationLogOnPassword))
+                person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
+                                                           {
+                                                               ApplicationLogOnName = dto.ApplicationLogOnName,
+                                                               Password = dto.ApplicationLogOnPassword
+                                                           };
             if (!string.IsNullOrEmpty(dto.Email))
                 person.Email = dto.Email;
             if (!string.IsNullOrEmpty(dto.EmploymentNumber))
                 person.EmploymentNumber = dto.EmploymentNumber;
-            if (!string.IsNullOrEmpty(dto.WindowsDomain))
-                person.PermissionInformation.WindowsAuthenticationInfo.DomainName = dto.WindowsDomain;
-            if (!string.IsNullOrEmpty(dto.WindowsLogOnName))
-                person.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = dto.WindowsLogOnName;
+            if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
+                person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                                       {
+                                                           DomainName = dto.WindowsDomain,
+                                                           WindowsLogOnName = dto.WindowsLogOnName
+                                                       };
             if(dto.TerminationDate != null)
                 person.TerminalDate = new DateOnly(dto.TerminationDate.DateTime);
             else

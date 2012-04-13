@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common.Rows;
@@ -62,9 +63,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             SetValue(multisitePeriod, cellInfo.Style.CellValue);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void SetValue(ITemplateMultisitePeriod multisitePeriod, object value)
         {
-            Percent percent = (Percent)value;
+            var percent = new Percent();
+            try
+            {
+                percent = (Percent)value;
+            }
+            catch {}
+             
             multisitePeriod.SetPercentage(_childSkill, percent);
         }
 

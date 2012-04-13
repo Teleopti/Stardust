@@ -65,19 +65,15 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=6 & GOTO :Error
 "%workingdir%\DatabaseInstaller\DBManager.exe" -S. -D%SRCAGG% -OTeleoptiCCCAgg -E -T
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=7 & GOTO :Error
 
-::encrypt Pwd in local database
-"%workingdir%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DD%SRCCCC7% -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
-"%workingdir%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DD%SRCCCC7% -FM -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=9 & GOTO :error
-"%workingdir%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DD%SRCCCC7% -PU -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error
-
 ::Prepare (clean out and prepare data) in local database
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\TeleoptiCCC7-PrepareData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=11 & GOTO :error
 SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR%\TeleoptiAnalytics-PrepareData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
+
+::Run the more complex data updates
+"%workingdir%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DD%SRCCCC7% -EE
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
 ::Generate BCP in+out batch files
 ::CCC7

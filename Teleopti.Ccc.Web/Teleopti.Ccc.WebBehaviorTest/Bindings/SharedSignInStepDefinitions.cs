@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I sign in by user name")]
 		public void WhenISignInByApplicationAuthentication()
 		{
+			Navigation.GotoGlobalSignInPage();
 			string userName;
 			if (_hasPermission)
 			{
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
+			Navigation.GotoGlobalSignInPage();
 			Pages.Pages.CurrentSignInPage.SignInApplication(UserTestData.PersonApplicationUserSingleBusinessUnitUserName, "wrong password");
 		}
 
@@ -82,15 +84,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 		}
 
-		[BeforeScenario("signin")]
-		public void BeforeScenarioSignInWindows()
-		{
-			Navigation.GotoGlobalSignInPage();
-		}
-
 		[When(@"I sign in by Windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
+			Navigation.GotoGlobalSignInPage();
 			if (_singleBusinessUnit)
 			{
 				ScenarioContext.Current.Pending();

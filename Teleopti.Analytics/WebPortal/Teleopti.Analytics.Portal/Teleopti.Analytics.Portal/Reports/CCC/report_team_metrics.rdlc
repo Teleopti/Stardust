@@ -2657,7 +2657,7 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
             <TablixMember>
               <Group Name="table2_Group1">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!team_set.Value</GroupExpression>
+                  <GroupExpression>=Fields!team_name.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <TablixMembers>

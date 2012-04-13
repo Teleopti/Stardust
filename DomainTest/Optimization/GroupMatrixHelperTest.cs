@@ -307,10 +307,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson))
-                    .Return(true);
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson, _allScheduleMatrixes))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(true);
                 Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson))
-                    .Return(true);
             }
             using (_mocks.Playback())
             {
@@ -333,10 +332,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson))
-                    .Return(true);
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson))
-                    .Return(false);
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson, _allScheduleMatrixes))
+                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(false);
                 rollbackService.Rollback();
             }
             using (_mocks.Playback())

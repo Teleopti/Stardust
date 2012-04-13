@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -152,6 +153,39 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				target.OnConfirm();
 			}
 		}
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnDataSourceException()
+        {
+            var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()));
+            target.SetPersistingDic(dic);
+            var err = new DataSourceException();
+
+            Expect.Call(() => scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
+            Expect.Call(() => view.ShowDataSourceException(err));
+            Expect.Call(() => view.CloseForm());
+            mocks.ReplayAll();
+            target.OnConfirm();
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldCallViewToShowErrorOnDataSourceExceptionInInit()
+        {
+            var person = new Person();
+            partsToMove.Add(createDummyPart(person));
+            persons.Add(person);
+            var err = new DataSourceException();
+            Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
+            Expect.Call(() => callback.ReassociateDataWithAllPeople()).Throw(err);
+            Expect.Call(() => view.ShowDataSourceException(err));
+            Expect.Call(() => view.CloseForm());
+            mocks.ReplayAll();
+
+            target.Initialize();
+            
+            mocks.VerifyAll();
+        }
 
 		[Test]
 		public void ExportToScenarioEqualsOperators()

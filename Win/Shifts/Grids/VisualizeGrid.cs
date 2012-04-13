@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         private readonly Pen pen = new Pen(Brushes.Black);
         private readonly Font font = new Font("Arial", 7);
         private readonly Brush defaultBrush = Brushes.Black;
-
+		private DateTime _lastTime = DateTime.Now;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualizeGrid"/> class.
@@ -62,7 +62,13 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             Grid.CellDrawn += Grid_CellDrawn;
             Grid.CellMouseHover += Grid_CellMouseHover;
             Grid.LostFocus += Grid_LostFocus;
+			Grid.MouseLeave += Grid_MouseLeave;
         }
+
+		void Grid_MouseLeave(object sender, EventArgs e)
+		{
+			_visualizeToolTip.RemoveAll();
+		}
 
         /// <summary>
         /// Prepares the view
@@ -296,14 +302,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             }
         }
 
-        /// <summary>
-        /// Shows the shift tool tip text.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridCellMouseEventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-24
-        /// </remarks>
+
+    	
         private void ShowShiftToolTipText(GridCellMouseEventArgs e)
         {
             if (Presenter.GetNumberOfRowsToBeShown() == 0)
@@ -318,9 +318,11 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 _visualizeToolTip.RemoveAll();
                 return;
             }
-
+			if (_lastTime.AddMilliseconds(300) > DateTime.Now)
+				return;
             if (e.ColIndex == 1 && e.RowIndex > 0)
             {
+            	_lastTime = DateTime.Now;
                 List<VisualPayloadInfo> payLoadInfoList = Presenter.ModelCollection[e.RowIndex-1].ToList();
                 if(payLoadInfoList == null)
                     return;

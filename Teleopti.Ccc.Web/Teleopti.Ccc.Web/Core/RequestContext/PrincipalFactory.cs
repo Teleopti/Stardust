@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		private TeleoptiPrincipal createPrincipal(SessionSpecificData sessionData)
 		{
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(sessionData.DataSourceName);
+			if (dataSource == null)
+				return null;
 
 			TeleoptiPrincipal principal;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())

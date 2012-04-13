@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _culture = CultureInfo.CreateSpecificCulture("en-GB");
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
             _daysOffPreferences = new DaysOffPreferences();
-            _target = new TuiCaseSolver(_bitArray, _functions, _daysOffPreferences, 20);
+            _target = new TuiCaseSolver(_bitArray, _functions, _sessionRuleSet, 20, 1);
         }
 
         [Test]
@@ -51,32 +51,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(MinMaxNumberOfResult.ToMany, _target.ResolvableState());
         }
 
-		[Test, Ignore("Remove this test due to bug 18662")]
+		[Test]
         public void VerifySetToManyBackToLegalState()
-        {
-            _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
-            Assert.IsTrue(_target.SetToManyBackToLegalState());
-            Assert.IsFalse(_target.SetToManyBackToLegalState());
-        }
-
-		[Test, Ignore("Remove this test due to bug 18662")]
-        public void VerifySetToManyBackToLegalState2()
-        {
-            _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
-            Assert.IsTrue(_target.SetToManyBackToLegalState());
-            Assert.IsFalse(_target.SetToManyBackToLegalState());
-        }
-
-		[Test, Ignore("Remove this test due to bug 18662")]
-        public void VerifySetToManyBackToLegalState3()
-        {
-            _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
-            Assert.IsTrue(_target.SetToManyBackToLegalState());
-            Assert.IsFalse(_target.SetToManyBackToLegalState());
-        }
-
-		[Test, Ignore("Remove this test due to bug 18662")]
-        public void VerifySetToManyBackToLegalState4()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
@@ -102,7 +78,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         [Test]
         public void VerifySetToManyBackToLegalStateOutOfIterations()
         {
-            _target = new TuiCaseSolver(_bitArray, _functions, _daysOffPreferences, 0);
+            _target = new TuiCaseSolver(_bitArray, _functions, _sessionRuleSet, 0, 1);
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
             Assert.IsTrue(_target.SetToManyBackToLegalState());
         }
@@ -121,7 +97,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
             _bitArray = array3();
             _functions = new DayOffBackToLegalStateFunctions(_bitArray, _culture);
-            _target = new TuiCaseSolver(_bitArray, _functions, _daysOffPreferences, 20);
+            _target = new TuiCaseSolver(_bitArray, _functions, _sessionRuleSet, 20, 1);
             Assert.AreEqual(MinMaxNumberOfResult.Ok, _target.ResolvableState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());
             Assert.IsFalse(_target.SetToFewBackToLegalState());

@@ -88,81 +88,22 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.Win.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Ccc.Win.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
-    <OutputPath>bin\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE;GUI_TEST</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Teleopti.Ccc.Win.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
-    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE;GUI_TEST</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Ccc.Win.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\AutoFac\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=0.1.3708.26234, Culture=neutral, PublicKeyToken=bb9148a82fc72dee, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\mbcache\MbCache.dll</HintPath>
+    <Reference Include="MbCache">
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -318,6 +259,8 @@
     <Compile Include="Budgeting\AddShrinkageForm.Designer.cs">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Budgeting\Events\BudgetGroupNeedsRefresh.cs" />
+    <Compile Include="Budgeting\Events\BudgetGroupTreeNeedsRefresh.cs" />
     <Compile Include="Budgeting\SetEfficiencyShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -664,6 +607,7 @@
     <Compile Include="ExceptionHandling\ExceptionHandlerView.Designer.cs">
       <DependentUpon>ExceptionHandlerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\ForecasterModule.cs" />
     <Compile Include="Forecasting\ForecasterSettings.cs" />
     <Compile Include="Forecasting\Forms\CopyToSkillView.cs">
       <SubType>Form</SubType>
@@ -701,11 +645,18 @@
     <Compile Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.Designer.cs">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryView.cs">
+    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryView.Designer.cs">
-      <DependentUpon>JobHistoryView.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
+      <DependentUpon>ImportForecastView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ImportForecast\SendCommandToSdk.cs" />
+    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.Designer.cs">
+      <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPresenter.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModel.cs" />
@@ -767,6 +718,7 @@
     <Compile Include="Forecasting\Forms\WorkloadPages\WorkloadQueueAdjustment.designer.cs">
       <DependentUpon>WorkloadQueueAdjustment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\IJobHistoryViewFactory.cs" />
     <Compile Include="Grouping\DynamicOptionType.cs" />
     <Compile Include="Grouping\FindPersonsModel.cs" />
     <Compile Include="Grouping\FindPersonsPresenter.cs" />
@@ -1221,6 +1173,13 @@
     </Compile>
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\RequestHistoryModule.cs" />
+    <Compile Include="Scheduling\RequestHistoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\RequestHistoryView.Designer.cs">
+      <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SchedulerNavigator.cs">
       <SubType>UserControl</SubType>
@@ -2489,8 +2448,14 @@
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectMultiSiteSkills.resx">
       <DependentUpon>SelectMultiSiteSkills.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryView.resx">
-      <DependentUpon>JobHistoryView.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\ImportForecast\ImportForecastView.resx">
+      <DependentUpon>ImportForecastView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.resx">
+      <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
+      <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>
@@ -2680,6 +2645,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
+      <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulerNavigator.resx">
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>

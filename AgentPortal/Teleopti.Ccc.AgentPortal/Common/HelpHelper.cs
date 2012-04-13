@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.AgentPortal.Common
         {
             string topic = GetTopicUrlOnline(formName, control);
             topic = HttpUtility.UrlEncode(topic);
-            return string.Concat(_httpOnline, "dev/", _helpLang, _prefixOnline, topic, _suffixOnline);
+            return string.Concat(_httpOnline, _helpLang, _prefixOnline, topic, _suffixOnline);
         }
         private static string GetTopicUrlOnline(string formName, IHelpContext control)
         {

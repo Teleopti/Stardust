@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_licenseStatus.NumberOfActiveAgents = 500);
             Expect.Call(_licenseService.IsThisAlmostTooManyActiveAgents(500)).Return(true);
             Expect.Call(_licenseStatus.AlmostTooMany = true);
-            Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
+            Expect.Call(_licenseStatus.GetNewStatusDocument()).Return(new XmlDocument());
             Expect.Call(() => _licenseStatusReps.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.RunCheck();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_licenseStatus.StatusOk = false);
             Expect.Call(_licenseStatus.DaysLeft = 30);
             Expect.Call(_licenseStatus.AlmostTooMany = false);
-            Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
+            Expect.Call(_licenseStatus.GetNewStatusDocument()).Return(new XmlDocument());
             Expect.Call(() => _licenseStatusReps.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.RunCheck();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_licenseStatus.CheckDate = DateTime.Today.Date);
             Expect.Call(_licenseStatus.LastValidDate).Return(DateTime.Today.AddDays(21).Date);
             Expect.Call(_licenseStatus.DaysLeft = 20);
-            Expect.Call(_licenseStatus.XmlDocument).Return(new XmlDocument());
+            Expect.Call(_licenseStatus.GetNewStatusDocument()).Return(new XmlDocument());
             Expect.Call(() => _licenseStatusReps.SaveLicenseStatus(""));
             _mocks.ReplayAll();
             _target.RunCheck();

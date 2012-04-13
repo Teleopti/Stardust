@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
                     return false;
 
-                if (!_groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson))
+                if (!_groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, allMatrixes))
                 {
                     return false;
                 }

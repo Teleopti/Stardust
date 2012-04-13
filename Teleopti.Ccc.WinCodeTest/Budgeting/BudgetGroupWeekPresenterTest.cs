@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.WinCode.Budgeting.Views;
@@ -116,5 +115,30 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			}
 		}
 
+        [Test]
+        public void ShouldReloadShrinkages()
+        {
+            using (mock.Record())
+            {
+                Expect.Call(() => view.AddShrinkageRow(null)).IgnoreArguments().Repeat.Any();
+            }
+            using (mock.Playback())
+            {
+                target.InitializeShrinkages();
+            }
+        }
+
+        [Test]
+        public void ShouldReloadEfficiencyShrinkages()
+        {
+            using (mock.Record())
+            {
+                Expect.Call(() => view.AddEfficiencyShrinkageRow(null)).IgnoreArguments().Repeat.Any();
+            }
+            using (mock.Playback())
+            {
+                target.InitializeEfficiencyShrinkages();
+            }
+        }
     }
 }

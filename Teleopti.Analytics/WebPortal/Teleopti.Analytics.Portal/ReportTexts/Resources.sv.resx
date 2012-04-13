@@ -179,7 +179,7 @@
     <value>Kompetens:</value>
   </data>
   <data name="ResTeamNameColon" xml:space="preserve">
-    <value>Grupp:</value>
+    <value>Team:</value>
   </data>
   <data name="ResWorkloadColon" xml:space="preserve">
     <value>Workload:</value>
@@ -201,11 +201,11 @@
     <comment>Frånvaro (%)</comment>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Schemauppföljning(%)</value>
+    <value>Schemauppföljning (%)</value>
     <comment>Schemauppföljning(%)</comment>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>Besvarade samtal per schemalagd telefontid</value>
+    <value>Besvarade samtal per schemalagd telefontimme</value>
     <comment>Besvarade samtal per schemalagd telefontid</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
@@ -237,7 +237,7 @@
     <value>Mål</value>
   </data>
   <data name="ResTeamActual" xml:space="preserve">
-    <value>Gruppens nuvarande</value>
+    <value>Teamets nuvarande</value>
   </data>
   <data name="ResTrend" xml:space="preserve">
     <value>Trend</value>
@@ -246,7 +246,7 @@
     <value>Logga in</value>
   </data>
   <data name="LogInError" xml:space="preserve">
-    <value>Din inloggning misslyckades. Var snäll och försök igen.</value>
+    <value>Din inloggning misslyckades. Var god försök igen.</value>
   </data>
   <data name="LogInName" xml:space="preserve">
     <value>Användarnamn:</value>
@@ -340,15 +340,15 @@
     <comment>Samtal</comment>
   </data>
   <data name="ResForecastedACW" xml:space="preserve">
-    <value>Prognos ACW</value>
+    <value>Prognostiserad ACW</value>
     <comment>Prognos ACW</comment>
   </data>
   <data name="ResForecastedATT" xml:space="preserve">
-    <value>Prognos ATT</value>
+    <value>Prognostiserad ATT</value>
     <comment>Prognos ATT</comment>
   </data>
   <data name="ResForecastedCalls" xml:space="preserve">
-    <value>Prognos samtal</value>
+    <value>Prognostiserade samtal</value>
     <comment>Prognos samtal</comment>
   </data>
   <data name="ResNumberOf" xml:space="preserve">
@@ -356,11 +356,11 @@
     <comment>Antal</comment>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Prognos vs Verklig Workload</value>
+    <value>Prognos vs verklig workload</value>
     <comment>Prognos vs Verklig Workload</comment>
   </data>
   <data name="ResAgentsReady" xml:space="preserve">
-    <value>Agenter ready</value>
+    <value>Agenter redo</value>
     <comment>Agenter Ready</comment>
   </data>
   <data name="ResAgentsScheduled" xml:space="preserve">
@@ -372,7 +372,7 @@
     <comment>Relativ skillnad (%)</comment>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>Prognos tid (tt:mm)</value>
+    <value>Prognostiserad tid (tt:mm)</value>
     <comment>Prognos tid (hh:mm)</comment>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
@@ -380,11 +380,11 @@
     <comment>Inkommande samtal</comment>
   </data>
   <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
-    <value>Inkommande / agent ready</value>
+    <value>Inkommande / agent redo</value>
     <comment>Inkommande samtal/Agent Ready</comment>
   </data>
   <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
-    <value>Inkommande / schemalagd agent ready</value>
+    <value>Inkommande / schemalagd agent redo</value>
     <comment>Inkommande samtal/Schemalagd Agent</comment>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
@@ -436,11 +436,11 @@
     <comment>Agent / Datum</comment>
   </data>
   <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
-    <value>Besvarade samtal / Schemalagd ready timme</value>
+    <value>Besvarade samtal / Schemalagd redotimme</value>
     <comment>Besvarade samtal / schemalagd ready timme</comment>
   </data>
   <data name="ResOccupancyPercent" xml:space="preserve">
-    <value>Occupancy (%)</value>
+    <value>Nyttjandegrad (%)</value>
     <comment>Occupancy (%)</comment>
   </data>
   <data name="ResReadinessPercent" xml:space="preserve">
@@ -572,7 +572,7 @@
     <comment>Agentstatistik</comment>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
-    <value>Admin tid</value>
+    <value>Admintid</value>
     <comment>Admin tid</comment>
   </data>
   <data name="ResDirectIncomingCalls" xml:space="preserve">
@@ -600,7 +600,7 @@
     <comment>Inloggad tid</comment>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Ej ready tid</value>
+    <value>Ej redotid</value>
     <comment>Ej ready tid</comment>
   </data>
   <data name="ResDateInterval" xml:space="preserve">
@@ -612,15 +612,15 @@
     <comment>Rättigheter saknas</comment>
   </data>
   <data name="ResOverflowInCalls" xml:space="preserve">
-    <value>Overflow in </value>
+    <value>Overflow samtal in </value>
     <comment>Overflow in</comment>
   </data>
   <data name="ResOverflowOutCalls" xml:space="preserve">
-    <value>Overflow ut</value>
+    <value>Overflow samtal ut</value>
     <comment>Overflow ut</comment>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>Prognos tid (shrinkage) (tt:mm)</value>
+    <value>Prognostiserad tid inkl. shrinkage (tt:mm)</value>
     <comment>Prognos tid (shrinkage) (hh:mm)</comment>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
@@ -656,11 +656,11 @@
     <comment>Aktivitet:</comment>
   </data>
   <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>Prognos timmar (tt:mm)</value>
+    <value>Prognostiserade timmar (tt:mm)</value>
     <comment>Prognos timmar (hh:mm)</comment>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Prognos timmar (shrinkage) (tt:mm)</value>
+    <value>Prognostiserade timmar (shrinkage) (tt:mm)</value>
     <comment>Prognos timmar (shrinkage) (hh:mm)</comment>
   </data>
   <data name="ResScheduledHoursH" xml:space="preserve">
@@ -668,7 +668,7 @@
     <comment>Schemalagda timmar (hh:mm)</comment>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>Relativ skillnad (shrinkage) (%)</value>
+    <value>Relativ skillnad inkl. shrinkage (%)</value>
     <comment>Relativ skillnad (shrinkage) (%)</comment>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
@@ -696,15 +696,15 @@
     <comment>Schemalagd tid per aktivitet</comment>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>Gruppmätvärden</value>
+    <value>Teammätvärden</value>
     <comment>Team mätvärden</comment>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
-    <value>Grupp / Datum</value>
+    <value>Team / Datum</value>
     <comment>Team / Datum</comment>
   </data>
   <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
-    <value>Besvarade samtal / Ready timme</value>
+    <value>Besvarade samtal / redotimme</value>
     <comment>Besvarade samtal / Ready timme</comment>
   </data>
   <data name="ResContractAbsenceTimeH" xml:space="preserve">
@@ -752,7 +752,7 @@
     <comment>Önskemål per agent</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Schemalagda agenter per interval och team</value>
+    <value>Schemalagda agenter per intervall och team</value>
     <comment>Schemalagda agenter per interval och team</comment>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
@@ -840,7 +840,7 @@
     <comment>September</comment>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Agent Scorecard</value>
+    <value>Agent scorecard</value>
     <comment>Agent Scorecard</comment>
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
@@ -848,7 +848,7 @@
     <comment>Betald frånvarotid  (hh:mm)</comment>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
-    <value>Inkluderad i arbetstid (tt:mm)</value>
+    <value>Arbetstid (tt:mm)</value>
     <comment>Frånvaro inkluderad i arbetstid (hh:mm)</comment>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
@@ -868,7 +868,7 @@
     <comment>Verifiering av användaren misslyckades</comment>
   </data>
   <data name="AuthenticationMixedFailure" xml:space="preserve">
-    <value>När Windows verifiering används på webbapplikationen är det fel att använda Applikationsverifiering på klienten.</value>
+    <value>När Windowsverifiering används på webbapplikationen är det inte tillåtet att använda Applikationsverifiering på klienten.</value>
     <comment>När Windows verifiering används på webb applikationen är det fel att använda Applikation verifiering på klienten.</comment>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
@@ -880,11 +880,11 @@
     <comment>Förslag på lösning</comment>
   </data>
   <data name="PossibleSolution1" xml:space="preserve">
-    <value>Säkerställ att rättigheter är synkroniserade ordentligt med ETL tjänsten.</value>
+    <value>Säkerställ att rättigheterna är synkroniserade ordentligt med ETL tjänsten.</value>
     <comment>Säkerställ att rättigheter är synkroniserade ordentligt med ETL tjänsten.</comment>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>Either close the client and log back on using Windows authentication or a system administrator can change web authentication to Forms.</value>
+    <value>Stäng klienten och logga in på nytt med Windowsinloggning eller be systemadministratören ändra webbinloggningen till Forms. </value>
     <comment>Either close the client and log back on using Windows authentication or a system administrator can change web authentication to Forms.</comment>
   </data>
   <data name="TechnicalInformation" xml:space="preserve">
@@ -912,15 +912,15 @@
     <comment>Alla</comment>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>Besvarade samtal inom svarsmål / Besvarade samtal</value>
+    <value>Besvarade samtal inom servicenivå / Besvarade samtal</value>
     <comment>Besvarade samtal inom svarsmål / Besvarade samtal</comment>
   </data>
   <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarade och tappade samtal inom svarsmål / Inkommande samtal</value>
+    <value>Besvarade och tappade samtal inom servicenivå / Inkommande samtal</value>
     <comment>Besvarade och tappade samtal inom svarsmål / Inkommande samtal</comment>
   </data>
   <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarade samtal inom svarsmål / Inkommande samtal</value>
+    <value>Besvarade samtal inom servicenivå / Inkommande samtal</value>
     <comment>Besvarade samtal inom svarsmål / Inkommande samtal</comment>
   </data>
   <data name="ResDay" xml:space="preserve">
@@ -972,7 +972,7 @@
     <comment>Ready tid vs Schemalagd konstraktstid</comment>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Redotid vs Schemalagd ready tid</value>
+    <value>Redotid vs Schemalagd redotid</value>
     <comment>Ready tid vs Schemalagd ready tid</comment>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
@@ -1026,7 +1026,7 @@
     <value>Scenario:</value>
   </data>
   <data name="ResNoScorecardAvailable" xml:space="preserve">
-    <value>Inget styrkort tillgängligt</value>
+    <value>Inget scorecard tillgängligt</value>
     <comment>No scorecard available</comment>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
@@ -1098,7 +1098,7 @@
     <comment>Agent - Köresultat</comment>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktivitet per agent</value>
+    <value>Aktivitetstid per agent</value>
     <comment>Activity Time per Agent</comment>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
@@ -1123,7 +1123,7 @@
     <value>Text</value>
   </data>
   <data name="ResRequestsDayCount" xml:space="preserve">
-    <value>Önskade dagar</value>
+    <value>Begärda dagar</value>
     <comment>Önskade dagar</comment>
   </data>
   <data name="ResRequestsStartDayCount" xml:space="preserve">
@@ -1146,7 +1146,7 @@
     <comment>Pågående</comment>
   </data>
   <data name="ResRequestTypeColon" xml:space="preserve">
-    <value>Typ:</value>
+    <value>Förfrågningstyp:</value>
   </data>
   <data name="ResRequestStatusColon" xml:space="preserve">
     <value>Status:</value>

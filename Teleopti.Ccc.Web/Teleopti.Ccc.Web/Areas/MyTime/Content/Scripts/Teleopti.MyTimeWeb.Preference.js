@@ -86,10 +86,8 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 				data: data,
 				success: function(data, textStatus, jqXHR) {
 					var preference = $('li[data-mytime-date="' + data.Date + '"] .preference');
-				preference.text(data.PreferenceRestriction || "");
-					var cell = $('li[data-mytime-date="' + data.Date + '"]');
-					cell.removeClassStartingWith('color_');
-					cell.addClass(data.StyleClassName);
+					preference.text(data.PreferenceRestriction || "");
+					$('li[data-mytime-date="' + data.Date + '"] .day-content').css("border-left-color", data.HexColor);
 				},
 				statusCode404: statusCode404,
 				error: function(jqXHR, textStatus, errorThrown) {

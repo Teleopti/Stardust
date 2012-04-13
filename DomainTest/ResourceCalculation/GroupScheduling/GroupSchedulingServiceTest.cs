@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         private BackgroundWorker _bgWorker;
         private ISchedulingOptions _schedulingOptions;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+        private IScheduleMatrixPro _scheduleMatrixPro;
+        private IScheduleDayPro _scheduleDayPro;
 
         [SetUp]
         public void Setup()
@@ -84,8 +86,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 													_rollbackService, 
 													_resourceOptimizationHelper,
 													_schedulingResults);
-            
-        }
+
+            _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+            _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
+
+    	}
 
         [TearDown]
         public void Teardown()
@@ -101,136 +106,205 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         [Test]
         public void ShouldDoSomethingIfSuccess()
         {
-        	var range1 = _mock.StrictMock<IScheduleRange>();
-			
-			using (_mock.Record())
-			{
-				commonMocks(false);
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+            var range1 = _mock.StrictMock<IScheduleRange>();
+            var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+            var dateOnly = new DateOnly();
+            var dateOnlyPeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
+            
+
+            using (_mock.Record())
+            {
+                commonMocks(false);
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
 					.Return(true);
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
-		    }
 
-			using(_mock.Playback())
-			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
-			}
+                Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+            }
         }
 
-		[Test]
-		public void ShouldRollbackGroupIfAnyoneInGroupIsUnsuccessful()
-		{
-			var range1 = _mock.StrictMock<IScheduleRange>();
+        [Test]
+        public void ShouldRollbackGroupIfAnyoneInGroupIsUnsuccessful()
+        {
+            var range1 = _mock.StrictMock<IScheduleRange>();
+            var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+            var dateOnly = new DateOnly();
+            var dateOnlyPeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
 
-			using (_mock.Record())
-			{
-				commonMocks(false);
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+            using (_mock.Record())
+            {
+                commonMocks(false);
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
-				
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(false);
-				Expect.Call(() => _rollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
-
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
-                    .Return(true);
-				
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
-                    .Return(true);
-				
-			}
-
-			using (_mock.Playback())
-			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
-			}
-		}
-
-		[Test]
-		public void ShouldJumpIfBestShiftCategoryIsNull()
-		{
-			var range1 = _mock.StrictMock<IScheduleRange>();
-
-			using (_mock.Record())
-			{
-				commonMocks(true);
-			    Expect.Call(() => _rollbackService.Rollback());
-			    Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1,true,true));
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
-                    .Return(true);
-				
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
-                    .Return(true);
-				
-			}
-
-			using (_mock.Playback())
-			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
-			}
-		}
-
-		[Test]
-		public void ShouldNotScheduleAlreadyAssignedAgent()
-		{
-			var range1 = _mock.StrictMock<IScheduleRange>();
-
-			using (_mock.Record())
-			{
-				commonMocks(true);
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
-				Expect.Call(_scheduleDictionary[_person1]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 
-				Expect.Call(_scheduleDictionary[_person2]).Return(range1);
-				Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
-			}
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
 
-			using (_mock.Playback())
-			{
-                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, _selectedPersons, _bgWorker);
-			}
-		}
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
+
+                Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
+
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+            }
+        }
+
+        [Test]
+        public void ShouldJumpIfBestShiftCategoryIsNull()
+        {
+            var range1 = _mock.StrictMock<IScheduleRange>();
+            var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+            var dateOnly = new DateOnly();
+            var dateOnlyPeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
+
+            using (_mock.Record())
+            {
+                commonMocks(true);
+                Expect.Call(() => _rollbackService.Rollback());
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
+
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _shiftCategory, _resourceCalculateDelayer)).IgnoreArguments()
+                    .Return(true);
+
+                Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
+
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+            }
+        }
+
+        [Test]
+        public void ShouldNotScheduleAlreadyAssignedAgent()
+        {
+            var range1 = _mock.StrictMock<IScheduleRange>();
+            var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
+            var dateOnly = new DateOnly();
+            var dateOnlyPeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
+
+            using (_mock.Record())
+            {
+                commonMocks(true);
+                Expect.Call(() => _rollbackService.Rollback());
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+
+                Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+                Expect.Call(dateOnlyPeriod.DateOnly).Return(dateOnly).Repeat.AtLeastOnce();
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), _schedulingOptions, matrixProList, _selectedPersons, _bgWorker);
+            }
+        }
+
+        [Test]
+        public void ShouldNotScheduleLockedDay()
+        {
+            var range1 = _mock.StrictMock<IScheduleRange>();
+            var matrixProList = new List<IScheduleMatrixPro>();
+            
+            using (_mock.Record())
+            {
+                commonMocks(true);
+                Expect.Call(() => _rollbackService.Rollback());
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
+                Expect.Call(_scheduleDictionary[_person1]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+
+                Expect.Call(_scheduleDictionary[_person2]).Return(range1);
+                Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _selectedPersons, _bgWorker);
+            }   
+        }
 
     	private void commonMocks(bool failOnBestShiftCategoryForDays)
     	{

@@ -53,11 +53,16 @@
   <ItemGroup>
     <Compile Include="DatabaseCreator.cs" />
     <Compile Include="DatabaseFolder.cs" />
+    <Compile Include="DatabaseSchemaCreator.cs" />
     <Compile Include="DatabaseType.cs" />
+    <Compile Include="DatabaseVersionInformation.cs" />
     <Compile Include="DbManagerFolder.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="ILog.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="NullLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlBatchExecutor.cs" />
     <Compile Include="Timeouts.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json.Linq;
@@ -18,8 +21,8 @@ namespace Teleopti.Messaging.SignalR
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class SignalBroker : IMessageBroker
 	{
-		private const string EventName = "onEventMessage";
-		private const string HubClassName = "Teleopti.Ccc.Web.Broker.MessageBrokerHub";
+		private const string EventName = "OnEventMessage";
+		private const string HubClassName = "MessageBrokerHub";
 		private IHubProxy _proxy;
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
 
@@ -29,6 +32,13 @@ namespace Teleopti.Messaging.SignalR
 			FilterManager = new MessageFilterManager();
 			FilterManager.InitializeTypeFilter(typeFilter);
 			IsTypeFilterApplied = true;
+
+			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
+		}
+
+		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
 		}
 
 		public IMessageFilterManager FilterManager { get; set; }
@@ -359,11 +369,8 @@ namespace Teleopti.Messaging.SignalR
 			{
 				var subscription = _proxy.Subscribe(EventName);
 				subscription.Data -= subscription_Data;
-				proxy.RemoveEvent(EventName);
 			}
 		}
-
-		public ISubscriber Subscriber { get; set; }
 
 		public int Initialized { get; set; }
 

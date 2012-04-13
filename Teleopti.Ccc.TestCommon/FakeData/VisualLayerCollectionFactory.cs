@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.FakeData
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class VisualLayerCollectionFactory
 	{

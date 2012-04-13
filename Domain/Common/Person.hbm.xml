@@ -67,12 +67,6 @@
 		  not-null="true"
 		  type="boolean" />
 
-		<property name="PartOfUnique"
-					not-null="false"
-					type="guid"
-					access="property"
-					unique-key="Unique_LogOn"/>
-
 		<component name="PermissionInformation"
 				 class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.PermissionInformation">
 			<parent name="BelongsTo"/>
@@ -92,34 +86,7 @@
                 access="field"
 					  type="int"
 			  not-null="false"/>
-
-			<component name="WindowsAuthenticationInfo"
-					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.WindowsAuthenticationInfo">
-				<property name="WindowsLogOnName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_LogOn"/>
-				<property name="DomainName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_LogOn"/>
-			</component>
-
-			<component name="ApplicationAuthenticationInfo"
-					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
-				<property name="ApplicationLogOnName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_LogOn"/>
-				<property name="Password"
-				not-null="false"
-				length="50"
-				type="Encrypted" />
-			</component>
-
+      
 			<bag name="personInApplicationRole"
             access="field"
 				    cascade="none">
@@ -136,7 +103,7 @@
 				</many-to-many>
 			</bag>
 		</component>
-
+    
 		<map name="PersonPeriodCollection"
 			 cascade="all-delete-orphan"
 			 collection-type="sorted-list"
@@ -172,15 +139,50 @@
     <property name="IsDeleted"
 		  type="boolean"
 		  not-null="true"/>
+    
+    <join table="WindowsAuthenticationInfo" fetch="join" optional="true">
+      <key column="Person"></key>
+      <component name="WindowsAuthenticationInfo"
+           class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.WindowsAuthenticationInfo">
+        <property name="WindowsLogOnName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_WinLogOn"/>
+        <property name="DomainName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_WinLogOn"/>
+      </component>
+    </join>
+    
+    <join table="ApplicationAuthenticationInfo"  fetch="join" optional="true">
+      <key column="Person"/>
+      <component name="ApplicationAuthenticationInfo"
+					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
+        <property name="ApplicationLogOnName"
+				  not-null="false"
+				  length="50"
+				  type="string"
+						  unique-key="Unique_AppLogOn"/>
+        <property name="Password"
+				not-null="false"
+				length="50"
+				type="Encrypted" />
+      </component>
+    </join>
+    
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />
+    
 	</class>
 
 	<query name="CheckIfWindowsUserExists">
 		<![CDATA[
 		select 1 from Person p 
-						where p.PermissionInformation.WindowsAuthenticationInfo.WindowsLogOnName = :userName and
-							p.PermissionInformation.WindowsAuthenticationInfo.DomainName = :domainName and
+						where p.WindowsAuthenticationInfo.WindowsLogOnName = :userName and
+							p.WindowsAuthenticationInfo.DomainName = :domainName and
 							(p.TerminalDate is null or p.TerminalDate >= :dateNow)
 		]]>
 	</query>

@@ -121,6 +121,7 @@ namespace Teleopti.Messaging.Composites
             aggregateRoots.Add(typeof(IEventHeartbeat), new List<Type> { typeof(IEventHeartbeat) });
 			aggregateRoots.Add(typeof(IMeetingChangedEntity),new List<Type>{typeof(IMeetingChangedEntity)});
 			aggregateRoots.Add(typeof(MeetingChangedEntity),new List<Type>{typeof(IMeetingChangedEntity)});
+			aggregateRoots.Add(typeof(IScheduleChangedInDefaultScenario),new List<Type>{typeof(IScheduleChangedInDefaultScenario)});
         }
 
         private static void GetNonEmptyInterfaceLists(ICollection<KeyValuePair<Type, IList<Type>>> aggregateRoots)

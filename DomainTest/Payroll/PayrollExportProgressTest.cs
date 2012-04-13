@@ -22,5 +22,16 @@ namespace Teleopti.Ccc.DomainTest.Payroll
             Assert.AreEqual("test",_target.Message);
             Assert.AreEqual(2,_target.Percentage);
         }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.JobResultProgress.set_Message(System.String)"), Test]
+        public void ShouldSetTotalPercentage()
+        {
+            _target = new JobResultProgress { Message = @"test", JobResultId = Guid.NewGuid(), Percentage = 2, TotalPercentage = 200};
+
+            Assert.AreNotEqual(Guid.Empty, _target.JobResultId);
+            Assert.AreEqual("test", _target.Message);
+            Assert.AreEqual(2, _target.Percentage);
+            Assert.AreEqual(200, _target.TotalPercentage);
+        }
     }
 }

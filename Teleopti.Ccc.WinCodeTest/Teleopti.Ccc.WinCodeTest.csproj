@@ -90,76 +90,21 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DailyBuild|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DailyBuild\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Debug\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
-    <OutputPath>bin\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
-    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\x86\Release\Teleopti.Ccc.WinCodeTest.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac">
       <HintPath>..\AutoFac\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MbCache">
-      <HintPath>..\mbcache\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\packages\MbCache.1.0.0-CR1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -286,6 +231,7 @@
     <Compile Include="Common\Commands\SimpleRepositoryCommandTest.cs" />
     <Compile Include="Common\Commands\TextBoxBehaviorTest.cs" />
     <Compile Include="Common\Commands\TwoStepCommandModelTest.cs" />
+    <Compile Include="Common\CommonAgentNameProviderTest.cs" />
     <Compile Include="Common\CreateLayerViewModelServiceTest.cs" />
     <Compile Include="Common\CustomPanelsTest\Grouping\BaseGroupingPanelTest.cs" />
     <Compile Include="Common\CustomPanelsTest\TesterForPanels.cs" />
@@ -393,10 +339,15 @@
     <Compile Include="FileImport\ImportFileDoTest.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
+    <Compile Include="Forecasting\DetailedJobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsProviderTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsSettingsTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportAcrossBusinessUnitsWizardPagesTest.cs" />
     <Compile Include="Forecasting\ExportPages\ExportMultisiteSkillToSkillCommandModelTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ImportForecastModelTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ImportForecastPresenterTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\SaveImportForecastFileCommandTest.cs" />
+    <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
@@ -569,6 +520,7 @@
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRestrictionsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllTagsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockTagCommandTest.cs" />
+    <Compile Include="Scheduler\GridlockCommands\WriteProtectionRemoveCommandTest.cs" />
     <Compile Include="Scheduler\GridLockRemoverForDeleteTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllRotationsDayOffCommandTest.cs" />
@@ -589,6 +541,7 @@
     <Compile Include="Scheduler\PersistConflictTest.cs" />
     <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
     <Compile Include="Scheduler\PinnedSkillHelperTests.cs" />
+    <Compile Include="Scheduler\Reporting\CCCPdfStringFormatTest.cs" />
     <Compile Include="Scheduler\Reporting\PdfFontManagerTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimeVersusTargetTimeReportDataTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduleReportDialogGraphicalModelTest.cs" />
@@ -603,6 +556,8 @@
     <Compile Include="Scheduler\Reporting\StringWidthHandlerTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestSelectionChangedTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestViewModelTest.cs" />
+    <Compile Include="Scheduler\Requests\LoadRequestHistoryCommandTest.cs" />
+    <Compile Include="Scheduler\Requests\RequestHistoryViewPresenterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestAuthorizationTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelFilterTest.cs" />
     <Compile Include="Scheduler\Requests\PersonRequestViewModelIsEditableSpecificationTest.cs" />
@@ -692,10 +647,6 @@
     </Compile>
     <Compile Include="Tracking\DefaultTrackerTest.cs" />
     <Compile Include="Settings\TrackerViewTest.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTestClass.cs">
-    </Compile>
-    <Compile Include="Common\ControlExtenders\TreeViewSmartSelectExtenderTest.cs" />
-    <Compile Include="Common\ControlExtenders\TreeViewCheckBoxExtenderTest.cs" />
     <Compile Include="Common\CustomEventArgsTest.cs" />
     <Compile Include="Common\DateTimePeriodControllerTest.cs" />
     <Compile Include="Common\Clipboard\PasteBehaviorTest.cs" />
@@ -780,9 +731,6 @@
     <Compile Include="Presentation\SiteListBoxPresenterTest.cs" />
     <Compile Include="Common\Collections\TreeNodeAdvDisplayInfoTest.cs" />
     <Compile Include="Common\Collections\TreeNodeDisplayInfoTest.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewAdvBinderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
@@ -800,7 +748,6 @@
     <Compile Include="Common\Collections\TreeItemTest.cs" />
     <Compile Include="Common\CommonStateHolderTest.cs" />
     <Compile Include="Common\PasteOptionsTest.cs" />
-    <Compile Include="Common\ControlBinders\TreeViewBinderTest.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItemTest.cs" />
     <Compile Include="Forecasting\OpenHourHelperTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillPropertiesPagesTest.cs" />
@@ -897,6 +844,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Forecasting\ImportForecast\InvalidFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Forecasting\ImportForecast\ValidFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Forecasting\ImportForecast\EmptyFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Security\ValidFile.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
