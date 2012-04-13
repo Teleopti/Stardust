@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDayOffPlannerRules dayOffPlannerRules, IList<IShiftCategory> shiftCategories,
-            bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, SchedulingScreenSettings currentSchedulingScreenSettings,
+            bool reschedule, bool backToLegal, IList<IGroupPage> groupPages,
             IList<IScheduleTag> scheduleTags)
             : this()
         {
