@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             var usersNode = new TreeNodeAdv(Resources.UserName) { LeftImageIndices = new[] { 1 } ,Tag = new List<Guid>()};
             root.Nodes.Add(usersNode);
             var currSite = new TreeNodeAdv("");
+        	var currTeamText = ""; 
             var currTeam = new TreeNodeAdv("");
             
             foreach (var personSelectorOrganization in toNodes)
@@ -85,10 +86,12 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 {
                     currSite = new TreeNodeAdv(personSelectorOrganization.Site) { LeftImageIndices = new[] { 1 }, Tag = new List<Guid>(), TagObject = new List<Guid>() };
                     root.Nodes.Add(currSite);
+                	currTeamText = "";
                 }
-                if (!string.IsNullOrEmpty(personSelectorOrganization.Team) && currTeam.Text != personSelectorOrganization.Team && personSelectorOrganization.TeamId.HasValue)
-                {
-                    currTeam = new TreeNodeAdv(personSelectorOrganization.Team) { LeftImageIndices = new[] { 2 } ,Tag = new List<Guid>(), TagObject = new List<Guid>{personSelectorOrganization.TeamId.Value}};
+				if (!string.IsNullOrEmpty(personSelectorOrganization.Team) && currTeamText != personSelectorOrganization.Team && personSelectorOrganization.TeamId.HasValue)
+				{
+					currTeamText = personSelectorOrganization.Team;
+					currTeam = new TreeNodeAdv(currTeamText) { LeftImageIndices = new[] { 2 }, Tag = new List<Guid>(), TagObject = new List<Guid> { personSelectorOrganization.TeamId.Value } };
                     currSite.Nodes.Add(currTeam);
                     ((IList<Guid>)currSite.TagObject).Add(personSelectorOrganization.TeamId.Value);
                     ((IList<Guid>)root.TagObject).Add(personSelectorOrganization.TeamId.Value);
