@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         {
             foreach (TItems currentComboItem in _comboItems)
             {
-                string itemName = (_propertyReflector.GetValue(currentComboItem, _displayMember)).ToString();
+                string itemName = (_propertyReflector.GetValue(currentComboItem, _displayMember)).ToString().Trim();
                 if (itemName == selectedItem)
                 {
                     comboItem = currentComboItem;
