@@ -296,9 +296,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
 
             DateOnly date1 = new DateOnly(2001, 01, 01);
-            DateOnly date2 = new DateOnly(2001, 02, 01);
 
-            IList<DateOnly> dates = new List<DateOnly>{ date1, date2} ;
+            IList<DateOnly> dates = new List<DateOnly>{ date1} ;
 
             IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
             IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
@@ -307,8 +306,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson, _allScheduleMatrixes)).Return(true);
-                Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson, _allScheduleMatrixes)).Return(true);
+            	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson, _allScheduleMatrixes)).IgnoreArguments().Return(true);
             }
             using (_mocks.Playback())
             {
@@ -332,9 +330,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
             	Expect.Call(groupSchedulingService.ScheduleOneDay(date1, schedulingOptions, groupPerson,
-            	                                                  _allScheduleMatrixes)).Return(true);
+            	                                                  _allScheduleMatrixes)).IgnoreArguments().Return(true);
 				Expect.Call(groupSchedulingService.ScheduleOneDay(date2, schedulingOptions, groupPerson,
-																  _allScheduleMatrixes)).Return(false);
+																  _allScheduleMatrixes)).IgnoreArguments().Return(false);
                 rollbackService.Rollback();
             }
             using (_mocks.Playback())
