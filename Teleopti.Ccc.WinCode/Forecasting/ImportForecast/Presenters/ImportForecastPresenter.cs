@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
             if(workload==null)
                 throw new InvalidOperationException("Workload should not be null.");
             _view.SetWorkloadName(workload.Name);
+            _view.SetVisibility(skill.SkillType);
         }
 
         public void SetImportType(ImportForecastsMode importMode)

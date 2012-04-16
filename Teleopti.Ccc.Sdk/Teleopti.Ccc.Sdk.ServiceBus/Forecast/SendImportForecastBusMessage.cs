@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period)
         {
-            var result = _analyzeQuery.Run(importForecast, targetSkill.MidnightBreakOffset);
+            var result = _analyzeQuery.Run(importForecast, targetSkill);
             var stepMessage = string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", targetSkill.Name);
             _feedback.Info(stepMessage);
             _feedback.ReportProgress(0, stepMessage);
