@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class RequestsControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
 			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ViewName.Should().Be.EqualTo("RequestsPartial");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnViewModelForIndex()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			model.Should().Not.Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnViewModelForPaging()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistTextRequestForm()
 		{
 			var textRequestPersister = MockRepository.GenerateMock<ITextRequestPersister>();

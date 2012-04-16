@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			dependencyResolver.Stub(x => x.GetService(typeof(IUnitOfWorkFactory))).Return(unitOfWorkFactory);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCreateUnitOfWork()
 		{
 			var unitOfWorkCreated = false;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => unitOfWorkCreated, Is.True.After(1000, 10));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistAndDisposeUnitOfWork()
 		{
 			var unitOfWorkPersisted = false;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => unitOfWorkDisposed, Is.True.After(1000, 10));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldExecuteTaskMethod()
 		{
 			var taskInvokted = false;

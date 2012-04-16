@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class StudentAvailabilityControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnStudentAvailabilityPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			model.Should().Not.Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldUseDefaultDateWhenNotSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(defaultDate));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnNoSchedulePeriodPartialWhenNoSchedulePeriod()
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ViewName.Should().Be.EqualTo("NoSchedulePeriodPartial");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnStudentAvailabilityForDate()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistStudentAvailabilityForm()
 		{ 
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.SameInstanceAs(resultData);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorMessageOnInvalidModel()
 		{
 			var target = new StudentAvailabilityController(null, null, null);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.That(data.Errors.Single(), Is.EqualTo(message));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldDeleteStudentAvailability()
 		{
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();

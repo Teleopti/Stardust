@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	public class PreferenceControllerTest
 	{
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnPreferencePartialView()
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			model.Should().Not.Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldUseDefaultDateWhenNotSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(defaultDate));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnNoSchedulePeriodPartialWhenNoSchedulePeriod()
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ViewName.Should().Be.EqualTo("NoSchedulePeriodPartial");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistPreferenceInput()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.SameInstanceAs(resultData);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldDeletePreference()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.SameInstanceAs(resultData);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldGetFeedback()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();

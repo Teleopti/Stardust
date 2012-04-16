@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private static ISession _threadSession;
 
 		// This constructor should be kept, otherwise NHibernate will fail to create an instance of this class.
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "factory")]
 		public HybridWebSessionContext(ISessionFactoryImplementor factory)
 		{
 		}

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class PreferenceFeedbackControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnFeedback()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
