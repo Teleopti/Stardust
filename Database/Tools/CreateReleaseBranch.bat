@@ -3,6 +3,9 @@
 @ECHO off
 
 SET THISDIR=%~dp0
+::Remove trailer slash
+SET ROOTDIR=%THISDIR:~0,-1%
+SET ROOTDIR=%ROOTDIR%\..\..
 
 ::Confirm
 ECHO This will create release db scripts and
@@ -25,13 +28,18 @@ echo something wrong in versionbuild.bat. Ending...
 exit
 )
 
-:: create new release branch and push it to server
+:: create new release branch
 echo Creating branch %releaseBranchName%
 hg pull
 hg update default
 hg branch %releaseBranchName%
 hg ci -m "Creating release %SYSTEMVERSION%"
-hg update default
 ::hg push
+
+:: Bump version on default
+hg update default
+SET /P ActiveBranchVersion= < "%ROOTDIR%\..\ActiveBranchVersion.txt"
+SET /a NextBuild=%ActiveBranchVersion% + 1
+echo.%NextBuild% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
 
 echo Finished!
