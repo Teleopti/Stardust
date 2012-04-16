@@ -8,7 +8,7 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common
 {
-	public class JobRunner
+	public class JobRunner : IJobRunner
 	{
 		public IList<IJobResult> Run(IJob job, IList<IBusinessUnit> businessUnitCollection, IList<IJobResult> jobResultCollection, IList<IJobStep> jobStepsNotToRun)
 		{

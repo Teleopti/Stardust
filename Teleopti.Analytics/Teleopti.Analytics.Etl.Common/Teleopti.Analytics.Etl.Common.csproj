@@ -87,6 +87,8 @@
     <Compile Include="Database\EtlSchedules\EtlScheduleCollection.cs" />
     <Compile Include="EtlRunningInformation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IJobRunner.cs" />
+    <Compile Include="IRunController.cs" />
     <Compile Include="JobRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunController.cs" />

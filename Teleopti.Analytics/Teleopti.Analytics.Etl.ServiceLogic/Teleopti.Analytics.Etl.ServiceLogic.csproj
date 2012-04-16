@@ -78,7 +78,7 @@
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunJob.cs" />
+    <Compile Include="JobExtractor.cs" />
     <Compile Include="SchedulePriority.cs" />
     <Compile Include="EtlJobStarter.cs" />
   </ItemGroup>
