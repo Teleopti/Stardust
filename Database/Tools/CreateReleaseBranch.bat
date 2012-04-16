@@ -34,7 +34,6 @@ hg pull
 hg update default
 hg branch %releaseBranchName%
 hg ci -m "Creating release %SYSTEMVERSION%"
-::hg push
 
 :: Bump version on default
 hg update default
