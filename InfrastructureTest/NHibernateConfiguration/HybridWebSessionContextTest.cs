@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	{
 		// completely meaningless coverage test
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldStuff()
 		{
 			var target = new HybridWebSessionContext(null);
