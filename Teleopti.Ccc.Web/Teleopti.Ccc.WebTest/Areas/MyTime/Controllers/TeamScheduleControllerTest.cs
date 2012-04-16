@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -13,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	public class TeamScheduleControllerTest

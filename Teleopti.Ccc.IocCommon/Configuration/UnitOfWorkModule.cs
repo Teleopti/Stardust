@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

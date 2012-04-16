@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	public class PreferenceControllerTest

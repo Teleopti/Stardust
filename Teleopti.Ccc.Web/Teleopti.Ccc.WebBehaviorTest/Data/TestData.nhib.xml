@@ -9,7 +9,7 @@
 			<property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
 			<property name="default_schema">dbo</property>
 			<property name="transaction.factory_class">NHibernate.Transaction.AdoNetTransactionFactory, NHibernate</property>
-			<property name="current_session_context_class">web</property>
+			<property name="current_session_context_class">Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure</property>
 		</session-factory>
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">

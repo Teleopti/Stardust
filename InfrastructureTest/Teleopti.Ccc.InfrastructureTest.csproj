@@ -161,6 +161,7 @@
     <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversAuditDelegateTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfigurationDelegateTest.cs" />
+    <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliaryTest.cs" />
     <Compile Include="NHibernateConfiguration\HashedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />

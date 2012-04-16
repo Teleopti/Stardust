@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	public class StudentAvailabilityControllerTest
