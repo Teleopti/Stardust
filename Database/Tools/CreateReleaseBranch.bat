@@ -41,5 +41,6 @@ hg update default
 SET /P ActiveBranchVersion= < "%ROOTDIR%\..\ActiveBranchVersion.txt"
 SET /a NextBuild=%ActiveBranchVersion% + 1
 echo.%NextBuild% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
+hg ci -m "Bumping version number"
 
 echo Finished!
