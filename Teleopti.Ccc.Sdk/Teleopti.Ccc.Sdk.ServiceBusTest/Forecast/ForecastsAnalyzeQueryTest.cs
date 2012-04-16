@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -12,10 +13,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     public class ForecastsAnalyzeQueryTest
     {
         private IForecastsAnalyzeQuery _target;
+        private ISkill _skill;
 
         [SetUp]
         public void Setup()
         {
+            _skill = SkillFactory.CreateSkill("test skill");
+            _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
            _target = new ForecastsAnalyzeQuery();
         }
 
@@ -24,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         {
             var date = new DateOnly(2012, 3, 1);
             var forecastsRows = setUpForecasts();
-            var result = _target.Run(forecastsRows,TimeSpan.Zero);
+            var result = _target.Run(forecastsRows, _skill);
 
             Assert.That(result.ErrorMessage, Is.Null);
             Assert.That(result.Succeeded, Is.True);
@@ -40,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         {
             var forecastsRows = setUpForecastsWithMidnightBreak();
             var date = new DateOnly(2012, 3, 1);
-            var result = _target.Run(forecastsRows,TimeSpan.FromHours(2));
+            var result = _target.Run(forecastsRows,_skill);
             Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date), Is.EqualTo(new TimePeriod(6, 0, 26, 0)));
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -7,13 +8,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset);
+        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, ISkill skill);
     }
 
     public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, TimeSpan midnightBreakOffset)
+        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, ISkill skill)
         {
             var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
             var startDateTime = DateTime.MaxValue;
@@ -22,27 +23,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
             string previousSkillName = null;
             TimeSpan? previousIntervalLength = null;
-
+            var rowNumber = 1;
             foreach (var forecastsRow in forecastRows)
             {
                 if (!string.IsNullOrEmpty(previousSkillName) && !forecastsRow.SkillName.Equals(previousSkillName))
                 {
-                    result.ErrorMessage = "There exists multiple skill names in the file.";
-                    break;
+                    result.ErrorMessage = string.Format(CultureInfo.InvariantCulture,
+                                                        "Line {0}, Error:There exists multiple skill names in the file.",
+                                                        rowNumber);
+                    return result;
                 }
-
                 var intervalLength = forecastsRow.LocalDateTimeTo.Subtract(forecastsRow.LocalDateTimeFrom);
+                if (intervalLength != TimeSpan.FromMinutes(skill.DefaultResolution))
+                {
+                    result.ErrorMessage = string.Format(CultureInfo.InvariantCulture,
+                                                        "Line {0}, Error:Interval does not match the target skill: {1}.",
+                                                        rowNumber, skill.Name);
+                    return result;
+                }
                 if (previousIntervalLength.HasValue && intervalLength != previousIntervalLength)
                 {
-                    result.ErrorMessage = "Intervals do not have the same length.";
-                    break;
+                    result.ErrorMessage = string.Format(CultureInfo.InvariantCulture,
+                                                        "Line {0}, Error:Intervals do not have the same length.",
+                                                        rowNumber);
+                    return result;
                 }
                 if (forecastsRow.LocalDateTimeFrom < startDateTime)
                     startDateTime = forecastsRow.LocalDateTimeFrom;
                 if (forecastsRow.LocalDateTimeTo > endDateTime)
                     endDateTime = forecastsRow.LocalDateTimeTo;
 
-                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(midnightBreakOffset));
+                var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(skill.MidnightBreakOffset));
                 workloadDayOpenHours.AddOpenHour(day,
                                          new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day),
                                                         forecastsRow.LocalDateTimeTo.Subtract(day)));
@@ -51,6 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
                 previousSkillName = forecastsRow.SkillName;
                 previousIntervalLength = intervalLength;
+                rowNumber++;
             }
             result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
             result.WorkloadDayOpenHours = workloadDayOpenHours;
