@@ -94,7 +94,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get { return _averageAfterTaskTime; }
         }
-        
+
+        public TimeSpan AverageHandlingTaskTime
+        {
+            get { return _averageAfterTaskTime.Add(_averageTaskTime); }
+        }
+
         #endregion
 
         #region IEquatable<Task> Members
