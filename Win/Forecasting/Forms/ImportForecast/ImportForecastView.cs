@@ -5,6 +5,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
@@ -86,6 +87,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId });
             statusDialog.ShowDialog();
+        }
+
+        public void SetVisibility(ISkillType skillType)
+        {
+            if (skillType.ForecastSource != ForecastSource.InboundTelephony)
+            {
+                radioButtonImportStaffing.Visible = false;
+                radioButtonImportWLAndStaffing.Visible = false;
+            }
         }
 
         private void textBoxImportFileNameTextChanged(object sender, EventArgs e)

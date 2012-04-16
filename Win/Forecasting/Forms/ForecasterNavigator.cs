@@ -67,16 +67,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;
 			}
 
-			toolStripMenuItemQuickForecast.Visible =
-				TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
-					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-			toolStripMenuItemCopyTo.Visible =
-				TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
-					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-
+			setVisibility();
 		}
 
-        public ForecasterNavigator(PortalSettings portalSettings, 
+	    private void setVisibility()
+	    {
+	        toolStripMenuItemQuickForecast.Visible =
+	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
+	        toolStripMenuItemCopyTo.Visible =
+	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
+	        toolStripMenuItemActionSkillImportForecast.Visible =
+	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
+	        toolStripMenuItemSkillsImportForecast.Visible =
+	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
+	    }
+
+	    public ForecasterNavigator(PortalSettings portalSettings, 
             IRepositoryFactory repositoryFactory, 
             IUnitOfWorkFactory unitOfWorkFactory, 
             IQuickForecastViewFactory quickForecastViewFactory, 

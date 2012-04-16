@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views
 {
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views
         void ShowValidationException(string message);
         void ShowError(string errorMessage);
         void ShowStatusDialog(Guid jobId);
+        void SetVisibility(ISkillType skillType);
     }
 }
