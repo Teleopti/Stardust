@@ -29,6 +29,7 @@ GO
 --				2012-01-09 Change the handling of multi-bu and @adherence_id = 2
 --				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--				2012-04-16 Bug 18933
 
 -- Description:	Used by report Agent  - Schedule Adherence
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
@@ -410,7 +411,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
 				WHEN 1 THEN isnull(fs.scheduled_ready_time_s,0)
-				WHEN 2 THEN isnull(fs.scheduled_time_s,0)
+				WHEN 2 THEN isnull(fs.scheduled_ready_time_s,0)
 				WHEN 3 THEN isnull(fsd.contract_time_s,0)
 			END AS 'adherence_calc_s',
 			@selected_adherence_type,
