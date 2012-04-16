@@ -13,16 +13,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	public class PreferenceFeedbackControllerTest
 	{
 		[Test]
-		public void ShouldReturnFeedbackAsync()
+		public void ShouldReturnFeedback()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var model = new PreferenceDayFeedbackViewModel();
-			var target = new PreferenceFeedbackController(viewModelFactory, unitOfWorkFactory);
+			var target = new PreferenceFeedbackController(viewModelFactory);
 			viewModelFactory.Stub(x => x.CreateDayFeedbackViewModel(DateOnly.Today)).Return(model);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
-			target.FeedbackAsync(DateOnly.Today).Wait();
+			target.FeedbackTask(DateOnly.Today);
 			var result = target.FeedbackCompleted(target.AsyncManager.Parameters["model"] as PreferenceDayFeedbackViewModel, null);
 
 			result.Data.Should().Be(model);

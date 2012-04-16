@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -16,36 +14,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class PreferenceFeedbackController : AsyncController
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory, IUnitOfWorkFactory unitOfWorkFactory)
+		public PreferenceFeedbackController(IPreferenceViewModelFactory viewModelFactory)
 		{
 			_viewModelFactory = viewModelFactory;
-			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		[UnitOfWorkAction]
 		[HttpGet]
-		[AsyncTimeout(1000 * 60 * 5)]
-		public Task FeedbackAsync(DateOnly date)
+		[AsyncTask]
+		public void FeedbackAsync(DateOnly date) { }
+
+		public void FeedbackTask(DateOnly date)
 		{
-			AsyncManager.OutstandingOperations.Increment();
-			return Task.Factory.StartNew(() =>
-			                      	{
-			                      		try
-			                      		{
-											using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			                      			{
-			                      				var model = _viewModelFactory.CreateDayFeedbackViewModel(date);
-			                      				AsyncManager.Parameters["model"] = model;												
-			                      			}
-			                      		}
-			                      		catch (Exception e)
-			                      		{
-			                      			AsyncManager.Parameters["exception"] = e;
-			                      		}
-			                      		AsyncManager.OutstandingOperations.Decrement();
-			                      	});
+			AsyncManager.Parameters["model"] = _viewModelFactory.CreateDayFeedbackViewModel(date);
 		}
 
 		public JsonResult FeedbackCompleted(PreferenceDayFeedbackViewModel model, Exception exception)
@@ -55,5 +36,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}
-
 }

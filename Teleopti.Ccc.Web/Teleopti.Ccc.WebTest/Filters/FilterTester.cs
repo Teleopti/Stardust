@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.WebTest.Filters
 		private readonly Dictionary<string, string> _items = new Dictionary<string, string>();
 		private Func<ActionResult> _controllerAction = () => null;
 		private bool _isCustomErrorEnabled;
-		private Controller _controller;
+		private ITestController _controller;
 		private IPrincipal _user = Thread.CurrentPrincipal;
 		private readonly IDictionary<string, string> _routeDataTokens = new Dictionary<string, string>();
- 
+
 		public ActionResult InvokeFilter(IAuthorizationFilter authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(AuthorizeAttribute authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(IExceptionFilter exceptionFilter) { return InvokeFilter(new FilterTestActionInvoker(exceptionFilter)); }
@@ -57,26 +57,22 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		public void IsCustomErrorEnabled() { _isCustomErrorEnabled = true; }
 
-		public void AcceptJson()
-		{
-			_headers.Add("Accept", "application/json, text/javascript");
-		}
+		public void AcceptJson() { _headers.Add("Accept", "application/json, text/javascript"); }
 
-		public void IsUser(IPrincipal principal)
-		{
-			_user = principal;
-		}
+		public void IsUser(IPrincipal principal) { _user = principal; }
 
-		public void AddRouteDataToken(string key, string value)
-		{
-			_routeDataTokens.Add(key, value);
-		}
+		public void UseController(ITestController controller) { _controller = controller; }
+
+		public void AddRouteDataToken(string key, string value) { _routeDataTokens.Add(key, value); }
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private TestController CreateTestController(Func<ActionResult> controllerAction)
+		private ITestController CreateTestController(Func<ActionResult> controllerAction)
 		{
-			var controller = new TestController(controllerAction);
-			new StubbingControllerBuilder().InitializeController(controller);
+			ITestController controller = new TestController(controllerAction);
+			if (_controller != null)
+				controller = _controller;
+
+			new StubbingControllerBuilder().InitializeController((Controller) controller);
 
 			controller.ControllerContext.RouteData.Values.Add("controller", "TestController");
 			controller.ControllerContext.RouteData.Values.Add("action", "DummyAction");
@@ -139,7 +135,13 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		#region Nested type: TestController
 
-		public class TestController : Controller
+		public interface ITestController
+		{
+			ActionResult DummyAction();
+			ControllerContext ControllerContext { get; }
+		}
+
+		public class TestController : Controller, ITestController
 		{
 			private readonly Func<ActionResult> _controllerAction;
 
