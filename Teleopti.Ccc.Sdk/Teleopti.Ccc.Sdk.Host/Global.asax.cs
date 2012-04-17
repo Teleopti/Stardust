@@ -29,7 +29,8 @@ using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
-    public class Global : HttpApplication
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public class Global : HttpApplication
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
         private static string _sitePath;
