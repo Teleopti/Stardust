@@ -9863,7 +9863,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>edit shrinkage</comment>
   </data>
   <data name="ViewScheduleHistory" xml:space="preserve">
-    <value>Visa schema ändringar</value>
+    <value>Visa schemaändringar</value>
     <comment>View Schedule History</comment>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
