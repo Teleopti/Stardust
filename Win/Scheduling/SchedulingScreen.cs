@@ -2883,7 +2883,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
 
-            toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
+			toolStripMenuItemViewHistory.Enabled = false;
+			if(_scenario.DefaultScenario)
+				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
         }
 
         private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)

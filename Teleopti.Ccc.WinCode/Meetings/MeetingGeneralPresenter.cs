@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 activities = RepositoryFactory.CreateActivityRepository(unitOfWork).LoadAllSortByName();
             }
 			_view.SetActivityList(activities);
-			SetActivity(activities.FirstOrDefault());
+			SetActivity(_model.Activity);
 			UpdateView();
             
         }
