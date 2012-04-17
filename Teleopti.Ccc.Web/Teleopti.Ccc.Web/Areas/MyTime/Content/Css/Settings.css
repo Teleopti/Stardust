@@ -2,11 +2,29 @@
 {
 	margin: 0px;
 }
+
+.rtl #settings.edit-module {
+	text-align: right;
+}
+
 #settings .ui-selectbox
 {
 	width: 320px;
 }
+
+.rtl #settings .ui-selectbox
+{
+	direction: ltr;
+	text-align: right;
+}
+
 #settings .ui-selectbox-menu a
 {
 	width: 263px;
+}
+
+.rtl #settings .ui-selectbox-menu a
+{
+	direction: ltr;
+	text-align: right;
 }
