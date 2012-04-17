@@ -42,13 +42,11 @@
     <Target Name="RestorePackages" DependsOnTargets="CheckPrerequisites">
         <Exec Command="$(RestoreCommand)"
               LogStandardErrorAsError="true"
-              Condition="Exists('$(PackagesConfig)')"
-              WorkingDirectory="$(NuGetToolsPath)" />
+              Condition="Exists('$(PackagesConfig)')"/>
     </Target>
 
     <Target Name="BuildPackage" DependsOnTargets="CheckPrerequisites">
         <Exec Command="$(BuildCommand)"
-              LogStandardErrorAsError="true"
-              WorkingDirectory="$(NuGetToolsPath)" />
+              LogStandardErrorAsError="true"/>
     </Target>
 </Project>
