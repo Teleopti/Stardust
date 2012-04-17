@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 
         private const float RowSpace = 1;
 		public PdfDocument Export(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, 
-            ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, bool publicNote)
+            ISchedulingResultStateHolder stateHolder, ScheduleReportDetail details, bool publicNote)
         {
 			if(persons == null)
 				throw new ArgumentNullException("persons");
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                    
                     var personPeriod = person.Period(dateOnly);
                     if(personPeriod != null)
-                        top = DrawPersonSchedule(timeZoneInfo, top, part, rightToLeft, details, publicNote, culture, doc.Pages[0].GetClientSize().Width, persons);
+                        top = DrawPersonSchedule(timeZoneInfo, top, part, details, publicNote, culture, doc.Pages[0].GetClientSize().Width, persons);
                 }
             }
 
@@ -57,14 +57,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ShiftsPerDayToPdfManager.DrawColumnData(System.Single,System.Single,System.String,System.Single,System.Boolean,System.Globalization.CultureInfo)")]
-		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, bool rightToLeft, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
+		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
 		{
 			var personString = persons[part.Person];
             var font = PdfFontManager.GetFont(9f, PdfFontStyle.Regular, culture);
 		    var stringWidthHandler = new StringWidthHandler(font, 130);
 		    personString = stringWidthHandler.GetString(personString);
 
-			float personTop = DrawColumnData(top, 0, personString, 130, culture);
+            float personTop = DrawColumnData(top, 0, personString, 130, culture);
             float break1Top = top;
             float lunchTop = top;
             float break2Top = top;
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             {
                 var note = part.PublicNoteCollection().FirstOrDefault();
                 var noteString = note != null ? note.GetScheduleNote(new NoFormatting()) : string.Empty;
-                if(noteString.Length > 0) top = DrawColumnData(top, 130, noteString, pageWidth - 130, rightToLeft, culture);
+                if(noteString.Length > 0) top = DrawColumnData(top, 130, noteString, pageWidth - 130, culture);
             }
 
             DrawLine(top - 3, pageWidth, 1);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             for (int i = 0; i < lines.Count(); i++ )
             {
                 var line = lines[i];
-                _graphics.DrawString(line, font, _brush, new RectangleF(left, top + RowSpace, width, fontSize + 2), format);
+                _graphics.DrawString(line, font, _brush, new RectangleF(left, top + RowSpace, width, fontSize + 2), format.PdfStringFormat);
                 top = top + fontSize + 2 + ((RowSpace + 1) * 2);
             }
 
@@ -180,14 +180,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             if (details != ScheduleReportDetail.None)
             {
                 DrawColumnHeader(top, 190, Resources.ReportLevelDetailShortBreak, 85, culture);
-                DrawColumnHeader(top, 290, Resources.ReportLevelDetailLunch, 85, culture);
+                DrawColumnHeader(top, 290, Resources.ReportLevelDetailLunch, 85,  culture);
                 DrawColumnHeader(top, 390, Resources.ReportLevelDetailShortBreak, 85, culture);
                 left = 490;
             }
 
             DrawColumnHeader(top, left, Resources.EndTime, 80, culture);
 
-            
+            top = DrawColumnHeader(top, left + 80, Resources.Note, widthLeft - (left + 85), culture);
+
             DrawLine(top - 3, widthLeft, 1.5f);
             return top;
         }
