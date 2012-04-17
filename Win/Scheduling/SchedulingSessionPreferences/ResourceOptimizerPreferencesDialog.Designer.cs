@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             // schedulingSessionPreferencesPanel1
             // 
             this.schedulingSessionPreferencesPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.schedulingSessionPreferencesPanel1.BetweenDayOffVisible = false;
+            this.schedulingSessionPreferencesPanel1.BetweenDayOffVisible = true;
             this.schedulingSessionPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.schedulingSessionPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
             this.schedulingSessionPreferencesPanel1.Name = "schedulingSessionPreferencesPanel1";
@@ -147,12 +147,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyAvailableDaysVisible = false;
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyPreferenceDaysVisible = false;
             this.schedulingSessionPreferencesPanel1.ScheduleOnlyRotationDaysVisible = false;
-            this.schedulingSessionPreferencesPanel1.SchedulePeriodVisible = false;
+            this.schedulingSessionPreferencesPanel1.SchedulePeriodVisible = true;
             this.schedulingSessionPreferencesPanel1.ShiftCategoryVisible = false;
             this.schedulingSessionPreferencesPanel1.Size = new System.Drawing.Size(462, 560);
             this.schedulingSessionPreferencesPanel1.TabIndex = 0;
-            this.schedulingSessionPreferencesPanel1.UseBlockSchedulingVisible = false;
-            this.schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = false;
+            this.schedulingSessionPreferencesPanel1.UseBlockSchedulingVisible = true;
+            this.schedulingSessionPreferencesPanel1.UseSameDayOffsVisible = true;
             // 
             // tabPageUserDefinedOptions
             // 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.resourceOptimizerUserPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
             this.resourceOptimizerUserPreferencesPanel1.Name = "resourceOptimizerUserPreferencesPanel1";
             this.resourceOptimizerUserPreferencesPanel1.OptimizerAdvancedPreferences = null;
-            this.resourceOptimizerUserPreferencesPanel1.Size = new System.Drawing.Size(462, 560);
+            this.resourceOptimizerUserPreferencesPanel1.Size = new System.Drawing.Size(186, 68);
             this.resourceOptimizerUserPreferencesPanel1.TabIndex = 0;
             // 
             // tabPageDayOffPlannerOptions
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.resourceOptimizerPerformancePreferencesPanel1.Location = new System.Drawing.Point(3, 3);
             this.resourceOptimizerPerformancePreferencesPanel1.Name = "resourceOptimizerPerformancePreferencesPanel1";
             this.resourceOptimizerPerformancePreferencesPanel1.OptimizerAdvancedPreferences = null;
-            this.resourceOptimizerPerformancePreferencesPanel1.Size = new System.Drawing.Size(462, 560);
+            this.resourceOptimizerPerformancePreferencesPanel1.Size = new System.Drawing.Size(186, 68);
             this.resourceOptimizerPerformancePreferencesPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel2
