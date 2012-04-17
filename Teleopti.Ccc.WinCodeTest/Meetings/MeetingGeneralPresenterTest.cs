@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			_view.SetActivityList(_activityList);
 			_view.SetOrganizer(_model.Organizer);
             _view.SetParticipants(_model.Participants);
-            _view.SetSelectedActivity(_firstActivity);
+            _view.SetSelectedActivity(_model.Activity);
             _view.SetTimeZoneList(null);
             LastCall.IgnoreArguments();
             _view.SetSelectedTimeZone(_model.TimeZone);
@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.ReplayAll();
             _target.Initialize();
 			Assert.AreEqual(_model, _target.Model);
-			Assert.AreEqual(_firstActivity, _target.Model.Activity);
             _mocks.VerifyAll();
         }
 
