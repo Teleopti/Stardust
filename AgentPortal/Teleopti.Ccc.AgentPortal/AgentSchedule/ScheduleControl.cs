@@ -664,6 +664,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             toolStripMenuItemNewAbsenceRequest.Visible = showNewAbsenceRequests;
             toolStripMenuItemNewShiftTrade.Visible = showNewShiftTrade;
             toolStripMenuItemNewShiftTrade.Enabled = enableNewShiftTrade;
+            toolStripMenuItemShiftTradeFilter.Visible = showNewShiftTrade;
             toolStripMenuItemNewTextRequest.Visible = showNewTextRequest;
             
             toolStripSeparatorDelete.Visible = showSeparatorDelete;

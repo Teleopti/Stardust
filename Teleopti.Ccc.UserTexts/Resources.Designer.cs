@@ -13023,7 +13023,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Shift Trade Request.
+        ///   Looks up a localized string similar to New shift trade request.
         /// </summary>
         public static string NewShiftTradeRequest {
             get {
