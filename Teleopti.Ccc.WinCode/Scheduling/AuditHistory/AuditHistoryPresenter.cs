@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         public void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
             InParameter.NotNull("e", e);
-            if (e.RowIndex - 1 > Model.PageRows.Count)
+			if (Model.PageRows.Count == 0) return;
+			if (e.RowIndex - 1 > Model.PageRows.Count)
                 return;
 
             if (e.RowIndex == 0 && e.ColIndex == 1)
