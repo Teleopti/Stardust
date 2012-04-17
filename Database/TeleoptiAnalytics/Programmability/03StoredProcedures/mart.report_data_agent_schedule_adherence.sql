@@ -411,7 +411,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
 				WHEN 1 THEN isnull(fs.scheduled_ready_time_s,0)
-				WHEN 2 THEN isnull(fs.scheduled_ready_time_s,0)
+				WHEN 2 THEN isnull(fs.scheduled_time_s,0)
 				WHEN 3 THEN isnull(fsd.contract_time_s,0)
 			END AS 'adherence_calc_s',
 			@selected_adherence_type,
@@ -491,6 +491,7 @@ UPDATE #result
 SET adherence=
 CASE
 		WHEN adherence_calc_s = 0 THEN 1
+		WHEN deviation_s > adherence_calc_s THEN 0
 		ELSE (adherence_calc_s - deviation_s)/ adherence_calc_s
 	END
 FROM #result
@@ -505,6 +506,7 @@ UPDATE #result
 SET adherence_tot=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END,
 deviation_tot_s=a.deviation_s
@@ -521,6 +523,7 @@ UPDATE #result
 SET team_adherence=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
 ,team_deviation_s=a.deviation_s
@@ -546,6 +549,7 @@ UPDATE #result
 SET team_adherence_tot=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
 ,team_deviation_tot_s=a.deviation_s
