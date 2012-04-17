@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -16,8 +18,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         private string _reportTitle;
 
         private const float RowSpace = 1;
-		public PdfDocument Export(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
-            DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, ScheduleReportDetail details)
+		public PdfDocument Export(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, 
+            ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, bool publicNote)
         {
 			if(persons == null)
 				throw new ArgumentNullException("persons");
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				throw new ArgumentNullException("stateHolder");
 
             var doc = new PdfDocument();
-            if (details == ScheduleReportDetail.All)
+            if (details == ScheduleReportDetail.All || details == ScheduleReportDetail.Break)
                 doc.PageSettings.Orientation = PdfPageOrientation.Landscape;
             
             _brush = new PdfSolidBrush(Color.DimGray);
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                    
                     var personPeriod = person.Period(dateOnly);
                     if(personPeriod != null)
-                        top = DrawPersonSchedule(timeZoneInfo, top, part, details, culture, doc.Pages[0].GetClientSize().Width, persons);
+                        top = DrawPersonSchedule(timeZoneInfo, top, part, rightToLeft, details, publicNote, culture, doc.Pages[0].GetClientSize().Width, persons);
                 }
             }
 
@@ -55,10 +57,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ShiftsPerDayToPdfManager.DrawColumnData(System.Single,System.Single,System.String,System.Single,System.Boolean,System.Globalization.CultureInfo)")]
-		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, ScheduleReportDetail details, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
+		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, bool rightToLeft, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
 		{
 			var personString = persons[part.Person];
-		    var stringWidthHandler = new StringWidthHandler(9f, PdfFontStyle.Regular, 130, culture);
+            var font = PdfFontManager.GetFont(9f, PdfFontStyle.Regular, culture);
+		    var stringWidthHandler = new StringWidthHandler(font, 130);
 		    personString = stringWidthHandler.GetString(personString);
 
 			float personTop = DrawColumnData(top, 0, personString, 130, culture);
@@ -118,6 +121,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             }
             // if there was no layers
             if (personTop > top) top = personTop;
+
+            if(publicNote)
+            {
+                var note = part.PublicNoteCollection().FirstOrDefault();
+                var noteString = note != null ? note.GetScheduleNote(new NoFormatting()) : string.Empty;
+                if(noteString.Length > 0) top = DrawColumnData(top, 130, noteString, pageWidth - 130, rightToLeft, culture);
+            }
+
             DrawLine(top - 3, pageWidth, 1);
             return top;
         }
@@ -138,11 +149,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
            
             const float fontSize = 9f;
             PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, cultureInfo);
-            _graphics.DrawString(text, font, _brush, new RectangleF(left, top + RowSpace, width, fontSize + 2), format.PdfStringFormat);
-            return top + fontSize + 2 + ((RowSpace + 1) * 2);
+
+            var stringWidthHandler = new StringWidthHandler(font, width);
+            var lines = stringWidthHandler.WordWrap(text);
+           
+            for (int i = 0; i < lines.Count(); i++ )
+            {
+                var line = lines[i];
+                _graphics.DrawString(line, font, _brush, new RectangleF(left, top + RowSpace, width, fontSize + 2), format);
+                top = top + fontSize + 2 + ((RowSpace + 1) * 2);
+            }
+
+               // _graphics.DrawString(text, font, _brush, new RectangleF(left, top + RowSpace, width, fontSize + 2), format);
+            return top;// + fontSize + 2 + ((RowSpace + 1) * 2);
         }
-
-
 
         private float NewPage(PdfDocument doc, DateOnly dateOnly, float top, bool newReport, CultureInfo culture, out PdfPage page, ScheduleReportDetail details)
         {
@@ -166,7 +186,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             }
 
             DrawColumnHeader(top, left, Resources.EndTime, 80, culture);
-            top = DrawColumnHeader(top, left + 80, Resources.Note, widthLeft - (left + 85), culture);
+
+            
             DrawLine(top - 3, widthLeft, 1.5f);
             return top;
         }
