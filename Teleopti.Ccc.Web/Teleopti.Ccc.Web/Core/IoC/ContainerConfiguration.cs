@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
+using AutofacContrib.DynamicProxy2;
 using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -25,7 +26,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterControllers(Assembly.GetExecutingAssembly());
+			builder.RegisterControllers(Assembly.GetExecutingAssembly())
+				//.EnableClassInterceptors()
+				;
 
 			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
 
