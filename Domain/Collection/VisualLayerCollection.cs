@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
 			foreach (IVisualLayer layer in UnMergedCollection)
 			{
-				if (layer.Payload.Equals(payloadToSearch))
+				if (layer.Payload.OptimizedEquals(payloadToSearch))
 					retColl.Add(layer);
 			}
 			return new FilteredVisualLayerCollection(Person, retColl, (IProjectionMerger)_merger.Clone(),this);
