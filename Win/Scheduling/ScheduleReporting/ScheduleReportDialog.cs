@@ -13,9 +13,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
         private readonly ScheduleReportDialogSettings _settings;
         private const string SettingName = "ScheduleReportDialog";
+        private bool _shiftsPerDay;
 
-        public ScheduleReportDialog()
+        public ScheduleReportDialog(bool shiftsPerDay)
         {
+            _shiftsPerDay = shiftsPerDay;
             InitializeComponent();
             if (!DesignMode) SetTexts();
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -35,14 +37,6 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             get
             {
                 return radioButtonTeamReport.Checked;
-            }
-        }
-
-        public bool ShiftPerDay
-        {
-            get
-            {
-                return radioButtonShiftsPerDay.Checked;
             }
         }
 
@@ -68,6 +62,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             }
         }
 
+        public bool ShowPublicNote
+        {
+            get { return checkBoxShowPublicNote.Checked; }
+        }
+
         private void buttonAdvCancel_Click(object sender, EventArgs e)
         {
             Close();
@@ -91,6 +90,19 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             reportTypeSetting();
             singleFileSetting();
             detailLevelSetting();
+            showPublicNoteSetting();
+
+            if(_shiftsPerDay)
+            {
+                groupBox1.Enabled = false;
+                radioButtonTeamReport.Checked = false;
+                radioButtonIndividualReport.Checked = false;
+            }
+            else
+            {
+                checkBoxShowPublicNote.Visible = false;
+            }
+
         }
 
         private void detailLevelSetting()
@@ -123,6 +135,11 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             radioButtonTeamReport.Checked = !_settings.IndividualReport;
         }
 
+        private void showPublicNoteSetting()
+        {
+            checkBoxShowPublicNote.Checked = _settings.ShowPublicNote;
+        }
+
         private void radioButtonIndividualReport_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxSingleFile.Enabled = radioButtonIndividualReport.Checked;
@@ -136,17 +153,13 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             _settings.IndividualReport = radioButtonIndividualReport.Checked;
             _settings.SingleFile = checkBoxSingleFile.Checked;
             _settings.DetailLevel = DetailLevel;
+            _settings.ShowPublicNote = checkBoxShowPublicNote.Checked;
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 new PersonalSettingDataRepository(uow).PersistSettingValue(_settings);
                 uow.PersistAll();
             }
-        }
-
-        private void radioButtonShiftsPerDay_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
