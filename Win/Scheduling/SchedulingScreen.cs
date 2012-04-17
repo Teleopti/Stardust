@@ -4429,7 +4429,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                         options.Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
-                                                    new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules());
                     }
                 }
             }
@@ -4478,8 +4477,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                         Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
-                                                    new SchedulingAndOptimizeArgument(
-                                                        _scheduleView.SelectedSchedules());
                     }
                 }
             }
@@ -4617,7 +4614,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             if (schedulingOptions.UseGroupScheduling)
 								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll);
                             else
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, schedulingOptions, _backgroundWorkerScheduling);
+								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling);
                                                                                   
 
                             break;
