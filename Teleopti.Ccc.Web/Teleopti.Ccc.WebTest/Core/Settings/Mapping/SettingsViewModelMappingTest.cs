@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 		public void ShouldFetchAllCulturesOnComputer()
 		{
 			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
-			result.Cultures.Should().Have.Count.GreaterThanOrEqualTo(CultureInfo.GetCultures(CultureTypes.AllCultures).Length);
+			result.Cultures.Should().Have.Count.GreaterThanOrEqualTo(CultureInfo.GetCultures(CultureTypes.SpecificCultures).Length);
 			result.Cultures.Should().Not.Be.Empty();
 		}
 
