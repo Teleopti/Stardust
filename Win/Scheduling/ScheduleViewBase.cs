@@ -339,6 +339,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                  _grid.Model.SelectedRanges[0].Left);
                     }
                 }
+				var start = _grid.Model.Selections.Ranges[0].Left;
+				var end = _grid.Model.Selections.Ranges[_grid.Model.Selections.Ranges.Count - 1].Right;
+				_grid.Model.Selections.Clear(true);
+				_grid.Model.Selections.Add(GridRangeInfo.Cols(start, end));
             }
         }
 

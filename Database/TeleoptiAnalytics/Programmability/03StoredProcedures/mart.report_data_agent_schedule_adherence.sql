@@ -29,6 +29,7 @@ GO
 --				2012-01-09 Change the handling of multi-bu and @adherence_id = 2
 --				2012-01-23 Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--				2012-04-16 Bug 18933
 
 -- Description:	Used by report Agent  - Schedule Adherence
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
@@ -490,6 +491,7 @@ UPDATE #result
 SET adherence=
 CASE
 		WHEN adherence_calc_s = 0 THEN 1
+		WHEN deviation_s > adherence_calc_s THEN 0
 		ELSE (adherence_calc_s - deviation_s)/ adherence_calc_s
 	END
 FROM #result
@@ -504,6 +506,7 @@ UPDATE #result
 SET adherence_tot=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END,
 deviation_tot_s=a.deviation_s
@@ -520,6 +523,7 @@ UPDATE #result
 SET team_adherence=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
 ,team_deviation_s=a.deviation_s
@@ -545,6 +549,7 @@ UPDATE #result
 SET team_adherence_tot=
 	CASE
 		WHEN a.adherence_calc_s = 0 THEN 1
+		WHEN a.deviation_s > a.adherence_calc_s THEN 0
 		ELSE (a.adherence_calc_s - a.deviation_s )/ a.adherence_calc_s
 	END
 ,team_deviation_tot_s=a.deviation_s
