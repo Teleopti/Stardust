@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Win.Common
     public partial class ModifySelectionView : BaseRibbonForm, IModifySelectionView
     {
         private readonly ModifySelectionPresenter _presenter;
+        private string _percentage;
+        private const double maxValue = 999999999d;
 
         public ModifySelectionView(ModifyCalculator model)
         {
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Win.Common
 
             _presenter = new ModifySelectionPresenter(this, model);
             _presenter.Initialize();
+            _percentage = textBoxExtPercent.Text;
             SetTexts();
             UpdateChart(true);
             //tableLayoutPanel3.BackColor = ColorHelper.ChartControlBackColor();
@@ -94,8 +97,11 @@ namespace Teleopti.Ccc.Win.Common
 
         public string InputPercent
         {
-            get { return textBoxExtPercent.Text; }
-            set { if (textBoxExtPercent.Text != value) textBoxExtPercent.Text = value; }
+            get { return _percentage; }
+            set
+            { if (_percentage != value) { _percentage = value;
+            textBoxExtPercent.Text = _percentage;
+            } }
         }
 
         public string InputType
@@ -139,6 +145,24 @@ namespace Teleopti.Ccc.Win.Common
 
         private void textBoxExtPercent_TextChanged(object sender, EventArgs e)
         {
+            double value;
+            if (double.TryParse(textBoxExtPercent.Text, out value))
+            {
+                if (InputType == "0")
+                {
+                    if (value > maxValue)
+                        textBoxExtPercent.Text = _percentage;
+                    else
+                        _percentage = textBoxExtPercent.Text;
+                }
+                else
+                {
+                    if ((1 + value/100)*Sum > maxValue)
+                        textBoxExtPercent.Text = _percentage;
+                    else
+                        _percentage = textBoxExtPercent.Text;
+                }
+            }
             _presenter.UpdateInputTotal();
             UpdateChart(true);
         }

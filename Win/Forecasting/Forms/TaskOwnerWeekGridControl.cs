@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void CreateWorkloadTelephonyRows()
         {
             ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner,
-                                                              "NumericWorkloadDayTaskLimitedCell", "Tasks",
+                                                              "NumericWorkloadWeekTaskLimitedCell", "Tasks",
                                                               UserTexts.Resources.Calls,
                                                               UserTexts.Resources.Forecasted, _dateTimes, 13);
             gridRow.ChartSeriesSettings = configureSetting("Tasks");
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             TextManager manager = new TextManager(_owner.SkillType);
 
-            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericWorkloadDayTaskLimitedCell", "Tasks", manager.WordDictionary["Tasks"], UserTexts.Resources.Forecasted, _dateTimes, 13);
+            ITaskOwnerGridRow gridRow = new ITaskOwnerGridRow(_rowManagerTaskOwner, "NumericWorkloadWeekTaskLimitedCell", "Tasks", manager.WordDictionary["Tasks"], UserTexts.Resources.Forecasted, _dateTimes, 13);
             gridRow.ChartSeriesSettings = configureSetting("Tasks");
             _gridRows.Add(_rowManagerTaskOwner.AddRow(gridRow));
 
