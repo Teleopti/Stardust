@@ -526,7 +526,7 @@
             // 
             this.tableLayoutPanelTagWith.ColumnCount = 2;
             this.tableLayoutPanelTagWith.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanelTagWith.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 258F));
+            this.tableLayoutPanelTagWith.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 277F));
             this.tableLayoutPanelTagWith.Controls.Add(this.label6, 0, 0);
             this.tableLayoutPanelTagWith.Controls.Add(this.comboBoxAdvTag, 1, 0);
             this.tableLayoutPanelTagWith.Dock = System.Windows.Forms.DockStyle.Fill;
