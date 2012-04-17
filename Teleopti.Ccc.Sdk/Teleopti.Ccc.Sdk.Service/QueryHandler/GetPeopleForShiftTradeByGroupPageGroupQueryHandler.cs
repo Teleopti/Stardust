@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -52,72 +53,20 @@ namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
                                                                                           p.SetId(d.PersonId);
                                                                                           return p;
                                                                                       }));
-                people.ForEach(p => { if (isAvailableForShiftTrade(personFrom, p, queryDate)) peopleForShiftTrade.Add(p); });
+                people.ForEach(p => { if (isAvailableForShiftTrade(new ShiftTradeAvailableCheckItem{DateOnly = queryDate,PersonFrom = personFrom,PersonTo = p})) peopleForShiftTrade.Add(p); });
                 return _personAssembler.DomainEntitiesToDtos(peopleForShiftTrade).ToList();
             }
         }
 
-        private static bool isAvailableForShiftTrade(IPerson personFrom, IPerson personTo, DateOnly dateOnly)
+        private static bool isAvailableForShiftTrade(IShiftTradeAvailableCheckItem checkItem)
         {
-            if (personFrom.WorkflowControlSet == null || personTo.WorkflowControlSet == null)
-                return false;
-
-            var controlSetFrom = personFrom.WorkflowControlSet;
-            var controlSetTo = personTo.WorkflowControlSet;
-            var currentDate = DateOnly.Today;
-            var openPeriodFrom =
-                new DateOnlyPeriod(
-                    currentDate.AddDays(personFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
-                    currentDate.AddDays(personFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
-            var openPeriodTo =
-                new DateOnlyPeriod(
-                    currentDate.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
-                    currentDate.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
-
-            if (!openPeriodFrom.Contains(dateOnly) || !openPeriodTo.Contains(dateOnly))
-                return false;
-
-            var mustMatchingSkills = getListOfSkills(controlSetFrom.MustMatchSkills,
-                                                                              controlSetTo.MustMatchSkills);
-            if (mustMatchingSkills.Count == 0)
-                return true;
-            var periodFrom = personFrom.Period(dateOnly);
-            var periodTo = personTo.Period(dateOnly);
-            if (periodFrom == null || periodTo == null)
-                return false;
-            ICollection<ISkill> skills = new HashSet<ISkill>();
-            foreach (var personSkill in periodFrom.PersonSkillCollection.Where(personSkill => mustMatchingSkills.Contains(personSkill.Skill)))
-            {
-                skills.Add(personSkill.Skill);
-            }
-
-            foreach (var personSkill in periodTo.PersonSkillCollection.Where(personSkill => mustMatchingSkills.Contains(personSkill.Skill)))
-            {
-                if (skills.Contains(personSkill.Skill))
-                {
-                    skills.Remove(personSkill.Skill);
-                }
-                else
-                {
-                    skills.Add(personSkill.Skill);
-                }
-            }
-            if (skills.Count > 0) return false;
-            return true;
-        }
-
-        private static IList<ISkill> getListOfSkills(IEnumerable<ISkill> listOne, IEnumerable<ISkill> listTwo)
-        {
-            IList<ISkill> listOfSkills = new List<ISkill>();
-            foreach (var skill in listOne.Where(skill => !listOfSkills.Contains(skill)))
-            {
-                listOfSkills.Add(skill);
-            }
-            foreach (var skill in listTwo.Where(skill => !listOfSkills.Contains(skill)))
-            {
-                listOfSkills.Add(skill);
-            }
-            return listOfSkills;
+            var specifications = new List<ISpecification<IShiftTradeAvailableCheckItem>>
+                                     {
+                                         new OpenShiftTradePeriodSpecification(),
+                                         new IsWorkflowControlSetNullSpecification(),
+                                         new ShiftTradeSkillSpecification()
+                                     };
+            return specifications.All(s => s.IsSatisfiedBy(checkItem));
         }
     }
 }

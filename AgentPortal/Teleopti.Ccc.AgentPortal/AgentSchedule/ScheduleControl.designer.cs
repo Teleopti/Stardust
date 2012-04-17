@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             // 
             this.toolStripMenuItemShiftTradeFilter.Name = "toolStripMenuItemShiftTradeFilter";
             this.toolStripMenuItemShiftTradeFilter.Size = new System.Drawing.Size(204, 22);
-            this.toolStripMenuItemShiftTradeFilter.Text = "xxShiftTradeFilter";
+            this.toolStripMenuItemShiftTradeFilter.Text = "xxShowOnlyAvailableForShiftTrade";
             this.toolStripMenuItemShiftTradeFilter.Click += new System.EventHandler(this.toolStripMenuItemShiftTradeFilter_Click);
             // 
             // ScheduleControl
