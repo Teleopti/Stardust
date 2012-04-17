@@ -121,11 +121,9 @@
       <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\3.5\Rhino.Queues.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.ServiceBus, Version=2.3.1.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.2.3.1.0\lib\3.5\Rhino.ServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.1.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.1.0\lib\3.5\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
