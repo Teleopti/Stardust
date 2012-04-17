@@ -138,13 +138,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             {
                 if (effectiveRestriction.ValidateWorkShiftInfo(visualLayerInfo))
                 {
+						 var contractTime = visualLayerInfo.VisualLayerCollection.ContractTime();
                     IWorkTimeMinMax thisWorkTimeMinMax = new WorkTimeMinMax();
                     TimePeriod? period = visualLayerInfo.WorkShift.ToTimePeriod();
                     if (!period.HasValue)
                         continue;
                     thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);
                     thisWorkTimeMinMax.EndTimeLimitation = new EndTimeLimitation(period.Value.EndTime, period.Value.EndTime);
-                    thisWorkTimeMinMax.WorkTimeLimitation = new WorkTimeLimitation(visualLayerInfo.VisualLayerCollection.ContractTime(), visualLayerInfo.VisualLayerCollection.ContractTime());
+                    thisWorkTimeMinMax.WorkTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
                     if (resultWorkTimeMinMax == null)
                         resultWorkTimeMinMax = new WorkTimeMinMax();
 
