@@ -19,10 +19,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _usePreferences = true;
 		private bool _preferenceDaysOnly;
 		private bool _useMustHavesOnly;
-		private int _screenRefreshRate = 10;
+		
 		private bool _useShiftCategoryLimitations = true;
 		private Guid? _scheduleTagId;
 		private bool _useRotations = true;
+		private bool _showTroubleshotInformation;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPage> groupPages)
@@ -53,9 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.PreferencesDaysOnly = _preferenceDaysOnly;
 			schedulingOptions.UsePreferencesMustHaveOnly = _useMustHavesOnly;
 			schedulingOptions.UseShiftCategoryLimitations = _useShiftCategoryLimitations;
-			if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
-				_screenRefreshRate = 10;
-			schedulingOptions.RefreshRate = _screenRefreshRate;
+			schedulingOptions.ShowTroubleshot = _showTroubleshotInformation;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_preferenceDaysOnly = schedulingOptions.PreferencesDaysOnly;
 			_useMustHavesOnly = schedulingOptions.UsePreferencesMustHaveOnly;
 			_useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
-			_screenRefreshRate = schedulingOptions.RefreshRate;
+			_showTroubleshotInformation = schedulingOptions.ShowTroubleshot;
 		}
 		
 	}

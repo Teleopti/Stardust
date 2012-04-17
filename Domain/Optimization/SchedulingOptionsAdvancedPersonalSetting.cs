@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private double _fairnessValue;
 		private string _fairnessGroupPageKey;
 		private int _resourceCalculateFrequency = 1;
+		private int _screenRefreshRate = 10;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void MapTo(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IList<IGroupPage> groupPages)
@@ -44,7 +45,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulingOptions.GroupPageForShiftCategoryFairness = groupPage;
 			}
 
+			if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
+				_resourceCalculateFrequency = 1;
 			schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency;
+
+			if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
+				_screenRefreshRate = 10;
+			schedulingOptions.RefreshRate = _screenRefreshRate;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -62,9 +69,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			_fairnessValue = schedulingOptions.Fairness.Value;
 			_fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
-			if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
-				_resourceCalculateFrequency = 1;
 			_resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
+			_screenRefreshRate = schedulingOptions.RefreshRate;
 		}
 	}
 }
