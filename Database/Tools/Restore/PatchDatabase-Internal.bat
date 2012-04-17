@@ -44,7 +44,7 @@ SET /A ISCCC7=1
 
 ::Build Teleopti.Support.Security.exe
 ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" /p:SolutionDir=%ROOTDIR%\..\..\..\ > "%temp%\build.log"
+%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=12
 GOTO :error
