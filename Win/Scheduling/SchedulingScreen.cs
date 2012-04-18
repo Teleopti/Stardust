@@ -188,6 +188,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _isAuditingSchedules;
 		private IScheduleTag _defaultScheduleTag = NullScheduleTag.Instance;
         private System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
+	    private int _selectedScheduleCount;
 
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 
@@ -4227,14 +4228,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 
-			int selectedScheduleCount = ((SchedulingAndOptimizeArgugument)argument).ScheduleDays.Count;
-			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, selectedScheduleCount);
+			_selectedScheduleCount = ((SchedulingAndOptimizeArgugument)argument).ScheduleDays.Count;
+			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, _selectedScheduleCount);
 
 			Cursor = Cursors.WaitCursor;
 			disableAllExceptCancelInRibbon();
 			if (showProgressBar)
 			{
-				toolStripProgressBar1.Maximum = selectedScheduleCount;
+				toolStripProgressBar1.Maximum = _selectedScheduleCount;
 				toolStripProgressBar1.Visible = true;
 				toolStripProgressBar1.Value = 0;
 			}
@@ -4423,20 +4424,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (percent.HasValue)
 			{
 				toolStripProgressBar1.Maximum = 100;
-				toolStripProgressBar1.Value = percent.Value;
+				toolStripProgressBar1.Value = percent.Value;   
 			}
 			else
 			{
-				if (_totalScheduled <= toolStripProgressBar1.Maximum)
-					toolStripProgressBar1.Value = _totalScheduled;
-				string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, toolStripProgressBar1.Maximum);
-				toolStripStatusLabelStatus.Text = statusText;
-				_grid.Invalidate();
-				_skillIntradayGridControl.RefreshGrid();
-				_skillDayGridControl.RefreshGrid();
-				_gridChartManager.ReloadChart();
-				statusStrip1.Refresh();
+				if (_totalScheduled <= toolStripProgressBar1.Maximum) toolStripProgressBar1.Value = _totalScheduled;
 			}
+
+            string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, _selectedScheduleCount);
+            toolStripStatusLabelStatus.Text = statusText;
+            _grid.Invalidate();
+            _skillIntradayGridControl.RefreshGrid();
+            _skillDayGridControl.RefreshGrid();
+            _gridChartManager.ReloadChart();
+            statusStrip1.Refresh();
 
 			Application.DoEvents();
 
