@@ -4496,13 +4496,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_selectedScheduleCount = ((SchedulingAndOptimizeArgugument)argument).ScheduleDays.Count;
 			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, _selectedScheduleCount);
-                                                            selectedScheduleCount);
+                                                            
 
             Cursor = Cursors.WaitCursor;
             disableAllExceptCancelInRibbon();
             if (showProgressBar)
             {
-		toolStripProgressBar1.Maximum = _selectedScheduleCount;
+		        toolStripProgressBar1.Maximum = _selectedScheduleCount;
                 toolStripProgressBar1.Visible = true;
                 toolStripProgressBar1.Value = 0;
             }
