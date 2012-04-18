@@ -18,13 +18,18 @@ SELECT sgaa1.[Activity]
       ,sgaa1.[StateGroup]
       ,sgaa1.[BusinessUnit]
   FROM [dbo].[StateGroupActivityAlarm] sgaa1
-  WHERE sgaa1.IsDeleted = 0
   group by sgaa1.[Activity]
       ,sgaa1.[StateGroup]
       ,sgaa1.[BusinessUnit]
       having count(sgaa1.businessunit) > 1
 
-DELETE sgaa1 FROM [dbo].[StateGroupActivityAlarm] sgaa1 inner join #sgaa sgaa2 on (sgaa2.activity=sgaa1.activity or (sgaa2.activity is null and sgaa1.activity is null)) and (sgaa2.stategroup  = sgaa1.stategroup or (sgaa2.stategroup is null and sgaa1.stategroup is null)) and sgaa2.businessunit=sgaa1.businessunit WHERE sgaa1.IsDeleted = 0
+DELETE sgaa1 
+FROM [dbo].[StateGroupActivityAlarm] sgaa1 
+inner join #sgaa sgaa2	on (sgaa2.activity=sgaa1.activity
+							or (sgaa2.activity is null and sgaa1.activity is null)) 
+						and (sgaa2.stategroup  = sgaa1.stategroup 
+							or (sgaa2.stategroup is null and sgaa1.stategroup is null))
+						and sgaa2.businessunit=sgaa1.businessunit
 
 DROP TABLE #sgaa
 
