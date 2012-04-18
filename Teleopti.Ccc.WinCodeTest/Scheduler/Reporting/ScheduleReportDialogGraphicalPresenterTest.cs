@@ -66,6 +66,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			Assert.IsTrue(_model.OneFileForSelected);
 		}
 
+        [Test]
+        public void ShouldSetShowPublicNoteOnModelTrue()
+        {
+            _presenter.OnCheckBoxShowPublicNoteCheckedChanged(true);
+            Assert.IsTrue(_model.ShowPublicNote);
+        }
+
 		[Test]
 		public void ShouldCancel()
 		{

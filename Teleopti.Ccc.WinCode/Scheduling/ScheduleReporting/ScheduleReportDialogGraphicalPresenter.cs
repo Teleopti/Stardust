@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			_model.Team = value;
 			_view.EnableSortOptions(value);
 			_view.EnableSingleFile(!value);
+            _view.EnableShowPublicNote(value);
 
 		}
 
@@ -47,6 +48,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 		{
 			_model.OneFileForSelected = value;
 		}
+
+        public void OnCheckBoxShowPublicNoteCheckedChanged(bool value)
+        {
+            _model.ShowPublicNote = value;
+        }
 
 		public void OnButtonCancelClick()
 		{
