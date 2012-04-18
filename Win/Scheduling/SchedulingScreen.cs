@@ -4716,12 +4716,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (percent.HasValue)
             {
                 toolStripProgressBar1.Maximum = 100;
-		toolStripProgressBar1.Value = percent.Value;   
+		        toolStripProgressBar1.Value = percent.Value;   
             }
             else
             {
-	        if (_totalScheduled <= toolStripProgressBar1.Maximum) toolStripProgressBar1.Value = _totalScheduled;
-	    }
+	            if (_totalScheduled <= toolStripProgressBar1.Maximum) toolStripProgressBar1.Value = _totalScheduled;
+	        }
 
             string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, _selectedScheduleCount);
             toolStripStatusLabelStatus.Text = statusText;
