@@ -7,10 +7,15 @@
 -----------------
 
 CREATE TABLE [mart].[sys_etl_running_lock](
+	[id] [int] NOT NULL,
 	[computer_name] [nvarchar](255) NOT NULL,
 	[start_time] [datetime] NOT NULL,
 	[job_name] [nvarchar](100) NOT NULL,
-	[is_started_by_service] [bit] NOT NULL
+	[is_started_by_service] [bit] NOT NULL,
+ CONSTRAINT [PK_sys_etl_running_lock] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)
 ) ON [PRIMARY]
 
 GO
