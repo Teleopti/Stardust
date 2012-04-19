@@ -26,9 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new ScheduleDayEquator();
         }
 
-        #region Day Off and MainShift testcases when days has different significant parts
+	
+		#region Day Off and MainShift testcases when days has different significant parts
 
-        [Test]
+		[Test]
         public void ShouldBothDayOffAndMainShiftEqualIfOriginalHaveDayOffCurrentHasMainShift()
         {
             SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
@@ -268,7 +269,54 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         #endregion
 
-        private static void SetIdOnShiftCategories(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2, Guid shiftCategoryId)
+		#region Bugfix 19056
+
+		/// <summary>
+		/// Bugfix for 19056> Error "ScheduleDayEquator.mainShiftEquals" during optimization on days with only a personal shift.
+		/// </summary>
+		[Test]
+		public void ShouldReturnFalseIfCurrentPersonAssingmentHasNoMainShift()
+		{
+			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
+
+			IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
+			IScheduleDay current = schedulePartFactory.CreatePartWithoutMainShift();
+			
+			schedulePartFactory.AddPersonalLayer(current);
+
+			Assert.IsFalse(_target.MainShiftEquals(original, current));
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfOriginalPersonAssingmentHasNoMainShift()
+		{
+			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
+
+			IScheduleDay original = schedulePartFactory.CreatePartWithoutMainShift();
+			IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
+
+			schedulePartFactory.AddPersonalLayer(original);
+
+			Assert.IsFalse(_target.MainShiftEquals(original, current));
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfNorOriginalNorCurrentPersonAssingmentHasNoMainShift()
+		{
+			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
+
+			IScheduleDay original = schedulePartFactory.CreatePartWithoutMainShift();
+			IScheduleDay current = schedulePartFactory.CreatePartWithoutMainShift();
+
+			schedulePartFactory.AddPersonalLayer(original);
+			schedulePartFactory.AddPersonalLayer(current);
+
+			Assert.IsFalse(_target.MainShiftEquals(original, current));
+		}
+
+		#endregion
+
+		private static void SetIdOnShiftCategories(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2, Guid shiftCategoryId)
         {
             foreach (IPersonAssignment assignment in scheduleDay1.PersonAssignmentCollection())
             {
