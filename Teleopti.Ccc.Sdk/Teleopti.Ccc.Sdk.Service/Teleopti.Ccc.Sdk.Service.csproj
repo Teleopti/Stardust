@@ -110,7 +110,7 @@
       <HintPath>..\..\packages\Autofac.Wcf.2.6.1.841\lib\NET35\Autofac.Integration.Wcf.dll</HintPath>
     </Reference>
     <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.1.0\lib\Esent.Interop.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.1.1\lib\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
@@ -121,11 +121,13 @@
     <Reference Include="Rhino.Queues">
       <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\3.5\Rhino.Queues.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=2.3.1.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.1.0\lib\3.5\Rhino.ServiceBus.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus, Version=2.3.1.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.1.1\lib\3.5\Rhino.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.1.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.1.0\lib\3.5\Rhino.ServiceBus.Autofac.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.1.1, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.1.1\lib\3.5\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core, Version=7.403.0.20, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
