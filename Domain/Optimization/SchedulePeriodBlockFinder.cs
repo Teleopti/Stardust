@@ -9,17 +9,20 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class SchedulePeriodBlockFinder : IBlockFinder
     {
         private readonly IScheduleMatrixPro _scheduleMatrixPro;
-        private bool _blockFound;
-        private IDictionary<string, IWorkShiftFinderResult> _workShiftFinderResult = new Dictionary<string, IWorkShiftFinderResult>();
+    	private readonly IEmptyDaysInBlockOutsideSelectedHandler _emptyDaysInBlockOutsideSelectedHandler;
+    	private bool _blockFound;
+        private readonly IDictionary<string, IWorkShiftFinderResult> _workShiftFinderResult = new Dictionary<string, IWorkShiftFinderResult>();
 
         private SchedulePeriodBlockFinder(){}
 
-        public SchedulePeriodBlockFinder(IScheduleMatrixPro scheduleMatrixPro) :this()
-        {
-            _scheduleMatrixPro = scheduleMatrixPro;
-        }
+		public SchedulePeriodBlockFinder(IScheduleMatrixPro scheduleMatrixPro, IEmptyDaysInBlockOutsideSelectedHandler emptyDaysInBlockOutsideSelectedHandler)
+			: this()
+		{
+			_scheduleMatrixPro = scheduleMatrixPro;
+			_emptyDaysInBlockOutsideSelectedHandler = emptyDaysInBlockOutsideSelectedHandler;
+		}
 
-        public IBlockFinderResult NextBlock()
+    	public IBlockFinderResult NextBlock()
         {
             if(_blockFound)
                 return new BlockFinderResult(null, new List<DateOnly>(), new Dictionary<string, IWorkShiftFinderResult>());
@@ -60,6 +63,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             if (foundConflictingCategory && foundEmpty)
                 return new BlockFinderResult(null, new List<DateOnly>(), _workShiftFinderResult);
+
+			retList = _emptyDaysInBlockOutsideSelectedHandler.CheckDates(retList, _scheduleMatrixPro);
+
             if (!foundEmpty)
                 return new BlockFinderResult(null, retList, new Dictionary<string, IWorkShiftFinderResult>());
             
