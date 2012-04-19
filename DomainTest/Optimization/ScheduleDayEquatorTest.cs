@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		/// Bugfix for 19056> Error "ScheduleDayEquator.mainShiftEquals" during optimization on days with only a personal shift.
 		/// </summary>
 		[Test]
-		public void ShouldReturnFalseIfCurrentPersonAssingmentHasNoMainShift()
+		public void ShouldReturnFalseIfCurrentPersonAssignmentHasNoMainShift()
 		{
 			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
 
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfOriginalPersonAssingmentHasNoMainShift()
+		public void ShouldReturnFalseIfOriginalPersonAssignmentHasNoMainShift()
 		{
 			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
 
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfNorOriginalNorCurrentPersonAssingmentHasNoMainShift()
+		public void ShouldReturnFalseIfNorOriginalNorCurrentPersonAssignmentHasNoMainShift()
 		{
 			SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
 
