@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(() =>_scheduleMatrix.UnlockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
                 Expect.Call(_gridlockManager.Gridlocks(_person, _dateOnly)).Return(_gridlockDictionary);
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
+				Expect.Call(() => _scheduleMatrix.SelectedPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly));
             }
 
             using(_mockRepository.Playback())
@@ -82,6 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
                 Expect.Call(() => _scheduleMatrix.UnlockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
                 Expect.Call(_gridlockManager.Gridlocks(_person, _dateOnly)).Return(null);
+				Expect.Call(() => _scheduleMatrix.SelectedPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly));
             }
 
             using (_mockRepository.Playback())
