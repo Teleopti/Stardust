@@ -150,6 +150,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             _part.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod));
             return this;
         }
+
+
+		public SchedulePartFactoryForDomain AddPersonalLayer(IScheduleDay scheduleDay)
+		{
+			scheduleDay.CreateAndAddPersonalActivity(new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod));
+			return this;
+		}
+
         public SchedulePartFactoryForDomain AddMainShiftLayer()
         {
             _part.CreateAndAddActivity(new MainShiftActivityLayer(ActivityFactory.CreateActivity("Main"),CurrentPeriod),ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
