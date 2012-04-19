@@ -160,15 +160,13 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d5b442c46e4aedaa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
       <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a3af5866d2c43bc8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
       <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Library.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Module, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a2db8b4959e069c8, processorArchitecture=MSIL">
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Module, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Module.dll</HintPath>
     </Reference>
