@@ -41,14 +41,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
+    <Reference Include="Autofac, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration">
+    <Reference Include="Autofac.Configuration, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper">
+    <Reference Include="AutofacContrib.DynamicProxy2, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\AutoFac\AutofacContrib.DynamicProxy2-Fork\AutofacContrib.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=1.1.0.188, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.2.5.1\lib\NET40ClientProfile\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
@@ -113,6 +119,8 @@
     <Compile Include="Areas\Start\FakePermissionProvider.cs" />
     <Compile Include="Areas\Start\MenuViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
+    <Compile Include="Core\Aop\Core\AspectsTest.cs" />
     <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />

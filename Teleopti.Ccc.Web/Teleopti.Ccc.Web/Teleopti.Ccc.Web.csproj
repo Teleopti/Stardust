@@ -61,11 +61,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.Mvc3.2.6.1.841\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="AutofacContrib.DynamicProxy2">
-      <HintPath>..\..\AutoFac\AutofacContrib-2.6.1.841-NET40\Library\AutofacContrib.DynamicProxy2.dll</HintPath>
+    <Reference Include="AutofacContrib.DynamicProxy2, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="AutoMapper">
       <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.2.5.1\lib\NET35\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
@@ -84,12 +87,6 @@
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
       <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
-    </Reference>
-    <Reference Include="SignalR, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
-    </Reference>
-    <Reference Include="SignalR.Hosting.AspNet">
-      <HintPath>..\..\packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
@@ -167,6 +164,16 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\AspectInterceptor.cs" />
+    <Compile Include="Core\Aop\Core\AspectsAttribute.cs" />
+    <Compile Include="Core\Aop\Core\AspectsModule.cs" />
+    <Compile Include="Core\Aop\Core\IAspect.cs" />
+    <Compile Include="Core\Aop\Core\IAspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\IOrderedAspect.cs" />
+    <Compile Include="Core\Aop\Core\IResolvedAspect.cs" />
+    <Compile Include="Core\Aop\Core\IResolvedAspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -227,6 +234,8 @@
     <Compile Include="Core\RequestContext\ICurrentPrincipalProvider.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -614,7 +623,9 @@
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

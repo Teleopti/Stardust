@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
+using AutofacContrib.DynamicProxy2;
+using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -7,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
@@ -25,7 +28,9 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
 
@@ -68,6 +73,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 
 		private void registerPreferenceTypes(ContainerBuilder builder)
 		{
+			builder.RegisterType<PreferenceController>().EnableClassInterceptors();
+
 			builder.RegisterType<PreferenceViewModelFactory>().As<IPreferenceViewModelFactory>();
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
