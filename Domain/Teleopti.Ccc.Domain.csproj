@@ -216,6 +216,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
+    <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizerService.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizer.cs" />

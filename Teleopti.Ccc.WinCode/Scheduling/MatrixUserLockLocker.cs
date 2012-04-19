@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
 
                 setUserLockedDaysInMatrix(matrix, dates, _gridlockManager);
+				if(dates.Count > 0)
+					matrix.SelectedPeriod = new DateOnlyPeriod(dates[0], dates[dates.Count -1]);
             }
         }
 
