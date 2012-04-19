@@ -6,12 +6,15 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences)]
+	[Aspects]
 	public class PreferenceFeedbackController : AsyncController
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
@@ -25,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[AsyncTask]
 		public void FeedbackAsync(DateOnly date) { }
 
-		public void FeedbackTask(DateOnly date)
+		[UnitOfWork]
+		public virtual void FeedbackTask(DateOnly date)
 		{
 			AsyncManager.Parameters["model"] = _viewModelFactory.CreateDayFeedbackViewModel(date);
 		}

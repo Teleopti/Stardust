@@ -16,21 +16,16 @@ namespace Teleopti.Ccc.Web.Filters
 			var asyncController = (AsyncController) filterContext.Controller;
 			var asyncManager = asyncController.AsyncManager;
 			asyncManager.Timeout = 1000*60*5;
-			var unitOfWorkFactory = DependencyResolver.Current.GetService<IUnitOfWorkFactory>();
 
 			asyncManager.OutstandingOperations.Increment();
 			Task.Factory.StartNew(() =>
 			                      	{
 			                      		try
 			                      		{
-			                      			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			                      			{
-			                      				var actionName = filterContext.ActionDescriptor.ActionName + "Task";
-			                      				var method = filterContext.Controller.GetType().GetMethod(actionName);
-			                      				var parameters = filterContext.ActionParameters.Values.ToArray();
-			                      				method.Invoke(filterContext.Controller, parameters);
-			                      				unitOfWork.PersistAll();
-			                      			}
+			                      			var actionName = filterContext.ActionDescriptor.ActionName + "Task";
+			                      			var method = filterContext.Controller.GetType().GetMethod(actionName);
+			                      			var parameters = filterContext.ActionParameters.Values.ToArray();
+			                      			method.Invoke(filterContext.Controller, parameters);
 			                      		}
 			                      		catch (Exception e)
 			                      		{
