@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                                         rowNumber);
                     return result;
                 }
-                var intervalLength = forecastsRow.LocalDateTimeTo.Subtract(forecastsRow.LocalDateTimeFrom);
+                var intervalLength = forecastsRow.UtcDateTimeTo.Subtract(forecastsRow.UtcDateTimeFrom);
                 if (intervalLength != TimeSpan.FromMinutes(skill.DefaultResolution))
                 {
                     result.ErrorMessage = string.Format(CultureInfo.InvariantCulture,
