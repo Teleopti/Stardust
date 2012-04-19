@@ -611,35 +611,11 @@
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>
 
-	<!-- The two target below ar only called by RootMSI-build-->
-	<Target Name="CreateDBRelease">
-
-    <Message Importance="high" Text="Creating Db release ..."/>
-	<!--	<Exec Command="&quot;$(CreatedDBReleaseCmd)&quot;" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-    </Exec>
-    <Message Text="The exit code is: $(ErrorCode)"/>
-    <Error Text="Error while building new release. Please check build logs for details!" Condition="'$(ErrorCode)' != '0'" />
-    -->
-		<Message Importance="high" Text="Creating Db release. Done!"/>
-
-    <OnError ExecuteTargets="MessageErrorHandler"/>
+	<Target Name="TagAndPush" DependsOnTargets="GetVersion">
+		<exec command="hg update -r default" />
+		<exec command="hg revert -a"/>
+		<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
+		<exec command="hg fetch $(ServerRepo)" /> 
+		<exec command="hg push $(ServerRepo)"/>
 	</Target>
-
-  <Target Name="MessageErrorHandler">
-    <Message Text="Error while building new release. Please check build logs for details!"/>
-  </Target>
-
-  <Target Name="TagChangeset" DependsOnTargets="GetVersion">
-  	<Message Text="Setting tag $(CCCVersion) on tip of release branch $(branch)"/>
-	<exec command="hg update -r default" />
-	<exec command="hg revert -a"/>
-	<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
-	<exec command="hg update -r &quot;$(branch)&quot;" />
-  </Target>
-  <Target Name="PushTag">
-  	<exec command="hg revert -a"/>
-  	<exec command="hg fetch $(ServerRepo)" /> 
-	<exec command="hg push $(ServerRepo)"/>
-  </Target>
 </Project>
