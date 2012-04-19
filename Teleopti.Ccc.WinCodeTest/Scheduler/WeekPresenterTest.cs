@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -91,15 +92,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
             IVisualLayer vl1 = mocks.StrictMock<IVisualLayer>();
             IVisualLayer vl2 = mocks.StrictMock<IVisualLayer>();
-            IPayload pl1 = mocks.StrictMock<IPayload>();
-            IPayload pl2 = mocks.StrictMock<IPayload>();
+            var pl1 = new Activity("1");
+				var pl2 = new Activity("d");
             IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(null, new List<IVisualLayer>{vl1,vl2}, new ProjectionPayloadMerger());
 
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.FullDayAbsence);
             Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
             Expect.Call(vl1.Period).Return(new DateTimePeriod(_date.AddHours(10), _date.AddHours(15))).Repeat.AtLeastOnce();
-            Expect.Call(pl2.Equals(null)).IgnoreArguments().Return(false).Repeat.AtLeastOnce();
             Expect.Call(vl1.Payload).Return(pl1).Repeat.AtLeastOnce();
             Expect.Call(vl2.Payload).Return(pl2).Repeat.AtLeastOnce();
             Expect.Call(vl1.EntityClone()).Return(vl1);
