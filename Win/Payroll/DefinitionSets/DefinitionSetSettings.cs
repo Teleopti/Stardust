@@ -209,6 +209,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             multiplicatorDefinitionView.GridDataChanged += (ContainerControlDefinitionChanged);
             
             IContainedControl container = new PayrollControlContainer(_multiplicatorDefinitionView, Resources.MultiplicatorGrid);
+            splitContainerBottom.Panel2.Controls.Clear();
             splitContainerBottom.Panel2.Controls.Add(container.UserControl);
             container.UserControl.Dock = DockStyle.Fill;
         }
@@ -216,6 +217,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void InstantiateVisualizeView()
         {
+            splitContainerBottom.Panel1.Controls.Remove(_visualizeView);
             _visualizeView = new VisualizeView(this) {Anchor = AnchorStyles.Left};
         	splitContainerBottom.Panel1.Controls.Add(_visualizeView);
             _visualizeView.Dock = DockStyle.Fill;
