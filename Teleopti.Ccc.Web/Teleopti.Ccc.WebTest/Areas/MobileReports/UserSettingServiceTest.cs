@@ -1,70 +1,66 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Globalization;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Rhino.Mocks;
-
 	using SharpTestsEx;
-
-	using Teleopti.Ccc.Domain.Common;
-	using Teleopti.Ccc.Domain.Repositories;
-	using Teleopti.Ccc.Domain.Security.Principal;
-	using Teleopti.Ccc.TestCommon;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
-	using Teleopti.Ccc.Web.Core.RequestContext;
+	using Domain.Common;
+	using Domain.Repositories;
+	using Domain.Security.Principal;
+	using TestCommon;
+	using Web.Areas.MobileReports.Core;
+	using Web.Areas.MobileReports.Models.Domain;
+	using Web.Core.RequestContext;
 
 	[TestFixture]
 	public class UserSettingServiceTest
 	{
 		private BusinessUnit _businessUnit;
-
 		private MockRepository _mocks;
-
 		private Person _person;
-
-		private PrincipalForTest _printcipal;
-
+		private PrincipalForTest _principal;
 		private IWebReportUserInfoProvider _target;
+		private CultureInfo _uiCulture;
 
 		[SetUp]
 		public void Setup()
 		{
-			this._mocks = new MockRepository();
+			_mocks = new MockRepository();
 
-			this._businessUnit = new BusinessUnit("Bu");
-			this._businessUnit.SetId(Guid.NewGuid());
-			this._person = new Person();
-			this._person.SetId(Guid.NewGuid());
-			this._printcipal = new PrincipalForTest(this._businessUnit, this._person);
+			_businessUnit = new BusinessUnit("Bu");
+			_businessUnit.SetId(Guid.NewGuid());
+			_uiCulture = CultureInfo.GetCultureInfo("en");
+			_person = new Person();
+			_person.SetId(Guid.NewGuid());
+			_person.PermissionInformation.SetUICulture(_uiCulture);
+			_principal = new PrincipalForTest(_businessUnit, _person);
 		}
 
 		[Test]
 		public void ShouldPopulateFromPrincipal()
 		{
-			var personRepository = this._mocks.DynamicMock<IPersonRepository>();
+			var personRepository = _mocks.DynamicMock<IPersonRepository>();
 
-			using (this._mocks.Record())
+			using (_mocks.Record())
 			{
-				Expect.Call(personRepository.Get(this._person.Id.Value)).Return(this._person);
+				Expect.Call(personRepository.Get(_person.Id.Value)).Return(_person);
 			}
 
-			this._target = new WebReportUserInfoProvider(this._printcipal, personRepository);
+			_target = new WebReportUserInfoProvider(_principal, personRepository);
 
 			WebReportUserInformation webReportUserInformation;
-			using (this._mocks.Playback())
+			using (_mocks.Playback())
 			{
-				webReportUserInformation = this._target.GetUserInformation();
+				webReportUserInformation = _target.GetUserInformation();
 			}
 
 			webReportUserInformation.Should().Not.Be.Null();
-			webReportUserInformation.BusinessUnitCode.Should().Be.EqualTo(this._businessUnit.Id);
-			webReportUserInformation.PersonCode.Should().Be.EqualTo(this._person.Id);
+			webReportUserInformation.BusinessUnitCode.Should().Be.EqualTo(_businessUnit.Id);
+			webReportUserInformation.PersonCode.Should().Be.EqualTo(_person.Id);
 			webReportUserInformation.TimeZoneCode.Should().Be.EqualTo("W. Europe Standard Time");
+			webReportUserInformation.LanguageId.Should().Be.EqualTo(CultureInfo.CreateSpecificCulture(_uiCulture.TwoLetterISOLanguageName).LCID);
 		}
 
 		[TearDown]
@@ -82,16 +78,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 
 			public PrincipalForTest(BusinessUnit businessUnit, Person person)
 			{
-				this._businessUnit = businessUnit;
-				this._person = person;
-				this._principalForTest =
+				_businessUnit = businessUnit;
+				_person = person;
+				_principalForTest =
 					new TeleoptiPrincipalForTest(
-						new TeleoptiIdentity(this._person.Name.ToString(), null, this._businessUnit, null, AuthenticationTypeOption.Unknown), this._person);
+						new TeleoptiIdentity(_person.Name.ToString(), null, _businessUnit, null), _person);
 			}
 
 			public TeleoptiPrincipal Current()
 			{
-				return this._principalForTest;
+				return _principalForTest;
 			}
 		}
 	}
