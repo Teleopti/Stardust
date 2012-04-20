@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _personSkill2 = new PersonSkill(_skill2, new Percent(1));
             _personSkill3 = new PersonSkill(_skill3, new Percent(1));
         }
+
         [Test]
         public void NoWorkflowControlSetReturnsFalse()
         {
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         }
 
         [Test]
-        public void ShouldPassIfNoMatchingSkillSetUp()
+        public void ShouldPassIfNoMatchingSkillSetup()
         {
             using (_mocks.Record())
             {
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         }
 
         [Test]
-        public void ShouldFailIfNoPersonPeriodAvaliable()
+        public void ShouldFailIfNoPersonPeriodAvailable()
         {
             var dateOnly = new DateOnly(DateTime.Today.AddDays(1));
             using (_mocks.Record())
