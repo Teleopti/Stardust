@@ -19,7 +19,7 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 
 	function _pageLog(message) {
 		$('#page')
-			.append(message+ '<br/>')
+			.append(message + '<br/>')
 			;
 	}
 
@@ -50,6 +50,9 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		},
 		ExpireMyCookie: function () {
 			_expireMyCookie();
+		},
+		PageLog: function (message) {
+			_pageLog(message);
 		}
 	};
 
