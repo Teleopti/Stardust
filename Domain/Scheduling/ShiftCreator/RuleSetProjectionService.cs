@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _shiftCreatorService = shiftCreatorService;
         }
 
-        public virtual IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet)
+        public IEnumerable<IWorkShiftVisualLayerInfo> ProjectionCollection(IWorkShiftRuleSet ruleSet)
         {
             var retList = new List<IWorkShiftVisualLayerInfo>();
 
