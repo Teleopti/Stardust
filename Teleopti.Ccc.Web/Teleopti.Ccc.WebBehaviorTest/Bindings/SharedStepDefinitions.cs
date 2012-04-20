@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the delete button")]
 		public void WhenIClickTheDeleteButton()
 		{
+			if (Pages.Pages.Current is PreferencePage)
+				TestMethods.WaitForPreferenceFeedbackToLoad();
 			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
 		}
 
