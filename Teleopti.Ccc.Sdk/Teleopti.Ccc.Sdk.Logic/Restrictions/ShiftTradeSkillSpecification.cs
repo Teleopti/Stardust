@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                     skills.Add(personSkill.Skill);
                 }
             }
-            return skills.Count <= 0;
+            return skills.Count == 0;
         }
 
         private static IList<ISkill> getListOfSkills(IEnumerable<ISkill> listOne, IEnumerable<ISkill> listTwo)
