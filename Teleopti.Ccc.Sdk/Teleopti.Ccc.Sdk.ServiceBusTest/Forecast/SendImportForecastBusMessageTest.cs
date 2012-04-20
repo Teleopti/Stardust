@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             forecasts.AddForecastsRow(dateOnly, row);
             using (_mocks.Record())
             {
-                Expect.Call(_analyzeQuery.Run(new[] {row}, TimeSpan.Zero)).Return(queryResult);
+                Expect.Call(_analyzeQuery.Run(new[] { row }, targetSkill)).Return(queryResult);
                 Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
                 Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
                 Expect.Call(() => _serviceBus.Send()).Constraints(

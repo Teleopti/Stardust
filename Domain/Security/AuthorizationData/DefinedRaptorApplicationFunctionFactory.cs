@@ -112,6 +112,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			                                DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit,
 			                                "xxExportForecastToOtherBusinessUnit",
 			                                DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
+            CreateAndAddApplicationFunction(applicationFunctionList,
+			                                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
+                                            "xxImportForecastFromFile",
+                                            DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
 
 			// Agent Portal
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAsm, "xxASM", DefinedRaptorApplicationFunctionForeignIds.OpenAsm, null);

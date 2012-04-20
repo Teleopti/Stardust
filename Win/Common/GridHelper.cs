@@ -132,6 +132,8 @@ namespace Teleopti.Ccc.Win.Common
                         case "NumericServiceTargetLimitedCell":
                         case "NumericCell":
                         case "NumericWorkloadDayTaskLimitedCell":
+                        case "NumericWorkloadWeekTaskLimitedCell":
+                        case "NumericWorkloadMonthTaskLimitedCell":
                         case "NumericWorkloadIntradayTaskLimitedCell":
                         case "NumericWithTwoDecimalsCell":
                         case "NumericTwoDecimalCell":
@@ -208,6 +210,8 @@ namespace Teleopti.Ccc.Win.Common
                         case "NumericServiceTargetLimitedCell":
                         case "NumericCell":
                         case "NumericWorkloadDayTaskLimitedCell":
+                        case "NumericWorkloadWeekTaskLimitedCell":
+                        case "NumericWorkloadMonthTaskLimitedCell":
                         case "NumericWorkloadIntradayTaskLimitedCell":
                         case "NumericWithTwoDecimalsCell":
                         case "NumericTwoDecimalCell":

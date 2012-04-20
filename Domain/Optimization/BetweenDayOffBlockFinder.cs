@@ -14,18 +14,20 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class BetweenDayOffBlockFinder : IBlockFinder, IBetweenDayOffBlockFinder
     {
         private readonly IScheduleMatrixPro _scheduleMatrixPro;
-        private int _lastIndex;
+    	private readonly IEmptyDaysInBlockOutsideSelectedHandler _emptyDaysInBlockOutsideSelectedHandler;
+    	private int _lastIndex;
         private IDictionary<string, IWorkShiftFinderResult> _workShiftFinderResult = new Dictionary<string, IWorkShiftFinderResult>();
 
         private BetweenDayOffBlockFinder(){}
 
-        public BetweenDayOffBlockFinder(IScheduleMatrixPro scheduleMatrixPro)
+        public BetweenDayOffBlockFinder(IScheduleMatrixPro scheduleMatrixPro, IEmptyDaysInBlockOutsideSelectedHandler emptyDaysInBlockOutsideSelectedHandler)
             : this()
         {
-            _scheduleMatrixPro = scheduleMatrixPro;
+        	_scheduleMatrixPro = scheduleMatrixPro;
+        	_emptyDaysInBlockOutsideSelectedHandler = emptyDaysInBlockOutsideSelectedHandler;
         }
 
-		public IBlockFinderResult NextBlock()
+    	public IBlockFinderResult NextBlock()
 		{
 			for (int index = _lastIndex; index < _scheduleMatrixPro.FullWeeksPeriodDays.Count; index++)
 			{
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!validBlockOnly)
                 foundShiftCategory = null;
-
+        	dates = _emptyDaysInBlockOutsideSelectedHandler.CheckDates(dates, _scheduleMatrixPro);
             return new BlockFinderResult(foundShiftCategory, dates, new Dictionary<string, IWorkShiftFinderResult>());
         }
 

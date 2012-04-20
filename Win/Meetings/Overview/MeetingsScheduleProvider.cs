@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
                     	new ScenarioRepository(unitOfWork).LoadAll();
 						var meetings = meetingRepository.Find(persons, period, _model.CurrentScenario, _model.IncludeForOrganizer);
-
+                    	meetings = meetings.OrderBy(m => m.StartDate).ThenBy(m => m.StartTime).ToList();
                         var tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings,
                                                                                               new DateOnly(startDate.AddDays(-1)),
                                                                                               new DateOnly(endDate));

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Globalization;
 using NUnit.Framework;
 using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 	{
 		private ScheduleReportGraphicalDrawSchedule _drawSchedule;
         private ScheduleReportGraphicalDrawSchedule _drawScheduleRtl;
+        private ScheduleReportGraphicalDrawSchedule _drawSchedulePublicNote;
 		private IScheduleDay _scheduleDay;
 		private MockRepository _mockRepository;
 		private IProjectionService _projectionService;
@@ -25,6 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 		private IPayload _payload;
 		private IPerson _person;
 	    private IPersonPeriod _personPeriod;
+	    private IPublicNote _publicNote;
 
 		[SetUp]
 		public void Setup()
@@ -37,11 +43,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			_layerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
 			_layer = _mockRepository.StrictMock<IVisualLayer>();
 			_enumerator = new List<IVisualLayer> { _layer }.GetEnumerator();
-			_drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, 0, 50, 0, _scheduleDay, false);
-            _drawScheduleRtl = new ScheduleReportGraphicalDrawSchedule(page, 0, 50, 0, _scheduleDay, true);
+			_drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, 0, 50, 0, _scheduleDay, false, false, new CultureInfo("sv-SE"));
+            _drawSchedulePublicNote = new ScheduleReportGraphicalDrawSchedule(page, 0, 50, 0, _scheduleDay, false, true, new CultureInfo("sv-SE"));
+            _drawScheduleRtl = new ScheduleReportGraphicalDrawSchedule(page, 0, 50, 0, _scheduleDay, true, false, new CultureInfo("sv-SE")); ;
 			_payload = _mockRepository.StrictMock<IPayload>();
 			_person = _mockRepository.StrictMock<IPerson>();
 		    _personPeriod = _mockRepository.StrictMock<IPersonPeriod>();
+		    _publicNote = _mockRepository.StrictMock<IPublicNote>();
 		}
 
 		[Test]
@@ -70,6 +78,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Assert.AreEqual(15, top);
 			}	
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldDrawSchedulePublicNoteAndReturnTop()
+        {
+            var dateTime1 = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+            var dateTime3 = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
+
+            const float fontSize = 9f;
+            var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, new CultureInfo("sv-SE"));
+
+            using (_mockRepository.Record())
+            {
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+                Expect.Call(_projectionService.CreateProjection()).Return(_layerCollection);
+                Expect.Call(_layerCollection.GetEnumerator()).Return(_enumerator);
+                Expect.Call(_layer.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
+                Expect.Call(_layer.Payload).Return(_payload);
+                Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_payload.ConfidentialDisplayColor(_person)).Return(Color.Blue);
+                Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TeleoptiPrincipal.Current.Regional.TimeZone));
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_scheduleDay.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> {_publicNote}));
+                Expect.Call(_publicNote.GetScheduleNote(new NoFormatting())).IgnoreArguments().Return("publicNote");
+            }
+
+            using (_mockRepository.Playback())
+            {
+                var top = _drawSchedulePublicNote.Draw(new DateTimePeriod(2011, 1, 1, 2011, 1, 1));
+                Assert.AreEqual((int)(15 + font.Height + 2), (int)top);
+            }
+        }
 
         [Test]
         public void ShouldReturnXPosFromHour()

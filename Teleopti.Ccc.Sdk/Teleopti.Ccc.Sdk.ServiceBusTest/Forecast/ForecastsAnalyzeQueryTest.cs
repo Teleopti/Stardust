@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -12,10 +13,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     public class ForecastsAnalyzeQueryTest
     {
         private IForecastsAnalyzeQuery _target;
+        private ISkill _skill;
 
         [SetUp]
         public void Setup()
         {
+            _skill = SkillFactory.CreateSkill("test skill");
+            _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
            _target = new ForecastsAnalyzeQuery();
         }
 
@@ -24,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         {
             var date = new DateOnly(2012, 3, 1);
             var forecastsRows = setUpForecasts();
-            var result = _target.Run(forecastsRows,TimeSpan.Zero);
+            var result = _target.Run(forecastsRows, _skill);
 
             Assert.That(result.ErrorMessage, Is.Null);
             Assert.That(result.Succeeded, Is.True);
@@ -40,8 +44,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         {
             var forecastsRows = setUpForecastsWithMidnightBreak();
             var date = new DateOnly(2012, 3, 1);
-            var result = _target.Run(forecastsRows,TimeSpan.FromHours(2));
+            var result = _target.Run(forecastsRows,_skill);
             Assert.That(result.WorkloadDayOpenHours.GetOpenHour(date), Is.EqualTo(new TimePeriod(6, 0, 26, 0)));
+        }
+
+        [Test]
+        public void ShouldHandleSummertime()
+        {
+            var row = new ForecastsRow
+            {
+                TaskTime = 170,
+                AfterTaskTime = 0,
+                Agents = 2,
+                LocalDateTimeFrom = new DateTime(2012, 3, 25, 1, 45, 0),
+                LocalDateTimeTo = new DateTime(2012, 3, 25, 3, 0, 0),
+                SkillName = "Insurance",
+                Tasks = 10,
+                UtcDateTimeFrom = new DateTime(2012, 3, 25, 0, 45, 0, DateTimeKind.Utc),
+                UtcDateTimeTo = new DateTime(2012, 3, 25, 1, 0, 0, DateTimeKind.Utc)
+            };
+            var result = _target.Run(new[] {row}, _skill);
+            Assert.That(result.IntervalLength, Is.EqualTo(TimeSpan.FromTicks(9000000000)));
         }
 
         private static IEnumerable<IForecastsRow> setUpForecasts()

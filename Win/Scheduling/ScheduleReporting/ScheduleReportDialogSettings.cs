@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         private ScheduleReportDetail _detailLevel = ScheduleReportDetail.All;
         private bool _singleFile = true;
         private bool _individualReport = true;
+        private bool _showPublicNote;
 
         public ScheduleReportDetail DetailLevel
         {
@@ -27,6 +28,12 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         {
             get { return _individualReport; }
             set { _individualReport = value; }
+        }
+
+        public bool ShowPublicNote
+        {
+            get { return _showPublicNote; }
+            set { _showPublicNote = value; }
         }
     }
 }

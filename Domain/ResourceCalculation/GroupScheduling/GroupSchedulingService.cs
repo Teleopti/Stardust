@@ -116,7 +116,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                                 break;
                             }
                         }
-                        break;
+
+                        if(locked == false) break;
                     }
                 }
 

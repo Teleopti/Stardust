@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 case BlockFinderType.BetweenDayOff:
                     {
-                        finder = new BetweenDayOffBlockFinder(matrix);
+                        finder = new BetweenDayOffBlockFinder(matrix, new EmptyDaysInBlockOutsideSelectedHandler());
                         break;
                     }
 
                 case BlockFinderType.SchedulePeriod:
                     {
-                        finder = new SchedulePeriodBlockFinder(matrix);
+                        finder = new SchedulePeriodBlockFinder(matrix, new EmptyDaysInBlockOutsideSelectedHandler());
                         break;
                     }
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public IBetweenDayOffBlockFinder CreateBetweenDayOffBlockFinder(IScheduleMatrixPro matrix)
         {
-            return new BetweenDayOffBlockFinder(matrix);
+			return new BetweenDayOffBlockFinder(matrix, new EmptyDaysInBlockOutsideSelectedHandler());
         }
     }
 

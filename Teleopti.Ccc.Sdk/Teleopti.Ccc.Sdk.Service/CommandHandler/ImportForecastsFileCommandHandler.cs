@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -30,6 +31,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         {
             if (command == null)
                 throw new FaultException("Command is null.");
+            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile))
+            {
+                throw new FaultException("You're not authorized to run this command.");
+            }
             Guid jobResultId;
             var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

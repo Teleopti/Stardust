@@ -1074,8 +1074,8 @@ Schedule</value>
     <comment>Skill</comment>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Schedule Overtime per Agent</value>
-    <comment>Schedule Overtime per Agent</comment>
+    <value>Scheduled Overtime per Agent</value>
+    <comment>Scheduled Overtime per Agent</comment>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
     <value>Overtime:</value>

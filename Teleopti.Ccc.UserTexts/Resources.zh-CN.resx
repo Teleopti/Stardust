@@ -731,7 +731,7 @@
     <comment>Back</comment>
   </data>
   <data name="BackAmpersandArrow" xml:space="preserve">
-    <value>＜ &amp;返回</value>
+    <value>&lt; 返回(&amp;B)</value>
     <comment>&lt; &amp;Back</comment>
   </data>
   <data name="BackToLegalState" xml:space="preserve">
@@ -1912,7 +1912,7 @@
     <comment>Find and replace</comment>
   </data>
   <data name="FinishAmpersand" xml:space="preserve">
-    <value>&amp;完成</value>
+    <value>完成(&amp;F)</value>
     <comment>&amp;Finish</comment>
   </data>
   <data name="FirstName" xml:space="preserve">
@@ -3118,7 +3118,7 @@
     <comment>Used in column header</comment>
   </data>
   <data name="NextAmpersandArrow" xml:space="preserve">
-    <value>&amp;下一步&gt;</value>
+    <value>下一步(&amp;N)&gt;</value>
     <comment>&amp;Next &gt;</comment>
   </data>
   <data name="NextDate" xml:space="preserve">
