@@ -221,7 +221,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			_loadFeedbackSoon();
 		},
 		FeedbackIsLoaded: function () {
-			return _feedbackLoadingStarted && Teleopti.MyTimeWeb.Ajax.IsRequesting();
+			return _feedbackLoadingStarted && !Teleopti.MyTimeWeb.Ajax.IsRequesting();
 		}
 	};
 

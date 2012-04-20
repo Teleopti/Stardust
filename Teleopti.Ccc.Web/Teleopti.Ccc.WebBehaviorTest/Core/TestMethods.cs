@@ -40,6 +40,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void WaitForPreferenceFeedbackToLoad()
 		{
+			if (Browser.Current.Text.Contains("Preference feedback loaded!"))
+				return;
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.InformWhenPreferenceFeedbackIsLoaded('Preference feedback loaded!');");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Preference feedback loaded!"));
 		}
