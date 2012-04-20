@@ -1,7 +1,8 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -13,6 +14,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Preference = (function ($) {
+
+	var _feedbackLoadingStarted = false;
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
@@ -67,10 +70,16 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			;
 	}
 
+	function _loadFeedbackSoon() {
+		_feedbackLoadingStarted = false;
+		setTimeout(function () { _loadFeedback(); }, 300);
+	}
+
 	function _loadFeedback() {
 		$('li[data-mytime-date].feedback').each(function () {
 			var date = $(this).data('mytime-date');
 			_loadFeedbackForDate(date);
+			_feedbackLoadingStarted = true;
 		});
 	}
 
@@ -209,10 +218,10 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 		PreferencePartialInit: function () {
 			_initPeriodSelection();
 			_activateSelectable();
-			setTimeout('Teleopti.MyTimeWeb.Preference.LoadFeedback();', 300);
+			_loadFeedbackSoon();
 		},
-		LoadFeedback: function () {
-			_loadFeedback();
+		FeedbackIsLoaded: function () {
+			return _feedbackLoadingStarted && Teleopti.MyTimeWeb.Ajax.IsRequesting();
 		}
 	};
 

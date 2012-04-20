@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
 			// probably depending on how quickly the next request takes places.
 			// making a second request seems to enforce the cookie somehow..
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie();");
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Cookie is expired!"));
 
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie();");
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() =>
 			                    	{
 			                    		var text = Browser.Current.Text;
@@ -36,6 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void PageLog(string message)
 		{
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PageLog('" + message + "');");
+		}
+
+		public static void WaitForPreferenceFeedbackToLoad()
+		{
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.InformWhenPreferenceFeedbackIsLoaded('Preference feedback loaded!');");
+			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Preference feedback loaded!"));
 		}
 	}
 }
