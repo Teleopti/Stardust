@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		//    get { return Document.Spans.Filter(Find.ByClass("error")); }
 		//}
 
-		public void SelectFirstApplicationDataSource()
+		public void SelectApplicationTestDataSource()
 		{
 			SigninDataSources.First().Click();
 		}
