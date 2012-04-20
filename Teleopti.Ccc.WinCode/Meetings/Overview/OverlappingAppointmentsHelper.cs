@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 				var nextIndex = simpleAppointments.IndexOf(simpleAppointment) + 1;
 				if (nextIndex > lastIndex) continue;
 				var nextAppointment = simpleAppointments[nextIndex];
-				if (nextAppointment.StartDateTime < simpleAppointment.EndDateTime)
+				if (nextAppointment.StartDateTime < simpleAppointment.EndDateTime.AddMinutes(FindRemainsToEvenHalfHour(simpleAppointment.EndDateTime.Minute)))
 				{
 					appointmentsToMark.Add(simpleAppointment);
 					countOverlapping += 1;
@@ -64,5 +64,14 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 			return null;
 		}
 
+		public static int FindRemainsToEvenHalfHour(int minute)
+		{
+			if (minute == 0) return 0;
+			var result = 30 - minute;
+			if (result < 0)
+				return 30 + result;
+
+			return result;
+		}
 	}
 }
