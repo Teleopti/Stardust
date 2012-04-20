@@ -111,7 +111,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.7\lib\net20\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Client.20, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SignalR.Client.20.0.5.0\lib\net20\SignalR.Client.20.dll</HintPath>
+      <HintPath>..\..\packages\SignalR.Client.20.0.5.0.1\lib\net20\SignalR.Client.20.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
