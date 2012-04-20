@@ -664,6 +664,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             toolStripMenuItemNewAbsenceRequest.Visible = showNewAbsenceRequests;
             toolStripMenuItemNewShiftTrade.Visible = showNewShiftTrade;
             toolStripMenuItemNewShiftTrade.Enabled = enableNewShiftTrade;
+            toolStripMenuItemShiftTradeFilter.Visible = showNewShiftTrade;
             toolStripMenuItemNewTextRequest.Visible = showNewTextRequest;
             
             toolStripSeparatorDelete.Visible = showSeparatorDelete;
@@ -841,6 +842,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                     scheduleTeamView.SetDateSelection(scheduleControlMain.Calendar.SelectedDates);
                     break;
             }
+        }
+
+        private void toolStripMenuItemShiftTradeFilter_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItemShiftTradeFilter.Checked = !toolStripMenuItemShiftTradeFilter.Checked;
+            scheduleTeamView.FilterPeopleForShiftTrade = toolStripMenuItemShiftTradeFilter.Checked;
         }
     }
 }

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit Text Box</value>
@@ -4538,7 +4538,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New Shift Trade Request</value>
+    <value>New shift trade request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -10547,7 +10547,7 @@ These options are activated:
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} agent days could not be scheduled.</value>
- </data>
+  </data>
   <data name="Import" xml:space="preserve">
     <value>Import</value>
     <comment>Import</comment>
@@ -10589,5 +10589,11 @@ These options are activated:
   <data name="ShowPublicNote" xml:space="preserve">
     <value>Show public note</value>
     <comment>ShowPublicNote</comment>
+  </data>
+  <data name="ShiftTradeFilter" xml:space="preserve">
+    <value>Shift trade filter</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Show only available for shift trade</value>
   </data>
 </root>
