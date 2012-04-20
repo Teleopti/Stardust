@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 			Assert.That(left[4].OtherHasBeenDeleted,Is.True);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldReturnRemainsToHalfHour()
 		{
 			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(20),Is.EqualTo(10));
