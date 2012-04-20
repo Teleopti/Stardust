@@ -35,17 +35,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void That<T>(Func<T> value, Constraint constraint, string message)
 		{
 			ReusableConstraint reusableConstraint = constraint;
-			AssertionException exception = null;
+			Exception exception = null;
 			Func<bool> longPollTimeSafeAssert = () =>
 			                   	{
-			                   		try
-			                   		{
+									try
+									{
 										if (string.IsNullOrEmpty(message))
 											Assert.That(value.Invoke(), reusableConstraint);
 										else
 											Assert.That(value.Invoke(), reusableConstraint, message);
 										return true;
-			                   		}
+									}
+									catch (UnauthorizedAccessException ex)
+									{
+										// sometimes IE api gives these errors when the page is in a state between pages or something
+										// if so, lets just try again
+										// maybe this behavior should be placed elsewhere and not only apply to asserts..
+										exception = ex;
+										return false;
+									}
 									catch (AssertionException ex)
 									{
 										exception = ex;
