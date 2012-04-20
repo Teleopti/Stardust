@@ -27,7 +27,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			{
 				var startupConfigurationView = new StartupConfigurationView(configurationHandler);
 				if (startupConfigurationView.ShowDialog() == DialogResult.Cancel)
+				{
 					Current.Shutdown();
+					return;
+				}
 			}
 
 			if (configurationHandler.BaseConfiguration.CultureId != null)
