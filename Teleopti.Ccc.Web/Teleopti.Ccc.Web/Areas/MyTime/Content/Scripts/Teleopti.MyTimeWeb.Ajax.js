@@ -103,7 +103,14 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		});
 		_requests.length = 0;
 	}
-	
+
+	function _whenAllRequestsCompleted(callback) {
+		if (_requests.length == 0)
+			callback();
+		else
+			setTimeout(function () { _whenAllRequestsCompleted(callback); }, 1000);
+	}
+
 	return {
 		Init: function (settings) {
 			_settings = settings;
@@ -113,6 +120,9 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		},
 		AjaxAbortAll: function () {
 			_ajaxAbortAll();
+		},
+		WhenAllRequestsCompleted: function (callback) {
+			_whenAllRequestsCompleted(callback);
 		}
 	};
 

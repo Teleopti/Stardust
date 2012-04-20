@@ -437,6 +437,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
@@ -519,6 +520,7 @@
     <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.js" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.css" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.min.css" />
+    <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
