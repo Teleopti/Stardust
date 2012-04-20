@@ -45,6 +45,16 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 			Assert.That(left[3].OtherHasBeenDeleted,Is.True);
 			Assert.That(left[4].OtherHasBeenDeleted,Is.True);
 		}
+
+		[Test]
+		public void ShouldReturnRemainsToHalfHour()
+		{
+			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(20),Is.EqualTo(10));
+			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(29),Is.EqualTo(1));
+			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(1),Is.EqualTo(29));
+			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(40),Is.EqualTo(20));
+			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(0),Is.EqualTo(0));
+		}
 	}
 
 }
