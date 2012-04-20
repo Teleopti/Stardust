@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()
 		{
-			Assert.That(() => Browser.Current.Div("error-panel").Exists, Is.True.After(5000, 10));
+			EventualAssert.That(() => Browser.Current.Div("error-panel").Exists, Is.True);
 		}
 
 		[Then(@"I should see a symbol at the top of the schedule")]
