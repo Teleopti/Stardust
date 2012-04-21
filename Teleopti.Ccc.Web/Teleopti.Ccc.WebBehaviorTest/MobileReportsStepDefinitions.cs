@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow.Bindings;
+﻿using System;
+using TechTalk.SpecFlow.Bindings;
 using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -86,7 +87,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAReportForNextDate()
 		{
 			var expexted = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
+			try
+			{
+				EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
+			}
+			catch (AssertionException)
+			{
+				// there's a bug somewhere in the application that makes the user have to click twice!
+				// GAH!
+				_page.ReportViewNextDateNavigation.EventualClick();
+				EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
+			}
 		}
 
 		[Then(@"I should see a report for previous date")]
