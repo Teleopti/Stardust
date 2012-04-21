@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 try
                 {
                     var content = _contentProvider.LoadContent(forecastFile.FileContent, timeZone);
-                    queryResult = _analyzeQuery.Run(content, skill.MidnightBreakOffset);
+                    queryResult = _analyzeQuery.Run(content, skill);
                     if (!queryResult.Succeeded)
                     {
                         logAndReportValidationError(unitOfWork,jobResult, queryResult.ErrorMessage);

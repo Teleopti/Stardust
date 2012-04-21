@@ -32,14 +32,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _schedulePartEarly;
         private IScheduleDay _schedulePartLate;
         private IShiftCategory _early;
+    	private IEmptyDaysInBlockOutsideSelectedHandler _emptyDaysInBlockOutsideSelectedHandler;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             //_target = new SchedulePeriodBlockFinder(_matrix);
-            _interface = new SchedulePeriodBlockFinder(_matrix);
+        	_emptyDaysInBlockOutsideSelectedHandler = new EmptyDaysInBlockOutsideSelectedHandlerForTest();
+			_interface = new SchedulePeriodBlockFinder(_matrix, _emptyDaysInBlockOutsideSelectedHandler);
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
@@ -302,4 +304,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_matrix.Person).Return(person).Repeat.Any();
         }
     }
+
+	internal class EmptyDaysInBlockOutsideSelectedHandlerForTest :IEmptyDaysInBlockOutsideSelectedHandler
+	{
+		public IList<DateOnly> CheckDates(IList<DateOnly> blockDates, IScheduleMatrixPro matrixPro)
+		{
+			return blockDates;
+		}
+	}
 }

@@ -127,10 +127,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 					var nameDate = new ScheduleReportGraphicalDrawNameDate(page, top, _persons[part.Person], _rightToLeft, _culture);
 					nameDate.DrawData((int)_nameDateWidth);
 
-					var drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, (int)_nameDateWidth + NameDateWithPadding, NoteWidth, (int)top, part, _rightToLeft);
+					var drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, (int)_nameDateWidth + NameDateWithPadding, NoteWidth, (int)top, part, _rightToLeft, _model.ShowPublicNote, _culture);
 					var drawTimeline = new ScheduleReportGraphicalDrawTimeline(_culture, _rightToLeft, 0, page, 0, 0);
-				    top =
-				        drawSchedule.Draw(drawTimeline.TimelinePeriod(_period.DayCollection(), _stateHolder, _persons.Keys.ToList(), dateOnly));
+				    top = drawSchedule.Draw(drawTimeline.TimelinePeriod(_period.DayCollection(), _stateHolder, _persons.Keys.ToList(), dateOnly));
 				}
 			}
 
@@ -164,7 +163,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 					var nameDate = new ScheduleReportGraphicalDrawNameDate(page, top, dateOnly.Date.ToString("d", _culture), _rightToLeft, _culture);
 					nameDate.DrawData((int)_nameDateWidth);
 
-					var drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, (int)_nameDateWidth + NameDateWithPadding, NoteWidth, (int)top, part, _rightToLeft);
+					var drawSchedule = new ScheduleReportGraphicalDrawSchedule(page, (int)_nameDateWidth + NameDateWithPadding, NoteWidth, (int)top, part, _rightToLeft, _model.ShowPublicNote, _culture);
 					var drawTimeline = new ScheduleReportGraphicalDrawTimeline(_culture, _rightToLeft, 0, page, 0, 0);
 				    top = drawSchedule.Draw(drawTimeline.TimelinePeriod(_period.DayCollection(), _stateHolder, _persons.Keys.ToList(), dateOnly));
 

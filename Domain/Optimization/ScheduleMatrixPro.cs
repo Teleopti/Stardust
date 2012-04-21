@@ -195,7 +195,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _activeScheduleRange; }
         }
 
-        #endregion
+		public DateOnlyPeriod SelectedPeriod { get; set; }
+
+    	#endregion
 
         #region Local
 
@@ -213,7 +215,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var outerDays = periodCreator.OuterWeekPeriod().DayCollection();
             var fullWeekPeriod = periodCreator.FullWeekPeriod();
-            var selectedPeriod = periodCreator.EffectivePeriod();
+            var effectivePeriod = periodCreator.EffectivePeriod();
             foreach (DateOnly dateOnly in outerDays)
             {
                 IScheduleDayPro scheduleDayPro = new ScheduleDayPro(dateOnly, this);
@@ -222,7 +224,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (fullWeekPeriod.Contains(dateOnly))
                     _fullWeeksPeriodDays.Add(dateOnly, scheduleDayPro);
 
-                if (selectedPeriod.Contains(dateOnly))
+                if (effectivePeriod.Contains(dateOnly))
                     _effectivePeriodDays.Add(dateOnly, scheduleDayPro);
 
                 int count = outerDays.Count;

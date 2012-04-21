@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
             {
                 Expect.Call(() => _view.SetSkillName(_skill.Name));
                 Expect.Call(() => _view.SetWorkloadName(workload.Name));
+                Expect.Call(() => _view.SetVisibility(_skill.SkillType));
             }
             using (_mocks.Playback())
             {
@@ -131,6 +132,5 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
                 _target.StartImport(fileName);
             }
         }
-
     }
 }

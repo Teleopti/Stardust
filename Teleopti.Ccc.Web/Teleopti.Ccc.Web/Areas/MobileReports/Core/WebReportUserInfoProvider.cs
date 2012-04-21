@@ -1,12 +1,12 @@
+using System.Globalization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Areas.MobileReports.Models;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 {
-	using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
+	using Models.Domain;
 
 	public class WebReportUserInfoProvider : IWebReportUserInfoProvider
 	{
@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			return new WebReportUserInformation
 			       	{
 			       		BusinessUnitCode = teleoptiIdentity.BusinessUnit.Id.Value,
-			       		LanguageId = regional.Culture.LCID,
+						LanguageId = CultureInfo.CreateSpecificCulture(regional.UICulture.TwoLetterISOLanguageName).LCID,
+						//LanguageId = regional.UICulture.LCID,
 			       		// Unable to find PersonId in Principal!?
 			       		PersonCode = person.Id.Value,
 			       		TimeZoneCode = regional.TimeZone.Id

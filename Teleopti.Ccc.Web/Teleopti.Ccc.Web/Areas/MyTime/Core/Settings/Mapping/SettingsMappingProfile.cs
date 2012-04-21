@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 
 		private static CultureInfo[] allCulturesSortedByNamePlusBrowserDefault()
 		{
-			return CultureInfo.GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.DisplayName).ToArray();
+			return CultureInfo.GetCultures(CultureTypes.SpecificCultures).OrderBy(culture => culture.DisplayName).ToArray();
 		}
 	}
 }

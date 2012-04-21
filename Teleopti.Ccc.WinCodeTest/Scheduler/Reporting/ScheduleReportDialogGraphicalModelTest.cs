@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			Assert.IsTrue(_model.Individual);
 			Assert.IsTrue(_model.OneFileForSelected);
 			Assert.IsTrue(_model.SortOnStartTime);
+            Assert.IsFalse(_model.ShowPublicNote);
 		}
 
 		[Test]
@@ -51,6 +52,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			_model.OneFileForSelected = false;
 			Assert.IsFalse(_model.OneFileForSelected);
 		}
+
+        [Test]
+        public void ShouldSetShowPublicNoteProperty()
+        {
+            _model.ShowPublicNote = true;
+            Assert.IsTrue(_model.ShowPublicNote);
+
+            _model.ShowPublicNote = false;
+            Assert.IsFalse(_model.ShowPublicNote);
+        }
 
 		[Test]
 		public void ShouldSetSortOnAgentNameProperty()

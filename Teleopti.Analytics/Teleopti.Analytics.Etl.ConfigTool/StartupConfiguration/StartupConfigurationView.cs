@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
@@ -59,6 +60,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.StartupConfiguration
 
 		private void StartupConfigurationView_Load(object sender, EventArgs e)
 		{
+			Font = SystemFonts.DefaultFont;
 			_presenter.Initialize();
 		}
 

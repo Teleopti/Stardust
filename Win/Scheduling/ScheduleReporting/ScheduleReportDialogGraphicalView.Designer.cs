@@ -26,7 +26,7 @@
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1302:DoNotHardcodeLocaleSpecificStrings", MessageId = "Start menu"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxType"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTeam"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSortOrder"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSingleFile"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxOk"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIndividual"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCancel"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAgentName"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShowPublicNote"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1302:DoNotHardcodeLocaleSpecificStrings", MessageId = "Start menu"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxType"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTeam"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSortOrder"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSingleFile"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxOk"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIndividual"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCancel"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAgentName"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void InitializeComponent()
 		{
             this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
@@ -41,6 +41,7 @@
             this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBoxPublicNote = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -50,6 +51,7 @@
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
@@ -58,6 +60,8 @@
             this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
+            this.ribbonControlAdv1.SelectedTab = null;
+            this.ribbonControlAdv1.ShowMinimizeButton = false;
             this.ribbonControlAdv1.Size = new System.Drawing.Size(382, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
             this.ribbonControlAdv1.TabIndex = 0;
@@ -67,12 +71,13 @@
             // 
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.groupBox1, 3);
+            this.groupBox1.Controls.Add(this.checkBoxPublicNote);
             this.groupBox1.Controls.Add(this.checkBoxSingleFile);
             this.groupBox1.Controls.Add(this.radioButtonIndividual);
             this.groupBox1.Controls.Add(this.radioButtonTeam);
-            this.groupBox1.Location = new System.Drawing.Point(3, 12);
+            this.groupBox1.Location = new System.Drawing.Point(3, 14);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(366, 91);
+            this.groupBox1.Size = new System.Drawing.Size(366, 106);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "xxType";
@@ -82,7 +87,7 @@
             this.checkBoxSingleFile.AutoSize = true;
             this.checkBoxSingleFile.Checked = true;
             this.checkBoxSingleFile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxSingleFile.Location = new System.Drawing.Point(37, 65);
+            this.checkBoxSingleFile.Location = new System.Drawing.Point(37, 83);
             this.checkBoxSingleFile.Name = "checkBoxSingleFile";
             this.checkBoxSingleFile.Size = new System.Drawing.Size(81, 17);
             this.checkBoxSingleFile.TabIndex = 2;
@@ -94,7 +99,7 @@
             // 
             this.radioButtonIndividual.AutoSize = true;
             this.radioButtonIndividual.Checked = true;
-            this.radioButtonIndividual.Location = new System.Drawing.Point(6, 42);
+            this.radioButtonIndividual.Location = new System.Drawing.Point(6, 60);
             this.radioButtonIndividual.Name = "radioButtonIndividual";
             this.radioButtonIndividual.Size = new System.Drawing.Size(80, 17);
             this.radioButtonIndividual.TabIndex = 1;
@@ -121,7 +126,7 @@
             this.groupBox2.Controls.Add(this.radioButtonEndTime);
             this.groupBox2.Controls.Add(this.radioButtonStartTime);
             this.groupBox2.Controls.Add(this.radioButtonAgentName);
-            this.groupBox2.Location = new System.Drawing.Point(3, 127);
+            this.groupBox2.Location = new System.Drawing.Point(3, 154);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(366, 94);
             this.groupBox2.TabIndex = 4;
@@ -167,7 +172,7 @@
             // 
             this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonAdvCancel.Location = new System.Drawing.Point(284, 235);
+            this.buttonAdvCancel.Location = new System.Drawing.Point(284, 271);
             this.buttonAdvCancel.Name = "buttonAdvCancel";
             this.buttonAdvCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
             this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
@@ -179,7 +184,7 @@
             // buttonAdvOk
             // 
             this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvOk.Location = new System.Drawing.Point(194, 235);
+            this.buttonAdvOk.Location = new System.Drawing.Point(194, 271);
             this.buttonAdvOk.Name = "buttonAdvOk";
             this.buttonAdvOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
             this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
@@ -205,8 +210,21 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(372, 270);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(372, 306);
             this.tableLayoutPanel1.TabIndex = 7;
+            // 
+            // checkBoxPublicNote
+            // 
+            this.checkBoxPublicNote.AutoSize = true;
+            this.checkBoxPublicNote.Checked = true;
+            this.checkBoxPublicNote.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPublicNote.Location = new System.Drawing.Point(37, 42);
+            this.checkBoxPublicNote.Name = "checkBoxPublicNote";
+            this.checkBoxPublicNote.Size = new System.Drawing.Size(115, 17);
+            this.checkBoxPublicNote.TabIndex = 3;
+            this.checkBoxPublicNote.Text = "xxShowPublicNote";
+            this.checkBoxPublicNote.UseVisualStyleBackColor = true;
+            this.checkBoxPublicNote.CheckedChanged += new System.EventHandler(this.CheckBoxPublicNoteCheckedChanged);
             // 
             // ScheduleReportDialogGraphicalView
             // 
@@ -214,7 +232,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonAdvCancel;
-            this.ClientSize = new System.Drawing.Size(384, 310);
+            this.ClientSize = new System.Drawing.Size(384, 346);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.ribbonControlAdv1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -250,5 +268,6 @@
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.CheckBox checkBoxPublicNote;
 	}
 }

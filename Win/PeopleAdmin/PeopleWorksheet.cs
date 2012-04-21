@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         {
             toolStripButtonSystemOptions.Enabled =
                 TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+        	toolStripTabItem2.Visible = toolStripButtonSystemOptions.Enabled;
         }
 
         private void dateNavigatePeriods_SelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)

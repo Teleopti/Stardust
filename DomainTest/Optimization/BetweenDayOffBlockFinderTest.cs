@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _target = new BetweenDayOffBlockFinder(_matrix);
-            _interface = new BetweenDayOffBlockFinder(_matrix);
+			_target = new BetweenDayOffBlockFinder(_matrix, new EmptyDaysInBlockOutsideSelectedHandlerForTest());
+			_interface = new BetweenDayOffBlockFinder(_matrix, new EmptyDaysInBlockOutsideSelectedHandlerForTest());
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
@@ -533,4 +533,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro10.DaySchedulePart()).Return(_schedulePartDo).Repeat.Any();
         }
     }
+
 }

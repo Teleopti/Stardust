@@ -124,5 +124,10 @@ namespace Teleopti.Interfaces.Domain
         ///// </summary>
         //IList<DateOnly> UserLockedDates { get; }
 
+    	/// <summary>
+    	/// 
+    	/// </summary>
+    	DateOnlyPeriod SelectedPeriod { get; set; }
+    	
     }
 }
