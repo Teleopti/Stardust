@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var fluentCfg = new FluentConfiguration();
 			configureSchedule(fluentCfg);
 			fluentCfg.SetRevisionEntity<Revision>(rev => rev.Id, rev => rev.ModifiedAt, new RevisionListener(new UnsafePersonProvider()));
-			nhibConfiguration.SetProperty(ConfigurationKey.StoreDataAtDelete, "true")
-								.SetProperty(ConfigurationKey.DoNotAuditOptimisticLockingField, "false")
-								.SetProperty(ConfigurationKey.DefaultSchema, AuditingSchema)
+			nhibConfiguration.SetEnversProperty(ConfigurationKey.StoreDataAtDelete, true)
+								.SetEnversProperty(ConfigurationKey.DoNotAuditOptimisticLockingField, false)
+								.SetEnversProperty(ConfigurationKey.DefaultSchema, AuditingSchema)
 								.IntegrateWithEnvers(eventListener, fluentCfg);
 		}
 
