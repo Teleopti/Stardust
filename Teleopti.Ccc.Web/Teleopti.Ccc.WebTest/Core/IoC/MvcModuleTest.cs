@@ -387,12 +387,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			result.Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
-		{
-			var result = requestContainer.Resolve<IRuleSetProjectionService>();
-			result.GetType().Should().Be.AssignableTo<RuleSetProjectionServiceForMultiSessionCaching>();
-		}
+		//[Test]
+		//public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
+		//{
+		//    var result = requestContainer.Resolve<IRuleSetProjectionService>();
+		//    result.GetType().Should().Be.AssignableTo<RuleSetProjectionServiceForMultiSessionCaching>();
+		//}
 
 	}
 }
