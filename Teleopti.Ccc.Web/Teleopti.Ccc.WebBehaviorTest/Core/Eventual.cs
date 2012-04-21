@@ -62,6 +62,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 										exception = ex;
 										return false;
 									}
+									catch (ArgumentNullException ex)
+									{
+										// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+										// if so, lets just try again
+										// maybe this behavior should be placed elsewhere and not only apply to asserts..
+										exception = ex;
+										return false;
+									}
 									catch (AssertionException ex)
 									{
 										exception = ex;
