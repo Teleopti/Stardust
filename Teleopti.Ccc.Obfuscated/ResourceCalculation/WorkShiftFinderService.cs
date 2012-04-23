@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -23,12 +25,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
         private readonly ISchedulingOptions _schedulingOptions;
+    	private readonly IShiftLengthDecider _shiftLengthDecider;
 
-        public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
+    	public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-            ISchedulingOptions schedulingOptions)
+            ISchedulingOptions schedulingOptions, IShiftLengthDecider shiftLengthDecider)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -39,6 +42,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _fairnessAndMaxSeatCalculatorsManager = fairnessAndMaxSeatCalculatorsManager;
             _schedulingOptions = schedulingOptions;
+        	_shiftLengthDecider = shiftLengthDecider;
         }
 
         private IScheduleDictionary ScheduleDictionary
@@ -165,7 +169,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             FinderResult.AddFilterResults(new WorkShiftFilterResult(message, countWorkShiftsBefore, countWorkShiftsAfter));
         }
 
-        private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
             IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix)
         {
             using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
@@ -184,6 +189,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                                                                                          effectiveRestriction,
                                                                                                          _schedulingOptions.NotAllowedShiftCategories,
                                                                                                           FinderResult);
+				
+
                 if (_shiftList.Count == 0)
                     return null;
 
@@ -206,6 +213,18 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     if (_shiftList.Count == 0)
                         return null;
                 }
+
+				var temp = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
+				if (temp)
+				{
+					if (_schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
+					{
+						_shiftList = _shiftLengthDecider.FilterList(_shiftList, _workShiftMinMaxCalculator, matrix);
+						if (_shiftList.Count == 0)
+							return null;
+					}
+				}
             }
 
             IWorkShiftCalculationResultHolder result;

@@ -195,7 +195,8 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
             return false;
         }
 
-        private IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix)
         {
             
                 if (_possibleMinMaxWorkShiftLengthState == null)

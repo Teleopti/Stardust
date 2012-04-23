@@ -59,6 +59,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupShiftCategoryFairnessCreator>().As<IGroupShiftCategoryFairnessCreator>().InstancePerLifetimeScope();
             builder.RegisterType<ShiftCategoryFairnessCalculator>().As<IShiftCategoryFairnessCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
+        	builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
+        		InstancePerLifetimeScope();
+        	builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
             builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>().InstancePerLifetimeScope();

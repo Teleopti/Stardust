@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		}
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowInformationMessage(System.String,System.String)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowInformationMessage(System.Windows.Forms.IWin32Window,System.String,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowInformationMessage(System.String,System.String)")]
         private void removeWorkload(IWorkload workload)
 		{
 			string questionString = string.Format(CultureInfo.CurrentCulture, Resources.QuestionDeleteTheWorkloadTwoParameters, "\"", workload.Name);
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     string templateMessage = string.Concat(UserTexts.Resources.SomeoneElseHaveChanged, " {0}{1}{0} ", UserTexts.Resources.YourChangesWillBeDiscardedReloading);
                     string message = string.Format(CultureInfo.CurrentCulture, templateMessage, "\"", workload.Name);
                     
-                    ViewBase.ShowInformationMessage(message, UserTexts.Resources.SaveError);
+                    ViewBase.ShowInformationMessage(this, message, UserTexts.Resources.SaveError);
                     EntityEventAggregator.TriggerEntitiesNeedRefresh(ParentForm, new List<IAggregateRoot> {workload});
                 }
 			}

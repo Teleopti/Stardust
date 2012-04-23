@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -78,5 +79,13 @@ namespace Teleopti.Interfaces.Domain
         /// Empties the cashed values for all days
         ///</summary>
         void ResetCache();
+
+		/// <summary>
+		/// Possibles the min max work shift lengths.
+		/// </summary>
+		/// <param name="matrix">The matrix.</param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix);
     }
 }
