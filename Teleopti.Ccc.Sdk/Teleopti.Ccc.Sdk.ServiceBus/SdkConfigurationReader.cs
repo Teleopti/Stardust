@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);
                 var messageBroker = StateHolder.Instance.StateReader.ApplicationScopeData.Messaging;
-                if (messageBroker != null)
+                if (messageBroker != null && !(messageBroker is SignalBroker))
                 {
                     messageBroker.StopMessageBroker();
                 }

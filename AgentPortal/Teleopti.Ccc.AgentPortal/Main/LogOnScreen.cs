@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.AgentPortal.Main
 {

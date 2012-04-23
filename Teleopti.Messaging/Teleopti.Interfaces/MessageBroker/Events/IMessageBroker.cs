@@ -12,23 +12,25 @@ namespace Teleopti.Interfaces.MessageBroker.Events
     /// </summary>
     public interface IMessageBroker : IDisposable
     {
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        void SendEventMessage(DateTime eventStartDate,
+    	/// <summary>
+    	/// Sends the event message.
+    	/// </summary>
+    	/// <param name="eventStartDate">The event start date.</param>
+    	/// <param name="eventEndDate">The event end date.</param>
+    	/// <param name="moduleId">The module id.</param>
+    	/// <param name="referenceObjectId">The reference object id.</param>
+    	/// <param name="referenceObjectType">Type of the reference object.</param>
+    	/// <param name="domainObjectId">The domain object id.</param>
+    	/// <param name="domainObjectType">Type of the domain object.</param>
+    	/// <param name="updateType">Type of the update.</param>
+    	/// <param name="domainObject">The domain object.</param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		/// <remarks>
+    	/// Created by: ankarlp
+    	/// Created date: 16/04/2009
+    	/// </remarks>
+    	void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate,
                               DateTime eventEndDate,
                               Guid moduleId,
                               Guid referenceObjectId,
@@ -48,13 +50,17 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="domainObjectType">Type of the domain object.</param>
         /// <param name="updateType">Type of the update.</param>
         /// <param name="domainObject">The domain object.</param>
-        void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject);
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject);
 
         /// <summary>
         /// Sends the event messages.
         /// </summary>
         /// <param name="eventMessages">The event messages.</param>
-        void SendEventMessages(IEventMessage[] eventMessages);
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages);
 
         /// <summary>
         /// Registers the event subscription.
@@ -62,11 +68,13 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// passing in a delegate where no filters are applicable.
         /// </summary>
         /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
+		/// <param name="domainObjectType">Type of the domain object.</param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
         /// <remarks>
         /// Created by: ankarlp
         /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType);
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType);
 
         /// <summary>
         /// Designated method for Raptor Developers to Register Event Subscriptions
@@ -74,8 +82,10 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// </summary>
         /// <param name="eventMessageHandler"></param>
         /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType);
+		/// <param name="domainObjectType"></param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType);
 
         /// <summary>
         /// Registers the event subscription.
@@ -83,12 +93,14 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="eventMessageHandler">The event message handler.</param>
         /// <param name="referenceObjectId">The reference object id.</param>
         /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
+		/// <param name="domainObjectType">Type of the domain object.</param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
         /// <remarks>
         /// Created by: ankarlp
         /// Created date: 16/04/2009
         /// </remarks>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType);
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType);
 
         /// <summary>
         /// Method for Raptor Developers to Register Event Subscriptions for the Scheduler,
@@ -97,8 +109,10 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="eventMessageHandler"></param>
         /// <param name="domainObjectType"></param>
         /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate);
+		/// <param name="endDate"></param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Method for Raptor Developers to Register Event Subscriptions,
@@ -108,8 +122,10 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// <param name="domainObjectId"></param>
         /// <param name="domainObjectType"></param>
         /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
+		/// <param name="endDate"></param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="dataSource"></param>
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Unregister a delegate and all filters associated will be unregistered as well.

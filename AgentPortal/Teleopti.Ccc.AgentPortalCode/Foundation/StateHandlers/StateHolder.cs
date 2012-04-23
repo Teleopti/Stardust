@@ -141,7 +141,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-        		_messageBroker = new SignalBroker(new Dictionary<Type, IList<Type>>()) {ConnectionString = _connectionString};
+				var broker = new SignalBroker(new Dictionary<Type, IList<Type>>()) {ConnectionString = _connectionString};
+        		_messageBroker = broker;
         	}
 			else
         	{
