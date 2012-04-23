@@ -213,6 +213,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPage.cs" />
     <Compile Include="Helper\LoggerNames.cs" />
     <Compile Include="Helper\LogPointOutput.cs" />
+    <Compile Include="Helper\MessageBrokerExtensions.cs" />
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />

@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(_activityRepository.LoadAll()).Return(activities);
             Expect.Call(_stateGroupActvityAlarmRepository.LoadAllCompleteGraph()).Return(stateGroupActivityAlarms);
 #pragma warning restore 618
-            _messageBroker.RegisterEventSubscription(null, typeof(IActivity));
+            _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, typeof(IActivity));
             LastCall.IgnoreArguments().Repeat.Times(3);
         }
 

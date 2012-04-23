@@ -98,9 +98,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 					{
 						workflowControlSetId = new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.Id);
 					}
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, workflowControlSetId, typeof(IWorkflowControlSet));
+
+                	var businessUnitId = new Guid(StateHolder.Instance.State.SessionScopeData.BusinessUnit.Id);
+                	var datasource = StateHolder.Instance.State.SessionScopeData.DataSource.Name;
+					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
+					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
+					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, workflowControlSetId, typeof(IWorkflowControlSet));
                 }
                 catch (RemotingException e)
                 {
