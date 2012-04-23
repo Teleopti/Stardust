@@ -25,11 +25,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private IShiftTradeSwapDetail _shiftTradeSwapDetail;
         private IPerson _tradePerson;
         private IPersonRequestCheckAuthorization _authorization;
-        private const string ShiftTradeRequestHasBeenDeniedDot = "ShiftTradeRequestHasBeenDeniedDot";
-        private const string ShiftTradeRequestHasBeenApprovedDot = "ShiftTradeRequestHasBeenApprovedDot";
-        private const string ShiftTradeRequestHasBeenAcceptedDot = "ShiftTradeRequestHasBeenAcceptedDot";
-        private const string ShiftTradeRequestHasBeenReferredDot= "ShiftTradeRequestHasBeenReferredDot";
-        private const string ANewShiftTradeHasBeenCreatedDot = "ANewShiftTradeHasBeenCreatedDot";
+       
 
         [SetUp]
         public void Setup()
@@ -107,7 +103,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.IsNotNull(_target);
             
             Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
-            Assert.AreEqual(ShiftTradeRequestHasBeenDeniedDot, _target.TextForNotification);
+            var datepattern = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
+                                                   _target.Period.StartDateTimeLocal(
+                                                       _requestedPerson.PermissionInformation.DefaultTimeZone()).
+                                                       ToString(datepattern));
+            Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
         [Test]
@@ -137,7 +138,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             personRequest.Pending();
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            Assert.AreEqual(ShiftTradeRequestHasBeenApprovedDot, _target.TextForNotification);
+            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
+                                                   personRequest.RequestedDate.ToShortDateString());
+
+            Assert.AreEqual(notificationString, _target.TextForNotification);
             Assert.IsTrue(MessageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
 
             mocks.VerifyAll();
@@ -158,7 +162,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             personRequest.Pending();
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(1, brokenRules.Count);
-            Assert.AreEqual(ANewShiftTradeHasBeenCreatedDot, _target.TextForNotification);
+
+            var notificationString = string.Format(UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
+                                                   personRequest.RequestedDate.ToShortDateString());
+            Assert.AreEqual(notificationString, _target.TextForNotification);
 
             mocks.VerifyAll();
         }
@@ -187,7 +194,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
          
             Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
 
-            Assert.AreEqual(ShiftTradeRequestHasBeenAcceptedDot, _target.TextForNotification);
+            var datepattern = _tradePerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
+                                                   UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot,
+                                                   _target.Period.StartDateTimeLocal(
+                                                       _tradePerson.PermissionInformation.DefaultTimeZone()).ToString(
+                                                           datepattern));
+
+            Assert.AreEqual(notificationString, _target.TextForNotification);
+            //Assert.AreEqual(ShiftTradeRequestHasBeenAcceptedDot, _target.TextForNotification);
             mocks.VerifyAll();
         }
 
@@ -211,7 +226,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-            Assert.AreEqual(ShiftTradeRequestHasBeenReferredDot, _target.TextForNotification);
+            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
+                                                   UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot,
+                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()),
+                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()));
+            Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
         [Test]
