@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				if (MessageBrokerIsRunning())
 				{
-					_messageBroker.SendEventMessage(date, date, Guid.Empty, person.Id.GetValueOrDefault(), typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable, null);
+					_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.Name,scenario.BusinessUnit.Id.GetValueOrDefault(), date, date, Guid.Empty, person.Id.GetValueOrDefault(), typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable, null);
 				}
 				else
 				{

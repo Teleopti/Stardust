@@ -38,7 +38,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             {
                 if (MessageBrokerIsRunning())
                 {
-                    _messageBroker.SendEventMessage(DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty, typeof(IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
+                	_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.Name,
+                	                                ((IBelongsToBusinessUnit) _payrollResult).BusinessUnit.Id.
+                	                                	GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
+                	                                Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,
+                	                                binaryData);
                 }
                 else
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyInitialize()
         {
+        	var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
             var site = _mocks.StrictMock<ISite>();
             var sites = new List<ISite> { site};
             var scorecards = new List<IScorecard> {_mocks.StrictMock<IScorecard>()};
@@ -58,18 +60,21 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(
                     () =>
                     _messageBroker.RegisterEventSubscription(
+						identity.DataSource.DataSourceName,identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onScorecardEvent),
                         typeof (IScorecard)));
                 Expect.Call(
                     () =>
                     _messageBroker.RegisterEventSubscription(
+					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onTeamEvent),
                         typeof (ITeam)));
                 Expect.Call(
                     () =>
                     _messageBroker.RegisterEventSubscription(
+					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onSiteEvent),
                         typeof (ISite)));

@@ -848,8 +848,11 @@ namespace Teleopti.Ccc.AgentPortal.Main
             {
                 try
                 {
-                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, typeof(IPushMessageDialogue));
-                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler, typeof(IPersonRequest));
+                	var details = StateHolder.Instance.State.SessionScopeData;
+                	StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
+                	                                                             new Guid(details.BusinessUnit.Id), OnEventMessageHandler, typeof(IPushMessageDialogue));
+					StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
+																				 new Guid(details.BusinessUnit.Id), OnEventMessageHandler, typeof(IPersonRequest));
                 }
                 catch (RemotingException e)
                 {

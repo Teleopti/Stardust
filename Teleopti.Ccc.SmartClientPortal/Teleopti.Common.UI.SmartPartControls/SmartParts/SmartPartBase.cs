@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Common.UI.SmartPartControls.SmartParts
