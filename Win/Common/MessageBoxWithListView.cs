@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Win.Common
 {
 	public partial class MessageBoxWithListView : BaseRibbonForm
-	{
+    {
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
         public MessageBoxWithListView(string text, string caption, IEnumerable<IUnsavedDayInfo> detailList)
 		{
 			InitializeComponent();
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Win.Common
 
 		private void Copy()
 		{
-			Clipboard.Clear();
+		    _externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
 			var str = new StringBuilder();
             foreach (ColumnHeader header in listViewDetails.Columns)
             {
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.Win.Common
 			
 			var dataObject = new DataObject();
 			dataObject.SetData(DataFormats.Text, true, str);
-			Clipboard.SetDataObject(dataObject, true);
+		    _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetDataObject(dataObject, true));
 		}
 
 		private void listViewDetails_MouseUp(object sender, MouseEventArgs e)

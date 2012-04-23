@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private ControlType _controlType;
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
-
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
@@ -1728,7 +1728,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						clone.Add(personDayOff);
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
-						Clipboard.SetData("PersistableScheduleData", new int());
+					    _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
 						pasteDayOff();
 					}
 				}
@@ -2605,7 +2605,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					part.AddMainShift(mainShift);
 					_clipHandlerSchedule.Clear();
 					_clipHandlerSchedule.AddClip(0, 0, part);
-					Clipboard.SetData("PersistableScheduleData", new int());
+			        _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
 					paste();
 					break;
 				case ControlType.SchedulerGridSkillData:
