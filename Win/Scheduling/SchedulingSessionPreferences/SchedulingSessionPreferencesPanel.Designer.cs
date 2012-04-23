@@ -30,6 +30,7 @@
         private void InitializeComponent()
         {
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.checkBoxShowTroubleShot = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanelRestrictions = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxUseShiftCategoryRestrictions = new System.Windows.Forms.CheckBox();
@@ -79,13 +80,12 @@
 			this.tabPageAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelScheduleOrSchedules2 = new System.Windows.Forms.Label();
+			this.numericUpDownRefreshRate = new System.Windows.Forms.NumericUpDown();
+			this.label1 = new System.Windows.Forms.Label();
 			this.labelScheduleOrSchedules1 = new System.Windows.Forms.Label();
 			this.numericUpDownResourceCalculateEvery = new System.Windows.Forms.NumericUpDown();
 			this.labelResourceCalculateEveryColon = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.numericUpDownRefreshRate = new System.Windows.Forms.NumericUpDown();
-			this.label2 = new System.Windows.Forms.Label();
-			this.checkBoxShowTroubleShot = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tableLayoutPanelRestrictions.SuspendLayout();
@@ -110,8 +110,8 @@
 			this.tabPageAdvanced.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -135,6 +135,20 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 626);
 			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// checkBoxShowTroubleShot
+			// 
+			this.checkBoxShowTroubleShot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBoxShowTroubleShot.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxShowTroubleShot, 2);
+			this.checkBoxShowTroubleShot.Location = new System.Drawing.Point(4, 601);
+			this.checkBoxShowTroubleShot.Margin = new System.Windows.Forms.Padding(4);
+			this.checkBoxShowTroubleShot.Name = "checkBoxShowTroubleShot";
+			this.checkBoxShowTroubleShot.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
+			this.checkBoxShowTroubleShot.Size = new System.Drawing.Size(267, 21);
+			this.checkBoxShowTroubleShot.TabIndex = 23;
+			this.checkBoxShowTroubleShot.Text = "xxIncludeTroubleshootingInformation";
+			this.checkBoxShowTroubleShot.UseVisualStyleBackColor = true;
 			// 
 			// groupBox1
 			// 
@@ -814,7 +828,7 @@
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Controls.Add(this.label2, 3, 1);
+			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules2, 3, 1);
 			this.tableLayoutPanel8.Controls.Add(this.numericUpDownRefreshRate, 2, 1);
 			this.tableLayoutPanel8.Controls.Add(this.label1, 1, 1);
 			this.tableLayoutPanel8.Controls.Add(this.labelScheduleOrSchedules1, 3, 0);
@@ -829,6 +843,53 @@
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel8.Size = new System.Drawing.Size(549, 72);
 			this.tableLayoutPanel8.TabIndex = 21;
+			// 
+			// labelScheduleOrSchedules2
+			// 
+			this.labelScheduleOrSchedules2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelScheduleOrSchedules2.Location = new System.Drawing.Point(363, 35);
+			this.labelScheduleOrSchedules2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.labelScheduleOrSchedules2.Name = "labelScheduleOrSchedules2";
+			this.labelScheduleOrSchedules2.Size = new System.Drawing.Size(182, 37);
+			this.labelScheduleOrSchedules2.TabIndex = 22;
+			this.labelScheduleOrSchedules2.Text = "xxScheduleOrSchedules";
+			this.labelScheduleOrSchedules2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericUpDownRefreshRate
+			// 
+			this.numericUpDownRefreshRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.numericUpDownRefreshRate.Location = new System.Drawing.Point(286, 46);
+			this.numericUpDownRefreshRate.Margin = new System.Windows.Forms.Padding(4);
+			this.numericUpDownRefreshRate.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+			this.numericUpDownRefreshRate.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDownRefreshRate.Name = "numericUpDownRefreshRate";
+			this.numericUpDownRefreshRate.Size = new System.Drawing.Size(67, 22);
+			this.numericUpDownRefreshRate.TabIndex = 21;
+			this.numericUpDownRefreshRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownRefreshRate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// label1
+			// 
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Location = new System.Drawing.Point(16, 35);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(262, 37);
+			this.label1.TabIndex = 20;
+			this.label1.Text = "xxRefreshScreenEveryColon";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelScheduleOrSchedules1
 			// 
@@ -877,67 +938,6 @@
 			this.labelResourceCalculateEveryColon.Text = "xxResourceCalculateEveryColon";
 			this.labelResourceCalculateEveryColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label1
-			// 
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(16, 35);
-			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(262, 37);
-			this.label1.TabIndex = 20;
-			this.label1.Text = "xxRefreshScreenEveryColon";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// numericUpDownRefreshRate
-			// 
-			this.numericUpDownRefreshRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.numericUpDownRefreshRate.Location = new System.Drawing.Point(286, 46);
-			this.numericUpDownRefreshRate.Margin = new System.Windows.Forms.Padding(4);
-			this.numericUpDownRefreshRate.Maximum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-			this.numericUpDownRefreshRate.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numericUpDownRefreshRate.Name = "numericUpDownRefreshRate";
-			this.numericUpDownRefreshRate.Size = new System.Drawing.Size(67, 22);
-			this.numericUpDownRefreshRate.TabIndex = 21;
-			this.numericUpDownRefreshRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDownRefreshRate.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// label2
-			// 
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(363, 35);
-			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(182, 37);
-			this.label2.TabIndex = 22;
-			this.label2.Text = "xxScheduleOrSchedules";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkBoxShowTroubleShot
-			// 
-			this.checkBoxShowTroubleShot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBoxShowTroubleShot.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxShowTroubleShot, 2);
-			this.checkBoxShowTroubleShot.Location = new System.Drawing.Point(4, 601);
-			this.checkBoxShowTroubleShot.Margin = new System.Windows.Forms.Padding(4);
-			this.checkBoxShowTroubleShot.Name = "checkBoxShowTroubleShot";
-			this.checkBoxShowTroubleShot.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-			this.checkBoxShowTroubleShot.Size = new System.Drawing.Size(267, 21);
-			this.checkBoxShowTroubleShot.TabIndex = 23;
-			this.checkBoxShowTroubleShot.Text = "xxIncludeTroubleshootingInformation";
-			this.checkBoxShowTroubleShot.UseVisualStyleBackColor = true;
-			// 
 			// SchedulingSessionPreferencesPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -980,8 +980,8 @@
 			this.tabPageAdvanced.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel8.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -1041,7 +1041,7 @@
 		private System.Windows.Forms.Label labelScheduleOrSchedules1;
 		private System.Windows.Forms.NumericUpDown numericUpDownResourceCalculateEvery;
 		private System.Windows.Forms.Label labelResourceCalculateEveryColon;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelScheduleOrSchedules2;
 		private System.Windows.Forms.NumericUpDown numericUpDownRefreshRate;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox checkBoxShowTroubleShot;

@@ -4421,14 +4421,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
                 IList<IGroupPage> groupPages = _cachedGroupPages;
+				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
+							ScheduleEmploymentType.FixedStaff;
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules,
                                                                             _schedulerState.CommonStateHolder.ShiftCategories,
 																			 false, false, groupPages, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted))
                 {
                     if (options.ShowDialog(this) == DialogResult.OK)
                     {
-                        _optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
-                            ScheduleEmploymentType.FixedStaff;
                         options.Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
@@ -4465,6 +4465,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
                 IList<IGroupPage> groupPages = _cachedGroupPages;
+				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
+							ScheduleEmploymentType.HourlyStaff;
 
                 using (var options =
 					new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, _optimizerOriginalPreferences.DayOffPlannerRules, _schedulerState.CommonStateHolder.ShiftCategories,
@@ -4474,9 +4476,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         //_currentSchedulingOptions = options.CurrentOptions;
                         _optimizerOriginalPreferences.SchedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-                        _optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType =
-                            ScheduleEmploymentType.HourlyStaff;
-
                         Refresh();
 
 						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);

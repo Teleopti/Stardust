@@ -52,6 +52,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 groupBox3.Text = Resources.Team;
             }
 
+			labelResourceCalculateEveryColon.Visible = true;
+			numericUpDownResourceCalculateEvery.Visible = true;
+			labelScheduleOrSchedules1.Visible = true;
+
+			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+			{
+				labelResourceCalculateEveryColon.Visible = false;
+				numericUpDownResourceCalculateEvery.Visible = false;
+				labelScheduleOrSchedules1.Visible = false;
+			}
+
             _schedulingOptions = schedulingOptions;
             _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
             _scheduleTags = scheduleTags;
