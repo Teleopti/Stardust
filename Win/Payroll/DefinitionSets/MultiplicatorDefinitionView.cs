@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         private IList<IMultiplicatorDefinitionAdapter> _multiplicatorDefinitionTypeCollection;
         private Point _gridPoint;
         private IList<IMultiplicatorDefinitionViewModel> _inMemoryViewModelCollection = new List<IMultiplicatorDefinitionViewModel>();
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 
         public MultiplicatorDefinitionView(IExplorerView explorerView)
             : base(explorerView)
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                 return;
 
             // Build a string for for all viewModels in range and insert into clipboard.
-            Clipboard.SetText(ExplorerView.ExplorerPresenter.MultiplicatorDefinitionPresenter.BuildCopyString(_inMemoryViewModelCollection));
+            _externalExceptionHandler.AttemptToUseExternalResource(()=>
+            Clipboard.SetText(ExplorerView.ExplorerPresenter.MultiplicatorDefinitionPresenter.BuildCopyString(_inMemoryViewModelCollection)));
 
             // Delete selected rows.
             deleteSelectedItems();
