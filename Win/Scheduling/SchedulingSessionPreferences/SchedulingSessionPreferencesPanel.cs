@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 			bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, 
             bool optimize, IList<IScheduleTag> scheduleTags)
         {
