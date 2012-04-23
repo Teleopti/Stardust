@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.TestCommon;
@@ -366,10 +365,10 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
 			
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null, _periodNow.StartDateTime,
+			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _periodNow.StartDateTime,
 																	_periodNow.EndDateTime)).IgnoreArguments().Repeat.Times(2);
-            Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, typeof(IExternalAgentState), _periodNow.StartDateTime,
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, Guid.Empty, typeof(IExternalAgentState), _periodNow.StartDateTime,
                                                                     _periodNow.EndDateTime)).IgnoreArguments().Repeat.Times(1);
 			Expect.Call(eventMessage.ModuleId).Return(Guid.Empty);
             Expect.Call(eventMessage.DomainObject).Return(data);
@@ -423,9 +422,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             createRtaStateHolderExpectation();
             
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-            
-            Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null, _period.StartDateTime,
+
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
 																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow));
@@ -458,8 +457,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
 
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null, _period.StartDateTime,
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
 																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 			
 			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
@@ -556,8 +555,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
 
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, typeof(IStatisticTask))).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, null, _period.StartDateTime,
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, typeof(IStatisticTask))).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
 																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();

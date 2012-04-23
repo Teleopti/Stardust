@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;

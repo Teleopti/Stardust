@@ -113,7 +113,7 @@ namespace Teleopti.Messaging.Client
         /// </remarks>
         protected override void PostInitialize()
         {
-            RegisterEventSubscription(OnHeartbeat, typeof(IEventHeartbeat));
+            RegisterEventSubscription(string.Empty, Guid.Empty, OnHeartbeat, typeof(IEventHeartbeat));
             InternalLog("Client registered to listen to heartbeat events.");
         }
 
@@ -447,152 +447,61 @@ namespace Teleopti.Messaging.Client
                 SendReceipt(e.Message);
         }
 
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        public void SendEventMessage(DateTime eventStartDate,
-                                    DateTime eventEndDate,
-                                    Guid moduleId,
-                                    Guid referenceObjectId,
-                                    Type referenceObjectType,
-                                    Guid domainObjectId,
-                                    Type domainObjectType,
-                                    DomainUpdateType updateType,
-                                    byte[] domainObject)
-        {
-            Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
-        }
+		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate,
+									DateTime eventEndDate,
+									Guid moduleId,
+									Guid referenceObjectId,
+									Type referenceObjectType,
+									Guid domainObjectId,
+									Type domainObjectType,
+									DomainUpdateType updateType,
+									byte[] domainObject)
+		{
+			Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType,
+			                            domainObjectId, domainObjectType, updateType, domainObject);
+		}
 
-        /// <summary>
-        /// Sends the event message.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <param name="domainObject">The domain object.</param>
-        public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+    	public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
         {
             Dispatcher.SendEventMessage(eventStartDate, eventEndDate, moduleId, domainObjectId, domainObjectType, domainObjectId, domainObjectType, updateType, domainObject);
         }
 
-        /// <summary>
-        /// Sends the event messages.
-        /// </summary>
-        /// <param name="eventMessages">The event messages.</param>
-        public void SendEventMessages(IEventMessage[] eventMessages)
+		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
         {
             if(Dispatcher != null)
                 Dispatcher.SendEventMessages(eventMessages);
         }
 
-        /// <summary>
-        /// Registers the event subscription.
-        /// Designated method for Raptor Developers to Register Event Subscriptions
-        /// passing in a delegate where no filters are applicable.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// </remarks>
-        public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
         {
             MessageRegistrationManager.RegisterEventSubscription(eventMessageHandler, domainObjectType, domainObjectType);
         }
 
-        /// <summary>
-        /// Designated method for Raptor Developers to Register Event Subscriptions
-        /// passing in a delegate along with filter criterias in form of a GUID.
-        /// </summary>
-        /// <param name="eventMessageHandler"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
         {
             MessageRegistrationManager.RegisterEventSubscription(eventMessageHandler, domainObjectId, domainObjectType, domainObjectId, domainObjectType);
         }
 
-        /// <summary>
-        /// Registers the event subscription.
-        /// </summary>
-        /// <param name="eventMessageHandler">The event message handler.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 25/05/2009
-        /// </remarks>
-        public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
         {
             MessageRegistrationManager.RegisterEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, Guid.Empty, domainObjectType);
         }
 
-        /// <summary>
-        /// Method for Raptor Developers to Register Event Subscriptions for the Scheduler,
-        /// a delegate and filter criterias including dates is taken as arguments but no Guid.
-        /// </summary>
-        /// <param name="eventMessageHandler"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
         {
             MessageRegistrationManager.RegisterEventSubscription(eventMessageHandler, domainObjectType, domainObjectType, startDate, endDate);
         }
 
-        /// <summary>
-        /// Method for Raptor Developers to Register Event Subscriptions,
-        /// a delegate and filter criterias including dates is taken as arguments.
-        /// </summary>
-        /// <param name="eventMessageHandler"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
         {
             MessageRegistrationManager.RegisterEventSubscription(eventMessageHandler, domainObjectId, domainObjectType, domainObjectId, domainObjectType, startDate, endDate);
         }
 
-        /// <summary>
-        /// Unregister a delegate and all filters associated will be unregistered as well.
-        /// </summary>
-        /// <param name="eventMessageHandler"></param>
         public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
         {
             MessageRegistrationManager.UnregisterEventSubscription(eventMessageHandler);
         }
 
-
-        /// <summary>
-        /// Creates event message, ignoring dates and payload.
-        /// </summary>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <returns></returns>
         public IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
         {
             IDomainObjectFactory processor = new DomainObjectFactory();
@@ -600,16 +509,6 @@ namespace Teleopti.Messaging.Client
             return message;
         }
 
-        /// <summary>
-        /// Creates event message, ignoring dates and payload.
-        /// </summary>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <returns></returns>
         public IEventMessage CreateEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
         {
             IDomainObjectFactory processor = new DomainObjectFactory();
@@ -617,16 +516,6 @@ namespace Teleopti.Messaging.Client
             return message;
         }
 
-        /// <summary>
-        /// Create Event Message, consider event range dates but not payload.
-        /// </summary>
-        /// <param name="eventStartDate"></param>
-        /// <param name="eventEndDate"></param>
-        /// <param name="moduleId"></param>
-        /// <param name="domainObjectId"></param>
-        /// <param name="domainObjectType"></param>
-        /// <param name="updateType"></param>
-        /// <returns></returns>
         public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
         {
             IDomainObjectFactory processor = new DomainObjectFactory();
@@ -634,18 +523,6 @@ namespace Teleopti.Messaging.Client
             return message;
         }
 
-        /// <summary>
-        /// Create Event Message, consider event range dates but not payload.
-        /// </summary>
-        /// <param name="eventStartDate">The event start date.</param>
-        /// <param name="eventEndDate">The event end date.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="referenceObjectId">The reference object id.</param>
-        /// <param name="referenceObjectType">Type of the reference object.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainObjectType">Type of the domain object.</param>
-        /// <param name="updateType">Type of the update.</param>
-        /// <returns></returns>
         public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
         {
             IDomainObjectFactory processor = new DomainObjectFactory();

@@ -775,7 +775,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             {
                 try
                 {
-                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(OnEventMessageHandler,
+                	var details = StateHolder.Instance.State.SessionScopeData;
+                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,new Guid(details.BusinessUnit.Id), OnEventMessageHandler,
                                                          typeof(IPersonRequest));
                 }
                 catch (RemotingException)
