@@ -94,7 +94,8 @@ namespace Teleopti.Messaging.Composites
             }
         }
 
-    	private void sendRemotingMessagesOnOtherTherad(object state)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Logging.BaseLogger.WriteLine(System.Diagnostics.EventLogEntryType,System.Type,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "occured")]
+		private void sendRemotingMessagesOnOtherTherad(object state)
     	{
     		IEventMessage[] eventMessages = (IEventMessage[]) state;
     		try
