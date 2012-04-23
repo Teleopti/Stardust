@@ -1,5 +1,6 @@
 using Autofac;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -18,7 +19,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule(new UnitOfWorkModule());
 		}
 
-
 		[Test]
 		public void AllRepositoriesWithCorrectCtorAreWired()
 		{
@@ -29,6 +29,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 				Assert.IsAssignableFrom<PersonRepository>(personRep);
 				Assert.IsAssignableFrom<SkillRepository>(skillRep);
+			}
+		}
+
+		[Test]
+		public void ShouldResolveTheStatisticRepository()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IStatisticRepository>().Should().Not.Be.Null();
 			}
 		}
 
