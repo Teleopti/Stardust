@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Win.Intraday
             builder.RegisterType<OnEventScheduleMessageCommand>().InstancePerLifetimeScope();
             builder.RegisterType<OnEventForecastDataMessageCommand>().InstancePerLifetimeScope();
             builder.RegisterType<OnEventStatisticMessageCommand>().InstancePerLifetimeScope();
+            builder.RegisterType<LoadStatisticsAndActualHeadsCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadScheduleByPersonSpecification>().InstancePerLifetimeScope();
         }
 
