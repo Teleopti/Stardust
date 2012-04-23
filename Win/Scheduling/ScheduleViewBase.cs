@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IHandleBusinessRuleResponse _handleBusinessRuleResponse = new HandleBusinessRuleResponse();
         private bool _isDesposing;
 		private bool _isOverviewColumnsHidden;
-
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
         private delegate void RefreshRangeForAgentPeriodHandler(IEntity person, DateTimePeriod period);
 
         public event EventHandler RefreshSelectionInfo;
@@ -784,7 +784,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             Presenter.ClipHandlerSchedule.IsInCutMode = cut;
             GridHelper.GridCopySelection(_grid, Presenter.ClipHandlerSchedule, true);
-            Clipboard.SetData("PersistableScheduleData", new int());
+            _externalExceptionHandler.AttemptToUseExternalResource(()=>
+            Clipboard.SetData("PersistableScheduleData", new int()));
         }
 
         //paste in views, only accepts paste from views

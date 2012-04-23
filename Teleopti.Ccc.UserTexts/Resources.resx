@@ -10622,4 +10622,12 @@ These options are activated:
     <value>A shift trade request {0} must be accepted again due to a schedule change from.</value>
     <comment>A shift trade request for one day must be accepted again.</comment>
   </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>External resource in use</value>
+    <comment>External resource in use</comment>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>External resource is using by another program, please try again later.</value>
+    <comment>External resource is using by another program, please try again later.</comment>
+  </data>
 </root>
