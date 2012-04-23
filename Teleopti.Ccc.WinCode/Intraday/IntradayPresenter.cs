@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -47,7 +46,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventStatisticMessageCommand _onEventStatisticMessageCommand;
         private readonly OnEventForecastDataMessageCommand _onEventForecastDataMessageCommand;
         private readonly OnEventScheduleMessageCommand _onEventScheduleMessageCommand;
-        private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
+    	private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
+    	private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 
         public IntradayPresenter(IIntradayView view, 
             ISchedulingResultLoader schedulingResultLoader, 
@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             IRepositoryFactory repositoryFactory,
             OnEventStatisticMessageCommand onEventStatisticMessageCommand, 
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand, 
-            OnEventScheduleMessageCommand onEventScheduleMessageCommand)
+            OnEventScheduleMessageCommand onEventScheduleMessageCommand,
+			LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -68,7 +69,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _onEventStatisticMessageCommand = onEventStatisticMessageCommand;
             _onEventForecastDataMessageCommand = onEventForecastDataMessageCommand;
             _onEventScheduleMessageCommand = onEventScheduleMessageCommand;
-            _repositoryFactory = repositoryFactory;
+        	_loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
+        	_repositoryFactory = repositoryFactory;
             _messageBroker = messageBroker;
             _rtaStateHolder = rtaStateHolder;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -361,43 +363,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         }
 
         /// <summary>
-        /// Loads the statistics for the IntradayScreen
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="skill">The skill.</param>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <param name="statisticRepository">The statistic repository.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-23
-        /// </remarks>
-        public static void LoadStatistics(DateTimePeriod period, ISkill skill, IList<ISkillStaffPeriod> skillStaffPeriods, IStatisticRepository statisticRepository)
-        {
-            if (!skill.WorkloadCollection.Any()) return;
-            var statisticTasks = new List<IStatisticTask>();
-
-            foreach (var workload in skill.WorkloadCollection)
-            {
-                var skillDay = skillStaffPeriods.First().Parent as ISkillDay;
-                var workloadDays = new WorkloadDayHelper().GetWorkloadDaysFromSkillDays(new []{skillDay}, workload);
-                var tasks = statisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period).ToList();
-                new Statistic(workload).Match(workloadDays, tasks);
-                foreach (var workloadDay in workloadDays)
-                    statisticTasks.AddRange(workloadDay.OpenTaskPeriodList.Select(t => t.StatisticTask));
-            }
-
-            var activeAgentCounts = (IList<IActiveAgentCount>)statisticRepository.LoadActiveAgentCount(skill, period);
-
-            var taskPeriods = Statistic.CreateTaskPeriodsFromPeriodized(skillStaffPeriods);
-            var provider = new QueueStatisticsProvider(statisticTasks, new QueueStatisticsCalculator(skill.WorkloadCollection.First().QueueAdjustments));
-            foreach (var taskPeriod in taskPeriods)
-            {
-                Statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
-            }
-            Statistic.Match(skillStaffPeriods, taskPeriods, activeAgentCounts);
-        }
-
-        /// <summary>
         /// Prepares the chart description.
         /// </summary>
         /// <param name="format">The format.</param>
@@ -438,12 +403,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _chartIntradayDescription = PrepareChartDescription("{0} - {1}", skill.Name,
                                                                 _intradayDate.ToShortDateString());
 
-            LoadStatistics(utcDayPeriod,
-                skill, skillStaffPeriods, _repositoryFactory.CreateStatisticRepository());
+            _loadStatisticsAndActualHeadsCommand.Execute(_intradayDate, skill, skillStaffPeriods);
 
             // fill in statistic data
-            SkillStaffPeriodStatisticsForSkillIntraday statistics =
-                new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods);
+            var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods);
             statistics.Analyze();
 
             return skillStaffPeriods;
@@ -641,4 +604,45 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
         }
     }
+
+	public class LoadStatisticsAndActualHeadsCommand
+	{
+		private readonly IStatisticRepository _statisticRepository;
+
+		public LoadStatisticsAndActualHeadsCommand(IStatisticRepository statisticRepository)
+		{
+			_statisticRepository = statisticRepository;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public virtual void Execute(DateOnly dateOnly, ISkill skill, IList<ISkillStaffPeriod> skillStaffPeriods)
+		{
+			if (!skill.WorkloadCollection.Any()) return;
+			var statisticTasks = new List<IStatisticTask>();
+			var period = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(skill.TimeZone);
+			period = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
+
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				var skillDay = skillStaffPeriods.First().Parent as ISkillDay;
+				var workloadDays = new WorkloadDayHelper().GetWorkloadDaysFromSkillDays(new[] { skillDay }, workload);
+				var tasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period).ToList();
+				new Statistic(workload).Match(workloadDays, tasks);
+				foreach (var workloadDay in workloadDays)
+				{
+					statisticTasks.AddRange(workloadDay.OpenTaskPeriodList.Select(t => t.StatisticTask));
+				}
+			}
+
+			var activeAgentCounts = (IList<IActiveAgentCount>)_statisticRepository.LoadActiveAgentCount(skill, period);
+
+			var taskPeriods = Statistic.CreateTaskPeriodsFromPeriodized(skillStaffPeriods);
+			var provider = new QueueStatisticsProvider(statisticTasks, new QueueStatisticsCalculator(skill.WorkloadCollection.First().QueueAdjustments));
+			foreach (var taskPeriod in taskPeriods)
+			{
+				Statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
+			}
+			Statistic.Match(skillStaffPeriods, taskPeriods, activeAgentCounts);
+		}
+	}
 }
