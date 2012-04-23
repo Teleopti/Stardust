@@ -18,7 +18,7 @@
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 		<UseDBManager>true</UseDBManager>
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
-<!--		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests> -->
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI30000'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18357'">true</RunWebBehaviorTests>
