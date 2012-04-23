@@ -398,7 +398,7 @@
 
 
 	<Target Name="GetVersion">
-		<exec command="hg update -r &quot;$(branch)&quot;" />
+		<exec command="hg update -C -r &quot;$(branch)&quot;" />
 		<Message Text="Set DeployPath: [$(DeployPath)] ..." Importance="high"/>
 		<ReadLinesFromFile File="@(VersionFile)" >
 			<Output TaskParameter="Lines"
@@ -612,7 +612,7 @@
 	</Target>
 
 	<Target Name="TagAndPush" DependsOnTargets="GetVersion">
-		<exec command="hg update -r default" />
+		<exec command="hg update -C -r default" />
 		<exec command="hg revert -a"/>
 		<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
 		<exec command="hg fetch $(ServerRepo)" /> 
