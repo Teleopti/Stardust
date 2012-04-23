@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
         private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
             new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
-
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
         private Point _gridPoint;
 
         public WorkflowControlSetView()
@@ -653,7 +653,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void SetClipboardText(string text)
         {
-            Clipboard.SetText(text);
+            _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetText(text));
         }
 
         public void EnableHandlingOfAbsenceRequestPeriods(bool enable)
