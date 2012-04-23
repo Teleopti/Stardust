@@ -72,14 +72,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.Given("I am an agent with published schedule");
+ testRunner.Given("I am an agent");
 #line 8
- testRunner.When("I view my week schedule");
+ testRunner.And("My schedule is published");
 #line 9
- testRunner.And("I sign out");
+ testRunner.When("I view my week schedule");
 #line 10
- testRunner.And("I press back in the web browser");
+ testRunner.And("I sign out");
 #line 11
+ testRunner.And("I press back in the web browser");
+#line 12
  testRunner.Then("I should be redirected to the sign in page");
 #line hidden
             this.ScenarioCleanup();

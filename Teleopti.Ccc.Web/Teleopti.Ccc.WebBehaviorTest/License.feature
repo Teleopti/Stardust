@@ -10,6 +10,7 @@ Scenario: Restrict usage based on license
 	And I should not see the sign in page
 
 Scenario: Show licensed to information in portal
-	Given I am an agent with published schedule
+	Given I am an agent
+	And My schedule is published
 	When I view my week schedule
 	Then I Should see licensed to information

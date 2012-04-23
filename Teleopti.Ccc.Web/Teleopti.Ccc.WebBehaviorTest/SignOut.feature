@@ -4,7 +4,8 @@
 	I want to sign out
 
 Scenario: Sign out from week schedule
-	Given I am an agent with published schedule
+	Given I am an agent
+	And My schedule is published
 	When I view my week schedule
 	And I sign out
 	And I press back in the web browser
