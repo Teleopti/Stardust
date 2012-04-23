@@ -17,10 +17,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     {
         private readonly IAbsence _absence;
         private string _typeDescription = string.Empty;
-        private const string AbsenceRequestHasBeenDeniedDot = "AbsenceRequestHasBeenDeniedDot";
-        private const string AbsenceRequestHasBeenApprovedDot = "AbsenceRequestHasBeenApprovedDot";
-
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRequest"/> class.
         /// For NHibernate to use.
@@ -57,7 +54,32 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public override void Deny(IPerson denyPerson)
         {
-            TextForNotification = AbsenceRequestHasBeenDeniedDot;
+            if (
+                Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().
+                    ToString(Person.PermissionInformation.Culture()) ==
+                Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString
+                    (Person.PermissionInformation.Culture()))
+            {
+                TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+                                                    UserTexts.Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
+                                                    Period.StartDateTimeLocal(
+                                                        Person.PermissionInformation.DefaultTimeZone()).
+                                                        ToShortDateString().ToString(
+                                                            Person.PermissionInformation.Culture()));
+            }
+            else
+            {
+                TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+                                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
+                                                    Period.StartDateTimeLocal(
+                                                        Person.PermissionInformation.DefaultTimeZone()).
+                                                        ToShortDateString().ToString(
+                                                            Person.PermissionInformation.Culture()),
+                                                    Period.EndDateTimeLocal(
+                                                        Person.PermissionInformation.DefaultTimeZone()).
+                                                        ToShortDateString().ToString(
+                                                            Person.PermissionInformation.Culture()));
+                }
         }
 
         public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
@@ -95,7 +117,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var result = approvalService.ApproveAbsence(_absence, Period, Person);
             if (result.IsEmpty())
             {
-                TextForNotification = AbsenceRequestHasBeenApprovedDot;
+
+                if (Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()) == Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()))
+                {
+                    TextForNotification = string.Format(Person.PermissionInformation.UICulture(), UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot, 
+                        Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()));
+                }
+                else
+                {
+                    TextForNotification = string.Format(Person.PermissionInformation.UICulture(), UserTexts.Resources.AbsenceRequestHasBeenApprovedDot, 
+                        Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()), 
+                        Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()));
+                }
             }
             return result;
         }
