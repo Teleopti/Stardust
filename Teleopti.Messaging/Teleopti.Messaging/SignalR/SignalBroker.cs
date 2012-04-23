@@ -25,6 +25,7 @@ namespace Teleopti.Messaging.SignalR
 		private const string HubClassName = "MessageBrokerHub";
 		private IHubProxy _proxy;
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
+		private HubConnection _connection;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -47,6 +48,7 @@ namespace Teleopti.Messaging.SignalR
 		public void Dispose()
 		{
 			_proxy = null;
+			_connection = null;
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
@@ -325,12 +327,12 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
-			var connection = new HubConnection(serverUrl.ToString());
-			_proxy = connection.CreateProxy(HubClassName);
+			_connection = new HubConnection(serverUrl.ToString());
+			_proxy = _connection.CreateProxy(HubClassName);
 			var subscription = _proxy.Subscribe(EventName);
 			subscription.Data += subscription_Data;
 
-			connection.Start();
+			_connection.Start();
 		}
 
 		private void subscription_Data(object[] obj)
@@ -357,14 +359,33 @@ namespace Teleopti.Messaging.SignalR
 			InvokeEventHandlers(message, d.Routes());
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)")]
 		public void StopMessageBroker()
 		{
-			var proxy = (HubProxy)_proxy;
-			var subscriptionList = new List<string>(proxy.GetSubscriptions());
-			if (subscriptionList.Contains(EventName))
+			if (_connection != null && _connection.IsActive)
 			{
-				var subscription = _proxy.Subscribe(EventName);
-				subscription.Data -= subscription_Data;
+				var reset = new ManualResetEvent(false);
+				var signal = _proxy.Invoke("NotifyClients", new Notification());
+				signal.Finished += (sender, e) =>
+				                   	{
+				                   		var proxy = (HubProxy) _proxy;
+				                   		var subscriptionList = new List<string>(proxy.GetSubscriptions());
+				                   		if (subscriptionList.Contains(EventName))
+				                   		{
+				                   			var subscription = _proxy.Subscribe(EventName);
+				                   			subscription.Data -= subscription_Data;
+				                   		}
+				                   		_connection.Stop();
+				                   		reset.Set();
+				                   	};
+				try
+				{
+					reset.WaitOne(20*1000);
+				}
+				catch (Exception ex)
+				{
+					InternalLog(ex);
+				}
 			}
 		}
 
