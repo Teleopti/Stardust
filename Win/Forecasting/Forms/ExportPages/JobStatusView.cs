@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;

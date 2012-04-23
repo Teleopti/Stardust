@@ -90,7 +90,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _selectorChanged(value, url) {
-		$("#selectors label").hide();
 		var data = { LCID: value };
 		$.myTimeAjax({
 			url: url,

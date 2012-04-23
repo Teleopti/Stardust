@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Shifts
         private VisualizeGridView _visualizeView;
         private IDictionary<ShiftCreatorViewType, ToolStripButton> _viewButtonDictionary;
         private readonly IEventAggregator _eventAggregator;
-
+        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 
         public WorkShiftsExplorer(IEventAggregator eventAggregator)
         {
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void clipboardControlCutClicked(object sender, EventArgs e)
         {
-            Clipboard.Clear();
+            _externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
             switch (Presenter.Model.SelectedView)
             {
                 case ShiftCreatorViewType.RuleSet:
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void clipboardControlCopyClicked(object sender, EventArgs e)
         {
-            Clipboard.Clear();
+            _externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
             switch (Presenter.Model.SelectedView)
             {
                 case ShiftCreatorViewType.RuleSet:

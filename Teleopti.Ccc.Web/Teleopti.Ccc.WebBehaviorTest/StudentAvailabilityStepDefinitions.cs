@@ -221,15 +221,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Assert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
-			Assert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
+			EventualAssert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
 		}
 
 		private void cellShouldContainInputValues(DateTime date)
 		{
-			var cell = _page.CalendarCellForDate(date);
-			Assert.That(() => cell.InnerHtml, Contains.Substring("05:00").After(5000, 10));
-			Assert.That(() => cell.InnerHtml, Contains.Substring("14:00").After(5000, 10));
+			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("05:00"));
+			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("14:00"));
 		}
 
 	}

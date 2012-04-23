@@ -94,6 +94,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Domain">
+      <HintPath>..\Version6\Domain.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -136,6 +139,7 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\EntityExtensions.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
@@ -209,6 +213,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPage.cs" />
     <Compile Include="Helper\LoggerNames.cs" />
     <Compile Include="Helper\LogPointOutput.cs" />
+    <Compile Include="Helper\MessageBrokerExtensions.cs" />
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
@@ -612,6 +617,8 @@
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecification.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceChecker.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractor.cs" />

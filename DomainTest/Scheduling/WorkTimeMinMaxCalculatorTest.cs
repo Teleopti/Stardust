@@ -5,9 +5,14 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
@@ -18,25 +23,66 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldReturnMinMaxWorkTimeFromRuleSetBag()
 		{
-			var workTimeMinMax = new WorkTimeMinMax
-						{
-							StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
-							EndTimeLimitation = new EndTimeLimitation(new TimeSpan(16, 0, 0), new TimeSpan(18, 0, 0)),
-							WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(10, 0, 0))
-						};
-
-			var projectionService = new RuleSetProjectionService(new ShiftCreatorService());
-			var target = new WorkTimeMinMaxCalculator(projectionService);
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
-			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																  new WorkTimeLimitation(), null, null, null,
-																  new List<IActivityRestriction>());
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var ruleSetProjectionService = MockRepository.GenerateMock<IRuleSetProjectionService>();
+			var workTimeMineMax = new WorkTimeMinMax();
 
-			ruleSetBag.Stub(x => x.MinMaxWorkTime(projectionService, DateOnly.Today, effectiveRestriction)).Return(workTimeMinMax);
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
+			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.GetEffectiveRestrictionForDisplay(scheduleDay, new EffectiveRestrictionOptions(true, true)))
+				.Return(effectiveRestriction);
+			ruleSetBag.Stub(x => x.MinMaxWorkTime(ruleSetProjectionService, DateOnly.Today, effectiveRestriction))
+				.Return(workTimeMineMax);
 
-			var result = target.WorkTimeMinMax(ruleSetBag, DateOnly.Today);
+			var target = new WorkTimeMinMaxCalculator(ruleSetProjectionService, effectiveRestrictionForDisplayCreator);
 
-			result.Should().Be.EqualTo(workTimeMinMax);
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.EqualTo(workTimeMineMax);
 		}
+
+		[Test]
+		public void ShouldReturnNullIfNoPersonPeriod()
+		{
+			var person = MockRepository.GenerateMock<IPerson>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new List<IPersonPeriod>());
+
+			var target = new WorkTimeMinMaxCalculator(null, null);
+
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoRuleSetBag()
+		{
+			var person = MockRepository.GenerateMock<IPerson>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDay.Stub(x => x.Person).Return(person);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
+			personPeriod.Stub(x => x.RuleSetBag).Return(null);
+
+			var target = new WorkTimeMinMaxCalculator(null, null);
+
+			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
+
+			result.Should().Be.Null();
+		}
+
 	}
 }

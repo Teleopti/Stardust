@@ -2,6 +2,15 @@
 Generates BCP statements for export and import of data. Enter corresponding Soure- and Destination credentials and ouput path for the .bat files to be generated.
 */
 
+/*
+:SETVAR DESTDB "Forecasts_TeleoptiCCC"
+:SETVAR WORKINGDIR "c:\temp\AzureRestore"
+:SETVAR SOURCEUSER "bcpUser"
+:SETVAR SOURCEPWD "abc123456"
+:SETVAR DESTSERVER "tcp:s8v4m110k9.database.windows.net"
+:SETVAR DESTUSER "forecast@s8v4m110k9"
+:SETVAR DESTPWD "teleopti2012"
+*/
 SET NOCOUNT ON
 
 -- Source server and database
@@ -108,7 +117,7 @@ ON fk2.referenced_object_id = ot.table_id;
 
 ----
 
-CREATE TABLE #BCPOut(id INT IDENTITY(1,1), ExportBCPStatements NVARCHAR(500))
+CREATE TABLE #BCPOut(id INT IDENTITY(1,1), ExportBCPStatements NVARCHAR(1000))
 INSERT INTO #BCPOut
 SELECT 'IF NOT EXIST "' + @Path +'\BCPData" MD "' + @Path +'\BCPData\"'
 INSERT INTO #BCPOut
@@ -133,8 +142,8 @@ SELECT ExportBCPStatements FROM #BCPOut ORDER BY id
 SELECT @bcpString = 'bcp "SELECT Statements FROM ' + @SourceDB + '.dbo.BCPStatments ORDER BY id" queryout ' + @Path + '\Out.bat  -c -C1252 -S' + @SourceServer + ' -U' + @SourceUser + ' -P' + @SourcePwd
 EXEC xp_cmdshell @bcpString
 DROP TABLE BCPStatments
- 
-CREATE TABLE #BCPIn(id INT IDENTITY(1,1), ImportBCPStatements NVARCHAR(500))
+
+CREATE TABLE #BCPIn(id INT IDENTITY(1,1), ImportBCPStatements NVARCHAR(1000))
 
 INSERT INTO #BCPIn
 SELECT '@ECHO off'

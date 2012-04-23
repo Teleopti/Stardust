@@ -72,12 +72,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="Core\TestMethods.cs" />
+    <Compile Include="Data\User\ExistingAvailability.cs" />
+    <Compile Include="Data\User\ExistingLunchPreferenceToday.cs" />
+    <Compile Include="Data\User\RuleSetBagWithTwoShiftsAndLunch.cs" />
     <Compile Include="Data\User\AdministratorRoleWithEveryoneData.cs" />
     <Compile Include="Data\User\AgentThatLeavesTomorrow.cs" />
+    <Compile Include="Data\User\ShiftCategoryPreferenceToday.cs" />
+    <Compile Include="Data\User\SecondShiftCategory.cs" />
+    <Compile Include="Data\User\FirstShiftCategory.cs" />
+    <Compile Include="Data\User\RuleSetBagWithTwoCategories.cs" />
+    <Compile Include="Data\User\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\User\ExistingPreference.cs" />
     <Compile Include="Data\User\ExistingPreferenceToday.cs" />
     <Compile Include="Data\User\RuleSetBag.cs" />
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Data\User\BaseShiftCategory.cs" />
     <Compile Include="Data\User\UserWithoutResReportServiceLevelAndAgentsReadyAccess.cs" />
     <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\User\AbsenceToday.cs" />

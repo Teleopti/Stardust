@@ -1,11 +1,22 @@
 ﻿
 .preference 
 {
+	font-weight: bold;
 	overflow: hidden;
+	height: 16px;
 }
 
 .calendarview-week li.modified div.day-content
 {
 	border-left-color: white;
 	border-right-color: white;
+}
+
+.calendarview-week li .loading-small-gray-blue
+{
+	position: absolute;
+	top: 20px;
+	right: 0;
+	height: 20px;
+	width: 20px;
 }

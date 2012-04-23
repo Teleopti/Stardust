@@ -1,16 +1,20 @@
 using System.Web.Mvc;
+using AutofacContrib.DynamicProxy2;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StandardPreferences)]
+	[Aspects]
 	public class PreferenceController : Controller
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
@@ -25,8 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ViewResult Index(DateOnly? date)
+		[UnitOfWork]
+		public virtual ViewResult Index(DateOnly? date)
 		{
 			if (!_virtualSchedulePeriodProvider.HasSchedulePeriod())
 				return View("NoSchedulePeriodPartial");
@@ -36,19 +40,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("PreferencePartial", _viewModelFactory.CreateViewModel(date.Value));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpPostOrPut]
-		public JsonResult Preference(PreferenceDayInput input)
+		public virtual JsonResult Preference(PreferenceDayInput input)
 		{
 			return Json(_preferencePersister.Persist(input));
 		}
 
-		[UnitOfWorkAction]
+		[UnitOfWork]
 		[HttpDelete]
 		[ActionName("Preference")]
-		public JsonResult PreferenceDelete(DateOnly date)
+		public virtual JsonResult PreferenceDelete(DateOnly date)
 		{
 			return Json(_preferencePersister.Delete(date));
 		}
+
 	}
 }

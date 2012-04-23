@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var currLayer = clonedUnmergedCollection[i];
 				var prevLayer = clonedUnmergedCollection[i - 1];
-				if (currLayer.Payload.Equals(prevLayer.Payload)
+				if (currLayer.Payload.OptimizedEquals(prevLayer.Payload)
 						&& currLayer.AdjacentTo(prevLayer)
 						&& currLayer.DefinitionSet == prevLayer.DefinitionSet)
 				{

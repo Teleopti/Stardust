@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -8,11 +9,13 @@ namespace Teleopti.Interfaces.Domain
 	public interface IWorkTimeMinMaxCalculator
 	{
 		/// <summary>
-		/// Calculate the min/max work times based on a rule set bag
+		/// Calculate the min/max work times for a day using an alread loaded schedule day
 		/// </summary>
-		/// <param name="ruleSetBag">The sule set bag</param>
-		/// <param name="date">The date</param>
+		/// <param name="date"></param>
+		/// <param name="person"></param>
+		/// <param name="scheduleDay"></param>
 		/// <returns></returns>
-		IWorkTimeMinMax WorkTimeMinMax(IRuleSetBag ruleSetBag, DateOnly date);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
+		IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay);
 	}
 }

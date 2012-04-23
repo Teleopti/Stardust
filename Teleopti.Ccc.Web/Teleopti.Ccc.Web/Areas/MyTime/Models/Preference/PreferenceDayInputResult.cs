@@ -7,3 +7,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string HexColor { get; set; }
 	}
 }
+

@@ -1,0 +1,54 @@
+using System.Linq;
+using Autofac;
+using Castle.DynamicProxy;
+using Teleopti.Ccc.Domain.Collection;
+
+namespace Teleopti.Ccc.Web.Core.Aop.Core
+{
+	public class AspectInterceptor : Castle.DynamicProxy.IInterceptor
+	{
+		private readonly IComponentContext _resolver;
+
+		public AspectInterceptor(IComponentContext resolver)
+		{
+			_resolver = resolver;
+		}
+
+		public void Intercept(IInvocation invocation)
+		{
+			var orderedAspects = from a in invocation.Method.GetCustomAttributes(false)
+			                     let orderedAspect = a as IOrderedAspect
+			                     where orderedAspect != null
+			                     orderby orderedAspect.Order
+			                     select orderedAspect;
+
+			var aspects = from a in orderedAspects
+			              let aspect = a as IAspect
+			              let resolvedAspect = a as IResolvedAspect
+			              let theResolvedAspect = resolvedAspect == null ? null : (IAspect) _resolver.Resolve(resolvedAspect.AspectType)
+			              let useAspect = aspect ?? theResolvedAspect
+			              select useAspect;
+
+			var array = aspects.ToArray();
+
+			if (array.Any())
+			{
+				array.ForEach(a => a.OnBeforeInvokation());
+
+				try
+				{
+					invocation.Proceed();
+				}
+				finally
+				{
+					array.Reverse().ForEach(a => a.OnAfterInvokation());
+				}
+			}
+			else
+			{
+				invocation.Proceed();
+			}
+		}
+
+	}
+}

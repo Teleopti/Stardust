@@ -256,9 +256,9 @@ namespace Teleopti.Messaging.Management.Model
                 _messageBroker = MessageBrokerImplementation.GetInstance(_controller.ConnectionString);
                 _messageBroker.StartMessageBroker();
                 EventHandler<EventMessageArgs> eventHandler = new EventHandler<EventMessageArgs>(OnEventMessage);
-                _messageBroker.RegisterEventSubscription(eventHandler, typeof(IChat));
-                _messageBroker.RegisterEventSubscription(eventHandler, typeof(IEventHeartbeat));
-                _messageBroker.RegisterEventSubscription(eventHandler, typeof(IExternalAgentState));
+                _messageBroker.RegisterEventSubscription(string.Empty,Guid.Empty, eventHandler, typeof(IChat));
+				_messageBroker.RegisterEventSubscription(string.Empty, Guid.Empty, eventHandler, typeof(IEventHeartbeat));
+				_messageBroker.RegisterEventSubscription(string.Empty, Guid.Empty, eventHandler, typeof(IExternalAgentState));
                 _messageBroker.ExceptionHandler += new EventHandler<UnhandledExceptionEventArgs>(OnException);
             }
         }

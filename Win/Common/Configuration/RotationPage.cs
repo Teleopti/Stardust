@@ -9,6 +9,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;

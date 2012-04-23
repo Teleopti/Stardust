@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public IShiftCategory ShiftCategory { get; set; }
 			public IDayOffTemplate DayOffTemplate { get; set; }
 			public IAbsence Absence { get; set; }
-			public IWorkTimeMinMax WorkTimeMinMax { get; set; }
 		}
 
 		protected override void Configure()
@@ -119,7 +118,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       	let shiftCategory = restriction == null ? null : restriction.ShiftCategory
 				                                       		       	let dayOffTemplate = restriction == null ? null : restriction.DayOffTemplate
 				                                       		       	let absence = restriction == null ? null : restriction.Absence
-				                                       		       	let workTimeMinMax = day == null ? null : day.WorkTimeMinMax
 				                                       		       	let projection = day == null ? null : day.Projection
 				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
 				                                       		       	let significantPart = scheduleDay == null ? SchedulePartView.None : scheduleDay.SignificantPartForDisplay()
@@ -139,7 +137,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                       		       				DayOffTemplate = dayOffTemplate,
 				                                       		       				Absence = absence,
 				                                       		       				WorkflowControlSet = s.WorkflowControlSet,
-				                                       		       				WorkTimeMinMax = workTimeMinMax
 				                                       		       			}
 				                                       		       ).ToArray();
 				                                       	}))
@@ -197,6 +194,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence ? s : null))
+				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
+				                                           	{
+				                                           		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
+																return !isScheduled && s.Period.Contains(s.Date);
+				                                           	}))
 				;
 			
 			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
@@ -215,36 +217,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<DayMappingData, PreferenceDayViewModel>()
 				.ForMember(d => d.Preference, o => o.MapFrom(s =>
-																				{
-																					if (s.DayOffTemplate != null)
-																						return s.DayOffTemplate.Description.Name;
-																					if (s.Absence != null)
-																						return s.Absence.Description.Name;
-																					if (s.ShiftCategory != null)
-																						return s.ShiftCategory.Description.Name;
-																					return null;
-																				}))
-				.ForMember(d => d.PossibleStartTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-				                                                          	? ""
-				                                                          	: s.WorkTimeMinMax.StartTimeLimitation.
-				                                                          	  	StartTimeString +
-				                                                          	  "-" +
-				                                                          	  s.WorkTimeMinMax.StartTimeLimitation.
-				                                                          	  	EndTimeString))
-				.ForMember(d => d.PossibleEndTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-																			? ""
-																			: s.WorkTimeMinMax.EndTimeLimitation.
-																				StartTimeString +
-																			  "-" +
-																			  s.WorkTimeMinMax.EndTimeLimitation.
-																				EndTimeString))
-				.ForMember(d => d.PossibleContractTimes, o => o.MapFrom(s => s.WorkTimeMinMax == null
-																			? ""
-																			: s.WorkTimeMinMax.WorkTimeLimitation.
-																				StartTimeString +
-																			  "-" +
-																			  s.WorkTimeMinMax.WorkTimeLimitation.
-																				EndTimeString))
+				                                             	{
+				                                             		if (s.DayOffTemplate != null)
+				                                             			return s.DayOffTemplate.Description.Name;
+				                                             		if (s.Absence != null)
+				                                             			return s.Absence.Description.Name;
+				                                             		if (s.ShiftCategory != null)
+				                                             			return s.ShiftCategory.Description.Name;
+				                                             		return null;
+				                                             	}))
 				;
 
 			CreateMap<DayMappingData, HeaderViewModel>()

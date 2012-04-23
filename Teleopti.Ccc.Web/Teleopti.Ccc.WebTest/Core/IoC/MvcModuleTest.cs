@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
@@ -328,8 +329,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePreferenceFeedbackProvider()
 		{
-			var result = requestContainer.Resolve<IPreferenceFeedbackProvider>();
-			result.Should().Not.Be.Null();
+			var result1 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result1.Should().Not.Be.Null();
+			var result2 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result2.Should().Be.SameInstanceAs(result1);
 		}
 
 		[Test]
@@ -369,5 +372,28 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 			ok.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldResolveEffectiveRestrictionForDisplayCreator()
+		{
+			var result = requestContainer.Resolve<IEffectiveRestrictionForDisplayCreator>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveWorkTimeMinMaxCalculator()
+		{
+			var result = requestContainer.Resolve<IWorkTimeMinMaxCalculator>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
+		{
+			var result = requestContainer.Resolve<IRuleSetProjectionService>();
+			result.Should().Not.Be.Null();
+			//result.GetType().Should().Be.AssignableTo<RuleSetProjectionServiceForMultiSessionCaching>();
+		}
+
 	}
 }

@@ -388,6 +388,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     result = (result * 398) ^ ShiftCategory.GetHashCode();
                 if(DayOffTemplate != null)
                     result = (result * 398) ^ DayOffTemplate.GetHashCode();
+				if(Absence != null)
+					result = (result * 398) ^ Absence.GetHashCode();
                 foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
                 {
                     result = (result * 398) ^ activityRestriction.GetHashCode();

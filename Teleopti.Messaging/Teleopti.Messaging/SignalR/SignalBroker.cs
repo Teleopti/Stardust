@@ -25,6 +25,7 @@ namespace Teleopti.Messaging.SignalR
 		private const string HubClassName = "MessageBrokerHub";
 		private IHubProxy _proxy;
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
+		private HubConnection _connection;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -43,22 +44,19 @@ namespace Teleopti.Messaging.SignalR
 
 		public IMessageFilterManager FilterManager { get; set; }
 
-		public Guid BusinessUnitId { get; set; }
-
-		public string DataSource { get; set; }
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
 			_proxy = null;
+			_connection = null;
 		}
 
-		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
+		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
-			SendEventMessage(eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
+			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, null);
 		}
 
-		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
 			IList<Type> types;
 			if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
@@ -79,8 +77,8 @@ namespace Teleopti.Messaging.SignalR
 								: FilterManager.LookupType(referenceObjectType),
 						ModuleId = Subscription.IdToString(moduleId),
 						DomainUpdateType = (int)updateType,
-						DataSource = DataSource,
-						BusinessUnitId = Subscription.IdToString(BusinessUnitId),
+						DataSource = dataSource,
+						BusinessUnitId = Subscription.IdToString(businessUnitId),
 						BinaryData =
 							(domainObject != null) ? Encoding.UTF8.GetString(domainObject) : null
 					});
@@ -93,50 +91,50 @@ namespace Teleopti.Messaging.SignalR
 			_proxy.Invoke("NotifyClients", (Notification)state);
 		}
 
-		public void SendEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			SendEventMessage(eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
+			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendEventMessages(IEventMessage[] eventMessages)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
 			foreach (var eventMessage in eventMessages)
 			{
-				SendEventMessage(eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
+				SendEventMessage(dataSource,businessUnitId, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
 								 eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache, eventMessage.DomainObjectId,
 								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject);
 			}
 		}
 
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType,Consts.MinDate,Consts.MaxDate);
+			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType)
 		{
-			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, Consts.MinDate,
+			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, Consts.MinDate,
 			                          Consts.MaxDate);
 		}
 
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
-			registerEventSubscription(eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
+			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
+			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
 		}
 
-		public void RegisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
+			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		private void registerEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		private void registerEventSubscription(string datasource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
 			if (!domainObjectType.IsInterface)
@@ -151,8 +149,8 @@ namespace Teleopti.Messaging.SignalR
 					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
 				UpperBoundary = Subscription.DateToString(endDate),
-				DataSource = DataSource,
-				BusinessUnitId = Subscription.IdToString(BusinessUnitId),
+				DataSource = datasource,
+				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
 			EventSignal<object> result = _proxy.Invoke("AddSubscription", subscription);
@@ -329,12 +327,12 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
-			var connection = new HubConnection(serverUrl.ToString());
-			_proxy = connection.CreateProxy(HubClassName);
+			_connection = new HubConnection(serverUrl.ToString());
+			_proxy = _connection.CreateProxy(HubClassName);
 			var subscription = _proxy.Subscribe(EventName);
 			subscription.Data += subscription_Data;
 
-			connection.Start();
+			_connection.Start();
 		}
 
 		private void subscription_Data(object[] obj)
@@ -361,14 +359,33 @@ namespace Teleopti.Messaging.SignalR
 			InvokeEventHandlers(message, d.Routes());
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)")]
 		public void StopMessageBroker()
 		{
-			var proxy = (HubProxy)_proxy;
-			var subscriptionList = new List<string>(proxy.GetSubscriptions());
-			if (subscriptionList.Contains(EventName))
+			if (_connection != null && _connection.IsActive)
 			{
-				var subscription = _proxy.Subscribe(EventName);
-				subscription.Data -= subscription_Data;
+				var reset = new ManualResetEvent(false);
+				var signal = _proxy.Invoke("NotifyClients", new Notification());
+				signal.Finished += (sender, e) =>
+				                   	{
+				                   		var proxy = (HubProxy) _proxy;
+				                   		var subscriptionList = new List<string>(proxy.GetSubscriptions());
+				                   		if (subscriptionList.Contains(EventName))
+				                   		{
+				                   			var subscription = _proxy.Subscribe(EventName);
+				                   			subscription.Data -= subscription_Data;
+				                   		}
+				                   		_connection.Stop();
+				                   		reset.Set();
+				                   	};
+				try
+				{
+					reset.WaitOne(20*1000);
+				}
+				catch (Exception ex)
+				{
+					InternalLog(ex);
+				}
 			}
 		}
 

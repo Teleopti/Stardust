@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 												let providedScheduleDay = (from sd in scheduleDays where sd.DateOnlyAsPeriod.DateOnly == d select sd).SingleOrDefault()
 												let scheduleDay = providedScheduleDay != null && providedScheduleDay.IsScheduled() ? providedScheduleDay : null
 												let projection = scheduleDay != null ? _projectionProvider.Invoke().Projection(scheduleDay) : null
-												let workTimeMinMax = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(d)
+												//let workTimeMinMax = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(d, providedScheduleDay)
 				              		            select new PreferenceDayDomainData
 				              		                   	{
 				              		                   		Date = d,
 				              		                   		PreferenceDay = preferenceDay,
-															WorkTimeMinMax = workTimeMinMax,
+															//WorkTimeMinMax = workTimeMinMax,
 															ScheduleDay = scheduleDay,
 															Projection = projection
 				              		                   	}).ToArray();

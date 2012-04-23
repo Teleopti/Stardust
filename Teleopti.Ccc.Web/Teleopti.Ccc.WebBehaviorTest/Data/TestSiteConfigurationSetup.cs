@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				Url = new Uri(IniFileInfo.Url);
 			}
-			BackupExistingNHibFiles();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 
 			var setupTime = DateTime.Now.Subtract(startTime);
@@ -48,9 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (IniFileInfo.CassiniDev)
 				_server.ShutDown();
-
-			RemoveTestDataNHibFile();
-			RevertBackedUpNHibFiles();
 		}
 
 		public static void RestartApplication()
@@ -62,12 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.SetLastWriteTimeUtc(TargetTestDataNHibFile, DateTime.UtcNow);
 		}
 
-		private static void RemoveTestDataNHibFile()
-		{
-			File.SetAttributes(TargetTestDataNHibFile, FileAttributes.Archive);
-			File.Delete(TargetTestDataNHibFile);
-		}
-
 		private static void GenerateAndWriteTestDataNHibFileFromTemplate()
 		{
 			var contents = File.ReadAllText("Data\\TestData.nhib.xml");
@@ -77,31 +67,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.WriteAllText(TargetTestDataNHibFile, contents);
 		}
 
-		private static void BackupExistingNHibFiles()
-		{
-			var existingNHibFiles = Directory.GetFiles(AgentPortalWebNhibConfPath, "*.nhib.xml");
-			existingNHibFiles.ToList().ForEach(f =>
-			                                   	{
-			                                   		var newFile = f + ".bak";
-			                                   		File.SetAttributes(f, FileAttributes.Archive);
-			                                   		if (File.Exists(newFile))
-			                                   		{
-			                                   			File.Delete(newFile);
-			                                   			//File.SetAttributes(newFile, FileAttributes.Archive);
-			                                   		}
-			                                   		File.Move(f, newFile);
-			                                   	});
-		}
-
-		private static void RevertBackedUpNHibFiles()
-		{
-			var backedUpNHibFiles = Directory.GetFiles(AgentPortalWebNhibConfPath, "*.nhib.xml.bak");
-			backedUpNHibFiles.ToList().ForEach(f =>
-			                                   	{
-			                                   		var newFile = f.Substring(0, f.Length - 4);
-			                                   		File.SetAttributes(f, FileAttributes.Archive);
-			                                   		File.Move(f, newFile);
-			                                   	});
-		}
 	}
 }

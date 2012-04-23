@@ -1,11 +1,21 @@
 ﻿using AutoMapper;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayInputResultMappingProfile : Profile
 	{
+		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
+
+		public PreferenceDayInputResultMappingProfile(IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider)
+		{
+			_preferenceFeedbackProvider = preferenceFeedbackProvider;
+		}
+
 		protected override void Configure()
 		{
 			base.Configure();
@@ -25,9 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                                        	}))
 				.ForMember(d => d.HexColor, o => o.MapFrom(s =>
 				                                                 	{
-																		if (s.Restriction.DayOffTemplate != null)
+				                                                 		if (s.Restriction.DayOffTemplate != null)
 																			return s.Restriction.DayOffTemplate.DisplayColor.ToHtml();
-																		if (s.Restriction.Absence != null)
+				                                                 		if (s.Restriction.Absence != null)
 																			return s.Restriction.Absence.DisplayColor.ToHtml();
 				                                                 		if (s.Restriction.ShiftCategory != null)
 																			return s.Restriction.ShiftCategory.DisplayColor.ToHtml();

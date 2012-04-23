@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
 using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -84,6 +85,17 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 	public class ResolveUsingDependencyResolver<T> : IResolve<T>
 	{
-		public T Invoke() { return DependencyResolver.Current.GetService<T>(); }
+		private readonly IComponentContext _resolver;
+
+		public ResolveUsingDependencyResolver(IComponentContext resolver) {
+			_resolver = resolver;
+		}
+
+		public T Invoke()
+		{
+			if (HttpContext.Current == null)
+				return _resolver.Resolve<T>();
+			return DependencyResolver.Current.GetService<T>();
+		}
 	}
 }

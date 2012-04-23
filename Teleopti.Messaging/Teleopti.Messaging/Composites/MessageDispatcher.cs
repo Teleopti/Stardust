@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.Remoting;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -89,18 +90,29 @@ namespace Teleopti.Messaging.Composites
             }
             if (!String.IsNullOrEmpty(_messageBroker.ConnectionString) && _messageBroker.Initialized == 0)
             {
-                try
-                {
-                    _brokerService.SendEventMessages(eventMessages);
-                }
-                catch (SocketException exception)
-                {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error,GetType(),string.Format(System.Globalization.CultureInfo.InvariantCulture, "An error occured while trying to notify broker: {0}",exception.Message));
-                }
+                 _messageBroker.CustomThreadPool.QueueUserWorkItem(sendRemotingMessagesOnOtherTherad,eventMessages);
             }
         }
 
-        private void SendEventMessageInterProcess(DateTime startDate, DateTime endDate, int userId, int processId, Guid moduleId, int packageSize, bool isHeartbeat, Guid parentObjectId, string parentObjectType, Guid domainObjectId, string domainObjectType, DomainUpdateType updateType, byte[] domainObject, string userName)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Logging.BaseLogger.WriteLine(System.Diagnostics.EventLogEntryType,System.Type,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "occured")]
+		private void sendRemotingMessagesOnOtherTherad(object state)
+    	{
+    		IEventMessage[] eventMessages = (IEventMessage[]) state;
+    		try
+    		{
+    			_brokerService.SendEventMessages(eventMessages);
+    		}
+    		catch (SocketException exception)
+    		{
+    			BaseLogger.Instance.WriteLine(EventLogEntryType.Error,GetType(),string.Format(System.Globalization.CultureInfo.InvariantCulture, "An error occured while trying to notify broker: {0}",exception.Message));
+    		}
+    		catch(RemotingException exception)
+    		{
+    			BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), string.Format(System.Globalization.CultureInfo.InvariantCulture, "A remoting error occured while trying to notify broker: {0}", exception.Message));
+    		}
+    	}
+
+    	private void SendEventMessageInterProcess(DateTime startDate, DateTime endDate, int userId, int processId, Guid moduleId, int packageSize, bool isHeartbeat, Guid parentObjectId, string parentObjectType, Guid domainObjectId, string domainObjectType, DomainUpdateType updateType, byte[] domainObject, string userName)
         {
             IEventMessage message = new EventMessage(Guid.Empty, startDate, endDate, userId, processId, moduleId, packageSize, isHeartbeat, parentObjectId, parentObjectType, domainObjectId, domainObjectType, updateType, domainObject, userName, DateTime.Now);
             _messageBroker.CustomThreadPool.QueueUserWorkItem(SendInterProcess, message);

@@ -95,29 +95,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I change culture to US")]
 		public void WhenIChangeCultureToUS()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureSelect.Select(CultureInfo.GetCultureInfo(1033).DisplayName);
+			ChangeCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[When(@"I change culture to browser's default")]
 		public void WhenIChangeCultureToBrowserSDefault()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureSelect.Select(UserTexts.Resources.BrowserDefault);
+			ChangeCulture(UserTexts.Resources.BrowserDefault);
 		}
 
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureUiSelect.Select(CultureInfo.GetCultureInfo(1033).DisplayName);
+			ChangeUiCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[When(@"I change language to browser's default")]
 		public void WhenIChangeLanguageToBrowserSDefault()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			page.CultureUiSelect.Select(UserTexts.Resources.BrowserDefault);
+			ChangeUiCulture(UserTexts.Resources.BrowserDefault);
 		}
 
 		[Then(@"I should see US date format")]
@@ -169,5 +165,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<PasswordPage>();
 			EventualAssert.That(() => page.IncorrectPassword.DisplayVisible(), Is.True);
 		}
+
+
+
+		private static void ChangeCulture(string culture)
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			TestMethods.PageLog("Page have not refreshed");
+			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
+			page.CultureSelect.Select(culture);
+			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
+		}
+
+		private static void ChangeUiCulture(string culture)
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			TestMethods.PageLog("Page have not refreshed");
+			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
+			page.CultureUiSelect.Select(culture);
+			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
+		}
+
 	}
 }

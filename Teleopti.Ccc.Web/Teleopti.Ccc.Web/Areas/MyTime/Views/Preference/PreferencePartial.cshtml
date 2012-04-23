@@ -1,6 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
-@using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model PreferenceViewModel
 @{
@@ -9,24 +9,28 @@
 
 <div id="Preference-period" class="pd5 info-pnl">
 	@if (Model.PreferencePeriod == null)
-	 {
-			@string.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-	 }
-	 else
-	 {
-			@string.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-			@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-	 }
- </div>
+	{
+		@string.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+	}
+	else
+	{
+		@string.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+		@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+	}
+</div>
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+
+
+
+		
 	<div id="Preference-body-inner" class="body-calendarview-inner clearfix">
 		<ul class="weekdays">
-			@foreach (var weekDayName in Model.WeekDayHeaders)
+			@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 			{
 				<li>@weekDayName.Title</li>
 			}
 		</ul>
-		@foreach (var week in Model.Weeks)
+		@foreach (WeekViewModel week in Model.Weeks)
 		{
 			<ul class="calendarview-week" onselectstart="return false;">
 				<li>
@@ -34,13 +38,13 @@
 
 					</div>
 				</li>
-				@foreach (var day in week.Days)
+				@foreach (DayViewModel day in week.Days)
 				{
-					var preference = day.Preference;
-					var personAssignment = day.PersonAssignment;
-					var dayOff = day.DayOff;
-					var absence = day.Absence;
-					<li class="@(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
+					PreferenceDayViewModel preference = day.Preference;
+					PersonAssignmentDayViewModel personAssignment = day.PersonAssignment;
+					DayOffDayViewModel dayOff = day.DayOff;
+					AbsenceDayViewModel absence = day.Absence;
+					<li class="relative @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
@@ -51,6 +55,10 @@
 									<div class="preference">
 										@preference.Preference
 									</div>
+									<div class="feedback-error"></div>
+									<div class="possible-start-times"></div>
+									<div class="possible-end-times"></div>
+									<div class="possible-contract-times"></div>
 								}
 								@if (personAssignment != null)
 								{
