@@ -7690,6 +7690,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External resource in use.
+        /// </summary>
+        public static string ExternalResourceInUse {
+            get {
+                return ResourceManager.GetString("ExternalResourceInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to External resource is using by another program, please try again later..
+        /// </summary>
+        public static string ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot {
+            get {
+                return ResourceManager.GetString("ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to External system error.
         /// </summary>
         public static string ExternalSystemError {
