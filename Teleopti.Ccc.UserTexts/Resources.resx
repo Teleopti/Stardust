@@ -10630,4 +10630,12 @@ These options are activated:
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
   </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>External resource in use</value>
+    <comment>External resource in use</comment>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>External resource is using by another program, please try again later.</value>
+    <comment>External resource is using by another program, please try again later.</comment>
+  </data>
 </root>
