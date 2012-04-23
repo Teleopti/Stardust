@@ -50,15 +50,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	    private OnEventScheduleMessageCommand _scheduleCommand;
 	    private OnEventForecastDataMessageCommand _forecastCommand;
 	    private OnEventStatisticMessageCommand _statisticCommand;
+		private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			_eventAggregator = new EventAggregator();
 			_view = mocks.StrictMock<IIntradayView>();
-			_scenario = mocks.StrictMock<IScenario>();
-			_persons = new List<IPerson>{mocks.StrictMock<IPerson>()};
+			_scenario = ScenarioFactory.CreateScenarioAggregate();
+			_persons = new List<IPerson>{PersonFactory.CreatePerson()};
 			_schedulingResultLoader = mocks.DynamicMock<ISchedulingResultLoader>();
 			_messageBroker = mocks.StrictMock<IMessageBroker>();
 			_rtaStateHolder = mocks.StrictMock<IRtaStateHolder>();
@@ -67,17 +68,20 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_scheduleDictionarySaver = mocks.StrictMock<IScheduleDictionarySaver>();
 			_scheduleRepository = mocks.StrictMock<IScheduleRepository>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, _period, _persons);
+
+			_scheduleCommand = mocks.DynamicMock<OnEventScheduleMessageCommand>();
+			_forecastCommand = mocks.DynamicMock<OnEventForecastDataMessageCommand>();
+			_statisticCommand = mocks.DynamicMock<OnEventStatisticMessageCommand>();
+			_loadStatisticCommand = mocks.DynamicMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
+
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
 			
 			mocks.Replay(_schedulingResultLoader);
-	        _scheduleCommand = mocks.DynamicMock<OnEventScheduleMessageCommand>();
-			_forecastCommand = mocks.DynamicMock<OnEventForecastDataMessageCommand>();
-			_statisticCommand = mocks.DynamicMock<OnEventStatisticMessageCommand>();
 	        _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
 	                                        _rtaStateHolder, _eventAggregator,
 	                                        _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
 	                                        _repositoryFactory, _statisticCommand, _forecastCommand,
-	                                        _scheduleCommand);
+	                                        _scheduleCommand, _loadStatisticCommand);
 			mocks.Verify(_schedulingResultLoader);
 		}
 
@@ -91,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		    _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 		                                    _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
                                             _repositoryFactory, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand);
+                                            _scheduleCommand, _loadStatisticCommand);
 			Assert.AreEqual(DateOnly.Today,_target.IntradayDate);
 			Assert.IsFalse(_target.HistoryOnly);
 			mocks.Verify(_schedulingResultLoader);
@@ -118,15 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var smallPeriod = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15));
             var skill = mocks.StrictMock<ISkill>();
             var skillDay = mocks.DynamicMock<ISkillDay>();
-            var statisticRepository = mocks.StrictMock<IStatisticRepository>();
-            var activeAgentCounts = new List<IActiveAgentCount>();
-            var statisticTasks = new List<IStatisticTask>();
-            var workload = mocks.StrictMock<IWorkload>();
-            var workloadDay = mocks.DynamicMock<IWorkloadDay>();
-            var queueSource = mocks.StrictMock<IQueueSource>();
-            var skillDayCalculator = mocks.DynamicMock<ISkillDayCalculator>();
-            var queueSources = new ReadOnlyCollection<IQueueSource>(new List<IQueueSource> { queueSource });
-
+            
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(smallPeriod, new Task(),
 																	   ServiceAgreement.DefaultValues());
 			ISkillStaffPeriod skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(smallPeriod.MovePeriod(TimeSpan.FromMinutes(15)), new Task(),
@@ -143,18 +139,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(skillDay.SkillStaffPeriodCollection).Return(
 				new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>
 															  {skillStaffPeriod1, skillStaffPeriod2, skillStaffPeriod3}));
-            Expect.Call(skill.WorkloadCollection).Return(new ReadOnlyCollection<IWorkload>(new List<IWorkload> { workload })).Repeat.AtLeastOnce();
-            Expect.Call(workload.Skill).Return(skill).Repeat.Any();
-		    Expect.Call(workload.QueueSourceCollection).Return(queueSources).Repeat.Once();
-            Expect.Call(workload.QueueAdjustments).Return(new QueueAdjustment());
-            Expect.Call(statisticRepository.LoadActiveAgentCount(skill, _period)).IgnoreArguments().Return(activeAgentCounts).Repeat.Once();
-            Expect.Call(statisticRepository.LoadSpecificDates(queueSources, _period)).IgnoreArguments().Return(statisticTasks).Repeat.Once();
-            Expect.Call(workloadDay.Workload.Equals(workload)).Return(true);
-            Expect.Call(workloadDay.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
-            Expect.Call(skillDay.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new[] { workloadDay }));
-            Expect.Call(skillDay.SkillDayCalculator).Return(skillDayCalculator);
-		    Expect.Call(_repositoryFactory.CreateStatisticRepository()).Return(statisticRepository);
-
+            
 			_schedulerStateHolder.SchedulingResultState.Skills.Add(skill);
 			_schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
 			_schedulerStateHolder.SchedulingResultState.SkillDays.Add(skill, new List<ISkillDay> { skillDay });
@@ -384,7 +369,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             {
                 _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
                                                 _eventAggregator, null, null, _unitOfWorkFactory, _repositoryFactory,
-                                                _statisticCommand, _forecastCommand, _scheduleCommand);
+                                                _statisticCommand, _forecastCommand, _scheduleCommand, _loadStatisticCommand);
                 _target.Initialize();
                 bool updateMessageReceived = false;
                 _target.ExternalAgentStateReceived += (x, y) =>
@@ -470,7 +455,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             {
                 _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
                                                 _eventAggregator, null, null, _unitOfWorkFactory, _repositoryFactory,
-                                                _statisticCommand, _forecastCommand, _scheduleCommand);
+                                                _statisticCommand, _forecastCommand, _scheduleCommand, _loadStatisticCommand);
                 _target.Initialize();
             }
 		    mocks.VerifyAll();
@@ -709,45 +694,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			string description = IntradayPresenter.PrepareChartDescription("{0} - {1}", "test1", "test2");
 			Assert.AreEqual("test1 - test2", description);
 		}
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyLoadStatistics()
-        {
-            var skill = mocks.StrictMock<ISkill>();
-            var skillDay = mocks.DynamicMock<ISkillDay>();
-            var statisticRepository = mocks.StrictMock<IStatisticRepository>();
-            var activeAgentCounts = new List<IActiveAgentCount>();
-            var statisticTasks = new List<IStatisticTask>();
-            var skillStaffPeriod1 = mocks.DynamicMock<ISkillStaffPeriod>();
-            var skillStaffPeriods = new List<ISkillStaffPeriod> {skillStaffPeriod1};
-            var workload = mocks.StrictMock<IWorkload>();
-            var workloadDay = mocks.DynamicMock<IWorkloadDay>();
-            var queueSource = mocks.StrictMock<IQueueSource>();
-            var skillDayCalculator = mocks.DynamicMock<ISkillDayCalculator>();
-            var queueSources = new ReadOnlyCollection<IQueueSource>(new List<IQueueSource> {queueSource});
-            var smallPeriod = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15));
-
-            using (mocks.Record())
-            {
-                Expect.Call(skill.WorkloadCollection).Return(new ReadOnlyCollection<IWorkload>(new List<IWorkload> { workload })).Repeat.AtLeastOnce();
-                Expect.Call(workload.Skill).Return(skill).Repeat.Any();
-                Expect.Call(workload.QueueSourceCollection).Return(queueSources).Repeat.Once();
-                Expect.Call(workload.QueueAdjustments).Return(new QueueAdjustment());
-                Expect.Call(statisticRepository.LoadActiveAgentCount(skill, _period)).Return(activeAgentCounts).Repeat.Once();
-                Expect.Call(statisticRepository.LoadSpecificDates(queueSources, _period)).Return(statisticTasks).Repeat.Once();
-                Expect.Call(skillStaffPeriod1.Parent).Return(skillDay).Repeat.AtLeastOnce();
-                Expect.Call(skillStaffPeriod1.Period).Return(smallPeriod).Repeat.AtLeastOnce();
-                Expect.Call(workloadDay.Workload.Equals(workload)).Return(true);
-                Expect.Call(workloadDay.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
-                Expect.Call(skillDay.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new []{workloadDay}));
-                Expect.Call(skillDay.SkillDayCalculator).Return(skillDayCalculator);
-            }
-
-            using (mocks.Playback())
-            {
-                IntradayPresenter.LoadStatistics(_period, skill, skillStaffPeriods, statisticRepository); 
-            }
-        }
 
 	    [Test]
 		public void VerifyRefreshDataWithoutReceivedEvent()

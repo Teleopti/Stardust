@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.Where(t => isRepository(t) && hasCorrectCtor(t))
 				.AsImplementedInterfaces()
 				.InstancePerDependency();
+			builder.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
 		}
 
 		private static bool hasCorrectCtor(Type repositoryType)
