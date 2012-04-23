@@ -196,7 +196,25 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An absence request has been approved..
+        ///   Looks up a localized string similar to The absence request {0} was approved..
+        /// </summary>
+        public static string AbsenceRequestForOneDayHasBeenApprovedDot {
+            get {
+                return ResourceManager.GetString("AbsenceRequestForOneDayHasBeenApprovedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The absence request {0} was denied..
+        /// </summary>
+        public static string AbsenceRequestForOneDayHasBeenDeniedDot {
+            get {
+                return ResourceManager.GetString("AbsenceRequestForOneDayHasBeenDeniedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An absence request {0} - {1} was approved..
         /// </summary>
         public static string AbsenceRequestHasBeenApprovedDot {
             get {
@@ -205,7 +223,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An absence request has been denied..
+        ///   Looks up a localized string similar to An absence request has been denied from {0} to {1}..
         /// </summary>
         public static string AbsenceRequestHasBeenDeniedDot {
             get {
@@ -1772,7 +1790,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New shift trade request, approve or deny in your request list..
+        ///   Looks up a localized string similar to New shift trade request {0}, approve or deny in your request list..
+        /// </summary>
+        public static string ANewShiftTradeForOneDayHasBeenCreatedDot {
+            get {
+                return ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New shift trade request {0} - {1}, approve or deny in your request list..
         /// </summary>
         public static string ANewShiftTradeHasBeenCreatedDot {
             get {
@@ -19136,7 +19163,43 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request has been accepted by other person..
+        ///   Looks up a localized string similar to A shift trade request {0} was accepted by other person..
+        /// </summary>
+        public static string ShiftTradeRequestForOneDayHasBeenAcceptedDot {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenAcceptedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A shift trade request {0} was approved..
+        /// </summary>
+        public static string ShiftTradeRequestForOneDayHasBeenApprovedDot {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenApprovedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A shift trade request {0} was denied..
+        /// </summary>
+        public static string ShiftTradeRequestForOneDayHasBeenDeniedDot {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenDeniedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A shift trade request {0} must be accepted again due to a schedule change from..
+        /// </summary>
+        public static string ShiftTradeRequestForOneDayHasBeenReferredDot {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenReferredDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A shift trade request {0} - {1} was accepted by other person..
         /// </summary>
         public static string ShiftTradeRequestHasBeenAcceptedDot {
             get {
@@ -19145,7 +19208,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request has been approved..
+        ///   Looks up a localized string similar to A shift trade request {0} - {1} was approved..
         /// </summary>
         public static string ShiftTradeRequestHasBeenApprovedDot {
             get {
@@ -19154,7 +19217,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request has been denied..
+        ///   Looks up a localized string similar to A shift trade request {0} - {1} was denied..
         /// </summary>
         public static string ShiftTradeRequestHasBeenDeniedDot {
             get {
@@ -19163,7 +19226,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request must be accepted again due to a schedule change..
+        ///   Looks up a localized string similar to A shift trade request {0} - {1} must be accepted again due to a schedule change from..
         /// </summary>
         public static string ShiftTradeRequestHasBeenReferredDot {
             get {
