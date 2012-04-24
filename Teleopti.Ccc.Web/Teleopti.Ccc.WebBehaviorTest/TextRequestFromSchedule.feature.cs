@@ -71,13 +71,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add text request from week schedule view", ((string[])(null)));
 #line 6
-this.ScenarioSetup(scenarioInfo);
+ this.ScenarioSetup(scenarioInfo);
 #line 7
  testRunner.Given("I am an agent");
 #line 8
  testRunner.And("I am viewing week schedule");
 #line 9
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click on today\'s summary");
 #line 10
  testRunner.And("I input text request values");
 #line 11
@@ -100,7 +100,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 17
  testRunner.When("I am viewing week schedule");
 #line 18
- testRunner.Then("I should not see the add text request button");
+ testRunner.Then("I should not be able to open the add text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -117,9 +117,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 22
  testRunner.And("I am viewing week schedule");
 #line 23
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click on tomorrows summary");
 #line 24
- testRunner.Then("I should see the text request form with the first day of week as default");
+ testRunner.Then("I should see the text request form with tomorrow as default date");
 #line 25
  testRunner.And("I should see 8:00 - 17:00 as the default times");
 #line hidden
@@ -138,7 +138,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 29
  testRunner.And("I am viewing week schedule");
 #line 30
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click on today\'s summary");
 #line 31
  testRunner.And("I input text request values");
 #line 32
@@ -161,7 +161,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 37
  testRunner.And("I am viewing week schedule");
 #line 38
- testRunner.When("I click add text request button in the toolbar");
+ testRunner.When("I click on today\'s summary");
 #line 39
  testRunner.And("I input empty subject");
 #line 40
