@@ -10,7 +10,6 @@
 	And I input text request values
 	And I click the OK button
 	Then I should see a symbol at the top of the schedule
-	#And I should see the text request on the request tab
 
 Scenario: Can not add text request if no permission
 	Given I am an agent without access to text requests

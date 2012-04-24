@@ -44,15 +44,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
-	function _initToolbarButtons() {
-		$('#Schedule-addTextRequest-button')
-			.click(function () {
-				Teleopti.MyTimeWeb.Common.OpenEditSection('#Schedule-addTextRequest-section');
-			})
-			.removeAttr('disabled')
-			;
-	}
-
 	function _initEditSection() {
 		$('#Schedule-addTextRequest-ok-button')
 			.click(function () {
@@ -153,7 +144,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	return {
 		Init: function () {
-			_initToolbarButtons();
+
 		},
 		PartialInit: function () {
 			_initEditSection();
