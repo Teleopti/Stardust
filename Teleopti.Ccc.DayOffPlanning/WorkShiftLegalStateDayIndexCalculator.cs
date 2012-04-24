@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.DayOffPlanning
                                      where relativeDeficit.HasValue
                                      select relativeDeficit.Value).ToList();
 
-                var max = list.Max();
+                var max = 0d;
+                if(list.Count > 0) max = list.Max();
 
                 IList<double?> retList = new Collection<double?>();
                 foreach (double? deficit in relativeDeficits)
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.DayOffPlanning
                                  where relativeDeficit.HasValue
                                  select relativeDeficit.Value).ToList();
 
-            var min = Math.Abs(list.Min());
+            var min = 0d;
+            if(list.Count > 0) min = Math.Abs(list.Min());
 
             IList<double?> retList = new Collection<double?>();
             foreach (double? deficit in relativeDeficits)
