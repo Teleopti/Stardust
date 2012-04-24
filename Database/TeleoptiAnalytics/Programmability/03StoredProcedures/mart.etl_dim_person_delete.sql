@@ -71,12 +71,6 @@ FROM mart.bridge_group_page_person AS bridge
     ON bridge.person_id = dim.person_id
 WHERE dim.to_be_deleted = 1
 
-DELETE FROM mart.fact_requested_days
-FROM mart.fact_requested_days AS fact
-   INNER JOIN mart.dim_person AS dim
-    ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
-
 DELETE FROM mart.fact_request
 FROM mart.fact_request AS fact
    INNER JOIN mart.dim_person AS dim
