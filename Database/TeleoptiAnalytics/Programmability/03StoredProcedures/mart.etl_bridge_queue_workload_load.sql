@@ -19,7 +19,7 @@ GO
 -- 2009-04-27 Change dateformat on min/max date DJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_queue_workload_load] 
-
+@business_unit_code uniqueidentifier
 	
 AS
 
@@ -27,6 +27,17 @@ AS
 DECLARE @maxdate as smalldatetime
 SELECT @maxdate=CAST('20591231' as smalldatetime)
 
+/*Get business unit id*/
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+/*Deleting data from bride queue workload */
+
+DELETE FROM mart.bridge_queue_workload 
+WHERE business_unit_id = @business_unit_id
+OR business_unit_id = -1
+
+/*
 DELETE FROM mart.bridge_queue_workload 
 WHERE business_unit_id = 
 	(
@@ -40,7 +51,7 @@ WHERE business_unit_id =
 			qw.business_unit_code = bu.business_unit_code
 	)
 	OR business_unit_id = -1
-
+*/
 
 -- Insert new queues
 INSERT INTO mart.bridge_queue_workload

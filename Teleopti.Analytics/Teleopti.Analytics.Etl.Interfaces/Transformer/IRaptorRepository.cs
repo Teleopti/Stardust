@@ -13,13 +13,13 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         //Schedule
         IList<IActivity> LoadActivity();
         int PersistActivity(DataTable dataTable);
-        int FillActivityDataMart();
+        int FillActivityDataMart(IBusinessUnit businessUnit);
         IList<IShiftCategory> LoadShiftCategory();
         int PersistShiftCategory(DataTable dataTable);
-        int FillShiftCategoryDataMart();
+        int FillShiftCategoryDataMart(IBusinessUnit businessUnit);
         IList<IScenario> LoadScenario();
         int PersistScenario(DataTable dataTable);
-        int FillScenarioDataMart();
+        int FillScenarioDataMart(IBusinessUnit businessUnit);
         IList<IPerson> LoadPerson(ICommonStateHolder stateHolder);
         int PersistPerson(DataTable dataTable);
         int PersistAcdLogOnPerson(DataTable dataTable);
@@ -28,26 +28,26 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         void TruncateSchedule();
         int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable);
 
-        int FillScheduleDataMart(DateTimePeriod period);
+        int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
         int FillScheduleContractDataMart(DateTimePeriod period);
         int PersistDate(DataTable dataTable);
         int FillDateDataMart();
         int PersistInterval(DataTable dataTable);
-        int FillShiftLengthDataMart();
-        int FillBusinessUnitDataMart();
-        int FillSiteDataMart();
-        int FillTeamDataMart();
+        int FillShiftLengthDataMart(IBusinessUnit businessUnit);
+        int FillBusinessUnitDataMart(IBusinessUnit businessUnit);
+        int FillSiteDataMart(IBusinessUnit businessUnit);
+        int FillTeamDataMart(IBusinessUnit businessUnit);
         IList<IAbsence> LoadAbsence();
         int PersistAbsence(DataTable dataTable);
-        int FillAbsenceDataMart();
+        int FillAbsenceDataMart(IBusinessUnit businessUnit);
         IList<ISkill> LoadSkill(IList<IActivity> activities);
         IList<ISkill> LoadSkillWithSkillDays(DateOnlyPeriod period);
         int PersistScheduleForecastSkill(DataTable dataTable);
-        int FillScheduleForecastSkillDataMart(DateTimePeriod period);
+        int FillScheduleForecastSkillDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
         IList<IBusinessUnit> LoadBusinessUnit();
         int PersistBusinessUnit(DataTable dataTable);
         int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
-        int FillDayOffDataMart();
+        int FillDayOffDataMart(IBusinessUnit businessUnit);
         int PersistScheduleDayOffCount(DataTable dataTable);
 
         /// <summary>
@@ -66,20 +66,21 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         /// </summary>
         /// <param name="period">The period.</param>
         /// <param name="defaultTimeZone">The default time zone.</param>
+        /// <param name="businessUnit"></param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: Henryg
         /// Created date: 2009-11-27
         /// </remarks>
-        int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone);
+        int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 
         //Queue stats
-        int FillDimQueueDataMart(int dataSourceId);
-        int FillFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone);
+        int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit);
+        int FillFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 
         //Date and Time Zone
         int PersistTimeZoneDim(DataTable dataTable);
-        int FillTimeZoneDimDataMart();
+        int FillTimeZoneDimDataMart(IBusinessUnit businessUnit);
         int PersistTimeZoneBridge(DataTable dataTable, bool doTruncateTable);
         int FillTimeZoneBridgeDataMart(DateTimePeriod period);
         IEnumerable<TimeZoneInfo> LoadTimeZonesInUse();
@@ -90,30 +91,30 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IWorkload> LoadWorkload();
         int PersistWorkload(DataTable dataTable);
         int PersistQueueWorkload(DataTable dataTable);
-        int FillWorkloadDataMart();
+        int FillWorkloadDataMart(IBusinessUnit businessUnit);
         IDictionary<ISkill, IList<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
         int PersistForecastWorkload(DataTable dataTable);
-        int FillForecastWorkloadDataMart(DateTimePeriod period);
-        int FillSkillDataMart();
+        int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
+        int FillSkillDataMart(IBusinessUnit businessUnit);
 
         //Agent stats
-        int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone);
-        int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone);
+        int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
+        int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
         int FillAcdLogOnDataMart(int dataSourceId);
         int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone);
 
         //KPI
         IList<IKeyPerformanceIndicator> LoadKpi();
         int PersistKpi(DataTable dataTable);
-        int FillKpiDataMart();
+        int FillKpiDataMart(IBusinessUnit businessUnit);
         IList<IScorecard> LoadScorecard();
         int PersistScorecard(DataTable dataTable);
         int FillScorecardDataMart();
         int PersistScorecardKpi(DataTable dataTable);
-        int FillScorecardKpiDataMart();
+        int FillScorecardKpiDataMart(IBusinessUnit businessUnit);
         IList<IKpiTarget> LoadKpiTargetTeam();
         int PersistKpiTargetTeam(DataTable dataTable);
-        int FillKpiTargetTeamDataMart();
+        int FillKpiTargetTeamDataMart(IBusinessUnit businessUnit);
         
         //Permission
         int PersistPermissionReport(DataTable dataTable);
@@ -122,13 +123,13 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<MatrixPermissionHolder> LoadReportPermissions();
 
         int FillBridgeAcdLogOnPerson(IBusinessUnit businessUnit);
-        int FillBridgeWorkloadQueue();
+        int FillBridgeWorkloadQueue(IBusinessUnit businessUnit);
 
         //Person Skill
         int PersistSkill(DataTable dataTable);
         int PersistAgentSkill(DataTable dataTable);
-        int FillSkillSetDataMart();
-        int FillBridgeAgentSkillSetDataMart();
+        int FillSkillSetDataMart(IBusinessUnit businessUnit);
+        int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit);
 
         //Users
         IList<IPerson> LoadUser();
@@ -142,9 +143,9 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         ReadOnlyCollection<IExternalLogOn> LoadAgentLogins();
 
         // Cleanup
-        int DimPersonDeleteData();
-        int DimPersonTrimData();
-        int DimScenarioDeleteData();
+        int DimPersonDeleteData(IBusinessUnit businessUnit);
+        int DimPersonTrimData(IBusinessUnit businessUnit);
+        int DimScenarioDeleteData(IBusinessUnit businessUnit);
         int PerformMaintenance();
 
         /// <summary>
@@ -192,15 +193,15 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
     	IList<IMultiplicatorDefinitionSet> LoadMultiplicatorDefinitionSet();
     	int PersistOvertime(DataTable bulkInsertDataTable1);
-    	int FillOvertimeDataMart();
+    	int FillOvertimeDataMart(IBusinessUnit businessUnit);
 		IList<TimeZoneInfo> LoadTimeZonesInUseByDataSource();
 
     	ITimeZoneDim DefaultTimeZone { get; }
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
 		int PersistRequest(DataTable dataTable);
-    	int FillFactRequestMart(DateTimePeriod period);
+    	int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);
     	int PerformPurge();
-        int FillFactRequestedDaysMart(DateTimePeriod period);
+        int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit);
         ILicenseStatusUpdater LicenseStatusUpdater { get; }
     }
 }

@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillActivityDataMart()
+        public int FillActivityDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillShiftCategoryDataMart()
+        public int FillShiftCategoryDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillScenarioDataMart()
+        public int FillScenarioDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -123,7 +123,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return scheduleDataTable.Rows.Count + absenceDayCountDataTable.Rows.Count;
         }
 
-        public int FillScheduleDataMart(DateTimePeriod period)
+        public int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -148,22 +148,22 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillShiftLengthDataMart()
+        public int FillShiftLengthDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillBusinessUnitDataMart()
+        public int FillBusinessUnitDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillSiteDataMart()
+        public int FillSiteDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillTeamDataMart()
+        public int FillTeamDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -178,7 +178,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillAbsenceDataMart()
+        public int FillAbsenceDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -198,7 +198,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillScheduleForecastSkillDataMart(DateTimePeriod period)
+        public int FillScheduleForecastSkillDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -218,7 +218,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillDayOffDataMart()
+        public int FillDayOffDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -233,17 +233,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone)
+        public int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillDimQueueDataMart(int dataSourceId)
+        public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone)
+        public int FillFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -253,7 +253,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillTimeZoneDimDataMart()
+        public int FillTimeZoneDimDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -293,7 +293,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillWorkloadDataMart()
+        public int FillWorkloadDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -313,12 +313,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillForecastWorkloadDataMart(DateTimePeriod period)
+        public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillSkillDataMart()
+        public int FillSkillDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -333,12 +333,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone)
+        public int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone)
+        public int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -353,7 +353,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillKpiDataMart()
+        public int FillKpiDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -378,7 +378,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillScorecardKpiDataMart()
+        public int FillScorecardKpiDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -393,7 +393,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return dataTable.Rows.Count;
         }
 
-        public int FillKpiTargetTeamDataMart()
+        public int FillKpiTargetTeamDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -424,7 +424,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return Ret;
         }
 
-        public int FillBridgeWorkloadQueue()
+        public int FillBridgeWorkloadQueue(IBusinessUnit businessUnit)
         {
             return Ret;
         }
@@ -439,12 +439,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillSkillSetDataMart()
+        public int FillSkillSetDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int FillBridgeAgentSkillSetDataMart()
+        public int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit)
         {
             return Ret;
         }
@@ -484,17 +484,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new ReadOnlyCollection<IExternalLogOn>(new List<IExternalLogOn>());
         }
 
-        public int DimPersonDeleteData()
+        public int DimPersonDeleteData(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int DimPersonTrimData()
+        public int DimPersonTrimData(IBusinessUnit businessUnit)
         {
             return 0;
         }
 
-        public int DimScenarioDeleteData()
+        public int DimScenarioDeleteData(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -605,7 +605,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
 
-    	public int FillOvertimeDataMart()
+    	public int FillOvertimeDataMart(IBusinessUnit businessUnit)
     	{
     		return 0;
     	}
@@ -630,7 +630,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
 
-		public int FillFactRequestMart(DateTimePeriod period)
+		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			return 0;
 		}
@@ -640,7 +640,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return 0;
     	}
     	
-        public int FillFactRequestedDaysMart(DateTimePeriod period)
+        public int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
         }
