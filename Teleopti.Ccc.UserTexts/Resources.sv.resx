@@ -10262,4 +10262,67 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Visa publik notering</value>
     <comment>ShowPublicNotes</comment>
   </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Kunde inte nå Teleoptis kundwebb just nu!</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>Namn importfil:</value>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>Importera bemanning</value>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>Importera workload</value>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>Importera workload och bemanning</value>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>Kompetensnamn:</value>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>Workloadnamn:</value>
+  </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Importera prognos</value>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>Visa jobbhistorik</value>
+  </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>Inga tillgängliga skift</value>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Verklig efterbearbetningstid</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>Frånvaroförfrågan {0} godkändes.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Frånvaroförfrågan {0} nekades.</value>
+  </data>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>Ny skiftbytesförfrågan {0}, godkänn eller neka i din förfrågningslista.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>En skiftbytesförfrågan {0} accepterades av den andra personen.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>En skiftbytesförfrågan {0} godkändes.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>En skiftbytesförfrågan {0} nekades.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>En skiftbytesförfrågan {0} måste accepteras igen på grund av en schemaändring.</value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>Extern resurs används.</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>Extern resurs används av ett annat program, var god försök igen senare.</value>
+  </data>
 </root>
