@@ -66,5 +66,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.That(forecastRows[1].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 1, 0, 0)));
             Assert.That(forecastRows[1].UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 1, 15, 0)));
         }
+
+        [Test]
+        public void ShouldImportWinterTimeForAmbiguousTime()
+        {
+            _fileContent = Encoding.UTF8.GetBytes("Insurance,20121028 01:45,20121028 02:00,17,179,0,4.05");
+            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
+
+            Assert.That(forecastRows.Length, Is.EqualTo(1));
+            Assert.That(forecastRows[0].LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 1, 45, 0)));
+            Assert.That(forecastRows[0].LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 2, 0, 0)));
+            Assert.That(forecastRows[0].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 27, 23, 45, 0)));
+            Assert.That(forecastRows[0].UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 0, 0, 0)));
+        }
     }
 }
