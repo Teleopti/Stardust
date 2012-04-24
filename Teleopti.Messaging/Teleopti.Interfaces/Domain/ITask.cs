@@ -36,5 +36,14 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 21.12.2007
         /// </remarks>
         TimeSpan AverageAfterTaskTime { get; }
+
+        /// <summary>
+        /// Gets the total handling time (AverageTaskTime + AverageAfterTaskTime) 
+        /// </summary>
+        /// <remarks>
+        /// Created by: Ola
+        /// Created date: 3.4.2012
+        /// </remarks>
+        TimeSpan AverageHandlingTaskTime { get; }
     }
 }

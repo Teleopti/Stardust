@@ -520,6 +520,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual after call work time.
+        /// </summary>
+        public static string ActualAfterCallWorkTime {
+            get {
+                return ResourceManager.GetString("ActualAfterCallWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual agents.
         /// </summary>
         public static string ActualAgents {
@@ -18856,7 +18865,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send Asm.
+        ///   Looks up a localized string similar to Send message (ASM).
         /// </summary>
         public static string SendASM {
             get {
@@ -23694,7 +23703,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work week starts at.
+        ///   Looks up a localized string similar to Work week starts on.
         /// </summary>
         public static string WorkWeekStartsAt {
             get {
