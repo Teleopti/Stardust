@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -236,6 +238,89 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			UserFactory.User().Setup(new ExistingPreferenceToday());
 		}
+
+		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(endTimeLimitation));
+		}
+
+		[Given(@"I have a preference with start time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(startTimeLimitation));
+		}
+
+		[Given(@"I have a preference with work time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(int shortest, int longest)
+		{
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(shortest, 0, 0), new TimeSpan(longest, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(workTimeLimitation));
+		}
+
+
+		[Given(@"I have preference for the first category today")]
+		public void GivenIHavePreferenceForTheFirstCategoryToday()
+		{
+			var firstCat = UserFactory.User().UserData<FirstShiftCategory>();
+			var firstCategory = firstCat.ShiftCategory;
+
+			UserFactory.User().Setup(new ShiftCategoryPreferenceToday() {ShiftCategory = firstCategory});
+		}
+
+		[Given(@"I have a preference with lunch length limitation of 1 hour today")]
+		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday()
+		{
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(workTimeLimitation));
+		}
+
+		[Given(@"I have a preference with lunch end time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(endTimeLimitation));
+		}
+
+		[Given(@"I have a preference with lunch start time limitation between (.*) and (.*)")]
+		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(int earliest, int latest)
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
+			UserFactory.User().Setup(new ExistingLunchPreferenceToday(startTimeLimitation));
+		}
+
+		[Given(@"I have a availabilty with earliest start time at (.*)")]
+		public void GivenIHaveAAvailabiltyWithEarliestStartTimeAt(int earliestStart)
+		{
+			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliestStart, 0, 0), null);
+			UserFactory.User().Setup(new ExistingAvailability(startTimeLimitation));
+		}
+
+		[Given(@"I have a availabilty with latest end time at (.*)")]
+		public void GivenIHaveAAvailabiltyWithLatestEndTimeAt(int latestEnd)
+		{
+			var endTimeLimitation = new EndTimeLimitation(null, new TimeSpan(latestEnd, 0, 0));
+			UserFactory.User().Setup(new ExistingAvailability(endTimeLimitation));
+		}
+
+		[Given(@"I have a availabilty with work time between (.*) and (.*) hours")]
+		public void GivenIHaveAAvailabiltyWithWorkTimeBetween5And7Hours(int shortest, int longest)
+		{
+			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(shortest, 0, 0), new TimeSpan(longest, 0, 0));
+			UserFactory.User().Setup(new ExistingAvailability(workTimeLimitation));
+		}
+
+		[Given(@"I have a conflicting preference and availability today")]
+		public void GivenIHaveAConflictingPreferenceAndAvailabilityToday()
+		{
+			var startTimeAvailability = new StartTimeLimitation(new TimeSpan(10, 0, 0), null);
+			var startTimePreference = new StartTimeLimitation(null, new TimeSpan(9, 0, 0));
+			UserFactory.User().Setup(new ExistingExtendedPreferenceToday(startTimePreference));
+			UserFactory.User().Setup(new ExistingAvailability(startTimeAvailability));
+		}
+
 
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
@@ -482,8 +567,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]
 		public void GivenIHaveAShiftBagWithStartTimesToAndEndTimesTo(int earliestStart, int latestStart, int earliestEnd, int latestEnd)
 		{
-			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
+		}
+
+		[Given(@"I have a shift bag with two categories with shift from (.*) to (.*) and from (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithTwoCategoriesWithShiftFromToAndFromTo(int start1, int end1, int start2, int end2)
+		{
+			var category1 = new FirstShiftCategory();
+			var category2 = new SecondShiftCategory();
+			UserFactory.User().Setup(category1);
+			UserFactory.User().Setup(category2);
+			UserFactory.User().Setup(new RuleSetBagWithTwoCategories(category1, start1, end1, category2, start2, end2));
+		}
+
+		[Given(@"I have a shift bag with two categories with shift start from (.*) to (.*) and from (.*) to (.*) and end from (.*) to (.*) and from (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithTwoCategoriesWithShiftStartFromToAndFromToAndEndFromToAndFromTo(int earliestStart1, int latestStart1, int earliestStart2, int latestStart2, int earliestEnd1, int latestEnd1, int earliestEnd2, int latestEnd2)
+		{
+			var category1 = new FirstShiftCategory();
+			var category2 = new SecondShiftCategory();
+			UserFactory.User().Setup(category1);
+			UserFactory.User().Setup(category2);
+			UserFactory.User().Setup(new RuleSetBagWithTwoCategories(category1, earliestStart1, latestStart1, earliestEnd1, latestEnd1, category2, earliestStart2, latestStart2, earliestEnd2, latestEnd2));
+		}
+
+
+		[Given(@"I have a shift bag")]
+		public void GivenIHaveAShiftBag()
+		{
+			UserFactory.User().Setup(new RuleSetBag(8, 10, 16, 18));
+		}
+
+		[Given(@"I have a shift bag with one shift (.*) to (.*) and lunch (.*) to (.*) and one shift (.*) to (.*) and lunch (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithOneShiftToAndLunchToAndOneShiftToAndLunchTo(int start1, int end1, int lunchStart1, int lunchEnd1, int start2, int end2, int lunchStart2, int lunchEnd2)
+		{
+			UserFactory.User().Setup(new RuleSetBagWithTwoShiftsAndLunch(start1, end1, lunchStart1, lunchEnd1, start2, end2, lunchStart2, lunchEnd2));
 		}
 
 		[Given(@"I am an agent in a team that leaves tomorrow")]

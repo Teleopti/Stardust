@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+		public WorkShiftRuleSetRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            : base(unitOfWorkFactory)
+        {
+        }
+
         /// <summary>
         /// Finds all with limiters and extenders included.
         /// </summary>

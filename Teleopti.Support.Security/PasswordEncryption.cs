@@ -46,7 +46,7 @@ namespace Teleopti.Support.Security
                     transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
 
-                    using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.Person WHERE Password<>''", connection))
+					using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.ApplicationAuthenticationInfo WHERE Password<>''", connection))
                     {
                         daPerson.SelectCommand.Transaction = transaction;
                         using (SqlCommandBuilder builder = new SqlCommandBuilder(daPerson))
@@ -71,10 +71,16 @@ namespace Teleopti.Support.Security
                                         string password = (string)passwordObj;
                                         if (!specification.IsSatisfiedBy(password))
                                         {
-                                            row["Password"] = encryption.EncryptString(password);
-                                            //Console.WriteLine("Password before: {0}, After: {1}",password,row["Password"]);
-                                            row["Version"] = ((int)row["Version"]) + 1;
-                                            row["UpdatedOn"] = DateTime.UtcNow;
+                                            //set new password
+											row["Password"] = encryption.EncryptString(password);
+
+											//update root object
+											command = connection.CreateCommand();
+											command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+																				"UPDATE dbo.Person SET Version=Version+1,UpdatedOn = GetUtcDate() WHERE Id='{0}'",
+																				row["Person"]);
+											command.Transaction = transaction;
+											command.ExecuteNonQuery();
                                         }
                                     }
                                 }

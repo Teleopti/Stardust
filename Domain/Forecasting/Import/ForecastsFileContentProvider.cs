@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                                                                                 StringSplitOptions.RemoveEmptyEntries))
                 {
                     var forecastsRow = _rowExtractor.Extract(line, timeZone);
-                    if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom))
+                    if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom) && timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeTo))
                     {
                         var missingRow = new ForecastsRow
                                              {
@@ -45,10 +45,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                                                  SkillName = forecastsRow.SkillName,
                                                  Tasks = forecastsRow.Tasks,
                                                  TaskTime = forecastsRow.TaskTime,
-                                                 UtcDateTimeFrom = addMissingUtcTime(forecastsRow.UtcDateTimeFrom, (TimeZoneInfo)timeZone.TimeZoneInfoObject),
-                                                 UtcDateTimeTo = addMissingUtcTime(forecastsRow.UtcDateTimeTo,(TimeZoneInfo)timeZone.TimeZoneInfoObject)
+                                                 UtcDateTimeFrom = adjustMissingUtcTime(forecastsRow.UtcDateTimeFrom, (TimeZoneInfo)timeZone.TimeZoneInfoObject),
+                                                 UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo,(TimeZoneInfo)timeZone.TimeZoneInfoObject)
                                              };
                         result.Add(missingRow);
+                    }
+                    else if (!timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom) && timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeTo))
+                    {
+                        forecastsRow.UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo,
+                                                                       (TimeZoneInfo) timeZone.TimeZoneInfoObject);
                     }
                     result.Add(forecastsRow);
                     rowNumber++;
@@ -61,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             return result;
         }
         
-        private static DateTime addMissingUtcTime(DateTime utcTime, TimeZoneInfo timeZone)
+        private static DateTime adjustMissingUtcTime(DateTime utcTime, TimeZoneInfo timeZone)
         {
             var rules = timeZone.GetAdjustmentRules();
             var rul = rules.FirstOrDefault(r => r.DateStart < new DateTime(utcTime.Year, 1, 1) && r.DateEnd > new DateTime(utcTime.Year, 1, 1));

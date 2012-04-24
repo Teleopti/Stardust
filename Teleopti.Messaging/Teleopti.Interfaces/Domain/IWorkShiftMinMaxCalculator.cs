@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -88,13 +89,13 @@ namespace Teleopti.Interfaces.Domain
         ///</summary>
         void ResetCache();
 
-        ///// <summary>
-        ///// Periods the legal state status.
-        ///// </summary>
-        ///// <param name="matrix">The matrix.</param>
-        ///// <param name="restrictionsOverLimitDecider">The restrictions over limit decider.</param>
-        ///// <param name="schedulingOptions">The scheduling options.</param>
-        ///// <returns></returns>
+		/// <summary>
+		/// Possibles the min max work shift lengths.
+		/// </summary>
+		/// <param name="matrix">The matrix.</param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix);
         //int PeriodLegalStateStatus(
         //    IScheduleMatrixPro matrix,
         //    IRestrictionsOverLimitDecider restrictionsOverLimitDecider,

@@ -121,6 +121,8 @@
     <Compile Include="ExtendReduceTimeDecisionMaker.cs" />
     <Compile Include="IWorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="LockableBitArrayChangesTracker.cs" />
+    <Compile Include="Scheduling\DesiredShiftLengthCalculator.cs" />
+    <Compile Include="Scheduling\ShiftLengthDecider.cs" />
     <Compile Include="TuiCaseSolver.cs" />
     <Compile Include="WorkShiftBackToLegalStateBitArrayCreator.cs" />
     <Compile Include="WorkShiftBackToLegalStateDecisionMaker.cs" />

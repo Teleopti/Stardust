@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 {
 	public interface IPreferenceViewModelFactory
 	{
-		PreferenceViewModel CreateViewModel(DateOnly today);
+		PreferenceViewModel CreateViewModel(DateOnly date);
+		PreferenceDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date);
 	}
 }

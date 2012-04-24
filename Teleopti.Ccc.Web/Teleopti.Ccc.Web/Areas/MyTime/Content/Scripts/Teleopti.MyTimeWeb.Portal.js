@@ -178,23 +178,25 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _loadContent(hashInfo) {
 		_disablePortalControls();
+
+		$.myTimeAjaxAbortAll();
 		$.myTimeAjax({
-			url: hashInfo.hash,
-			global: true,
-			success: function (html) {
-				$('#body-inner').html(html);
-				var partialFn = _partialViewInitCallback[hashInfo.actionHash];
-				if ($.isFunction(partialFn))
-					partialFn();
-			}
-		})
-			;
+				url: hashInfo.hash,
+				global: true,
+				success: function(html) {
+					$('#body-inner').html(html);
+					var partialFn = _partialViewInitCallback[hashInfo.actionHash];
+					if ($.isFunction(partialFn))
+						partialFn();
+				}
+			});
 	}
 
 	return {
 		Init: function (settings) {
 			Teleopti.MyTimeWeb.Ajax.Init(settings);
 			Teleopti.MyTimeWeb.Common.Init(settings);
+			Teleopti.MyTimeWeb.Test.Init(settings);
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();

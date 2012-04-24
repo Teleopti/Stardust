@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _options = options;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
                                                     double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
                                                     IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
@@ -95,13 +97,19 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     shiftValue += seatVal.Value;
                 }
 
-                if (_options.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff &&
-                    _options.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
-                {
-                    shiftValue = _averageShiftLengthValueCalculator.CalculateShiftValue(shiftValue,
-                                                                                       shiftProjection.MainShiftProjection.ContractTime(),
-                                                                                       averageWorkTimePerDay);
-                }
+				var temp = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
+				if(!temp)
+				{
+					if (_options.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff &&
+						_options.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
+					{
+						shiftValue = _averageShiftLengthValueCalculator.CalculateShiftValue(shiftValue,
+																						   shiftProjection.MainShiftProjection.ContractTime(),
+																						   averageWorkTimePerDay);
+					}
+				}
+				
 
                 if (shiftValue > highestShiftValue)
                 {

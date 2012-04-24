@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
+			TestMethods.WaitForPreferenceFeedbackToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
 		}
@@ -35,6 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I try to select a standard preference")]
 		public void WhenITryToSelectStandardPreference()
 		{
+			TestMethods.WaitForPreferenceFeedbackToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}
@@ -210,36 +214,82 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-start-times");
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			var div = cell.Div(Find.ByClass("possible-start-times"));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-end-times");
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			var div = cell.Div(Find.ByClass("possible-end-times"));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the contract time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = _page.CalendarCellForDate(date);
-			var div = cell.Div("possible-contract-times");
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(earliest));
-			EventualAssert.That(() => div.InnerHtml, Is.StringContaining(latest));
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			var div = cell.Div(Find.ByClass("possible-contract-times"));
+			TimeSpan earliestTime;
+			TimeSpan latestTime;
+			TimeHelper.TryParse(earliest, out earliestTime);
+			TimeHelper.TryParse(latest, out latestTime);
+			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
+		[Then(@"I should see no feedback")]
+		public void ThenIShouldSeeNoFeedback()
+		{
+			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var cell = _page.CalendarCellForDate(date);
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
 
+			startTimeDiv.InnerHtml.Should().Be.Null();
+			endTimeDiv.InnerHtml.Should().Be.Null();
+			contractTimeDiv.InnerHtml.Should().Be.Null();
+		}
 
+		[Then(@"I should see that there are no available shifts")]
+		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
+		{
+			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(Resources.NoAvailableShifts));
+		}
 
+		[Then(@"I should see the preference feedback")]
+		public void ThenIShouldSeeThePreferenceFeedback()
+		{
+			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var cell = _page.CalendarCellForDate(date);
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
+
+			startTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+			endTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+			contractTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
+		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{
@@ -248,8 +298,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Assert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
-			Assert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")).After(5000, 10));
+			EventualAssert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
 		}
 	}
 }

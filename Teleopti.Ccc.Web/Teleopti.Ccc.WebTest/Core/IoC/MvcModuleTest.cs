@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Autofac;
 using Autofac.Core;
+using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -17,8 +18,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -26,6 +27,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
+using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -33,15 +35,13 @@ using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
+
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
-	using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 
 	[TestFixture]
 	public class MvcModuleTest
 	{
-		#region Setup/Teardown
-
 		[SetUp]
 		public void Setup()
 		{
@@ -57,8 +57,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			requestContainer = containerOrg.BeginLifetimeScope("httpRequest");
 		}
-
-		#endregion
 
 		private ILifetimeScope requestContainer;
 		private MockRepository mocks;
@@ -328,8 +326,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePreferenceFeedbackProvider()
 		{
-			var result = requestContainer.Resolve<IPreferenceFeedbackProvider>();
-			result.Should().Not.Be.Null();
+			var result1 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result1.Should().Not.Be.Null();
+			var result2 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			result2.Should().Be.SameInstanceAs(result1);
 		}
 
 		[Test]
@@ -368,6 +368,35 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					ok = true;
 			}
 			ok.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldResolveEffectiveRestrictionForDisplayCreator()
+		{
+			var result = requestContainer.Resolve<IEffectiveRestrictionForDisplayCreator>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveWorkTimeMinMaxCalculator()
+		{
+			var result = requestContainer.Resolve<IWorkTimeMinMaxCalculator>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveRuleSetProjection()
+		{
+			var result = requestContainer.Resolve<IRuleSetProjectionService>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
+		{
+			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
+			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
+				.Should().Be.EqualTo<RuleSetProjectionServiceForMultiSessionCaching>();
 		}
 	}
 }

@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private ControlType _controlType;
         private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
-
+		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
         private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
         private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
 	    private readonly IOptimizationPreferences _optimizationPreferences;
@@ -1864,7 +1864,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         clone.Add(personDayOff);
                         _scheduleView.Presenter.ClipHandlerSchedule.Clear();
                         _scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
-                        Clipboard.SetData("PersistableScheduleData", new int());
+                        _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
                         pasteDayOff();
                     }
                 }
@@ -2816,7 +2816,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     part.AddMainShift(mainShift);
                     _clipHandlerSchedule.Clear();
                     _clipHandlerSchedule.AddClip(0, 0, part);
-                    Clipboard.SetData("PersistableScheduleData", new int());
+				    _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
                     paste();
                     break;
                 case ControlType.SchedulerGridSkillData:
@@ -3354,7 +3354,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot)
                 new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
                 else
-                    ViewBase.ShowInformationMessage(string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled, 
+                    ViewBase.ShowInformationMessage(this, string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled, 
                         _scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
                         , Resources.SchedulingResult);
             }

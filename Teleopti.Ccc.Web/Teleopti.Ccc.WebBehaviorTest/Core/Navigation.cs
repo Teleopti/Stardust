@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
-using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using WatiN.Core.Constraints;
+using WatiN.Core.Interfaces;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -165,25 +167,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Current.GoTo("about:blank");
 		}
 
-		public static void CreateCorruptCookie()
-		{
-			GoTo("Test/CorruptMyCookie");
-		}
-
-		public static void CreateNonExistingDatabaseCookie()
-		{
-			GoTo("Test/NonExistingDatasourceCookie");
-		}
-
-		public static void ExpireMyCookie()
-		{
-			// doing this twice because IE fails to grab the cookie after the first one sometimes..
-			// probably depending on how quickly the next request takes places.
-			// making a second request seems to enforce the cookie somehow..
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Common.ExpireMyCookie();");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Cookie is expired!"));
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Common.ExpireMyCookie();");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Cookie is expired!Cookie is expired!"));
-		}
 	}
 }

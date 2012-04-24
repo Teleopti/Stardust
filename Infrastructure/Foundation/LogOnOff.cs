@@ -1,7 +1,5 @@
-using System;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -41,17 +39,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             
             SessionData sessionData = new SessionData();
             StateHolder.Instance.State.SetSessionData(sessionData);
-
-        	setRouteDetailsToSignalBroker(dataSource, businessUnit);
         }
-
-    	private static void setRouteDetailsToSignalBroker(IDataSource dataSource, IBusinessUnit businessUnit)
-    	{
-    		var signalBroker = StateHolder.Instance.State.ApplicationScopeData.Messaging as SignalBroker;
-			if (signalBroker == null) return;
-
-    		signalBroker.BusinessUnitId = businessUnit.Id.GetValueOrDefault();
-    		signalBroker.DataSource = dataSource.DataSourceName;
-    	}
     }
 }

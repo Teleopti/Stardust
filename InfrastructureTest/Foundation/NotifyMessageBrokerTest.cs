@@ -60,20 +60,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+                    messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Update))
                                         .Return(mess2);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess2 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                                         .Return(mess3);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess3 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3 }));
                 }
             }
             using (mocks.Playback())
@@ -119,14 +119,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(PersonAbsence), DomainUpdateType.Insert))
                     .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(PersonAbsence), DomainUpdateType.Delete))
                     .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
                 }
             }
             using (mocks.Playback())
@@ -183,20 +183,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Update))
                                         .Return(mess2);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess2 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                                         .Return(mess3);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess3 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3 }));
                 }
             }
             using (mocks.Playback())
@@ -245,14 +245,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                     .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                     .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
                 }
             }
             using (mocks.Playback())
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSendMessageFromCustomSource()
 		{
 			UnitOfWork.PersistAll();
@@ -301,8 +301,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					Expect.Call(messBroker.CreateEventMessage(period.StartDateTime,period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(MeetingChangedEntity), DomainUpdateType.Insert))
 					.Return(mess2);
 
-					messBroker.SendEventMessages(null);
-					LastCall.Constraints(List.Equal(new[] { mess1, mess2 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
 
 					Expect.Call(messBroker.IsInitialized).Return(true);
 					Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
@@ -310,9 +310,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 					Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(MeetingChangedEntity), DomainUpdateType.Delete))
 					.Return(mess2);
-					
-					messBroker.SendEventMessages(null);
-					LastCall.Constraints(List.Equal(new[] { mess1,mess2 }));
+
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
 				}
 			}
 			using (mocks.Playback())
@@ -353,16 +353,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                                         .Return(mess1);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per2.Id.Value, per2.GetType(), DomainUpdateType.Insert))
                                         .Return(mess2);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1, mess2 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per1.Id.Value, per1.GetType(), DomainUpdateType.Delete))
                                         .Return(mess3);
                     Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per2.Id.Value, per2.GetType(), DomainUpdateType.Delete))
                                         .Return(mess4);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess3, mess4 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3, mess4 }));
                 }
             }
 
@@ -398,20 +398,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess1 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Update))
                                         .Return(mess2);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess2 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                                         .Return(mess3);
-                    messBroker.SendEventMessages(null);
-                    LastCall.Constraints(List.Equal(new[] { mess3 }));
+					messBroker.SendEventMessages(null, Guid.Empty, null);
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3 }));
                 }
             }
             using (mocks.Playback())

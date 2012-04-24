@@ -7839,11 +7839,11 @@ Weekday</value>
     <comment>Are you sure you want to delete the rotation?</comment>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>An absence request has been approved.</value>
+    <value>An absence request {0} - {1} was approved.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>An absence request has been denied.</value>
+    <value>An absence request has been denied from {0} to {1}.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="Details" xml:space="preserve">
@@ -7851,19 +7851,19 @@ Weekday</value>
     <comment>Details för requests</comment>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>A shift trade request has been accepted by other person.</value>
+    <value>A shift trade request {0} - {1} was accepted by other person.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>A shift trade request has been approved.</value>
+    <value>A shift trade request {0} - {1} was approved.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>A shift trade request has been denied.</value>
+    <value>A shift trade request {0} - {1} was denied.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>A shift trade request must be accepted again due to a schedule change.</value>
+    <value>A shift trade request {0} - {1} must be accepted again due to a schedule change from.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
@@ -7887,7 +7887,7 @@ Weekday</value>
     <comment>Are you sure you want to delete the meeting {0}?</comment>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>New shift trade request, approve or deny in your request list.</value>
+    <value>New shift trade request {0} - {1}, approve or deny in your request list.</value>
     <comment>A new shift trade request has been created.</comment>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
@@ -10593,25 +10593,71 @@ These options are activated:
   <data name="AvailabilityFulfillment" xml:space="preserve">
     <value>Availability Fulfillment</value>
     <comment>Availability Fulfillment</comment>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>No available shifts</value>
+    <comment>No available shifts</comment>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
     <value>Must Have Fulfillment</value>
     <comment>Must Have Fulfillment</comment>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Actual after call work time</value>
+    <comment>Actual after call work time</comment>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>Preference Fulfillment</value>
     <comment>Preference Fulfillment</comment>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>The absence request {0} was approved.</value>
+    <comment>Approve absence request for one day.</comment>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
     <value>Rotation Fulfillment</value>
     <comment>Rotation Fulfillment</comment>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>The absence request {0} was denied.</value>
+    <comment>Denied absence request for one day.</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Student Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>New shift trade request {0}, approve or deny in your request list.</value>
+    <comment>New shift trade request for one day.</comment>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Resource calculate every:</value>
     <comment>Resource Calculate Every:</comment>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>A shift trade request {0} was accepted by other person.</value>
+    <comment>A shift trade reqyest for one day was accepted.</comment>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>A shift trade request {0} was approved.</value>
+    <comment>A shift trade request for one day was approved.</comment>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>A shift trade request {0} was denied.</value>
+    <comment>A shift trade request for one day.</comment>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>A shift trade request {0} must be accepted again due to a schedule change from.</value>
+    <comment>A shift trade request for one day must be accepted again.</comment>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>External resource in use</value>
+    <comment>External resource in use</comment>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>External resource is using by another program, please try again later.</value>
+    <comment>External resource is using by another program, please try again later.</comment>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>External resource in use</value>
+    <comment>External resource in use</comment>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>External resource is using by another program, please try again later.</value>
+    <comment>External resource is using by another program, please try again later.</comment>
   </data>
 </root>

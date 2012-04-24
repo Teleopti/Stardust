@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -43,7 +45,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             }
             if (eventMessages.Count > 0)
             {
-                _messageBroker.SendEventMessages(eventMessages.ToArray());
+            	_messageBroker.SendEventMessages(UnitOfWorkFactory.Current.Name,
+            	                                 ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.
+            	                                 	GetValueOrDefault(), eventMessages.ToArray());
             }
         }
 

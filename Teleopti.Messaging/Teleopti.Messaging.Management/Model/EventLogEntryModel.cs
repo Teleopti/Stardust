@@ -45,7 +45,7 @@ namespace Teleopti.Messaging.Management.Model
             {
                 _messageBroker = MessageBrokerImplementation.GetInstance(_connectionString);
                 _messageBroker.StartMessageBroker();
-                _messageBroker.RegisterEventSubscription(new EventHandler<EventMessageArgs>(OnEvent), Guid.Empty, typeof(ILogEntry));
+                _messageBroker.RegisterEventSubscription(null,Guid.Empty, OnEvent, Guid.Empty, typeof(ILogEntry));
                 _messageBroker.ExceptionHandler += new EventHandler<UnhandledExceptionEventArgs>(OnException);
                 BaseLogger.Instance.WriteLine(EventLogEntryType.SuccessAudit, typeof(ILogEntry), "Successfully instantiated the Message Broker.");
             }

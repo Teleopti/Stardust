@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Common
 
         public void ShowInformationMessage(string text, string caption)
         {
-            ViewBase.ShowInformationMessage(text, caption);
+            ViewBase.ShowInformationMessage(this, text, caption);
         }
 
         public DialogResult ShowOkCancelMessage(string text, string caption)

@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Link SignOutLink;
 
 
-		public void SelectFirstApplicationDataSource()
+		public void SelectApplicationTestDataSource()
 		{
-			ApplicationDataSourceList.ListItem(Find.First()).EventualClick();
+			ApplicationDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
 		}
 
 		public void ClickApplicationOkButton()
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			ApplicationOkButton.EventualClick();
 		}
 
-		public void SelectFirstWindowsDataSource()
+		public void SelectWindowsTestDataSource()
 		{
-			WindowsDataSourceList.ListItem(Find.First()).EventualClick();
+			WindowsDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
 		}
 
 		public void SelectFirstBusinessUnit()
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public void SignInApplication(string username, string password)
 		{
 			ApplicationTabLink.Click();
-			SelectFirstApplicationDataSource();
+			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
 			ApplicationOkButton.Click();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public void SignInWindows()
 		{
 			WindowsTabLink.EventualClick();
-			SelectFirstWindowsDataSource();
+			SelectWindowsTestDataSource();
 			WindowsOkButton.EventualClick();
 		}
 

@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the delete button")]
 		public void WhenIClickTheDeleteButton()
 		{
+			if (Pages.Pages.Current is PreferencePage)
+				TestMethods.WaitForPreferenceFeedbackToLoad();
 			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
 		}
 
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()
 		{
-			Assert.That(() => Browser.Current.Div("error-panel").Exists, Is.True.After(5000, 10));
+			EventualAssert.That(() => Browser.Current.Div("error-panel").Exists, Is.True);
 		}
 
 		[Then(@"I should see a symbol at the top of the schedule")]

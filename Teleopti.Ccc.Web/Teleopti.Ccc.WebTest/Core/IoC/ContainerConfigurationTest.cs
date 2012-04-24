@@ -105,16 +105,5 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					.Should().Be.True();
 			}
 		}
-
-		/* Don't know how/when to test this... PW
-		[Test]
-		public void ConfigurationSettingsReaderModuleHasBeenLoadedWithTestDataOverrides()
-		{
-			using (var container = builder.Configure())
-			{
-				container.Resolve<IWebReportRepository>().Should().Be.OfType<TestDataWebReportRepository>();
-			}
-		}
-		 * */
 	}
 }

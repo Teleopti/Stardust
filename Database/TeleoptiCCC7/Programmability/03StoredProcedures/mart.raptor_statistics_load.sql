@@ -34,7 +34,7 @@ BEGIN
 
 	--Init
 	INSERT INTO @TempList
-	SELECT * FROM mart.SplitStringInt(@QueueList)
+	SELECT * FROM dbo.SplitStringInt(@QueueList)
 
 	--Return result set to client
 	SELECT	

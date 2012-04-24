@@ -49,27 +49,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\AutoFac\NET4\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\AutoFac\NET4\Autofac.Configuration.dll</HintPath>
+    <Reference Include="Autofac.Configuration, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Integration.Mvc, Version=2.5.2.830, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\AutoFac\NET4\Autofac.Integration.Mvc.dll</HintPath>
+    <Reference Include="Autofac.Integration.Mvc, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.Mvc3.2.6.1.841\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="AutofacContrib.DynamicProxy2, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\AutoFac\AutofacContrib.DynamicProxy2-Fork\AutofacContrib.DynamicProxy2.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper">
       <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\packages\Castle.Core.2.5.1\lib\NET35\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MbCache, Version=1.1.0.5, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MbCache.1.1\lib\Net35\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.1.0.5, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MbCache.1.1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\ASP.NET MVC 3\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -154,6 +174,18 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\AspectInterceptor.cs" />
+    <Compile Include="Core\Aop\Core\AspectsAttribute.cs" />
+    <Compile Include="Core\Aop\Core\AspectsModule.cs" />
+    <Compile Include="Core\Aop\Core\IAspect.cs" />
+    <Compile Include="Core\Aop\Core\IAspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\IOrderedAspect.cs" />
+    <Compile Include="Core\Aop\Core\IResolvedAspect.cs" />
+    <Compile Include="Core\Aop\Core\IResolvedAspectAttribute.cs" />
+    <Compile Include="Core\Aop\Core\ResolvedAspectAttribute.cs" />
+    <Compile Include="Filters\AsyncTaskAttribute.cs" />
+    <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IPersonPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
@@ -161,6 +193,8 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\RuleSetProjectionServiceForMultiSessionCaching.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
@@ -186,6 +220,7 @@
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\LayoutBaseViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\StyleClasses.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
@@ -209,6 +244,8 @@
     <Compile Include="Core\RequestContext\ICurrentPrincipalProvider.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -409,6 +446,8 @@
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
+    <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
@@ -491,6 +530,7 @@
     <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.js" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.css" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.min.css" />
+    <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
@@ -574,6 +614,8 @@
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
+    <Content Include="Content\Scripts\jquery.signalR.js" />
+    <Content Include="Content\Scripts\jquery.signalR.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -593,7 +635,9 @@
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

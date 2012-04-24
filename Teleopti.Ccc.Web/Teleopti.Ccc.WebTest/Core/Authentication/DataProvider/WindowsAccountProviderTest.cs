@@ -62,35 +62,5 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 		}
 
-			
-
-
-		//[Test]
-		//public void ShouldSplitNameIntoUserNameAndDomainName()
-		//{
-		//    const string fakeDomainName = "domain Name";
-		//    const string fakeUserName = " le faking userNAME";
-		//    const string userName = fakeDomainName + @"\" + fakeUserName;
-
-		//    var fakePrinciple = mocks.DynamicMock<IPrincipal>();
-		//    var fakeIdentity = mocks.DynamicMock<IIdentity>();
-
-		//    using(mocks.Record())
-		//    {
-		//        Expect.Call(http.User)
-		//            .Return(fakePrinciple);
-		//        Expect.Call(fakePrinciple.Identity)
-		//            .Return(fakeIdentity);
-		//        Expect.Call(fakeIdentity.Name)
-		//            .Return(userName);
-		//    }
-		//    using(mocks.Playback())
-		//    {
-		//        target.UserInformation().DomainName
-		//            .Should().Be.EqualTo(fakeDomainName);
-		//        target.UserInformation().UserName
-		//            .Should().Be.EqualTo(fakeUserName);
-		//    }
-		//}
 	}
 }

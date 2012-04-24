@@ -92,10 +92,12 @@ this.ScenarioSetup(scenarioInfo);
 #line 12
 this.ScenarioSetup(scenarioInfo);
 #line 13
- testRunner.Given("I am an agent with published schedule");
+ testRunner.Given("I am an agent");
 #line 14
- testRunner.When("I view my week schedule");
+ testRunner.And("My schedule is published");
 #line 15
+ testRunner.When("I view my week schedule");
+#line 16
  testRunner.Then("I Should see licensed to information");
 #line hidden
             this.ScenarioCleanup();

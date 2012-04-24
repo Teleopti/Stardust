@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </remarks>
     public class VisualLayer : Layer<IPayload>, IVisualLayer
     {
-        internal VisualLayer(IPayload payload,
+		public VisualLayer(IPayload payload,
                            DateTimePeriod period,
                            IActivity highestPriorityActivity)
             : base(payload, period)

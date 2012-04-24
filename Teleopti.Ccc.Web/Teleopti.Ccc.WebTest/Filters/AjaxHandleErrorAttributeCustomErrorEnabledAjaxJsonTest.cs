@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var result = filterTester.InvokeFilter(target) as JsonResult;
 
 			result.Should().Not.Be.Null();
+			filterTester.ControllerContext.HttpContext.Response.TrySkipIisCustomErrors.Should().Be.True();
 		}
 
 		[Test]
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.InvokeFilter(target);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be(500);
+			filterTester.ControllerContext.HttpContext.Response.TrySkipIisCustomErrors.Should().Be.True();
 		}
 
 		[Test]
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.InvokeFilter(target);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be(404);
+			filterTester.ControllerContext.HttpContext.Response.TrySkipIisCustomErrors.Should().Be.True();
 		}
 
 		[Test]

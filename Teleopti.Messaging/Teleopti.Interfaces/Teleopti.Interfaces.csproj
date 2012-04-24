@@ -125,6 +125,8 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\IDetailedJobResult.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
@@ -288,6 +290,7 @@
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
+    <Compile Include="Domain\IShiftLengthDecider.cs" />
     <Compile Include="Domain\IShiftProjectionCache.cs" />
     <Compile Include="Domain\IShiftProjectionCacheManager.cs" />
     <Compile Include="Domain\IShiftProjectionCasheFilter.cs" />

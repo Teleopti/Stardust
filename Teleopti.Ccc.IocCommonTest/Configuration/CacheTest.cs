@@ -5,24 +5,14 @@ using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
-    //logic tested from other test classes
     [TestFixture]
     public class CacheTest
     {
-        private ContainerBuilder containerBuilder;
-
-        [SetUp]
-        public void Setup()
-        {
-            containerBuilder = new ContainerBuilder();
-        }
-
-
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.IocCommon.Configuration.MbCacheModule"), Test]
         public void CacheProviderMustBeSet()
         {
-            containerBuilder.RegisterModule(new MbCacheModule());
-            Assert.Throws<InvalidOperationException>(() => containerBuilder.Build());
+			Assert.Throws<InvalidOperationException>(() => new MbCacheModule(null));
         }
     }
 }

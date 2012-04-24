@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {
@@ -121,7 +124,16 @@ namespace Teleopti.Ccc.AgentPortal.Helper
             }
 
             //add string to clipboard
-            Clipboard.SetDataObject(new DataObject(s), true);
+            try
+            {
+                Clipboard.SetDataObject(new DataObject(s), true);
+            }
+            catch (ExternalException)
+            {
+                MessageBoxHelper.ShowInformationMessage(
+                    UserTexts.Resources.ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot,
+                    UserTexts.Resources.ExternalResourceInUse);
+            }
         }
 
         private static string GetColHeadersString(GridControl control, GridRangeInfo range)
