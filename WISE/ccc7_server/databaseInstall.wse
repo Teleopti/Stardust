@@ -195,6 +195,24 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=ADMIN_USER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=myADMIN_USER
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=ADMIN_PWD
+  Variable Name2=_PROP_VAR_
+  Variable Value2=myADMIN_PWD
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=DemoDatabase
   Variable Name2=_PROP_VAR_
   Variable Value2=RESTOREDEMO
@@ -210,6 +228,15 @@ end
 item: Set Variable
   Variable=FAILED_MESS
   Value=Failed to install database
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=APPLICATIONCONFIGURATION
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DIR2
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
@@ -266,11 +293,19 @@ item: Set Variable
   Variable=SA
   Value=-E
 end
+item: Set Variable
+  Variable=SA2
+  Value=-EE
+end
 item: Else Statement
 end
 item: Set Variable
   Variable=SA
   Value=-U"%SUSER%" -P"%SPASS%"
+end
+item: Set Variable
+  Variable=SA2
+  Value=-DU"%SUSER%" -DP"%SPASS%"
 end
 item: End Block
 end
@@ -341,42 +376,27 @@ item: If/While Statement
   Variable=UPGRADE
   Value=NEW
 end
+item: Remark
+  Text=Add Admin User to dbo.person
+end
+item: Execute Program
+  Pathname=CccAppConfig.exe
+  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%"
+  Default Directory=%DIR2%
+  Flags=00000010
+end
 item: If/While Statement
   Variable=CONVERT
   Value=NO
 end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=APPLICATIONCONFIGURATION
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DIR
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: If/While Statement
-  Variable=SAUTH
-  Value=NT
-end
-remarked item: Display Message
-  Title=CCCAppCOnfig
-  Text=%DIR%\CCCAppConfig.exe -DS%SRV% -DD%DCCC% -DU%SUSER% -DP%SPASS% -TZ"%TZ%" -BU%BU%
+item: Remark
+  Text=Add other default data (BU, Scenario, Roles, etc.)
 end
 item: Execute Program
   Pathname=CccAppConfig.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" -EE -BU"%BU%"
-  Default Directory=%DIR%
+  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -BU"%BU%"
+  Default Directory=%DIR2%
   Flags=00000010
-end
-item: Else Statement
-end
-item: Execute Program
-  Pathname=CccAppConfig.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" -DU"%SUSER%" -DP"%SPASS%" -BU"%BU%"
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: End Block
 end
 item: End Block
 end
