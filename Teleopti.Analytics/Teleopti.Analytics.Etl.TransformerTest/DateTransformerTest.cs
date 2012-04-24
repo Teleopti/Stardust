@@ -184,14 +184,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.IsNotNull(_target);
         }
 
-		 [Test]
-		 public void ShouldSetCorrectYearForYearWeekWhenWeekFromPreviousYearGoesIntoNextYear()
-		 {
-			var theDate = new DateTime(2012, 1, 1);
-		 	var theDayDate = new DayDate(theDate, _swedishCulture);
-
-			Assert.AreEqual(2012, theDayDate.Year);
-			Assert.AreEqual("201152", theDayDate.YearWeek);
-		 }
+        [Test]
+        public void ShouldSetCorrectYearForYearWeek()
+        {
+            var theDayDate1 = new DayDate(new DateTime(2012, 1, 1), _swedishCulture);
+            var theDayDate2 = new DayDate(new DateTime(2012, 1, 2), _swedishCulture);
+            var theDayDate3 = new DayDate(new DateTime(2011, 1, 1), _swedishCulture);
+            var theDayDate4 = new DayDate(new DateTime(2010, 1, 1), _swedishCulture);
+            var theDayDate5 = new DayDate(new DateTime(2014, 1, 1), _swedishCulture);
+            
+            Assert.AreEqual("201152", theDayDate1.YearWeek);
+            Assert.AreEqual("201201", theDayDate2.YearWeek);
+            Assert.AreEqual("201052", theDayDate3.YearWeek);
+            Assert.AreEqual("200953", theDayDate4.YearWeek);
+            Assert.AreEqual("201401", theDayDate5.YearWeek);
+        }
     }
 }
