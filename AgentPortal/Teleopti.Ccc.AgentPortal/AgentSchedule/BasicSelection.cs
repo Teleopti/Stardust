@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                        new GetPeopleForShiftTradeByGroupPageGroupQueryDto
                        {
                            GroupPageGroupId = _selectedTeam.Id,
-                           PersonId = SdkServiceHelper.LogOnServiceClient.GetLoggedOnPerson().Id,
+                           PersonId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id,
                            QueryDate = new DateOnlyDto { DateTime = _selectedDate, DateTimeSpecified = true }
                        }));
 			SelectedPeople = persons;

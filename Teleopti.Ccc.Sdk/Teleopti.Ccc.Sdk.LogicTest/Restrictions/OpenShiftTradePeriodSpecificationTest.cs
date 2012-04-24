@@ -59,5 +59,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Assert.That(_target.IsSatisfiedBy(_checkItem), Is.True);
             }
         }
+
+        [Test]
+        public void ShouldFailIfOneHasNoWorkflowControlSet()
+        {
+            _personFrom.WorkflowControlSet = null;
+            _personTo.WorkflowControlSet = new WorkflowControlSet();
+            using (_mocks.Record())
+            {
+                Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
+                Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
+            }
+            using (_mocks.Playback())
+            {
+                Assert.That(_target.IsSatisfiedBy(_checkItem), Is.False);
+            }
+        }
     }
 }

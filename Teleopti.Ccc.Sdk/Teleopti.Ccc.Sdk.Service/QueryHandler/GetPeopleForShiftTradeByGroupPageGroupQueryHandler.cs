@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
         {
             var specifications = new List<ISpecification<IShiftTradeAvailableCheckItem>>
                                      {
-                                         new OpenShiftTradePeriodSpecification(),
                                          new IsWorkflowControlSetNullSpecification(),
+                                         new OpenShiftTradePeriodSpecification(),
                                          new ShiftTradeSkillSpecification()
                                      };
             return specifications.All(s => s.IsSatisfiedBy(checkItem));

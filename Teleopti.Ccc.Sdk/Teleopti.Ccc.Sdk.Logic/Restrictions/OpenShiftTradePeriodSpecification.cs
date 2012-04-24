@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
     {
         public override bool IsSatisfiedBy(IShiftTradeAvailableCheckItem obj)
         {
+            if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
+                return false;
             var currentDate = DateOnly.Today;
             var openPeriodFrom =
                 new DateOnlyPeriod(
