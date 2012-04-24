@@ -9218,4 +9218,7 @@ Periods</comment>
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
     <value>活动设置不能为空</value>
   </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>只显示可替换班的人</value>
+  </data>
 </root>

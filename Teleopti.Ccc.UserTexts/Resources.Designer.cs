@@ -13077,7 +13077,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Shift Trade Request.
+        ///   Looks up a localized string similar to New shift trade request.
         /// </summary>
         public static string NewShiftTradeRequest {
             get {
@@ -19288,6 +19288,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift trade filter.
+        /// </summary>
+        public static string ShiftTradeFilter {
+            get {
+                return ResourceManager.GetString("ShiftTradeFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because a meeting ended up outside a shift..
         /// </summary>
         public static string ShiftTradeMeetingSpecificationDenyReason {
@@ -19600,6 +19609,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowNextShift {
             get {
                 return ResourceManager.GetString("ShowNextShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show only available for shift trade.
+        /// </summary>
+        public static string ShowOnlyAvailableForShiftTrade {
+            get {
+                return ResourceManager.GetString("ShowOnlyAvailableForShiftTrade", resourceCulture);
             }
         }
         
