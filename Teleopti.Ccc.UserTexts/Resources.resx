@@ -10562,4 +10562,8 @@ These options are activated:
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
   </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Request allowances</value>
+    <comment>Request allowances</comment>
+  </data>
 </root>
