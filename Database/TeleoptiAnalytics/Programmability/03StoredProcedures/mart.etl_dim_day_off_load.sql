@@ -18,7 +18,7 @@ GO
 -- 2011-02-08	DJ	#13471 Days off with same name on two BU does not work in analytics
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_day_off_load]
-@business_unit_code uniqueidentifier		
+@business_unit_code uniqueidentifier	
 AS
 -----------------------------------------------------
 -- Not Defined
