@@ -98,7 +98,9 @@ INSERT INTO mart.dim_person
 		insert_date,
 		update_date,
 		datasource_update_date,
-		to_be_deleted
+		to_be_deleted,
+		windows_domain,
+		windows_username
 	)
 SELECT
 		person_id					= -1,
@@ -141,7 +143,9 @@ SELECT
 		insert_date					= @mindate,
 		update_date					= @mindate,
 		datasource_update_date		= @mindate,
-		to_be_deleted				= 0
+		to_be_deleted				= 0,
+		windows_domain				= 'Not Defined',
+		windows_username			= 'Not Defined'
 WHERE
 	NOT EXISTS (SELECT d.person_id FROM mart.dim_person d WHERE d.person_id=-1)
 
@@ -246,7 +250,9 @@ SET
 	parttime_percentage		= s.parttime_percentage,
 	datasource_id			= 1, 
 	update_date				= getdate(),
-	datasource_update_date	= s.datasource_update_date
+	datasource_update_date	= s.datasource_update_date,
+	windows_domain			= s.windows_domain,
+	windows_username		= s.windows_username
 FROM
 	Stage.stg_person s	
 LEFT JOIN
@@ -310,7 +316,9 @@ INSERT INTO mart.dim_person
 	parttime_percentage,
 	datasource_id, 
 	datasource_update_date,
-	to_be_deleted
+	to_be_deleted,
+	windows_domain,
+	windows_username
 	)
 SELECT
 	person_code				= s.person_code,
@@ -350,7 +358,9 @@ SELECT
 	parttime_percentage		= s.parttime_percentage,
 	datasource_id			= 1, 
 	datasource_update_date	= s.datasource_update_date,
-	to_be_deleted			= 0
+	to_be_deleted			= 0,
+	windows_domain			= s.windows_domain,
+	windows_username		= s.windows_username
 FROM
 	Stage.stg_person s
 LEFT JOIN
