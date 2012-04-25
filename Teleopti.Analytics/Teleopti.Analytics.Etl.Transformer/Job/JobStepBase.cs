@@ -76,7 +76,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
            try
             {
-                Result.RowsAffected = RunStep(jobResultCollection, isLastBusinessUnitRun);
+               // need to add current bussiness unit here. 
+               Result.RowsAffected = RunStep(jobResultCollection, isLastBusinessUnitRun);
                 Result.Duration = StopTimer();
                 Result.Status = "Done";
                 if (IsBusinessUnitIndependent)

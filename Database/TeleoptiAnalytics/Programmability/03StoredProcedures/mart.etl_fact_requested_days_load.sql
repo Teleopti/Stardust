@@ -5,7 +5,8 @@ GO
 --exec [mart].[etl_fact_requested_days_load] '2012-02-08','2012-02-11'
 CREATE PROCEDURE [mart].[etl_fact_requested_days_load]
 @start_date smalldatetime,
-@end_date smalldatetime
+@end_date smalldatetime,
+@business_unit_code uniqueidentifier	
 	
 AS
 BEGIN
@@ -32,13 +33,17 @@ SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 --Todo: Get @business_unit_code on interface instead!
 ----------------
 --for now get business unit id via stg-table
-SELECT TOP 1
+/*SELECT TOP 1
 	@business_unit_id = bu.business_unit_id
 FROM mart.dim_business_unit bu
 INNER JOIN stage.stg_request stg
-	ON bu.business_unit_code = stg.business_unit_code
+	ON bu.business_unit_code = stg.business_unit_code*/
 
 SET NOCOUNT OFF
+
+/*Get business unit id*/
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 ----------------
 --Remove old data

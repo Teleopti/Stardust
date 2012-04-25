@@ -19,7 +19,7 @@ GO
 -- Description:	Loads bridge, that connects skillsets with skills.
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_skillset_skill_load] 
-
+@business_unit_code uniqueidentifier
 	
 AS
 
@@ -27,10 +27,21 @@ AS
 DECLARE @maxdate as smalldatetime
 SELECT @maxdate=CAST('20591231' as smalldatetime)
 
+/*Get business unit id*/
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+/*Deleting data*/
+DELETE FROM mart.bridge_skillset_skill 
+WHERE business_unit_id = @business_unit_id
+	OR business_unit_id = -1
+
+
+/*
 DELETE FROM mart.bridge_skillset_skill 
 WHERE business_unit_id = (SELECT DISTINCT business_unit_id FROM Stage.stg_agent_skillset)
 	OR business_unit_id = -1
-
+*/
 --INSERT -1
 INSERT INTO mart.bridge_skillset_skill
 	(	skillset_id, 
