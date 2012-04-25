@@ -124,9 +124,9 @@ namespace Teleopti.Analytics.Etl.Transformer
         		datePart = String.Concat("0", datePart);
 
         	int year = _year;
-			if (_dayInMonth < 4 && _weekNumber > 51)
+			if (_dayInMonth <= 6 && _weekNumber > 51)
 				year -= 1;
-            if (_dayInMonth > 27 && _weekNumber == 1)
+            if (_dayInMonth >= 26 && _weekNumber == 1)
                 year += 1;
 
 			return string.Format(CultureInfo.InvariantCulture, "{0}{1}", year, datePart);
