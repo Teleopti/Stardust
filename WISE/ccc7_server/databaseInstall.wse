@@ -381,7 +381,7 @@ item: Remark
 end
 item: Execute Program
   Pathname=CccAppConfig.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%"
+  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%" -BU"%BU%"
   Default Directory=%DIR2%
   Flags=00000010
 end
