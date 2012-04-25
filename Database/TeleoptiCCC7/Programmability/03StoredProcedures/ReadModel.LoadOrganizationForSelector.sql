@@ -1,5 +1,13 @@
+/****** Object:  StoredProcedure [ReadModel].[LoadOrganizationForSelector]    Script Date: 02/09/2012 11:58:54 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadOrganizationForSelector]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[LoadOrganizationForSelector]
+GO
+
+/****** Object:  StoredProcedure [ReadModel].[LoadOrganizationForSelector]    Script Date: 02/09/2012 11:58:54 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
 GO
 
 
@@ -18,60 +26,13 @@ CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
 @culture int
 AS
 BEGIN
---Create needed temp tables
-CREATE TABLE #otherBUpersons(
-	[Parent] [uniqueidentifier] NOT NULL
-)
-
-CREATE TABLE #result(
-	[PersonId] [uniqueidentifier] NOT NULL,
-	[TeamId] [uniqueidentifier]  NULL,
-	[SiteId] [uniqueidentifier]  NULL,
-	[BusinessUnitId] [uniqueidentifier]  NULL,
-	[Team] [nvarchar](50) NOT NULL,
-	[Site] [nvarchar](50) NOT NULL,
-	[FirstName] [nvarchar](50) NOT NULL,
-	[LastName] [nvarchar](50) NOT NULL,
-	EmploymentNumber [nvarchar](50) NOT NULL
-	)
-
-CREATE TABLE #tempPerson(
-	[Id] [uniqueidentifier] NOT NULL,
-	[ppId] [uniqueidentifier] NOT NULL,
-	[Team] [uniqueidentifier] NOT NULL,
-	[FirstName] [nvarchar](25) NOT NULL,
-	[LastName] [nvarchar](25) NOT NULL,
-	[EmploymentNumber] [nvarchar](50) NOT NULL,
-	[Contract] [uniqueidentifier] NOT NULL,
-	[ContractSchedule] [uniqueidentifier] NOT NULL,
-	[PartTimePercentage] [uniqueidentifier] NOT NULL,
-	[RuleSetBag] [uniqueidentifier] NULL
-)
-
-CREATE TABLE #tempSkill(
-	[ppId] [uniqueidentifier] NOT NULL,
-	[Skill] [uniqueidentifier] NOT NULL
-)
-
-CREATE TABLE #otherResult(
-	[PersonId] [uniqueidentifier] NOT NULL,
-	[TeamId] [uniqueidentifier]  NULL,
-	[SiteId] [uniqueidentifier]  NULL,
-	[BusinessUnitId] [uniqueidentifier]  NULL,
-	[Node] [nvarchar](1024) NOT NULL,
-	[FirstName] [nvarchar](50) NOT NULL,
-	[LastName] [nvarchar](50) NOT NULL,
-	EmploymentNumber [nvarchar](50) NOT NULL
-	)
-
--- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
 SET NOCOUNT ON;
-
--- declares
 DECLARE @dynamicSQL nvarchar(4000)
 DECLARE @collation nvarchar(50)
 	
---Set collation
+	--Set collation
 SELECT @collation = cc.[Collation]
 FROM ReadModel.CollationCulture() cc
 inner join fn_helpcollations() fn
@@ -83,28 +44,26 @@ SELECT @collation = ISNULL(@collation,'database_default')
 --re-init @dynamicSQL
 SELECT @dynamicSQL=''
 
-INSERT INTO #tempPerson 
-SELECT DISTINCT p.Id, pp.Id ppId, pp.Team, FirstName, LastName, EmploymentNumber, Contract, ContractSchedule, PartTimePercentage, RuleSetBag 
-FROM PersonPeriodWithEndDate pp
-INNER JOIN Person p 
-ON pp.Parent = p.Id AND p.IsDeleted = 0
-AND @ondate BETWEEN StartDate AND EndDate AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
-
-INSERT INTO #tempSkill
-SELECT DISTINCT pp.Id ppId, ps.Skill
-FROM PersonPeriodWithEndDate pp
-INNER JOIN PersonSkill ps
-ON pp.Id = ps.Parent
-AND @ondate BETWEEN StartDate AND EndDate
-
 IF @type = 'Organization' BEGIN
-		
-	INSERT #result	
-	SELECT tp.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team AND Team.IsDeleted = 0  
+	CREATE TABLE #result(
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[TeamId] [uniqueidentifier]  NULL,
+		[SiteId] [uniqueidentifier]  NULL,
+		[BusinessUnitId] [uniqueidentifier]  NULL,
+		[Team] [nvarchar](50) NOT NULL,
+		[Site] [nvarchar](50) NOT NULL,
+		[FirstName] [nvarchar](50) NOT NULL,
+		[LastName] [nvarchar](50) NOT NULL,
+		EmploymentNumber [nvarchar](50) NOT NULL
+		)
+	
+	INSERT #result
+	SELECT Person.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
+	FROM PersonPeriodWithEndDate pp
+	INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team AND Team.IsDeleted = 0  
 	INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu
-	WHERE BusinessUnit = @bu
 	
 	IF @users = 1 BEGIN 
 		SELECT DISTINCT Parent INTO #otherBU FROM PersonPeriod pp INNER JOIN Team ON Team.Id = pp.Team
@@ -114,14 +73,14 @@ IF @type = 'Organization' BEGIN
 		SELECT Id, null, null, null, '', '',  FirstName, LastName, EmploymentNumber
 		FROM  Person 
 		WHERE Id NOT IN (SELECT PersonId FROM #result)
-		AND Id NOT IN (SELECT Id FROM #otherBU)
+		AND Id NOT IN (SELECT * FROM #otherBU)
 		AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
 		AND IsDeleted = 0 AND BuiltIn = 0
 
 	END
 	
 	
-	SELECT @dynamicSQL =	'SELECT [PersonId], [TeamId], [SiteId], [BusinessUnitId], [Team], [Site], [FirstName], [LastName],	EmploymentNumber FROM #result ORDER BY Site collate ' + @collation +
+	SELECT @dynamicSQL =	'SELECT * FROM #result ORDER BY Site collate ' + @collation +
 							', Team collate ' + @collation +
 							', LastName collate ' + @collation +
 							', FirstName collate ' + @collation 
@@ -131,47 +90,63 @@ IF @type = 'Organization' BEGIN
 	RETURN
 				
 	END
-
+	
+	CREATE TABLE #otherResult(
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[TeamId] [uniqueidentifier]  NULL,
+		[SiteId] [uniqueidentifier]  NULL,
+		[BusinessUnitId] [uniqueidentifier]  NULL,
+		[Node] [nvarchar](1024) NOT NULL,
+		[FirstName] [nvarchar](50) NOT NULL,
+		[LastName] [nvarchar](50) NOT NULL,
+		EmploymentNumber [nvarchar](50) NOT NULL
+		)
+		
 	IF @type = 'Contract' BEGIN
 	
 	INSERT #otherResult
-	SELECT DISTINCT tp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
+	SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 	FirstName, LastName, EmploymentNumber  
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team
-	INNER JOIN Site ON Site.id = Team.Site and Site.BusinessUnit = @bu
-	INNER JOIN Contract c ON tp.Contract = c.Id AND c.IsDeleted = 0
+	FROM Person p
+	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
+	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
+	INNER JOIN Contract c ON pp.Contract = c.Id AND c.IsDeleted = 0
 
 	END
 	
 	IF @type = 'ContractSchedule' BEGIN
 	
 	INSERT #otherResult
-	SELECT DISTINCT tp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
+	SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 	FirstName, LastName, EmploymentNumber  
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team
+	FROM Person p
+	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-	INNER JOIN ContractSchedule c ON tp.ContractSchedule = c.Id AND c.IsDeleted = 0
+	INNER JOIN ContractSchedule c ON pp.ContractSchedule = c.Id AND c.IsDeleted = 0
 	
 	END
 
 IF @type = 'PartTimePercentage' BEGIN
 	
 	INSERT #otherResult
-	SELECT DISTINCT tp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
+	SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
 	FirstName, LastName, EmploymentNumber   
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team
+	FROM Person p
+	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-	INNER JOIN PartTimePercentage c ON tp.PartTimePercentage = c.Id AND c.IsDeleted = 0
+	INNER JOIN PartTimePercentage c ON pp.PartTimePercentage = c.Id AND c.IsDeleted = 0
  
 	END
 	
 IF @type = 'Note' BEGIN
 
-	INSERT INTO #otherBUpersons
-	SELECT DISTINCT Parent
+	SELECT DISTINCT Parent INTO #otherBUpersons
 	 FROM PersonPeriod pp INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site  WHERE BusinessUnit <> @bu
 		
@@ -189,32 +164,37 @@ IF @type = 'Note' BEGIN
 	IF @type = 'ShiftBag' BEGIN
 	
 	INSERT #otherResult
-	SELECT DISTINCT tp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
+	SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
 	FirstName, LastName, EmploymentNumber  
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team
+	FROM Person p 
+	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-	INNER JOIN RuleSetBag c ON tp.RuleSetBag = c.Id AND c.IsDeleted = 0 
+	INNER JOIN RuleSetBag c ON pp.RuleSetBag = c.Id AND c.IsDeleted = 0 
 	 
 	END
 	
 	IF @type = 'Skill' BEGIN
+	
 	INSERT #otherResult
-	SELECT DISTINCT tp.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
+	SELECT DISTINCT p.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
 	FirstName, LastName, EmploymentNumber  
-	FROM #tempPerson tp
-	INNER JOIN Team ON Team.Id = tp.Team
-	INNER JOIN Site ON Site.id = Team.Site and Site.BusinessUnit = @bu
-	INNER JOIN #tempSkill ps ON tp.ppId = ps.ppId
+	FROM Person p
+	INNER JOIN PersonPeriodWithEndDate pp ON p.Id = pp.Parent AND p.IsDeleted = 0 AND StartDate <= @ondate AND EndDate >= @ondate
+	AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
+	INNER JOIN Team ON Team.Id = pp.Team
+	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
+	INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
 	INNER JOIN Skill s ON ps.Skill = s.Id AND s.IsDeleted = 0
 	 
 	END
 	
-	SELECT @dynamicSQL =	'SELECT [PersonId], [TeamId], [SiteId], [BusinessUnitId], [Node], [FirstName], [LastName],	EmploymentNumber FROM #otherResult ORDER BY Node collate ' + @collation +
+	SELECT @dynamicSQL =	'SELECT * FROM #otherResult ORDER BY Node collate ' + @collation +
 							', LastName collate ' + @collation +
 							', FirstName collate ' + @collation 
 		
-	EXEC sp_executesql @dynamicSQL 
+		EXEC sp_executesql @dynamicSQL 
 END
 
 
