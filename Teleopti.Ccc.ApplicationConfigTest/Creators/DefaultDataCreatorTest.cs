@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             CultureInfo cultureInfo = commandLineArgument.CultureInfo;
 
             ISessionFactory sessionFactory = SetupFixtureForAssembly.SessionFactory;
-            _target = new DefaultDataCreator(businessUnitName, cultureInfo, new CccTimeZoneInfo(TimeZoneInfo.Local), sessionFactory);
+            _target = new DefaultDataCreator(businessUnitName, cultureInfo, new CccTimeZoneInfo(TimeZoneInfo.Local), "username", "password", sessionFactory);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
 
         private static CommandLineArgument createFakeArguments()
         {
-            var arguments = new string[14];
+            var arguments = new string[16];
             arguments[0] = "-SSPeterWe";   // Source Server Name.
             arguments[1] = "-SDTPS_REPORT";   // Source Database Name.
             arguments[2] = "-SUUserName";   // Source User Name.
@@ -116,6 +116,9 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             arguments[11] = "-BUBusinessUnit";  // BusinessUnit Name.
             arguments[12] = "-CO";  // Convert.
             arguments[13] = "-CUkn-IN";  // Culture.
+
+        	arguments[14] = "-NAuser2";
+        	arguments[15] = "-NPpass2";
 
             return new CommandLineArgument(arguments);
         }

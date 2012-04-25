@@ -46,13 +46,10 @@ namespace Teleopti.Ccc.ApplicationConfigTest
         private static void createTestPerson()
         {
             var personCreator = new PersonCreator(SessionFactory);
-            var person = personCreator.Create("name", "name", "name", "name", new CultureInfo(1033),
-                                                                                                                new CccTimeZoneInfo(TimeZoneInfo.Local));
+            var person = personCreator.Create("name", "name", "name", "name", new CultureInfo(1033), new CccTimeZoneInfo(TimeZoneInfo.Local));
 
-            if (personCreator.Save(person))
-            {
-                _person = person;
-            }
+        	personCreator.Save(person);
+        	_person = person;
         }
 
         [TearDown]

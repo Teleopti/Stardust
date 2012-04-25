@@ -177,5 +177,15 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-11-16
         /// </remarks>
         bool OnlyRunMergeDefaultResolution { get; }
+
+    	///<summary>
+    	/// The user name for the new admin user.
+    	///</summary>
+    	string NewUserName { get; }
+
+    	///<summary>
+    	/// The password for the new admin user.
+    	///</summary>
+    	string NewUserPassword { get; }
     }
 }
