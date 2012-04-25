@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
         private SchedulePeriodTargetTimeCalculatorForTest _schedulePeriodTargetTimeCalculatorForTest;
         private IPerson _person;
         private IContract _newContract;
+        private ISchedulingOptions _schedulingOptions;
 
 
         [SetUp]
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2010, 1, 1), new List<ISkill>());
             _person.AddSchedulePeriod(new SchedulePeriod(new DateOnly(2010, 8, 1), SchedulePeriodType.Day, 1 ));
             _newContract = new Contract("kalle");
+            _schedulingOptions = new SchedulingOptions();
         }
 
         [Test]
@@ -102,7 +105,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
             using (_mocks.Playback())
             {
-                bool ret = _target.IsPeriodInLegalState(_matrix);
+                bool ret = _target.IsPeriodInLegalState(_matrix, _schedulingOptions);
                 Assert.IsTrue(ret);
             }
            
@@ -119,7 +122,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
             using (_mocks.Playback())
             {
-                bool ret = _target.IsPeriodInLegalState(_matrix);
+                bool ret = _target.IsPeriodInLegalState(_matrix, _schedulingOptions);
                 Assert.IsFalse(ret);
             }
 
@@ -138,7 +141,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
             using (_mocks.Playback())
             {
-                bool ret = _target.IsPeriodInLegalState(_matrix);
+                bool ret = _target.IsPeriodInLegalState(_matrix, _schedulingOptions);
                 Assert.IsFalse(ret);
             }
         }
@@ -154,7 +157,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
             using (_mocks.Playback())
             {
-                bool ret = _target.IsPeriodInLegalState(_matrix);
+                bool ret = _target.IsPeriodInLegalState(_matrix, _schedulingOptions);
                 Assert.IsFalse(ret);
             }
         }
@@ -170,7 +173,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                bool ret = _target.IsWeekInLegalState(0, _matrix);
+                bool ret = _target.IsWeekInLegalState(0, _matrix, _schedulingOptions);
                 Assert.IsTrue(ret);
             }
         }
@@ -187,7 +190,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			}
 			using (_mocks.Playback())
 			{
-                bool ret = _target.IsWeekInLegalState(new DateOnly(2010, 8, 2), _matrix);
+                bool ret = _target.IsWeekInLegalState(new DateOnly(2010, 8, 2), _matrix, _schedulingOptions);
 				Assert.IsTrue(ret);
 			}
 		}
@@ -203,7 +206,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			}
 			using (_mocks.Playback())
 			{
-                bool ret = _target.IsWeekInLegalState(new DateOnly(2010, 8, 15), _matrix);
+                bool ret = _target.IsWeekInLegalState(new DateOnly(2010, 8, 15), _matrix, _schedulingOptions);
 				Assert.IsTrue(ret);
 			}
 		}
@@ -219,7 +222,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(8), ret.Maximum);
             }
@@ -238,7 +241,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(8), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(9), ret.Maximum);
             }
@@ -261,7 +264,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(9), ret.Maximum);
             }
@@ -279,7 +282,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Maximum);
             }
@@ -296,7 +299,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan>? ret = _target.MinMaxAllowedShiftContractTime(day,_matrix );
+                MinMax<TimeSpan>? ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions);
                 Assert.IsFalse(ret.HasValue);
             }
         }
@@ -314,7 +317,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(9), ret.Maximum);
             }
@@ -333,7 +336,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             }
             using (_mocks.Playback())
             {
-                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix).Value;
+                MinMax<TimeSpan> ret = _target.MinMaxAllowedShiftContractTime(day, _matrix, _schedulingOptions).Value;
                 Assert.AreEqual(TimeSpan.FromHours(7), ret.Minimum);
                 Assert.AreEqual(TimeSpan.FromHours(9), ret.Maximum);
             }
@@ -672,7 +675,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             for (int i = 0; i < 14; i++)
             {
                 DateOnly dateOnly = new DateOnly(2010, 8, 2).AddDays(i);
-                ret.Add(dateOnly, _possibleMinMaxWorkShiftLengthExtractorForTest.PossibleLengthsForDate(dateOnly, _matrix));
+                ret.Add(dateOnly, _possibleMinMaxWorkShiftLengthExtractorForTest.PossibleLengthsForDate(dateOnly, _matrix, _schedulingOptions));
             }
             return ret;
         }
@@ -700,7 +703,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
     public class PossibleMinMaxWorkShiftLengthExtractorForTest : IPossibleMinMaxWorkShiftLengthExtractor
     {
-        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix)
+        public MinMax<TimeSpan> PossibleLengthsForDate(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday)
                 return new MinMax<TimeSpan>(TimeSpan.FromHours(9), TimeSpan.FromHours(9));

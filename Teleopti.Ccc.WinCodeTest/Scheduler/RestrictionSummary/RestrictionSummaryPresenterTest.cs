@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 			Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
             _mocks.ReplayAll();
             var helper = new AgentInfoHelper(_person, new DateOnly(_date), _schedulingResultStateHolder, _schedulingOptions, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_schedulingOptions);
+            helper.SchedulePeriodData();
             _target.GetNextPeriod(helper);
             _mocks.VerifyAll();
         }

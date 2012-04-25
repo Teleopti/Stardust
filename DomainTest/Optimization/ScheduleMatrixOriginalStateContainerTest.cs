@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations();
+                Expect.Call(_part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 mockExpectations();
 				Expect.Call(_part.IsScheduled()).Return(true);
+                Expect.Call(_part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 mockExpectations();
             	Expect.Call(_part.IsScheduled()).Return(false);
+                Expect.Call(_part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {
@@ -115,55 +118,90 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using(_mocks.Playback())
             {
                 _target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
-                _target.CountChangedWorkShifts();
+                _target.ChangedWorkShiftsPercent();
             }
 
         }
 
-        [Test]
-        public void VerifyScheduleDayEquatorShouldReturnTheNumberOfDayEquatorReturnTrue()
-        {
-            IPerson person = PersonFactory.CreatePerson();
-            IScenario scenario = new Scenario("TestScenario");
-            DateTime startDate = new DateTime(2010, 01, 10, 0, 0, 0, DateTimeKind.Utc);
-            DateTime endDate = startDate.AddDays(10);
-            DateTimePeriod dateTimePeriod = new DateTimePeriod(startDate, endDate);
-            ISkill skill = SkillFactory.CreateSkill("TestSkill");
+		[Test]
+		public void VerifyChangedDayOffsPercent()
+		{
+			IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 
-            IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+			IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> {_scheduleDayPro, scheduleDayPro2};
 
-            SchedulePartFactoryForDomain schedulePartFactory = new SchedulePartFactoryForDomain(person, scenario, dateTimePeriod, skill);
+			using(_mocks.Record())
+			{
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
+				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
+				//Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(_scheduleDayPro);
+				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+				Expect.Call(_part.Clone()).Return(_part).Repeat.Twice();
+				Expect.Call(_part.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_part.SignificantPart()).Return(SchedulePartView.DayOff);
 
-            _part = schedulePartFactory.CreatePartWithMainShift();
-            IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> { _scheduleDayPro, scheduleDayPro2 };
+				Expect.Call(_scheduleDayEquator.DayOffEquals(_part, _part)).Return(false);
+				Expect.Call(_scheduleDayEquator.DayOffEquals(_part, _part)).Return(true);
+			}
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
-                Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
-                Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
-                Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(scheduleDayPro2);
-                Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
-                    .Return(true)
-                    .Repeat.Once();
-                Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
-                    .Return(false)
-                    .Repeat.Once();
+			double ret;
 
-            }
+			using (_mocks.Playback())
+			{
+				_target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
+				ret = _target.ChangedDayOffsPercent();
+			}
 
-            int result;
-            using (_mocks.Playback())
-            {
-                _target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
-                result = _target.CountChangedWorkShifts();
-            }
+			Assert.AreEqual(.5, ret);
+		}
 
-            Assert.AreEqual(1, result);
-        }
+        //[Test]
+        //public void VerifyScheduleDayEquatorShouldReturnTheNumberOfDayEquatorReturnTrue()
+        //{
+        //    IPerson person = PersonFactory.CreatePerson();
+        //    IScenario scenario = new Scenario("TestScenario");
+        //    DateTime startDate = new DateTime(2010, 01, 10, 0, 0, 0, DateTimeKind.Utc);
+        //    DateTime endDate = startDate.AddDays(10);
+        //    DateTimePeriod dateTimePeriod = new DateTimePeriod(startDate, endDate);
+        //    ISkill skill = SkillFactory.CreateSkill("TestSkill");
+
+        //    IScheduleDayPro scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+
+        //    SchedulePartFactoryForDomain schedulePartFactory = new SchedulePartFactoryForDomain(person, scenario, dateTimePeriod, skill);
+
+        //    _part = schedulePartFactory.CreatePartWithMainShift();
+        //    IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro> { _scheduleDayPro, scheduleDayPro2 };
+
+        //    using (_mocks.Record())
+        //    {
+        //        Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays)).Repeat.Any();
+        //        Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 10)).Repeat.Any();
+        //        Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 10))).Return(_scheduleDayPro);
+        //        Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+        //        Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
+        //        Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(scheduleDayPro2);
+        //        Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
+        //        Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
+        //            .Return(true)
+        //            .Repeat.Once();
+        //        Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
+        //            .Return(false)
+        //            .Repeat.Once();
+
+        //    }
+
+        //    double result;
+        //    using (_mocks.Playback())
+        //    {
+        //        _target = new ScheduleMatrixOriginalStateContainer(_matrix, _scheduleDayEquator);
+        //        result = _target.ChangedWorkShiftsPercent();
+        //    }
+
+        //    Assert.AreEqual(1, result);
+        //}
 
         private void mockExpectations()
         {
@@ -174,6 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2010, 1, 1)).Repeat.Any();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
             Expect.Call(_part.Clone()).Return(_part).Repeat.Once();
+            
         }
     }
 }

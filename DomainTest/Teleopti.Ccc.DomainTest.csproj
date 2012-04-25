@@ -225,11 +225,13 @@
     <Compile Include="Optimization\GroupPersonSchedulePeriodCheckerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
+    <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
@@ -558,6 +560,7 @@
     <Compile Include="Scheduling\NoteTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCloserTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private  IGroupPersonPreOptimizationChecker _groupPersonPreOptimizationChecker;
         private  IGroupMatrixHelper _groupMatrixHelper;
         private GroupDayOffOptimizerCreator _target;
+        private IDaysOffPreferences _daysOffPreferences;
 
         [SetUp]
         public void Setup()
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _groupSchedulingService = _mock.StrictMock<IGroupSchedulingService>();
             _groupPersonPreOptimizationChecker = _mock.StrictMock<IGroupPersonPreOptimizationChecker>();
             _groupMatrixHelper = _mock.StrictMock<IGroupMatrixHelper>();
+            _daysOffPreferences = new DaysOffPreferences();
 
             _target = new GroupDayOffOptimizerCreator(_optimizerPreferences, _scheduleResultDataExtractorProvider,
                                                       _changesTracker, _schedulePartModifyAndRollbackService,
@@ -46,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             var converter = _mock.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             var decisionMaker = _mock.StrictMock<IDayOffDecisionMaker>();
-            var ruleset = new DayOffPlannerSessionRuleSet();
             var validators = new List<IDayOffLegalStateValidator>();
             var allPersons = new List<IPerson>();
             var schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(schedulingOptions.UseSameDayOffs).Return(false);
             Expect.Call(_groupPersonPreOptimizationChecker.GroupPersonBuilder).Return(null);
             _mock.ReplayAll();
-            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, ruleset, validators, allPersons);
+            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons);
             Assert.That(ret.GetType(), Is.EqualTo(typeof(GroupDayOffSingleOptimizer)));
             _mock.VerifyAll();
         }
@@ -65,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             var converter = _mock.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             var decisionMaker = _mock.StrictMock<IDayOffDecisionMaker>();
-            var ruleset = new DayOffPlannerSessionRuleSet();
             var validators = new List<IDayOffLegalStateValidator>();
             var allPersons = new List<IPerson>();
             var schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_optimizerPreferences.SchedulingOptions).Return(schedulingOptions);
             Expect.Call(schedulingOptions.UseSameDayOffs).Return(true);
             _mock.ReplayAll();
-            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, ruleset, validators, allPersons);
+            var ret = _target.CreateDayOffOptimizer(converter, decisionMaker,_dayOffDecisionMakerExecuter, _daysOffPreferences, validators, allPersons);
             Assert.That(ret.GetType(), Is.EqualTo(typeof(GroupDayOffOptimizer)));
             _mock.VerifyAll();
         }

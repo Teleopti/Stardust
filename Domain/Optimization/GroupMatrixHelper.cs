@@ -40,12 +40,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="groupPerson">The group person.</param>
         /// <param name="groupSchedulingService">The group scheduling service.</param>
         /// <param name="schedulePartModifyAndRollbackService">The schedule part modify and rollback service.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
         bool ScheduleRemovedDayOffDays(
             IList<DateOnly> daysOffToRemove,
             IGroupPerson groupPerson,
             IGroupSchedulingService groupSchedulingService,
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+            ISchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Creates the group matrix containers.
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="daysOffToRemove">The days off to remove.</param>
         /// <param name="daysOffToAdd">The days off to add.</param>
         /// <param name="groupPerson">The group person.</param>
-        /// <param name="ruleSet">The rule set.</param>
+        /// <param name="daysOffPreferences">The rule set.</param>
         /// <returns>
         /// Returns the created list of matrix container.
         /// Returns null if no matrix for a groupperson found or some problem turn up with the creation of matrix container
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IGroupPerson groupPerson,
-            DayOffPlannerSessionRuleSet ruleSet);
+            IDaysOffPreferences daysOffPreferences);
     }
 
     public class GroupMatrixHelper : IGroupMatrixHelper
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="daysOffToRemove">The days off to remove.</param>
         /// <param name="daysOffToAdd">The days off to add.</param>
         /// <param name="groupPerson">The group person.</param>
-        /// <param name="ruleSet">The rule set.</param>
+        /// <param name="daysOffPreferences">The rule set.</param>
         /// <returns>
         /// Returns the created list of matrix container.
         /// Returns null if no matrix for a groupperson found or some problem turn up with the creation of matrix container
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove, 
             IList<DateOnly> daysOffToAdd, 
             IGroupPerson groupPerson, 
-            DayOffPlannerSessionRuleSet ruleSet
+            IDaysOffPreferences daysOffPreferences
             )
         {
             IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>();
@@ -108,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _allMatrixes = allMatrixes;
 
                 GroupMatrixContainer matrixContainer =
-                    _groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix, ruleSet);
+                    _groupMatrixContainerCreator.CreateGroupMatrixContainer(daysOffToRemove, daysOffToAdd, scheduleMatrix, daysOffPreferences);
                 if (matrixContainer == null)
                     return null;
                 containers.Add(matrixContainer);
@@ -141,11 +143,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public bool ScheduleRemovedDayOffDays(IList<DateOnly> daysOffToRemove, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
         {
             foreach (var dateOnly in daysOffToRemove)
             {
-                if (!groupSchedulingService.ScheduleOneDay(dateOnly, groupPerson, _allMatrixes))
+                if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, _allMatrixes))
                 {
                     schedulePartModifyAndRollbackService.Rollback();
                     return false;

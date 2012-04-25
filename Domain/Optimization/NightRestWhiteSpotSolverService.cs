@@ -13,19 +13,23 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IScheduleService _scheduleService;
         private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+    	private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 
-        public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteSchedulePartService deleteSchedulePartService, 
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IScheduleService scheduleService, IWorkShiftFinderResultHolder workShiftFinderResultHolder)
+    	public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteSchedulePartService deleteSchedulePartService, 
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			IScheduleService scheduleService, IWorkShiftFinderResultHolder workShiftFinderResultHolder,
+			IResourceCalculateDelayer resourceCalculateDelayer)
         {
             _solver = solver;
             _deleteSchedulePartService = deleteSchedulePartService;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _scheduleService = scheduleService;
             _workShiftFinderResultHolder = workShiftFinderResultHolder;
+        	_resourceCalculateDelayer = resourceCalculateDelayer;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool Resolve(IScheduleMatrixPro matrix)
+        public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
             // om inte solvern returnerar något så returnera false
@@ -45,8 +49,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (var dateOnly in solverResult.DaysToReschedule())
             {
                 _workShiftFinderResultHolder.Clear(person, dateOnly);
-                
-                if(_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), true))
+
+				if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, true, _resourceCalculateDelayer))
                 {
                     //_schedulePartModifyAndRollbackService.Rollback();
                     success = true;

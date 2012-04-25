@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
 {
@@ -11,21 +13,21 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private ISmartDayOffBackToLegalStateService _target;
         private MockRepository _mocks;
         private int _maxIterations;
-        private DayOffPlannerSessionRuleSet _rules;
+        private IDaysOffPreferences _daysOffPreferences;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _maxIterations = 20;
-            _rules = new DayOffPlannerSessionRuleSet();
-            _rules.UseConsecutiveDaysOff = true;
-            _rules.UseConsecutiveWorkdays = true;
-            _rules.UseDaysOffPerWeek = true;
-            _rules.UseFreeWeekendDays = true;
-            _rules.UseFreeWeekends = true;
+            _daysOffPreferences = new DaysOffPreferences();
+            _daysOffPreferences.UseConsecutiveDaysOff = true;
+            _daysOffPreferences.UseConsecutiveWorkdays = true;
+            _daysOffPreferences.UseDaysOffPerWeek = true;
+            _daysOffPreferences.UseWeekEndDaysOff = true;
+            _daysOffPreferences.UseFullWeekendsOff = true;
             IDayOffBackToLegalStateFunctions functions = _mocks.StrictMock<IDayOffBackToLegalStateFunctions>();
-            _target = new SmartDayOffBackToLegalStateService(functions, _rules, _maxIterations);
+            _target = new SmartDayOffBackToLegalStateService(functions, _daysOffPreferences, _maxIterations);
         }
 
         [Test]

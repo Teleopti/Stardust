@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayList = new List<IScheduleDay>{_scheduleDay};
             _modifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
             _target = new WorkShiftBackToLegalStateStep(_bitArrayCreator, _decisionMaker, _deleteService, _modifyAndRollbackService);
-
         }
 
         [Test]

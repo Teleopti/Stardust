@@ -86,7 +86,7 @@ namespace Teleopti.Interfaces.Domain
         bool UsePreferences { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [use preferences must have].
+        /// Gets or sets a value indicating whether to use preferences must have].
         /// </summary>
         /// <value>
         /// 	<c>true</c> if [use preferences must have]; otherwise, <c>false</c>.
@@ -319,8 +319,17 @@ namespace Teleopti.Interfaces.Domain
         ///</summary>
         IScheduleTag TagToUseOnOptimize { get; set; }
 
+		
         ///<summary>
         ///</summary>
         bool ShowTroubleshot { get; set; }
+        
+        /// <summary>
+		/// Gets or sets the resource calculate frequency.
+		/// </summary>
+		/// <value>
+		/// The resource calculate frequency.
+		/// </value>
+		int ResourceCalculateFrequency { get; set; }
     }
 }

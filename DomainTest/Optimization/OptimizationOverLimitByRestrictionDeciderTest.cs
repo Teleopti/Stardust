@@ -1,0 +1,807 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Optimization
+{
+    [TestFixture]
+    public class OptimizationOverLimitByRestrictionDeciderTest
+    {
+        private IOptimizationOverLimitByRestrictionDecider _target;
+        private MockRepository _mocks;
+
+        private IScheduleMatrixPro _matrix;
+        private ICheckerRestriction _restrictionChecker;
+        private OptimizationPreferences _optimizationPreferences;
+
+        private IScheduleDayPro _scheduleDayPro1;
+        private IScheduleDayPro _scheduleDayPro2;
+        private IScheduleDayPro _scheduleDayPro3;
+        private IScheduleDayPro _scheduleDayPro4;
+
+        private IScheduleDay _scheduleDay1;
+        private IScheduleDay _scheduleDay2;
+        private IScheduleDay _scheduleDay3;
+        private IScheduleDay _scheduleDay4;
+
+        private IScheduleMatrixOriginalStateContainer _originalStateContainer;
+
+        [SetUp]
+        public void Setup()
+        {
+            _mocks = new MockRepository();
+
+            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+            _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
+            _restrictionChecker = _mocks.StrictMock<ICheckerRestriction>();
+            _optimizationPreferences = new OptimizationPreferences();
+            resetPreferences();
+
+            _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
+            _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
+
+            _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+            _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+            _scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
+            _scheduleDay4 = _mocks.StrictMock<IScheduleDay>();
+
+        }
+
+        [Test]
+        public void VerifyInstantiate()
+        {
+            _target = new OptimizationOverLimitByRestrictionDecider(
+                _matrix,
+                _restrictionChecker,
+                _optimizationPreferences,
+                _originalStateContainer);
+            Assert.IsNotNull(_target);
+        }
+
+        #region PreferencesTests
+
+        [Test]
+        public void VerifyPreferencesUnderLimit()
+        {
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0;
+
+            using (_mocks.Record())
+            {
+                addPreferencesMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyPreferencesEqualLimit()
+        {
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0.5d;
+
+            using (_mocks.Record())
+            {
+                addPreferencesMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+
+            }
+        }
+
+        [Test]
+        public void VerifyPreferencesOverLimit()
+        {
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0.6d;
+
+            using (_mocks.Record())
+            {
+                addPreferencesMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyPreferencesIsUnderLimitIfUsePreferencesIsFalse()
+        {
+            _optimizationPreferences.General.UsePreferences = false;
+            _optimizationPreferences.General.PreferencesValue = 0.4d;
+
+            _target = new OptimizationOverLimitByRestrictionDecider(
+                _matrix,
+                _restrictionChecker,
+                _optimizationPreferences,
+                _originalStateContainer);
+            IList<DateOnly> result = _target.OverLimit();
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [Test]
+        public void VerifyPreferencesUnderLimitWhenNoPreferencesInPeriod()
+        {
+            _optimizationPreferences.General.UsePreferences = true;
+            _optimizationPreferences.General.PreferencesValue = 0.0d;
+
+            using (_mocks.Record())
+            {
+
+                commonMocks();
+
+                Expect.Call(_restrictionChecker.CheckPreference())
+                    .Return(PermissionState.None)
+                    .Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        private void addPreferencesMockExpectation()
+        {
+            addMockExpectation(_restrictionChecker.CheckPreference);
+        }
+
+
+        #endregion
+
+        #region MustHavesTests
+
+        [Test]
+        public void VerifyMustHavesUnderLimit()
+        {
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 0;
+
+            using (_mocks.Record())
+            {
+                addMustHaveMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyMustHavesEqualLimit()
+        {
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 0.5d;
+
+            using (_mocks.Record())
+            {
+                addMustHaveMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyMustHavesOverLimit()
+        {
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.MustHavesValue = 0.6d;
+
+            using (_mocks.Record())
+            {
+                addMustHaveMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyMustHavesIsUnderLimitIfUseRotationsIsFalse()
+        {
+            _optimizationPreferences.General.UseMustHaves = false;
+            _optimizationPreferences.General.MustHavesValue = 0.4d;
+
+            _target = new OptimizationOverLimitByRestrictionDecider(
+                _matrix,
+                _restrictionChecker,
+                _optimizationPreferences,
+                _originalStateContainer);
+            IList<DateOnly> result = _target.OverLimit();
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [Test]
+        public void VerifyMustHavesNoMustHavesInPeriod()
+        {
+            _optimizationPreferences.General.UseMustHaves = true;
+            _optimizationPreferences.General.RotationsValue = 0.0d;
+
+            using (_mocks.Record())
+            {
+
+                commonMocks();
+
+                Expect.Call(_restrictionChecker.CheckPreferenceMustHave())
+                    .Return(PermissionState.None)
+                    .Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        private void addMustHaveMockExpectation()
+        {
+            addMockExpectation(_restrictionChecker.CheckPreferenceMustHave);
+        }
+
+
+        #endregion
+
+        #region RotationTests
+
+        [Test]
+        public void VerifyRotationUnderLimit()
+        {
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0;
+
+            using (_mocks.Record())
+            {
+                addRotationMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyRotationEqualLimit()
+        {
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0.5d;
+
+            using (_mocks.Record())
+            {
+                addRotationMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyRotationOverLimit()
+        {
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0.6d;
+
+            using (_mocks.Record())
+            {
+                addRotationMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyRotationIsUnderLimitIfUseRotationsIsFalse()
+        {
+            _optimizationPreferences.General.UseRotations = false;
+            _optimizationPreferences.General.RotationsValue = 0.4d;
+
+            using (_mocks.Record())
+            {
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyRotationNoRotationInPeriod()
+        {
+            _optimizationPreferences.General.UseRotations = true;
+            _optimizationPreferences.General.RotationsValue = 0.0d;
+
+            using (_mocks.Record())
+            {
+
+                commonMocks();
+
+                Expect.Call(_restrictionChecker.CheckRotations())
+                    .Return(PermissionState.None)
+                    .Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        private void addRotationMockExpectation()
+        {
+            addMockExpectation(_restrictionChecker.CheckRotations);
+        }
+
+        #endregion
+
+        #region AvailabilitiesTests
+
+        [Test]
+        public void VerifyAvailabilitiesUnderLimit()
+        {
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0;
+
+            using (_mocks.Record())
+            {
+                addAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyAvailabilitiesEqualLimit()
+        {
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.5d;
+
+            using (_mocks.Record())
+            {
+                addAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyAvailabilitiesOverLimit()
+        {
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.6d;
+
+            using (_mocks.Record())
+            {
+                addAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyAvailabilitiesIsUnderLimitIfUseAvailabilitiesIsFalse()
+        {
+            _optimizationPreferences.General.UseAvailabilities = false;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.4d;
+
+            using (_mocks.Record())
+            {
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyAvailabilitiesIsUnderLimitIfNoAvailabilitiesInPeriod()
+        {
+            _optimizationPreferences.General.UseAvailabilities = true;
+            _optimizationPreferences.General.AvailabilitiesValue = 0.0d;
+
+            using (_mocks.Record())
+            {
+
+                commonMocks();
+
+                Expect.Call(_restrictionChecker.CheckAvailability())
+                    .Return(PermissionState.None)
+                    .Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        private void addAvailabilityMockExpectation()
+        {
+            addMockExpectation(_restrictionChecker.CheckAvailability);
+        }
+
+        #endregion
+
+        #region StudentAvailabilitiesTests
+
+        [Test]
+        public void VerifyStudentAvailabilitiesUnderLimit()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0;
+
+            using (_mocks.Record())
+            {
+                addStudentAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyStudentAvailabilitiesEqualLimit()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.5d;
+
+            using (_mocks.Record())
+            {
+                addStudentAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyStudentAvailabilitiesOverLimit()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.6d;
+
+            using (_mocks.Record())
+            {
+                addStudentAvailabilityMockExpectation();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsFalse(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyStudentAvailabilitiesIsUnderLimitIfUseStudentAvailabilitiesIsFalse()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = false;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.4d;
+
+            using (_mocks.Record())
+            {
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        [Test]
+        public void VerifyStudentAvailabilitiesIsUnderLimitIfNoStudentAvailabilitiesInPeriod()
+        {
+            _optimizationPreferences.General.UseStudentAvailabilities = true;
+            _optimizationPreferences.General.StudentAvailabilitiesValue = 0.0d;
+
+            using (_mocks.Record())
+            {
+                commonMocks();
+
+                Expect.Call(_restrictionChecker.CheckStudentAvailability())
+                    .Return(PermissionState.None)
+                    .Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                _target = new OptimizationOverLimitByRestrictionDecider(
+                    _matrix,
+                    _restrictionChecker,
+                    _optimizationPreferences,
+                    _originalStateContainer);
+                IList<DateOnly> result = _target.OverLimit();
+                Assert.IsTrue(result.Count == 0);
+            }
+        }
+
+        private void addStudentAvailabilityMockExpectation()
+        {
+            addMockExpectation(_restrictionChecker.CheckStudentAvailability);
+        }
+
+        #endregion
+
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnFalseIfEverythingOk()
+		{
+			_optimizationPreferences.Extra.KeepShifts = true;
+			_optimizationPreferences.Extra.KeepShiftsValue = 1;
+			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
+			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(0);
+				Expect.Call(_originalStateContainer.ChangedDayOffsPercent()).Return(0);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsFalse(ret);
+		}
+
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnTrueIfShiftsOverLimit()
+		{
+			_optimizationPreferences.Extra.KeepShifts = true;
+			_optimizationPreferences.Extra.KeepShiftsValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedWorkShiftsPercent()).Return(.5);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsTrue(ret);
+		}
+
+		[Test]
+		public void MoveMaxDaysOverLimitShouldReturnTrueIfDaysOffOverLimit()
+		{
+			_optimizationPreferences.DaysOff.UseKeepExistingDaysOff = true;
+			_optimizationPreferences.DaysOff.KeepExistingDaysOffValue = 1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_originalStateContainer.ChangedDayOffsPercent()).Return(.5);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.MoveMaxDaysOverLimit();
+			}
+
+			Assert.IsTrue(ret);
+		}
+
+        private void resetPreferences()
+        {
+            _optimizationPreferences.General.UsePreferences = false;
+            _optimizationPreferences.General.UseMustHaves = false;
+            _optimizationPreferences.General.UseRotations = false;
+            _optimizationPreferences.General.UseAvailabilities = false;
+            _optimizationPreferences.General.UseStudentAvailabilities = false;
+        }
+
+        private void addMockExpectation(Func<PermissionState> checkMethod)
+        {
+
+            commonMocks();
+
+            Expect.Call(checkMethod())
+                .Return(PermissionState.None);
+            Expect.Call(checkMethod())
+                .Return(PermissionState.Unspecified);
+            Expect.Call(checkMethod())
+                .Return(PermissionState.Broken);
+            Expect.Call(checkMethod())
+                .Return(PermissionState.None);
+        }
+
+        private void commonMocks()
+        {
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
+            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
+
+            Expect.Call(_matrix.EffectivePeriodDays).Return(
+                new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
+                                                            {
+                                                                _scheduleDayPro1,
+                                                                _scheduleDayPro2,
+                                                                _scheduleDayPro3,
+                                                                _scheduleDayPro4
+                                                            }));
+
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3);
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_scheduleDay4);
+
+            Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.Day).Return(new DateOnly(2012, 01, 01)).Repeat.Any();
+        }
+    }
+}

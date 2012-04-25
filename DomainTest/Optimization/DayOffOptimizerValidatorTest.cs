@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person);
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_dayOffRule.Validate(_dictionary, new List<IScheduleDay> {_scheduleDay})).Return(new List<IBusinessRuleResponse>());
+                Expect.Call(_dayOffRule.Validate(_dictionary, new List<IScheduleDay> { _scheduleDay })).Return(new List<IBusinessRuleResponse>());
             }
 
             using(_mock.Playback())

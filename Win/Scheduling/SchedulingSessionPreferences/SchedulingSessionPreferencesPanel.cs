@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private bool _dataLoaded;
     	private IList<IGroupPage> _groupPages;
 		private IList<IGroupPage> _groupPagesFairness;
-        private SchedulingScreenSettings _currentSchedulingScreenSettings;
         private bool _optimize;
         private IList<IScheduleTag> _scheduleTags;
 
@@ -28,13 +27,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-			bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, SchedulingScreenSettings currentSchedulingScreenSettings, 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
+			bool reschedule, bool backToLegal, IList<IGroupPage> groupPages, 
             bool optimize, IList<IScheduleTag> scheduleTags)
         {
             if(!reschedule)
             {
-                tableLayoutPanel1.RowStyles[tableLayoutPanel1.GetRow(groupBoxKeep)].Height = 0;
+
             }
             else
             {
@@ -53,8 +53,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 groupBox3.Text = Resources.Team;
             }
 
+			labelResourceCalculateEveryColon.Visible = true;
+			numericUpDownResourceCalculateEvery.Visible = true;
+			labelScheduleOrSchedules1.Visible = true;
+
+			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+			{
+				labelResourceCalculateEveryColon.Visible = false;
+				numericUpDownResourceCalculateEvery.Visible = false;
+				labelScheduleOrSchedules1.Visible = false;
+			}
+
             _schedulingOptions = schedulingOptions;
-            _currentSchedulingScreenSettings = currentSchedulingScreenSettings;
             _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
             _scheduleTags = scheduleTags;
             var specification = new NotSkillGroupSpecification();
@@ -111,12 +121,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             get { return groupBoxShiftCategory.Visible; }
             set { groupBoxShiftCategory.Visible = value; }
-        }
-
-        public bool RefreshScreenVisible
-        {
-            get { return tableLayoutPanelRefreshScreen.Visible; }
-            set { tableLayoutPanelRefreshScreen.Visible = value; }
         }
 
         #region IDataExchange Members
@@ -189,12 +193,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
 			comboBoxGroupingFairness.DisplayMember = "Description";
-		    comboBoxGroupingFairness.ValueMember = "Key";
-
-            if(_currentSchedulingScreenSettings.SelectedFairnessGroupingKey != null)
-		        comboBoxGroupingFairness.SelectedValue = _currentSchedulingScreenSettings.SelectedFairnessGroupingKey;
-            if (comboBoxGroupingFairness.SelectedValue == null)
-                comboBoxGroupingFairness.SelectedIndex = 0;
 
 			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
 			{
@@ -205,12 +203,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void DataOffline()
         {
             _localSchedulingOptions = (ISchedulingOptions)_schedulingOptions.Clone();
-
-            //Default to false for now...until gui is refactored
-            _localSchedulingOptions.AvailabilityDaysOnly = false;
-            _localSchedulingOptions.RotationDaysOnly = false;
-            _localSchedulingOptions.PreferencesDaysOnly = false;
-            _localSchedulingOptions.ShiftCategory = null;
         }
 
         private void DataOnline()
@@ -242,7 +234,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
             _schedulingOptions.TagToUseOnOptimize = _localSchedulingOptions.TagToUseOnOptimize;
-            _schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
+        	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
+			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
         }
 
         private void GetDataFromControls()
@@ -266,18 +259,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             else
                 _localSchedulingOptions.ShiftCategory = null;
 
-            if(radioButtonKeepNone.Checked)
-            {
-                _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.None;
-            }
-            else
-            {
-                if (radioButtonKeepShiftCategory.Checked)
-                    _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-                else
-                    _localSchedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime;
-            }
-
+            
             if (!checkBoxUseBlockScheduling.Checked)
                 _localSchedulingOptions.UseBlockScheduling = BlockFinderType.None;
             else
@@ -307,10 +289,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag)comboBoxAdvTag.SelectedItem;
             }
             _localSchedulingOptions.UseSameDayOffs = !checkBoxUseGroupScheduling.Checked ? checkBoxUseGroupScheduling.Checked : checkBoxUseSameDayOffs.Checked;
+        	_localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
+			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
 
-            _currentSchedulingScreenSettings.SelectedFairnessGroupingKey = comboBoxGroupingFairness.SelectedValue.ToString();
-
-            _localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
         }
 
         private void SetDataInControls()
@@ -357,21 +338,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 comboBoxAdvShiftCategory.SelectedItem = _localSchedulingOptions.ShiftCategory;
 
             comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
-            switch (_localSchedulingOptions.RescheduleOptions)
-            {
-                case OptimizationRestriction.None:
-                    radioButtonKeepNone.Checked = true;
-                    break;
-
-                case OptimizationRestriction.KeepShiftCategory:
-                    radioButtonKeepShiftCategory.Checked = true;
-                    break;
-
-                case OptimizationRestriction.KeepStartAndEndTime:
-                    radioButtonKeepStartAndEndTime.Checked = true;
-                    break;
-            }
-
+            
             trackBar1.Value = (int)(_localSchedulingOptions.Fairness.Value*100);
 
             switch (_localSchedulingOptions.UseBlockScheduling)
@@ -409,8 +376,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (_optimize)
                 checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupOptimizing;
             checkBoxUseSameDayOffs.Checked = _localSchedulingOptions.UseSameDayOffs;
-
-            checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
+        	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
+			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
         }
 
         private bool MustHaveSetAndOnlyPreferenceDaysVisible()

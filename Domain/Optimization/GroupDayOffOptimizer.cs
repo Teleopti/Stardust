@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupDayOffOptimizer
     {
-        bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes);
+        bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions);
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
         private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
         private readonly IDayOffDecisionMaker _decisionMaker;
-        private readonly DayOffPlannerSessionRuleSet _ruleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public GroupDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-            DayOffPlannerSessionRuleSet ruleSet,
+            IDaysOffPreferences daysOffPreferences,
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             ILockableBitArrayChangesTracker changesTracker,
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _converter = converter;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
             _decisionMaker = decisionMaker;
-            _ruleSet = ruleSet;
+            _daysOffPreferences = daysOffPreferences;
             _dayOffDecisionMakerExecuter = dayOffDecisionMakerExecuter;
             _changesTracker = changesTracker;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -55,26 +55,26 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes)
+        public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
         {
             //_schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-            ILockableBitArray originalArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
-            ILockableBitArray workingBitArray = _converter.Convert(_ruleSet.ConsiderWeekBefore, _ruleSet.ConsiderWeekAfter);
+            ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
+            ILockableBitArray workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
             IScheduleResultDataExtractor scheduleResultDataExtractor = _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
             bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values());
             if (!decisionMakerFoundDays)
                 return false;
 
-            IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix, _ruleSet.ConsiderWeekBefore);
-            IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix, _ruleSet.ConsiderWeekBefore);
+            IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix, _daysOffPreferences.ConsiderWeekBefore);
+            IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix, _daysOffPreferences.ConsiderWeekBefore);
 
             IGroupPerson groupPerson = _groupPersonPreOptimizationChecker.CheckPersonOnDates(allMatrixes, matrix.Person, daysOffToRemove, daysOffToAdd, _allSelectedPersons);
             if (groupPerson == null)
                 return false;
 
-            IList<GroupMatrixContainer> containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _ruleSet);
+            IList<GroupMatrixContainer> containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, groupPerson, _daysOffPreferences);
             if (containers == null || containers.Count() == 0)
                 return false;
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
                 return false;
 
-            if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService))
+            if (!_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, schedulingOptions))
                 return false;
 
             return true;

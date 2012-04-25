@@ -7,11 +7,14 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IWorkShiftBackToLegalStateServicePro
     {
+
         /// <summary>
-        /// Executes the specified schedule matrix.
+        /// Executes the specified matrix.
         /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
-        bool Execute(IScheduleMatrixPro matrix);
+        bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Gets the removed days during the Execute.

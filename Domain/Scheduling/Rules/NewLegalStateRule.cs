@@ -9,13 +9,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private bool _haltModify = true;
+        private ISchedulingOptions _schedulingOptions;
+
         public bool ForDelete { get; set; }
 
         public NewLegalStateRule(IScheduleMatrixListCreator scheduleMatrixListCreator, 
-            IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
+            IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
+            ISchedulingOptions schedulingOptions)
         {
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+            _schedulingOptions = schedulingOptions;
         }
 
         public string ErrorMessage
@@ -54,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     oldResponses.Remove(response);
                 }
 
-                if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix))
+                if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                 {
                     foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
                     {

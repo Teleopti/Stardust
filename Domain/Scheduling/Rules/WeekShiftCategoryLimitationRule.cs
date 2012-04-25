@@ -36,8 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         }
 
         public bool ForDelete { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
         {
             var responseList = new HashSet<IBusinessRuleResponse>();

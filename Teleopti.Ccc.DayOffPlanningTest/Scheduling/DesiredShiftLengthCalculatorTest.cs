@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 		private IScheduleDayPro _scheduleDayPro2;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
+		private ISchedulingOptions _schedulingOptions;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-
+			_schedulingOptions = new SchedulingOptions();
 
 		}
 
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using(_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 
 			Assert.AreEqual(new TimeSpan(8, 0, 0), result);
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 
 			Assert.AreEqual(new TimeSpan(9, 0, 0), result);
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 
 			Assert.AreEqual(new TimeSpan(7, 0, 0), result);
@@ -147,7 +149,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix)).Return(minMaxDic);
+				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(_matrix, _schedulingOptions)).Return(minMaxDic);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1))).
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix);
+				result = _target.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 
 			Assert.AreEqual(new TimeSpan(9, 0, 0), result);

@@ -12,14 +12,6 @@ namespace Teleopti.Ccc.DayOffPlanning
 
     public class WorkShiftBackToLegalStateBitArrayCreator : IWorkShiftBackToLegalStateBitArrayCreator
     {
-       private readonly IPossibleMinMaxWorkShiftLengthExtractor _workShiftMinMaxCalculator;
-
-        // for each weeks and period
-        public WorkShiftBackToLegalStateBitArrayCreator(
-            IPossibleMinMaxWorkShiftLengthExtractor workShiftMinMaxCalculator)
-        {
-            _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
-        }
 
         public ILockableBitArray CreateWeeklyBitArray(int weekIndex, IScheduleMatrixPro scheduleMatrix)
         {
@@ -45,14 +37,6 @@ namespace Teleopti.Ccc.DayOffPlanning
                 if (index < validWeekIndexes.Minimum || index > validWeekIndexes.Maximum) 
                 {
                     ret.Lock(index, true);
-                    continue;
-                }
-                MinMax<TimeSpan> minMaxLength = _workShiftMinMaxCalculator.PossibleLengthsForDate(scheduleDayPro.Day, scheduleMatrix);
-                TimeSpan workingTime = scheduleDayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-                if(workingTime <= minMaxLength.Minimum)
-                {
-                    ret.Lock(index, true);
-                    continue;
                 }
             }
 
@@ -81,19 +65,6 @@ namespace Teleopti.Ccc.DayOffPlanning
                 if (significantPart != SchedulePartView.MainShift)
                 {
                     ret.Lock(index, true);
-                    continue;
-                }
-                MinMax<TimeSpan> minMaxLength = _workShiftMinMaxCalculator.PossibleLengthsForDate(scheduleDayPro.Day, scheduleMatrix);
-                TimeSpan workingTime = scheduleDayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-                if(raise && workingTime >= minMaxLength.Maximum)
-                {
-                    ret.Lock(index, true);
-                    continue;
-                }
-                if(!raise && workingTime <= minMaxLength.Minimum)
-                {
-                    ret.Lock(index, true);
-                    continue;
                 }
             }
 

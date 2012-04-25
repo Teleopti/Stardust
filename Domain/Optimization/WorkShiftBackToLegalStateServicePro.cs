@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             _workShiftRangeCalculator = workShiftRangeCalculator;
         }
 
-        public bool Execute( IScheduleMatrixPro matrix)
+        public bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             _removedDays.Clear();
             _workShiftRangeCalculator.ResetCache();
-            
+
             //for each week
             int weekCount = _workShiftRangeCalculator.WeekCount(matrix);
             for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
             {
-                while(!_workShiftRangeCalculator.IsWeekInLegalState(weekIndex, matrix))
+                while (!_workShiftRangeCalculator.IsWeekInLegalState(weekIndex, matrix, schedulingOptions))
                 {
                     DateOnly? removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix);
                     if (!removedDay.HasValue)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             // whole period
             int legalStateStatus;
-            while ((legalStateStatus = _workShiftRangeCalculator.PeriodLegalStateStatus(matrix)) != 0)
+            while ((legalStateStatus = _workShiftRangeCalculator.PeriodLegalStateStatus(matrix, schedulingOptions)) != 0)
             {
                 bool raise = legalStateStatus < 0;
                 DateOnly? removedDay = _workShiftBackToLegalStateStep.ExecutePeriodStep(raise, matrix);
@@ -47,6 +47,37 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             return true;
         }
+
+        //public bool Execute( IScheduleMatrixPro matrix)
+        //{
+        //    _removedDays.Clear();
+        //    _workShiftRangeCalculator.ResetCache();
+            
+        //    //for each week
+        //    int weekCount = _workShiftRangeCalculator.WeekCount(matrix);
+        //    for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
+        //    {
+        //        while(!_workShiftRangeCalculator.IsWeekInLegalState(weekIndex, matrix))
+        //        {
+        //            DateOnly? removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix);
+        //            if (!removedDay.HasValue)
+        //                return false;
+        //            _removedDays.Add(removedDay.Value);
+        //        }
+        //    }
+
+        //    // whole period
+        //    int legalStateStatus;
+        //    while ((legalStateStatus = _workShiftRangeCalculator.PeriodLegalStateStatus(matrix)) != 0)
+        //    {
+        //        bool raise = legalStateStatus < 0;
+        //        DateOnly? removedDay = _workShiftBackToLegalStateStep.ExecutePeriodStep(raise, matrix);
+        //        if (!removedDay.HasValue)
+        //            return false;
+        //        _removedDays.Add(removedDay.Value);
+        //    }
+        //    return true;
+        //}
 
         public IList<DateOnly> RemovedDays
         {

@@ -7,13 +7,14 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
     public interface IExtendReduceTimeHelper
     {
-        void RunExtendReduceTimeOptimization(IOptimizerOriginalPreferences optimizerPreferences,
+        void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
                                              BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays,
                                              ISchedulingResultStateHolder schedulingResultStateHolder,
                                              DateOnlyPeriod selectedPeriod,
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void RunExtendReduceTimeOptimization(IOptimizerOriginalPreferences optimizerPreferences,
+        public void RunExtendReduceTimeOptimization(IOptimizationPreferences optimizerPreferences,
                                              BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays,
                                              ISchedulingResultStateHolder schedulingResultStateHolder,
                                              DateOnlyPeriod selectedPeriod,
@@ -42,25 +43,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _backgroundWorker = backgroundWorker;
 
-            if (optimizerPreferences.AdvancedPreferences.MaximumMovableWorkShiftPercentagePerPerson == 0)
-                return;
-
             IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedDays, schedulingResultStateHolder, _container);
             lockDaysForExtendReduceOptimization(matrixList);
 
             IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);
 
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences.Advanced);
             
             IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, schedulingResultStateHolder);
 
             IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
             IPeriodValueCalculator allSkillsPeriodValueCalculator =
-                periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences, allSkillsDataExtractor);
+                periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
             IExtendReduceTimeOptimizerService extendReduceTimeOptimizerService = new ExtendReduceTimeOptimizerService(allSkillsPeriodValueCalculator);
-
-            
 
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
                 _container.Resolve<IPossibleMinMaxWorkShiftLengthExtractor>();
@@ -72,8 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IWorkShiftFinderService workShiftFinderServiceForFlexibleAgents =
                 _container.Resolve<IWorkShiftFinderService>(new TypedParameter(typeof(IWorkShiftMinMaxCalculator), workShiftMinMaxCalculatorForFlexibleAgents));
             IScheduleService scheduleServiceForFlexibleAgents =
-                _container.Resolve<IScheduleService>(new TypedParameter(typeof (IWorkShiftFinderService),
-                                                                        workShiftFinderServiceForFlexibleAgents));
+                _container.Resolve<IScheduleService>(new TypedParameter(typeof (IWorkShiftFinderService), workShiftFinderServiceForFlexibleAgents));
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
                 _container.Resolve<ISchedulePartModifyAndRollbackService>();
@@ -100,17 +95,32 @@ namespace Teleopti.Ccc.Win.Scheduling
                     continue;
                 IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro);
                 IPeriodValueCalculator personalSkillsPeriodValueCalculator =
-                periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences, personalSkillsDataExtractor);
+                periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
                 IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker();
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
 
+                ICheckerRestriction restrictionChecker = new RestrictionChecker();
+                IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
+
+                ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 
                 IExtendReduceTimeOptimizer optimizer = new ExtendReduceTimeOptimizer(
-                    personalSkillsPeriodValueCalculator, personalSkillsDataExtractor, decisionMaker, bitArrayConverter,
-                    scheduleServiceForFlexibleAgents, optimizerPreferences, schedulePartModifyAndRollbackService,
-                    deleteSchedulePartService, resourceOptimizationHelper, effectiveRestrictionCreator,
-                    resourceCalculateDaysDecider, originalStateListForMoveMax[i], originalStateListForScheduleTag[i]);
+                    personalSkillsPeriodValueCalculator, 
+                    personalSkillsDataExtractor, 
+                    decisionMaker, 
+                    bitArrayConverter,
+                    scheduleServiceForFlexibleAgents, 
+                    optimizerPreferences, 
+                    schedulePartModifyAndRollbackService,
+                    deleteSchedulePartService, 
+                    resourceOptimizationHelper, 
+                    effectiveRestrictionCreator,
+                    resourceCalculateDaysDecider, 
+                    originalStateListForScheduleTag[i],
+                    optimizerOverLimitDecider, 
+                    schedulingOptionsCreator
+                    );
 
                 optimizers.Add(optimizer);
             }
