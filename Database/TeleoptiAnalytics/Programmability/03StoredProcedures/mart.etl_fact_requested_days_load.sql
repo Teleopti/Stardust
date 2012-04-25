@@ -42,7 +42,6 @@ INNER JOIN stage.stg_request stg
 SET NOCOUNT OFF
 
 /*Get business unit id*/
-DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 ----------------
