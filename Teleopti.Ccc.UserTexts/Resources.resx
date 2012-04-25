@@ -10642,4 +10642,8 @@ These options are activated:
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
   </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Import forecast from file</value>
+    <comment>Import forecast from file</comment>  
+  </data>
 </root>

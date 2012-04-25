@@ -9212,6 +9212,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import forecast from file.
+        /// </summary>
+        public static string ImportForecastFromFile {
+            get {
+                return ResourceManager.GetString("ImportForecastFromFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Queue From File.
         /// </summary>
         public static string ImportQueueFromFile {
