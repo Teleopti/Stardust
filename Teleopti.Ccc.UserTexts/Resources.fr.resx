@@ -373,10 +373,10 @@
     <value>Couper Jour Libre</value>
   </data>
   <data name="CutPersonalShift" xml:space="preserve">
-    <value>Couper Roulement Personnel</value>
+    <value>Couper Horaire Personnel</value>
   </data>
   <data name="CutShift" xml:space="preserve">
-    <value>Couper Roulement</value>
+    <value>Couper Horaire</value>
   </data>
   <data name="CutSpecial" xml:space="preserve">
     <value>Couper Spécial</value>
@@ -439,10 +439,10 @@
     <value>Supprimer Jour Libre</value>
   </data>
   <data name="DeletePersonalShift" xml:space="preserve">
-    <value>Supprimer Roulement Personnel</value>
+    <value>Supprimer Horaire Personnel</value>
   </data>
   <data name="DeleteShift" xml:space="preserve">
-    <value>Supprimer Roulement</value>
+    <value>Supprimer Horaire</value>
   </data>
   <data name="DeleteSkillThreeDots" xml:space="preserve">
     <value>Supprimer Compétence...</value>
@@ -685,10 +685,10 @@
     <value>Bloquer Sélection</value>
   </data>
   <data name="LockShiftCategories" xml:space="preserve">
-    <value>Bloquer Catégories de roulement</value>
+    <value>Bloquer Catégories d'horaires</value>
   </data>
   <data name="LockShiftCategory" xml:space="preserve">
-    <value>Bloquer Catégorie de roulement</value>
+    <value>Bloquer Catégorie d'horaires</value>
   </data>
   <data name="MainGrid" xml:space="preserve">
     <value>Plannings</value>
@@ -784,7 +784,7 @@
     <value>Nouvelle scorecard</value>
   </data>
   <data name="NewShift" xml:space="preserve">
-    <value>Nouveau Roulement</value>
+    <value>Nouvel Horaire</value>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
     <value>Nouvelle Compétence...</value>
@@ -865,7 +865,7 @@
     <value>Evénement Spécial</value>
   </data>
   <data name="OverlappningShifts" xml:space="preserve">
-    <value>Chevauchement des Roulements</value>
+    <value>Chevauchement des Horaires</value>
   </data>
   <data name="OverView" xml:space="preserve">
     <value>Aperçu</value>
@@ -895,7 +895,7 @@
     <value>Coller Absence</value>
   </data>
   <data name="PasteAssignment" xml:space="preserve">
-    <value>Coller Roulement</value>
+    <value>Coller Horaire</value>
   </data>
   <data name="PasteDayOff" xml:space="preserve">
     <value>Coller Jour Libre</value>
@@ -904,7 +904,7 @@
     <value>Coller Nouveau</value>
   </data>
   <data name="PastePersonalShift" xml:space="preserve">
-    <value>Coller Roulement Personnel</value>
+    <value>Coller Horaire Personnel</value>
   </data>
   <data name="PasteSpecial" xml:space="preserve">
     <value>Coller Spécial</value>
@@ -1081,16 +1081,16 @@
     <value>Définir tendance manuellement</value>
   </data>
   <data name="Shift" xml:space="preserve">
-    <value>Roulement</value>
+    <value>Horaire</value>
   </data>
   <data name="ShiftCategoryColon" xml:space="preserve">
-    <value>Catégorie roulement:</value>
+    <value>Catégorie d'horaires:</value>
   </data>
   <data name="ShiftCreator" xml:space="preserve">
-    <value>Roulements</value>
+    <value>Horaires</value>
   </data>
   <data name="ShiftEditor" xml:space="preserve">
-    <value>Editeur de roulement</value>
+    <value>Editeur d'horaires</value>
   </data>
   <data name="ShowAbsence" xml:space="preserve">
     <value>Montrer Absence</value>
@@ -1099,22 +1099,22 @@
     <value>Montrer Détails</value>
   </data>
   <data name="ShowMainShift" xml:space="preserve">
-    <value>Montrer Roulement</value>
+    <value>Montrer Horaire</value>
   </data>
   <data name="ShowNext" xml:space="preserve">
     <value>Montrer Suivant</value>
   </data>
   <data name="ShowNextShift" xml:space="preserve">
-    <value>Montrer Roulement Suivant</value>
+    <value>Montrer Horaire Suivant</value>
   </data>
   <data name="ShowPersonalShifts" xml:space="preserve">
-    <value>Montrer Roulement Personnel</value>
+    <value>Montrer Horaire Personnel</value>
   </data>
   <data name="ShowPrevious" xml:space="preserve">
     <value>Montrer Précédent</value>
   </data>
   <data name="ShowPreviousShift" xml:space="preserve">
-    <value>Montrer Roulement Précédent</value>
+    <value>Montrer Horaire Précédent</value>
   </data>
   <data name="SixMinutes" xml:space="preserve">
     <value>6 Minutes</value>
@@ -1342,10 +1342,10 @@
     <value>Supprimer Spécial</value>
   </data>
   <data name="PasteShift" xml:space="preserve">
-    <value>Coller Roulement</value>
+    <value>Coller Horaire</value>
   </data>
   <data name="Shifts" xml:space="preserve">
-    <value>Roulements</value>
+    <value>Horaires</value>
   </data>
   <data name="AddMainLayer" xml:space="preserve">
     <value>Ajouter Couche principale</value>
@@ -1567,7 +1567,7 @@
     <value>Sélectionner rotations</value>
   </data>
   <data name="ShiftCategory" xml:space="preserve">
-    <value>Catégorie roulement</value>
+    <value>Catégorie d'horaires</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Cacher</value>
@@ -1723,10 +1723,10 @@
     <value>Modfier Absence</value>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
-    <value>Modifier roulement principal</value>
+    <value>Modifier horaire principal</value>
   </data>
   <data name="ModifyPersonalShift" xml:space="preserve">
-    <value>Modifier roulement personnel</value>
+    <value>Modifier horaire personnel</value>
   </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
     <value>Modifier nom et mot de passe</value>
@@ -1921,19 +1921,19 @@
     <value>Sélectionner Type d'emploi</value>
   </data>
   <data name="NewShiftCategory" xml:space="preserve">
-    <value>Nouvelle Catégorie Roulement</value>
+    <value>Nouvelle Catégorie Horaire</value>
   </data>
   <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Ajouter nouvelle catégorie de Roulement</value>
+    <value>Ajouter nouvelle catégorie d'Horaire</value>
   </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
-    <value>Choisir catégorie de roulement à modifier</value>
+    <value>Choisir catégorie d'horaires à modifier</value>
   </data>
   <data name="EnterSettingsForShiftCategory" xml:space="preserve">
-    <value>Entrez propriétés pour catégorie roulement</value>
+    <value>Entrez propriétés pour catégorie horaires</value>
   </data>
   <data name="ManageShiftCategories" xml:space="preserve">
-    <value>Gérer Catégories de Roulement</value>
+    <value>Gérer Catégories d'Horaires</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>Information</value>
@@ -1966,7 +1966,7 @@
     <value>Groupe n'est pas vide</value>
   </data>
   <data name="AddShiftCategory" xml:space="preserve">
-    <value>Ajouter catégorie roulement</value>
+    <value>Ajouter catégorie d'horaires</value>
   </data>
   <data name="NewShiftCategoryShortName" xml:space="preserve">
     <value>XX</value>
@@ -1984,7 +1984,7 @@
     <value>Copier vers Planificateur</value>
   </data>
   <data name="PasteShiftFromShifts" xml:space="preserve">
-    <value>Coller Roulement depuis Roulements</value>
+    <value>Coller Horaire depuis Horaires</value>
   </data>
   <data name="AlterBetween" xml:space="preserve">
     <value>Altérer entre</value>
@@ -2461,7 +2461,7 @@
     <value>Utiliser moyenne pour les jours en déviation</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Banque de roulements</value>
+    <value>Banque d'horaires</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
     <value>Teleopti CCC Agent Schedule Messenger</value>
@@ -2530,7 +2530,7 @@
     <value>Pourcentage Temps Partiel</value>
   </data>
   <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
-    <value>Banque de roulements</value>
+    <value>Banque d'horaires</value>
   </data>
   <data name="GroupPage" xml:space="preserve">
     <value>Page de groupe</value>
@@ -2665,7 +2665,7 @@
     <value>Set de règles</value>
   </data>
   <data name="ShiftBags" xml:space="preserve">
-    <value>Banque de roulements</value>
+    <value>Banque d'horaires</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>Temps</value>
@@ -2854,7 +2854,7 @@
     <value>Nouveau Set de Règles</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Roulements - Teleopti CCC</value>
+    <value>Horaires - Teleopti CCC</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nom set de règles &gt;</value>
@@ -2893,7 +2893,7 @@
     <value>Nouvelle Limitation</value>
   </data>
   <data name="NewRuleSetBag" xml:space="preserve">
-    <value>Nouvelle banque de roulements</value>
+    <value>Nouvelle banque d'horaires</value>
   </data>
   <data name="PasteActivity" xml:space="preserve">
     <value>Coller Activité</value>
@@ -3001,7 +3001,7 @@
     <value>Etat</value>
   </data>
   <data name="RequestTypeShiftTrade" xml:space="preserve">
-    <value>Echange de roulement</value>
+    <value>Echange d'horaires</value>
   </data>
   <data name="ActualAgents" xml:space="preserve">
     <value>Agents réels</value>
@@ -3082,10 +3082,10 @@
     <value>Etat demande:</value>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>Demande d'échange de roulement</value>
+    <value>Demande d'échange d'horaires</value>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>Nouvelle demande d'échange de roulement</value>
+    <value>Nouvelle demande d'échange d'horaires</value>
   </data>
   <data name="MoveTime" xml:space="preserve">
     <value>Deplacer temps</value>
@@ -3313,7 +3313,7 @@
     <value>Gérer Adhérence temps réel</value>
   </data>
   <data name="SelectShiftCategory" xml:space="preserve">
-    <value>Sélectionner Catégorie Roulement</value>
+    <value>Sélectionner Catégorie d'Horaire</value>
   </data>
   <data name="DeleteRotation" xml:space="preserve">
     <value>Supprimer Rotations</value>
@@ -3388,7 +3388,7 @@
     <value>Utiliser Préférences</value>
   </data>
   <data name="UseShiftCategory" xml:space="preserve">
-    <value>Utiliser Catégorie Roulement</value>
+    <value>Utiliser Catégorie d'Horaire</value>
   </data>
   <data name="NewPartTimePercentage" xml:space="preserve">
     <value>Nouveau pourcentage temps partiel</value>
@@ -3709,10 +3709,10 @@
     <value>Niveau de service et Agents en Ready</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Catégorie de Roulement et Absence Journée Entière par Agent</value>
+    <value>Catégorie d'Horaire et Absence Journée Entière par Agent</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Catégorie Roulement par Jour</value>
+    <value>Catégorie d'Horaire par Jour</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
     <value>Métriques Equipe</value>
@@ -3727,7 +3727,7 @@
     <value>Nom court:</value>
   </data>
   <data name="MultiplicatorTypeOBTime" xml:space="preserve">
-    <value>Permission roulement</value>
+    <value>Permission horaire</value>
   </data>
   <data name="NewMultiplicator" xml:space="preserve">
     <value>Nouveau Multiplicateur</value>
@@ -3916,7 +3916,7 @@
     <value>Actualisé le:</value>
   </data>
   <data name="AddToBags" xml:space="preserve">
-    <value>Ajouter aux banques de roulements</value>
+    <value>Ajouter aux banques d'horaires</value>
   </data>
   <data name="SelectBags" xml:space="preserve">
     <value>Sélectionner banques</value>
@@ -4303,10 +4303,10 @@
     <value>Détails</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Une demande d'échange de roulement a été approuvée.</value>
+    <value>Une demande d'échange d'horaires {0} - {1} a été approuvée.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Une demande d'échange de roulement a été refusée.</value>
+    <value>Une demande d'échange d'horaires {0} - {1} a été refusée.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Une demande de texte est approuvée.</value>
@@ -4414,7 +4414,7 @@
     <value>Résultat</value>
   </data>
   <data name="ShiftsPerDay" xml:space="preserve">
-    <value>Roulements par jour</value>
+    <value>Horaires par jour</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
     <value>Jour de semaine </value>
@@ -4462,7 +4462,7 @@
     <value>Planning</value>
   </data>
   <data name="ShiftsPerDayHeader" xml:space="preserve">
-    <value>Roulements par jour</value>
+    <value>Horaires par jour</value>
   </data>
   <data name="PerPeriod" xml:space="preserve">
     <value>Par période</value>
@@ -4498,7 +4498,7 @@
     <value>Voir Confidentiel</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>Votre demande d'échange de roulement est refusée par votre destinataire. </value>
+    <value>Votre demande d'échange d'horaires est refusée par votre destinataire. </value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
     <value>Votre demande d'absence est refusée d'office. Vous n'avez plus assez de temps disponible dans votre compte personnel. </value>
@@ -4513,7 +4513,7 @@
     <value>Nouvelle</value>
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
-    <value>Aucun roulement existant n'était sélectionné</value>
+    <value>Aucun horaire existant n'était sélectionné</value>
   </data>
   <data name="BetweenDayOff" xml:space="preserve">
     <value>Entre Jours libres</value>
@@ -4531,7 +4531,7 @@
     <value>Effectif réel</value>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
-    <value>Vous devez avoir au moins une activité et catégorie roulement avant de créer un set de règle. </value>
+    <value>Vous devez avoir au moins une activité et catégorie horaires avant de créer un set de règle. </value>
   </data>
   <data name="Validations" xml:space="preserve">
     <value>Validations</value>
@@ -4981,7 +4981,7 @@
     <value>Modifié</value>
   </data>
   <data name="AuditingReportShift" xml:space="preserve">
-    <value>Roulement</value>
+    <value>Horaire</value>
   </data>
   <data name="ViewCustomTeamSchedule" xml:space="preserve">
     <value>Regarder Planning équipe personalisé</value>
@@ -5044,7 +5044,7 @@
     <value>Déplacer:</value>
   </data>
   <data name="ShiftsWithinDay" xml:space="preserve">
-    <value>Roulements dans la journée</value>
+    <value>Horaires dans la journée</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
     <value>Durée entre jours</value>
@@ -5104,10 +5104,10 @@
     <value>Tous Jours Libres accomplis</value>
   </data>
   <data name="AllFulFilledShifts" xml:space="preserve">
-    <value>Tous Roulements accomplis</value>
+    <value>Tous Horaires accomplis</value>
   </data>
   <data name="AllShifts" xml:space="preserve">
-    <value>Tous Roulements</value>
+    <value>Tous Horaires</value>
   </data>
   <data name="AllUnavailable" xml:space="preserve">
     <value>Tous Non Disponibles</value>
@@ -5137,7 +5137,7 @@
     <value>Utiliser Valeurs ' Tweaked '</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Catégorie de Roulement et Absence Journée Entière par Jour</value>
+    <value>Catégorie d'Horaire et Absence Journée Entière par Jour</value>
   </data>
   <data name="AuditingTurnOnShort" xml:space="preserve">
     <value>Mettre en route?</value>
@@ -5620,7 +5620,7 @@
     <value>Chercher:</value>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>Demande Echange Roulement </value>
+    <value>Demande d'échange d'horaires</value>
   </data>
   <data name="Longterm" xml:space="preserve">
     <value>Long-terme</value>
@@ -5776,7 +5776,7 @@
     <value>Options de l'optimiseur</value>
   </data>
   <data name="MoveMaxShifts" xml:space="preserve">
-    <value>Deplacer Roulements Max</value>
+    <value>Deplacer Horaires Max</value>
   </data>
   <data name="DeletingSchedules" xml:space="preserve">
     <value>Supprimer {0} horaire(s)</value>
@@ -5890,7 +5890,7 @@
     <value>Horaire protégé en écriture</value>
   </data>
   <data name="Bags" xml:space="preserve">
-    <value>Banques de Roulements</value>
+    <value>Banques d'Horaires</value>
   </data>
   <data name="ViewPointTimeZone" xml:space="preserve">
     <value>View Point (Time Zone)</value>
@@ -5953,7 +5953,7 @@
     <value>Ne garder aucun</value>
   </data>
   <data name="KeepShiftCategory" xml:space="preserve">
-    <value>Garder catégorie roulement</value>
+    <value>Garder catégorie d'horaires</value>
   </data>
   <data name="ExpandAllNodes" xml:space="preserve">
     <value>Développer tous les noeuds</value>
@@ -6100,13 +6100,13 @@
     <value>Etendu</value>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>Limitations catégorie roulement</value>
+    <value>Limitations catégorie horaires</value>
   </data>
   <data name="ResetLayout" xml:space="preserve">
     <value>Reset Disposition</value>
   </data>
   <data name="UseShiftCategoryRestrictions" xml:space="preserve">
-    <value>Utiliser Limitations Catégorie Roulement</value>
+    <value>Utiliser Limitations Catégorie d'Horaire</value>
   </data>
   <data name="ConsiderWeekAfter" xml:space="preserve">
     <value>Considérer la Semaine suivante</value>
@@ -6226,10 +6226,10 @@
     <value>Non Publié</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>Demandes d'Echange de Roulement</value>
+    <value>Demandes d'Echange d'Horaires</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>Ouvrir pour demandes d'échange de roulement</value>
+    <value>Ouvrir pour demandes d'échange d'horaires</value>
   </data>
   <data name="PosNeg" xml:space="preserve">
     <value>+/-</value>
@@ -6433,13 +6433,13 @@
     <value>Utiliser Max sièges</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
-    <value>Egalité de chaque catégorie de roulement</value>
+    <value>Egalité de chaque catégorie d'horaires</value>
   </data>
   <data name="FairnessSystemUsedForScheduling" xml:space="preserve">
     <value>Système d'équité est utilisé pour planification</value>
   </data>
   <data name="PointsPerShiftCategory" xml:space="preserve">
-    <value>Points par catégorie de roulement</value>
+    <value>Points par catégorie d'horaires</value>
   </data>
   <data name="TheDaysListedBelowWillNotBeSavedDot" xml:space="preserve">
     <value>Les jours mentionnés dans la liste en-dessous ne seront pas sauvegardés.</value>
@@ -6535,10 +6535,10 @@
     <value>Le nom du Volume entré est non valable, le nom ne peut excéder 50 caractères ni être vide.</value>
   </data>
   <data name="WorkShiftRule" xml:space="preserve">
-    <value>Règle roulement de travail</value>
+    <value>Règle horaire de travail</value>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>set de règles Roulement de travail</value>
+    <value>set de règles Horaire de travail</value>
   </data>
   <data name="DuplicatePersonPeriodMessage" xml:space="preserve">
     <value>Aucun doublon de date autorisé dans la Période personne pour</value>
@@ -6556,7 +6556,7 @@
     <value>Le Jour libre à {0} est en conflit avec l'activité avant et après le Jour Libre.</value>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Aucun roulement disponible pour cette disponibilté d'étudiant.</value>
+    <value>Aucun horaire disponible pour cette disponibilté d'étudiant.</value>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Vous devez travailler au moins {0} heures. Vous êtes disponible maintenant entre {1} et {2}heures. </value>
@@ -6643,7 +6643,7 @@
     <value>Temps Ready contre Temps Ready planifié</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Temps Ready contre Temps Planifié (incluant temps avant et après début de roulement)</value>
+    <value>Temps Ready contre Temps Planifié (incluant temps avant et après début d'horaire)</value>
   </data>
   <data name="SupportEmailAddress" xml:space="preserve">
     <value>Adresse e-mail support</value>
@@ -6685,16 +6685,16 @@
     <value>*Un maximum de 5 scénarios peuvent être utilisés pour le reporting.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>Une demande d'échange de roulement a été acceptée par une autre personne.</value>
+    <value>Une demande d'échange d'horaires {0} - {1} a été acceptée par une autre personne.</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Nouvelle demande d'échange de roulement. Approuvez ou refusez dans votre liste des demandes.</value>
+    <value>Nouvelle demande d'échange d'horaires {0} - {1}. Approuvez ou refusez dans votre liste des demandes.</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
     <value>La somme des distributions entre sub-compétences doit être de 100%</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
-    <value>Vous devez avoir au moins une date dans votre demande d'échange de roulement.</value>
+    <value>Vous devez avoir au moins une date dans votre demande d'échange d'horaires.</value>
   </data>
   <data name="Fairness" xml:space="preserve">
     <value>Equité</value>
@@ -6715,10 +6715,10 @@
     <value>Aucune connexion avec 'le message broker'</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage" xml:space="preserve">
-    <value>La semaine a trop de Catégories de roulement {0}.</value>
+    <value>La semaine a trop de Catégories d'Horaires {0}.</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage2" xml:space="preserve">
-    <value>La période a trop de Catégories de roulement {0}.</value>
+    <value>La période a trop de Catégories d'Horaires {0}.</value>
   </data>
   <data name="YouDontHaveAWorkflowControlSet" xml:space="preserve">
     <value>Vous n'avez pas de contrôle de flux d'activités</value>
@@ -6733,7 +6733,7 @@
     <value>Agent actifs utilisés:</value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
-    <value>Optimisation des longeurs de roulement</value>
+    <value>Optimisation des longeurs d'horaires</value>
   </data>
   <data name="NotSelectedActivities" xml:space="preserve">
     <value>Activités non sélectionnées</value>
@@ -6775,7 +6775,7 @@
     <value>Planification: {0} jours de {1} planifié</value>
   </data>
   <data name="ErrorMessageNotConsistentShiftCategories" xml:space="preserve">
-    <value>Impossible de planifier Equipe car elle a déjà des Catégories de roulement différentes. </value>
+    <value>Impossible de planifier Equipe car elle a déjà des Catégories d'horaires différentes. </value>
   </data>
   <data name="CouldNotAddOverTimeNoPersonPeriods" xml:space="preserve">
     <value>Impossible d'ajouter heures supplémentaires à cause d'agents avec Période personne en sélection</value>
@@ -6814,13 +6814,13 @@
     <value>Aucune compétence avec des propriétés correspendant à la compétence courante trouvé</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>Echange de roulement  impossible dû à une absence dans un roulement.</value>
+    <value>Echange d'horaires  impossible dû à une absence dans un horaire.</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé dû à une activité personnelle  qui se trouve hors du roulement.</value>
+    <value>Echange d'horaires refusé dû à une activité personnelle qui se trouve hors de l'horaire.</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé dû à une réunion  qui se trouve hors du roulement.</value>
+    <value>Echange d'horaires refusé dû à une réunion  qui se trouve hors de l'horaire.</value>
   </data>
   <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
     <value>Sélectionner une Période de temps pour recevoir les réunions et un scénario vers lequel exporter.</value>
@@ -6886,16 +6886,16 @@
     <value>La semaine contient un trop long temps de travail ({0}). Maximum {1}.</value>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>Le temps de repos journalier doit être de minimum {0} heures entre 2 roulements. Entre {1}et {2} il y a seulement {3} heures.</value>
+    <value>Le temps de repos journalier doit être de minimum {0} heures entre 2 horaires. Entre {1}et {2} il y a seulement {3} heures.</value>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
     <value>La personne {0} n'a pas de contat défini à la date courante {1}</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage1" xml:space="preserve">
-    <value>Il y a déjà un roulement dans l'intervalle. L'autre roulement est dans l'intervalle {0}-{1}, ce roulement est dans l'intervalle {2}-{3}.</value>
+    <value>Il y a déjà un horaire dans l'intervalle. L'autre horaire est dans l'intervalle {0}-{1}, cet horaire est dans l'intervalle {2}-{3}.</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage2" xml:space="preserve">
-    <value>Il y a deux roulements qui se chevauchent</value>
+    <value>Il y a deux horaires qui se chevauchent</value>
   </data>
   <data name="HandledWithinColon" xml:space="preserve">
     <value>Traité en:</value>
@@ -7259,7 +7259,7 @@ Vous devez obtenir une licence qui couvre suffisamment d'agents.</value>
     <value>La semaine n'a pas le repos hebdomadaire de {0} stipulé.</value>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
-    <value>La requête d'échange de roulement ne peut pas être acceptée à cause d'une erreur.
+    <value>La requête d'échange d'horaires ne peut pas être acceptée à cause d'une erreur.
 Message d'erreur: {0}</value>
   </data>
   <data name="MasterActivityCanResultInColon" xml:space="preserve">
@@ -7290,13 +7290,13 @@ Message d'erreur: {0}</value>
     <value>{0} (Normal) {1} (Saisonnalité) {2} (Solde Entrée) {3} (Extra) {4} (Solde Sortie) = {5}</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
-    <value>Un roulement avec une Activité Maître ne peut pas être utilisé dans les plannings!</value>
+    <value>Un horaire avec une Activité Maître ne peut pas être utilisé dans les plannings!</value>
   </data>
   <data name="TimedOutWhileWaitingforProcessing" xml:space="preserve">
     <value>Temps d'attente dépassé avant de procéder.</value>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
-    <value>La Catégorie de Roulement dans les Restrictions est en conflit avec la Catégorie de Roulement dans les Options.</value>
+    <value>La Catégorie d'Horaires dans les Restrictions est en conflit avec la Catégorie d'Horaires dans les Options.</value>
   </data>
   <data name="AllMustHave" xml:space="preserve">
     <value>Tous Doit Avoir</value>
@@ -7368,13 +7368,13 @@ Ces options sont activés:
     <value>Filtre sur limitations de période personne</value>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
-    <value>Pas de roulement correspondant au temps contrat n'a pu être trouvé</value>
+    <value>Aucun horaire correspondant au temps contrat n'a pu être trouvé</value>
   </data>
   <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
-    <value>Roulement pendant la période:</value>
+    <value>Horaire pendant la période:</value>
   </data>
   <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
-    <value>Roulement avec temps contrat entre:</value>
+    <value>Horaire avec temps contrat entre:</value>
   </data>
   <data name="TheDayIsNotAvailableForScheduling" xml:space="preserve">
     <value>La journée n'est pas disponible pour le planning</value>
@@ -7386,7 +7386,7 @@ Ces options sont activés:
     <value>Cette journée est un jour libre dans les rotations</value>
   </data>
   <data name="GetsShiftListToStartWith" xml:space="preserve">
-    <value>Fait débuter les roulements avec</value>
+    <value>Fait débuter les horaires avec</value>
   </data>
   <data name="NoRuleSetBagDefined" xml:space="preserve">
     <value>Pas de groupe de set de règles défini</value>
@@ -7395,7 +7395,7 @@ Ces options sont activés:
     <value>Pas de période planning définie à cette date</value>
   </data>
   <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
-    <value>Pas de roulements de travail disponibles</value>
+    <value>Pas d'horaires de travail disponibles</value>
   </data>
   <data name="RulesetIsNotValidThisDate" xml:space="preserve">
     <value>Le set de règles {0} n'est pas valide à cette date</value>
@@ -7407,10 +7407,10 @@ Ces options sont activés:
     <value>Seulement montrer les essais réussis</value>
   </data>
   <data name="WorkShiftsAfter" xml:space="preserve">
-    <value>Roulements de travail après</value>
+    <value>Horaires de travail après</value>
   </data>
   <data name="WorkShiftsBefore" xml:space="preserve">
-    <value>Roulements de travail avant</value>
+    <value>Horaires de travail avant</value>
   </data>
   <data name="TheRecurrencePatternIsNotValid" xml:space="preserve">
     <value>Le mode de récurrence est non valide</value>
@@ -7419,10 +7419,10 @@ Ces options sont activés:
     <value>Entrer Propriétés des Multiplicateurs</value>
   </data>
   <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
-    <value>Filtre sur limitations de temps contrat (roulement avec un temps contrat entre {0} et {1})</value>
+    <value>Filtre sur limitations de temps contrat (horaire avec un temps contrat entre {0} et {1})</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
-    <value>Filtre sur limitations de période personne (roulements pendant la période: {0} - {1})</value>
+    <value>Filtre sur limitations de période personne (horaires pendant la période: {0} - {1})</value>
   </data>
   <data name="NoRestrictionDefinedFor" xml:space="preserve">
     <value>Pas de restriction définie pour {0}</value>
@@ -7443,7 +7443,7 @@ Ces options sont activés:
     <value>Pas d'activités trouvées dans la base de données</value>
   </data>
   <data name="ZeroShiftCategoriesInDb" xml:space="preserve">
-    <value>Pas de catégories de roulement trouvées dans la base de données</value>
+    <value>Pas de catégories d'horaire trouvées dans la base de données</value>
   </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>Une opération s'est mal déroulée. Merci de fermer le fichier s'il est ouvert.</value>
@@ -7497,7 +7497,7 @@ Ces options sont activés:
     <value>Protection d'écriture (jours)</value>
   </data>
   <data name="RecentWorkShiftRuleSets" xml:space="preserve">
-    <value>Set de règles de roulements récents</value>
+    <value>Set de règles d'horaires récents</value>
   </data>
   <data name="NotRemovable" xml:space="preserve">
     <value>Non supprimable</value>
@@ -7597,7 +7597,7 @@ Teleopti R&amp;D</value>
     <value>C'est le dernier participant de ce meeting. Voulez-vous supprimer le meeting "{0})"?</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>Une demande d'échange de roulement doit être acceptée à nouveau dû à un changement de planning.</value>
+    <value>Une demande d'échange d'horaires {0} - {1} doit être acceptée à nouveau suite à un changement de planning.</value>
   </data>
   <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
     <value>Vous devez travailler {0}h.
@@ -7628,7 +7628,7 @@ Vos préférences peuvent maintenant aller de {1}h à {2}h.</value>
     <value>Le temps de travail maximum ne peut être inférieur au temps de travail minimum.</value>
   </data>
   <data name="NoShiftsAvailableForThisPreference" xml:space="preserve">
-    <value>Pas de roulements disponibles pour cette préférence</value>
+    <value>Pas d'horaires disponibles pour cette préférence</value>
   </data>
   <data name="MustHave" xml:space="preserve">
     <value>Doit Avoir</value>
@@ -7646,7 +7646,7 @@ Vos préférences peuvent maintenant aller de {1}h à {2}h.</value>
     <value>Une absence ou plus n'a pas été sauvegardée. Vous n'êtes pas autorisé à changer le type de tracker d'une absence quand il est utilisé par un compte personne.</value>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
-    <value>Catégories de roulement pré-planifiées, pas un bloc valide</value>
+    <value>Catégories d'horaires pré-planifiées, pas un bloc valide</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
     <value>Voulez-vous appliquer le nouveau modèle aux jours sélectionnés?</value>
@@ -7722,22 +7722,22 @@ Période: {3}</value>
     <value>Date de début doit être antérieure à date de fin</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé car les dates sélectionnées ne sont pas ouvertes aux requêtes</value>
+    <value>Echange d'horaires refusé car les dates sélectionnées ne sont pas ouvertes aux requêtes</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé car vos compétences ne correspondent pas avec l'autre personne.</value>
+    <value>Echange d'horaires refusé car vos compétences ne correspondent pas avec l'autre personne.</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé car le contrôle de flux d'activités ne correspond pas avec l'autre personne.</value>
+    <value>Echange d'horaires refusé car le contrôle de flux d'activités ne correspond pas avec l'autre personne.</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé car la tolérance de contrat de planning est dépassée</value>
+    <value>Echange d'horaires refusé car la tolérance de contrat de planning est dépassée</value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
-    <value>Echange de roulement refusé car il n'y a pas de contrôle de flux d'activités</value>
+    <value>Echange d'horaires refusé car il n'y a pas de contrôle de flux d'activités</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Catégories de Roulement Disponibles pour Préférences</value>
+    <value>Catégories d'Horaires Disponibles pour Préférences</value>
   </data>
   <data name="DaysOffAvailableForExtendedPreferences" xml:space="preserve">
     <value>Jours Libres Disponibles pour Préférences</value>
@@ -7770,7 +7770,7 @@ Période: {3}</value>
     <value>Filtre sur activité de préférence</value>
   </data>
   <data name="NotAllowedShiftCategories" xml:space="preserve">
-    <value>Catégories de roulement non valide</value>
+    <value>Catégories d'horaires non valide</value>
   </data>
   <data name="CheckPermissionsForCastle" xml:space="preserve">
     <value>Permissions locales insuffisantes. Mise en cache doit être désactivée. Merci de contacter votre administrateur système.</value>
@@ -7886,7 +7886,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Pourcentage Temps Partiel</value>
   </data>
   <data name="PersonFinderFieldShiftBag" xml:space="preserve">
-    <value>Banque de roulements</value>
+    <value>Banque d'Horaires</value>
   </data>
   <data name="PersonFinderFieldSkill" xml:space="preserve">
     <value>Compétence</value>
@@ -7925,7 +7925,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Sélectionnez une activité!</value>
   </data>
   <data name="NoShiftsFound" xml:space="preserve">
-    <value>Aucun roulement n'a pu être trouvé</value>
+    <value>Aucun horaire n'a pu être trouvé</value>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
     <value>Trouver...</value>
@@ -8027,10 +8027,10 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Garder les jours libres existants</value>
   </data>
   <data name="KeepShiftCategories" xml:space="preserve">
-    <value>Garder les catégories de roulements</value>
+    <value>Garder les catégories d'horaires</value>
   </data>
   <data name="KeepShifts" xml:space="preserve">
-    <value>Garder les roulements</value>
+    <value>Garder les horaires</value>
   </data>
   <data name="KeepStartEndTimes" xml:space="preserve">
     <value>Garder les horaires de début et fin</value>
@@ -8051,13 +8051,13 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Etapes d'optimisation</value>
   </data>
   <data name="ShiftLimits" xml:space="preserve">
-    <value>Limites de Roulements</value>
+    <value>Limites d'Horaires</value>
   </data>
   <data name="ShiftSelection" xml:space="preserve">
-    <value>Sélection des roulements</value>
+    <value>Sélection des horaires</value>
   </data>
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
-    <value>Roulements pour horaires flexibles</value>
+    <value>Horaires pour horaires flexibles</value>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
     <value>Disponibilités Etudiant</value>
@@ -8085,5 +8085,95 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="ThePersonsRoles" xml:space="preserve">
     <value>Les rôles de la Personne</value>
+  </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Ne peut pas joindre le Customer Web de Teleopti pour le moment!</value>
+  </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>Historique de Demandes</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>Voir l'Historique</value>
+  </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>Temps contrat croissant</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>Temps contrat décroissant</value>
+  </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Supprimer la protection en écriture</value>
+  </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Inclure les informations de dépannage</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} journées agent ont pu être planifiées</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importer</value>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>Nom du fichier d'import</value>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>Importer Personnel</value>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>Importer Volume</value>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>Importer Volume et Personnel</value>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>Nom Compétence:</value>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>Nom Volume:</value>
+  </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Importer Prévisions</value>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>Voir l'Historique de Routine</value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Exporter vers PDF horaires par jour</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Montrer note publique</value>
+  </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>Pas d'horaires disponibles</value>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Durée de travail post-appel réelle</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>La demande d'absence {0} a été approuvée.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>La demande d'absence {0} a été refusée</value>
+  </data>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>Nouvelle demande d'échange d'horaires {0}, approuvez ou refusez dans votre liste de demandes.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>Une demande d'échange d'horaire {0} a été acceptée par une autre personne.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>Une demande d'échange d'horaires {0} a été approuvée.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Une demande d'échange d'horaires {0} a été refusée.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>Une demande d'échange d'horaire {0} doit être réacceptée suite à un changement de planning.</value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>Ressource externe utilisée</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>La ressource externe est utilisée par un autre programme, merci de réessayer plus tard.</value>
   </data>
 </root>
