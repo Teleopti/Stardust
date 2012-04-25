@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using NHibernate;
+﻿using NHibernate;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +15,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     public class BusinessUnitCreator
     {
         private readonly IPerson _person;
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public BusinessUnitCreator(IPerson person, ISessionFactory sessionFactory)
         {
@@ -38,19 +37,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         {
             IBusinessUnit newBusinessUnit = new BusinessUnit(businessUnitName);
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(newBusinessUnit, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(newBusinessUnit, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(newBusinessUnit, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(newBusinessUnit, nu);
+            _setChangeInfoCommand.Execute((AggregateRoot)newBusinessUnit,_person);
 
             return newBusinessUnit;
         }
