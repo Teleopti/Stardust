@@ -49,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
                 var period = new DateTimePeriod(startDateTime, endDateTime);
 
-                affectedRows += _jobParameters.Helper.Repository.FillFactAgentDataMart(period, _jobParameters.DataSource, _jobParameters.DefaultTimeZone);
+                affectedRows += _jobParameters.Helper.Repository.FillFactAgentDataMart(period, _jobParameters.DataSource, _jobParameters.DefaultTimeZone, RaptorTransformerHelper.CurrentBusinessUnit);
                 Result.RowsAffected = affectedRows;
             }
             

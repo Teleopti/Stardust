@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
          
-            return _jobParameters.Helper.Repository.FillTimeZoneDimDataMart();
+            return _jobParameters.Helper.Repository.FillTimeZoneDimDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
 
         }
     }

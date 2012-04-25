@@ -25,7 +25,8 @@ GO
 --exec mart.etl_fact_schedule_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_load] 
 @start_date smalldatetime,
-@end_date smalldatetime
+@end_date smalldatetime,
+@business_unit_code uniqueidentifier
 	
 AS
 ----------------------------------------------------------------------------------
@@ -62,7 +63,15 @@ SET @end_date_id	 =	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_da
 -----------------------------------------------------------------------------------
 -- Delete rows based on shift_starttime
 --DELETE FROM mart.fact_schedule  WHERE shift_starttime between @start_date AND @end_date
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
+DELETE FROM mart.fact_schedule
+WHERE shift_startdate_id between @start_date_id AND @end_date_id
+AND business_unit_id = @business_unit_id
+
+
+/*
 DELETE FROM mart.fact_schedule
 WHERE shift_startdate_id between @start_date_id AND @end_date_id
 	AND business_unit_id = 
@@ -76,7 +85,7 @@ WHERE shift_startdate_id between @start_date_id AND @end_date_id
 		ON
 			s.business_unit_code = bu.business_unit_code
 	)
-
+*/
 -----------------------------------------------------------------------------------
 -- Insert rows
 

@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             return
                 _jobParameters.Helper.Repository.FillScheduleDataMart(
                     new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
-                                       JobCategoryDatePeriod.EndDateUtcCeiling));
+                                       JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }
 }

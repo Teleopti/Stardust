@@ -167,6 +167,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             DefaultDataCreator defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit,
                                                                            argument.CultureInfo,
                                                                            argument.TimeZone,
+																		   argument.NewUserName,
+																		   argument.NewUserPassword,
                                                                            databaseHandler.SessionFactory);
  
             DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();

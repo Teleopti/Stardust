@@ -16,11 +16,19 @@ GO
 --				2009-04-28 Verfication that team exists in dim_person otherwise error in cube KJ
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_kpi_targets_team_load]
+@business_unit_code uniqueidentifier	
 AS
 
 -----------------------------------------------------------------------------------
 -- Delete rows
+/*Get business unit id*/
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
+DELETE FROM mart.fact_kpi_targets_team
+WHERE business_unit_id = @business_unit_id
+
+/*
 DELETE FROM mart.fact_kpi_targets_team
 WHERE business_unit_id = 
 	(
@@ -32,7 +40,7 @@ WHERE business_unit_id =
 		ON
 			ktm.business_unit_code = bu.business_unit_code
 	)
-
+*/
 -----------------------------------------------------------------------------------
 -- Insert rows
 

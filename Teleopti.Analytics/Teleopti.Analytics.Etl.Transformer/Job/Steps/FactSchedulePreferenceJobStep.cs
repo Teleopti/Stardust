@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                 _jobParameters.Helper.Repository.FillFactSchedulePreferenceMart(
                     new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
                                        JobCategoryDatePeriod.EndDateUtcCeiling),
-                _jobParameters.DefaultTimeZone);
+                _jobParameters.DefaultTimeZone, RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }
 }

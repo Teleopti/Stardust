@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             //Load data from stage to datamart
             return
                 _jobParameters.Helper.Repository.FillScheduleForecastSkillDataMart(
-                    new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling));
+                    new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }
 }

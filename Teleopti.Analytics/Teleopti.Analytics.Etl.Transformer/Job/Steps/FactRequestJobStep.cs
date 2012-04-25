@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			return _jobParameters.Helper.Repository.FillFactRequestMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling));
+			return _jobParameters.Helper.Repository.FillFactRequestMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
 		}
 	}
 }

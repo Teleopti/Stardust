@@ -13,7 +13,8 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_forecast_workload_load] 
 @start_date smalldatetime,
-@end_date smalldatetime
+@end_date smalldatetime,
+@business_unit_code uniqueidentifier
 	
 AS
 ----------------------------------------------------------------------------------
@@ -43,6 +44,16 @@ SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 -----------------------------------------------------------------------------------
 -- Delete rows
 
+/*Get business unit id*/
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+DELETE FROM mart.fact_forecast_workload
+WHERE date_id between @start_date_id AND @end_date_id
+AND business_unit_id = @business_unit_id
+
+
+/*
 DELETE FROM mart.fact_forecast_workload
 WHERE date_id between @start_date_id AND @end_date_id
 	AND business_unit_id = 
@@ -56,7 +67,7 @@ WHERE date_id between @start_date_id AND @end_date_id
 		ON
 			fw.business_unit_code = bu.business_unit_code
 	)
-
+*/
 -----------------------------------------------------------------------------------
 -- Insert rows
 
