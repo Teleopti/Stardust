@@ -68,7 +68,7 @@ SELECT date_date FROM mart.dim_date WHERE date_id IN (@end_date_id,@start_date_i
 SELECT COUNT(*) as rows_to_delete FROM mart.fact_schedule_forecast_skill WHERE date_id between @start_date_id AND @end_date_id
 -----------------------------------------------------------------------------------
 -- Delete rows matching dates
-
+DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 DELETE FROM mart.fact_schedule_forecast_skill
