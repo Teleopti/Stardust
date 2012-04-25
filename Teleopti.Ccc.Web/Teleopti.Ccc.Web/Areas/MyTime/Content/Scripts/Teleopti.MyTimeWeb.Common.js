@@ -138,41 +138,59 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 
-			$('.tooltip').each(function () {
+			$('.tooltip').each(function() {
 				$(this).qtip({
-					content: {
-						title: $(this).attr('tooltip-title'),
-						text: $(this).attr('tooltip-text')
-					},
-					title: "test",
-					style: {
-						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-						tip: true
-					},
-					position: {
-						my: 'bottom left',
-						at: 'top right',
-						target: 'mouse'
-					}
-				});
+						content: {
+							title: $(this).attr('tooltip-title'),
+							text: $(this).attr('tooltip-text')
+						},
+						title: "test",
+						style: {
+							classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+							tip: true
+						},
+						position: {
+							my: 'bottom left',
+							at: 'top right',
+							target: 'mouse'
+						}
+					});
 			});
 
-			$('[title]').each(function () {
+			$('[title]').each(function() {
 				$(this).qtip({
-					content: {
-						text: $(this).attr('title')
-					},
-					title: "test",
-					style: {
-						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-						tip: true
-					},
-					position: {
-						my: 'bottom left',
-						at: 'top right',
-						target: 'mouse'
-					}
-				});
+						content: {
+							text: $(this).attr('title')
+						},
+						title: "test",
+						style: {
+							classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+							tip: true
+						},
+						position: {
+							my: 'bottom left',
+							at: 'top right',
+							target: 'mouse'
+						}
+					});
+			});
+
+			$('.add-text-request').each(function () {
+				$(this).qtip({
+					content: $('#Schedule-addTextRequest-section'),
+						show: { event: 'click' },
+						hide: {
+							event: 'unfocus',
+							fixed: true
+						},
+						style: {
+							classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow'
+						},
+						position: {
+							my: 'middle left',
+							at: 'middle right'
+						}
+					});
 			});
 		}
 

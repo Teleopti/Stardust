@@ -3,7 +3,13 @@
 	As an agent
 	I want to be able to submit requests as text
 
-	Scenario: Add text request from week schedule view
+Scenario: Open add text request form
+	Given I am an agent
+	And I am viewing week schedule
+	When I click on today's summary
+	Then I should see the text request form
+
+Scenario: Add text request from week schedule view
 	Given I am an agent
 	And I am viewing week schedule
 	When I click on today's summary

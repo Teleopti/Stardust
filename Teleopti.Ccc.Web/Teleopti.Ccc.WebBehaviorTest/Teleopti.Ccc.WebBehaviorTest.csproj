@@ -302,6 +302,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
+    <Compile Include="TextRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

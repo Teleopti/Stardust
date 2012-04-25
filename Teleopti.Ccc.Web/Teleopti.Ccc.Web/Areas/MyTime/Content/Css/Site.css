@@ -517,6 +517,23 @@ button.icon-left{padding-left: 35px;}
 	margin-left: 4px;
 }
 
+/*** ToolTip input ***/
+.tooltip{position: relative;}
+
+.ui-tooltip-input .ui-tooltip-titlebar,
+.ui-tooltip-input .ui-tooltip-content{
+	border-color: rgb(241,241,241);
+	background-color: rgb(241,241,241);
+	color: #010101;
+	font-size: 10px;
+	line-height: 12px;
+	padding: 5px 5px;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+
+
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}
 header {
