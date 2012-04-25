@@ -66,9 +66,19 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 			return _model.GetTitle(formatter);
 		}
 
+		public string Title
+		{
+			get { return GetTitle(new NoFormatting()); }
+		}
+
 		public string GetMessage(ITextFormatter formatter)
 		{
 			return _model.GetMessage(new NoFormatting());
+		}
+
+		public string Message
+		{
+			get { return GetMessage(new NoFormatting()); }
 		}
 
 		public IList<ReplyOptionViewModel> ReplyOptions
