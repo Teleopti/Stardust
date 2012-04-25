@@ -17,7 +17,7 @@ CREATE PROCEDURE [mart].[etl_scorecard_kpi_load]
 AS
 ---------------------------------------------------------------------------
 --Delete current connections scorecard<->kpi
-
+DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 DELETE FROM mart.scorecard_kpi

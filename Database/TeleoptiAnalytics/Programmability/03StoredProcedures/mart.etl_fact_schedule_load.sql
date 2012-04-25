@@ -63,7 +63,7 @@ SET @end_date_id	 =	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_da
 -----------------------------------------------------------------------------------
 -- Delete rows based on shift_starttime
 --DELETE FROM mart.fact_schedule  WHERE shift_starttime between @start_date AND @end_date
-
+DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 DELETE FROM mart.fact_schedule
