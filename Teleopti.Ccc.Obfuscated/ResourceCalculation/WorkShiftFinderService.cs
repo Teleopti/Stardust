@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-            IEffectiveRestrictionCreator effectiveRestrictionCreator)
+            IEffectiveRestrictionCreator effectiveRestrictionCreator, IShiftLengthDecider shiftLengthDecider)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -210,9 +210,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 				if (temp)
 				{
-					if (_schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
+					if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 					{
-						_shiftList = _shiftLengthDecider.FilterList(_shiftList, _workShiftMinMaxCalculator, matrix);
+						_shiftList = _shiftLengthDecider.FilterList(_shiftList, _workShiftMinMaxCalculator, matrix, schedulingOptions);
 						if (_shiftList.Count == 0)
 							return null;
 					}

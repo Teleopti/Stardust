@@ -10593,6 +10593,7 @@ These options are activated:
   <data name="AvailabilityFulfillment" xml:space="preserve">
     <value>Availability Fulfillment</value>
     <comment>Availability Fulfillment</comment>
+  </data>
   <data name="NoAvailableShifts" xml:space="preserve">
     <value>No available shifts</value>
     <comment>No available shifts</comment>
@@ -10600,6 +10601,7 @@ These options are activated:
   <data name="MustHaveFulfillment" xml:space="preserve">
     <value>Must Have Fulfillment</value>
     <comment>Must Have Fulfillment</comment>
+  </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
     <value>Actual after call work time</value>
     <comment>Actual after call work time</comment>
@@ -10607,6 +10609,7 @@ These options are activated:
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>Preference Fulfillment</value>
     <comment>Preference Fulfillment</comment>
+  </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>The absence request {0} was approved.</value>
     <comment>Approve absence request for one day.</comment>
@@ -10614,6 +10617,7 @@ These options are activated:
   <data name="RotationFulfillment" xml:space="preserve">
     <value>Rotation Fulfillment</value>
     <comment>Rotation Fulfillment</comment>
+  </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>The absence request {0} was denied.</value>
     <comment>Denied absence request for one day.</comment>
@@ -10621,6 +10625,7 @@ These options are activated:
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Student Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
+  </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>New shift trade request {0}, approve or deny in your request list.</value>
     <comment>New shift trade request for one day.</comment>
@@ -10628,6 +10633,7 @@ These options are activated:
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Resource calculate every:</value>
     <comment>Resource Calculate Every:</comment>
+  </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
     <value>A shift trade request {0} was accepted by other person.</value>
     <comment>A shift trade reqyest for one day was accepted.</comment>

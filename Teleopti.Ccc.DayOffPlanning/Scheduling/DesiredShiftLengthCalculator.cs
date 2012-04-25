@@ -5,15 +5,15 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 {
 	public interface IDesiredShiftLengthCalculator
 	{
-		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix);
+		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 	}
 
 	public class DesiredShiftLengthCalculator : IDesiredShiftLengthCalculator
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix)
+		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
-			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix);
+			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
 			var targetTime = matrix.SchedulePeriod.PeriodTarget();
 			var newAverage = TimeSpan.Zero;

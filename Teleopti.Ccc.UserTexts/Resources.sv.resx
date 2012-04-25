@@ -10273,6 +10273,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>Önskemålsuppfyllnad</value>
     <comment>Preference Fulfillment</comment>
+  </data>
   <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
     <value>Kunde inte nå Teleoptis kundwebb just nu!</value>
   </data>

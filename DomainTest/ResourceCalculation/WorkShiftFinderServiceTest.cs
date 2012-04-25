@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new WorkShiftFinderService(_stateHolder, _preSchedulingStatusChecker,
                _shiftProjectionCacheFilter, _personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, _workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
-			   _options, _shiftLengthDecider);
+			   _effectiveRestrictionCreator, _shiftLengthDecider);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
-				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix)).Return(caches);
+				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(caches);
 			}
             _schedulingOptions.ShiftCategory = _category;
 			using (_mocks.Playback())
