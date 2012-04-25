@@ -9218,4 +9218,12 @@ Periods</comment>
   <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
     <value>活动设置不能为空</value>
   </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>导入预测数据</value>
+    <comment>import forecast</comment>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>从文件导入预测数据</value>
+    <comment>import forecast from file</comment>
+  </data>
 </root>
