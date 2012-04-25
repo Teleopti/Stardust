@@ -11,26 +11,36 @@ GO
 --David J
 --New hiararcy in the Cube: WindowsCredentials
 ----------------
-/*
---revert
-ALTER TABLE mart.dim_person DROP COLUMN windows_domain
-ALTER TABLE mart.dim_person DROP COLUMN windows_username
-ALTER TABLE stage.stg_person DROP COLUMN windows_domain
-ALTER TABLE stage.stg_person DROP COLUMN windows_username
-*/
 --stage
 ALTER TABLE stage.stg_person ADD
 	windows_domain		nvarchar(50) NULL,
 	windows_username	nvarchar(50) NULL
 
 --mart	
-ALTER TABLE mart.dim_person ADD
-	windows_domain		nvarchar(50) NULL,
-	windows_username	nvarchar(50) NULL
+--===============================
+--Use if exist since PS Tech might have delivered this part already
+--===============================
+if not exists(select * from sys.columns where Name = N'windows_domain' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin 
+	ALTER TABLE mart.dim_person ADD	windows_domain nvarchar(50) NULL
+end
 GO
-UPDATE mart.dim_person 
-SET windows_domain	 = 'Not Defined',
-	windows_username = 'Not Defined'
+if not exists(select * from sys.columns where Name = N'windows_domain' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin 
+	UPDATE mart.dim_person SET windows_domain = 'Not Defined'
+end	
+GO
+if not exists(select * from sys.columns where Name = N'windows_username' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin
+	ALTER TABLE mart.dim_person ADD	windows_username nvarchar(50) NULL
+end
+GO
+if not exists(select * from sys.columns where Name = N'windows_username' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin
+	UPDATE mart.dim_person SET windows_username = 'Not Defined'
+end
+GO
+--===============================
 
 ALTER TABLE mart.dim_person ALTER COLUMN windows_domain		nvarchar(50) NOT NULL
 ALTER TABLE mart.dim_person ALTER COLUMN windows_username	nvarchar(50) NOT NULL
