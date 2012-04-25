@@ -11,6 +11,7 @@ GO
 -- ======change log=======
 -- When			Who		Why
 -- 2012-03-13	DavidJ	Fix Azure compability => Remove unwanted SET commands, No SELECT INTO
+-- 2012-04-25	DavidJ	Manual merg to 356
 
 -- =============================================
 CREATE PROCEDURE [ReadModel].[LoadOrganizationForSelector]
