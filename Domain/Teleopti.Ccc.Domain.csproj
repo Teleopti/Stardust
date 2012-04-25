@@ -787,7 +787,6 @@
     <Compile Include="Security\PasswordStrengthRule.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolver.cs" />
     <Compile Include="Security\Matrix\TeamResolver.cs" />
-    <Compile Include="Security\Principal\AbsenceAllowancePermissionSpecification.cs" />
     <Compile Include="Security\Principal\AuthorizeEveryone.cs" />
     <Compile Include="Security\Principal\AuthorizeExternalAvailableData.cs" />
     <Compile Include="Security\Principal\AuthorizeMyBusinessUnit.cs" />

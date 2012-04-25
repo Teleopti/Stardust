@@ -16842,6 +16842,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request allowances.
+        /// </summary>
+        public static string RequestAllowances {
+            get {
+                return ResourceManager.GetString("RequestAllowances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request date.
         /// </summary>
         public static string RequestDate {

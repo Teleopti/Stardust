@@ -10670,4 +10670,8 @@ These options are activated:
     <value>Import forecast from file</value>
     <comment>Import forecast from file</comment>  
   </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Request allowances</value>
+    <comment>Request allowances</comment>
+  </data>
 </root>
