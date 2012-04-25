@@ -26,6 +26,7 @@ GO
 -- 2010-09-15	DaJo	temp-fix of #11390 - Adding 24 h to ending person periods
 -- 2010-11-30	DaJo	#12550 - Refactor dim_person_load to use Person_Period_Code as key
 -- 2012-03-05	DaJo	#????? - Try to avoid IsDeleted to be set when multiple ETL processes run at the same time
+-- 2012-04-25	DaJo	#19150 - Add Windows credentials to cube
 -- =============================================
 --EXEC [mart].[etl_dim_person_load] @current_business_unit_code = '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_dim_person_load] 
@@ -251,8 +252,8 @@ SET
 	datasource_id			= 1, 
 	update_date				= getdate(),
 	datasource_update_date	= s.datasource_update_date,
-	windows_domain			= isnull(s.windows_domain,'Not Defined'),
-	windows_username		= isnull(s.windows_username,'Not Defined')
+	windows_domain			= case when (s.windows_domain is null or s.windows_domain = '') then 'Not Defined' else s.windows_domain end,
+	windows_username		= case when (s.windows_username is null or s.windows_username = '') then 'Not Defined' else s.windows_username end
 FROM
 	Stage.stg_person s	
 LEFT JOIN
