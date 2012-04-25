@@ -251,8 +251,8 @@ SET
 	datasource_id			= 1, 
 	update_date				= getdate(),
 	datasource_update_date	= s.datasource_update_date,
-	windows_domain			= s.windows_domain,
-	windows_username		= s.windows_username
+	windows_domain			= isnull(s.windows_domain,'Not Defined'),
+	windows_username		= isnull(s.windows_username,'Not Defined')
 FROM
 	Stage.stg_person s	
 LEFT JOIN
