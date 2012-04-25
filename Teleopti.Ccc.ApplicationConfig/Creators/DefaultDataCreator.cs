@@ -7,7 +7,7 @@ using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfig.Creators
@@ -18,7 +18,9 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private readonly string _businessUnitName;
         private readonly CultureInfo _cultureInfo;
         private readonly ICccTimeZoneInfo _timeZone;
-        private IPerson _person;
+    	private readonly string _newUserName;
+    	private readonly string _newUserPassword;
+    	private IPerson _person;
         private PersonCreator _personCreator;
         private BusinessUnitCreator _businessUnitCreator;
         private ApplicationRoleCreator _applicationRoleCreator;
@@ -28,12 +30,14 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private SkillTypeCreator _skillTypeCreator;
         private KeyPerformanceIndicatorCreator _keyPerformanceIndicatorCreator;
 
-        public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, ICccTimeZoneInfo timeZone, ISessionFactory sessionFactory)
+        public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, ICccTimeZoneInfo timeZone, string newUserName, string newUserPassword, ISessionFactory sessionFactory)
         {
             _businessUnitName = businessUnitName;
             _cultureInfo = cultureInfo;
             _timeZone = timeZone;
-            _sessionFactory = sessionFactory;
+        	_newUserName = newUserName;
+        	_newUserPassword = newUserPassword;
+        	_sessionFactory = sessionFactory;
         }
 
         public IPerson ConvertPerson
@@ -82,14 +86,12 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
             _groupingAbsenceCreator = new GroupingAbsenceCreator(_person, _sessionFactory);
             IGroupingAbsence groupingAbsence = _groupingAbsenceCreator.Create("Default");
-            defaultAggregateRoot.GroupingAbsence = groupingAbsence; //Todo: Need to fix this later
+            defaultAggregateRoot.GroupingAbsence = groupingAbsence;
 
             _groupingActivityCreator = new GroupingActivityCreator(_person, _sessionFactory);
             IGroupingActivity groupingActivity = _groupingActivityCreator.Create("Default");
-            defaultAggregateRoot.GroupingActivity = groupingActivity; //Fix
+            defaultAggregateRoot.GroupingActivity = groupingActivity;
             
-
-
             _skillTypeCreator = new SkillTypeCreator(_person, _sessionFactory);
             defaultAggregateRoot.SkillTypeInboundTelephony = _skillTypeCreator.Create(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
             defaultAggregateRoot.SkillTypeTime = _skillTypeCreator.Create(new Description("SkillTypeTime"), ForecastSource.Time);
@@ -178,19 +180,57 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
             //Create convert user
             _person = _personCreator.Create("DatabaseConverter", "DatabaseConverter", "DatabaseConverter", "byseashare10", _cultureInfo,_timeZone);
+        	_personCreator.Save(_person);
+            
+			if (!string.IsNullOrEmpty(_newUserName) && !string.IsNullOrEmpty(_newUserPassword))
+			{
+				var sysAdmin = _personCreator.Create("Admin", "Administrator", _newUserName, _newUserPassword, _cultureInfo,
+				                                     _timeZone);
 
-            //Save persons
-            if (!_personCreator.Save(_person))
-            {
-                _person = _personCreator.FetchPerson(_person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-            }
+				if (!string.IsNullOrEmpty(Environment.UserDomainName) && !string.IsNullOrEmpty(Environment.UserName))
+				{
+					var windowsAuthInfo = new WindowsAuthenticationInfo
+					                      	{
+					                      		DomainName = Environment.UserDomainName,
+					                      		WindowsLogOnName = Environment.UserName
+					                      	};
+					if (!_personCreator.WindowsUserExists(windowsAuthInfo))
+					{
+						sysAdmin.WindowsAuthenticationInfo = windowsAuthInfo;
+					}
+				}
+
+				_personCreator.Save(sysAdmin);
+				updateUserWithSuperRole(sysAdmin);
+			}
         }
+
+		private void updateUserWithSuperRole(IPerson user)
+		{
+			if (user.PermissionInformation.ApplicationRoleCollection.Count>0) return;
+
+			InParameter.NotNull("user", user);
+            SetUpdatedOn(user, DateTime.UtcNow);
+            SetUpdatedBy(user, user);
+
+            ISession sess = _sessionFactory.OpenSession();
+
+			var role = sess.Get<ApplicationRole>(new Guid("193AD35C-7735-44D7-AC0C-B8EDA0011E5F"));
+			if (role != null)
+			{
+				user.PermissionInformation.AddApplicationRole(role);
+
+				sess.Update(user);
+				sess.Flush();
+			}
+			sess.Close();
+		}
 
         private void updateUserWithRole(IPerson user, IApplicationRole role)
         {
             InParameter.NotNull("user", user);
             user.PermissionInformation.AddApplicationRole(role);
-            SetUpdatedOn(user, DateTime.Now);
+            SetUpdatedOn(user, DateTime.UtcNow);
             SetUpdatedBy(user, user);
 
             ISession sess = _sessionFactory.OpenSession();
@@ -209,7 +249,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             typeof(AggregateRoot).GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
                 aggregateRoot, person);
         }
-
 
         private void createDefaultKeyPerformanceIndicators()
         {          
@@ -235,7 +274,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
             keyPerformanceIndicator = _keyPerformanceIndicatorCreator.Create("Absenteeism (%)", "KpiAbsenteeism", EnumTargetValueType.TargetValueTypePercent, 5, 4, 6, Color.FromArgb(-256), Color.FromArgb(-16744448), Color.FromArgb(-65536));
             _keyPerformanceIndicatorCreator.Save(keyPerformanceIndicator);
-           
         }
     }
 }

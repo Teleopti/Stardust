@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     public class AvailableDataCreator
     {
         private readonly IPerson _person;
-        private readonly ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
+		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
         public AvailableDataCreator(IPerson person, ISessionFactory sessionFactory)
         {
@@ -41,19 +42,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             availableData.ApplicationRole = applicationRole;
             availableData.AvailableDataRange = availableDataRangeOption;
 
-            DateTime nu = DateTime.Now;
-            typeof(AggregateRoot)
-                .GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(availableData, _person);
-            typeof(AggregateRoot)
-                .GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(availableData, nu);
-            typeof(AggregateRoot)
-                .GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(availableData, _person);
-            typeof(AggregateRoot)
-                .GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(availableData, nu);
+            _setChangeInfoCommand.Execute((AggregateRoot)availableData,_person);
 
             return availableData;
         }
