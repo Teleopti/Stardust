@@ -12,10 +12,11 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 	{
 		public static bool DoCurrentUserHavePmPermission(string currentuser)
 		{
+			var forceFormsLogOn = (bool)HttpContext.Current.Session["FORCEFORMSLOGIN"];
 			IList<SqlParameter> parameters = new List<SqlParameter>
 												 {
 													 new SqlParameter("user_name", currentuser),
-													 new SqlParameter("is_windows_logon", IsWebAuthenticationWindows)
+													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication(forceFormsLogOn))
 												 };
 
 			return
@@ -29,10 +30,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			AuthenticationMode webAuthenticationMode = GetWebAuthenticationMode();
 
 			if (webAuthenticationMode == AuthenticationMode.Forms & PermissionInformation.IsPmAuthenticationWindows)
-			{
-				// Invalid configuration with Forms web auth and PM auth set to windows
-				return false;
-			}
+				return false; // Invalid configuration with Forms web auth and PM auth set to windows
 
 			return true;
 		}
@@ -53,18 +51,12 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			}
 		}
 
-		public static bool IsWebAuthenticationWindows
+		public static bool CheckWindowsAuthentication(bool forceFormsLogOn)
 		{
-			get
-			{
-				if (GetWebAuthenticationMode() == AuthenticationMode.Windows)
-				{
-					if (!(bool)HttpContext.Current.Session["FORCEFORMSLOGIN"])
-						return true;
-				}
+			if (GetWebAuthenticationMode() == AuthenticationMode.Windows)
+				return !forceFormsLogOn;
 
-				return false;
-			}
+			return false;
 		}
 
 		private static string ConnectionString
