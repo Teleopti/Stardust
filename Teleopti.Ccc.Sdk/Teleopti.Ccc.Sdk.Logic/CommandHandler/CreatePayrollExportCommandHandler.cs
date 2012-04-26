@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     class CreatePayrollExportCommandHandler : IHandleCommand<CreatePayrollExportCommandDto>
     {

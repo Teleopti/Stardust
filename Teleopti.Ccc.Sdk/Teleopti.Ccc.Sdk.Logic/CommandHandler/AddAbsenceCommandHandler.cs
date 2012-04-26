@@ -1,39 +1,38 @@
-﻿using System.Linq;
-using System.ServiceModel;
-using Teleopti.Ccc.Domain.Common;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    public class AddActivityCommandHandler :IHandleCommand<AddActivityCommandDto>
+    public class AddAbsenceCommandHandler : IHandleCommand<AddAbsenceCommandDto>
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
-        private readonly IActivityRepository _activityRepository;
+        private readonly IAbsenceRepository _absenceRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public AddActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService)
+    	public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
-            _activityRepository = activityRepository;
+            _absenceRepository = absenceRepository;
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
-        public CommandResultDto Handle(AddActivityCommandDto command)
+        public CommandResultDto Handle(AddAbsenceCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -43,25 +42,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+                     new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
                 var scheduleDay = scheduleDictionary[person].ScheduledDay(startDate);
-                
-                IShiftCategory shiftCategory;
-                var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
-                if (personAssignment != null)
-                {
-                    shiftCategory = personAssignment.MainShift.ShiftCategory;
-                }
-                else
-                    throw new FaultException("A main shift should exist first before you add a new activity.");
-
-                var activity = _activityRepository.Load(command.ActivityId);
-                var activityLayer = new MainShiftActivityLayer(activity,
-                                                      _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
-
-                scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);
+                var absence = _absenceRepository.Load(command.AbsenceId);
+                var absenceLayer = new AbsenceLayer(absence, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
+                scheduleDay.CreateAndAddAbsence(absenceLayer);
                 _saveSchedulePartService.Save(uow, scheduleDay);
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

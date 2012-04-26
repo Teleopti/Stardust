@@ -1,39 +1,40 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System.Linq;
+using System.ServiceModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    public class AddOvertimeCommandHandler : IHandleCommand<AddOvertimeCommandDto>
+    public class AddActivityCommandHandler :IHandleCommand<AddActivityCommandDto>
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
-        private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public AddOvertimeCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService)
+    	public AddActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
-            _multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
             _activityRepository = activityRepository;
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
-        public CommandResultDto Handle(AddOvertimeCommandDto command)
+        public CommandResultDto Handle(AddActivityCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -45,12 +46,23 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
                     new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
                 var scheduleDay = scheduleDictionary[person].ScheduledDay(startDate);
+                
+                IShiftCategory shiftCategory;
+                var personAssignment = scheduleDay.PersonAssignmentCollection().FirstOrDefault();
+                if (personAssignment != null)
+                {
+                    shiftCategory = personAssignment.MainShift.ShiftCategory;
+                }
+                else
+                    throw new FaultException("A main shift should exist first before you add a new activity.");
+
                 var activity = _activityRepository.Load(command.ActivityId);
-                var overtimeDefinition = _multiplicatorDefinitionSetRepository.Load(command.OvertimeDefinitionSetId);
-                var overtimeLayer = new OvertimeShiftActivityLayer(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
-                scheduleDay.CreateAndAddOvertime(overtimeLayer);
+                var activityLayer = new MainShiftActivityLayer(activity,
+                                                      _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));
+
+                scheduleDay.CreateAndAddActivity(activityLayer, shiftCategory);
                 _saveSchedulePartService.Save(uow, scheduleDay);
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

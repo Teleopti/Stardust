@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.Factory
+namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface ISaveSchedulePartService
     {

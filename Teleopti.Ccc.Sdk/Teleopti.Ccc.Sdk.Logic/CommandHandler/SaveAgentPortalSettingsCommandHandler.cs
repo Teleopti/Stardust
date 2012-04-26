@@ -1,10 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class SaveAgentPortalSettingsCommandHandler : IHandleCommand<SaveAgentPortalSettingsCommandDto>
     {

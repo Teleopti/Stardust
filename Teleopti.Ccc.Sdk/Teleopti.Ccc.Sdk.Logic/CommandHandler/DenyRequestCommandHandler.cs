@@ -2,23 +2,24 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class DenyRequestCommandHandler : IHandleCommand<DenyRequestCommandDto>
     {
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, IUnitOfWorkFactory unitOfWorkFactory)
+    	public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _personRequestRepository = personRequestRepository;
             _authorization = authorization;
             _unitOfWorkFactory = unitOfWorkFactory;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
         public CommandResultDto Handle(DenyRequestCommandDto command)
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 {
                     throw new FaultException(e.Message);
                 }
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

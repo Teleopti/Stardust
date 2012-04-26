@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 
-namespace Teleopti.Ccc.Sdk.WcfService.Factory
+namespace Teleopti.Ccc.Sdk.Logic
 {
     [Serializable]
     public class AgentPortalSettings : SettingValue

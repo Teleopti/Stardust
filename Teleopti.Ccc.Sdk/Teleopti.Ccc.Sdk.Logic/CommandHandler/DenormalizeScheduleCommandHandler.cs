@@ -2,10 +2,9 @@
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
     {

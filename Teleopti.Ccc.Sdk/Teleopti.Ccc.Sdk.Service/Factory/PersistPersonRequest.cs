@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

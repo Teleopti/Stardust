@@ -1,7 +1,8 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.WcfService
 {
     public class CommandHandlerModule : Module
     {

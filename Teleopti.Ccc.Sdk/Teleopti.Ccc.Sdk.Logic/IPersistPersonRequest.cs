@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.Factory
+namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface IPersistPersonRequest
     {

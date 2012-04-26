@@ -6,11 +6,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class NewMainShiftCommandHandler : IHandleCommand<NewMainShiftCommandDto>
     {
@@ -21,8 +20,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRepository _personRepository;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public NewMainShiftCommandHandler(IUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService)
+    	public NewMainShiftCommandHandler(IUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
             _scenarioRepository = scenarioRepository;
             _personRepository = personRepository;
             _saveSchedulePartService = saveSchedulePartService;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
         public CommandResultDto Handle(NewMainShiftCommandDto command)
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 addLayersToMainShift(mainShift, command.LayerCollection);
                 scheduleDay.AddMainShift(mainShift);
                 _saveSchedulePartService.Save(uow, scheduleDay);
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

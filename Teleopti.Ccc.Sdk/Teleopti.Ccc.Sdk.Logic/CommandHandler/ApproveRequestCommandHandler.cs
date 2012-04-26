@@ -9,11 +9,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommandDto>
     {
@@ -24,8 +23,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         private readonly ISwapAndModifyService _swapAndModifyService;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioProvider scenarioProvider, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory)
+    	public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioProvider scenarioProvider, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
             _swapAndModifyService = swapAndModifyService;
             _personRequestRepository = personRequestRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
         public CommandResultDto Handle(ApproveRequestCommandDto command)
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
 
                 new ScheduleDictionaryModifiedCallback().Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

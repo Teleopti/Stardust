@@ -5,11 +5,10 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class CancelOvertimeCommandHandler : IHandleCommand<CancelOvertimeCommandDto>
     {
@@ -19,8 +18,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
+    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-        public CancelOvertimeCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService)
+    	public CancelOvertimeCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _scheduleRepository = scheduleRepository;
@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
+        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
         public CommandResultDto Handle(CancelOvertimeCommandDto command)
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
             	}
                 
                 _saveSchedulePartService.Save(uow, scheduleDay);
-                using (new MessageBrokerSendEnabler())
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }

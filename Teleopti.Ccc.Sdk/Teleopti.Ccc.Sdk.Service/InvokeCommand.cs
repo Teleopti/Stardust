@@ -2,8 +2,9 @@
 using System.ServiceModel;
 using Autofac;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 
-namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
+namespace Teleopti.Ccc.Sdk.WcfService
 {
 	public class InvokeCommand : IInvokeCommand
 	{
