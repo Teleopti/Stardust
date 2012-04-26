@@ -16,7 +16,7 @@ namespace Teleopti.Analytics.Portal
 		{
 			if (Page.IsPostBack)
 				if (Session.IsNewSession)
-					Response.Redirect(string.Format(CultureInfo.InvariantCulture, "~/Timeout.aspx{0}", GetQueryString()), true);
+					Response.Redirect(string.Format(CultureInfo.InvariantCulture, "~/Timeout.aspx{0}", QueryStringWithPrefix), true);
 
 			LoggedOnUser.Text = LoggedOnUserInformation;
 			if (!Page.IsPostBack)
