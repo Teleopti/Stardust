@@ -12,13 +12,14 @@ namespace Teleopti.Analytics.Portal
 			{
 				Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}", Request.QueryString), true);
 			}
-			setTexts();
+			SetTexts();
 		}
 
-		private void setTexts()
+		private void SetTexts()
 		{
-			//labelHeader.Text=Resources.XXX;
-			//labelText.Text=Resources.XXX;
+			labelHeader.Text=Resources.SessionExpiredHeader;
+			labelText.Text=Resources.SessionExpiredText;
+			redirectLink.InnerText = Resources.RedirectNow;
 		}
 	}
 }

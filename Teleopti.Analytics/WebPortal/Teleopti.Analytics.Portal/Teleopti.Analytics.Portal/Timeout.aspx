@@ -40,18 +40,17 @@
 		</tr>
 		<tr>
 			<td>
-				<asp:Label ID="labelHeader" runat="server" CssClass="TechnicalDetailHeader">xxSession Expired</asp:Label>
+				<asp:Label ID="labelHeader" runat="server" CssClass="TechnicalDetailHeader"></asp:Label>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<asp:Label ID="labelText" runat="server" CssClass="TechnicalDetail">xxYour session has expired due to an extended period of inactivity. You will soon be redirected to the log on page again.</asp:Label>
+				<asp:Label ID="labelText" runat="server" CssClass="TechnicalDetail"></asp:Label>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<%--<asp:LinkButton runat="server" ID="linkButtonRedirect" onclick="linkButtonRedirect_Click" CssClass="TechnicalDetail">Redirect Now</asp:LinkButton>--%>
-				<a class="TechnicalDetail" href="#" onclick="javascript:redirect();">xxRedirect Now</a>
+				<a id="redirectLink" runat="server" class="TechnicalDetail" href="#" onclick="javascript:redirect();"></a>
 			</td>
 		</tr>
 	</table>
