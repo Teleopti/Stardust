@@ -131,7 +131,7 @@ namespace Teleopti.Analytics.Portal
             return string.Format("Login.aspx{0}", GetQueryString());
         }
 
-        private string GetQueryString()
+        protected string GetQueryString()
         {
             return string.Concat("?", Request.QueryString.ToString());
         }
@@ -177,6 +177,9 @@ namespace Teleopti.Analytics.Portal
 
 		protected bool IsBrowseTargetPerformanceManager { get; private set; }
 
-		protected static string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
+    	protected string PerformanceManagerUrl
+    	{
+			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", GetQueryString()); }
+    	}
     }
 }
