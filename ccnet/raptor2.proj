@@ -16,7 +16,13 @@
 		<DBServer>$(Computername)</DBServer>
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>true</DoCodeAnalysis>
-		<UseDBManager>true</UseDBManager>
+
+		<UseDBManager>nottrueorfalse</UseDBManager>
+		<!-- this will actually make the script not create a database in any way.
+		tests now create they own database using dbmanager logic.
+		experimental. if we decide to do this, we can remove all this stuff from this script.
+		-->
+		
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'NightlyBuild'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI15494'">true</RunWebBehaviorTests>
