@@ -9,7 +9,7 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalWrapper
+	internal class SignalWrapper
 	{
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
