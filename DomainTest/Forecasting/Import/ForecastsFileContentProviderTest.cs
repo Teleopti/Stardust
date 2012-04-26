@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         [Test]
         public void ShouldImportWinterTime()
         {
-            _fileContent = Encoding.UTF8.GetBytes("Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05");
+            _fileContent = Encoding.UTF8.GetBytes("Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05\r\nInsurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
             var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
 
-            Assert.That(forecastRows.Length, Is.EqualTo(2));
+            Assert.That(forecastRows.Length, Is.EqualTo(4));
             Assert.That(forecastRows[0].LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 2, 0, 0)));
             Assert.That(forecastRows[0].LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 2, 15, 0)));
             Assert.That(forecastRows[0].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 0, 0, 0)));
@@ -65,6 +65,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.That(forecastRows[1].LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 2, 15, 0)));
             Assert.That(forecastRows[1].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 1, 0, 0)));
             Assert.That(forecastRows[1].UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 1, 15, 0)));
+            Assert.That(forecastRows[2].LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 2, 45, 0)));
+            Assert.That(forecastRows[2].LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 3, 0, 0)));
+            Assert.That(forecastRows[2].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 0, 45, 0)));
+            Assert.That(forecastRows[2].UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 1, 0, 0)));
+            Assert.That(forecastRows[3].LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 2, 45, 0)));
+            Assert.That(forecastRows[3].LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 3, 0, 0)));
+            Assert.That(forecastRows[3].UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 10, 28, 1, 45, 0)));
+            Assert.That(forecastRows[3].UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 10, 28, 2, 0, 0)));
         }
 
         [Test]

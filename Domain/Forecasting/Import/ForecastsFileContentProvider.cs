@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                                                                                 StringSplitOptions.RemoveEmptyEntries))
                 {
                     var forecastsRow = _rowExtractor.Extract(line, timeZone);
-                    if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom) && timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeTo))
+                    if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom))
                     {
                         var missingRow = new ForecastsRow
                                              {
@@ -46,14 +46,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                                                  Tasks = forecastsRow.Tasks,
                                                  TaskTime = forecastsRow.TaskTime,
                                                  UtcDateTimeFrom = adjustMissingUtcTime(forecastsRow.UtcDateTimeFrom, (TimeZoneInfo)timeZone.TimeZoneInfoObject),
-                                                 UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo,(TimeZoneInfo)timeZone.TimeZoneInfoObject)
+                                                 UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo, (TimeZoneInfo)timeZone.TimeZoneInfoObject)
                                              };
                         result.Add(missingRow);
                     }
-                    else if (!timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeFrom) && timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeTo))
+                    else
                     {
-                        forecastsRow.UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo,
-                                                                       (TimeZoneInfo) timeZone.TimeZoneInfoObject);
+                        if (timeZone.IsAmbiguousTime(forecastsRow.LocalDateTimeTo))
+                            forecastsRow.UtcDateTimeTo = adjustMissingUtcTime(forecastsRow.UtcDateTimeTo,
+                                                                              (TimeZoneInfo) timeZone.TimeZoneInfoObject);
                     }
                     result.Add(forecastsRow);
                     rowNumber++;
