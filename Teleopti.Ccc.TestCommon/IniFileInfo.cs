@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static string UserName { get; private set; }
 		public static string Password { get; private set; }
 		public static bool Create { get; private set; }
+		public static bool CreateByNHib { get; private set; }
 		public static string Url { get; private set; }
 		public static string SitePath { get; private set; }
 		public static bool CassiniDev { get; private set; }
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.TestCommon
 			UserName = iniFileHelper.ReadIniValue(testDatabaseSection, "user");
 			Password = iniFileHelper.ReadIniValue(testDatabaseSection, "password");
 			Create = iniFileHelper.ReadIniValue(testDatabaseSection, "create") != "false";
+			CreateByNHib = iniFileHelper.ReadIniValue(testDatabaseSection, "createmode") == "nhib";
 			SqlOutput = iniFileHelper.ReadIniValue(testDatabaseSection, "sqloutput") == "true";
 			ConnectionStringMatrix = iniFileHelper.ReadIniValue(testDatabaseSection, "matrix");
 			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
