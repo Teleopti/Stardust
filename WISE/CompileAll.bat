@@ -263,6 +263,7 @@ COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\Forecasts\licen
 COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\StandAlone\licensecontext.slf"
 COPY "%ARTIFACTDIR%\Web.MyTime.Web.config" "%WISESOURCEFILE%\Web\Areas\MyTime\Views\web.config"
 COPY "%ARTIFACTDIR%\Web.Start.Web.config" "%WISESOURCEFILE%\Web\Areas\Start\Views\web.config"
+COPY "%ARTIFACTDIR%\Web.Mobile.Web.config" "%WISESOURCEFILE%\Web\Areas\MobileReports\Views\web.config"
 
 ::Create msi output folder
 IF NOT EXIST %OUTDIR% MKDIR %OUTDIR%
