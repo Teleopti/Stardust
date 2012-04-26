@@ -293,6 +293,7 @@
     </Compile>
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
+    <Compile Include="SignalR\SignalWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Teleopti.Core\Teleopti.Core.csproj">

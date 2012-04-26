@@ -16,7 +16,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
-		private IHubProxy _proxy;
+		private SignalWrapper _wrapper;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -33,12 +33,13 @@ namespace Teleopti.Messaging.SignalR
 
 		public void Dispose()
 		{
-			_proxy = null;
+			_wrapper.StopListening();
+			_wrapper = null;
 		}
 
 		public bool IsAlive
 		{
-			get { return _proxy != null; }
+			get { return _wrapper.IsInitialized(); }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -54,7 +55,7 @@ namespace Teleopti.Messaging.SignalR
 					byte[] domainObject = encoder.Encode(externalAgentState);
 
 					var type = typeof (IExternalAgentState);
-					callProxy(new Notification
+					_wrapper.NotifyClients(new Notification
 					          	{
 					          		StartDate =
 					          			Subscription.DateToString(externalAgentState.Timestamp.Add(externalAgentState.TimeInState.Negate())),
@@ -85,7 +86,7 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					callProxy(new Notification
+					_wrapper.NotifyClients(new Notification
 					          	{
 					          		StartDate = Subscription.DateToString(floor),
 					          		EndDate = Subscription.DateToString(ceiling),
@@ -106,20 +107,12 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void callProxy(Notification notification)
-		{
-			if (_proxy!=null)
-			{
-				_proxy.Invoke("NotifyClients", notification);
-			}
-		}
-
 		public void InstantiateBrokerService()
 		{
 			var connection = new HubConnection(_serverUrl);
-			_proxy = connection.CreateProxy("messageBrokerHub");
-			
-			connection.Start();
+			var proxy = connection.CreateProxy("MessageBrokerHub");
+
+			_wrapper = new SignalWrapper(proxy, connection);
 		}
 	}
 }
