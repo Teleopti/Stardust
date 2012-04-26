@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => controller.AsyncManager.OutstandingOperations.Count, Is.EqualTo(0).After(1000, 10));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCopyThreadCulture()
 		{
 			CultureInfo threadCulture = null;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => threadUICulture, Is.EqualTo(CultureInfo.GetCultureInfo("fi-FI")).After(1000, 10));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCopyThreadPrincipal()
 		{
 			// this is actually done automatically. the same does not apply for culture though.
