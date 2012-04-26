@@ -78,7 +78,7 @@ SELECT @ParentForeignId = '0003'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0075' --Foreign id of the function > hardcoded	
+SELECT @ForeignId = '0076' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'ImportForecastFromFile' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'xxImportForecastFromFile' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
@@ -122,7 +122,7 @@ SELECT @ParentForeignId = '0050'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0076' --Foreign id of the function > hardcoded	
+SELECT @ForeignId = '0075' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'RequestAllowances' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'xxRequestAllowances' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId

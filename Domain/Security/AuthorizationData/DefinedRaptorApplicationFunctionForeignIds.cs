@@ -67,9 +67,9 @@
 
 		// Forecaster
     	public const string ExportForecastToOtherBusinessUnit = "0073";
-        public const string ImportForecastFromFile = "0075";
+        public const string ImportForecastFromFile = "0076";
 		// Budget
-        public const string RequestAllowances = "0076";
+        public const string RequestAllowances = "0075";
 
         // Agent Portal
         public const string OpenAsm = "0020";
