@@ -113,6 +113,7 @@ namespace Teleopti.Messaging.SignalR
 			var proxy = connection.CreateProxy("MessageBrokerHub");
 
 			_wrapper = new SignalWrapper(proxy, connection);
+			_wrapper.StartListening();
 		}
 	}
 }
