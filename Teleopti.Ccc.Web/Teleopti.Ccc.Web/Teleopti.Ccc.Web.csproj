@@ -576,12 +576,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Content\Scripts\MicrosoftAjax.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
@@ -746,4 +740,11 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
+if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
+if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
+if not exist "$(ProjectDir)Areas\MobileReports\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Mobile.Web.config" "$(ProjectDir)Areas\MobileReports\Views\web.config"
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>
