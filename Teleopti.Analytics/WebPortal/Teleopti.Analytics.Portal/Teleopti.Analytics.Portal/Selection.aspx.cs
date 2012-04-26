@@ -14,11 +14,14 @@ namespace Teleopti.Analytics.Portal
 		
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			if (Page.IsPostBack)
+				if (Session.IsNewSession)
+					Response.Redirect(string.Format(CultureInfo.InvariantCulture, "~/Timeout.aspx{0}", GetQueryString()), true);
+
 			LoggedOnUser.Text = LoggedOnUserInformation;
 			if (!Page.IsPostBack)
 				CheckStandardReportOrPerformanceManager();
 
-			Parameter.ConnectionString = ConnectionString;
 			Parameter.ReportId = ReportId;
 			Parameter.GroupPageCode = GroupPageCode;
 			Parameter.UserCode = UserCode;
