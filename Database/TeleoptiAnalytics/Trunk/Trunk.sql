@@ -46,12 +46,15 @@ GO
 
 ALTER TABLE mart.dim_person ADD
 	windows_domain nvarchar(50) NULL
+GO
 UPDATE mart.dim_person SET windows_domain = 'Not Defined'
 
 ALTER TABLE mart.dim_person ADD	
     windows_username nvarchar(50) NULL
+GO
 UPDATE mart.dim_person SET windows_username = 'Not Defined'
 
+GO
 ALTER TABLE mart.dim_person ALTER COLUMN windows_domain		nvarchar(50) NOT NULL
 ALTER TABLE mart.dim_person ALTER COLUMN windows_username	nvarchar(50) NOT NULL
 GO
