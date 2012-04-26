@@ -7,7 +7,6 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 SET IDEBUILD=Microsoft Visual Studio 9.0\Common7\IDE
-SET IDETF=Microsoft Visual Studio 10.0\Common7\IDE
 SET XmlaFile=%ROOTDIR%\XMLA\CreateDatabase.xmla
 
 ::Set path to Visual Studio Team Foundation

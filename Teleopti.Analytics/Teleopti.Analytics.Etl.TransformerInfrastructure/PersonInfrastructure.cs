@@ -42,6 +42,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 table.Columns.Add("insert_date", typeof(DateTime));
                 table.Columns.Add("update_date", typeof(DateTime));
                 table.Columns.Add("datasource_update_date", typeof(DateTime));
+                table.Columns.Add("windows_domain", typeof(String));
+                table.Columns.Add("windows_username", typeof(String));
         }
     }
 }

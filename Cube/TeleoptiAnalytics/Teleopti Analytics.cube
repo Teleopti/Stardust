@@ -3238,6 +3238,12 @@
         <Attribute dwd:design-time-name="0ccb42d1-3786-4e9c-a933-1715d0c53594">
           <AttributeID>Employment Number 1</AttributeID>
         </Attribute>
+        <Attribute dwd:design-time-name="ae9a8530-38cc-4a12-afd7-2e7dc6ec6369">
+          <AttributeID>Windows Domain</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="21476bd7-dea5-4385-9e33-9a6619103e19">
+          <AttributeID>Windows Domain Username</AttributeID>
+        </Attribute>
       </Attributes>
       <Hierarchies>
         <Hierarchy dwd:design-time-name="b727bd2f-b57d-4e1a-8b47-cdb05b2344b7">
@@ -3263,6 +3269,9 @@
         </Hierarchy>
         <Hierarchy dwd:design-time-name="588a0c29-68e7-4124-bae5-915f608a47be">
           <HierarchyID>Hierarchy 7</HierarchyID>
+        </Hierarchy>
+        <Hierarchy dwd:design-time-name="0168b3c8-bc66-4935-97af-2465e956caeb">
+          <HierarchyID>Hierarchy 8</HierarchyID>
         </Hierarchy>
       </Hierarchies>
     </Dimension>
@@ -4013,6 +4022,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="6810c312-e93c-4384-b7b3-41ac7ca49fd6">
       <ID>Fact Agent Queue</ID>
@@ -4183,6 +4193,7 @@
           <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="5c196689-64ee-48c5-b1e4-b1a958c65460">
       <ID>Fact Queue</ID>
@@ -4442,6 +4453,7 @@
           <MeasureGroupID>Bridge Queue Workload</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="4764eb22-70ed-44d8-9666-0b6fa97ed423">
       <ID>Vfact Agents Ready</ID>
@@ -4555,6 +4567,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="86990995-f9f5-4170-ab0c-c6be2f8257a1">
       <ID>Fact Schedule</ID>
@@ -4859,6 +4872,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="311803db-529a-4bb0-ba62-bdd72b5344a9">
       <ID>Vfact Schedule</ID>
@@ -5009,6 +5023,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="f0cc0f04-e660-4623-8dd4-ef8423fedd4c">
       <ID>v Fact Schedule Day Count Absence</ID>
@@ -5211,6 +5226,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="549e6a5e-c427-48a0-b534-ba3aaa257495">
       <ID>v Fact Scheudule Day Count Shift Category</ID>
@@ -5395,6 +5411,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="d9fedb8d-3658-4b61-bcf4-9768bb0869ce">
       <ID>v Fact Schedule Day Count Day Off</ID>
@@ -5579,6 +5596,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="4af9f822-80b7-442f-99bc-a69c5f47f97f">
       <ID>Fact Schedule Preference</ID>
@@ -5803,6 +5821,7 @@
           <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="def146f8-c2c2-4cc0-8dea-6d54ef75b9d7">
       <ID>Fact Schedule Deviation</ID>
@@ -5994,6 +6013,7 @@
           <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="7f0a9d91-1501-46e4-a714-da85bcbc8057">
       <ID>Fact Schedule Forecast Skill</ID>
@@ -6166,6 +6186,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="42321bc0-78f2-4f74-947f-87786c89b8ba">
       <ID>Fact Forecast Workload</ID>
@@ -6462,6 +6483,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="39ad3011-b1c8-4926-8a1f-fbf526688b6d">
       <ID>Fact Kpi Targets Team</ID>
@@ -6619,6 +6641,7 @@
           <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="09ab7fe9-2d54-4091-ab48-f7a74a4f6582">
       <ID>Vfact Kpi Targets Team</ID>
@@ -6945,6 +6968,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="0881368f-4628-4942-b8c5-9c09d0bf7da4">
       <ID>Scorecard Kpi</ID>
@@ -7008,6 +7032,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="7fbec2da-af01-490a-ae82-4287fc5f47da">
       <ID>Vfact Shift Start</ID>
@@ -7155,6 +7180,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="90a02a7c-32bd-47c7-a757-74a5ab3d7855">
       <ID>v Bridge Agent Skill</ID>
@@ -7218,6 +7244,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="38c1e138-6f0e-4f5a-9d01-2230b08f5a15">
       <ID>Bridge Queue Workload</ID>
@@ -7317,6 +7344,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="6f8a8872-b18c-4c4d-99b7-6d2b1142d081">
       <ID>Bridge Acd Login Person</ID>
@@ -7446,6 +7474,7 @@
           <MeasureGroupID>Bridge Time Zone</MeasureGroupID>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="1cc4a8e0-ec0c-4cf4-9bae-1e450cee8740">
       <ID>Bridge Time Zone</ID>
@@ -7563,6 +7592,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="8a5bc46e-db78-4c58-a996-160809c1901c">
       <ID>Bridge Group Page Person</ID>
@@ -7637,6 +7667,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="0d6e56e2-d351-484d-9573-f56a06025450">
       <ID>Fact Request</ID>
@@ -7749,6 +7780,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="b1233275-b263-412a-b8f5-be742661250b">
       <ID>Fact Requested Days</ID>
@@ -7850,6 +7882,7 @@
           </Attributes>
         </Dimension>
       </Dimensions>
+      <Partitions />
     </MeasureGroup>
   </MeasureGroups>
   <Source dwd:design-time-name="03f1b68d-a933-4051-8eb1-b7a364c7da4a">
