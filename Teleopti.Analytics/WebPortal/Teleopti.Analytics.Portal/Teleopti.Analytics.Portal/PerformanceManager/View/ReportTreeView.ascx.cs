@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.View
             else
             {
             	string queryString = ((IMasterPage)Page.Master).ModifyQueryString(Request.QueryString);
-                string url = String.Format("ShowReport.aspx?reportid={0}&reportname={1}&{2}", 
+                string url = String.Format(CultureInfo.InvariantCulture, "ShowReport.aspx?reportid={0}&reportname={1}&{2}", 
 											TreeView2.SelectedValue,
 											TreeView2.SelectedNode.Text,
 											queryString);

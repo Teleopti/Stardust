@@ -128,15 +128,15 @@ namespace Teleopti.Analytics.Portal
 
         private string LoginUrl()
         {
-            return string.Format("Login.aspx{0}", GetQueryString());
+            return string.Format("Login.aspx{0}", QueryStringWithPrefix);
         }
 
-        protected string GetQueryString()
-        {
-            return string.Concat("?", Request.QueryString.ToString());
-        }
+    	protected string QueryStringWithPrefix
+    	{
+    		get { return string.Concat("?", Request.QueryString.ToString()); }
+    	}
 
-        protected string LoggedOnUserInformation
+    	protected string LoggedOnUserInformation
         { get { return TheUser.PersonName + " (" + TheUser.UserName + ")"; } }
 
         protected static string ConnectionString
@@ -179,7 +179,7 @@ namespace Teleopti.Analytics.Portal
 
     	protected string PerformanceManagerUrl
     	{
-			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", GetQueryString()); }
+			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", QueryStringWithPrefix); }
     	}
     }
 }

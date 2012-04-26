@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Portal
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			ContainerControl.Attributes.Add("src", string.Format(CultureInfo.InvariantCulture, "PerformanceManager/Default.aspx{0}", GetQueryString()));
+			ContainerControl.Attributes.Add("src", string.Format(CultureInfo.InvariantCulture, "PerformanceManager/Default.aspx{0}", QueryStringWithPrefix));
 		}
 	}
 }
