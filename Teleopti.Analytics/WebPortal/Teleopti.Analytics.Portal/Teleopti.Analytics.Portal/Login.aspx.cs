@@ -16,24 +16,20 @@ namespace Teleopti.Analytics.Portal
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(Request.QueryString["FORCEFORMSLOGIN"]) == false)
-			{
-				if (Request.QueryString["FORCEFORMSLOGIN"] == "true")
-				{
-					_forceFormsLogin = true;
-				}
-			}
-		Login1.Authenticate +=Login1_Authenticate;
-		Login1.TitleText = Resources.LogInTitle;
-		Login1.UserNameLabelText = Resources.LogInName;
-		Login1.PasswordLabelText = Resources.LogInPassword;
-		
-		Login1.LoginButtonText = Resources.LogInButton;
-		Login1.FailureText = Resources.LogInError;
-		Login1.UserNameRequiredErrorMessage = Resources.LogInUserRequired;
-		Login1.PasswordRequiredErrorMessage = Resources.LogInPassRequired;
-		Login1.Focus();
-		
+			if (!string.IsNullOrEmpty(Request.QueryString["FORCEFORMSLOGIN"]) && (Request.QueryString["FORCEFORMSLOGIN"] == "true"))
+				_forceFormsLogin = true;
+
+			Login1.Authenticate += Login1_Authenticate;
+			Login1.TitleText = Resources.LogInTitle;
+			Login1.UserNameLabelText = Resources.LogInName;
+			Login1.PasswordLabelText = Resources.LogInPassword;
+
+			Login1.LoginButtonText = Resources.LogInButton;
+			Login1.FailureText = Resources.LogInError;
+			Login1.UserNameRequiredErrorMessage = Resources.LogInUserRequired;
+			Login1.PasswordRequiredErrorMessage = Resources.LogInPassRequired;
+			Login1.Focus();
+
 			AuthenticationMode mode = AuthorizationHelper.GetWebAuthenticationMode();
 
 			if (!string.IsNullOrEmpty(Request.ServerVariables["LOGON_USER"]))
@@ -67,7 +63,7 @@ namespace Teleopti.Analytics.Portal
 		private string RedirectUrl(string userName)
 		{
 			return string.Format(CultureInfo.InvariantCulture, "{0}?{1}",
-								 FormsAuthentication.GetRedirectUrl(userName, false), 
+								 FormsAuthentication.GetRedirectUrl(userName, false),
 								 Request.QueryString);
 		}
 
@@ -76,7 +72,7 @@ namespace Teleopti.Analytics.Portal
 			//bool Authenticated;
 			var lUtil = new LogOnUtilities(ConnectionString);
 			e.Authenticated = lUtil.CheckPassword(Login1.UserName, Login1.Password);
-			   
+
 			if (e.Authenticated)
 			{
 				Context.Session["USER"] = null;
@@ -100,5 +96,5 @@ namespace Teleopti.Analytics.Portal
 		}
 	}
 
-   
+
 }

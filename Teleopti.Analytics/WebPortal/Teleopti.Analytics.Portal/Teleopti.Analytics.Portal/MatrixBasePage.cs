@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Portal
 					if (Context.Session["USERNAME"] == null)
 					{
 						var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
-						if (sec.Mode == AuthenticationMode.Windows)
+						if (sec.Mode == AuthenticationMode.Windows && !Page.IsPostBack)
 							Response.Redirect(LoginUrl());
 					}
 				}

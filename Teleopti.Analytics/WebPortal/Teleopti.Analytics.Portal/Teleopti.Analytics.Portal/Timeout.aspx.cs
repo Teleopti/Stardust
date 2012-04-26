@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Globalization;
-using System.Web;
-using Teleopti.Analytics.Portal.PerformanceManager.Helper;
+using Teleopti.Analytics.ReportTexts;
 
 namespace Teleopti.Analytics.Portal
 {
@@ -10,57 +8,17 @@ namespace Teleopti.Analytics.Portal
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			
-		}
-
-		protected bool IsForceFormsLogOn
-		{
-			get
+			if (Page.IsPostBack)
 			{
-				if (!string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["FORCEFORMSLOGIN"]))
-					if (Request.QueryString["FORCEFORMSLOGIN"] == "true")
-						return true;
-
-				return false;
+				Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}", Request.QueryString), true);
 			}
+			setTexts();
 		}
 
-		private bool IsPmBrowsed
+		private void setTexts()
 		{
-			get
-			{
-				return !string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["PM"]) && (Request.QueryString["PM"] == "1");
-			}
-		}
-
-		//private string ReturnUrl
-		//{
-		//    get
-		//    {
-		//        if (IsPmBrowsed)
-		//            return HttpContext.Current.Server.UrlEncode(string.Format(CultureInfo.InvariantCulture, "PmContainer.aspx?{0}", Request.QueryString));
-
-		//        return string.Empty;
-		//    }
-		//}
-
-		private void ApplicationAuthentication()
-		{
-			//Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}&timeouturl={1}", Request.QueryString, ReturnUrl), true);
-			Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}", Request.QueryString), true);
-		}
-
-		private void WindowsAuthentication()
-		{
-			Response.Redirect(string.Format(CultureInfo.InvariantCulture, "Login.aspx?{0}", Request.QueryString), true);
-		}
-
-		protected void linkButtonRedirect_Click(object sender, EventArgs e)
-		{
-			if (AuthorizationHelper.CheckWindowsAuthentication(IsForceFormsLogOn))
-				WindowsAuthentication();
-			else
-				ApplicationAuthentication();
+			//labelHeader.Text=Resources.XXX;
+			//labelText.Text=Resources.XXX;
 		}
 	}
 }
