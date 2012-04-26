@@ -10,7 +10,7 @@
 namespace Teleopti.Analytics.Portal {
     
     
-    public partial class Login {
+    public partial class Timeout {
         
         /// <summary>
         /// form1 control.
@@ -22,21 +22,30 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// _labelInfo control.
+        /// labelHeader control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelInfo;
+        protected global::System.Web.UI.WebControls.Label labelHeader;
         
         /// <summary>
-        /// Login1 control.
+        /// labelText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Login Login1;
+        protected global::System.Web.UI.WebControls.Label labelText;
+        
+        /// <summary>
+        /// redirectLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor redirectLink;
     }
 }

@@ -350,6 +350,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redirect Now.
+        /// </summary>
+        public static string RedirectNow {
+            get {
+                return ResourceManager.GetString("RedirectNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abandoned Calls.
         /// </summary>
         public static string ResAbandonedCalls {
@@ -2524,6 +2533,24 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string RuleSetBag {
             get {
                 return ResourceManager.GetString("RuleSetBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session Expired.
+        /// </summary>
+        public static string SessionExpiredHeader {
+            get {
+                return ResourceManager.GetString("SessionExpiredHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your session has expired due to an extended period of inactivity. You will soon be redirected to the log on page again..
+        /// </summary>
+        public static string SessionExpiredText {
+            get {
+                return ResourceManager.GetString("SessionExpiredText", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
@@ -29,7 +30,7 @@ namespace Teleopti.Analytics.Parameters
         internal static Guid BuCode;
         internal static int LangId;
 
-        internal static string _ConnectionString;
+        internal static string _ConnectionString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
         //public static string _Database;
 
         internal static Unit _LabelWidth = new Unit("200");
@@ -150,11 +151,6 @@ namespace Teleopti.Analytics.Parameters
             get
             {
                 return _ConnectionString;
-            }
-
-            set
-            {
-                _ConnectionString = value;
             }
         }
 
