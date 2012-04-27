@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
+﻿using System.Windows.Forms;
+
+namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 {
     partial class OpenHourDialog
     {
@@ -28,6 +30,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OpenHourDialog));
             this.timePicker = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
             this.btnOk = new Syncfusion.Windows.Forms.ButtonAdv();
             this.groupBoxOpenHour = new System.Windows.Forms.GroupBox();
@@ -42,31 +46,34 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxAdv1 = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBoxOpenHour.SuspendLayout();
             this.tableLayoutPanelOpenHoursRtl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdv1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // timePicker
             // 
-            this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanelOpenHoursRtl.SetColumnSpan(this.timePicker, 2);
             this.timePicker.Location = new System.Drawing.Point(0, 18);
             this.timePicker.Margin = new System.Windows.Forms.Padding(0, 3, 3, 5);
+            this.timePicker.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxEndTime")));
+            this.timePicker.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxStartTime")));
             this.timePicker.Name = "timePicker";
-            this.timePicker.Size = new System.Drawing.Size(155, 24);
+            this.timePicker.Size = new System.Drawing.Size(168, 24);
             this.timePicker.TabIndex = 0;
             this.timePicker.WholeDayText = "xxNextDay";
             // 
             // btnOk
             // 
             this.btnOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Location = new System.Drawing.Point(148, 135);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
@@ -89,9 +96,9 @@
             // tableLayoutPanelOpenHoursRtl
             // 
             this.tableLayoutPanelOpenHoursRtl.ColumnCount = 3;
-            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29F));
-            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29F));
-            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42F));
+            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.38686F));
+            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.0219F));
+            this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.59124F));
             this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.autoLabelTo, 1, 0);
             this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.timePicker, 0, 1);
             this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.autoLabelFrom, 0, 0);
@@ -108,9 +115,7 @@
             // 
             // autoLabelTo
             // 
-            this.autoLabelTo.DX = 0;
-            this.autoLabelTo.DY = 0;
-            this.autoLabelTo.Location = new System.Drawing.Point(82, 0);
+            this.autoLabelTo.Location = new System.Drawing.Point(89, 0);
             this.autoLabelTo.Name = "autoLabelTo";
             this.autoLabelTo.Size = new System.Drawing.Size(57, 13);
             this.autoLabelTo.TabIndex = 2;
@@ -118,8 +123,6 @@
             // 
             // autoLabelFrom
             // 
-            this.autoLabelFrom.DX = 0;
-            this.autoLabelFrom.DY = 0;
             this.autoLabelFrom.Location = new System.Drawing.Point(3, 0);
             this.autoLabelFrom.Name = "autoLabelFrom";
             this.autoLabelFrom.Size = new System.Drawing.Size(67, 13);
@@ -129,7 +132,7 @@
             // chbClose
             // 
             this.chbClose.AutoSize = true;
-            this.chbClose.Location = new System.Drawing.Point(158, 18);
+            this.chbClose.Location = new System.Drawing.Point(171, 18);
             this.chbClose.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.chbClose.Name = "chbClose";
             this.chbClose.Padding = new System.Windows.Forms.Padding(5, 6, 0, 0);
@@ -154,6 +157,7 @@
             // ribbonControlAdv1
             // 
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MenuButtonText = "";
             this.ribbonControlAdv1.MenuButtonVisible = false;
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
@@ -162,7 +166,9 @@
             this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
             this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdv1.QuickPanelVisible = false;
-            this.ribbonControlAdv1.Size = new System.Drawing.Size(325, 30);
+            this.ribbonControlAdv1.SelectedTab = null;
+            this.ribbonControlAdv1.ShowMinimizeButton = false;
+            this.ribbonControlAdv1.Size = new System.Drawing.Size(325, 33);
             this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartMenu";
             this.ribbonControlAdv1.TabIndex = 4;
             this.ribbonControlAdv1.Text = "yyRibbonControlAdv1";
@@ -171,7 +177,6 @@
             // 
             this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FloralWhite, System.Drawing.Color.Gold);
             this.gradientPanel1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-            this.gradientPanel1.BorderColor = System.Drawing.Color.Black;
             this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
             this.gradientPanel1.Name = "gradientPanel1";
@@ -224,7 +229,6 @@
             this.comboBoxAdv1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxAdv1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxAdv1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAdv1.IgnoreThemeBackground = true;
             this.comboBoxAdv1.Location = new System.Drawing.Point(131, 8);
             this.comboBoxAdv1.MaxDropDownItems = 16;
             this.comboBoxAdv1.Name = "comboBoxAdv1";
@@ -233,12 +237,15 @@
             this.comboBoxAdv1.SuppressDropDownEvent = true;
             this.comboBoxAdv1.TabIndex = 0;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.errorProvider1.ContainerControl = this;
+            // 
             // OpenHourDialog
             // 
-            this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(327, 171);
             this.ControlBox = false;
             this.Controls.Add(this.ribbonControlAdv1);
@@ -246,6 +253,7 @@
             this.Controls.Add(this.groupBoxOpenHour);
             this.Controls.Add(this.btnOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "OpenHourDialog";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -259,6 +267,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdv1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -279,6 +288,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv1;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
 
 
     }

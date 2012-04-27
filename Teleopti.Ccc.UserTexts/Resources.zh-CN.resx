@@ -9226,4 +9226,8 @@ Periods</comment>
     <value>从文件导入预测数据</value>
     <comment>import forecast from file</comment>
   </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>起始时间{0}必须早于结束时间{1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
 </root>

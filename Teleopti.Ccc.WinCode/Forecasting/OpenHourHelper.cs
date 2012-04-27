@@ -129,28 +129,5 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             openHour = new TimePeriod(start, end);
             return openHour;
         }
-
-        public static bool IsValidOpenHour(TimePeriod timePeriod, TimeSpan midnightOffsetBreak)
-        {
-            bool hasValidTime = false;
-            bool startEnd = false;
-            bool hasValidEndTime = false;
-
-            if (midnightOffsetBreak >= TimeSpan.Zero)
-            {
-                startEnd = timePeriod.StartTime <= timePeriod.EndTime;
-                if (timePeriod.StartTime >= midnightOffsetBreak)
-                {
-                    hasValidTime = (timePeriod.EndTime <= midnightOffsetBreak.Add(TimeSpan.FromDays(1)));
-                    hasValidEndTime = timePeriod.EndTime >= midnightOffsetBreak;
-                }
-                else
-                {
-                    hasValidTime = true;
-                    hasValidEndTime = timePeriod.EndTime <= midnightOffsetBreak;
-                }
-            }
-            return hasValidTime && hasValidEndTime && startEnd;
-        }
     }
 }
