@@ -131,6 +131,7 @@
     <Compile Include="Job\Steps\FactScheduleDeviationJobStepTest.cs" />
     <Compile Include="Job\Steps\RequestJobsTest.cs" />
     <Compile Include="Job\Steps\ScheduleDayRestrictorTest.cs" />
+    <Compile Include="Job\Steps\StatisticsUpdateNotificationJobStepTest.cs" />
     <Compile Include="OvertimeTransformerTest.cs" />
     <Compile Include="PmPermissionExtractorTest.cs" />
     <Compile Include="RequestTransformTest.cs" />
