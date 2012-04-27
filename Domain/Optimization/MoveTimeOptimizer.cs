@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             _schedulingOptionsCreator = schedulingOptionsCreator;
         }
 
-        public bool Execute()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public bool Execute()
         {
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
