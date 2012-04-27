@@ -9229,4 +9229,8 @@ Periods</comment>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
     <value>只显示可替换班的人</value>
   </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>起始时间{0}必须早于结束时间{1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
 </root>
