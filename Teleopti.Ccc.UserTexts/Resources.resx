@@ -10566,4 +10566,8 @@ These options are activated:
     <value>Request allowances</value>
     <comment>Request allowances</comment>
   </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Start time {0} should be earlier than end time {1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
 </root>
