@@ -70,22 +70,25 @@
 </div>
 
 
-<div id="Schedule-addTextRequest-section" class="displaynone ui-corner-all">
-	<strong>@Resources.NewTextRequest</strong>
+<div id="Schedule-addRequest-title" class="displaynone">@Resources.NewTextRequest</div>
+
+<div class="displaynone" id="Schedule-addRequest-cancel-button">@Resources.Cancel</div>
+
+<div id="Schedule-addRequest-section" class="displaynone ui-corner-all">
 	<div class="edit-module-element">
-		<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
-		<input id="Request-detail-subject-input" type="text"/>
+		<label class="displayblock" for="Schedule-addRequest-subject-input">@Resources.Subject</label>
+		<input id="Schedule-addRequest-subject-input" type="text"/>
 	</div>
 	<div class="edit-module-element">
-		<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
-		<textarea id="Request-detail-message-input" />
+		<label class="displayblock" for="Schedule-addRequest-message-input">@Resources.Message</label>
+		<textarea id="Schedule-addRequest-message-input" />
 	</div>
 	<div class="edit-module-element floatleft">
-		<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+		<input id="Schedule-addRequest-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
 	</div>
 	<div class="edit-module-element floatleft">
-		<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-		<select id="Request-detail-fromTime-input" class="time-input combobox">
+		<label class="displayblock" for="Schedule-addRequest-fromTime-input-input">@Resources.Time</label>
+		<select id="Schedule-addRequest-fromTime-input" class="time-input combobox">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
 			{
 				<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
@@ -93,18 +96,18 @@
 		</select>
 	</div>
 	<div class="edit-module-element clearleftfloat floatleft">
-		<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+		<input id="Schedule-addRequest-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
 	</div>
 	<div class="edit-module-element floatleft">
-		<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-		<select id="Request-detail-toTime-input" class="time-input combobox">
+		<label class="displayblock" for="Schedule-addRequest-toTime-input-input">@Resources.Time</label>
+		<select id="Schedule-addRequest-toTime-input" class="time-input combobox">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
 			{
 				<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
 			}
 		</select>
 	</div>
-	<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.NewRequest)"/>
-	<div id="Request-detail-error" class="error clearleftfloat"></div>
+	<input id="Schedule-addRequest-ok-button" type="button" class="button mb5 floatright" value="@Html.AttributeEncode(Resources.NewRequest)"/>
+	<div id="Schedule-addRequest-error" class="error clearleftfloat"></div>
 </div>
 

@@ -45,7 +45,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _initEditSection() {
-		$('#Schedule-addTextRequest-ok-button')
+		$('#Schedule-addRequest-ok-button')
 			.click(function () {
 				_addTextRequest();
 			});
@@ -55,16 +55,16 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	}
 
 	function _initLabels() {
-		$('#Schedule-addTextRequest-section input[type=text], #Schedule-addTextRequest-section textarea')
+		$('#Schedule-addRequest-section input[type=text], #Schedule-addRequest-section textarea')
 			.labeledinput()
 			;
 	}
 
 	function _initControls() {
-		$('#Schedule-addTextRequest-section .date-input')
+		$('#Schedule-addRequest-section .date-input')
 			.datepicker()
 			;
-		$("#Schedule-addTextRequest-section .combobox.time-input")
+		$("#Schedule-addRequest-section .combobox.time-input")
 			.combobox()
 			;
 	}
@@ -80,7 +80,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
 				_displayTextRequest(formData.Period.StartDate);
-				Teleopti.MyTimeWeb.Common.CloseEditSection('#Schedule-addTextRequest-section');
+				Teleopti.MyTimeWeb.Common.CloseEditSection('#Schedule-addRequest-section');
 				_clearFormData();
 				_clearValidationError();
 			},
@@ -97,28 +97,28 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _displayValidationError(data) {
 		var message = data.Errors.join(' ');
-		$('#Schedule-addTextRequest-error').html(message || '');
+		$('#Schedule-addRequest-error').html(message || '');
 	}
 
 	function _clearValidationError() {
-		$('#Schedule-addTextRequest-error').html('');
+		$('#Schedule-addRequest-error').html('');
 	}
 
 	function _getFormData() {
 		return {
-			Subject: $('#Schedule-addTextRequest-subject-input').val(),
+			Subject: $('#Schedule-addRequest-subject-input').val(),
 			Period: {
-				StartDate: $('#Schedule-addTextRequest-fromDate-input').val(),
-				StartTime: $('#Schedule-addTextRequest-fromTime-input-input').val(),
-				EndDate: $('#Schedule-addTextRequest-toDate-input').val(),
-				EndTime: $('#Schedule-addTextRequest-toTime-input-input').val()
+				StartDate: $('#Schedule-addRequest-fromDate-input').val(),
+				StartTime: $('#Schedule-addRequest-fromTime-input-input').val(),
+				EndDate: $('#Schedule-addRequest-toDate-input').val(),
+				EndTime: $('#Schedule-addRequest-toTime-input-input').val()
 			},
-			Message: $('#Schedule-addTextRequest-message-input').val()
+			Message: $('#Schedule-addRequest-message-input').val()
 		};
 	}
 
 	function _clearFormData() {
-		$('#Schedule-addTextRequest-section input, #Schedule-addTextRequest-section textarea, #Schedule-addTextRequest-section select')
+		$('#Schedule-addRequest-section input, #Schedule-addRequest-section textarea, #Schedule-addRequest-section select')
 			.not(':button, :submit, :reset')
 			.reset()
 			;

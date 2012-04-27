@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -138,62 +139,78 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 
-			$('.tooltip').each(function() {
+			$('.tooltip').each(function () {
 				$(this).qtip({
-						content: {
-							title: $(this).attr('tooltip-title'),
-							text: $(this).attr('tooltip-text')
-						},
-						title: "test",
-						style: {
-							classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-							tip: true
-						},
-						position: {
-							my: 'bottom left',
-							at: 'top right',
-							target: 'mouse'
-						}
-					});
+					content: {
+						title: $(this).attr('tooltip-title'),
+						text: $(this).attr('tooltip-text')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse'
+					}
+				});
 			});
 
-			$('[title]').each(function() {
+			$('[title]').each(function () {
 				$(this).qtip({
-						content: {
-							text: $(this).attr('title')
-						},
-						title: "test",
-						style: {
-							classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-							tip: true
-						},
-						position: {
-							my: 'bottom left',
-							at: 'top right',
-							target: 'mouse'
-						}
-					});
+					content: {
+						text: $(this).attr('title')
+					},
+					title: "test",
+					style: {
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse'
+					}
+				});
 			});
 
-			$('.add-text-request').each(function () {
-				$(this).qtip({
-					content: $('#Schedule-addTextRequest-section'),
-						show: { event: 'click' },
-						hide: {
-							event: 'unfocus',
-							fixed: true
-						},
-						style: {
-							classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow'
-						},
-						position: {
-							my: 'middle left',
-							at: 'middle right'
-						}
-					});
+			var addTextRequest = $('.add-text-request');
+			$('<div/>').qtip({
+				content: {
+					text: $('#Schedule-addRequest-section'),
+					title: {
+						text: $('#Schedule-addRequest-title'),
+						button: $('#Schedule-addRequest-cancel-button').text()
+					}
+				},
+				position: {
+					target: 'event',
+					my: 'middle left',
+					at: 'middle right',
+					viewport: $(window),
+					adjust: {
+						x: 15
+					}
+				},
+				show: {
+					target: addTextRequest,
+					event: 'click'
+				},
+				hide: {
+					target: addTextRequest,
+					event: 'unfocus'
+				},
+				style: {
+					classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
+					tip: true,
+					border: {
+						radius: 2
+					}
+				}
 			});
 		}
-
 	};
 })(jQuery);
 

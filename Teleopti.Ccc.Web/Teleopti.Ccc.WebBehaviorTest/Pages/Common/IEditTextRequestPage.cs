@@ -16,6 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		Div ValidationErrorText { get; }
 
 		Button OkButton { get; set; }
-		Button CancelButton { get; set; }
+		Element CancelButton { get; }
 	}
 }

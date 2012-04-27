@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-ok-button")]
 		public Button OkButton { get; set; }
 		[FindBy(Id = "Request-detail-cancel-button")]
-		public Button CancelButton { get; set; }
+		public Element CancelButton { get; set; }
 
 		[FindBy(Id = "Request-detail-entityid")]
 		public TextField TextRequestDetailEntityId { get; set; }

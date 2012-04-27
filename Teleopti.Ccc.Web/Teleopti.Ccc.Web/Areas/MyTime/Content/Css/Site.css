@@ -522,7 +522,7 @@ button.icon-left{padding-left: 35px;}
 
 .ui-tooltip-input .ui-tooltip-titlebar,
 .ui-tooltip-input .ui-tooltip-content{
-	border-color: rgb(241,241,241);
+	border-color: rgb(200, 200, 200);
 	background-color: rgb(241,241,241);
 	color: #010101;
 	font-size: 10px;
@@ -531,8 +531,6 @@ button.icon-left{padding-left: 35px;}
 	text-align: left;
 	word-wrap: break-word;
 }
-
-
 
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}
