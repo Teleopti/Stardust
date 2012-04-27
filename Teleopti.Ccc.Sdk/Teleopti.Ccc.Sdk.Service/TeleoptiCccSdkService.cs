@@ -31,7 +31,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
@@ -1090,12 +1089,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriod(PersonDto person, DateOnlyDto dateInPeriod, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateScheduleFactory(inner).GetValidatedSchedulePartsOnSchedulePeriod(person,
-                                                                                                          dateInPeriod,
-                                                                                                          timeZoneId, false);
-            }
+			return
+				GetValidatedSchedulePartsOnSchedulePeriodByQuery(new GetValidatedSchedulePartsForPreferenceQueryDto
+				                                                 	{
+				                                                 		Person = person,
+				                                                 		DateInPeriod = dateInPeriod,
+				                                                 		TimeZoneId = timeZoneId
+				                                                 	});
 		}
 
         public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto)
