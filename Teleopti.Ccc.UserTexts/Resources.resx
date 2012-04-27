@@ -10562,4 +10562,8 @@ These options are activated:
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
   </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Start time {0} should be earlier than end time {1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
+  </data>
 </root>
