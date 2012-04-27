@@ -7,7 +7,7 @@
 -----------------
 
 CREATE TABLE [mart].[sys_etl_running_lock](
-	[id] [int] NOT NULL,
+	[id] [int] IDENTITY(1,1) NOT NULL,
 	[computer_name] [nvarchar](255) NOT NULL,
 	[start_time] [datetime] NOT NULL,
 	[job_name] [nvarchar](100) NOT NULL,
