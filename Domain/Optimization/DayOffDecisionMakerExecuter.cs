@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+        	schedulingOptions.UseCustomTargetTime = _originalStateContainer.OriginalWorkTime();
             
             IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -44,8 +45,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IScheduleTag TagToUseOnScheduling { get; set; }
         public IScheduleTag TagToUseOnOptimize { get; set; }
     	public int ResourceCalculateFrequency { get; set; }
-
-        public bool ShowTroubleshot { get; set; }
+    	public TimeSpan? UseCustomTargetTime { get; set; }
+    	public bool ShowTroubleshot { get; set; }
 
 		public SchedulingOptions()
 		{
