@@ -9226,4 +9226,7 @@ Periods</comment>
     <value>从文件导入预测数据</value>
     <comment>import forecast from file</comment>
   </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>只显示可替换班的人</value>
+  </data>
 </root>

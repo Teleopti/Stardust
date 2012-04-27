@@ -4538,7 +4538,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New Shift Trade Request</value>
+    <value>New shift trade request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -10673,5 +10673,8 @@ These options are activated:
   <data name="RequestAllowances" xml:space="preserve">
     <value>Request allowances</value>
     <comment>Request allowances</comment>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Show only available for shift trade</value>  
   </data>
 </root>

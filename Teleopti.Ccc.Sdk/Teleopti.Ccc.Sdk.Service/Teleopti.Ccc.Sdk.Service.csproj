@@ -261,6 +261,7 @@
     <Compile Include="LogOn\WindowsDataSourceFromToken.cs" />
     <Compile Include="LogOn\WindowsTokenAuthenticator.cs" />
     <Compile Include="LogOn\WindowsUserFromToken.cs" />
+    <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAgentPortalSettingsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetBusinessUnitByIdQueryHandler.cs" />
