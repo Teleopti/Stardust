@@ -335,6 +335,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 {
                     activity = preference.ActivityRestrictionCollection[0].Activity;
                 }
+                else
+                {
+                	return permissionState;
+                }
 
                 var activities = visualLayerCollection.FilterLayers(activity);
                 foreach (var layer in activities)
