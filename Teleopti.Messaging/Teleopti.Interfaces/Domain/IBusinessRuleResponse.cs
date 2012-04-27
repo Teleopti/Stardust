@@ -72,6 +72,12 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         DateTimePeriod Period { get; }
 
+		/// <summary>
+		/// Gets the date only period.
+		/// </summary>
+		/// <value>The date only period.</value>
+		DateOnlyPeriod DateOnlyPeriod { get; }
+
         /// <summary>
         /// Gets the person.
         /// </summary>
