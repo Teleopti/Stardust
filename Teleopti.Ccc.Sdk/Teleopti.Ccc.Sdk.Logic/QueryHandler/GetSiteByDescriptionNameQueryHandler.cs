@@ -8,30 +8,30 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-    public class GetTeamByDescriptionNameQueryHandler : IHandleQuery<GetTeamByDescriptionNameQueryDto, ICollection<TeamDto>>
+    public class GetSiteByDescriptionNameQueryHandler : IHandleQuery<GetSiteByDescriptionNameQueryDto, ICollection<SiteDto>>
     {
-        private readonly IAssembler<ITeam, TeamDto> _assembler;
-        private readonly ITeamRepository _teamRepository;
+        private readonly IAssembler<ISite, SiteDto> _assembler;
+        private readonly ISiteRepository _siteRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetTeamByDescriptionNameQueryHandler(IAssembler<ITeam, TeamDto> assembler, ITeamRepository teamRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetSiteByDescriptionNameQueryHandler(IAssembler<ISite, SiteDto> assembler, ISiteRepository siteRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
-            _teamRepository = teamRepository;
+            _siteRepository = siteRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ICollection<TeamDto> Handle(GetTeamByDescriptionNameQueryDto query)
+        public ICollection<SiteDto> Handle(GetSiteByDescriptionNameQueryDto query)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {
-                    var memberList = new List<ITeam>();
-                    var foundTeams = _teamRepository.FindTeamByDescriptionName(query.DescriptionName);
-                    memberList.AddRange(foundTeams);
+                    var memberList = new List<ISite>();
+                    var foundSites = _siteRepository.FindSiteByDescriptionName(query.DescriptionName);
+                    memberList.AddRange(foundSites);
                     return _assembler.DomainEntitiesToDtos(memberList).ToList();
                 }
             }

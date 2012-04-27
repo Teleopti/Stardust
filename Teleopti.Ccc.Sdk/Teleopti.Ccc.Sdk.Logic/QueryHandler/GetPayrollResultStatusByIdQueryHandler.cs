@@ -6,7 +6,7 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetPayrollResultStatusByIdQueryHandler : IHandleQuery<GetPayrollResultStatusByIdQueryDto, ICollection<PayrollResultDto>>
     {

@@ -8,31 +8,30 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-    public class GetPersonByEmploymentNumberQueryHandler : IHandleQuery<GetPersonByEmploymentNumberQueryDto,ICollection<PersonDto>>
+    public class GetTeamByDescriptionNameQueryHandler : IHandleQuery<GetTeamByDescriptionNameQueryDto, ICollection<TeamDto>>
     {
-        private readonly IAssembler<IPerson, PersonDto> _assembler;
-        private readonly IPersonRepository _personRepository;
+        private readonly IAssembler<ITeam, TeamDto> _assembler;
+        private readonly ITeamRepository _teamRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetPersonByEmploymentNumberQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetTeamByDescriptionNameQueryHandler(IAssembler<ITeam, TeamDto> assembler, ITeamRepository teamRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
-            _personRepository = personRepository;
+            _teamRepository = teamRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ICollection<PersonDto> Handle(GetPersonByEmploymentNumberQueryDto query)
+        public ICollection<TeamDto> Handle(GetTeamByDescriptionNameQueryDto query)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {
-                    var memberList = new List<IPerson>();
-                    var foundPersons =
-                        _personRepository.FindPeopleByEmploymentNumber(query.EmploymentNumber);
-                    memberList.AddRange(foundPersons);
+                    var memberList = new List<ITeam>();
+                    var foundTeams = _teamRepository.FindTeamByDescriptionName(query.DescriptionName);
+                    memberList.AddRange(foundTeams);
                     return _assembler.DomainEntitiesToDtos(memberList).ToList();
                 }
             }

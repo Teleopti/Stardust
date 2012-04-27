@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetAvailableCustomGroupPagesQueryHandler : IHandleQuery<GetAvailableCustomGroupPagesQueryDto, ICollection<GroupPageDto>>
 	{

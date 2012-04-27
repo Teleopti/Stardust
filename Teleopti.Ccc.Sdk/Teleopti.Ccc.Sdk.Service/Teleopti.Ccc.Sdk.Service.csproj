@@ -220,7 +220,9 @@
     <Compile Include="Factory\LicenseFactory.cs" />
     <Compile Include="Factory\PersonRequestFactory.cs" />
     <Compile Include="IInvokeCommand.cs" />
+    <Compile Include="IInvokeQuery.cs" />
     <Compile Include="InvokeCommand.cs" />
+    <Compile Include="InvokeQuery.cs" />
     <Compile Include="LogOn\ApplicationDataSourceFromToken.cs" />
     <Compile Include="LogOn\ApplicationUserFromToken.cs" />
     <Compile Include="LogOn\BusinessUnitCache.cs" />
@@ -236,26 +238,7 @@
     <Compile Include="LogOn\WindowsDataSourceFromToken.cs" />
     <Compile Include="LogOn\WindowsTokenAuthenticator.cs" />
     <Compile Include="LogOn\WindowsUserFromToken.cs" />
-    <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetAgentPortalSettingsQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetBusinessUnitByIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetAllPayrollExportsQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPayrollResultStatusByExportIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPayrollResultStatusByIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetAvailableGroupPagesQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetGroupsForGroupPageAtDateQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPeopleByGroupPageGroupQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetTeamByDescriptionNameQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetTeamByIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPersonByEmploymentNumberQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetPersonByIdQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />
-    <Compile Include="QueryHandler\IHandleQuery.cs" />
-    <Compile Include="QueryHandler\IInvokeQuery.cs" />
-    <Compile Include="QueryHandler\InvokeQuery.cs" />
-    <Compile Include="QueryHandler\QueryHandlerModule.cs" />
+    <Compile Include="QueryHandlerModule.cs" />
     <Compile Include="TeleoptiCccSdkService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,7 +1,8 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.WcfService
 {
     public class InvokeQuery<TResult> : IInvokeQuery<TResult>
     {

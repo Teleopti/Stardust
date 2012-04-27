@@ -23,7 +23,6 @@ using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
-using Teleopti.Ccc.Sdk.WcfService.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;

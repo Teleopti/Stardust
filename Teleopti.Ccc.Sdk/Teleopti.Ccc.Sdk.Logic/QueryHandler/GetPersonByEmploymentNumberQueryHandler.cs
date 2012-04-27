@@ -8,30 +8,31 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-    public class GetSiteByDescriptionNameQueryHandler : IHandleQuery<GetSiteByDescriptionNameQueryDto, ICollection<SiteDto>>
+    public class GetPersonByEmploymentNumberQueryHandler : IHandleQuery<GetPersonByEmploymentNumberQueryDto,ICollection<PersonDto>>
     {
-        private readonly IAssembler<ISite, SiteDto> _assembler;
-        private readonly ISiteRepository _siteRepository;
+        private readonly IAssembler<IPerson, PersonDto> _assembler;
+        private readonly IPersonRepository _personRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetSiteByDescriptionNameQueryHandler(IAssembler<ISite, SiteDto> assembler, ISiteRepository siteRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetPersonByEmploymentNumberQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
-            _siteRepository = siteRepository;
+            _personRepository = personRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ICollection<SiteDto> Handle(GetSiteByDescriptionNameQueryDto query)
+        public ICollection<PersonDto> Handle(GetPersonByEmploymentNumberQueryDto query)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {
-                    var memberList = new List<ISite>();
-                    var foundSites = _siteRepository.FindSiteByDescriptionName(query.DescriptionName);
-                    memberList.AddRange(foundSites);
+                    var memberList = new List<IPerson>();
+                    var foundPersons =
+                        _personRepository.FindPeopleByEmploymentNumber(query.EmploymentNumber);
+                    memberList.AddRange(foundPersons);
                     return _assembler.DomainEntitiesToDtos(memberList).ToList();
                 }
             }

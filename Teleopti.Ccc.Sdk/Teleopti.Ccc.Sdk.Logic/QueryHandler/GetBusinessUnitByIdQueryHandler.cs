@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetCurrentBusinessUnitQueryHandler : IHandleQuery<GetCurrentBusinessUnitQueryDto, ICollection<BusinessUnitDto>>
     {

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetGroupsForGroupPageAtDateQueryHandler : IHandleQuery<GetGroupsForGroupPageAtDateQueryDto, ICollection<GroupPageGroupDto>>
 	{

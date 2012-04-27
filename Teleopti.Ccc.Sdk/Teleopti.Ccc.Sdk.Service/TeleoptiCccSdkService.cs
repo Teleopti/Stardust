@@ -35,7 +35,6 @@ using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
-using Teleopti.Ccc.Sdk.WcfService.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -1101,8 +1100,11 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
         public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto)
         {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<ValidatedSchedulePartDto>>>();
-            return invoker.Invoke(queryDto);
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<ValidatedSchedulePartDto>>>();
+				return invoker.Invoke(queryDto);
+			}
         }
 
 		private IStudentAvailabilityDay GetStudentAvailabilityDomainFromDto(StudentAvailabilityDayDto dto)

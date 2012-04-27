@@ -2,11 +2,9 @@
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
-using Teleopti.Ccc.Sdk.Logic;
-using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
+namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetAgentPortalSettingsQueryHandler : IHandleQuery<GetAgentPortalSettingsQueryDto, ICollection<AgentPortalSettingsDto>>
     {
