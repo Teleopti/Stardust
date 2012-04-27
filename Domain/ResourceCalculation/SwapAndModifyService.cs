@@ -32,8 +32,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> { part1, part2 };
                 modifiedParts.AddRange(swapParts(scheduleDictionary, selectedSchedules));
             }
+
             var ruleRepsonses = scheduleDictionary.Modify(ScheduleModifier.Scheduler, modifiedParts, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
-            return ruleRepsonses.Where(r => !r.Overridden).ToList();
+
+			ruleRepsonses = new List<IBusinessRuleResponse>(ruleRepsonses)
+				.FindAll(new BusinessRuleResponseContainsDateSpecification(shiftTradeSwapDetails).IsSatisfiedBy);
+			
+			return ruleRepsonses.Where(r => !r.Overridden).ToList();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

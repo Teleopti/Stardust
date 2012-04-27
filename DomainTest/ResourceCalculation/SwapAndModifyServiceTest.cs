@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -196,6 +197,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(ruleResponse1.Overridden).Return(true);
                 Expect.Call(ruleResponse2.Overridden).Return(false);
 
+				Expect.Call(ruleResponse1.DateOnlyPeriod).Return(new DateOnlyPeriod(date1, date2));
+				Expect.Call(ruleResponse2.DateOnlyPeriod).Return(new DateOnlyPeriod(date1, date2));
+
                 Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).
                     IgnoreArguments().Return(new List<IBusinessRuleResponse> {ruleResponse1, ruleResponse2});
             }
@@ -208,5 +212,52 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Assert.AreEqual(ruleResponse2,result.Single());
             }
         }
+
+		[Test]
+		public void TradeShouldBeApprovedIfNoValidationErrorOccursOnDaysOfTrade()
+		{
+			IShiftTradeSwapDetail shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_person1, _person2, new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1));
+			IShiftTradeSwapDetail shiftTradeSwapDetail2 = new ShiftTradeSwapDetail(_person1, _person2, new DateOnly(2010, 1, 2), new DateOnly(2010, 1, 4));
+
+			ReadOnlyCollection<IShiftTradeSwapDetail> shiftTradeSwapDetails = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
+
+			int numberOfshiftTradeSwapDetails = shiftTradeSwapDetails.Count;
+
+			IEnumerable<IScheduleDay> scheduleDays = new List<IScheduleDay> { _p1D1, _p1D2 };
+
+			IBusinessRuleResponse response1 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 1, 2010, 2, 2));
+			IBusinessRuleResponse response2 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 2, 2010, 2, 3));
+			// this rule will be the only in the returnlist
+			IBusinessRuleResponse response3 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 1, 1, 2010, 2, 3));
+
+			IEnumerable<IBusinessRuleResponse> lista = new List<IBusinessRuleResponse> { response1, response2, response3 };
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _swapService.Init(null)).IgnoreArguments().Repeat.Times(numberOfshiftTradeSwapDetails);
+				Expect.Call(_swapService.SwapAssignments(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p1D2 }).Repeat.Times(numberOfshiftTradeSwapDetails);
+
+				Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, scheduleDays, null, null, null)).IgnoreArguments()
+					.Return(lista);
+				Expect.Call(_dictionary[_person1])
+					.Return(_range1).Repeat.Times(2);
+				Expect.Call(_dictionary[_person2])
+					.Return(_range2).Repeat.Times(2);
+				Expect.Call(_range1.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_p1D1);
+				Expect.Call(_range2.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_p1D2);
+				Expect.Call(_range1.ScheduledDay(new DateOnly(2010, 1, 2))).Return(_p1D1);
+				Expect.Call(_range2.ScheduledDay(new DateOnly(2010, 1, 4))).Return(_p1D2);
+			}
+
+			IEnumerable<IBusinessRuleResponse> result;
+
+			using (_mocks.Playback())
+			{
+				result = _target.SwapShiftTradeSwapDetails(shiftTradeSwapDetails, _dictionary, null, null);
+			}
+
+			Assert.AreEqual(1, result.Count());
+
+		}
     }
 }
