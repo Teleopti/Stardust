@@ -1439,6 +1439,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
             return invoker.Invoke(queryDto);
         }
 
+		public ICollection<ScenarioDto> GetScenariosByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<ScenarioDto>>>();
+			return invoker.Invoke(queryDto);
+		}
+
         public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<IInvokeCommand>();
