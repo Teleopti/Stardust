@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
@@ -33,8 +30,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			_jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(), _messageSender, null);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldInitiateMessageBrokerServiceWhenNotAlive()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldSendMessageBrokerEvent()
 		{
 			_messageSender.Expect(x => x.IsAlive).Return(false).Repeat.Once();
 			_messageSender.Expect(x => x.InstantiateBrokerService());
