@@ -193,7 +193,7 @@
     <Compile Include="QueryHandler\GetAllPayrollExportsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllScenariosQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAvailableGroupPagesQueryHandler.cs" />
-    <Compile Include="QueryHandler\GetBusinessUnitByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetCurrentBusinessUnitQueryHandler.cs" />
     <Compile Include="QueryHandler\GetGroupsForGroupPageAtDateQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPayrollResultStatusByExportIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPayrollResultStatusByIdQueryHandler.cs" />
