@@ -40,12 +40,11 @@ namespace Teleopti.Ccc.Win.Optimization
                 bindTagsCombo();
 
                 comboBoxAdvTag.SelectedItem = _generalPreferences.ScheduleTag;
-
                 checkBoxDaysOff.Checked = _generalPreferences.OptimizationStepDaysOff;
-                checkBoxTimeBetweenDays.Checked = _generalPreferences.OptimizationStepShiftsWithinDay;
+				checkBoxTimeBetweenDays.Checked = _generalPreferences.OptimizationStepTimeBetweenDays;
                 checkBoxShiftsForFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime;
                 checkBoxDaysOffFromFlexibleWorkTime.Checked = _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime;
-                checkBoxShiftsWithinDay.Checked = _generalPreferences.OptimizationStepTimeBetweenDays;
+				checkBoxShiftsWithinDay.Checked = _generalPreferences.OptimizationStepShiftsWithinDay;
 
                 checkBoxPreferences.Checked = _generalPreferences.UsePreferences;
                 checkBoxMustHaves.Checked = _generalPreferences.UseMustHaves;
@@ -65,10 +64,10 @@ namespace Teleopti.Ccc.Win.Optimization
                 _generalPreferences.ScheduleTag = (IScheduleTag)comboBoxAdvTag.SelectedItem;
 
                 _generalPreferences.OptimizationStepDaysOff = checkBoxDaysOff.Checked;
-                _generalPreferences.OptimizationStepShiftsWithinDay = checkBoxTimeBetweenDays.Checked;
+				_generalPreferences.OptimizationStepShiftsWithinDay = checkBoxShiftsWithinDay.Checked;
                 _generalPreferences.OptimizationStepShiftsForFlexibleWorkTime = checkBoxShiftsForFlexibleWorkTime.Checked;
                 _generalPreferences.OptimizationStepDaysOffForFlexibleWorkTime = checkBoxDaysOffFromFlexibleWorkTime.Checked;
-                _generalPreferences.OptimizationStepTimeBetweenDays = checkBoxShiftsWithinDay.Checked;
+				_generalPreferences.OptimizationStepTimeBetweenDays = checkBoxTimeBetweenDays.Checked;
 
                 _generalPreferences.UsePreferences = checkBoxPreferences.Checked;
                 _generalPreferences.UseMustHaves = checkBoxMustHaves.Checked;

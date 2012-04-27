@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -51,5 +52,11 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
         bool WorkShiftChanged(DateOnly dateOnly);
+
+		/// <summary>
+		/// The original work time before any changes.
+		/// </summary>
+		/// <returns></returns>
+    	TimeSpan OriginalWorkTime();
     }
 }
