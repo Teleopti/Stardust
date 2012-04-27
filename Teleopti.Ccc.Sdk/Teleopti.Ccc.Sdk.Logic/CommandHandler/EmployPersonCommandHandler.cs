@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _personAssembler = personAssembler;
         }
 
-        public CommandResultDto Handle(EmployPersonCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(EmployPersonCommandDto command)
         {
             PersonPeriod personPeriod;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

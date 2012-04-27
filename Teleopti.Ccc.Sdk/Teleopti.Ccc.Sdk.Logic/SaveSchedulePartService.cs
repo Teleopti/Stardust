@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Sdk.Logic
             _scheduleRepository = scheduleRepository;
         }
 
-        public void Save(IUnitOfWork unitOfWork, IScheduleDay scheduleDay)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void Save(IUnitOfWork unitOfWork, IScheduleDay scheduleDay)
         {
             var dic = (ReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();

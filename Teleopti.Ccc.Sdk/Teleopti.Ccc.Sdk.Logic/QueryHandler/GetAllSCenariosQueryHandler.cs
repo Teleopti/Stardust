@@ -7,12 +7,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
-	public class GetAllSCenariosQueryHandler : IHandleQuery<GetAllScenariosQueryDto,ICollection<ScenarioDto>>
+	public class GetAllScenariosQueryHandler : IHandleQuery<GetAllScenariosQueryDto,ICollection<ScenarioDto>>
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetAllSCenariosQueryHandler(IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetAllScenariosQueryHandler(IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_scenarioRepository = scenarioRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;

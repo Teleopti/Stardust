@@ -6,11 +6,10 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
+    public class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
     {
     	private readonly IServiceBusSender _busSender;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",Justification = "The class is registered in the IoC-container.")]
 		public DenormalizeScheduleCommandHandler(IServiceBusSender busSender)
 		{
 			_busSender = busSender;

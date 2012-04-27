@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _serviceBusSender = serviceBusSender;
         }
 
-        public CommandResultDto Handle(SavePersonAbsenceRequestCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(SavePersonAbsenceRequestCommandDto command)
         {
             IPersonRequest result;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

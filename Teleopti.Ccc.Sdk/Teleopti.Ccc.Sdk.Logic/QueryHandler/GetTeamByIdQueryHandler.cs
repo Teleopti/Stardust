@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ICollection<TeamDto> Handle(GetTeamByIdQueryDto query)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ICollection<TeamDto> Handle(GetTeamByIdQueryDto query)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {

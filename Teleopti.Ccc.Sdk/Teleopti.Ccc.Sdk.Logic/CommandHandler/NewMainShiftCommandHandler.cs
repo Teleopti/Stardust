@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
-        public CommandResultDto Handle(NewMainShiftCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(NewMainShiftCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {

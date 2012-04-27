@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private MockRepository mocks;
 		private IScenarioRepository scenarioRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
-		private GetAllSCenariosQueryHandler target;
+		private GetAllScenariosQueryHandler target;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			mocks = new MockRepository();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new GetAllSCenariosQueryHandler(scenarioRepository, unitOfWorkFactory);
+			target = new GetAllScenariosQueryHandler(scenarioRepository, unitOfWorkFactory);
 		}
 
 		[Test]

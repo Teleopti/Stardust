@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public ICollection<SiteDto> Handle(GetSiteByDescriptionNameQueryDto query)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ICollection<SiteDto> Handle(GetSiteByDescriptionNameQueryDto query)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {

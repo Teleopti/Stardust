@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    class CreatePayrollExportCommandHandler : IHandleCommand<CreatePayrollExportCommandDto>
+    public class CreatePayrollExportCommandHandler : IHandleCommand<CreatePayrollExportCommandDto>
     {
         private readonly IPayrollResultFactory _payrollResultFactory;
 
@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _payrollResultFactory = payrollResultFactory;
         }
 
-        public CommandResultDto Handle(CreatePayrollExportCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto Handle(CreatePayrollExportCommandDto command)
         {
             var id = _payrollResultFactory.RunPayrollOnBus(command.PayrollExportDto);
             return new CommandResultDto() { AffectedId = id, AffectedItems = 1};

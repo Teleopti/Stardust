@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _jobResultRepository = jobResultRepository;
         }
 
-        public CommandResultDto Handle(ExportMultisiteSkillToSkillCommandDto command)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public CommandResultDto Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
 			if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
 			{

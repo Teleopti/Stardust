@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<GroupPageGroupDto> Handle(GetGroupsForGroupPageAtDateQueryDto query)
 		{
 			var queryDate = new DateOnly(query.QueryDate.DateTime);
