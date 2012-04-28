@@ -3346,7 +3346,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot)
                 new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true).Show(this);
                 else
-                    ViewBase.ShowInformationMessage(string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled, 
+                    ViewBase.ShowInformationMessage(this, string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled, 
                         _scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
                         , Resources.SchedulingResult);
             }
