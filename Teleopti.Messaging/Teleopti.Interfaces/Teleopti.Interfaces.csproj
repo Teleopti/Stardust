@@ -255,7 +255,7 @@
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
-    <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Domain\IScheduleMatrixSchedulePeriodContainer.cs" />
     <Compile Include="Domain\ISchedulePartExtractor.cs" />

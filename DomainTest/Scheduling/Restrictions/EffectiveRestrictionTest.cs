@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private IWorkShift _workShift4;
         private IWorkShift _workShift5;
 
-        private IWorkShiftVisualLayerInfo _info1;
-        private IWorkShiftVisualLayerInfo _info2;
-        private IWorkShiftVisualLayerInfo _info3;
-        private IWorkShiftVisualLayerInfo _info4;
-        private IWorkShiftVisualLayerInfo _info5;
+		private IWorkShiftProjection _info1;
+		private IWorkShiftProjection _info2;
+		private IWorkShiftProjection _info3;
+		private IWorkShiftProjection _info4;
+		private IWorkShiftProjection _info5;
 
         private IActivity _activity;
 
@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _endTimeLimitation = new EndTimeLimitation();
             _workTimeLimitation = new WorkTimeLimitation();
             _shiftCategory = new ShiftCategory("Test");
+			_shiftCategory.SetId(Guid.NewGuid());
             _activity = new Activity("Test");
+			_activity.SetId(Guid.NewGuid());
             _activity.InContractTime = true;
             //15h
             _workShift1 = WorkShiftFactory.CreateWorkShift(
@@ -77,11 +79,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _activity,
                 _shiftCategory);
 
-            _info1 = new WorkShiftVisualLayerInfo(_workShift1, _workShift1.ProjectionService().CreateProjection());
-            _info2 = new WorkShiftVisualLayerInfo(_workShift2, _workShift2.ProjectionService().CreateProjection());
-            _info3 = new WorkShiftVisualLayerInfo(_workShift3, _workShift3.ProjectionService().CreateProjection());
-            _info4 = new WorkShiftVisualLayerInfo(_workShift4, _workShift4.ProjectionService().CreateProjection());
-            _info5 = new WorkShiftVisualLayerInfo(_workShift5, _workShift5.ProjectionService().CreateProjection());
+			_info1 = WorkShiftProjection.FromWorkShift(_workShift1);
+			_info2 = WorkShiftProjection.FromWorkShift(_workShift2);
+			_info3 = WorkShiftProjection.FromWorkShift(_workShift3);
+			_info4 = WorkShiftProjection.FromWorkShift(_workShift4);
+			_info5 = WorkShiftProjection.FromWorkShift(_workShift5);
         }
 
         [Test]
@@ -132,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         public void VerifyValidateWorkShiftShiftCategory()
         {
             IShiftCategory notValidCategory = new ShiftCategory("NotValid");
+			notValidCategory.SetId(Guid.NewGuid());
 
             _target = new EffectiveRestriction(
                 _startTimeLimitation,
@@ -618,9 +621,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13));
             _workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
             IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-            IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-                                                                          _workShift1.ProjectionService().
-                                                                              CreateProjection());
+			lunchActivity.SetId(Guid.NewGuid());
+        	var info = WorkShiftProjection.FromWorkShift(_workShift1);
             IActivityRestriction activityRestriction = new ActivityRestriction(ActivityFactory.CreateActivity("notInShift"));
             _target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                new WorkTimeLimitation(), null, null, null,
@@ -643,9 +645,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(null, TimeSpan.FromHours(11));
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -663,9 +663,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(11), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(12), TimeSpan.FromHours(12));
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -682,9 +680,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(11), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(12), TimeSpan.FromHours(12));
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -701,9 +697,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(13), null);
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -721,9 +715,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(14), null);
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -741,9 +733,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			TimePeriod lunchPeriod = new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13));
 			_workShift1 = WorkShiftFactory.CreateWithLunch(fullPeriod, lunchPeriod);
 			IActivity lunchActivity = _workShift1.LayerCollection[1].Payload;
-			IWorkShiftVisualLayerInfo info = new WorkShiftVisualLayerInfo(_workShift1,
-																		  _workShift1.ProjectionService().
-																			  CreateProjection());
+			var info = WorkShiftProjection.FromWorkShift(_workShift1);
 			IActivityRestriction activityRestriction = new ActivityRestriction(lunchActivity);
 			activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(12));
 			_target = new EffectiveRestriction(new StartTimeLimitation(null, null), new EndTimeLimitation(),
@@ -759,7 +749,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             CccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             IActivity activity = new Activity("lunch");
+			activity.SetId(Guid.NewGuid());
             IActivity activity2 = new Activity("another one");
+			activity2.SetId(Guid.NewGuid());
             var activityRestriction = new ActivityRestriction(activity);
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(12, 0, 0));
@@ -776,10 +768,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
                                                             new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)));
 
-            var layerCollection = new VisualLayerCollection(new Person(), new List<IVisualLayer>(), new ProjectionPayloadMerger());
+        	var layerCollection = new ActivityRestrictableVisualLayer[] {};
             Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
 
-            layerCollection = new VisualLayerCollection(new Person(), new List<IVisualLayer> { layer1, layerLunch }, new ProjectionPayloadMerger());
+        	layerCollection = new[]
+        	                  	{
+        	                  		new ActivityRestrictableVisualLayer
+        	                  			{
+        	                  				Period = layer1.Period,
+        	                  				ActivityId = layer1.Payload.Id.Value
+        	                  			},
+        	                  		new ActivityRestrictableVisualLayer
+        	                  			{
+        	                  				Period = layerLunch.Period,
+        	                  				ActivityId = layerLunch.Payload.Id.Value
+        	                  			}
+        	                  	};
             Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null);

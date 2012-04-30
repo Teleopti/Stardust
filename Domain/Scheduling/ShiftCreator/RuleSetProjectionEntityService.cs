@@ -3,11 +3,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
-    public class RuleSetProjectionService : IRuleSetProjectionService
+    public class RuleSetProjectionEntityService : IRuleSetProjectionEntityService
     {
         private readonly IShiftCreatorService _shiftCreatorService;
 
-        public RuleSetProjectionService(IShiftCreatorService shiftCreatorService)
+        public RuleSetProjectionEntityService(IShiftCreatorService shiftCreatorService)
         {
             _shiftCreatorService = shiftCreatorService;
         }

@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2010-02-15
     /// </remarks>
-    public interface IRuleSetProjectionService
+    public interface IRuleSetProjectionEntityService
     {
         /// <summary>
         /// Gets the projection collection.

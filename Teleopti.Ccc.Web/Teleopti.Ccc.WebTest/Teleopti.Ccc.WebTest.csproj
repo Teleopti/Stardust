@@ -119,7 +119,6 @@
     <Compile Include="Areas\MobileReports\TestData\PrincipalProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\UserSettingServiceTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\RuleSetProjectionServiceForCachingTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />

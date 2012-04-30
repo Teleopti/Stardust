@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
         private readonly IVisualizePresenter _visualizePresenter;
 
 
-        public ExplorerPresenter(IExplorerView view, IDataHelper dataHelper, IRuleSetProjectionService ruleSetProjectionService, 
+        public ExplorerPresenter(IExplorerView view, IDataHelper dataHelper, IRuleSetProjectionEntityService ruleSetProjectionEntityService, 
             IUnitOfWorkFactory unitOfWorkFactory, IEventAggregator eventAggregator, IMbCacheFactory mbCacheFactory, IExplorerViewModel model)
         {
             _view = view;
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             _model = model;
             _navigationPresenter = new NavigationPresenter(this,dataHelper);
             _generalPresenter = new GeneralPresenter(this,dataHelper);
-            _visualizePresenter = new VisualizePresenter(this, dataHelper, ruleSetProjectionService);
+            _visualizePresenter = new VisualizePresenter(this, dataHelper, ruleSetProjectionEntityService);
             _eventAggregator.GetEvent<RuleSetChanged>().Subscribe(ruleSetChanged);
         }
 
         private void ruleSetChanged(IList<IWorkShiftRuleSet> obj)
         {
-            _mbCacheFactory.Invalidate<IRuleSetProjectionService>();
+            _mbCacheFactory.Invalidate<IRuleSetProjectionEntityService>();
         }
 
         private void setDefaultSegment()

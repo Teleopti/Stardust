@@ -52,9 +52,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IWorkShift CreateWithLunch(TimePeriod fullPeriod, TimePeriod lunchPeriod)
         {
-            WorkShift retObj = new WorkShift(new ShiftCategory("for test"));
+        	var shiftCategory = new ShiftCategory("for test");
+			shiftCategory.SetId(Guid.NewGuid());
+			WorkShift retObj = new WorkShift(shiftCategory);
             IActivity activity = new Activity("Test activity");
+			activity.SetId(Guid.NewGuid());
             IActivity lunch = new Activity("lunch");
+			lunch.SetId(Guid.NewGuid());
             lunch.InContractTime = false;
             retObj.LayerCollection.Add(new WorkShiftActivityLayer(activity, DateTimePeriodForWorkShift(fullPeriod.StartTime, lunchPeriod.StartTime)));
             retObj.LayerCollection.Add(new WorkShiftActivityLayer(lunch, DateTimePeriodForWorkShift(lunchPeriod.StartTime, lunchPeriod.EndTime)));

@@ -13,7 +13,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="options">The options.</param>
         /// <param name="mainShiftOptimizeActivitiesSpecification">The main shift optimize activities spcification.</param>
         /// <param name="shiftCategoryFairnessShiftValueCalculator">The shift category fairness shift value calculator.</param>
-        /// <param name="ruleSetProjectionService">The rule set projection service.</param>
+        /// <param name="ruleSetProjectionEntityService">The rule set projection service.</param>
         /// <param name="groupShiftCategoryFairnessCreator"></param>
         /// <returns></returns>
         IWorkShiftFinderService CreateFinderServiceWithSchedulingObjectContainer(ISchedulingResultStateHolder
@@ -23,6 +23,6 @@ namespace Teleopti.Interfaces.Domain
                                                                                      mainShiftOptimizeActivitiesSpecification,
                                                                                  IShiftCategoryFairnessShiftValueCalculator 
                                                                                      shiftCategoryFairnessShiftValueCalculator,
-            IRuleSetProjectionService ruleSetProjectionService, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator);
+            IRuleSetProjectionEntityService ruleSetProjectionEntityService, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator);
     }
 }

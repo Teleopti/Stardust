@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
 {
     public class VisualizePresenter : BasePresenter<ReadOnlyCollection<VisualPayloadInfo>>, IVisualizePresenter
     {
-        private readonly IRuleSetProjectionService _ruleSetProjectionService;
+        private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
     	private IList<int> _amountList;
         private IList<TimeSpan> _contractList;
 
-		public VisualizePresenter(IExplorerPresenter explorer, IDataHelper dataHelper, IRuleSetProjectionService ruleSetProjectionService)
+		public VisualizePresenter(IExplorerPresenter explorer, IDataHelper dataHelper, IRuleSetProjectionEntityService ruleSetProjectionEntityService)
             : base(explorer, dataHelper)
 		{
-			_ruleSetProjectionService = ruleSetProjectionService;
+			_ruleSetProjectionEntityService = ruleSetProjectionEntityService;
 		}
 
     	public override void LoadModelCollection()
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
 							 startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
 						 if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
 							 endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
-						 var layers = getVisualLayers(_ruleSetProjectionService.ProjectionCollection(ruleSet));
+						 var layers = getVisualLayers(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet));
 						 layerCollection.AddRange(layers);
 						 _amountList.Add(layers.Count);
                 }
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             var list = new List<IWorkShiftVisualLayerInfo>();
             foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
             {
-                var layers = _ruleSetProjectionService.ProjectionCollection(ruleSet);
+                var layers = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
                 list.AddRange(layers);
             }
             StateHolderReader.Instance.StateReader.SessionScopeData.Clip = list[rowIndex - 1].WorkShift.Clone();

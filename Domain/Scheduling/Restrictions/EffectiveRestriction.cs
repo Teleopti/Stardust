@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -77,9 +78,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             set { _dayOff = value; }
         }
 
-        public bool ValidateWorkShiftInfo(IWorkShiftVisualLayerInfo workShiftVisualLayerInfo)
+		public bool ValidateWorkShiftInfo(IWorkShiftProjection workShiftProjection)
         {
-            TimePeriod? workShiftTimePeriod = workShiftVisualLayerInfo.WorkShift.ToTimePeriod();
+            TimePeriod? workShiftTimePeriod = workShiftProjection.TimePeriod;
 
             if (!workShiftTimePeriod.HasValue)
                 return false;
@@ -93,13 +94,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 return false;
 
             validPeriod = WorkTimeLimitation.ValidPeriod();
-            TimeSpan contractTime = workShiftVisualLayerInfo.VisualLayerCollection.ContractTime();
+            TimeSpan contractTime = workShiftProjection.ContractTime;
             if (!validPeriod.ContainsPart(contractTime))
                 return false;
 
             if (ShiftCategory != null)
             {
-                if (!ShiftCategory.Equals(workShiftVisualLayerInfo.WorkShift.ShiftCategory))
+                if (!ShiftCategory.Id.Value.Equals(workShiftProjection.ShiftCategoryId))
                     return false;
             }
 
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             var dateOnly = new DateOnly(WorkShift.BaseDate);
             ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
-            if (!VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, tzInfo, workShiftVisualLayerInfo.VisualLayerCollection))
+            if (!VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, tzInfo, workShiftProjection.Layers))
             {
                 return false;
             }
@@ -289,12 +290,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public bool MustHave { get; set; }
 
-        public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IVisualLayerCollection layerCollection)
+		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection)
         {
 			if (scheduleDayDateOnly == new DateOnly(2050, 1, 1))
 				return false;
 
-            if (!layerCollection.HasLayers)
+            if (!layerCollection.Any())
                 return false;
 
             foreach (IActivityRestriction activityRestriction in _activityRestrictionCollection)
@@ -329,7 +330,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
         }
 
-        private static bool visualLayerCollectionSatisfiesOneActivityRestriction(ICccTimeZoneInfo agentTimeZone, IVisualLayerCollection layerCollection, IActivityRestriction activityRestriction)
+		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
         {
             IActivityRestriction actRestriction = activityRestriction;
             
@@ -343,12 +344,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             //    latestEnd = TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(actRestriction.EndTimeLimitation.EndTime.Value), agentTimeZone);
 
             //DateTimePeriod outerPeriod = new DateTimePeriod(earliestStart, latestEnd);
-            var filteredLayers = layerCollection.FilterLayers(activityRestriction.Activity);
             //filteredLayers = filteredLayers.FilterLayers(outerPeriod);
-            if (!filteredLayers.HasLayers)
-                return false;
 
-            foreach (var layer in filteredLayers)
+
+
+			//var filteredLayers = layerCollection.FilterLayers(activityRestriction.Activity);
+			//if (!filteredLayers.HasLayers)
+			//    return false;
+
+
+			var layers = from l in layerCollection
+			             where l.ActivityId == activityRestriction.Activity.Id
+			             select l;
+
+			foreach (var layer in layers)
             {
             	TimePeriod period = layer.Period.TimePeriod(agentTimeZone);
 

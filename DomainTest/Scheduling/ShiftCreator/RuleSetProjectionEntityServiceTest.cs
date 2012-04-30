@@ -10,7 +10,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 {
-    public class RuleSetProjectionServiceTest
+	[TestFixture]
+	public class RuleSetProjectionEntityServiceTest
     {
         private MockRepository mocks;
         private IShiftCreatorService shiftCreatorService;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             listOfWorkShifts.Add(ws1);
             listOfWorkShifts.Add(ws2);
 
-            var target = new RuleSetProjectionService(shiftCreatorService);
+            var target = new RuleSetProjectionEntityService(shiftCreatorService);
             WorkShiftRuleSet workShiftRuleSet = new WorkShiftRuleSet(mocks.StrictMock<IWorkShiftTemplateGenerator>());
 
             Expect.Call(shiftCreatorService.Generate(workShiftRuleSet)).Return(listOfWorkShifts);

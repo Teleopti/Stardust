@@ -45,9 +45,9 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Validates the work shift if that complies with the restrictions.
         /// </summary>
-        /// <param name="workShiftVisualLayerInfo">The work shift.</param>
+        /// <param name="workShiftProjection">The work shift.</param>
         /// <returns></returns>
-        bool ValidateWorkShiftInfo(IWorkShiftVisualLayerInfo workShiftVisualLayerInfo);
+		bool ValidateWorkShiftInfo(IWorkShiftProjection workShiftProjection);
 
         /// <summary>
         /// Combines the specified effective restriction.
@@ -104,11 +104,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="scheduleDayDateOnly">The schedule day date only.</param>
         /// <param name="agentTimeZone">The agent time zone.</param>
-        /// <param name="layerCollection">The layer collection.</param>
+        /// <param name="layers">The layers.</param>
         /// <returns></returns>
         bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly,
                                                                ICccTimeZoneInfo agentTimeZone,
-                                                               IVisualLayerCollection layerCollection);
+															   IEnumerable<IActivityRestrictableVisualLayer> layers);
 
         /// <summary>
         /// Determines whether this is a limited work day.

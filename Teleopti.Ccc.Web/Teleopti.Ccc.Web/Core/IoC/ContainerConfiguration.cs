@@ -70,16 +70,15 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.Register(c =>
 			                 	{
-			                 		var inner = new RuleSetProjectionService(c.Resolve<IShiftCreatorService>());
-			                 		var lazyLoadingManager = c.Resolve<ILazyLoadingManager>();
+			                 		var shiftCreatorService = c.Resolve<IShiftCreatorService>();
 			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-			                 		var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(inner, lazyLoadingManager);
+									var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(shiftCreatorService);
 			                 		return instance;
 			                 	})
 				.As<IRuleSetProjectionService>();
 
 			mbCacheModule.Builder
-				.For<RuleSetProjectionServiceForMultiSessionCaching>()
+				.For<RuleSetProjectionService>()
 				.CacheMethod(m => m.ProjectionCollection(null))
 				.As<IRuleSetProjectionService>();
 		}
