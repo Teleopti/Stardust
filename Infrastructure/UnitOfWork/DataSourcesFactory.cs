@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 		public bool UseCache { get; set; }
-
 		public bool UseDistributedTransactionFactory { get; set; }
+		public string SessionContext { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
@@ -163,10 +163,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void createApplicationConfiguration(IDictionary<string, string> settings)
 		{
-			var appCfg = new Configuration()
-				 .SetProperties(settings);
-			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
+			var appCfg = new Configuration();
 			setDefaultValuesOnApplicationConf(appCfg);
+			appCfg.SetProperties(settings);
+			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			_applicationConfiguration = appCfg;
 		}
 
@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					nhibernateConfiguration.WriteTo(xmlWriter);
 				}
 
-				var appCfg = new Configuration()
-						  .Configure(temporaryConfigFile);
+				var appCfg = new Configuration();
 				setDefaultValuesOnApplicationConf(appCfg);
+				appCfg.Configure(temporaryConfigFile);
 				_applicationConfiguration = appCfg;
 			}
 			finally
@@ -288,12 +288,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
-			string userDefinedName;
-			if (!cfg.Properties.TryGetValue(Environment.SessionFactoryName, out userDefinedName) ||
-			    string.IsNullOrEmpty(userDefinedName))
-			{
-				cfg.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
-			}
+			cfg.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			cfg.SetProperty(Environment.ConnectionProvider, typeof (TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
+			cfg.SetProperty(Environment.DefaultSchema, "dbo");
+			cfg.SetProperty(Environment.TransactionStrategy, "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
+			cfg.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
 			cfg.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			cfg.AddAssembly("Teleopti.Ccc.Domain");
 			cfg.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName);
