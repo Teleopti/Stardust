@@ -52,5 +52,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				result.Count.Should().Be.EqualTo(1);
 			}
 		}
+
+		[Test]
+		public void ShouldHandleSiteByIdNotFound()
+		{
+			var siteId = Guid.NewGuid();
+			using (mocks.Record())
+			{
+				Expect.Call(siteRepository.Get(siteId)).Return(null);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (mocks.Playback())
+			{
+				var result = target.Handle(new GetSiteByIdQueryDto { SiteId = siteId });
+				result.Count.Should().Be.EqualTo(0);
+			}
+		}
 	}
 }

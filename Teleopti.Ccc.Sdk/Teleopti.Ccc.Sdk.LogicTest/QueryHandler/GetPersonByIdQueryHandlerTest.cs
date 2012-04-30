@@ -51,5 +51,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				result.Count.Should().Be.EqualTo(1);
 			}
 		}
+
+		[Test]
+		public void ShouldHandlePersonByIdNotFound()
+		{
+			var personId = Guid.NewGuid();
+			using (mocks.Record())
+			{
+				Expect.Call(personRepository.Get(personId)).Return(null);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (mocks.Playback())
+			{
+				var result = target.Handle(new GetPersonByIdQueryDto { PersonId = personId });
+				result.Count.Should().Be.EqualTo(0);
+			}
+		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		}
 
 		[Test]
-		public void ShouldGetTeamsById()
+		public void ShouldGetTeamById()
 		{
 			var team = TeamFactory.CreateTeam("MyTeam","MySite");
 			team.SetId(Guid.NewGuid());
@@ -49,6 +49,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				var result = target.Handle(new GetTeamByIdQueryDto { TeamId= team.Id.GetValueOrDefault()});
 				result.Count.Should().Be.EqualTo(1);
+			}
+		}
+
+		[Test]
+		public void ShouldHandleTeamByIdNotFound()
+		{
+			var teamId = Guid.NewGuid();
+			using (mocks.Record())
+			{
+				Expect.Call(teamRepository.Get(teamId)).Return(null);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (mocks.Playback())
+			{
+				var result = target.Handle(new GetTeamByIdQueryDto { TeamId = teamId });
+				result.Count.Should().Be.EqualTo(0);
 			}
 		}
 	}
