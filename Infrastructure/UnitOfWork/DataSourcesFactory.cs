@@ -9,7 +9,6 @@ using log4net;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using NHibernate.Transaction;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
