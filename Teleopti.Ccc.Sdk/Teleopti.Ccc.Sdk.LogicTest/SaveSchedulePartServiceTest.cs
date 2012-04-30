@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
 			var response = new List<IBusinessRuleResponse>();
-			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
+			var dictionary = mocks.StrictMock<IReadOnlyScheduleDictionary>();
 
 			using (mocks.Record())
 			{
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, differenceCollectionItems)).Return(null);
+				Expect.Call(dictionary.MakeEditable);
 			}
 			using (mocks.Playback())
 			{
@@ -55,12 +56,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var response = new List<IBusinessRuleResponse>{mocks.DynamicMock<IBusinessRuleResponse>()};
-			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
+			var dictionary = mocks.StrictMock<IReadOnlyScheduleDictionary>();
 
 			using (mocks.Record())
 			{
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
+				Expect.Call(dictionary.MakeEditable);
 			}
 			using (mocks.Playback())
 			{
