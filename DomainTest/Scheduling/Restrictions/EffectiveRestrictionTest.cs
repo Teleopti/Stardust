@@ -768,17 +768,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
                                                             new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)));
 
-        	var layerCollection = new ActivityRestrictableVisualLayer[] {};
+			var layerCollection = new WorkShiftProjectionLayer[] { };
             Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
 
         	layerCollection = new[]
         	                  	{
-        	                  		new ActivityRestrictableVisualLayer
+        	                  		new WorkShiftProjectionLayer
         	                  			{
         	                  				Period = layer1.Period,
         	                  				ActivityId = layer1.Payload.Id.Value
         	                  			},
-        	                  		new ActivityRestrictableVisualLayer
+        	                  		new WorkShiftProjectionLayer
         	                  			{
         	                  				Period = layerLunch.Period,
         	                  				ActivityId = layerLunch.Payload.Id.Value

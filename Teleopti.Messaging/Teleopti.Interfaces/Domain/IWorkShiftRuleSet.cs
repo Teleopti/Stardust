@@ -212,24 +212,4 @@ namespace Teleopti.Interfaces.Domain
         #endregion
     }
 
-
-
-
-	public interface IRuleSetProjectionService
-	{
-		IEnumerable<IWorkShiftProjection> ProjectionCollection(IWorkShiftRuleSet workShiftRuleSet);
-	}
-
-	public interface IWorkShiftProjection
-	{
-		TimeSpan ContractTime { get; }
-		TimePeriod? TimePeriod { get; }
-		Guid ShiftCategoryId { get; }
-		IEnumerable<IActivityRestrictableVisualLayer> Layers { get; }
-	}
-
-	public interface IActivityRestrictableVisualLayer : IPeriodized
-	{
-		Guid ActivityId { get; }
-	}
 }

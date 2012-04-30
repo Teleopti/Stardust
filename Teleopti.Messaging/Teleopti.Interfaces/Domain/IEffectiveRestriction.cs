@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -127,4 +128,17 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool IsRestriction { get; }
     }
+
+
+	/// <summary>
+	/// Layer that can be used by IEffectiveRestriction.VisualLayerCollectionSatisfiesActivityRestriction
+	/// </summary>
+	public interface IActivityRestrictableVisualLayer : IPeriodized
+	{
+		/// <summary>
+		/// The activity id
+		/// </summary>
+		Guid ActivityId { get; }
+	}
+
 }

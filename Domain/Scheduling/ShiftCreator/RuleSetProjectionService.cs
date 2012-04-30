@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 
 
-
+	[Serializable]
 	public class WorkShiftProjection : IWorkShiftProjection
 	{
 
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			       	{
 			       		ContractTime = workShift.Projection.ContractTime(),
 			       		ShiftCategoryId = workShift.ShiftCategory.Id.Value,
-			       		TimePeriod = workShift.ToTimePeriod(),
+			       		TimePeriod = workShift.ToTimePeriod().Value,
 			       		Layers = (from l in workShift.Projection
 			       		          let payloadId = l.Payload.Id ?? Guid.Empty
-			       		          select new ActivityRestrictableVisualLayer
+								  select new WorkShiftProjectionLayer
 			       		                 	{
 			       		                 		ActivityId = payloadId,
 			       		                 		Period = l.Period
@@ -50,12 +50,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 		}
 
 		public TimeSpan ContractTime { get; set; }
-		public TimePeriod? TimePeriod { get; set; }
+		public TimePeriod TimePeriod { get; set; }
 		public Guid ShiftCategoryId { get; set; }
 		public IEnumerable<IActivityRestrictableVisualLayer> Layers { get; set; }
 	}
 
-	public class ActivityRestrictableVisualLayer : IActivityRestrictableVisualLayer
+	[Serializable]
+	public class WorkShiftProjectionLayer : IActivityRestrictableVisualLayer
 	{
 		public Guid ActivityId { get; set; }
 		public DateTimePeriod Period { get; set; }

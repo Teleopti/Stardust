@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
