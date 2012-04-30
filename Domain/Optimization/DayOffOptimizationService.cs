@@ -79,28 +79,19 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 bool result = optimizer.Execute();
                 executes++;
-                if (!result)
-                {
-                    retList.Add(optimizer);
-                }
-                else
-                {
+                if (result)
                     newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization); 
-                }
+                else
+                    retList.Add(optimizer);
 
                 string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
                 string success;
-                if (!result)
-                {
-                    success = " " + Resources.wasNotSuccessful;
-                }
-                else
-                {
+                if (result)
                     success = " " + Resources.wasSuccessful;
-                }
+                else
+                    success = " " + Resources.wasNotSuccessful;
                 string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
                 OnReportProgress(who + success + values);
-
                 lastPeriodValue = newPeriodValue;
                 if (_cancelMe)
                     break;

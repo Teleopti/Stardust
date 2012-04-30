@@ -52,5 +52,11 @@ namespace Teleopti.Ccc.Domain.Time
                     return (int) Math.Round(factor, MidpointRounding.AwayFromZero);
             }
         }
+
+        public static string ToShortTimeStringWithDays(this DateTime dateTime)
+        {
+            var days = dateTime.Subtract(DateTime.MinValue).Days;
+            return dateTime.ToShortTimeString() + (days == 0 ? string.Empty : "+" + days);
+        }
     }
 }

@@ -9,6 +9,7 @@ using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule<InitializeModule>();
+			builder.RegisterModule(new InitializeModule(new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure")));
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();

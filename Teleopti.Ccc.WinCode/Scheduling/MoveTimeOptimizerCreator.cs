@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly IList<IScheduleMatrixOriginalStateContainer> _workShiftContainerList;
         private readonly IMoveTimeDecisionMaker _decisionMaker;
     	private readonly IScheduleService _scheduleService;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
     	private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
             IMoveTimeDecisionMaker decisionMaker,
             IScheduleService scheduleService,
-            IOptimizerOriginalPreferences optimizerPreferences,
+            IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
         {
@@ -56,29 +56,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         		IScheduleMatrixLockableBitArrayConverter matrixConverter =
                     new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
 
-                IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_optimizerPreferences);
+                IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_optimizerPreferences.Advanced);
                 IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro);
 
                 IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
         	    IPeriodValueCalculator periodValueCalculator =
-        	        periodValueCalculatorProvider.CreatePeriodValueCalculator(_optimizerPreferences, personalSkillsDataExtractor);
-
-                // commented out by tamas, to be removed later in sprint 96 
-                //if (_optimizerPreferences.AdvancedPreferences.UseTweakedValues)
-                //{
-                //    dailySkillForecastAndScheduledValueCalculator =
-                //        new DailyBoostedSkillForecastAndScheduledValueCalculator(scheduleMatrixPro.SchedulingStateHolder);
-                //    personalSkillsDataExtractor =
-                //        new RelativeBoostedDailyDifferencesByPersonalSkillsExtractor(scheduleMatrixPro, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
-                //    periodValueCalculator = new RmsPeriodValueCalculator(personalSkillsDataExtractor);
-                //}
-                //else
-                //{
-                //    dailySkillForecastAndScheduledValueCalculator =
-                //        new DailySkillForecastAndScheduledValueCalculator(scheduleMatrixPro.SchedulingStateHolder);
-                //    personalSkillsDataExtractor = new RelativeDailyDifferencesByPersonalSkillsExtractor(scheduleMatrixPro, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
-                //    periodValueCalculator = new StdDevPeriodValueCalculator(personalSkillsDataExtractor);
-                //}
+        	        periodValueCalculatorProvider.CreatePeriodValueCalculator(_optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
                 IDeleteSchedulePartService deleteSchedulePartService =
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
@@ -101,6 +84,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
                 IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 
+                var restrictionChecker = new RestrictionChecker();
+                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, _optimizerPreferences, scheduleMatrixContainer);
+
+                var schedulingOptionsCreator = new SchedulingOptionsCreator();
+
         		IMoveTimeOptimizer optimizer =
         			new MoveTimeOptimizer(
                         periodValueCalculator,
@@ -114,8 +102,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         				resourceOptimizationHelper,
         				effectiveRestrictionCreator,
                         new ResourceCalculateDaysDecider(),
-                        scheduleMatrixContainer,
-                        workShiftContainer);
+                        workShiftContainer, 
+                        optimizerOverLimitDecider, 
+                        schedulingOptionsCreator);
 
         		result.Add(optimizer);
         	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 		private IDesiredShiftLengthCalculator _desiredShiftLengthCalculator;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IScheduleMatrixPro _matrix;
+		private ISchedulingOptions _schedulingOptions;
 
 		[SetUp]
 		public void Setup()
@@ -24,6 +26,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			_target = new ShiftLengthDecider(_desiredShiftLengthCalculator);
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			_schedulingOptions = new SchedulingOptions();
 		}
 
 		[Test]
@@ -37,7 +40,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix)).Return(
+				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(
 					new TimeSpan(7, 36, 0));
 				Expect.Call(c1.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
 				Expect.Call(c2.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.75)).Repeat.AtLeastOnce();
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix);
+				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 			
 			Assert.AreEqual(2, result.Count);
@@ -65,7 +68,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix)).Return(
+				Expect.Call(_desiredShiftLengthCalculator.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(
 					new TimeSpan(8, 0, 0));
 				Expect.Call(c1.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.5)).Repeat.AtLeastOnce();
 				Expect.Call(c2.WorkShiftProjectionContractTime).Return(TimeSpan.FromHours(7.75)).Repeat.AtLeastOnce();
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix);
+				result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
 			}
 
 			Assert.AreEqual(1, result.Count);

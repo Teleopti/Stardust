@@ -7,28 +7,28 @@ namespace Teleopti.Ccc.DayOffPlanning
     public class DaysOffPerWeekSolver : IDayOffBackToLegalStateSolver
     {
         private readonly ILockableBitArray _bitArray;
-        private readonly DayOffPlannerSessionRuleSet _sessionRuleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _functions;
         private readonly int _maxIterations;
 
 
-        public DaysOffPerWeekSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, DayOffPlannerSessionRuleSet sessionRuleSet, int maxIterations)
+        public DaysOffPerWeekSolver(ILockableBitArray bitArray, IDayOffBackToLegalStateFunctions functions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
             _functions = functions;
             _bitArray = bitArray;
-            _sessionRuleSet = sessionRuleSet;
+            _daysOffPreferences = daysOffPreferences;
         }
 
         public MinMaxNumberOfResult ResolvableState()
         {
-            IDictionary<int, int> weeklyDaysOffsDictionary = _functions.CreateWeeklyDaysOffsDictionary(_sessionRuleSet.ConsiderWeekBefore, _sessionRuleSet.ConsiderWeekAfter);
-            IDictionary<int, int> weeklyNumberOfNonPeriodDays = createWeeklyNumberOfNonPeriodDaysDictionary(_sessionRuleSet.ConsiderWeekBefore, _sessionRuleSet.ConsiderWeekAfter);
-            int weeklyMinDayOff = _sessionRuleSet.DaysOffPerWeek.Minimum;
+            IDictionary<int, int> weeklyDaysOffsDictionary = _functions.CreateWeeklyDaysOffsDictionary(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
+            IDictionary<int, int> weeklyNumberOfNonPeriodDays = createWeeklyNumberOfNonPeriodDaysDictionary(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
+            int weeklyMinDayOff = _daysOffPreferences.DaysOffPerWeekValue.Minimum;
 
             foreach (int key in weeklyDaysOffsDictionary.Keys)
             {
-                if (weeklyDaysOffsDictionary[key] > _sessionRuleSet.DaysOffPerWeek.Maximum)
+                if (weeklyDaysOffsDictionary[key] > _daysOffPreferences.DaysOffPerWeekValue.Maximum)
                    return MinMaxNumberOfResult.ToMany;
                 int currentMinDaysOff = weeklyMinDayOff - weeklyNumberOfNonPeriodDays[key];
                 if (weeklyDaysOffsDictionary[key] < currentMinDaysOff)
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 
         private Point calculateSwap()
         {
-            IDictionary<int, int> weeklyList = _functions.CreateWeeklyDaysOffsDictionary(_sessionRuleSet.ConsiderWeekBefore, _sessionRuleSet.ConsiderWeekAfter);
+            IDictionary<int, int> weeklyList = _functions.CreateWeeklyDaysOffsDictionary(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
             IList<Point> weekEndList = _functions.WeekendList();
             int indexToMoveFrom = _functions.FindFirstBestIndexToMoveDaysOffFromLocksConsidered(weeklyList, weekEndList);
             int indexToMoveTo;

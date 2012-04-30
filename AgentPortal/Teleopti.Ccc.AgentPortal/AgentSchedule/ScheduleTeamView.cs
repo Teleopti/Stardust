@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         private readonly string _teamAll = Guid.NewGuid().ToString();
     	private bool _isAscending;
     	private IList<GroupPageDto> _allGroupPages;
+        private bool _filterPeopleForShiftTrade;
 
-		internal const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
+        internal const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
         
     	public ScheduleTeamView()
         {
@@ -60,6 +61,17 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         public PersonDto LastRightClickedPerson
         {
             get { return _lastRightClickedPerson; }
+        }
+
+        public bool FilterPeopleForShiftTrade
+        {
+            get { return _filterPeopleForShiftTrade; }
+            set
+            {
+                if (_filterPeopleForShiftTrade == value) return;
+                _filterPeopleForShiftTrade = value;
+                Reload(_filterPeopleForShiftTrade);
+            }
         }
 
         /// <summary>
@@ -233,7 +245,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             try
             {
             	LoadTeams();
-                Reload();
+                Reload(FilterPeopleForShiftTrade);
             }
             finally
             {
@@ -345,7 +357,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.AgentPortal.Reports.Grid.ScheduleGridColumnGridHelper`1<Teleopti.Ccc.AgentPortalCode.Common.VisualProjection>"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.AgentPortal.Reports.Grid.ScheduleGridColumnGridHelper`1<Teleopti.Ccc.AgentPortal.Schedules.VisualProjection>")]
-        private void Reload()
+        private void Reload(bool filterEnabled)
         {
             InitializeTeamViewGrid();
 
@@ -362,7 +374,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 				selection = new BasicSelection(_startDateForTeamView, selectedTeam, selectedPage);
 			}
 
-        	selection.Initialize();
+            selection.Initialize(filterEnabled);
         	LoadTeamMembersScheduleData(selection);
 
 			_presenter = new VisualProjectionGridPresenter(gridControlTeamSchedules, _schedules);
@@ -515,7 +527,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             if (comboSiteAndTeam == null || comboSiteAndTeam.SelectedItem==null)
                 return;
             Cursor = Cursors.WaitCursor;
-            Reload();
+            Reload(FilterPeopleForShiftTrade);
             Cursor = Cursors.Default;
         }
         private void populateSiteTeamCombo(IList<GroupDetailModel> teams)
@@ -563,7 +575,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			                                                                         					DateTimeSpecified = true
 			                                                                         				}
 			                                                                         	});
-			foreach (var groupPageGroupDto in groups)
+            foreach (var groupPageGroupDto in groups)
 			{
 				dataSourceItems.Add(new GroupDetailModel
 				                    	{

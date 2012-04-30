@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="daysOffToRemove">The days off to remove.</param>
         /// <param name="daysOffToAdd">The days off to add.</param>
         /// <param name="scheduleMatrix">The schedule matrix.</param>
-        /// <param name="ruleSet">The rule set.</param>
+        /// <param name="daysOffPreferences">The days off preferences.</param>
         /// <returns></returns>
         GroupMatrixContainer CreateGroupMatrixContainer(
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
-            DayOffPlannerSessionRuleSet ruleSet);
+            IDaysOffPreferences daysOffPreferences);
     }
 
     public class GroupMatrixContainerCreator : IGroupMatrixContainerCreator
@@ -27,15 +27,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysOffToRemove,
             IList<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
-            DayOffPlannerSessionRuleSet ruleSet)
+            IDaysOffPreferences daysOffPreferences)
         {
-            if (ruleSet == null) return null;
+            if (daysOffPreferences == null) return null;
             IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
             ILockableBitArray personOriginalArray =
-                bitArrayConverter.Convert(ruleSet.ConsiderWeekBefore,
-                                          ruleSet.ConsiderWeekAfter);
+                bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
+                                          daysOffPreferences.ConsiderWeekAfter);
             ILockableBitArray personWorkingArray = (LockableBitArray)personOriginalArray.Clone();
-            if (!setDayOffBitsInBitArrays(daysOffToRemove, daysOffToAdd, scheduleMatrix, personWorkingArray, ruleSet))
+            if (!setDayOffBitsInBitArrays(daysOffToRemove, daysOffToAdd, scheduleMatrix, personWorkingArray, daysOffPreferences))
                 return null;
 
             var matrixContainer = new GroupMatrixContainer
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             IEnumerable<DateOnly> daysOffToAdd,
             IScheduleMatrixPro scheduleMatrix,
             ILockableBitArray personWorkingArray,
-            DayOffPlannerSessionRuleSet ruleSet)
+            IDaysOffPreferences daysOffPreferences)
         {
             foreach (var dateOnly in daysOffToRemove)
             {
                 int index;
-                if (!ruleSet.ConsiderWeekBefore)
+                if (!daysOffPreferences.ConsiderWeekBefore)
                 {
                     index =
                         scheduleMatrix.FullWeeksPeriodDays.IndexOf(
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (var dateOnly in daysOffToAdd)
             {
                 int index;
-                if (!ruleSet.ConsiderWeekBefore)
+                if (!daysOffPreferences.ConsiderWeekBefore)
                 {
                     index =
                         scheduleMatrix.FullWeeksPeriodDays.IndexOf(

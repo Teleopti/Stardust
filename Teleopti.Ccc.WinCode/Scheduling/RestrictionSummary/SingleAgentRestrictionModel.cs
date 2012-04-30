@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
                     if (person.Equals(key.Key))
                     {
                         var agentInfo = _personsAffectedPeriodDatesDic[key];
-                        agentInfo.SchedulePeriodData(_schedulingOptions);
+                        agentInfo.SchedulePeriodData();
                     }
                 }
             }

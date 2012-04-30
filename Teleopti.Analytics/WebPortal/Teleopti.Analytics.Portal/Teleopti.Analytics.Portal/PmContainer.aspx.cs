@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web;
+using System.Globalization;
 
 namespace Teleopti.Analytics.Portal
 {
@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Portal
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			ContainerControl.Attributes.Add("src", "PerformanceManager/Default.aspx");
+			ContainerControl.Attributes.Add("src", string.Format(CultureInfo.InvariantCulture, "PerformanceManager/Default.aspx{0}", QueryStringWithPrefix));
 		}
 	}
 }

@@ -1,16 +1,34 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
+using System.Web;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
 using Teleopti.Analytics.Portal.PerformanceManager.Helper;
 using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal.PerformanceManager
 {
-    public partial class Site1 : System.Web.UI.MasterPage
-    {
-        protected void Page_Load(object sender, EventArgs e)
+	public interface IMasterPage
+	{
+		string ModifyQueryString(NameValueCollection queryString);
+	}
+
+	public partial class Site1 : System.Web.UI.MasterPage, IMasterPage
+	{
+		protected void Page_Init(object sender, EventArgs e)
+		{
+			if (Context.Session == null) return;
+
+			if (Context.Session.IsNewSession)
+			{
+				string timeoutUrl = string.Format(CultureInfo.InvariantCulture, "../timeout.aspx?{0}", ModifyQueryString(Request.QueryString));
+				Response.Write(string.Format(CultureInfo.InvariantCulture, "<SCRIPT>top.location.href='{0}'</SCRIPT>", timeoutUrl));
+				Response.End();
+			}
+		}
+
+    	protected void Page_Load(object sender, EventArgs e)
         {
             const string permissionDenyText = "Permission denied to view and create Performance Manager reports.";
             
@@ -72,17 +90,20 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
             get { return LabelMessage.Text; }
             set
             {
-                if (string.IsNullOrEmpty(value))
-                {
-                    LabelMessage.Visible = false;
-                }
-                else
-                {
-                    LabelMessage.Visible = true;
-                }
-                LabelMessage.Text = value;
+            	LabelMessage.Visible = !string.IsNullOrEmpty(value);
+            	LabelMessage.Text = value;
             }
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public string ModifyQueryString(NameValueCollection queryString)
+		{
+			NameValueCollection newQs = HttpUtility.ParseQueryString(queryString.ToString());
+			newQs.Remove("reportid");
+			newQs.Remove("reportname");
+			
+			return newQs.ToString();
+		}
 
         private void BuildHelpLinkAction()
         {

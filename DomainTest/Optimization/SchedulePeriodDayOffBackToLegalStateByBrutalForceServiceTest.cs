@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private SchedulePeriodDayOffBackToLegalStateByBrutalForceService _target;
         private MockRepository _mockRepository;
         private IScheduleMatrixBitArrayConverter _matrixBitArrayConverter;
-        private DayOffPlannerRules _dayOffPlannerRules;
+        private IDaysOffPreferences _daysOffPreferences;
         private CultureInfo _cultureInfo;
         private IScheduleMatrixPro _matrix;
 
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mockRepository = new MockRepository();
             _matrixBitArrayConverter = _mockRepository.StrictMock<IScheduleMatrixBitArrayConverter>();
-            _dayOffPlannerRules = new DayOffPlannerRules();
+            _daysOffPreferences = new DaysOffPreferences();
             _cultureInfo = new CultureInfo("se-SE");
             _matrix = _mockRepository.StrictMock<IScheduleMatrixPro>();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _dayOffPlannerRules, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setTwoDayOffPerWeekInRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _dayOffPlannerRules, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
 
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setTwoFullWeekEndsInRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _dayOffPlannerRules, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
             
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             setImpossibleRules();
-            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _dayOffPlannerRules, _cultureInfo);
+            _target = new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(_matrixBitArrayConverter, _daysOffPreferences, _cultureInfo);
 
             Assert.IsNull(_target.Result);
             _target.Execute(_matrix);
@@ -109,36 +109,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void setTwoDayOffPerWeekInRules()
         {
-            _dayOffPlannerRules = new DayOffPlannerRules
+            _daysOffPreferences = new DaysOffPreferences
                                       {
                                           UseConsecutiveDaysOff = false,
                                           UseConsecutiveWorkdays = false,
                                           UseDaysOffPerWeek = true,
-                                          DaysOffPerWeek = new MinMax<int>(2, 2)
+                                          DaysOffPerWeekValue = new MinMax<int>(2, 2)
                                       };
         }
 
         private void setTwoFullWeekEndsInRules()
         {
-            _dayOffPlannerRules = new DayOffPlannerRules
+            _daysOffPreferences = new DaysOffPreferences
                                       {
                                           UseConsecutiveDaysOff = false,
                                           UseConsecutiveWorkdays = false,
                                           UseDaysOffPerWeek = false,
-                                          UseFreeWeekends = true,
-                                          FreeWeekends = new MinMax<int>(2, 2)
+                                          UseFullWeekendsOff = true,
+                                          FullWeekendsOffValue = new MinMax<int>(2, 2)
                                       };
         }
 
         private void setImpossibleRules()
         {
-            _dayOffPlannerRules = new DayOffPlannerRules
+            _daysOffPreferences = new DaysOffPreferences
                                       {
                                           UseConsecutiveDaysOff = false,
                                           UseConsecutiveWorkdays = false,
                                           UseDaysOffPerWeek = false,
-                                          UseFreeWeekends = true,
-                                          FreeWeekends = new MinMax<int>(20, 20)
+                                          UseFullWeekendsOff = true,
+                                          FullWeekendsOffValue = new MinMax<int>(20, 20)
                                       };
         }
 

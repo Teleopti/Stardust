@@ -12,8 +12,8 @@ namespace Teleopti.Interfaces.Domain
         /// Finds the best shift.
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
-        /// <param name="effectiveRestriction">The effective restriction.</param>
-        /// <param name="matrix"></param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
+        /// <param name="matrix">The matrix.</param>
         /// <returns></returns>
         /// ///
         /// <remarks>
@@ -21,7 +21,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-09-18
         /// ///
         /// </remarks>
-        IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, IEffectiveRestriction effectiveRestriction, IScheduleMatrixPro matrix);
+        IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix);
 
 		/// <summary>
 		/// Gets the finder result.
@@ -33,12 +33,13 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Finds the best main shift.
         /// </summary>
-        /// <param name="dateOnly"></param>
+        /// <param name="dateOnly">The date only.</param>
         /// <param name="shiftProjectionCaches">The shift projection caches.</param>
         /// <param name="dataHolders">The data holders.</param>
-        /// <param name="maxSeatSkillPeriods"></param>
-        /// <param name="nonBlendSkillPeriods"></param>
-        /// <param name="currentSchedulePeriod"></param>
+        /// <param name="maxSeatSkillPeriods">The max seat skill periods.</param>
+        /// <param name="nonBlendSkillPeriods">The non blend skill periods.</param>
+        /// <param name="currentSchedulePeriod">The current schedule period.</param>
+        /// <param name="schedulingOptions">The scheduling options.</param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IWorkShiftCalculationResultHolder FindBestMainShift(
@@ -47,6 +48,7 @@ namespace Teleopti.Interfaces.Domain
             IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
-            IVirtualSchedulePeriod currentSchedulePeriod);
+            IVirtualSchedulePeriod currentSchedulePeriod,
+            ISchedulingOptions schedulingOptions);
     }
 }

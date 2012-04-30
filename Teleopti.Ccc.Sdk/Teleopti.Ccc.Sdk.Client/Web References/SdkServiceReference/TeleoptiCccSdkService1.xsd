@@ -1,35 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:simpleType name="AuthenticationTypeOptionDto">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Application" />
-      <xs:enumeration value="Windows" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="AuthenticationTypeOptionDto" nillable="true" type="tns:AuthenticationTypeOptionDto" />
-  <xs:simpleType name="MultiplicatorTypeDto">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="OBTime" />
-      <xs:enumeration value="Overtime" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="MultiplicatorTypeDto" nillable="true" type="tns:MultiplicatorTypeDto" />
-  <xs:simpleType name="RequestStatusDto">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Pending" />
-      <xs:enumeration value="Denied" />
-      <xs:enumeration value="Approved" />
-      <xs:enumeration value="New" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="RequestStatusDto" nillable="true" type="tns:RequestStatusDto" />
-  <xs:simpleType name="ShiftTradeStatusDto">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="OkByMe" />
-      <xs:enumeration value="OkByBothParts" />
-      <xs:enumeration value="NotValid" />
-      <xs:enumeration value="Referred" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="ShiftTradeStatusDto" nillable="true" type="tns:ShiftTradeStatusDto" />
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/System" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="SystemException">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Exception" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SystemException" nillable="true" type="tns:SystemException" />
+  <xs:complexType name="Exception">
+    <xs:sequence>
+      <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##local" processContents="skip" />
+    </xs:sequence>
+    <xs:attribute ref="ser:FactoryType" />
+  </xs:complexType>
+  <xs:element name="Exception" nillable="true" type="tns:Exception" />
 </xs:schema>

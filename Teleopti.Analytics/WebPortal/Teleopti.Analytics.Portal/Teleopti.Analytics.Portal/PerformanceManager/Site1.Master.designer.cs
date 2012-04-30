@@ -10,7 +10,8 @@
 namespace Teleopti.Analytics.Portal.PerformanceManager {
     
     
-    public partial class Site1 {
+    public partial class Site1 : IMasterPage
+    {
         
         /// <summary>
         /// head control.

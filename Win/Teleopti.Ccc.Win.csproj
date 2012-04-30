@@ -820,6 +820,36 @@
     <Compile Include="Meetings\Overview\MeetingsScheduleProvider.cs" />
     <Compile Include="Meetings\Overview\ScheduleAppointmentFromMeetingCreator.cs" />
     <Compile Include="Meetings\ViewType.cs" />
+    <Compile Include="Optimization\AdvancedPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\AdvancedPreferencesPanel.Designer.cs">
+      <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\DayOffPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\DayOffPreferencesPanel.Designer.cs">
+      <DependentUpon>DayOffPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\ExtraPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\ExtraPreferencesPanel.Designer.cs">
+      <DependentUpon>ExtraPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\GeneralPreferencesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Optimization\GeneralPreferencesPanel.Designer.cs">
+      <DependentUpon>GeneralPreferencesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Optimization\OptimizationPreferencesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Optimization\OptimizationPreferencesDialog.Designer.cs">
+      <DependentUpon>OptimizationPreferencesDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Payroll\DefinitionSets\MultiplicatorDefinitionView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1295,24 +1325,6 @@
     <Compile Include="Scheduling\SchedulerMeetingHelper.cs" />
     <Compile Include="Scheduling\SchedulerMessageBrokerHandler.cs" />
     <Compile Include="Scheduling\SchedulingScreenSettings.cs" />
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerAdvancedPreferencesPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerAdvancedPreferencesPanel.Designer.cs">
-      <DependentUpon>ResourceOptimizerAdvancedPreferencesPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerPreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerPreferencesDialog.Designer.cs">
-      <DependentUpon>ResourceOptimizerPreferencesDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerUserPreferencesPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerUserPreferencesPanel.Designer.cs">
-      <DependentUpon>ResourceOptimizerUserPreferencesPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2102,12 +2114,6 @@
     <Compile Include="Scheduling\RequestReplyStatusChangeDialog.Designer.cs">
       <DependentUpon>RequestReplyStatusChangeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\DayOffOptimizerPreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\DayOffOptimizerPreferencesDialog.Designer.cs">
-      <DependentUpon>DayOffOptimizerPreferencesDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\MeetingPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2534,6 +2540,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Meetings\Overview\MeetingOverviewView.resx">
       <DependentUpon>MeetingOverviewView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\AdvancedPreferencesPanel.resx">
+      <DependentUpon>AdvancedPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\DayOffPreferencesPanel.resx">
+      <DependentUpon>DayOffPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\ExtraPreferencesPanel.resx">
+      <DependentUpon>ExtraPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\GeneralPreferencesPanel.resx">
+      <DependentUpon>GeneralPreferencesPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Optimization\OptimizationPreferencesDialog.resx">
+      <DependentUpon>OptimizationPreferencesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Payroll\Forms\PayrollExportPages\PersonsSelectionView.resx">
       <DependentUpon>PersonsSelectionView.cs</DependentUpon>
@@ -3052,18 +3073,6 @@
     <EmbeddedResource Include="Scheduling\SchedulerSplitters.resx">
       <DependentUpon>SchedulerSplitters.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerAdvancedPreferencesPanel.resx">
-      <DependentUpon>ResourceOptimizerAdvancedPreferencesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerPreferencesDialog.resx">
-      <DependentUpon>ResourceOptimizerPreferencesDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerUserPreferencesPanel.resx">
-      <DependentUpon>ResourceOptimizerUserPreferencesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.resx">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3447,10 +3456,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestReplyStatusChangeDialog.resx">
       <DependentUpon>RequestReplyStatusChangeDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\DayOffOptimizerPreferencesDialog.resx">
-      <DependentUpon>DayOffOptimizerPreferencesDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FormClipboardSpecial.resx">

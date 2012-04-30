@@ -78,7 +78,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             row["employment_type"] = personPeriod.PersonContract.Contract.EmploymentType;
             row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
             row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(person);
-
+            row["windows_domain"] = person.WindowsAuthenticationInfo == null
+                                                ? string.Empty
+                                                : person.WindowsAuthenticationInfo.DomainName;
+            row["windows_username"] = person.WindowsAuthenticationInfo == null
+                                          ? string.Empty
+                                          : person.WindowsAuthenticationInfo.WindowsLogOnName;
             table.Rows.Add(row);
         }
 

@@ -143,13 +143,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
             {
                 IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
-                var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(),new DateOnly());
-                IBusinessRuleResponse resp = new BusinessRuleResponse(typeof (NewFailingRule), "", true, true,
+                var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
+                IBusinessRuleResponse resp = new BusinessRuleResponse(typeof(NewFailingRule), "", true, true,
                                                                       new DateTimePeriod(), PersonFactory.CreatePerson(), dateOnlyPeriod);
                 ret.Add(resp);
                 return ret;
             }
-
         }
     }
 

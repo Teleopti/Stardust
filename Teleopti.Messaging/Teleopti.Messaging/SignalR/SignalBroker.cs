@@ -5,7 +5,6 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using Newtonsoft.Json.Linq;
 using SignalR.Client._20.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -21,11 +20,9 @@ namespace Teleopti.Messaging.SignalR
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class SignalBroker : IMessageBroker
 	{
-		private const string EventName = "OnEventMessage";
 		private const string HubClassName = "MessageBrokerHub";
-		private IHubProxy _proxy;
 		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
-		private HubConnection _connection;
+		private SignalWrapper _wrapper;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -47,8 +44,8 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
-			_proxy = null;
-			_connection = null;
+			_wrapper.StopListening();
+			_wrapper = null;
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
@@ -88,7 +85,7 @@ namespace Teleopti.Messaging.SignalR
 
 		private void callProxy(object state)
 		{
-			_proxy.Invoke("NotifyClients", (Notification)state);
+			_wrapper.NotifyClients((Notification) state);
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -153,7 +150,7 @@ namespace Teleopti.Messaging.SignalR
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			EventSignal<object> result = _proxy.Invoke("AddSubscription", subscription);
+			EventSignal<object> result = _wrapper.AddSubscription(subscription);
 			result.Finished += (sender, e) =>
 			{
 				var route = subscription.Route();
@@ -170,7 +167,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			if (_proxy == null) return;
+			if (_wrapper == null) return;
 
 			var handlersToRemove = new List<string>();
 			var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
@@ -185,7 +182,7 @@ namespace Teleopti.Messaging.SignalR
 						if (subscriptionHandler.Value.Count==0)
 						{
 							var route = subscriptionWithHandler.Subscription.Route();
-							_proxy.Invoke("RemoveSubscription", route);
+							_wrapper.RemoveSubscription(route);
 							handlersToRemove.Add(route);
 						}
 					}
@@ -327,18 +324,16 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
-			_connection = new HubConnection(serverUrl.ToString());
-			_proxy = _connection.CreateProxy(HubClassName);
-			var subscription = _proxy.Subscribe(EventName);
-			subscription.Data += subscription_Data;
+			var connection = new HubConnection(serverUrl.ToString());
+			var hubProxy = connection.CreateProxy(HubClassName);
 
-			_connection.Start();
+			_wrapper = new SignalWrapper(hubProxy, connection);
+			_wrapper.OnNotification += onNotification;
+			_wrapper.StartListening();
 		}
 
-		private void subscription_Data(object[] obj)
+		private void onNotification(Notification d)
 		{
-			var d = ((JObject)obj[0]).ToObject<Notification>();
-			
 			var message = new EventMessage();
 			message.InterfaceType = Type.GetType(d.DomainQualifiedType, false, true);
 			message.DomainObjectType = d.DomainType;
@@ -359,34 +354,10 @@ namespace Teleopti.Messaging.SignalR
 			InvokeEventHandlers(message, d.Routes());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)")]
 		public void StopMessageBroker()
 		{
-			if (_connection != null && _connection.IsActive)
-			{
-				var reset = new ManualResetEvent(false);
-				var signal = _proxy.Invoke("NotifyClients", new Notification());
-				signal.Finished += (sender, e) =>
-				                   	{
-				                   		var proxy = (HubProxy) _proxy;
-				                   		var subscriptionList = new List<string>(proxy.GetSubscriptions());
-				                   		if (subscriptionList.Contains(EventName))
-				                   		{
-				                   			var subscription = _proxy.Subscribe(EventName);
-				                   			subscription.Data -= subscription_Data;
-				                   		}
-				                   		_connection.Stop();
-				                   		reset.Set();
-				                   	};
-				try
-				{
-					reset.WaitOne(20*1000);
-				}
-				catch (Exception ex)
-				{
-					InternalLog(ex);
-				}
-			}
+			_wrapper.OnNotification -= onNotification;
+			_wrapper.StopListening();
 		}
 
 		public int Initialized { get; set; }
@@ -411,7 +382,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsInitialized
 		{
-			get { return _proxy != null; }
+			get { return _wrapper.IsInitialized(); }
 		}
 
 		public event EventHandler<EventMessageArgs> EventMessageHandler;

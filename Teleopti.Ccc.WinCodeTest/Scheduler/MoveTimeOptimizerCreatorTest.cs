@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _decisionMaker = _mocks.StrictMock<IMoveTimeDecisionMaker>();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
         	_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            IOptimizerOriginalPreferences optimizerPreferences = new OptimizerOriginalPreferences();
+            IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,

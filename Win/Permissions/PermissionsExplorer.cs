@@ -1825,8 +1825,16 @@ namespace Teleopti.Ccc.Win.Permissions
                             }
                         }
 
-                        role.DescriptionText = e.Label;
-                        role.Name = e.Label.Replace(" ", string.Empty);
+						if (e.Label.Length > 255)
+						{
+							e.CancelEdit = true;
+							return;
+						}
+
+						role.DescriptionText = e.Label;
+						role.Name = e.Label.Replace(" ", string.Empty);
+						if (role.Name.Length > 50) role.Name = role.Name.Substring(0, 50);
+
                         if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(role)))
                         {
                         	FormKill();

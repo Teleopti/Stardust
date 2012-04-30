@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon
 					if (IniFileInfo.Create)
 						PrepareDatabases(ccc7, analytics);
 
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()) { UseCache = false };
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null));
 					var dataSource = CreateDataSource(dataSourceFactory);
 
 					if (IniFileInfo.Create)
@@ -50,7 +50,10 @@ namespace Teleopti.Ccc.TestCommon
 					ccc7.DropConnections();
 					ccc7.Drop();
 				}
-				ccc7.Create();
+				if (IniFileInfo.CreateByNHib)
+					ccc7.Create();
+				else
+					ccc7.CreateByDbManager();
 			}
 			catch (Exception e)
 			{
@@ -96,7 +99,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			try
 			{
-				dataSourceFactory.CreateSchema();
+				if (IniFileInfo.CreateByNHib)
+					dataSourceFactory.CreateSchema();
+				else
+					ccc7.CreateSchemaByDbManager();
 				PersistAuditSetting();
 			}
 			catch (Exception e)

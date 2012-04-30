@@ -6,35 +6,35 @@ namespace Teleopti.Ccc.DayOffPlanning
 {
     public class SmartDayOffBackToLegalStateService : ISmartDayOffBackToLegalStateService
     {
-        private readonly DayOffPlannerSessionRuleSet _dayOffPlannerSessionRuleSet;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _backToLegalStateFunctions;
         private readonly int _maxIterations;
         private readonly IList<string> _failedSolverDescriptionKeys = new List<string>();
 
-        public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, DayOffPlannerSessionRuleSet dayOffPlannerSessionRuleSet, int maxIterations)
+        public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, IDaysOffPreferences daysOffPreferences, int maxIterations)
         {
             _maxIterations = maxIterations;
             _backToLegalStateFunctions = backToLegalStateFunctions;
-            _dayOffPlannerSessionRuleSet = dayOffPlannerSessionRuleSet;
+            _daysOffPreferences = daysOffPreferences;
         }
 
         public IList<IDayOffBackToLegalStateSolver> BuildSolverList(ILockableBitArray bitArray)
         {
             _backToLegalStateFunctions.WorkingArray = bitArray;
             IList<IDayOffBackToLegalStateSolver> solvers = new List<IDayOffBackToLegalStateSolver>();
-            if (_dayOffPlannerSessionRuleSet.UseFreeWeekends)
-                solvers.Add(new FreeWeekendSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
-            if (_dayOffPlannerSessionRuleSet.UseFreeWeekendDays)
-                solvers.Add(new FreeWeekendDaySolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
-            if (_dayOffPlannerSessionRuleSet.UseDaysOffPerWeek)
-                solvers.Add(new DaysOffPerWeekSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
-            if (_dayOffPlannerSessionRuleSet.UseConsecutiveDaysOff)
-                solvers.Add(new ConsecutiveDaysOffSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
-            if (_dayOffPlannerSessionRuleSet.UseConsecutiveWorkdays)
+            if (_daysOffPreferences.UseFullWeekendsOff)
+                solvers.Add(new FreeWeekendSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations));
+            if (_daysOffPreferences.UseWeekEndDaysOff)
+                solvers.Add(new FreeWeekendDaySolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations));
+            if (_daysOffPreferences.UseDaysOffPerWeek)
+                solvers.Add(new DaysOffPerWeekSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations));
+            if (_daysOffPreferences.UseConsecutiveDaysOff)
+                solvers.Add(new ConsecutiveDaysOffSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations));
+            if (_daysOffPreferences.UseConsecutiveWorkdays)
             {
-                solvers.Add(new ConsecutiveWorkdaysSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations));
-                if (_dayOffPlannerSessionRuleSet.UseFreeWeekendDays)
-                    solvers.Add(new TuiCaseSolver(bitArray, _backToLegalStateFunctions, _dayOffPlannerSessionRuleSet, _maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
+                solvers.Add(new ConsecutiveWorkdaysSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations));
+                if (_daysOffPreferences.UseWeekEndDaysOff)
+					solvers.Add(new TuiCaseSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
             }
 
             return solvers;

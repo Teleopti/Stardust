@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -9,8 +10,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     public interface IGroupSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
-        bool ScheduleOneDay(DateOnly dateOnly, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
+        void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker);
+        bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
+        public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     if (backgroundWorker.CancellationPending)
                         return;
                     _rollbackService.ClearModificationCollection();
-                    if (!ScheduleOneDay(dateOnly, groupPerson, matrixList))
+                    if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, matrixList))
 				    {
                         // add some information probably already added when trying to schedule
                         //AddResult(groupPerson, dateOnly, "XXCan't Schedule Team");
@@ -67,8 +68,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			}
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public bool ScheduleOneDay(DateOnly dateOnly, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
         {
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 
@@ -122,7 +123,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
                 if (!locked && !scheduleDay.IsScheduled())
                 {
-                    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, true, bestCategory);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+					bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, bestCategory, resourceCalculateDelayer);
                     if (!sucess)
                     {
                         return false;

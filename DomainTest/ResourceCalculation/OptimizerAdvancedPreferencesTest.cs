@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyDefaultValues()
         {
-            Assert.AreEqual(1d, _target.MaximumMovableDayOffPercentagePerPerson);
             Assert.AreEqual(1d, _target.MaximumMovableWorkShiftPercentagePerPerson);
             Assert.IsTrue(_target.AllowWorkShiftOptimization);
             Assert.IsTrue(_target.AllowDayOffOptimization);

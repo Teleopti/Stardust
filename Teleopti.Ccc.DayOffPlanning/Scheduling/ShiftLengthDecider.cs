@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix)
+		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			//ta reda på alla skiftlängder i _shiftList, som en lista
 			HashSet<TimeSpan> resultingTimes = new HashSet<TimeSpan>();
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				resultingTimes.Add(shiftProjectionCache.WorkShiftProjectionContractTime);
 			}
 			//hämta önskad skiftlängd
-			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix);
+			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions);
 			//välj närmaste från listan
 			IList<TimeSpan> resultingList = new List<TimeSpan>(resultingTimes);
 

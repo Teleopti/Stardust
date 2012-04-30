@@ -5,17 +5,21 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 {
 	public interface IDesiredShiftLengthCalculator
 	{
-		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix);
+		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 	}
 
 	public class DesiredShiftLengthCalculator : IDesiredShiftLengthCalculator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
-			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix);
+			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
 			var targetTime = matrix.SchedulePeriod.PeriodTarget();
+			if (schedulingOptions.UseCustomTargetTime.HasValue)
+				targetTime = schedulingOptions.UseCustomTargetTime.Value;
 			var newAverage = TimeSpan.Zero;
 			var exit = false;
 			while (!exit)
@@ -51,7 +55,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 				}
 
 				if (freeSlots == 0)
-					return TimeSpan.Zero;
+					return currentAverage;
 
 				var diff = targetTime.TotalSeconds - fixedTime.TotalSeconds;
 				newAverage = TimeSpan.FromSeconds(diff / freeSlots);

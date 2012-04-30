@@ -92,7 +92,7 @@
     <Compile Include="FakeData\ContractScheduleFactory.cs" />
     <Compile Include="FakeData\DateTimeFactory.cs" />
     <Compile Include="FakeData\DayOffFactory.cs" />
-    <Compile Include="FakeData\DayOffPlannerRulesFactory.cs" />
+    <Compile Include="FakeData\DaysOffPreferencesFactory.cs" />
     <Compile Include="FakeData\FakeUserTextTranslator.cs" />
     <Compile Include="FakeData\GroupingAbsenceFactory.cs" />
     <Compile Include="FakeData\GroupingActivityFactory.cs" />

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             _target.GetNextPeriod(helper);
             _mocks.VerifyAll();
         }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             double maxWeekHours = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalHours;
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             Assert.AreEqual(21, _target.CellDataCollection.Count);
             Assert.AreEqual(maxWeekHours, _target.CellDataCollection[0].WeeklyMax.TotalHours);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
         }
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
         }
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             IPersonPeriod period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             _target.LoadPeriod(helper);
             _mocks.VerifyAll();
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _person.SetId(Guid.NewGuid());
             _person.AddPersonPeriod(period);
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             using(new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
             {
                 _target.LoadPeriod(helper);
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
             _mocks.ReplayAll();
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             var extractor = new RestrictionExtractor(_resultStateHolder);
                 extractor.Extract(helper.Person, helper.Period.Value.StartDate);
             IEffectiveRestriction totalRestriction = extractor.CombinedRestriction(helper.SchedulingOptions);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Expect.Call(_range.ScheduledDay(new DateOnly(_dateTime))).IgnoreArguments().Return(part).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             var helper = new AgentInfoHelper(_person, new DateOnly(_dateTime), _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             var extractor = new RestrictionExtractor(_resultStateHolder);
             extractor.Extract(helper.Person, helper.Period.Value.StartDate);
             IEffectiveRestriction totalRestriction = extractor.CombinedRestriction(helper.SchedulingOptions);
@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             period.PeriodType = SchedulePeriodType.Week;
             _person.AddSchedulePeriod(period);
             var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             IList<DateOnly> customizedList = _target.CustomizedDayCollection(helper);
             Assert.AreEqual(28, customizedList.Count);
             var min = customizedList.Min();
@@ -537,7 +537,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             period.PeriodType = SchedulePeriodType.Week;
             _person.AddSchedulePeriod(period);
             var helper = new AgentInfoHelper(_person, periodStartDate, _schedulingResultStateHolder, _options, _ruleSetProjectionService);
-            helper.SchedulePeriodData(_options);
+            helper.SchedulePeriodData();
             IList<DateOnly> customizedList = _target.CustomizedDayCollection(helper);
             Assert.AreEqual(49, customizedList.Count);
             var min = customizedList.Min();

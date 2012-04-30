@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             
             builder.RegisterType<SchedulingOptions>().As<ISchedulingOptions>().InstancePerLifetimeScope();
             builder.RegisterType<OptimizerOriginalPreferences>().As<IOptimizerOriginalPreferences>().InstancePerLifetimeScope();
+            builder.RegisterType<OptimizationPreferences>().As<IOptimizationPreferences>().InstancePerLifetimeScope();
             builder.RegisterType<DayOffPlannerRules>().As<IDayOffPlannerRules>().InstancePerLifetimeScope();
             builder.RegisterType<OptimizerAdvancedPreferences>().As<IOptimizerAdvancedPreferences>().InstancePerLifetimeScope();
             
@@ -149,7 +150,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
 
             builder.RegisterType<BlockOptimizerBlockCleaner>().As<IBlockOptimizerBlockCleaner>().InstancePerLifetimeScope();
-            
+            builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().
+                InstancePerLifetimeScope();
+
         }
 
     }

@@ -4538,7 +4538,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New Shift Trade Request</value>
+    <value>New shift trade request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -10547,7 +10547,7 @@ These options are activated:
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} agent days could not be scheduled.</value>
- </data>
+  </data>
   <data name="Import" xml:space="preserve">
     <value>Import</value>
     <comment>Import</comment>
@@ -10590,25 +10590,49 @@ These options are activated:
     <value>Show public note</value>
     <comment>ShowPublicNote</comment>
   </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Availability Fulfillment</value>
+    <comment>Availability Fulfillment</comment>
+  </data>
   <data name="NoAvailableShifts" xml:space="preserve">
     <value>No available shifts</value>
     <comment>No available shifts</comment>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Must Have Fulfillment</value>
+    <comment>Must Have Fulfillment</comment>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
     <value>Actual after call work time</value>
     <comment>Actual after call work time</comment>
   </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Preference Fulfillment</value>
+    <comment>Preference Fulfillment</comment>
+  </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>The absence request {0} was approved.</value>
     <comment>Approve absence request for one day.</comment>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Rotation Fulfillment</value>
+    <comment>Rotation Fulfillment</comment>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>The absence request {0} was denied.</value>
     <comment>Denied absence request for one day.</comment>
   </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Student Availability Fulfillment</value>
+    <comment>Student Availability Fulfillment</comment>
+  </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>New shift trade request {0}, approve or deny in your request list.</value>
     <comment>New shift trade request for one day.</comment>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Resource calculate every:</value>
+    <comment>Resource Calculate Every:</comment>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
     <value>A shift trade request {0} was accepted by other person.</value>
@@ -10641,5 +10665,20 @@ These options are activated:
   <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
     <value>External resource is using by another program, please try again later.</value>
     <comment>External resource is using by another program, please try again later.</comment>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Import forecast from file</value>
+    <comment>Import forecast from file</comment>  
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Request allowances</value>
+    <comment>Request allowances</comment>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Show only available for shift trade</value>  
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Start time {0} should be earlier than end time {1}.</value>
+    <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
   </data>
 </root>

@@ -238,7 +238,7 @@
     <Compile Include="LogOn\WindowsDataSourceFromToken.cs" />
     <Compile Include="LogOn\WindowsTokenAuthenticator.cs" />
     <Compile Include="LogOn\WindowsUserFromToken.cs" />
-    <Compile Include="QueryHandlerModule.cs" />
+    <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandler.cs" />
     <Compile Include="TeleoptiCccSdkService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

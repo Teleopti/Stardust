@@ -146,8 +146,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             {
                 throw new NotImplementedException();
             }
-
         }
-
     }
 }

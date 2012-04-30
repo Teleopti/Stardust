@@ -221,7 +221,10 @@
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
+    <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
+    <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizerService.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizer.cs" />
@@ -253,6 +256,9 @@
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProvider.cs" />
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
+    <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
+    <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />
@@ -317,6 +323,7 @@
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
+    <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
@@ -613,6 +620,7 @@
     <Compile Include="Scheduling\Note.cs" />
     <Compile Include="Scheduling\NoteByDateSorter.cs" />
     <Compile Include="Scheduling\PersonAbsence.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduler.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecification.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
@@ -780,7 +788,6 @@
     <Compile Include="Security\PasswordStrengthRule.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolver.cs" />
     <Compile Include="Security\Matrix\TeamResolver.cs" />
-    <Compile Include="Security\Principal\AbsenceAllowancePermissionSpecification.cs" />
     <Compile Include="Security\Principal\AuthorizeEveryone.cs" />
     <Compile Include="Security\Principal\AuthorizeExternalAvailableData.cs" />
     <Compile Include="Security\Principal\AuthorizeMyBusinessUnit.cs" />
@@ -1149,7 +1156,6 @@
     <None Include="Forecasting\WorkloadDayTemplates.cd" />
     <None Include="ResourceCalculation\FurnessEvaluatorDiagram.cd" />
     <None Include="Scheduling\Assignment\ScheduleStuff.cd" />
-    <None Include="Scheduling\Restrictions\Restrictions.cd" />
     <None Include="Scheduling\TimeLayer\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>

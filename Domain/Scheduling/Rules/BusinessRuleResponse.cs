@@ -58,6 +58,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             get { return _period; }
         }
 
+		public DateOnlyPeriod DateOnlyPeriod
+		{
+			get { return _dateOnlyPeriod; }
+		}
+
         public IPerson Person
         {
             get { return _person; }

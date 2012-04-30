@@ -163,10 +163,7 @@ Teleopti.MyTimeWeb.Preference = (function ($) {
 			},
 			statusCode404: statusCode404,
 			error: function (jqXHR, textStatus, errorThrown) {
-
-				if (textStatus == "abort")
-					return;
-
+				
 				var cellHtml = $('<h2></h2>')
 					.addClass('error');
 

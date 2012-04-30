@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Globalization;
+using System.Security.Principal;
 using System.Threading;
 using System.Web.Mvc;
 using NUnit.Framework;
@@ -72,6 +74,47 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => controller.AsyncManager.OutstandingOperations.Count, Is.EqualTo(0).After(1000, 10));
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldCopyThreadCulture()
+		{
+			CultureInfo threadCulture = null;
+			CultureInfo threadUICulture = null;
+			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-GB");
+			Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("fi-FI");
+			SetupDependencyResolver();
+			var target = new AsyncTaskAttribute();
+			var filterTester = new FilterTester();
+			filterTester.UseController(new TestTaskController(c =>
+			                                                  	{
+																	threadCulture = Thread.CurrentThread.CurrentCulture;
+																	threadUICulture = Thread.CurrentThread.CurrentUICulture;
+																}));
+
+			filterTester.InvokeFilter(target);
+
+			Assert.That(() => threadCulture, Is.EqualTo(CultureInfo.GetCultureInfo("en-GB")).After(1000, 10));
+			Assert.That(() => threadUICulture, Is.EqualTo(CultureInfo.GetCultureInfo("fi-FI")).After(1000, 10));
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldCopyThreadPrincipal()
+		{
+			// this is actually done automatically. the same does not apply for culture though.
+			IPrincipal principal = null;
+			Thread.CurrentPrincipal = new TestPrincipal();
+			SetupDependencyResolver();
+			var target = new AsyncTaskAttribute();
+			var filterTester = new FilterTester();
+			filterTester.UseController(new TestTaskController(c =>
+			                                                  	{
+			                                                  		principal = Thread.CurrentPrincipal;
+			                                                  	}));
+
+			filterTester.InvokeFilter(target);
+
+			Assert.That(() => principal.GetType(), Is.EqualTo(typeof(TestPrincipal)).After(1000, 10));
+		}
+
 		private class TestTaskController : AsyncController, FilterTester.ITestController
 		{
 			private readonly Action<TestTaskController> _taskAction;
@@ -83,6 +126,12 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			public void DummyActionTask() { _taskAction.Invoke(this); }
 
+		}
+
+		private class TestPrincipal : IPrincipal
+		{
+			public bool IsInRole(string role) { return true; }
+			public IIdentity Identity { get { throw new NotImplementedException(); } }
 		}
 	}
 }

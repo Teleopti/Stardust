@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             // Code that runs on application startup
             if (_nhibConfPath == null)
                 _nhibConfPath = Directory.GetCurrentDirectory();
-			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>()),
+			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null)),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
             application.MessageBrokerDisabled = true;
             application.Start(new StateManager(), _nhibConfPath, null);

@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -10,21 +11,25 @@ namespace Teleopti.Ccc.Domain.Optimization
             DaysOff = new DaysOffPreferences();
             Extra = new ExtraPreferences();
             Advanced = new AdvancedPreferences();
+            Rescheduling = new ReschedulingPreferences();
         }
 
         public IGeneralPreferences General { get; set; }
         public IDaysOffPreferences DaysOff { get; set; }
         public IExtraPreferences Extra { get; set; }
         public IAdvancedPreferences Advanced { get; set; }
+        public IReschedulingPreferences Rescheduling { get; set; }
+
     }
 
     public class GeneralPreferences : IGeneralPreferences
     {
         public GeneralPreferences()
         {
-            OptimizationForDaysOff = true;
-            OptimizationForShiftsWithinDay = true;
-            AllowMoveShiftsWithinDay = true;
+            ScheduleTag = NullScheduleTag.Instance;
+            OptimizationStepDaysOff = true;
+            OptimizationStepTimeBetweenDays = true;
+            OptimizationStepShiftsWithinDay = true;
 
             UsePreferences = true;
             UseMustHaves = true;
@@ -42,11 +47,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IScheduleTag ScheduleTag { get; set; }
 
-        public bool OptimizationForDaysOff { get; set; }
-        public bool OptimizationForShiftsWithinDay { get; set; }
-        public bool ShiftsForFlexibleWorkTime { get; set; }
-        public bool DaysOffForFlexibleWorkTime { get; set; }
-        public bool AllowMoveShiftsWithinDay { get; set; }
+        public bool OptimizationStepDaysOff { get; set; }
+        public bool OptimizationStepTimeBetweenDays { get; set; }
+        public bool OptimizationStepShiftsForFlexibleWorkTime { get; set; }
+        public bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
+        public bool OptimizationStepShiftsWithinDay { get; set; }
 
         public bool UsePreferences { get; set; }
         public bool UseMustHaves { get; set; }
@@ -77,10 +82,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
             ConsecutiveWorkdaysValue = new MinMax<int>(2, 6);
 
-            ConsiderWeekBefore = true;
-
-            KeepFreeWeekends = true;
-            KeepFreeWeekendDays = true;
+            // ***** note: those 3 values are different in the old version
+            //ConsiderWeekBefore = true;
+            //KeepFreeWeekends = true;
+            //KeepFreeWeekendDays = true;
         }
 
         public bool UseKeepExistingDaysOff { get; set; }
@@ -110,13 +115,13 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         public ExtraPreferences()
         {
-            BlockFinderOptionsValue = BlockFinderType.BetweenDayOff;
+            BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
             KeepShiftsValue = 0.8d;
         }
 
         public bool UseBlockScheduling { get; set; }
 
-        public BlockFinderType BlockFinderOptionsValue { get; set; }
+        public BlockFinderType BlockFinderTypeValue { get; set; }
 
         public bool UseTeams { get; set; }
         public IGroupPage GroupPageOnTeam { get; set; }
@@ -136,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         public AdvancedPreferences()
         {
-            TargetValue = TargetValueOptions.StandardDeviation;
+            TargetValueCalculation = TargetValueOptions.StandardDeviation;
             UseTweakedValues = true;
             UseMinimumStaffing = true;
             UseMaximumStaffing = true;
@@ -144,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             RefreshScreenInterval = 10;
         }
 
-        public TargetValueOptions TargetValue { get; set; }
+        public TargetValueOptions TargetValueCalculation { get; set; }
         public bool UseIntraIntervalDeviation { get; set; }
         public bool UseTweakedValues { get; set; }
 
@@ -154,5 +159,16 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool DoNotBreakMaximumSeats { get; set; }
 
         public int RefreshScreenInterval { get; set; }
+    }
+
+    public class ReschedulingPreferences : IReschedulingPreferences
+    {
+        public ReschedulingPreferences()
+        {
+            ConsiderShortBreaks = true;
+        }
+
+        public bool ConsiderShortBreaks { get; set; }
+        public bool OnlyShiftsWhenUnderstaffed { get; set; }
     }
 }
