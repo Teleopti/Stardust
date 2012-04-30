@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Save(IUnitOfWork unitOfWork, IScheduleDay scheduleDay)
         {
-            var dic = (ReadOnlyScheduleDictionary)scheduleDay.Owner;
+            var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();
 
             var invalidList = dic.Modify(ScheduleModifier.Scheduler,
