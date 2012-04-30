@@ -24,10 +24,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ByClass("add-text-request")).EventualClick();
 		}
 
+		[When(@"I click on tomorrows summary")]
+		public void WhenIClickOnTomorrowsSummary()
+		{
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today.AddDays(1)).ListItems.First(Find.ByClass("add-text-request")).EventualClick();
+		}
+
 		[Then(@"I should see the text request form")]
 		public void ThenIShouldSeeTheTextRequestForm()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
+		}
+
+		[Then(@"I should see the text request form with tomorrow as default date")]
+		public void ThenIShouldSeeTheTextRequestFormWithTomorrowAsDefaultDate()
+		{
+			var tomorrow = DateTime.Today.AddDays(1);
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value), Is.EqualTo(tomorrow));
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(tomorrow));
 		}
 
 	}
