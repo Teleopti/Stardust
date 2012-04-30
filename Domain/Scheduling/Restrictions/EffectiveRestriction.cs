@@ -78,19 +78,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             set { _dayOff = value; }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ValidateWorkShiftInfo(IWorkShiftProjection workShiftProjection)
         {
-            TimePeriod? workShiftTimePeriod = workShiftProjection.TimePeriod;
-
-            if (!workShiftTimePeriod.HasValue)
-                return false;
+			TimePeriod workShiftTimePeriod = workShiftProjection.TimePeriod;
 
             TimePeriod validPeriod = StartTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.Value.StartTime))
+            if (!validPeriod.ContainsPart(workShiftTimePeriod.StartTime))
                 return false;
 
             validPeriod = EndTimeLimitation.ValidPeriod();
-            if (!validPeriod.ContainsPart(workShiftTimePeriod.Value.EndTime))
+            if (!validPeriod.ContainsPart(workShiftTimePeriod.EndTime))
                 return false;
 
             validPeriod = WorkTimeLimitation.ValidPeriod();
@@ -290,18 +288,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public bool MustHave { get; set; }
 
-		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection)
+		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
 			if (scheduleDayDateOnly == new DateOnly(2050, 1, 1))
 				return false;
 
-            if (!layerCollection.Any())
+            if (!layers.Any())
                 return false;
 
             foreach (IActivityRestriction activityRestriction in _activityRestrictionCollection)
             {
                 bool result = visualLayerCollectionSatisfiesOneActivityRestriction(agentTimeZone,
-                                                                                   layerCollection, activityRestriction);
+                                                                                   layers, activityRestriction);
                 if(!result)
                     return false;
             }

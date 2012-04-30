@@ -17,6 +17,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 	[TestFixture]
 	public class RuleSetProjectionServiceTest
 	{
+		public void ShouldReturnRequiredData()
+		{
+			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
+			var target = new RuleSetProjectionService(shiftCreatorService);
+			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
+			shiftCreatorService.Stub(x => x.Generate(null)).Return(new List<IWorkShift>(new[] { workShift }));
+
+			var result = target.ProjectionCollection(null);
+
+			result.Single().ContractTime.Should().Be(workShift.Projection.ContractTime());
+			result.Single().TimePeriod.Should().Be(workShift.ToTimePeriod().Value);
+			result.Single().ShiftCategoryId.Should().Be(workShift.ShiftCategory.Id.Value);
+			result.Single().Layers.Select(l => l.ActivityId).Should().Have.SameSequenceAs(
+				workShift.Projection.Select(p => p.Payload.Id.Value));
+			result.Single().Layers.Select(l => l.Period).Should().Have.SameSequenceAs(
+				workShift.Projection.Select(p => p.Period));
+		}
+
 		[Test]
 		public void ShouldReturnSerializableData()
 		{
@@ -28,18 +46,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var result = target.ProjectionCollection(null);
 
 			var serializer = new BinaryFormatter();
-			var stream = new MemoryStream();
-			serializer.Serialize(stream, result);
-			stream.Position = 0;
-			var deserialized = (IWorkShiftProjection[]) serializer.Deserialize(stream);
+			IWorkShiftProjection[] deserialized;
+			using(var stream = new MemoryStream())
+			{
+				serializer.Serialize(stream, result);
+				stream.Position = 0;
+				deserialized = (IWorkShiftProjection[])serializer.Deserialize(stream);
+			}
 
-			deserialized.Single().ContractTime.Should().Be(workShift.Projection.ContractTime());
-			deserialized.Single().TimePeriod.Should().Be(workShift.ToTimePeriod().Value);
-			deserialized.Single().ShiftCategoryId.Should().Be(workShift.ShiftCategory.Id.Value);
-			deserialized.Single().Layers.Select(l => l.ActivityId).Should().Have.SameSequenceAs(
-				workShift.Projection.Select(p => p.Payload.Id.Value));
-			deserialized.Single().Layers.Select(l => l.Period).Should().Have.SameSequenceAs(
-				workShift.Projection.Select(p => p.Period));
+			deserialized.Single().ContractTime.Should().Be(result.Single().ContractTime);
+			deserialized.Single().Layers.Count().Should().Be(result.Single().Layers.Count());
 		}
 	}
 }
