@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly IEnumerable<IDenormalizer> _externalDenormalizers;
+		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 		private Configuration _applicationConfiguration;
 		private Configuration _statisticConfiguration;
@@ -39,15 +40,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private const string _connectionStringKeyName = "connection.connection_string";
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IDenormalizer> externalDenormalizers)
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IDenormalizer> externalDenormalizers, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
 			_externalDenormalizers = externalDenormalizers;
-			UseCache = true;
+			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
-
-		public bool UseCache { get; set; }
-		public bool UseDistributedTransactionFactory { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
@@ -290,29 +288,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
-			cfg.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
-			cfg.SetProperty(Environment.ConnectionProvider, typeof (TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
-			cfg.SetProperty(Environment.DefaultSchema, "dbo");
-			cfg.SetProperty(Environment.TransactionStrategy, "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
-			cfg.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
-			cfg.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
-			cfg.AddAssembly("Teleopti.Ccc.Domain");
-			cfg.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName);
-			if (UseCache)
-			{
-				cfg.SetProperty(Environment.CacheProvider, "NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
-				cfg.SetProperty(Environment.UseSecondLevelCache, "true");
-				cfg.SetProperty(Environment.UseQueryCache, "true");
-			}
-			else
-			{
-				cfg.SetProperty(Environment.UseSecondLevelCache, "false");
-			}
-			if (UseDistributedTransactionFactory)
-			{
-				cfg.SetProperty(Environment.TransactionStrategy,
-				                typeof (AdoNetWithDistributedTransactionFactory).FullName);
-			}
+			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
 			_enversConfiguration.Configure(cfg);
 		}
 	}

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>());
+			target = new DataSourcesFactory(enversConfiguration, new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null));
 			string currDirectory = Directory.GetCurrentDirectory();
 			testFile = currDirectory + "test.hbm.xml";
 		}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
 
-			target.UseDistributedTransactionFactory = true;
+			//target.UseDistributedTransactionFactory = true;
 			IDataSource res = target.Create(nhibernateXmlConfiguration, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 
 			Assert.IsNotNull(res.Application, "Application is null, shouldn't be!");

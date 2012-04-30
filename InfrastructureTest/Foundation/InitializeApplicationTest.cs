@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -338,7 +339,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void VerifyDefaultProperty()
 		{
-			target = new InitializeApplication(new DataSourcesFactory(null, new List<IDenormalizer>()),
+			target = new InitializeApplication(new DataSourcesFactory(null, new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null)),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
 		}
 
