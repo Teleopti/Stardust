@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public bool UseCache { get; set; }
 		public bool UseDistributedTransactionFactory { get; set; }
-		public string SessionContext { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
@@ -165,7 +164,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var appCfg = new Configuration();
 			setDefaultValuesOnApplicationConf(appCfg);
-			appCfg.SetProperties(settings);
+			foreach (var item in settings)
+			{
+				appCfg.SetProperty(item.Key, item.Value);
+			}
 			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			_applicationConfiguration = appCfg;
 		}
