@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
             _lifetimeScope = lifetimeScope;
         }
 
-        public TResult Invoke(QueryDto query)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TResult Invoke(QueryDto query)
         {
             var handler = _lifetimeScope.Resolve(typeof(IHandleQuery<,>).MakeGenericType(new[] { query.GetType(), typeof(TResult) }));
             var method = handler.GetType().GetMethod("Handle");

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			_lifetimeScope = lifetimeScope;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Invoke(CommandDto command)
 		{
 			var handler = _lifetimeScope.Resolve(typeof(IHandleCommand<>).MakeGenericType(new[] { command.GetType() }));
