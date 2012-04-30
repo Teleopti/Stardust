@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		}
 
 		[Test]
-		public void ShouldGetTheAgentPortalSettings()
+		public void ShouldGetTheCurrentBusinessUnit()
 		{
 			var result = target.Handle(new GetCurrentBusinessUnitQueryDto());
 			result.First().Name.Should().Be.EqualTo(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Name);

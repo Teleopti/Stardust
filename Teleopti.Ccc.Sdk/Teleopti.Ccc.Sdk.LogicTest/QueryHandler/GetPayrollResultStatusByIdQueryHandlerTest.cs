@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		}
 
 		[Test]
-		public void ShouldGetAllPayrollExports()
+		public void ShouldGetPayrollResultById()
 		{
 			var payrollExport = new PayrollExport();
 			var payrollResult = new PayrollResult(payrollExport, null, DateTime.UtcNow);

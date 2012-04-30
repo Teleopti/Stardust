@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		}
 
 		[Test]
-		public void ShouldGetTheAgentPortalSettings()
+		public void ShouldGetAllScenariosAvailable()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.SetId(Guid.NewGuid());

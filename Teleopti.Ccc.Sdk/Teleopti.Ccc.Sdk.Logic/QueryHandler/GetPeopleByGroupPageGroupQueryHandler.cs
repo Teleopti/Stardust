@@ -40,12 +40,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var people = _personRepository.FindPeople(availableDetails.Select(d =>
-				                                                                  	{
-				                                                                  		IPerson p = new Person();
-				                                                                  		p.SetId(d.PersonId);
-				                                                                  		return p;
-				                                                                  	}));
+				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				return _personAssembler.DomainEntitiesToDtos(people).ToList();
 			}
 		}
