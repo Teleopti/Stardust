@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IDenormalizer>
-        			                       	{new ScheduleDenormalizer(busSender,saveToDenormalizationQueue), new MeetingDenormalizer(busSender,saveToDenormalizationQueue)}),
+        			                       	{new ScheduleDenormalizer(busSender,saveToDenormalizationQueue), new MeetingDenormalizer(busSender,saveToDenormalizationQueue)},
+													new DataSourceConfigurationSetter(false, false, null)),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         {
             var builder = new ContainerBuilder();
 
-        	var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+				var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			builder.RegisterModule(mbCacheModule);
         	builder.RegisterModule<RuleSetModule>();
 			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule));

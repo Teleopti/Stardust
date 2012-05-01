@@ -9,7 +9,6 @@ using log4net;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using NHibernate.Transaction;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly IEnumerable<IDenormalizer> _externalDenormalizers;
+		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 		private Configuration _applicationConfiguration;
 		private Configuration _statisticConfiguration;
@@ -39,16 +39,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private const string _connectionStringKeyName = "connection.connection_string";
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IDenormalizer> externalDenormalizers)
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IDenormalizer> externalDenormalizers, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
 			_externalDenormalizers = externalDenormalizers;
-			UseCache = true;
+			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
-
-		public bool UseCache { get; set; }
-
-		public bool UseDistributedTransactionFactory { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
@@ -163,10 +159,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void createApplicationConfiguration(IDictionary<string, string> settings)
 		{
-			var appCfg = new Configuration()
-				 .SetProperties(settings);
-			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
+			var appCfg = new Configuration();
 			setDefaultValuesOnApplicationConf(appCfg);
+			foreach (var item in settings)
+			{
+				appCfg.SetProperty(item.Key, item.Value);
+			}
+			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			_applicationConfiguration = appCfg;
 		}
 
@@ -181,9 +180,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					nhibernateConfiguration.WriteTo(xmlWriter);
 				}
 
-				var appCfg = new Configuration()
-						  .Configure(temporaryConfigFile);
+				var appCfg = new Configuration();
 				setDefaultValuesOnApplicationConf(appCfg);
+				appCfg.Configure(temporaryConfigFile);
 				_applicationConfiguration = appCfg;
 			}
 			finally
@@ -288,30 +287,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
-			string userDefinedName;
-			if (!cfg.Properties.TryGetValue(Environment.SessionFactoryName, out userDefinedName) ||
-			    string.IsNullOrEmpty(userDefinedName))
-			{
-				cfg.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
-			}
-			cfg.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
-			cfg.AddAssembly("Teleopti.Ccc.Domain");
-			cfg.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName);
-			if (UseCache)
-			{
-				cfg.SetProperty(Environment.CacheProvider, "NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
-				cfg.SetProperty(Environment.UseSecondLevelCache, "true");
-				cfg.SetProperty(Environment.UseQueryCache, "true");
-			}
-			else
-			{
-				cfg.SetProperty(Environment.UseSecondLevelCache, "false");
-			}
-			if (UseDistributedTransactionFactory)
-			{
-				cfg.SetProperty(Environment.TransactionStrategy,
-				                typeof (AdoNetWithDistributedTransactionFactory).FullName);
-			}
+			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
 			_enversConfiguration.Configure(cfg);
 		}
 	}

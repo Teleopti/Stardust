@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Main
                 messageBrokerDisabled = true;
             }
 
-			new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(),new List<IDenormalizer>()),
+				new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, "thread_static")),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Main
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
-        			                       new List<IDenormalizer> {new ScheduleDenormalizer(sendDenormalizeNotification,saveToDenormalizationQueue), new MeetingDenormalizer(sendDenormalizeNotification,saveToDenormalizationQueue)}),
+												  new List<IDenormalizer> { new ScheduleDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue), new MeetingDenormalizer(sendDenormalizeNotification, saveToDenormalizationQueue) }, new DataSourceConfigurationSetter(false, false, "thread_static")),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
