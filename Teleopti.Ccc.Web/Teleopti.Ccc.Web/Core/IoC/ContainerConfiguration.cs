@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerMbCachedComponents(ContainerBuilder builder)
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20, new FixedNumberOfLockObjects(100)));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule<RuleSetModule>();
 
