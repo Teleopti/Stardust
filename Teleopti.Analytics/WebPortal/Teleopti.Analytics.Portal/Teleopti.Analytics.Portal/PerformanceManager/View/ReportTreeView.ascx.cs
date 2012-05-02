@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Web.UI.WebControls;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
-using Teleopti.Analytics.Portal.PerformanceManager;
 using Teleopti.Analytics.Portal.PerformanceManager.ViewModel;
 
 namespace Teleopti.Analytics.Portal.PerformanceManager.View
@@ -56,8 +55,11 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.View
             }
             else
             {
-                string url = String.Format("ShowReport.aspx?reportid={0}&reportname={1}", TreeView2.SelectedValue,
-                                           TreeView2.SelectedNode.Text);
+            	string queryString = ((IMasterPage)Page.Master).ModifyQueryString(Request.QueryString);
+                string url = String.Format(CultureInfo.InvariantCulture, "ShowReport.aspx?reportid={0}&reportname={1}&{2}", 
+											TreeView2.SelectedValue,
+											TreeView2.SelectedNode.Text,
+											queryString);
                 Response.Redirect(url);
             }
         }

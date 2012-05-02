@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// </remarks>
         void CreateSchema();
 
-        bool UseDistributedTransactionFactory { get; set; }
-
         /// <summary>
         /// Tries to create the specified file.
         /// </summary>

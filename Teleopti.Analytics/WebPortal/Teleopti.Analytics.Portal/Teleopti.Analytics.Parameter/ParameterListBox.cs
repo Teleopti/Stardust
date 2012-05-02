@@ -447,7 +447,7 @@ namespace Teleopti.Analytics.Parameters
                 function callMoveOneButton(buttonId)
                 {
                     var btnMoveOnlyOne = document.getElementById(buttonId);
-                    buttonId.click();
+                    btnMoveOnlyOne.click();
                 }
                 -->
                </script>";

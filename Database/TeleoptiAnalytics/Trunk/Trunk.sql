@@ -6,3 +6,55 @@ ON [mart].[fact_schedule] ([shift_startdate_id])
 INCLUDE ([schedule_date_id],[person_id],[interval_id],[activity_starttime],[scenario_id],[business_unit_id])
 GO
 
+----------------
+--PBI 19157
+--David J
+--New hiararcy in the Cube: WindowsCredentials
+----------------
+--stage
+
+if exists(select * from sys.columns where Name = N'windows_domain' and Object_ID = Object_ID(N'stage.stg_person')) 
+begin 
+	ALTER TABLE stage.stg_person DROP COLUMN windows_domain
+end
+GO
+if exists(select * from sys.columns where Name = N'windows_username' and Object_ID = Object_ID(N'stage.stg_person')) 
+begin
+	ALTER TABLE stage.stg_person DROP COLUMN windows_username
+end
+GO
+
+ALTER TABLE stage.stg_person ADD
+	windows_domain		nvarchar(50) NULL,
+	windows_username	nvarchar(50) NULL
+
+--mart	
+--===============================
+--Use if exist since PS Tech might have delivered this part already
+--===============================
+if exists(select * from sys.columns where Name = N'windows_domain' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin 
+	ALTER TABLE mart.dim_person DROP COLUMN windows_domain
+end
+GO
+if exists(select * from sys.columns where Name = N'windows_username' and Object_ID = Object_ID(N'mart.dim_person')) 
+begin
+	ALTER TABLE mart.dim_person DROP COLUMN windows_username
+end
+GO
+--===============================
+
+ALTER TABLE mart.dim_person ADD
+	windows_domain nvarchar(50) NULL
+GO
+UPDATE mart.dim_person SET windows_domain = 'Not Defined'
+
+ALTER TABLE mart.dim_person ADD	
+    windows_username nvarchar(50) NULL
+GO
+UPDATE mart.dim_person SET windows_username = 'Not Defined'
+
+GO
+ALTER TABLE mart.dim_person ALTER COLUMN windows_domain		nvarchar(50) NOT NULL
+ALTER TABLE mart.dim_person ALTER COLUMN windows_username	nvarchar(50) NOT NULL
+GO

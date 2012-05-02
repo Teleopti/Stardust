@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(schedulingOptions);
+				Expect.Call(_originalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
                     .Return(10).Repeat.Once();
                  _rollbackService.ClearModificationCollection();
@@ -207,6 +209,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
 					.Return(schedulingOptions);
+				Expect.Call(_originalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
 					.Return(10).Repeat.Once();
 				_rollbackService.ClearModificationCollection();
@@ -324,6 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(schedulingOptions);
+            	Expect.Call(_originalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
                     .Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
@@ -404,6 +408,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(schedulingOptions);
+				Expect.Call(_originalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
                     .Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();
@@ -534,6 +539,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(schedulingOptions);
+				Expect.Call(_originalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
                     .Return(10).Repeat.Once();
                 _rollbackService.ClearModificationCollection();

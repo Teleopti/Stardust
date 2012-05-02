@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls
@@ -23,12 +24,14 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         public Office2007OutlookTimePicker()
         {
+            MinValue = TimeSpan.FromDays(0);
             MaxValue = TimeSpan.FromDays(2);
             InitializeComponent();
         }
 
         public Office2007OutlookTimePicker(IContainer container)
         {
+            MinValue = TimeSpan.FromDays(0);
             MaxValue = TimeSpan.FromDays(2);
             container.Add(this);
 
@@ -76,6 +79,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 string timeAsText;
                 if (GetTimeInformation(out timeAsText, out timeOfDay))
                     Text = timeAsText;
+                else
+                    Text = string.Empty;
             }
         }
 
@@ -93,12 +98,14 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (TimeHelper.TryParse(Text, out timeAsTimeSpan))
             {
-                if (timeAsTimeSpan < MaxValue)
+                if (timeAsTimeSpan < MinValue || timeAsTimeSpan > MaxValue)
                 {
-                    timeAsTimeSpan = TimeHelper.FitToDefaultResolution(timeAsTimeSpan, _defaultResolution);
-                    timeAsString = DateTime.MinValue.Add(timeAsTimeSpan).ToShortTimeString();
-                    return true;
+                    timeAsString = Text;
+                    return false;
                 }
+                timeAsTimeSpan = TimeHelper.FitToDefaultResolution(timeAsTimeSpan, _defaultResolution);
+                timeAsString = DateTime.MinValue.Add(timeAsTimeSpan).ToShortTimeStringWithDays();
+                return true;
             }
 
             timeAsString = Text;
@@ -121,7 +128,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 timeOfDay < maxTime;
                 timeOfDay = timeOfDay.AddMinutes(_timeIntervalInDropDown))
             {
-                timeList.Add(timeOfDay.ToShortTimeString());
+                timeList.Add(timeOfDay.ToShortTimeStringWithDays());
             }
             Items.AddRange(timeList.ToArray());
             //DataSource = timeList;
@@ -161,9 +168,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         public void SetTimeValue(TimeSpan timeAsTimeSpan)
         {
-            Text = DateTime.MinValue.Add(timeAsTimeSpan).ToShortTimeString();
+            Text = DateTime.MinValue.Add(timeAsTimeSpan).ToShortTimeStringWithDays();
         }
-
+        
         public TimeSpan MaxValue { get; set; }
+        public TimeSpan MinValue { get; set; }
     }
 }

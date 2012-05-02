@@ -126,6 +126,7 @@
     <Compile Include="Licensing\LicenseStatusRepositories.cs" />
     <Compile Include="Licensing\LicenseStatusUpdater.cs" />
     <Compile Include="Licensing\LicenseStatusXml.cs" />
+    <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="NHibernateConfiguration\AuditSetter.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContext.cs" />
+    <Compile Include="NHibernateConfiguration\IDataSourceConfigurationSetter.cs" />
     <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />

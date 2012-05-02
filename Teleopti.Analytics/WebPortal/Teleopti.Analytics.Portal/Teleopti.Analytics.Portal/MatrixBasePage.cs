@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Portal
 					if (Context.Session["USERNAME"] == null)
 					{
 						var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
-						if (sec.Mode == AuthenticationMode.Windows)
+						if (sec.Mode == AuthenticationMode.Windows && !Page.IsPostBack)
 							Response.Redirect(LoginUrl());
 					}
 				}
@@ -128,15 +128,15 @@ namespace Teleopti.Analytics.Portal
 
         private string LoginUrl()
         {
-            return string.Format("Login.aspx{0}", GetQueryString());
+            return string.Format("Login.aspx{0}", QueryStringWithPrefix);
         }
 
-        private string GetQueryString()
-        {
-            return string.Concat("?", Request.QueryString.ToString());
-        }
+    	protected string QueryStringWithPrefix
+    	{
+    		get { return string.Concat("?", Request.QueryString.ToString()); }
+    	}
 
-        protected string LoggedOnUserInformation
+    	protected string LoggedOnUserInformation
         { get { return TheUser.PersonName + " (" + TheUser.UserName + ")"; } }
 
         protected static string ConnectionString
@@ -177,6 +177,9 @@ namespace Teleopti.Analytics.Portal
 
 		protected bool IsBrowseTargetPerformanceManager { get; private set; }
 
-		protected static string PerformanceManagerUrl { get { return "~/PmContainer.aspx"; } }
+    	protected string PerformanceManagerUrl
+    	{
+			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", QueryStringWithPrefix); }
+    	}
     }
 }

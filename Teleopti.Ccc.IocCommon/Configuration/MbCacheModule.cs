@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class MbCacheModule : Module
 	{
-		public MbCacheModule(ICache cache)
+		public MbCacheModule(ICache cache, ILockObjectGenerator lockObjectGenerator)
 		{
 			if (cache == null)
 				throw new InvalidOperationException();
-			Builder = new CacheBuilder(new ProxyFactory(), cache, new TeleoptiCacheKey());
+			Builder = new CacheBuilder(new ProxyFactory(), cache, new TeleoptiCacheKey(), lockObjectGenerator);
 		}
 
 		public CacheBuilder Builder { get; private set; }

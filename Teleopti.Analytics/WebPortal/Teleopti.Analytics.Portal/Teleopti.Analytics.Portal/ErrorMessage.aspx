@@ -7,7 +7,7 @@
     <title>TELEOPTI CCC</title>
     <link href="App_Themes/Theme1/Styles.css" rel="stylesheet" type="text/css" />
 </head>
-<body style="filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=  '#CADAF9' , EndColorStr= '#fcfcfc' );" >
+<body style="filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CADAF9', EndColorStr= '#fcfcfc');">
     <form id="form1" runat="server">
     <table cellspacing="0" cellpadding="0" width="100%" border="0">
 			<tr id="topmenu">

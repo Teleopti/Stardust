@@ -4819,7 +4819,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		    IGroupPage selectedGroupPage = null;
             // ***** temporary cope
-            if(options.OptimizationMethod == OptimizationMethod.BackToLegalState)
+            if(options.OptimizationMethod == OptimizationMethod.BackToLegalState || options.OptimizationMethod == OptimizationMethod.IntradayActivityOptimization)
             {
                 selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
             }

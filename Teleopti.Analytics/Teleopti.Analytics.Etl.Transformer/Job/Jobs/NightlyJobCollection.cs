@@ -5,8 +5,8 @@ using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public class NightlyJobCollection : List<IJobStep>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public class NightlyJobCollection : List<IJobStep>
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public NightlyJobCollection(IJobParameters jobParameters)
@@ -83,12 +83,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactScheduleJobStep(jobParameters));
             Add(new FactScheduleDayCountJobStep(jobParameters));
             Add(new FactSchedulePreferenceJobStep(jobParameters));
-            //Add(new FactScheduleContractJobStep(jobParameters));
             Add(new FactScheduleForecastSkillJobStep(jobParameters));
             Add(new FactQueueJobStep(jobParameters));                   // BU independent
-            Add(new FactForecastWorkloadJobStep(jobParameters));
             Add(new FactAgentJobStep(jobParameters));                   // BU independent
+            Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
             Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
+            Add(new FactForecastWorkloadJobStep(jobParameters));
             Add(new FactScheduleDeviationJobStep(jobParameters));
             Add(new FactKpiTargetTeamJobStep(jobParameters));
             Add(new FactRequestJobStep(jobParameters));

@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 	{
 		IEnumerable<PersonDto> SelectedPeople { get; }
 		ICollection<TeamDto> SelectedTeams { get; }
-		void Initialize();
+		void Initialize(bool filterEnabled);
 	}
 }

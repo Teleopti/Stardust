@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
             _rollbackService.ClearModificationCollection();
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             
             resourceCalculateMovedDays(changed);
 
-            if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Free)) 
+            if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;
 
             // Step: Check that there are no white spots

@@ -193,6 +193,8 @@
     <Compile Include="Payroll\PayrollFormatHandlerTest.cs" />
     <Compile Include="Payroll\PayrollResultServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Restrictions\IsWorkflowControlSetNullSpecificationTest.cs" />
+    <Compile Include="Restrictions\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculatorTest.cs" />
     <Compile Include="Restrictions\IsEditablePredicateTest.cs" />
     <Compile Include="Restrictions\MinMaxWorkTimeCheckerTest.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Restrictions\PlanningTimeBankExtractorTest.cs" />
     <Compile Include="Restrictions\PreferenceNightRestCheckerTest.cs" />
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
+    <Compile Include="Restrictions\ShiftTradeSkillSpecificationTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
   </ItemGroup>
   <ItemGroup>

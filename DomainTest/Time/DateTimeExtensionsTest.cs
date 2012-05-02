@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Time;
 
@@ -58,5 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(DateTimeKind.Local, _baseDateTime.ToInterval(1).Kind);
         }
 
+        [Test, SetCulture("sv-SE")]
+        public void ShouldShowShortDateTimeStringWithDays()
+        {
+            var dateString = DateTime.MinValue.Add(TimeSpan.FromHours(25)).ToShortTimeStringWithDays();
+            Assert.AreEqual("01:00+1", dateString);
+        }
     }
 }

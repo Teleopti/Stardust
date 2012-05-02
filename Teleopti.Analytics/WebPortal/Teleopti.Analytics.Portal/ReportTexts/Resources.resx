@@ -1177,4 +1177,16 @@ Schedule</value>
     <value>Request Period</value>
     <comment>Request Period</comment>
   </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Redirect Now</value>
+    <comment>Web page button text for page redirection</comment>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Session Expired</value>
+    <comment>Title on a web page where session expired</comment>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Your session has expired due to an extended period of inactivity. You will soon be redirected to the log on page again.</value>
+    <comment>Info text on a web page where session expired</comment>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 		public ICollection<TeamDto> SelectedTeams { get; private set; }
 
-		public void Initialize()
+		public void Initialize(bool filterEnabled)
 		{
 			var teamDtos = new List<TeamDto>();
 			var persons = new List<PersonDto>();
@@ -33,17 +34,26 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 				if (groupDetailModel == _selectedTeam) continue;
 
 				teamDtos.Add(new TeamDto { Id = groupDetailModel.Id });
-				persons.AddRange(SdkServiceHelper.OrganizationService.GetPersonsByQuery(new GetPeopleByGroupPageGroupQueryDto
-				                                                                        	{
-				                                                                        		GroupPageGroupId = groupDetailModel.Id,
-				                                                                        		QueryDate =
-				                                                                        			new DateOnlyDto
-				                                                                        				{
-				                                                                        					DateTime = _selectedDate,
-				                                                                        					DateTimeSpecified = true
-				                                                                        				}
-				                                                                        	}));
-			}
+                if (!filterEnabled)
+                    persons.AddRange(SdkServiceHelper.OrganizationService.GetPersonsByQuery(new GetPeopleByGroupPageGroupQueryDto
+                                                                                                {
+                                                                                                    GroupPageGroupId = groupDetailModel.Id,
+                                                                                                    QueryDate =
+                                                                                                        new DateOnlyDto
+                                                                                                            {
+                                                                                                                DateTime = _selectedDate,
+                                                                                                                DateTimeSpecified = true
+                                                                                                            }
+                                                                                                }));
+                else
+                    persons.AddRange(SdkServiceHelper.OrganizationService.GetPeopleForShiftTradeByQuery(
+                        new GetPeopleForShiftTradeByGroupPageGroupQueryDto
+                            {
+                                GroupPageGroupId = groupDetailModel.Id,
+                                PersonId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id,
+                                QueryDate = new DateOnlyDto {DateTime = _selectedDate, DateTimeSpecified = true}
+                            }));
+            }
 
 			SelectedPeople = persons;
 			SelectedTeams = teamDtos;

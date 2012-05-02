@@ -10,10 +10,6 @@ namespace Teleopti.Interfaces.Domain
     public enum ScheduleEmploymentType
     {
         /// <summary>
-        /// Schedule both
-        /// </summary>
-        Both,
-        /// <summary>
         /// Schedule only Employed on fixed basis
         /// </summary>
         FixedStaff,
@@ -331,5 +327,13 @@ namespace Teleopti.Interfaces.Domain
 		/// The resource calculate frequency.
 		/// </value>
 		int ResourceCalculateFrequency { get; set; }
+
+		/// <summary>
+		/// Gets or sets the use custom target time.
+		/// </summary>
+		/// <value>
+		/// The use custom target time.
+		/// </value>
+		TimeSpan? UseCustomTargetTime { get; set; }
     }
 }

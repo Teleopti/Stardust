@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRemoveQueue = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripSkills = new System.Windows.Forms.ToolStrip();
             this.toolStripLabelSkillActions = new System.Windows.Forms.ToolStripLabel();
             this.toolStripMenuItemActionSkillNewSkill = new System.Windows.Forms.ToolStripMenuItem();
@@ -452,7 +451,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.BackColor = System.Drawing.Color.White;
-            this.splitContainer1.Panel2.Controls.Add(this.toolStrip2);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripSkills);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripWorkload);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripQueues);
@@ -463,14 +461,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.splitContainer1.SplitterDistance = 370;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 4;
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.Location = new System.Drawing.Point(0, 237);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(195, 25);
-            this.toolStrip2.TabIndex = 7;
-            this.toolStrip2.Text = "toolStrip2";
             // 
             // toolStripSkills
             // 
@@ -1071,7 +1061,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemExport;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemJobHistory;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSkillsImportForecast;
-        private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemActionSkillImportForecast;
     }
 }

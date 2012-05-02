@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDictionary<DateOnly, IScheduleDay> _oldPeriodDaysState;
         private int _originalNumberOfDaysOff;
         private int _originalNumberOfWorkShifts;
+    	private TimeSpan? _originalWorkTime;
         public bool StillAlive { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -101,5 +102,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return false;
         }
+
+		public TimeSpan OriginalWorkTime()
+		{
+			if (!_originalWorkTime.HasValue)
+			{
+				_originalWorkTime = TimeSpan.Zero;
+				foreach (IScheduleDayPro scheduleDayPro in _matrix.EffectivePeriodDays)
+				{
+					IScheduleDay oldDay = _oldPeriodDaysState[scheduleDayPro.Day];
+					_originalWorkTime = _originalWorkTime.Value.Add(oldDay.ProjectionService().CreateProjection().ContractTime());
+				}
+			}
+
+			return _originalWorkTime.Value;
+		}
     }
 }

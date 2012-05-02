@@ -10,8 +10,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class InitializeModule : Module
 	{
+		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
+
+		public InitializeModule(IDataSourceConfigurationSetter dataSourceConfigurationSetter)
+		{
+			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterInstance(MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));

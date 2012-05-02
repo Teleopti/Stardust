@@ -164,12 +164,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Restrictions\IIsEditablePredicate.cs" />
     <Compile Include="Restrictions\IsEditablePredicate.cs" />
+    <Compile Include="Restrictions\IsWorkflowControlSetNullSpecification.cs" />
     <Compile Include="Restrictions\MinMaxWorkTimeChecker.cs" />
     <Compile Include="Restrictions\NightlyRestFromPersonOnDayExtractor.cs" />
+    <Compile Include="Restrictions\OpenShiftTradePeriodSpecification.cs" />
     <Compile Include="Restrictions\PlanningTimeBankExtractor.cs" />
     <Compile Include="Restrictions\PreferenceNightRestChecker.cs" />
     <Compile Include="Restrictions\RestrictionsValidator.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculator.cs" />
+    <Compile Include="Restrictions\ShiftTradeAvailableCheckItem.cs" />
+    <Compile Include="Restrictions\ShiftTradeSkillSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -112,6 +113,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                 .Return(_schedulingOptions);
+			Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+			Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+			Expect.Call(() => _schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime);
 			Expect.Call(_schedulingOptions.ConsiderShortBreaks).Return(false).Repeat.AtLeastOnce();
             Expect.Call(_optimizationOverLimitDecider.OverLimit())
                  .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
@@ -130,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
                 .Return(_fullWeeksPeriodDictionary).Repeat.Any();
-            Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
             Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
             Expect.Call(_mostOverStaffDay.DaySchedulePart())
                 .Return(_mostOverStaffSchedulePart).Repeat.AtLeastOnce();
@@ -211,6 +214,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                 .Return(_schedulingOptions);
+        	Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+			Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
             Expect.Call(_optimizationOverLimitDecider.OverLimit())
                 .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
             Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
@@ -228,6 +233,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+				Expect.Call(() => _schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime);
 				Expect.Call(_schedulingOptions.ConsiderShortBreaks).Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
@@ -247,7 +255,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary)
                     .Return(_fullWeeksPeriodDictionary).Repeat.Any();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
-                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostUnderStaffDate))
                     .Return(_mostUnderStaffDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostOverStaffDate))
@@ -318,6 +325,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+				Expect.Call(() => _schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime);
             	Expect.Call(_schedulingOptions.ConsiderShortBreaks).Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
@@ -334,7 +344,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                     .Return(new List<DateOnly> { _mostUnderStaffDate, _mostOverStaffDate });
                 Expect.Call(_scheduleMatrix.FullWeeksPeriodDictionary).Return(_fullWeeksPeriodDictionary).Repeat.Any();
-                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostUnderStaffDate)).Return(_mostUnderStaffDay).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_mostOverStaffDate)).Return(_mostOverStaffDay).Repeat.AtLeastOnce();
@@ -403,6 +412,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+				Expect.Call(() => _schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime);
 				Expect.Call(_schedulingOptions.ConsiderShortBreaks).Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit())
                     .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
@@ -450,7 +462,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_effectiveRestriction);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_mostOverStaffSchedulePart, _schedulingOptions))
                         .Return(_effectiveRestriction);
-                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short).Repeat.Once();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long).Repeat.Once();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_mostUnderStaffSchedulePart, _schedulingOptions, false, _effectiveRestriction, _resourceCalculateDelayer)).IgnoreArguments()
                     .Return(true);
@@ -485,6 +496,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
 				Expect.Call(_schedulingOptions.ConsiderShortBreaks).Return(false);
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).IgnoreArguments()
                      .Return(new List<DateOnly>()).Repeat.AtLeastOnce();
