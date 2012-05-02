@@ -197,6 +197,9 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 				},
 				events: {
 					show: function (event, api) {
+						$('#Schedule-addRequest-section input, #Schedule-addRequest-section textarea, #Schedule-addRequest-section select')
+							.not(':button, :submit, :reset')
+							.reset();
 						$('#Schedule-addRequest-fromDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
 						$('#Schedule-addRequest-toDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
 					}

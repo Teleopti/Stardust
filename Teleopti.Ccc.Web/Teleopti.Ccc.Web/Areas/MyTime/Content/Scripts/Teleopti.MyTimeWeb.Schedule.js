@@ -1,10 +1,9 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -80,7 +79,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
 				_displayTextRequest(formData.Period.StartDate);
-				Teleopti.MyTimeWeb.Common.CloseEditSection('#Schedule-addRequest-section');
+				$('#Schedule-addRequest-section').parents(".qtip").hide();
 				_clearFormData();
 				_clearValidationError();
 			},
@@ -128,7 +127,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		var date = Date.parse(inputDate);
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
 		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-//		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
+		//		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
 		var title = textRequestCount.attr('title');
 		if (title == undefined)
 			return;
