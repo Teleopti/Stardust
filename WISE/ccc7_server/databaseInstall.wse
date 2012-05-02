@@ -376,15 +376,6 @@ item: If/While Statement
   Variable=UPGRADE
   Value=NEW
 end
-item: Remark
-  Text=Add Admin User to dbo.person
-end
-item: Execute Program
-  Pathname=CccAppConfig.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%" -BU"%BU%"
-  Default Directory=%DIR2%
-  Flags=00000010
-end
 item: If/While Statement
   Variable=CONVERT
   Value=NO
@@ -394,7 +385,7 @@ item: Remark
 end
 item: Execute Program
   Pathname=CccAppConfig.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -BU"%BU%"
+  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%" -BU"%BU%"
   Default Directory=%DIR2%
   Flags=00000010
 end
