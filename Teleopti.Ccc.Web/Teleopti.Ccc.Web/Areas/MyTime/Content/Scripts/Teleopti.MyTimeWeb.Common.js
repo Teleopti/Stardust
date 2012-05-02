@@ -178,6 +178,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 			var addTextRequest = $('.add-text-request');
 			$('<div/>').qtip({
+
 				content: {
 					text: $('#Schedule-addRequest-section'),
 					title: {
@@ -194,6 +195,13 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 						x: 15
 					}
 				},
+				events: {
+					show: function (event, api) {
+						$('#Schedule-addRequest-fromDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
+						$('#Schedule-addRequest-toDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
+					}
+				},
+
 				show: {
 					target: addTextRequest,
 					event: 'click'

@@ -16,7 +16,7 @@
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		@foreach (var day in Model.Days)
 		{
-			<ul class="weekview-day" data-mytime-date="@day.FixedDate" data-mytime-state="@Html.Schedule().FormatState(day.State)">
+			<ul class="weekview-day" data-mytime-date="@day.FixedDate" data-request-default-date="@day.Date" data-mytime-state="@Html.Schedule().FormatState(day.State)">
 				<li>
 					<div>@day.Header.Title</div>
 				</li>
