@@ -59,20 +59,6 @@ SET WEBDEV=Common Files\microsoft shared\DevServer\10.0\WebDev.WebServer.EXE
 ::Used for check: Did we copy a new file?
 SET FINDTHIS=0 File(s) copied
 
-::Set path to Visual Studio Team Foundation
-:VSPATH
-IF %PROCESSOR_ARCHITECTURE% == AMD64 (
-ECHO OS is 64bit
-SET Cassini="%ProgramFiles(x86)%\%WEBDEV%"
-SET TEAMFOUNDATION="%ProgramFiles(x86)%\%IDE%\tf.exe"
-SET DEVENV="%ProgramFiles(x86)%\%IDE%\devenv.exe"
-) ELSE (
-ECHO OS is 32bit
-SET Cassini="%ProgramFiles%\%WEBDEV%"
-SET TEAMFOUNDATION="%ProgramFiles%\%IDE%\tf.exe"
-SET DEVENV="%ProgramFiles%\%IDE%\devenv.exe"
-)
-
 ECHO.
 
 goto MakeCustomPath
@@ -161,13 +147,6 @@ SET /P Customer=Restore which fileset (e.g. Demo):
 SET AppRar=%Customer%App.rar
 SET StatRar=%Customer%Stat.rar
 
-::Apply trunk?
-ECHO.
-SET TRUNK=
-SET /P IFTRUNK=Would like to deploy the Trunk on top of the Release code? [Y/N]
-IF "%IFTRUNK%"=="Y" SET TRUNK=-T
-IF "%IFTRUNK%"=="y" SET TRUNK=-T
-
 ::Load statistics?
 ECHO.
 SET LOADSTAT=0
@@ -252,61 +231,36 @@ ECHO Unrar file: "%RarFolder%\%StatRar%" ...
 ECHO Un-rar. Done!
 ECHO ------
 ECHO.
+
 :SkipStat
-
-::Get latest Database from deployment share
-ECHO.
-ECHO ------
-ECHO Getting latest DB-stuff ...
-
-%TEAMFOUNDATION% get $/raptorScrum/%BRANCH%/Database /all /recursive > NUL
-ECHO Getting latest DB-stuff. Done!
-ECHO ------
-ECHO.
-
 ::Restore Customer databases
 ECHO.
 ECHO ------
 ECHO Restoring baselines databases from backup. This will take a few minutes...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\tsql\Restore.sql" -v DATAFOLDER="%DataFolder%" -v RARFOLDER="%RarFolder%" -v CUSTOMER=%CUSTOMER% -v LOADSTAT=%LOADSTAT% -v BRANCH=%BRANCH%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=11
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=11 & GOTO :error
 
 ECHO Restoring baselines. Done!
 ECHO ------
 ECHO.
 
-::Check if stat Databases exists
-::If not, create via DBManager without trunk
+::Check if stat Databases exists, in that case leave as is
+::else, create via DBManager
 ECHO.
 ECHO ------
 ECHO Upgrade databases ...
-SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiAnalytics' OR name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
-findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
-if %errorlevel% EQU 0 (
-ECHO %Branch%_%Customer%_TeleoptiAnalytics exists.
-) ELSE (
-ECHO Database %Branch%_%Customer%_TeleoptiAnalytics does not exist. Creating empty database
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics -C -L%SQLLogin%:%SQLPwd%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=14
-GOTO :error
-)
-)
 
+SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiAnalytics'" -h-1 > "%temp%\FindDB.txt"
+findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
+if %errorlevel% NEQ 0 SET /A CreateAnalytics=1
+if %CreateAnalytics% EQU 1 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics -C -L%SQLLogin%:%SQLPwd% %TRUNK%
+if %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
+
+SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiCCCAgg" "%temp%\FindDB.txt"
-if %errorlevel% EQU 0 (
-ECHO %Branch%_%Customer%_TeleoptiCCCAgg exists.
-) ELSE (
-ECHO Database %Branch%_%Customer%_TeleoptiCCCAgg does not exist. Creating empty database
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg -C -L%SQLLogin%:%SQLPwd%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=15
-GOTO :error
-)
-)
+if %errorlevel% NEQ 0 SET /A CreateAgg=1
+if %CreateAgg% EQU 1 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg -C -L%SQLLogin%:%SQLPwd% %TRUNK%
+if %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
 
 ::Add Cross DB-view targets
 ECHO Adding Crossdatabases
@@ -314,91 +268,59 @@ ECHO Adding Crossdatabases
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE mart.sys_crossdatabaseview SET View_Definition = REPLACE(View_Definition,'FROM $$$target$$$.dbo','FROM [$$$target$$$].dbo')"
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
 
-::Upgrade Raptor DB to latest version (WITH  Trunk if TRUNK is True)
+::Upgrade Raptor DB to latest version
 CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCC7 -E -OTeleoptiCCC7 %TRUNK%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=3
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 CD "%ROOTDIR%"
 
 ::Build Teleopti.Support.Security.exe
 ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
 %MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=12
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO Encrypting passwords ...
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -EE
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=10
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
 ECHO Changing to Date Only in Forecasts ...
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -FM -EE
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=9
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=9 & GOTO :error
 
 ECHO Changing FirstDayInWeek on Person ...
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%Branch%_%Customer%_TeleoptiCCC7 -PU -EE
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=8
-GOTO :error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error)
 
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=1
-GOTO :error
-)
+if %errorlevel% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::Create views for all Cross DBs
 ECHO Adding views for Crossdatabases
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=5
-GOTO :Error
-)
+if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
 
-::Upgrade Stat+Mart databases to latest version (WITH  Trunk if TRUNK is True)
+::Upgrade Stat+Mart databases to latest version
 CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=2
-GOTO :Error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=4
-GOTO :Error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
+
 ECHO Upgrade databases. Done!
 ECHO ------
 ECHO.
 
 ::Update MsgBroker settings
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=17
-GOTO :Error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
 
 :Godis
 ::Add license (only if Demoreg)
 IF "%Customer%"=="%Demoreg%" (
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiCCC7 -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=13
-GOTO :Error
-)
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 )
 
 ::Build the Support Tool
