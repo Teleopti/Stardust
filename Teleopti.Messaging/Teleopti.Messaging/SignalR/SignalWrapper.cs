@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using SignalR.Client._20.Hubs;
 using SignalR.Client._20.Transports;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.Exceptions;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -38,7 +39,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (!_hubConnection.IsActive)
 				{
-					_hubConnection.Start();
+					startHubConnection();
 				}
 			}
 		}
@@ -48,8 +49,21 @@ namespace Teleopti.Messaging.SignalR
 			var subscription = _hubProxy.Subscribe(EventName);
 			subscription.Data += subscription_Data;
 
-			_hubConnection.Start();
+			startHubConnection();
 			_hubProxy.Subscribe(EventName);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "SignalR")]
+		private void startHubConnection()
+		{
+			try
+			{
+				_hubConnection.Start();
+			}
+			catch (InvalidOperationException exception)
+			{
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.",exception);
+			}
 		}
 
 		private void subscription_Data(object[] obj)
