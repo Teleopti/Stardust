@@ -21,20 +21,25 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
         private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    	private readonly IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> _availableForShiftTradeSpecifications;
 
-        public GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		public GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
             IAssembler<IPerson, PersonDto> personAssembler,
             IGroupingReadOnlyRepository groupingReadOnlyRepository,
             IPersonRepository personRepository,
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+			IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> availableForShiftTradeSpecifications)
         {
             _personAssembler = personAssembler;
             _groupingReadOnlyRepository = groupingReadOnlyRepository;
             _personRepository = personRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
+        	_availableForShiftTradeSpecifications = availableForShiftTradeSpecifications;
         }
 
-        public ICollection<PersonDto> Handle(GetPeopleForShiftTradeByGroupPageGroupQueryDto query)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ICollection<PersonDto> Handle(GetPeopleForShiftTradeByGroupPageGroupQueryDto query)
         {
             var queryDate = new DateOnly(query.QueryDate.DateTime);
             var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
@@ -47,26 +52,15 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var personFrom = _personRepository.Get(query.PersonId);
-                var people = _personRepository.FindPeople(availableDetails.Select(d =>
-                                                                                      {
-                                                                                          IPerson p = new Person();
-                                                                                          p.SetId(d.PersonId);
-                                                                                          return p;
-                                                                                      }));
+                var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
                 people.ForEach(p => { if (isAvailableForShiftTrade(new ShiftTradeAvailableCheckItem{DateOnly = queryDate,PersonFrom = personFrom,PersonTo = p})) peopleForShiftTrade.Add(p); });
                 return _personAssembler.DomainEntitiesToDtos(peopleForShiftTrade).ToList();
             }
         }
 
-        private static bool isAvailableForShiftTrade(IShiftTradeAvailableCheckItem checkItem)
+        private bool isAvailableForShiftTrade(IShiftTradeAvailableCheckItem checkItem)
         {
-            var specifications = new List<ISpecification<IShiftTradeAvailableCheckItem>>
-                                     {
-                                         new IsWorkflowControlSetNullSpecification(),
-                                         new OpenShiftTradePeriodSpecification(),
-                                         new ShiftTradeSkillSpecification()
-                                     };
-            return specifications.All(s => s.IsSatisfiedBy(checkItem));
+            return _availableForShiftTradeSpecifications.All(s => s.IsSatisfiedBy(checkItem));
         }
     }
 }

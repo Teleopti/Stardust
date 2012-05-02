@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			target = new GetValidatedSchedulePartsForStudentAvailabilityQueryHandler(unitOfWorkFactory, shiftCategoryRepository, activityRepository, personRepository, scheduleRepository, scenarioProvider, preferenceDayAssembler, studentAvailabilityDayAssembler, ruleSetProjectionService);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldGetValidatedSchedulePartsForStudentAvailability()
 		{
 			var date = new DateOnly(2012, 4, 30);
