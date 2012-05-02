@@ -234,6 +234,7 @@
     <Compile Include="Utils\HelpLinkBuilder.cs" />
     <Compile Include="Utils\ImpersonatedUser.cs" />
     <Compile Include="Utils\Login.cs" />
+    <Compile Include="Utils\StateHolder.cs" />
     <Compile Include="Utils\TextLoader.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
