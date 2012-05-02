@@ -60,10 +60,19 @@ namespace Teleopti.Ccc.DomainTest.Helper
             target = new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(10, 0, 0));
 
             Assert.AreEqual("10:00", target.EndTimeString);
-            Assert.AreEqual("05:00", target.StartTimeString);
+            Assert.AreEqual("5:00", target.StartTimeString);
         }
 
-        [Test]
+		[Test, SetCulture("en-US")]
+		public void ShouldHaveCorrectStringRepresentationInAmericanCulture()
+		{
+			target = new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(9, 0, 0));
+
+			Assert.AreEqual("9:00", target.EndTimeString);
+			Assert.AreEqual("5:00", target.StartTimeString);
+		}
+
+		[Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartToBig()
         {

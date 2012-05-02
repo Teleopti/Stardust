@@ -27,6 +27,7 @@ Scenario: Feedback for a day with absence preference
 
 Scenario: Feedback for a day with shift category preference
 	Given I am an agent
+	And I am american
 	And I have a shift bag with two categories with shift from 8 to 16 and from 12 to 19
 	And I have preference for the first category today
 	When I view preferences
