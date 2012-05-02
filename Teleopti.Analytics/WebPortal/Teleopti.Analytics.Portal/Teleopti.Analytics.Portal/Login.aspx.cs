@@ -12,13 +12,8 @@ namespace Teleopti.Analytics.Portal
 {
 	public partial class Login : System.Web.UI.Page
 	{
-		private bool _forceFormsLogin;
-
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (!string.IsNullOrEmpty(Request.QueryString["FORCEFORMSLOGIN"]) && (Request.QueryString["FORCEFORMSLOGIN"] == "true"))
-				_forceFormsLogin = true;
-
 			Login1.Authenticate += Login1_Authenticate;
 			Login1.TitleText = Resources.LogInTitle;
 			Login1.UserNameLabelText = Resources.LogInName;
@@ -35,7 +30,7 @@ namespace Teleopti.Analytics.Portal
 			if (!string.IsNullOrEmpty(Request.ServerVariables["LOGON_USER"]))
 			{
 				// In IIS NTLM authentication is set
-				if (mode == AuthenticationMode.Windows && !_forceFormsLogin)
+				if (mode == AuthenticationMode.Windows && !StateHolder.DoForceFormsLogOn)
 				{
 					// Windows authentication in web.config AND we get a flag 
 					// telling that we should not force a forms authentication.
@@ -75,9 +70,9 @@ namespace Teleopti.Analytics.Portal
 
 			if (e.Authenticated)
 			{
-				Context.Session["USER"] = null;
+				StateHolder.UserObject = null;
 				FormsAuthentication.SetAuthCookie(Login1.UserName, false);
-				Context.Session["USERNAME"] = Login1.UserName;
+				StateHolder.UserName = Login1.UserName;
 				if (Request.QueryString.Get("ReturnUrl") != null)
 				{
 					FormsAuthentication.RedirectFromLoginPage(Login1.UserName, false);

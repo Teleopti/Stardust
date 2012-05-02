@@ -145,15 +145,12 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
 
         void ActionBarView1_DeleteModeChanged(object sender, EventArgs e)
         {
-            if (Session["DeleteMode"] != null)
+            if (StateHolder.IsPmDeleteMode)
             {
-                if ((bool)Session["DeleteMode"])
-                {
-                    ReportTreeView1.SetDeleteMode(true);
-                    ActionBarView1.NewReportEnabled = false;
-                    ContentPlaceHolder3.Controls.Clear();
-                    return;
-                }
+                ReportTreeView1.SetDeleteMode(true);
+                ActionBarView1.NewReportEnabled = false;
+                ContentPlaceHolder3.Controls.Clear();
+                return;
             }
 
             ReportTreeView1.SetDeleteMode(false);
