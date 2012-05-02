@@ -10,6 +10,7 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -385,18 +386,18 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldResolveRuleSetProjection()
+		public void ShouldResolveRuleSetProjectionService()
 		{
 			var result = requestContainer.Resolve<IRuleSetProjectionService>();
 			result.Should().Not.Be.Null();
 		}
 
 		[Test]
-		public void ShouldResolveRuleSetProjectionServiceForMultiSessionCaching()
+		public void ShouldCacheRuleSetProjectionServiceResult()
 		{
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
 			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
-				.Should().Be.EqualTo<RuleSetProjectionServiceForMultiSessionCaching>();
+				.Should().Be.EqualTo<RuleSetProjectionService>();
 		}
 	}
 }

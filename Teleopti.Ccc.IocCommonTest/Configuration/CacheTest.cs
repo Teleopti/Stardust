@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using MbCache.Configuration;
 using NUnit.Framework;
 using Teleopti.Ccc.IocCommon.Configuration;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.IocCommon.Configuration.MbCacheModule"), Test]
         public void CacheProviderMustBeSet()
         {
-			Assert.Throws<InvalidOperationException>(() => new MbCacheModule(null));
+			Assert.Throws<InvalidOperationException>(() => new MbCacheModule(null, new FixedNumberOfLockObjects(10)));
         }
     }
 }

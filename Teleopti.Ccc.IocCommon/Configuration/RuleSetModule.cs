@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCreatorService>()
 				.As<IShiftCreatorService>()
 				.SingleInstance();
+			builder.RegisterType<RuleSetProjectionEntityService>()
+				.As<IRuleSetProjectionEntityService>()
+				.InstancePerLifetimeScope();
 			builder.RegisterType<RuleSetProjectionService>()
 				.As<IRuleSetProjectionService>()
 				.InstancePerLifetimeScope();

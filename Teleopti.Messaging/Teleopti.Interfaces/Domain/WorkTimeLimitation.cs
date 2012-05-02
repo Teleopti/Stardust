@@ -281,7 +281,7 @@ namespace Teleopti.Interfaces.Domain
             string ret = "";
             if (value.HasValue)
             {
-				ret = TimeHelper.TimeOfDayFromTimeSpan((TimeSpan)value, CultureInfo.CurrentCulture);
+				ret = TimeHelper.GetLongHourMinuteTimeString(value.Value, CultureInfo.CurrentCulture);
             }
             return ret;
         }

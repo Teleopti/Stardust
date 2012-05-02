@@ -144,6 +144,7 @@
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRevision.cs" />
+    <Compile Include="Domain\IRuleSetProjectionService.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
     <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
@@ -255,7 +256,7 @@
     <Compile Include="Domain\IBlockFinderResult.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
-    <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Domain\IScheduleMatrixSchedulePeriodContainer.cs" />
     <Compile Include="Domain\ISchedulePartExtractor.cs" />

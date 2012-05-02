@@ -21,18 +21,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.Register(c =>
 			                 c.Resolve<IMbCacheFactory>()
-			                 	.Create<IRuleSetProjectionService>(c.Resolve<IShiftCreatorService>())
+			                 	.Create<IRuleSetProjectionEntityService>(c.Resolve<IShiftCreatorService>())
 				)
 				.OnRelease(s => ((ICachingComponent) s).Invalidate())
-				.As<IRuleSetProjectionService>()
+				.As<IRuleSetProjectionEntityService>()
 				.InstancePerLifetimeScope()
 				;
 
 			_cacheBuilder
-				.For<RuleSetProjectionService>()
+				.For<RuleSetProjectionEntityService>()
 				.CacheMethod(m => m.ProjectionCollection(null))
 				.PerInstance()
-				.As<IRuleSetProjectionService>()
+				.As<IRuleSetProjectionEntityService>()
 				;
 
 		}

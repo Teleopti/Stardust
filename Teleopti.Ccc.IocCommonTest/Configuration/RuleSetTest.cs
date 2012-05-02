@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void VerifyProjectionServiceIsCached()
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				var wsRs = createRuleset(true);
 
-				var projSvc = container.Resolve<IRuleSetProjectionService>();
-				var projSvc2 = container.Resolve<IRuleSetProjectionService>();
+				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
+				var projSvc2 = container.Resolve<IRuleSetProjectionEntityService>();
 
 				Assert.AreSame(projSvc.ProjectionCollection(wsRs), projSvc2.ProjectionCollection(wsRs));
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ProjectionServiceIsCachedPerScope()
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
@@ -52,15 +52,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			using (var container = containerBuilder.Build())
 			{
-				IRuleSetProjectionService projSvc;
-				IRuleSetProjectionService projSvc2;
+				IRuleSetProjectionEntityService projSvc;
+				IRuleSetProjectionEntityService projSvc2;
 				using (var inner1 = container.BeginLifetimeScope())
 				{
-					projSvc = inner1.Resolve<IRuleSetProjectionService>();
+					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
 				}
 				using (var inner2 = container.BeginLifetimeScope())
 				{
-					projSvc2 = inner2.Resolve<IRuleSetProjectionService>();
+					projSvc2 = inner2.Resolve<IRuleSetProjectionEntityService>();
 				}
 
 				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc2.ProjectionCollection(wsRs));
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
@@ -79,10 +79,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = containerBuilder.Build())
 			{
 				IEnumerable<IWorkShiftVisualLayerInfo> proj;
-				IRuleSetProjectionService projSvc;
+				IRuleSetProjectionEntityService projSvc;
 				using (var inner1 = container.BeginLifetimeScope())
 				{
-					projSvc = inner1.Resolve<IRuleSetProjectionService>();
+					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
 					proj = projSvc.ProjectionCollection(wsRs);
 
 				}
@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void VerifyProjectionServiceIsNotCached()
 		{
-			containerBuilder.RegisterModule(new MbCacheModule(new AspNetCache(20)));
+			containerBuilder.RegisterModule(new MbCacheModule(new AspNetCache(20), null));
 			containerBuilder.RegisterModule(new RuleSetModule());
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
-				var projSvc = container.Resolve<IRuleSetProjectionService>();
+				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
 
 				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc.ProjectionCollection(wsRs));
 			}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldNotCacheRuleSetWithNoId()
 		{
-			var mbCacheModule = new MbCacheModule(new AspNetCache(20));
+			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				using (var inner1 = container.BeginLifetimeScope())
 				{
-					var projSvc = inner1.Resolve<IRuleSetProjectionService>();
+					var projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
 					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc.ProjectionCollection(wsRs));
 				}
 			}

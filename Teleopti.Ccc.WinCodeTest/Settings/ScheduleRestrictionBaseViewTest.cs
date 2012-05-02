@@ -145,9 +145,9 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		{
 			Assert.IsNotNull(_targetView);
 
-			_targetView.MinimumWorkTime = "05:00";
+			_targetView.MinimumWorkTime = "5:00";
 
-			Assert.AreEqual(_targetView.MinimumWorkTime, "05:00");
+			Assert.AreEqual(_targetView.MinimumWorkTime, "5:00");
 
 			_targetView.MinimumWorkTime = _minTimeWork.ToString();
 			Assert.AreEqual(_targetView.MinimumWorkTime, _workTimePeriod.StartTimeString);
@@ -180,8 +180,8 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			//_targetView.MinimumWorkTime = "10";
 			//Assert.AreEqual("07:00", _targetView.MinimumWorkTime);
 
-			_targetView.MinimumWorkTime = "0500";
-			Assert.AreEqual("05:00", _targetView.MinimumWorkTime);
+			_targetView.MinimumWorkTime = "500";
+			Assert.AreEqual("5:00", _targetView.MinimumWorkTime);
 			_targetView.MaximumWorkTime = "10";
 			Assert.AreEqual("10:00", _targetView.MaximumWorkTime);
 
