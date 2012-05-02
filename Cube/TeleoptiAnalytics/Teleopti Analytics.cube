@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="360" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-16186" scrolltop="2501" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="33946" y="24500" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="360" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-16186" scrolltop="2501" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="24289" y="18574" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -7901,40 +7901,40 @@ The CALCULATE command controls the aggregation of leaf cells in the cube.
 If the CALCULATE command is deleted or modified, the data within the cube is affected.
 You should edit this command only if you manually specify how the cube is aggregated.
 */
-CALCULATE;   CREATE HIDDEN SET CURRENTCUBE.[Date Today]
-AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));   CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
-AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);   CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
-AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));   
+CALCULATE;    CREATE HIDDEN SET CURRENTCUBE.[Date Today]
+AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));    CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
+AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);    CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
+AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));    
 CREATE SET CURRENTCUBE.[Date Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Lag(1);   
+ AS [TodaySet].ITEM(0).ITEM(0).Lag(1);    
 CREATE SET CURRENTCUBE.[Date Current Week Until Yesterday]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);   
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);    
 CREATE SET CURRENTCUBE.[Date Last Week]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;   
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;    
 CREATE SET CURRENTCUBE.[Date Current Month Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);   
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);    
 CREATE SET CURRENTCUBE.[Date Last Month]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;   
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;    
 CREATE SET CURRENTCUBE.[Date Current Quarter Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);   
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);    
 CREATE SET CURRENTCUBE.[Date Last Quarter]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;   
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;    
 CREATE SET CURRENTCUBE.[Date Current Year Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                        
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                         
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Accepted %]
  AS [Measures].[Preferences Accepted]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;                        
+VISIBLE = 1;                         
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Declined %]
  AS [Measures].[Preferences Declined]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;            
+VISIBLE = 1;             
 CREATE MEMBER CURRENTCUBE.[Measures].[Logged In Time m]
  AS [Measures].[Logged In Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                           
+VISIBLE = 1;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[factor]
  AS CASE 
 WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism] OR [KPI].[KPI].currentmember is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism]
@@ -7950,7 +7950,7 @@ WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[Kp
 THEN -1
 ELSE 1
 END, 
-VISIBLE = 0;                                          
+VISIBLE = 0;                                           
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Agents Ready FTE]
  AS CASE 
 WHEN [Interval].[Interval Hour].CurrentMember.Level IS [Interval].[Interval Hour].[Hour] 
@@ -7964,11 +7964,11 @@ THEN [Measures].[Ready Time s]/(1440/[Interval].[Interval Hour].[Interval].COUNT
   
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                         
+VISIBLE = 1;                                          
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Ready Time m]
  AS [Measures].[Ready Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                            
+VISIBLE = 1;                                             
 CREATE MEMBER CURRENTCUBE.[MEASURES].[xxActual]
  AS CASE 
 
@@ -8008,7 +8008,7 @@ IIF([Measures].[Scheduled Ready Time m]=0,null,[Measures].[Agent Answered Calls]
 
 END, 
 FORMAT_STRING = "#,#", 
-VISIBLE = 1;                                       
+VISIBLE = 1;                                        
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Adherence]
  AS CASE 
 
@@ -8021,8 +8021,16 @@ IIF( [Measures].[Scheduled Ready Time s]= 0,null,
 WHEN [Adherence Calculation].[Adherence Calculation].CurrentMember IS 
 [Adherence Calculation].[Adherence Calculation].&amp;[2]
 THEN (
-IIF( ([Measures].[Scheduled Time m]*60)= 0,null,
-(([Measures].[Scheduled Time m]*60) - [Measures].[Deviation Schedule s])/ (60*[Measures].[Scheduled Time m])))
+IIF(
+    [Measures].[Scheduled Time m] = 0,
+	IIF([Measures].[Deviation Schedule s]&gt;0,0,null),
+    IIF(
+        [Measures].[Deviation Schedule s]&gt;[Measures].[Scheduled Time m]*60,
+		0,
+		(([Measures].[Scheduled Time m]*60) - [Measures].[Deviation Schedule s])/ (60*[Measures].[Scheduled Time m])
+        )
+    )
+)
 
 WHEN [Adherence Calculation].[Adherence Calculation].CurrentMember IS 
 [Adherence Calculation].[Adherence Calculation].&amp;[3]
@@ -8034,59 +8042,59 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                    
+VISIBLE = 1  ;                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Answered Calls per Scheduled Phone Hour]
  AS IIF([Measures].[Scheduled Ready Time m]=0 , null, [Measures].[Agent Answered Calls]/([Measures].[Scheduled Ready Time m]/60)), 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Scheduled Ready Time m] }, 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Talk Time s]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                            
+VISIBLE = 1;                                             
 CREATE MEMBER CURRENTCUBE.[MEASURES].[KPI Actual]
  AS [xxActual], 
 FORMAT_STRING = "#", 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Handle Time s]
  AS [Measures].[Forecasted Handle Time s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;        
+VISIBLE = 1;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Readiness]
  AS [Measures].[Ready Time s]/[Measures].[Logged In Time s], 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;        
+VISIBLE = 1;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Absenteeism]
  AS IIF( [Measures].[Scheduled Contract Time m]= 0,null,([Measures].[Scheduled Contract Absence Time  m]/[Measures].[Scheduled Contract Time m])), 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average After Call Work s]
  AS [Measures].[Forecasted After Call Work s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                                  
+VISIBLE = 1;                                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Talk time s]
  AS [Measures].[Forecasted Campaign Talk Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                  
+VISIBLE = 0;                                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average After Call Work s ]
  AS [Measures].[Forecasted Campaign After Call Work S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                  
+VISIBLE = 0;                                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Handle Time s ]
  AS [Measures].[Forecasted Campaign Handling Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                     
+VISIBLE = 0;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Answer Rate]
  AS [Measures].[Answered Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                                                     
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Service Level]
  AS /*
 2010-03-16 DJ
@@ -8114,122 +8122,122 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                     
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Abandon Rate]
  AS [Measures].[Abandoned Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                               
+VISIBLE = 1;                                
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Occupancy]
  AS ([Measures].[Agent Talk Time s]+[Measures].[Agent After Call Work s])/[Measures].[Ready Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Ready Time s] }, 
-VISIBLE = 1;                                                     
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[AHT Average Handle Time s]
  AS ([Measures].[Agent Talk Time s]+ [Measures].[Agent After Call Work s])/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                     
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ASA Average Speed of Answer s]
  AS [Measures].[Speed Of Answer s]/[Measures].[Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Answered Calls] }, 
-VISIBLE = 1;                                                     
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Time to Abandon s]
  AS [Measures].[Time To Abandon s]/[Measures].[Abandoned Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Abandoned Calls] }, 
-VISIBLE = 1;                                    
+VISIBLE = 1;                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average After Call Work s]
  AS [Measures].[Agent After Call Work s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                        
+VISIBLE = 1;                                         
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time excl Shrinkage h]
  AS [Measures].[Forecasted Time excl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                  
+VISIBLE = 1;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time incl Shrinkage h]
  AS [Measures].[Forecasted Time incl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time h]
  AS [Measures].[Scheduled Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1; 
+VISIBLE = 1;  
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule Ready m]
  AS [Measures].[Deviation Schedule Ready s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1  ;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Time h]
  AS [Measures].[Scheduled Contract Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Work Time h]
  AS [Measures].[Scheduled Work Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Absence Time h]
  AS [Measures].[Scheduled Contract Absence Time  m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Over Time h]
  AS [Measures].[Scheduled Over Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Ready Time h]
  AS [Measures].[Scheduled Ready Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1; 
+VISIBLE = 1;  
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule m]
  AS [Measures].[Deviation Schedule s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1  ; 
+VISIBLE = 1;  
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Contract m]
  AS [Measures].[Deviation Contract s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1  ;                     
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Paid Time h]
  AS [Measures].[Scheduled Paid Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                  
+VISIBLE = 1;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time Skill h]
  AS [Measures].[Scheduled Time Skill m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                  
+VISIBLE = 1;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents]
  AS [Measures].[Forecasted Time excl Shrinkage m]/15, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                  
+VISIBLE = 0;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Agents Skill]
  AS [Measures].[Scheduled Time Skill m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                  
+VISIBLE = 0;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents incl Shrinkage]
  AS [Measures].[Forecasted Time incl Shrinkage m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                
+VISIBLE = 0;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Relative Difference]
  AS ([Measures].[Scheduled Time Skill m]-[Measures].[Forecasted Time excl Shrinkage m])/[Measures].[Forecasted Time excl Shrinkage m], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Time excl Shrinkage m] }, 
-VISIBLE = 1;                                  
+VISIBLE = 1;                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Standard Deviation]
  AS STDEVP([Measures].[Relative Difference]), 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                                     
+VISIBLE = 0;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ATT Average Talk Time s]
  AS [Measures].[Agent Talk Time s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                    
+VISIBLE = 1;                                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy Talk Time]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Talk Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Talk Time s] }, 
-VISIBLE = 1;                                                    
+VISIBLE = 1;                                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy After Call Work]
  AS [Measures].[Forecasted After Call Work S]/[Measures].[After Call Work s], 
 FORMAT_STRING = "Percent", 
