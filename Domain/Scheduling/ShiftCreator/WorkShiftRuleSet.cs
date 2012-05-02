@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using InParameter = Teleopti.Interfaces.Domain.InParameter;
@@ -8,7 +9,7 @@ using InParameter = Teleopti.Interfaces.Domain.InParameter;
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
 
-    /// <summary>
+	/// <summary>
     /// Holding rules, limiters and extenders, used
     /// when creating work shifts.
     /// </summary>
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             set { _templateGenerator = value; }
         }
 
-        public virtual IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, 
+		public virtual IWorkTimeMinMax MinMaxWorkTime(IRuleSetProjectionService ruleSetProjectionService, 
                                                         IEffectiveRestriction effectiveRestriction)
         {
             lock (this)
@@ -129,18 +130,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
         }
 
-        private IWorkTimeMinMax calculateWorkTimeMinMax(IRuleSetProjectionService ruleSetProjectionService, 
+		private IWorkTimeMinMax calculateWorkTimeMinMax(IRuleSetProjectionService ruleSetProjectionService, 
                                                         IEffectiveRestriction effectiveRestriction)
         {
             IWorkTimeMinMax resultWorkTimeMinMax = null;
-            IEnumerable<IWorkShiftVisualLayerInfo> infoList = ruleSetProjectionService.ProjectionCollection(this);
+            IEnumerable<IWorkShiftProjection> infoList = ruleSetProjectionService.ProjectionCollection(this);
             foreach (var visualLayerInfo in infoList)
             {
                 if (effectiveRestriction.ValidateWorkShiftInfo(visualLayerInfo))
                 {
-						 var contractTime = visualLayerInfo.VisualLayerCollection.ContractTime();
+						 var contractTime = visualLayerInfo.ContractTime;
                     IWorkTimeMinMax thisWorkTimeMinMax = new WorkTimeMinMax();
-                    TimePeriod? period = visualLayerInfo.WorkShift.ToTimePeriod();
+                    TimePeriod? period = visualLayerInfo.TimePeriod;
                     if (!period.HasValue)
                         continue;
                     thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);

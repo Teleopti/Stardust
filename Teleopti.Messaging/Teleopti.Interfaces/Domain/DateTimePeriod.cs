@@ -8,7 +8,8 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// DateTimePeriod structure that holds information on an action with a certain start and end time in UTC. 
     /// </summary>
-    public struct DateTimePeriod
+    [Serializable]
+	public struct DateTimePeriod
     {
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";

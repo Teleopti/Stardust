@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (var projectionCache in shiftList)
             {
                 if (restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, agentTimeZone,
-                                                                                  projectionCache.MainShiftProjection))
+                                                                                  projectionCache.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>()))
                 {
                     workShiftsWithActivity.Add(projectionCache); 
                 }
