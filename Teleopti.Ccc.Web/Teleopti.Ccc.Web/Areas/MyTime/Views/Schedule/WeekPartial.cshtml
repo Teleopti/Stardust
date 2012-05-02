@@ -33,7 +33,7 @@
 						@day.Summary.Summary
 					</div>
 				</li>
-				<li class="add-text-request">
+				<li id="day-summary" @(Model.TextRequestPermission? "class=add-text-request":"")>
 					<div class="relative">
 						<div class="text-request absolute" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
 							<div class="floatright extrasmall">@day.TextRequestCount</div>

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click on today's summary")]
 		public void WhenIClickOnTodaySSummary()
 		{
-			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ByClass("add-text-request")).EventualClick();
+			Pages.Pages.WeekSchedulePage.DayElementForDate(DateTime.Today).ListItems.First(Find.ById("day-summary")).EventualClick();
 		}
 
 		[When(@"I click on tomorrows summary")]
@@ -43,6 +43,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value), Is.EqualTo(tomorrow));
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(tomorrow));
 		}
+
+		[Then(@"I should not see the text request form")]
+		public void ThenIShouldNotSeeTheTextRequestForm()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.DisplayVisible(), Is.False);
+		}
+
 
 	}
 }

@@ -19,8 +19,9 @@ Scenario: Add text request from week schedule view
 
 Scenario: Can not add text request if no permission
 	Given I am an agent without access to text requests
-	When I am viewing week schedule
-	Then I should not be able to open the add text request form
+	And I am viewing week schedule
+	When I click on today's summary
+	Then I should not see the text request form
 
 Scenario: Default text request values from week schedule
 	Given I am an agent

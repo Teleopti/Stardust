@@ -117,9 +117,11 @@ this.ScenarioSetup(scenarioInfo);
 #line 21
  testRunner.Given("I am an agent without access to text requests");
 #line 22
- testRunner.When("I am viewing week schedule");
+ testRunner.And("I am viewing week schedule");
 #line 23
- testRunner.Then("I should not be able to open the add text request form");
+ testRunner.When("I click on today\'s summary");
+#line 24
+ testRunner.Then("I should not see the text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -129,17 +131,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DefaultTextRequestValuesFromWeekSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default text request values from week schedule", ((string[])(null)));
-#line 25
-this.ScenarioSetup(scenarioInfo);
 #line 26
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 27
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 28
- testRunner.When("I click on tomorrows summary");
+ testRunner.And("I am viewing week schedule");
 #line 29
- testRunner.Then("I should see the text request form with tomorrow as default date");
+ testRunner.When("I click on tomorrows summary");
 #line 30
+ testRunner.Then("I should see the text request form with tomorrow as default date");
+#line 31
  testRunner.And("I should see 8:00 - 17:00 as the default times");
 #line hidden
             this.ScenarioCleanup();
@@ -150,19 +152,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CancelAddingTextRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancel adding text request", ((string[])(null)));
-#line 32
-this.ScenarioSetup(scenarioInfo);
 #line 33
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 34
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 35
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 36
- testRunner.And("I input text request values");
+ testRunner.When("I click on today\'s summary");
 #line 37
- testRunner.And("I click the Cancel button");
+ testRunner.And("I input text request values");
 #line 38
+ testRunner.And("I click the Cancel button");
+#line 39
  testRunner.Then("I should not see a symbol at the top of the schedule");
 #line hidden
             this.ScenarioCleanup();
@@ -173,23 +175,23 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingInvalidTextRequestValues()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid text request values", ((string[])(null)));
-#line 40
-this.ScenarioSetup(scenarioInfo);
 #line 41
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 42
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 43
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 44
- testRunner.And("I input empty subject");
+ testRunner.When("I click on today\'s summary");
 #line 45
- testRunner.And("I input later start time than end time");
+ testRunner.And("I input empty subject");
 #line 46
- testRunner.And("I click the OK button");
+ testRunner.And("I input later start time than end time");
 #line 47
- testRunner.Then("I should see texts describing my errors");
+ testRunner.And("I click the OK button");
 #line 48
+ testRunner.Then("I should see texts describing my errors");
+#line 49
  testRunner.And("I should not see a symbol at the top of the schedule");
 #line hidden
             this.ScenarioCleanup();

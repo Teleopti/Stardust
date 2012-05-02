@@ -125,6 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input empty subject")]
 		public void WhenIInputEmptySubject()
 		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = string.Empty;
 		}
 
@@ -154,6 +155,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Today.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);

@@ -201,7 +201,6 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 						$('#Schedule-addRequest-toDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
 					}
 				},
-
 				show: {
 					target: addTextRequest,
 					event: 'click'
