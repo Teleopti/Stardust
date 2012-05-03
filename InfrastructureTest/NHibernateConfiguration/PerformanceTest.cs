@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using NHibernate.Cfg;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -10,8 +9,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	[TestFixture]
 	public class PerformanceTest
 	{
-		private const string correctAccess = "nosetter.camelcase-underscore";
-
 		[Test] 
 		public void ShouldMapEntityIdToProperty()
 		{
@@ -20,12 +17,19 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 				.AddAssembly(typeof(Person).Assembly);
 
 			var errOutput = new StringBuilder();
-			foreach (var classMapping in nhCfg.ClassMappings.Where(classMapping => !classMapping.IdentifierProperty.PropertyAccessorName.Equals(correctAccess)))
+			foreach (var classMapping in nhCfg.ClassMappings)
 			{
-				errOutput.AppendLine(classMapping.ClassName);
+				var access = classMapping.IdentifierProperty.PropertyAccessorName;
+				if (access.Contains("field"))
+				{
+					errOutput.AppendLine(classMapping.ClassName + " (access:" + access + ")");
+				}
 			}
-			if(errOutput.Length>0)
-				Assert.Fail("For performance reason, choose access='" + correctAccess + "' on Id mapping. This is not the case on the following entities." + Environment.NewLine + errOutput);
+			if (errOutput.Length > 0)
+			{
+				Assert.Fail("For performance reason, avoid field access on Id getters - choose access='nosetter.camelcase-underscore'. This is not the case on the following entities:"
+					+ Environment.NewLine + Environment.NewLine + errOutput);				
+			}
 		}
 	}
 }

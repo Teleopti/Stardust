@@ -5,7 +5,7 @@
                    default-access="field.camelcase-underscore">
   
   <class abstract="true" name="RecurrentMeetingOption">
-    <id name="Id" type="guid" unsaved-value="null">
+    <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
       <generator class="guid.comb" />
     </id>
 

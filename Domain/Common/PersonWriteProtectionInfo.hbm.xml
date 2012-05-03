@@ -6,7 +6,7 @@
 <class name="PersonWriteProtectionInfo"
 		   batch-size="10">
 		<!--IEntity-->
-		<id name="Id"
+		<id name="Id" access="nosetter.camelcase-underscore"
 				type="guid"
 				unsaved-value="null">
       <generator class="foreign">

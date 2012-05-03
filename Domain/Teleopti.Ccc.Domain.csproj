@@ -1561,9 +1561,6 @@
     <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\MasterActivity.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollResultDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
