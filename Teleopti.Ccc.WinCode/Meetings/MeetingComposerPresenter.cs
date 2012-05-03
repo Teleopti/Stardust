@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         //{
         //    foreach (IPerson person in _model.Meeting.MeetingPersons.Select(m => m.Person))
         //    {
-        //        if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings,Model.StartDate,person))
+        //        if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings,Model.StartDate,person))
         //        {
         //            string message = string.Format(System.Globalization.CultureInfo.CurrentUICulture,
         //                                             UserTexts.Resources.MeetingErrorMessageWithOneParameter, person.Name);
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 persons = RepositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(persons);
                 //unitOfWork.Reassociate(persons);
                 var checker = new MeetingParticipantPermittedChecker();
-                if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, TeleoptiPrincipal.Current.PrincipalAuthorization))
+                if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, PrincipalAuthorization.Instance()))
                     return;
             }
             if (!IsMeetingValid()) return;

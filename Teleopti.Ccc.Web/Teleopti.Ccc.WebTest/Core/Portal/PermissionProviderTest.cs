@@ -15,24 +15,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 	[TestFixture]
 	public class PermissionProviderTest
 	{
-
-		private static IPrincipalAuthorization SetupPrincipalAuthorization()
-		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
-			principalForTest.SetPrincipalAuthorization(principalAuthorization);
-			Thread.CurrentPrincipal = principalForTest;
-			return principalAuthorization;
-		}
-
 		[Test]
 		public void ShouldReturnFalseIfNoApplicationFunctionPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(false);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasApplicationFunctionPermission("ApplicationFunctionPath");
 
@@ -42,11 +32,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldReturnTrueIfApplicationFunctionPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(true);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasApplicationFunctionPermission("ApplicationFunctionPath");
 
@@ -56,12 +46,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldReturnFalseIfNoPersonPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			var person = new Person();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(false);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasPersonPermission("ApplicationFunctionPath", DateOnly.Today, person);
 
@@ -71,12 +61,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldReturnTrueIfPersonPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			var person = new Person();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(true);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasPersonPermission("ApplicationFunctionPath", DateOnly.Today, person);
 
@@ -86,12 +76,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldReturnFalseIfNoTeamPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			var team = new Team();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(false);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasTeamPermission("ApplicationFunctionPath", DateOnly.Today, team);
 
@@ -101,12 +91,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldReturnTrueIfTeamPermission()
 		{
-			var principalAuthorization = SetupPrincipalAuthorization();
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			var team = new Team();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(true);
 
-			var target = new PermissionProvider(new PrincipalProvider());
+			var target = new PermissionProvider(principalAuthorization);
 
 			var result = target.HasTeamPermission("ApplicationFunctionPath", DateOnly.Today, team);
 

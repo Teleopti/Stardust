@@ -44,12 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 				var newIdentity = new TeleoptiIdentity("test2", null, null, null, AuthenticationTypeOption.Unknown);
                 var newTarget = new TeleoptiPrincipal(newIdentity, newPerson);
 
-                var principalAuthorizationBefore = target.PrincipalAuthorization;
                 target.ChangePrincipal(newTarget);
 
                 Assert.AreEqual(newPerson, target.GetPerson(personRepository));
                 Assert.AreEqual(newIdentity, target.Identity);
-                Assert.AreNotEqual(principalAuthorizationBefore, target.PrincipalAuthorization);
             }
         }
 

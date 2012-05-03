@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
 			var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
 
 			var availableDetails = details.Where(
-				p => TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+				p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 				                                                                  queryDate, p));
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())

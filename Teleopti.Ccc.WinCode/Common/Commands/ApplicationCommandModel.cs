@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Common.Commands
 
         public sealed override void OnQueryEnabled(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(_functionPath) && CanExecute;
+            e.CanExecute = PrincipalAuthorization.Instance().IsPermitted(_functionPath) && CanExecute;
             e.Handled = true;
         }
 

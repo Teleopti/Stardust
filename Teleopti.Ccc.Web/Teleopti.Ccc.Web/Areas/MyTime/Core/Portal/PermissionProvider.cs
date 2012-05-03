@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -6,26 +7,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 {
 	public class PermissionProvider : IPermissionProvider
 	{
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly IPrincipalAuthorization _principalAuthorization;
 
-		public PermissionProvider(IPrincipalProvider principalProvider)
+		public PermissionProvider(IPrincipalAuthorization principalAuthorization)
 		{
-			_principalProvider = principalProvider;
+			_principalAuthorization = principalAuthorization;
 		}
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
-			return _principalProvider.Current().PrincipalAuthorization.IsPermitted(applicationFunctionPath);
+			return _principalAuthorization.IsPermitted(applicationFunctionPath);
 		}
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
 		{
-			return _principalProvider.Current().PrincipalAuthorization.IsPermitted(applicationFunctionPath, date, person);
+			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, person);
 		}
 
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)
 		{
-			return _principalProvider.Current().PrincipalAuthorization.IsPermitted(applicationFunctionPath, date, team);
+			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, team);
 		}
 	}
 }

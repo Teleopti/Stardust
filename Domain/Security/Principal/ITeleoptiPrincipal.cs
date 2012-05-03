@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		void AddClaimSet(ClaimSet claimSet);
 
 		IEnumerable<ClaimSet> ClaimSets { get; }
-		IPrincipalAuthorization PrincipalAuthorization { get; }
 		IRegional Regional { get; }
 		IOrganisationMembership Organisation { get; }
 	}

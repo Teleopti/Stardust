@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands
     {
         public bool CanExecute()
         {
-            return TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SendAsm);
+            return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.SendAsm);
         }
     }
 }

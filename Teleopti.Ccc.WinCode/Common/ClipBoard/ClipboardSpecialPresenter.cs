@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         {
             _view.SetTexts();
             _view.SetColor();
-            _view.SetPermissionOnAbsences(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
-            _view.SetPermissionOnDayOffs(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
-            _view.SetPermissionOnPersonalAssignments(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionOnAssignments(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionOnOvertime(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionsOnRestrictions(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
+            _view.SetPermissionOnAbsences(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
+            _view.SetPermissionOnDayOffs(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+            _view.SetPermissionOnPersonalAssignments(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnAssignments(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnOvertime(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionsOnRestrictions(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
             _view.ShowRestrictions(_showRestrictions);
         }
 

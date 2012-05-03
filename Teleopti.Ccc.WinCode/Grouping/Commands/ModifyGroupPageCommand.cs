@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 
         public bool CanExecute()
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage))
                 return false;
 
             return _personSelectorView.SelectedTab.Tag as ILoadUserDefinedTabsCommand != null;

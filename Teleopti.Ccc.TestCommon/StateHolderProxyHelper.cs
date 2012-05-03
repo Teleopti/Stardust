@@ -156,11 +156,11 @@ namespace Teleopti.Ccc.TestCommon
                 dataSource = applicationData.RegisteredDataSourceCollection.First();
             }
 
-            var principal = new TeleoptiPrincipalForTest(new TeleoptiIdentity("test user", dataSource,
+            var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test user", dataSource,
                                                                                   businessUnit,
                                                                                   WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application),
                                                              loggedOnPerson);
-            principal.SetPrincipalAuthorization(new PrincipalAuthorizationWithFullPermission());
+			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 
             var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
             if (currentPrincipal==null)
@@ -190,28 +190,6 @@ namespace Teleopti.Ccc.TestCommon
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                        {ApplicationLogOnName = "App", Password = "User"};
             return person;
-        }
-    }
-
-    public class TeleoptiPrincipalForTest : TeleoptiPrincipal
-    {
-        private IPrincipalAuthorization _principalAuthorization;
-
-        public TeleoptiPrincipalForTest(IIdentity identity, IPerson person) : base(identity, person)
-        {
-        }
-
-        public override IPrincipalAuthorization PrincipalAuthorization
-        {
-            get
-            {
-                return _principalAuthorization;
-            }
-        }
-
-        public void SetPrincipalAuthorization(IPrincipalAuthorization principalAuthorization)
-        {
-            _principalAuthorization = principalAuthorization;
         }
     }
 
@@ -321,27 +299,20 @@ namespace Teleopti.Ccc.TestCommon
     	}
     }
 
-    public class CustomAuthorizationContext :IDisposable
-    {
-        private readonly IPrincipalAuthorization _previousAuthorization;
+	public class CustomAuthorizationContext : IDisposable
+	{
+		private IPrincipalAuthorization _previousAuthorization;
 
-        public CustomAuthorizationContext(IPrincipalAuthorization principalAuthorization)
-        {
-            TeleoptiPrincipalForTest teleoptiPrincipalForTest = TeleoptiPrincipal.Current as TeleoptiPrincipalForTest;
-            if (teleoptiPrincipalForTest!=null)
-            {
-                _previousAuthorization = teleoptiPrincipalForTest.PrincipalAuthorization;
-                teleoptiPrincipalForTest.SetPrincipalAuthorization(principalAuthorization);
-            }
-        }
+		public CustomAuthorizationContext(IPrincipalAuthorization principalAuthorization)
+		{
+			_previousAuthorization = PrincipalAuthorization.Instance();
+			PrincipalAuthorization.SetInstance(principalAuthorization);
+		}
 
-        public void Dispose()
-        {
-            TeleoptiPrincipalForTest teleoptiPrincipalForTest = TeleoptiPrincipal.Current as TeleoptiPrincipalForTest;
-            if (teleoptiPrincipalForTest != null)
-            {
-                teleoptiPrincipalForTest.SetPrincipalAuthorization(_previousAuthorization);
-            }
-        }
-    }
+		public void Dispose()
+		{
+			PrincipalAuthorization.SetInstance(_previousAuthorization);
+			_previousAuthorization = null;
+		}
+	}
 }

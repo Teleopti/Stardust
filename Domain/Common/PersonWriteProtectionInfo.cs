@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _personWriteProtectedDate; }
             set
             {
-                var principal = TeleoptiPrincipal.Current;
-                if(!principal.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
+				if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
                     throw new PermissionException("You don't have permission to set write protection");
                 _personWriteProtectedDate = value;
                }

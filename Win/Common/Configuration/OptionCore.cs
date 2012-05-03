@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                                             new ScheduleTagControl()
                                     	};
 
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
                 allSupportedPages.Add(new MultiplicatorControlView());
 
             return allSupportedPages;

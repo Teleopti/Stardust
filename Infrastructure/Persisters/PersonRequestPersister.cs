@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
         public void MarkForPersist(IPersonRequestRepository personRequestRepository, IEnumerable<IPersonRequest> personRequests)
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
                 return;
 
             foreach (var workingPersonRequest in personRequests)

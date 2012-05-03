@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private void MergeDayOff(IScheduleDay source)
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                 return;
 
@@ -640,7 +640,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (SignificantPart() == SchedulePartView.DayOff)
                 {
-                    if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
+                    if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
                         return;
 
                     IPersonDayOff dayOff = PersonDayOffCollection()[0];
@@ -709,7 +709,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 }
             }
 
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
                 return;
 
             //remove absences up for split
@@ -883,7 +883,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void CreateAndAddActivity(IMainShiftActivityLayer layer, IShiftCategory shiftCategory)
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 

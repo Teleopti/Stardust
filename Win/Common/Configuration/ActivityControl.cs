@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InContractTime", Resources.IsContractTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InWorkTime", Resources.IsWorkTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InPaidTime", Resources.IsPaidTime));
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
             {
                 var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode)
                                         {AllowEmptyValue = true};

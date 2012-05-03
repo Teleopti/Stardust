@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
             Grid.CellModels.Add("HourMinutes", new TimeSpanHourMinutesOrEmptyCellModel(Grid.Model));
 			Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
-            Grid.ReadOnly = !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            Grid.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications); 
         }
 

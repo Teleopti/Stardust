@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Grouping
                 {
                     ITreeItem<TreeNodeAdv> usersItem = CreateVirtualSiteWithPersonsWhoAreUsers(functionPath, period.StartDate);
                     usersItem.IsPermitted =
-                        TeleoptiPrincipal.Current.PrincipalAuthorization.EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(functionPath));
+                        PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(functionPath));
                     rootItem.AddChild(usersItem);
                 }
                 foreach (ISite site in NotDeletedSitesInAlphabeticOrderInBusinessUnit(businessUnit))
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Win.Grouping
             SiteListBoxPresenter sitePresenter = new SiteListBoxPresenter(site);
             ITreeItem<TreeNodeAdv> siteItem = CreateTreeItem(sitePresenter);
             rootItem.AddChild(siteItem);
-            siteItem.IsPermitted = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(functionPath, dateOnly, site);
+            siteItem.IsPermitted = PrincipalAuthorization.Instance().IsPermitted(functionPath, dateOnly, site);
             siteItem.ImageIndex = 1;
             siteItem.StoredDataDictionary["Grouping"] = GroupingConstants.NodeTypeGroup;
             return siteItem;
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             TeamListBoxPresenter teamPresenter = new TeamListBoxPresenter(team);
             ITreeItem<TreeNodeAdv> teamItem = CreateTreeItem(teamPresenter);
-            teamItem.IsPermitted = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(functionPath, dateOnly, team);
+            teamItem.IsPermitted = PrincipalAuthorization.Instance().IsPermitted(functionPath, dateOnly, team);
             teamItem.ImageIndex = 2;
             teamItem.StoredDataDictionary["Grouping"] = GroupingConstants.NodeTypeGroup;
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             PersonListBoxPresenter personPresenter = new PersonListBoxPresenter(person, GetCommonNameDescription());
             ITreeItem<TreeNodeAdv> personItem = CreateTreeItem(personPresenter);
-            personItem.IsPermitted = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(functionPath, dateOnly, person);
+            personItem.IsPermitted = PrincipalAuthorization.Instance().IsPermitted(functionPath, dateOnly, person);
             personItem.ImageIndex = 3;
             personItem.StoredDataDictionary["Grouping"] = GroupingConstants.NodeTypePerson;
             if (_usesCheckBoxes)
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Win.Grouping
             {
                 PersonListBoxPresenter personPresenter = new PersonListBoxPresenter(user, GetCommonNameDescription());
                 ITreeItem<TreeNodeAdv> personItem = CreateTreeItem(personPresenter);
-                personItem.IsPermitted = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(functionPath, dateOnly, user);
+                personItem.IsPermitted = PrincipalAuthorization.Instance().IsPermitted(functionPath, dateOnly, user);
                 personItem.ImageIndex = 3;
                 personItem.StoredDataDictionary["Grouping"] = GroupingConstants.NodeTypePerson;
                 virtualTeamItem.AddChild(personItem);

@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _unitOfWorkFactory = unitOfWorkFactory;
             _view = view;
             _earlyWarningEnabled =
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning);
+                PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning);
             _realTimeAdherenceEnabled =
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence);
+                PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence);
 
             _schedulingResultLoader = schedulingResultLoader;
 

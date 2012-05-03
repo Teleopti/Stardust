@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         {
             get
             {
-                if (_model.CurrentScenario.Restricted && !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
+                if (_model.CurrentScenario.Restricted && !PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
                 {
                     return false;
                 }
-                if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings))
+                if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings))
                 {
                     return false;
                 }

@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void SetPermissionOnControls()
         {
             toolStripButtonSystemOptions.Enabled =
-               TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+               PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
         }
 
         private void addChart()

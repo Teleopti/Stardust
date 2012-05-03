@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             var principal = TeleoptiPrincipal.Current;
             return !Confidential ||
                    principal.Organisation.IsUser(assignedPerson) ||
-                   principal.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, assignedPerson);
+                   PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, assignedPerson);
         }
 
         public virtual object Clone()

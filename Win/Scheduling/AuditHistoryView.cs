@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void SetRestoreButtonStatus()
         {
-            if (_model.PageRows.Count <= 0 ||!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
+            if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
             else buttonRestore.Enabled = true;
         }
 

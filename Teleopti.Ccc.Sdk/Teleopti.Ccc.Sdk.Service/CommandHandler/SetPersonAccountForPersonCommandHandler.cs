@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
             {
                 throw new FaultException("You're not allowed to modify person accounts for this person.");
             }

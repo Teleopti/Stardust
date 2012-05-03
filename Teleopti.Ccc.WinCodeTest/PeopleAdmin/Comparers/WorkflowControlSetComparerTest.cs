@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void Setup()
         {
             _target = new WorkflowControlSetComparer();
-            _principalAuthorization = new PrincipalAuthorization(TeleoptiPrincipal.Current);
+            _principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
         }
 
         [Test]

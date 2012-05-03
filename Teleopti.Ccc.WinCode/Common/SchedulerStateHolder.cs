@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.WinCode.Common
             
             IList<IPersonRequest> personRequests = new List<IPersonRequest>();
 
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
                 if (personRequestRepository != null)
                     personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(AllPermittedPersons, period);
 
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)
         {
             IPersonRequest updatedRequest = null;
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
                 updatedRequest = personRequestRepository.Find(personRequestId);
             
             if(updatedRequest!=null)

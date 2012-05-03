@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -20,13 +19,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalProvider _principalProvider;
+		private readonly IPrincipalAuthorization _principalAuthorization;
 
 		public WebLogOn(ILogOnOff logOnOff,
 		                IDataSourcesProvider dataSourceProvider,
 		                IRepositoryFactory repositoryFactory,
 		                ISessionSpecificDataProvider sessionSpecificDataProvider,
 		                IRoleToPrincipalCommand roleToPrincipalCommand,
-		                IPrincipalProvider principalProvider)
+		                IPrincipalProvider principalProvider,
+		                IPrincipalAuthorization principalAuthorization)
 		{
 			_logOnOff = logOnOff;
 			_dataSourceProvider = dataSourceProvider;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_principalProvider = principalProvider;
+			_principalAuthorization = principalAuthorization;
 		}
 
 		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
@@ -47,18 +49,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
 				var principal = _principalProvider.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
-				checkWebPermission(principal, person);
+
+				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+				if (!allowed)
+					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
 
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, authenticationType);
 			_sessionSpecificDataProvider.Store(sessionSpecificData);
-		}
-
-		private static void checkWebPermission(ITeleoptiPrincipal principal, IPerson person)
-		{
-			var allowed = principal.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
-			if (!allowed)
-				throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 		}
 	}
 }

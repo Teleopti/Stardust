@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
 
         public CommandResultDto Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
-			if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
 			{
 				throw new FaultException("You're not authorized to run this command.");
 			}

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (SchedulePart != null)
             {
-                return TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+                return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
             }
             return true;
         }

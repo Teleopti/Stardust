@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -44,15 +45,15 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			logOnOff = mocks.DynamicMock<ILogOnOff>();
 			var ruleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
 			principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
-			var principal = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
+			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
 
 			target = new WebLogOn(logOnOff,
 			                      dataSourcesProvider,
 			                      repositoryFactory,
 			                      sessionSpecificDataProvider,
 			                      ruleToPrincipalCommand,
-			                      new FakePrincipalProvider(principal));
-			principal.SetPrincipalAuthorization(principalAuthorization);
+			                      new FakePrincipalProvider(principal),
+								  principalAuthorization);
 		}
 
 		[Test]

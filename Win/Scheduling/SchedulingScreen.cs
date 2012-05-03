@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             restrictionEditor = new RestrictionEditor();
             notesEditor =
                 new NotesEditor(
-                    TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                    PrincipalAuthorization.Instance().IsPermitted(
                         DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             schedulerSplitters1.MultipleHostControl3.AddItem(Resources.ShiftEditor, wpfShiftEditor1);
             schedulerSplitters1.MultipleHostControl3.AddItem(Resources.Restrictions, restrictionEditor);
@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_editControl != null)
             {
-                var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+                var authorization = PrincipalAuthorization.Instance();
 
                 _editControl.SetButtonState(EditAction.New,
                                             authorization.IsPermitted(
@@ -773,7 +773,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _editControl_NewClicked(object sender, EventArgs e)
         {
             if (
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 addNewLayer(ClipboardItems.Shift);
             else
@@ -921,7 +921,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_clipboardControl != null)
             {
-                var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+                var authorization = PrincipalAuthorization.Instance();
                 _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.Shift.ToString(),
                                                              authorization.IsPermitted(
                                                                  DefinedRaptorApplicationFunctionPaths.
@@ -1099,7 +1099,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             toolStripProgressBar1.Value = 0;
             toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateCollection().Count + 19;
 
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             toolStripMenuItemMeetingOrganizer.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
             toolStripMenuItemWriteProtectSchedule.Enabled =
@@ -1577,7 +1577,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (selectedSchedules.IsEmpty())
                 return;
 
-            ISwapRawService swapRawService = new SwapRawService(TeleoptiPrincipal.Current.PrincipalAuthorization);
+            ISwapRawService swapRawService = new SwapRawService(PrincipalAuthorization.Instance());
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
                 new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState,
                                                          new SchedulerStateScheduleDayChangedCallback(
@@ -2899,7 +2899,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             foreach (ITeam team in teams)
             {
                 if (!authorization.IsPermitted(functionPath, DateOnly.Today, team))
@@ -2966,14 +2966,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         private static bool isThisPermittedApproveRequest(PersonRequestViewModel model)
         {
             return
-                new PersonRequestAuthorization(TeleoptiPrincipal.Current.PrincipalAuthorization).
+                new PersonRequestAuthorization(PrincipalAuthorization.Instance()).
                     IsPermittedRequestApprove(model.RequestType);
         }
 
         private static bool isPermittedViewRequest()
         {
             return
-                new PersonRequestAuthorization(TeleoptiPrincipal.Current.PrincipalAuthorization).IsPermittedRequestView();
+                new PersonRequestAuthorization(PrincipalAuthorization.Instance()).IsPermittedRequestView();
         }
 
         private bool isViewRequestDetailsAvailable()
@@ -3367,7 +3367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (PerformanceOutput.ForOperation("Changing selection in view"))
             {
-				if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				if(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 					toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
                 if (_scheduleView != null &&
                     (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp))
@@ -3465,7 +3465,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void checkModifyPermissions()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
 
             ToolStripMenuItemAddActivity.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
@@ -3556,7 +3556,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             toolStripStatusLabelStatus.Text = Resources.ReadyThreeDots;
 
             if (
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.RequestScheduler))
             {
                 using (PerformanceOutput.ForOperation("Creating new RequestView"))
@@ -4921,7 +4921,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void checkPastePermissions()
         {
             bool permitted =
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
             toolStripMenuItemPaste.Enabled = permitted;
             toolStripMenuItemPasteSpecial.Enabled = permitted;
@@ -4932,7 +4932,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             toolStripExActions.Enabled = true;
 
             toolStripSplitButtonSchedule.Enabled =
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
             if (_scheduleView != null)
                 enableSwapButtons(_scheduleView.SelectedSchedules());
@@ -4940,7 +4940,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setPermissionOnContextMenuItems()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             toolStripMenuItemInsertAbsence.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
             toolStripMenuItemInsertDayOff.Enabled =
@@ -4961,7 +4961,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setPermissionOnMenuButtons()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             toolStripButtonRequestView.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
             toolStripButtonOptions.Enabled =
@@ -6169,7 +6169,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 scenarios = scenarioRepository.FindAllSorted(); // Ascending or Descending ?
             }
 
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
 
             for (var i = scenarios.Count - 1; i > -1; i--)
             {
@@ -7583,7 +7583,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void ToolstripMenuRemoveWriteProtectionMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection)) return;
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection)) return;
             Cursor = Cursors.WaitCursor;
 
             var removeCommand = new WriteProtectionRemoveCommand(_scheduleView.SelectedSchedules(), _modifiedWriteProtections);
@@ -7598,7 +7598,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void writeProtectSchedule()
         {
             if (
-                !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
                 return;
             GridHelper.WriteProtectPersonSchedule(_grid).ForEach(_modifiedWriteProtections.Add);

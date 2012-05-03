@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             }
             
             // rättigheter
-            var auth = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var auth = PrincipalAuthorization.Instance();
             var toRemove = new List<IPersonSelectorUserDefined>();
             foreach (var toNode in toNodes)
             {

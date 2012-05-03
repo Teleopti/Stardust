@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
-			var principal = new TeleoptiPrincipalForTest(
+			var principal = new TeleoptiPrincipal(
 				new TeleoptiIdentity(person.Name.ToString(), null, null, null, AuthenticationTypeOption.Unknown),
 				person);
 			Thread.CurrentPrincipal = principal;

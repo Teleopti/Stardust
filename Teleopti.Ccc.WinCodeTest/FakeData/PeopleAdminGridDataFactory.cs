@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
                  PersonContractFactory.CreatePersonContract(contractName, scheduleName, partTimePercentage),
                  team1);
             person.AddPersonPeriod(personPeriod1);
-            var principalAuthorization = new PrincipalAuthorization(TeleoptiPrincipal.Current);
+            var principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
             return new PersonGeneralModel(person, new UserDetail(person), principalAuthorization);
         }
     }

@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                         return null;
                 }
 
-				var temp = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+				var temp = PrincipalAuthorization.Instance().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 				if (temp)
 				{

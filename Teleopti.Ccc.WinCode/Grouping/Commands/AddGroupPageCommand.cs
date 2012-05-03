@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         public bool CanExecute()
         {
             return
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ModifyGroupPage);
         }
     }

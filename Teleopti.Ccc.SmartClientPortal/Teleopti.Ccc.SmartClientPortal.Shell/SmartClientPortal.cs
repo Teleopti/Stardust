@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         private void toolStripButtonPermissons_Click(object sender, EventArgs e)
         {
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
             {
                 PermissionsExplorer permissionForm = null;
                 try
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         /// </summary>
         private void SetPermissionOnToolStripButtonControls()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             toolStripButtonPermissions.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
             toolStripButtonSystemOptions.Enabled =
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         private void LoadOutLookBar()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(new ModuleSpecification());
 
             foreach (IApplicationFunction module in modules.OrderBy(m => m.SortOrder.GetValueOrDefault(1000000)))

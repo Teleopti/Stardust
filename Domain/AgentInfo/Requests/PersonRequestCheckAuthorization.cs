@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private static bool hasPermission(string applicationFunctionPath, IPersonRequest personRequest)
         {
             DateOnly dateOnly = new DateOnly(personRequest.RequestedDate);
-            return TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(applicationFunctionPath, dateOnly, personRequest.Person);
+            return PrincipalAuthorization.Instance().IsPermitted(applicationFunctionPath, dateOnly, personRequest.Person);
         }
     }
 }

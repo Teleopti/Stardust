@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 
         public bool CanExecute()
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyGroupPage))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyGroupPage))
                 return false;
 
             return _personSelectorView.SelectedTab.Tag as ILoadUserDefinedTabsCommand != null;

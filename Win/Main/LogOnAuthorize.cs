@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Win.Main
         {
             using(PerformanceOutput.ForOperation("Authorize including loading permissions"))
             {
-                if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                if (!PrincipalAuthorization.Instance().IsPermitted(
                          DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication))
                 {
                     MessageBox.Show(null,

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 HashSet<ITeam> tempList = new HashSet<ITeam>();
                 foreach (var team in _allTeams)
                 {
-                    if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(_functionPath, _queryDate, team))
+                    if (PrincipalAuthorization.Instance().IsPermitted(_functionPath, _queryDate, team))
                         tempList.Add(team);
                 }
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 HashSet<ISite> ret = new HashSet<ISite>();
                 foreach (var site in _allTeams.Select(t=>t.Site).Distinct())
                 {
-                    if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(_functionPath, _queryDate, site))
+                    if (PrincipalAuthorization.Instance().IsPermitted(_functionPath, _queryDate, site))
                         ret.Add(site);
                 }
 

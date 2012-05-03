@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 
         private static IRestrictionViewModel CreatePreferenceRestrictionViewModel(IRestrictionAltered altered, IRestrictionBase restriction)
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            if (!PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction))
                 return CreateReadOnlyViewModel(restriction);
 
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 
         private static IRestrictionViewModel CreateAvailableRestrictionViewModel(IRestrictionAltered altered, IRestrictionBase restriction)
         {
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction))
                 return CreateReadOnlyViewModel(restriction);
 
             return new AvailableRestrictionViewModel((IStudentAvailabilityRestriction)restriction, altered);

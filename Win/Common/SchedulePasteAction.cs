@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Common
                 // if it only is one lock and that is WriteProtected AND the user is allowed to change those
                 // Don't remove it the user can change it
                 Gridlock gridlock = new Gridlock(destination, LockType.WriteProtected);
-                if (lockDictionary.ContainsKey(gridlock.Key) && TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(Domain.Security.AuthorizationData.DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+                if (lockDictionary.ContainsKey(gridlock.Key) && PrincipalAuthorization.Instance().IsPermitted(Domain.Security.AuthorizationData.DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
                 {
 
                 }

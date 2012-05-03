@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             }
             gridLimitatation.ActivateCurrentCellBehavior = GridCellActivateAction.DblClickOnCell;
             gridLimitatation.AutoSize = true;
-            gridLimitatation.ReadOnly = !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            gridLimitatation.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             gridLimitatation.Enabled = (schedulePeriods.Count > 0);
             _presenter.SetSchedulePeriodList(schedulePeriods);
             gridLimitatation.Invalidate(true);
-            gridLimitatation.ReadOnly = !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            gridLimitatation.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         private void gridLimitatation_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
-            if(!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            if(!PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications)) return;
             IShiftCategory category = _presenter.OnQueryShiftCategoryCellInfo(e.RowIndex);
             if (e.ColIndex == 4)

@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (!IsInsidePersonPeriod(daySchedule))
                         _lockManager.AddLock(daySchedule, LockType.OutsidePersonPeriod);
 
-                    if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+                    if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
                         if (!daySchedule.IsFullyPublished)
                             _lockManager.AddLock(daySchedule, LockType.UnpublishedSchedule);
 
@@ -724,7 +724,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     // if it only is one lock and that is WriteProtected AND the user is allowed to change those
                     // Don't remove it the user can change it
                     var gridlock = new Gridlock(theParts[i], LockType.WriteProtected);
-                    if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) && TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+                    if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) && PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
                     {
 
                     }

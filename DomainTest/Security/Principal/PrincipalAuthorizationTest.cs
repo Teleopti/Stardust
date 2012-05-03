@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.Principal
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
-            principalAuthorization = new PrincipalAuthorization(principal);
+			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
             applicationFunction = mocks.StrictMock<IApplicationFunction>();
             
             PrepareClaims();
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
-            principalAuthorization = new PrincipalAuthorization(principal);
+			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
             PrepareClaims();
             
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
-            principalAuthorization = new PrincipalAuthorization(principal);
+			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
             PrepareClaims();
 
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
 			organisationMembership = principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(principal);
+			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
 			PrepareClaims();
 
@@ -218,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
 			organisationMembership = principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(principal);
+			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
 			PrepareClaims();
 

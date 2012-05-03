@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			if (!DesignMode)
 			{
 				SetTexts();
-				var understaffingRealmEnabled = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequests);
+				var understaffingRealmEnabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequests);
 				percentTextBoxUnderstaffingFor.Enabled = understaffingRealmEnabled;
 				labelFor.Enabled = understaffingRealmEnabled;
 				if(percentTextBoxUnderstaffingFor.Enabled)

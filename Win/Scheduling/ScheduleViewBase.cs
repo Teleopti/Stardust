@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             Color backGroundColor = _grid.BackColor;
             Color backGroundHolidayColor = _colorHolidayCell;
 
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
             {
                 if (schedulePart != null)
@@ -1097,7 +1097,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (gridLock.Value.LockType == LockType.WriteProtected)
 					{
-						if(!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+						if(!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
 							writeProtectLock = true;	
 					}
 					else

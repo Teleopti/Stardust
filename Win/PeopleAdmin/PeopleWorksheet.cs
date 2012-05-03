@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             SetPermissionOnControls();
             if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
                 Icon = Resources.people;
-            _readOnly = !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            _readOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private void SetPermissionOnControls()
         {
             toolStripButtonSystemOptions.Enabled =
-                TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+                PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
         	toolStripTabItem2.Visible = toolStripButtonSystemOptions.Enabled;
         }
 
@@ -949,7 +949,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             //Set generalToolStripButton to add new person when press CTRL + N.
             SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
-            toolStripExEdit.Enabled = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            toolStripExEdit.Enabled = PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -982,7 +982,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _clipboardControl.PasteSpecialClicked += (ClipboardControl_PasteSpecialClicked);
             _clipboardControl.PasteClicked += (ClipboardControl_PasteClicked);
             //_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
-            toolStripExClipboard.Enabled = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+            toolStripExClipboard.Enabled = PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -1142,7 +1142,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 // Configures the find and replace form
                 _findAndReplaceForm.ConfigureSearchFunctionality(_gridConstructor.View.Grid, _domainFinder);
 
-                if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
+                if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
                 {
                     TogglePanelContent(false);
                     splitContainerWorksheet.Panel2Collapsed = false;

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public bool CheckPermission()
         {
-            return TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(_applicationFunctionPath);
+            return PrincipalAuthorization.Instance().IsPermitted(_applicationFunctionPath);
         }
     }
 }

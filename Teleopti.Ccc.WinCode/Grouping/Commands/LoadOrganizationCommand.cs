@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 
         public void Execute()
         {
-            var loadUser = TeleoptiPrincipal.Current.PrincipalAuthorization.EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
+            var loadUser = PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
             if (!_loadUsers)
                 loadUser = false;
             var date = _view.SelectedDate;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             }
             
             // rättigheter
-            var auth = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var auth = PrincipalAuthorization.Instance();
             var toRemove = new List<IPersonSelectorOrganization>();
             foreach (var toNode in toNodes)
             {

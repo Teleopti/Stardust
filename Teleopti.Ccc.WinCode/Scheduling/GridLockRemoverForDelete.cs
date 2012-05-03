@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     // Don't remove it the user can change it
                     var gridlock = new Gridlock(scheduleDay, LockType.WriteProtected);
                     if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) &&
-                        TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                        PrincipalAuthorization.Instance().IsPermitted(
                             DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
                     {
 

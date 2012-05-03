@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 PersonContractFactory.CreatePersonContract("testContract", "TestSchedule", "TestPartTimePercentage"),
 				 team);
 			person.AddPersonPeriod(personPeriod);
-            _principalAuthorization = new PrincipalAuthorization(TeleoptiPrincipal.Current);
+            _principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
 			// Ses the contained entity
             _target = new PersonGeneralModel(person, new UserDetail(person), _principalAuthorization);
 

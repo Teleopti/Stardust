@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
         {
             //create new person grid data.
-            var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(TeleoptiPrincipal.Current));
+            var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()));
 
             //set optional columns if any.
             if (_optionalColumnCollection.Count > 0)

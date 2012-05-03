@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             var ret = new Dictionary<IPerson, string>();
              
             //Sorry don't know how to test this static shit
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             var functionPath = _applicationFunction.FunctionPath;
             _personToIndex = _personToIndex.Where(p => authorization.IsPermitted(functionPath, _datePeriod.StartDate, p) || authorization.IsPermitted(functionPath, _datePeriod.EndDate, p));
            

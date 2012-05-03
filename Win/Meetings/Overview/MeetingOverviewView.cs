@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
             scheduleControl1.PerformSwitchToScheduleViewTypeClick(ScheduleViewType.WorkWeek);
             
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings))
             {
                 scheduleControl1.AllowAdjustAppointmentsWithMouse = false;
             }
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         {
             IPerson person = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
             ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
-            if (TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
+            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
             {
                 return true;
             }

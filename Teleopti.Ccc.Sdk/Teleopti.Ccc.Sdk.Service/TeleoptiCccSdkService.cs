@@ -1019,7 +1019,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void SaveExtendedPreferenceTemplate(ExtendedPreferenceTemplateDto extendedPreferenceTemplateDto)
 		{
-			if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
 			{
 				throw new FaultException("The current user is not allowed to modify extended preferences.");
 			}
@@ -1063,7 +1063,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public ICollection<ExtendedPreferenceTemplateDto> GetExtendedPreferenceTemplates(PersonDto personDto)
 		{
-            if (!TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
+            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
 			{
 				throw new FaultException("The current user is not allowed to modify extended preferences.");
 			}
@@ -1740,7 +1740,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 			if (((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
 			{
-				afUnionCollection.AddRange(TeleoptiPrincipal.Current.PrincipalAuthorization.GrantedFunctions());
+				afUnionCollection.AddRange(PrincipalAuthorization.Instance().GrantedFunctions());
 			}
 			else
 			{

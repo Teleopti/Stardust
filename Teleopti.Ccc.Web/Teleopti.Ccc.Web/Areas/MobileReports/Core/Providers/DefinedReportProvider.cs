@@ -3,6 +3,7 @@ using System.Linq;
 
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -12,11 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 {
 	public class DefinedReportProvider : IDefinedReportProvider
 	{
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly IPrincipalAuthorization _principalAuthorization;
 
-		public DefinedReportProvider(IPrincipalProvider principalProvider)
+		public DefinedReportProvider(IPrincipalAuthorization principalAuthorization)
 		{
-			_principalProvider = principalProvider;
+			_principalAuthorization = principalAuthorization;
 		}
 
 		public IDefinedReport Get(string reportId)
@@ -30,8 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 				new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix);
 			var definedReportFunctionSpecification = new DefinedReportFunctionSpecification(DefinedReports.ReportInformations);
 
-			var grantedFunctionsBySpecification =
-				_principalProvider.Current().PrincipalAuthorization.GrantedFunctionsBySpecification(
+			var grantedFunctionsBySpecification = _principalAuthorization.GrantedFunctionsBySpecification(
 					externalApplicationFunctionSpecification.And(definedReportFunctionSpecification));
 			var grantedFunctions = grantedFunctionsBySpecification.Select(f => f.FunctionCode);
 

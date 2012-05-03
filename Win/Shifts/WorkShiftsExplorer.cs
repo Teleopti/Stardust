@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void setPermissionOnControls()
         {
-            toolStripButtonSystemOptions.Enabled = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+            toolStripButtonSystemOptions.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
         }
 
         private void workShiftsExplorerFormClosing(object sender, FormClosingEventArgs e)

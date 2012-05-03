@@ -73,16 +73,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    private void setVisibility()
 	    {
 	        toolStripMenuItemQuickForecast.Visible =
-	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	            PrincipalAuthorization.Instance().IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 	        toolStripMenuItemCopyTo.Visible =
-	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	            PrincipalAuthorization.Instance().IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 	        toolStripMenuItemActionSkillImportForecast.Visible =
-	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	            PrincipalAuthorization.Instance().IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 	        toolStripMenuItemSkillsImportForecast.Visible =
-	            TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+	            PrincipalAuthorization.Instance().IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 	    }
 
@@ -638,7 +638,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toggleExportMenu()
 		{
-			var exportContextItemsVisible = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit);
+			var exportContextItemsVisible = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit);
 			toolStripMenuItemExport.Visible = exportContextItemsVisible;
 			toolStripMenuItemJobHistory.Visible = exportContextItemsVisible;
 			toolStripSeparatorExport.Visible = exportContextItemsVisible;

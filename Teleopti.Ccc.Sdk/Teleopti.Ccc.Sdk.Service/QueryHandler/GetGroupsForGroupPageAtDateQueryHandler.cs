@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.QueryHandler
 				p =>
 				p.Any(
 					d =>
-					TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+					PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 					                                                             queryDate, d))).Select(
 					                                                             	p =>
 					                                                             	new GroupPageGroupDto

@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_selectedEntityList == null) return true;
 
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
 
             if (_selectedEntityList.OfType<ITeam>().Count() > 0) 
                 return _selectedEntityList.OfType<ITeam>().All(team => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, team));
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private static bool hasFunctionPermissionForRestrictedScenarios()
         {
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             return authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario);
         }
 

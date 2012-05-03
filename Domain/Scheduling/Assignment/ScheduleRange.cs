@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
                 var timeZone = Person.PermissionInformation.DefaultTimeZone();
                 var dop = Period.ToDateOnlyPeriod(timeZone);
-                _availablePeriods = TeleoptiPrincipal.Current.PrincipalAuthorization.PermittedPeriods(function, dop, Person);
+                _availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(function, dop, Person);
             }
             return _availablePeriods;
         }
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 				    var timeZone = Person.PermissionInformation.DefaultTimeZone();
 					var dop = Period.ToDateOnlyPeriod(timeZone);
-                    var availablePeriods = TeleoptiPrincipal.Current.PrincipalAuthorization.PermittedPeriods(function, dop, Person);
+                    var availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(function, dop, Person);
 					_availableDates = new HashSet<DateOnly>();
 					foreach (var period in availablePeriods)
 					{
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailableDates);
+			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailableDates);
 		}
 
         public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//don't use this from client. use scheduledictionary.modify instead!
 		public void ModifyInternal(IScheduleDay part)
 		{
-		    var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+		    var authorization = PrincipalAuthorization.Instance();
 
 		    ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
             IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var canSeeUnpublished = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var canSeeUnpublished = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			var retList = new List<IScheduleDay>();
 			foreach (var date in dateOnlyPeriod.DayCollection())
 			{

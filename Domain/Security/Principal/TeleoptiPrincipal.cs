@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
         private IPerson _person;
         private IList<ClaimSet> _claimSets = new List<ClaimSet>();
-        private IPrincipalAuthorization _principalAuthorization;
         private IIdentity _identity;
 
         public TeleoptiPrincipal(IIdentity identity, IPerson person)
@@ -22,15 +21,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             setupPerson();
         }
 
-		public static ITeleoptiPrincipal Current
-		{
-			get { return Thread.CurrentPrincipal as ITeleoptiPrincipal; }
-		}
+		private static readonly CurrentTeleoptiPrincipal CurrentTeleoptiPrincipal = new CurrentTeleoptiPrincipal();
+		public static ITeleoptiPrincipal Current { get { return CurrentTeleoptiPrincipal.Current(); } }
 
 		public void ChangePrincipal(TeleoptiPrincipal principal)
 		{
 			_person = principal._person;
-			_principalAuthorization = null;
 			_claimSets = principal._claimSets;
 			_identity = principal.Identity;
 
@@ -78,8 +74,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         }
 
         public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
-
-        public virtual IPrincipalAuthorization PrincipalAuthorization { get { return _principalAuthorization ?? (_principalAuthorization = new PrincipalAuthorization(this)); } }
 
         public IRegional Regional { get; private set; }
 

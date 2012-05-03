@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if(lockedDates == null)
 				throw new ArgumentNullException("lockedDates");
 
-		    var authorizationService = TeleoptiPrincipal.Current.PrincipalAuthorization;
+		    var authorizationService = PrincipalAuthorization.Instance();
             var applicationFunction = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			var modifiedParts = new List<IScheduleDay>();
 			

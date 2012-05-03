@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             }
             
             // rättigheter
-            var auth = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var auth = PrincipalAuthorization.Instance();
             var toRemove = new List<IPersonSelectorBuiltIn>();
             foreach (var toNode in toNodes)
             {

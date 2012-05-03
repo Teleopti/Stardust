@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             _filteredPeopleHolder = filteredPeopleHolder;
             _readOnly =
-                !TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
+                !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 

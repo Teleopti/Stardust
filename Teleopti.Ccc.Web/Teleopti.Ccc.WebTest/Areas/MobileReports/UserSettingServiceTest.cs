@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 				_businessUnit = businessUnit;
 				_person = person;
 				_principal =
-					new TeleoptiPrincipalForTest(
+					new TeleoptiPrincipal(
 						new TeleoptiIdentity(_person.Name.ToString(), null, _businessUnit, null, AuthenticationTypeOption.Unknown), _person);
 			}
 

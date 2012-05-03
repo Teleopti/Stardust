@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void setPermissionOnControls()
         {
-            toolStripButtonSystemOptions.Enabled = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+            toolStripButtonSystemOptions.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
         }
 
         private void showPeopleHeader()

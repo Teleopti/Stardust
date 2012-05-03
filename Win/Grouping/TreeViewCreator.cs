@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Grouping
             IEnumerable<IPerson> peopleList = _groupPageDataProvider.PersonCollection;
             _remainingPersonList = (peopleList != null) ? new List<IPerson>(peopleList) : new List<IPerson>();
             IList<TreeNodeAdv> nodes = new List<TreeNodeAdv>();
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             string functionPath = applicationFunction.FunctionPath;
 
             try
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Grouping
         private void AddPerson(TreeNodeAdv node, IEnumerable<IPerson> personCollection, IApplicationFunction applicationFunction)
         {
             var period = _groupPageDataProvider.SelectedPeriod;
-            var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+            var authorization = PrincipalAuthorization.Instance();
             string functionPath = applicationFunction.FunctionPath;
 
             //add persons to corresponding node

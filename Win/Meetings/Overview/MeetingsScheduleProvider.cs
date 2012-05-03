@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
                     _allowedScenarios = _repositoryFactory.CreateScenarioRepository(uow).FindAllSorted();
                 }
 
-                var authorization = TeleoptiPrincipal.Current.PrincipalAuthorization;
+                var authorization = PrincipalAuthorization.Instance();
                 if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario))
                 {
                     for (var i = _allowedScenarios.Count - 1; i > -1; i--)
