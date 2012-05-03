@@ -131,11 +131,19 @@
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
   
-  <Target Name="MoveToKanbox" Condition="'$(FullBuild)' == 'No'">
+  <Target Name="MoveToKanbox">
 	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
 	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
+	
+	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
+		<ZIPName>$(CCNetProject)</ZIPName>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
+		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
+	</PropertyGroup>
 
-	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(CCNetProject).zip&quot;"/>
+	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
 
   <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
