@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void buildDataTree()
         {
-            IBusinessUnit bu = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
 
             var buNode = new TreeNodeAdv
                                      {
@@ -1304,7 +1304,7 @@ namespace Teleopti.Ccc.Win.Permissions
             PermissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(newRole, permissionsDataHolder);
 
             // manually add BusinessUnit
-            newRole.SetBusinessUnit(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+            newRole.SetBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
 
             // Create an AvailableData instance for the new ApplicationRole
             IAvailableData availableData = new AvailableData { ApplicationRole = newRole };

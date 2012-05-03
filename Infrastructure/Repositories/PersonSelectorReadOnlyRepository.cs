@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetString("type", "Organization")
                     .SetDateTime("ondate", onDate)
                     .SetGuid("bu",
-                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", loadUsers)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetString("type", loadType.ToString())
                     .SetDateTime("ondate", onDate)
                     .SetGuid("bu",
-                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", false)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorBuiltIn)))
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     "exec ReadModel.LoadUserDefinedTab @tabid=:tabid, @bu=:bu,  @ondate=:ondate, @culture=:culture")
                     .SetGuid("tabid", value)
                     .SetGuid("bu",
-                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetDateTime("ondate", onDate)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorUserDefined)))
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
                     "SELECT Id, Name FROM GroupPage WHERE IsDeleted = 0 AND BusinessUnit = :bu")
                     .SetGuid("bu",
-                            ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetResultTransformer(Transformers.AliasToBean(typeof(UserDefinedTabLight)))
                     .SetReadOnly(true)
                     .List<IUserDefinedTabLight>();   

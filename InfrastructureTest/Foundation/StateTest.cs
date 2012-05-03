@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void VerifyLoggedInFalse()
         {
 			var currentPrincipal = TeleoptiPrincipal.Current as TeleoptiPrincipal;
-            var identity = (TeleoptiIdentity)currentPrincipal.Identity;
+            var identity = (ITeleoptiIdentity)currentPrincipal.Identity;
 
             currentPrincipal.ChangePrincipal(
                 new TeleoptiPrincipal(new TeleoptiIdentity("", identity.DataSource, identity.BusinessUnit,

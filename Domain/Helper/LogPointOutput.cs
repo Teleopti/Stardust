@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Helper
         {
             if (_log == null)
             {
-                var identity = TeleoptiPrincipal.Current.Identity as TeleoptiIdentity;
+                var identity = TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
                 if (identity != null)
                 {
                     GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;

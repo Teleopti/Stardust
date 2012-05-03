@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     	private static void killNotNeededSessionFactories()
     	{
 			//kan man inte få tag på datasource på nåt lättare sätt?
-    		var loggedOnDataSource = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource;
+    		var loggedOnDataSource = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource;
     		StateHolder.Instance.StateReader.ApplicationScopeData.DisposeAllDataSourcesExcept(loggedOnDataSource);
     	}
 

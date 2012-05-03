@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
 				throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
 			}
 
-			var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 			var message = new ProcessDenormalizeQueue
 			              	{
 			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),

@@ -315,7 +315,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 
         public IEnumerable<IBusinessUnit> BusinessUnitCollection
         {
-            get { yield return ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit; }
+            get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit; }
         }
 
         public DateOnlyPeriod SelectedPeriod

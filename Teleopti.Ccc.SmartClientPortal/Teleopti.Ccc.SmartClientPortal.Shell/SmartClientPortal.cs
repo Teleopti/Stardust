@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
-			var loggedOnBu = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
+			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 
             setNotifyData(_systemChecker.IsOk());
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
 #if(DEBUG)
             string outPut = string.Concat(UnitOfWorkFactory.Current.NumberOfLiveUnitOfWorks.ToString(), " Raptor UOW:s");
-            IUnitOfWorkFactory matrix = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Statistic;
+            IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Statistic;
             if(matrix!=null)
                 outPut +=string.Concat(", ", matrix.NumberOfLiveUnitOfWorks, " Matrix UOW:s");
             Roger65(outPut);
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             toolStripButtonSystemOptions.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
             toolStripButtonMyProfile.Enabled =
-                ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.AuthenticationSettings.LogOnMode !=
+                ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.AuthenticationSettings.LogOnMode !=
                 LogOnModeOption.Win;
         }
 

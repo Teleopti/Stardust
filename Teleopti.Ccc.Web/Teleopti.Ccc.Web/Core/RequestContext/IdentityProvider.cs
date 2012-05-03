@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class IdentityProvider : IIdentityProvider
 	{
-		public TeleoptiIdentity Current()
+		public ITeleoptiIdentity Current()
 		{
-			return TeleoptiPrincipal.Current.Identity as TeleoptiIdentity;
+			return TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
 		}
 	}
 }

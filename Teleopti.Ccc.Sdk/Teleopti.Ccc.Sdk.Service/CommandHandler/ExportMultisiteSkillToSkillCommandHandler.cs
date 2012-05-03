@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 unitOfWork.PersistAll();
 
                 //Prepare message to send to service bus
-                var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                 var message = new ExportMultisiteSkillsToSkill
                                   {
                                       BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),

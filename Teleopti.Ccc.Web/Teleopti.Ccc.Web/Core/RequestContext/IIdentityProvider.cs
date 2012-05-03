@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public interface IIdentityProvider
 	{
-		TeleoptiIdentity Current();
+		ITeleoptiIdentity Current();
 	}
 }

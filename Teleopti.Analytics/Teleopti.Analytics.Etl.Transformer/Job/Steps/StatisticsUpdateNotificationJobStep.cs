@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					messageSender.InstantiateBrokerService();
 				if (messageSender.IsAlive)
 				{
-					var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 					messageSender.SendData(DateTime.Now.Date,
 										   DateTime.Now.Date,
 										   Guid.NewGuid(),

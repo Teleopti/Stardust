@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
 					"SELECT DISTINCT PageName,PageId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId ORDER BY pagename")
 					.SetGuid("businessUnitId",
-					         ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					         ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
 					.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupPage)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
 					"SELECT GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND pageid=:pageId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
 					.SetGuid("businessUnitId",
-					         ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					         ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
 					.SetGuid("pageId", groupPage.PageId)
 					.SetDateTime("currentDate", queryDate.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupDetail)))
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
 					"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND groupid=:groupId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
 					.SetGuid("businessUnitId",
-							 ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
 					.SetGuid("groupId", groupId)
 					.SetDateTime("currentDate", queryDate.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))

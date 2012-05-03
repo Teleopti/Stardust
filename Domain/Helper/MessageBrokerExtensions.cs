@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Helper
 	{
 		private static BusinessUnitDetail GetDetail()
 		{
-			var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 			var businessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
 			var datasource = identity.DataSource.DataSourceName;
 

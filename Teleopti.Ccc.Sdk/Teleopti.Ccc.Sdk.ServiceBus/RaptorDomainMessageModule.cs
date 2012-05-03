@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         public static IUnitOfWorkFactory Current
         {
-            get { return _current ?? ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Application; }
+            get { return _current ?? ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Application; }
             set { _current = value; }
         }
     }

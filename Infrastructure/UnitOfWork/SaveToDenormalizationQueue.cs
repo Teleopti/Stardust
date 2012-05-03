@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Execute<T>(T message, IRunSql runSql) where T : RaptorDomainMessage
 		{
-			var identity = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
 
 			message.BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
 			message.Datasource = identity.DataSource.Application.Name;

@@ -1,15 +1,15 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class TeleoptiIdentity : GenericIdentity
+	public class TeleoptiIdentity : GenericIdentity, ITeleoptiIdentity
 	{
 		public TeleoptiIdentity(string name,
-										 IDataSource dataSource,
-										 IBusinessUnit businessUnit,
-										 WindowsIdentity windowsIdentity,
-										 AuthenticationTypeOption teleoptiAuthenticationType)
+		                        IDataSource dataSource,
+		                        IBusinessUnit businessUnit,
+		                        WindowsIdentity windowsIdentity,
+		                        AuthenticationTypeOption teleoptiAuthenticationType)
 			: base(name)
 		{
 			DataSource = dataSource;

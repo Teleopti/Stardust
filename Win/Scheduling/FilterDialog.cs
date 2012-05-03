@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             treeViewOrganization.BeginUpdate();   
             treeViewOrganization.Nodes.Clear();
 
-            IBusinessUnit bu = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
             TreeNode rootNode = new TreeNode(bu.Description.ToString());
             rootNode.ImageIndex = 4;
             treeViewOrganization.Nodes.Add(rootNode);

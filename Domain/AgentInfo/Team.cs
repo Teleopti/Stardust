@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get
             {
                 if (_site == null)
-                    return ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+                    return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
                 return _site.BusinessUnit;
             }
         }

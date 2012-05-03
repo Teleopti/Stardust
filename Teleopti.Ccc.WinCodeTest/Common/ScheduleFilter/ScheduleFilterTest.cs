@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.ScheduleFilter
         private DateTime _dateTimeFromDatePicker;
         private IBusinessUnitRepository _businessUnitRepository;
         private IBusinessUnit _businessUnit;
-        private readonly Guid _businessUnitId = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+        private readonly Guid _businessUnitId = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 
         [SetUp]
         public void Setup()

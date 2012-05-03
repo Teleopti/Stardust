@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
         public Guid? BusinessUnitId
         {
-            get { return ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id; }
+            get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id; }
         }
     }
 

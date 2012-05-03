@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			using (mocks.Playback())
 			{
 				var principal = target.Generate();
-				var identity = (TeleoptiIdentity) principal.Identity;
+				var identity = (ITeleoptiIdentity) principal.Identity;
 				((IUnsafePerson)principal).Person.Should().Be.SameInstanceAs(person);
 				identity.Name.Should().Be.EqualTo(person.Name.ToString());
 				identity.DataSource.Should().Be.SameInstanceAs(dataSource);

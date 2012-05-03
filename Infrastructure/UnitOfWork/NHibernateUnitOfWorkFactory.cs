@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker)
 		{
-			var identity = Thread.CurrentPrincipal.Identity as TeleoptiIdentity;
+			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
 			var buId = (identity !=null && identity.BusinessUnit!=null) ? identity.BusinessUnit.Id.GetValueOrDefault() : Guid.Empty;
 			var interceptor = new AggregateRootInterceptor();
 			var nhibSession = createNhibSession(interceptor, buId);

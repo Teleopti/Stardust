@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
         {
             var principal = TeleoptiPrincipal.Current;
-            var identity = (TeleoptiIdentity)principal.Identity;
+            var identity = (ITeleoptiIdentity)principal.Identity;
 
             foreach (var claimSet in obj)
             {

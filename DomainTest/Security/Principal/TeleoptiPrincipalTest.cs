@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
     public class TeleoptiPrincipalTest
     {
         private IPerson person;
-        private TeleoptiIdentity identity;
+        private ITeleoptiIdentity identity;
         private TeleoptiPrincipal target;
 
         [SetUp]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-					var newIdentity = new TeleoptiIdentity("test2", null, null, null, AuthenticationTypeOption.Unknown);
+				var newIdentity = new TeleoptiIdentity("test2", null, null, null, AuthenticationTypeOption.Unknown);
                 var newTarget = new TeleoptiPrincipal(newIdentity, newPerson);
 
                 var principalAuthorizationBefore = target.PrincipalAuthorization;

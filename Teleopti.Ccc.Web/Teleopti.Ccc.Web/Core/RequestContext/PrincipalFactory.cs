@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 					return null;
 
 				var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
-				IBusinessUnit businessUnit = buRep.Get(sessionData.BusinessUnitId);
+				var businessUnit = buRep.Get(sessionData.BusinessUnitId);
 
 				var teleoptiIdentity = new TeleoptiIdentity(person.Name.ToString(), dataSource, businessUnit, WindowsIdentity.GetCurrent(), sessionData.AuthenticationType);
 				principal = new TeleoptiPrincipal(teleoptiIdentity, person);

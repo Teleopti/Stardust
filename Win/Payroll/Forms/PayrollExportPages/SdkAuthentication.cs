@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
         public void SetSdkAuthenticationHeader()
         {
             var principal = TeleoptiPrincipal.Current;
-            var identity = ((TeleoptiIdentity)principal.Identity);
+            var identity = ((ITeleoptiIdentity)principal.Identity);
             AuthenticationMessageHeader.BusinessUnit = identity.BusinessUnit.Id.GetValueOrDefault();
             AuthenticationMessageHeader.DataSource = identity.DataSource.Application.Name;
             if (((IUnsafePerson)principal).Person.ApplicationAuthenticationInfo != null)

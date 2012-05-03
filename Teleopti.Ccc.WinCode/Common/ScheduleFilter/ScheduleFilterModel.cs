@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
             get
             {
                 if (_businessUnit == null)
-                    _businessUnit = _businessUnitRepository.Get(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
+                    _businessUnit = _businessUnitRepository.Get(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
 
                 return _businessUnit;
             }

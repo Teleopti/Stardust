@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         {
             get
             {
-                var identity = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+                var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
                 return identity.DataSource.Application;
             }
         }

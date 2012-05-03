@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             if (enabled)
             {
                 //Call RSB!
-                var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                 _serviceBusSender.NotifyServiceBus(new NewShiftTradeRequestCreated
                                            {
                                                BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 if (_serviceBusSender.EnsureBus())
                 {
-                    var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+                    var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                     _serviceBusSender.NotifyServiceBus(new AcceptShiftTrade
                                                            {
                                                                BusinessUnitId =

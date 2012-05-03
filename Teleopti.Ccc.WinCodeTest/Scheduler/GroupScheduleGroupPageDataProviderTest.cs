@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				
 			}
 
-            var expected = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            var expected = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
 
 			using (_mocks.Playback())
 			{

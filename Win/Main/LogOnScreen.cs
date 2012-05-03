@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.Win.Main
             try
             {
                 var repositoryFactory = new RepositoryFactory();
-                RaptorApplicationFunctionsSynchronizer raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
+                var raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
                 raptorSynchronizer.CheckRaptorApplicationFunctions();
 
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                     // those ApplicationRoles that are connected to the choosen business unit. We alos take into 
                     // consideration that the business unit can be null to those application roles that are valid
                     // to all business units like super roles.
-                    var identity = Thread.CurrentPrincipal.Identity as TeleoptiIdentity;
+                    var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
                     var businessUnit = identity != null ? identity.BusinessUnit : null;
                     if (!StateHolderReader.IsInitialized
                         && businessUnit != null

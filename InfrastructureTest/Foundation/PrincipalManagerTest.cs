@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			 target.SetCurrentPrincipal(null, null, null, authType);
 
 			 var currentPrincipal = TeleoptiPrincipal.Current;
-			 ((TeleoptiIdentity)currentPrincipal.Identity).TeleoptiAuthenticationType.Should().Be.EqualTo(authType);
+			 ((ITeleoptiIdentity)currentPrincipal.Identity).TeleoptiAuthenticationType.Should().Be.EqualTo(authType);
 		 }
 
         [TearDown]

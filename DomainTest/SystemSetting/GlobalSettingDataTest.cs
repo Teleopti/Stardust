@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
             exposingBu s = new exposingBu();
             Assert.IsNotNull(s.BusinessUnit);
 
-            var identity = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             Assert.AreSame(identity.BusinessUnit, s.BusinessUnit);
             IBusinessUnit bu = new BusinessUnit("df");
             s.SetBu(bu);

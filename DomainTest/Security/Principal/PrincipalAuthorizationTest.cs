@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
     {
         private IPrincipalAuthorization principalAuthorization;
         private IPerson person;
-        private TeleoptiPrincipal principal;
+        private ITeleoptiPrincipal principal;
         private MockRepository mocks;
         private IAuthorizeAvailableData authorizeAvailableData;
         private IApplicationFunction applicationFunction;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             authorizeAvailableData = mocks.StrictMock<IAuthorizeAvailableData>();
             person = PersonFactory.CreatePerson();
 
-				principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
+			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
             principalAuthorization = new PrincipalAuthorization(principal);
             applicationFunction = mocks.StrictMock<IApplicationFunction>();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10),site.TeamCollection[0]));
             otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
 
-				principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
+			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
             principalAuthorization = new PrincipalAuthorization(principal);
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
             otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
 
-				principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
+			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = principal.Organisation;
             principalAuthorization = new PrincipalAuthorization(principal);
 

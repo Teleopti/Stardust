@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Main
                         MessageBoxDefaultButton.Button1,
                         0);
                     owner.ShowInTaskbar = false;
-                    ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.ResetStatistic(); //Makes the factory return empty repository
+                    ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.ResetStatistic(); //Makes the factory return empty repository
                 }                
             }
         }

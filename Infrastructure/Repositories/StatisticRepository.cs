@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
-            var identity = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             return identity.DataSource.Statistic;
         }
     }

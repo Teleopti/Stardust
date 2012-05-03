@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 				message.Timestamp.Should().Be.GreaterThan(DateTime.UtcNow.AddMinutes(-1));
 				message.Datasource.Should().Be.EqualTo(UnitOfWorkFactory.Current.Name);
-				message.BusinessUnitId.Should().Be.EqualTo(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
+				message.BusinessUnitId.Should().Be.EqualTo(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
 			}
 		}
 	}

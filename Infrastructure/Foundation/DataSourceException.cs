@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
                 var principal = GetCurrentPrincipal();
                 if (principal == null)
                     return "[unknown datasource]";
-                var identity = principal.Identity as TeleoptiIdentity;
+                var identity = principal.Identity as ITeleoptiIdentity;
                 if (identity == null)
                     return "[unknown datasource]";
                 return identity.DataSource.DataSourceName;

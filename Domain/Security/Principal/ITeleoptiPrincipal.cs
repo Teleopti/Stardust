@@ -8,9 +8,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public interface ITeleoptiPrincipal
 	{
-		IPerson GetPerson(IPersonRepository personRepository);
-		void AddClaimSet(ClaimSet claimSet);
 		IIdentity Identity { get; }
+
+		IPerson GetPerson(IPersonRepository personRepository);
+
+		// required by RoleToPrincipalCommand which is used everywhere a principal is created.
+		// refactor??
+		void AddClaimSet(ClaimSet claimSet);
+
 		IEnumerable<ClaimSet> ClaimSets { get; }
 		IPrincipalAuthorization PrincipalAuthorization { get; }
 		IRegional Regional { get; }

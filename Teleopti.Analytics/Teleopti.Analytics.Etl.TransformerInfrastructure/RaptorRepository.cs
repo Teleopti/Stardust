@@ -915,7 +915,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
-                uow.Reassociate(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+                uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
 			    personRequests = rep.FindPersonRequestWithinPeriod(period);
 			}
 		    return personRequests;

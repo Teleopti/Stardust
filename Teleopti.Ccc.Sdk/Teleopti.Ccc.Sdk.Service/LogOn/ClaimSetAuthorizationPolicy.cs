@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                     return true;
                 }
 
-                var unitOfWorkFactory = ((TeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
+                var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
                 var personRepository = new PersonRepository(unitOfWorkFactory);
                 var personId = person.Id.GetValueOrDefault();
 

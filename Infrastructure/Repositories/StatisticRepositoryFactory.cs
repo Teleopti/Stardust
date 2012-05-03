@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public static IStatisticRepository Create()
         {
-			TeleoptiIdentity identity = null;
+			ITeleoptiIdentity identity = null;
 			var principal = TeleoptiPrincipal.Current;
 			if (principal!=null)
 			{
-				identity = principal.Identity as TeleoptiIdentity;
+				identity = principal.Identity as ITeleoptiIdentity;
 			}
         	if (identity == null || identity.DataSource.Statistic == null)
                 return new StatisticRepositoryEmpty();

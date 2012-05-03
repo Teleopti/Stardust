@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.PerformanceManager
             if (StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";
 
-            string bUnitID = ((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
+            string bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
 
             System.Diagnostics.Process proc = new System.Diagnostics.Process();
             proc.EnableRaisingEvents = false;

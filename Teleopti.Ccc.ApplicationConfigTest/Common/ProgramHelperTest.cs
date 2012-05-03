@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         public void CanLogOn()
         {
             target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit, _convertPerson);
-            Assert.IsNotNull(((TeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource);
+            Assert.IsNotNull(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource);
         }
 
         [Test]

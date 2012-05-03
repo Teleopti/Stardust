@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.CommandHandler
                 if (enabled)
                 {
                     //Call RSB!
-                    var identity = (TeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+                    var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                     _serviceBusSender.NotifyServiceBus(new NewAbsenceRequestCreated
                     {
                         BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),

@@ -53,21 +53,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void ExceptionShouldReturnDataSourceNameFromTheCurrentTeleoptiIdentity()
         {
-            MockRepository mocks = new MockRepository();
+            var mocks = new MockRepository();
 
             var loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             var dataSource = mocks.StrictMock<IDataSource>();
-				var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Unknown);
-            TeleoptiPrincipalForTest principalForTest = new TeleoptiPrincipalForTest(identity, loggedOnPerson);
+			var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Unknown);
+            var principalForTest = new TeleoptiPrincipalForTest(identity, loggedOnPerson);
 
             using (mocks.Record())
             {
                 Expect.Call(dataSource.DataSourceName).Return("DataSource");
             }
 
-            ExplicitlySetGenericPrincipalDataSourceException exception = new ExplicitlySetGenericPrincipalDataSourceException(principalForTest);
-            string datasourceName = exception.DataSource;
+            var exception = new ExplicitlySetGenericPrincipalDataSourceException(principalForTest);
+            var datasourceName = exception.DataSource;
             Assert.AreEqual("DataSource", datasourceName);
         }
 

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             if (eventMessages.Count > 0)
             {
             	_messageBroker.SendEventMessages(UnitOfWorkFactory.Current.Name,
-            	                                 ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.
+            	                                 ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.
             	                                 	GetValueOrDefault(), eventMessages.ToArray());
             }
         }
