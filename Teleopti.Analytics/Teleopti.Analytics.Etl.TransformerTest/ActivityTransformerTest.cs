@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Interfaces.Domain;
 
