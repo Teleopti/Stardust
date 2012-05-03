@@ -14,10 +14,7 @@ CREATE PROCEDURE [mart].[sys_etl_job_running_info_get]
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	SET TRANSACTION ISOLATION LEVEL read uncommitted
-
-	BEGIN TRANSACTION
+	
 	SELECT 
 		computer_name,
 		start_time,
@@ -25,7 +22,7 @@ BEGIN
 		is_started_by_service
 	FROM 
 		[mart].[sys_etl_running_lock]
-	COMMIT TRANSACTION
+	WITH (NOLOCK)
 END
 
 
