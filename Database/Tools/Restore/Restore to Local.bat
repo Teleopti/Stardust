@@ -26,6 +26,8 @@ SET CustomPathConfig=%DriveLetter%\CustomPath.txt
 SET SQLLogin=sa
 SET SQLPwd=cadadi
 SET SUPPORTTOOL=
+SET CreateAgg=
+SET CreateAnalytics=
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
@@ -250,20 +252,41 @@ ECHO.
 ECHO ------
 ECHO Upgrade databases ...
 
+::check if we need to create Analytics (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiAnalytics'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET /A CreateAnalytics=1
-if %CreateAnalytics% EQU 1 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics -C -L%SQLLogin%:%SQLPwd% %TRUNK%
-if %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
+if %errorlevel% NEQ 0 SET CreateAnalytics=-C -L%SQLLogin%:%SQLPwd%
 
+::Create views for all Cross DBs, could fail, don't bother about it
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE mart.sys_crossdatabaseview SET View_Definition = REPLACE(View_Definition,'FROM $$$target$$$.dbo','FROM [$$$target$$$].dbo')"
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
+
+::create or patch Analytics
+ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
+"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
+
+::Create views for all Cross DBs
+ECHO Adding views for Crossdatabases
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
+if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
+
+::Update MsgBroker settings
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
+
+::check if we need to create Agg (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiCCCAgg" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET /A CreateAgg=1
-if %CreateAgg% EQU 1 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg -C -L%SQLLogin%:%SQLPwd% %TRUNK%
-if %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
+if %errorlevel% NEQ 0 SET CreateAgg=-C -L%SQLLogin%:%SQLPwd%
+
+::Create or Patch Agg
+ECHO "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
+"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
 
 ::Add Cross DB-view targets
-ECHO Adding Crossdatabases
+ECHO Adding Crossdatabases, a second time
 
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE mart.sys_crossdatabaseview SET View_Definition = REPLACE(View_Definition,'FROM $$$target$$$.dbo','FROM [$$$target$$$].dbo')"
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
@@ -272,6 +295,10 @@ SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_
 CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCC7 -E -OTeleoptiCCC7 %TRUNK%
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
+
+ECHO Upgrade databases. Done!
+ECHO ------
+ECHO.
 
 CD "%ROOTDIR%"
 
@@ -295,28 +322,6 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error)
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'"
 if %errorlevel% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
-::Create views for all Cross DBs
-ECHO Adding views for Crossdatabases
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"EXEC mart.sys_crossDatabaseView_load"
-if %errorlevel% NEQ 0 SET /A ERRORLEV=5 & GOTO :Error
-
-::Upgrade Stat+Mart databases to latest version
-CD "%DBMANAGERPATH%"
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiAnalytics -E -OTeleoptiAnalytics %TRUNK%
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
-
-"%DBMANAGER%" -S%INSTANCE% -D%Branch%_%Customer%_TeleoptiCCCAgg -E -OTeleoptiCCCAgg %TRUNK%
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
-
-ECHO Upgrade databases. Done!
-ECHO ------
-ECHO.
-
-::Update MsgBroker settings
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Address] SET [Address] = '%COMPUTERNAME%',[Port]=9090 WHERE [AddressId] = 1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1;UPDATE [%Branch%_%Customer%_TeleoptiAnalytics].[msg].[Configuration] SET [ConfigurationValue] = '%COMPUTERNAME%' WHERE [ConfigurationId]=2"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :Error
-
-:Godis
 ::Add license (only if Demoreg)
 IF "%Customer%"=="%Demoreg%" (
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiCCC7 -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
@@ -373,8 +378,6 @@ IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
 IF %ERRORLEV% EQU 13 ECHO Could not apply license on demoreg database
-IF %ERRORLEV% EQU 14 ECHO Could not create empty Analytics DB
-IF %ERRORLEV% EQU 15 ECHO Could not create empty Agg DB
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 ECHO.
 ECHO --------
