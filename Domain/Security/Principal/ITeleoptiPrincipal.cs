@@ -5,11 +5,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
-{
-	public interface ITeleoptiPrincipal
+{	
+	public interface ITeleoptiPrincipal : IPrincipal
 	{
-		IIdentity Identity { get; }
-
 		IPerson GetPerson(IPersonRepository personRepository);
 
 		// required by RoleToPrincipalCommand which is used everywhere a principal is created.
@@ -20,6 +18,5 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		IPrincipalAuthorization PrincipalAuthorization { get; }
 		IRegional Regional { get; }
 		IOrganisationMembership Organisation { get; }
-		bool IsInRole(string role);
 	}
 }

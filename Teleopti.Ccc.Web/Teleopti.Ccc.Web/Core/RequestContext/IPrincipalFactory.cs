@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	/// </summary>
 	public interface IPrincipalFactory
 	{
-		TeleoptiPrincipal Generate();
+		ITeleoptiPrincipal Generate();
 	}
 }

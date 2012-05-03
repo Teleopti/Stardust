@@ -25,19 +25,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 		}
 
-		public TeleoptiPrincipal Generate()
+		public ITeleoptiPrincipal Generate()
 		{
 			var sessionData = _sessionSpecificDataProvider.Grab();
 			return sessionData == null ? null : createPrincipal(sessionData);
 		}
 
-		private TeleoptiPrincipal createPrincipal(SessionSpecificData sessionData)
+		private ITeleoptiPrincipal createPrincipal(SessionSpecificData sessionData)
 		{
 			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(sessionData.DataSourceName);
 			if (dataSource == null)
 				return null;
 
-			TeleoptiPrincipal principal;
+			ITeleoptiPrincipal principal;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
