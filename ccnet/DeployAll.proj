@@ -142,8 +142,8 @@
 		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
 	</PropertyGroup>
 	
-	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
-	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
+	<Exec Command="rd &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
+	<Exec Command="md &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot;" />
 
 	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
