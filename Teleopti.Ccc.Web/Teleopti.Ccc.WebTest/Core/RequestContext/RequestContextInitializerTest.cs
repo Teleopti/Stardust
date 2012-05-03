@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			private readonly TeleoptiPrincipal _principal;
 
-			public TeleoptiPrincipal Generate()
+			public ITeleoptiPrincipal Generate()
 			{
 				return _principal;
 			}
