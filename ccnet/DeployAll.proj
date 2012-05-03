@@ -137,13 +137,15 @@
 	
 	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
 		<ZIPName>$(CCNetProject)</ZIPName>
+		<KanboxShare>$(MSIShare)</KanboxShare>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
 		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
+		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
 	</PropertyGroup>
 
-	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
+	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
 
   <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
