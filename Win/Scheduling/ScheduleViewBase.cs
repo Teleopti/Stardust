@@ -953,17 +953,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         //get the local selected date
         public virtual DateOnly SelectedDateLocal()
         {
-            DateTime tag;
+            DateOnly tag;
             if (_grid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
             {
-                tag = (DateTime) _grid.Model[1, _grid.CurrentCell.ColIndex].Tag; 
+                tag = (DateOnly) _grid.Model[1, _grid.CurrentCell.ColIndex].Tag; 
             }
             else
             {
-                tag = Presenter.SelectedPeriod.StartDateTimeLocal(Presenter.SchedulerState.TimeZoneInfo);
+                tag = Presenter.SelectedPeriod.DateOnly.StartDate;
             }
             
-            return new DateOnly(tag);
+            return tag;
         }
 
         public IList<IScheduleDay> DeleteList<T>(ClipHandler<T> clipHandler)

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             ICollection<PublicNoteDto> publicNoteDtosToReturn;
             ICollection<PersonDto> personDtoCollection = _personsFromLoadOptionFactory.GetPersonFromLoadOption(publicNoteLoadOptionDto, teamDtoCollection,
-                                                                     startDate, endDate, timeZoneId);
+                                                                     startDate, endDate);
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {

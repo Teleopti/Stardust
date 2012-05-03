@@ -4,8 +4,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class DateTimePeriodAssembler : Assembler<DateTimePeriod,DateTimePeriodDto>
-    {
+	public class DateTimePeriodAssembler : Assembler<DateTimePeriod,DateTimePeriodDto>, IDateTimePeriodAssembler
+	{
         public DateTimePeriodAssembler()
         {
             TimeZone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;

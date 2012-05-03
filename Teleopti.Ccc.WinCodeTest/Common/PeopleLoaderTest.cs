@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     {
         private PeopleLoader _target;
         private readonly IList<IEntity> _selectedEntities = new List<IEntity>();
-        private DateTimePeriod _requestedPeriod;
+        private DateOnlyPeriod _requestedPeriod;
         private MockRepository _mockRep;
         private IPersonRepository _personRepository;
         private IContractRepository _contractRepository;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _contractRepository = _mockRep.StrictMock<IContractRepository>();
             _skillRepository = _mockRep.StrictMock<ISkillRepository>();
             _schedulerStateHolder = _mockRep.StrictMock<ISchedulerStateHolder>();
-            _requestedPeriod = new DateTimePeriod(new DateTime(2009, 9, 6, 22, 0, 0, DateTimeKind.Utc), new DateTime(2009, 9, 7, 22, 0, 0, DateTimeKind.Utc));
+            _requestedPeriod = new DateOnlyPeriod(2009, 9, 6,2009, 9, 7);
             _contract = ContractFactory.CreateContract("Part time");
             _contracts.Add(_contract);
             _uow = _mockRep.StrictMock<IUnitOfWork>();
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var intradayMainModel = new IntradayMainModel
             {
                 EntityCollection = _selectedEntities,
-                Period = _requestedPeriod.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone)
+                Period = _requestedPeriod
             };
             _selectedEntitiesForPeriod = new IntradaySelectedEntitiesForPeriod(intradayMainModel);
 

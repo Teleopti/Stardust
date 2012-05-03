@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
         void AddTabPages(string displayText);
         void AddSelectedIndexChangedHandler();
         void RemoveSelectedIndexChangedHandler();
-        DateTime CurrentFilterDate { get; }
+        DateOnly CurrentFilterDate { get; }
         void OpenContextMenu(Point point);
         void DisplaySearch();
         object SelectedTabTag();

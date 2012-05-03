@@ -13,7 +13,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private MeetingViewModel _model;
         private IMeetingSchedulesView _view;
         private IScenario _scenario;
-        private DateTimePeriod _period;
+        private DateOnlyPeriod _period;
         private IRangeProjectionService _rangeProjectionService;
         private ISchedulerStateLoader _schedulerStateLoader;
         private IMeetingSlotFinderService _meetingSlotFinderService;
@@ -43,13 +42,11 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
             _startDate = new DateOnly(2009, 10, 27);
-            _period =
-                new DateOnlyPeriod(_startDate, _startDate.AddDays(3)).ToDateTimePeriod(
-                    _person.PermissionInformation.DefaultTimeZone());
+            _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
             _schedulerStateLoader = _mocks.StrictMock<ISchedulerStateLoader>();
-            _schedulerStateHolder = new SchedulerStateHolder(_scenario,_period,new List<IPerson>{_person});
+            _schedulerStateHolder = new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_period,_person.PermissionInformation.DefaultTimeZone()), new List<IPerson>{_person});
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
             _model = MeetingComposerPresenter.CreateDefaultMeeting(_person, _schedulerStateHolder, _startDate,
                                                                    new List<IPerson>());
@@ -215,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.Model.AddParticipants(new List<ContactPersonViewModel>{new ContactPersonViewModel(_person)}, new List<ContactPersonViewModel>());
 
             Expect.Call(scheduleDictionary[_target.Model.RequiredParticipants[0].ContainedEntity]).Return(scheduleRange);
-            Expect.Call(_rangeProjectionService.CreateProjection(scheduleRange,_target.GetCurrentPeriod())).Return(visualLayerCollection);
+			Expect.Call(_rangeProjectionService.CreateProjection(scheduleRange, _target.GetCurrentPeriod().ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone))).Return(visualLayerCollection);
 
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 

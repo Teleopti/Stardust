@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -22,7 +21,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="candidates"></param>
         /// <param name="period"></param>
         /// <returns></returns>
-        IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateTimePeriod period);
+        IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateOnlyPeriod period);
 
         /// <summary>
         /// Converts to available data entry collection.

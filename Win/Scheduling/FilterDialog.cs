@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private IList<ITeam> _selectedTeams;
         private ICollection<IPerson> _allPermittedPersons;
-        private DateTimePeriod _period;
+        private DateOnlyPeriod _period;
         private TreeNode _userInvoke;
 
         protected FilterDialog()
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (!DesignMode) SetTexts();
         }
 
-        public FilterDialog(IList<ITeam> selectedTeams, ICollection<IPerson> allPermittedPersons, DateTimePeriod period)
+        public FilterDialog(IList<ITeam> selectedTeams, ICollection<IPerson> allPermittedPersons, DateOnlyPeriod period)
             : this()
         {
             _allPermittedPersons = allPermittedPersons;
@@ -50,9 +49,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _selectedTeams = new List<ITeam>();
                 if (_allPermittedPersons.Count > 0)
                 {
-                        foreach (Site site in bu.SiteCollection)
+                        foreach (ISite site in bu.SiteCollection)
                         {
-                             foreach (Team team in site.TeamCollection)
+                             foreach (ITeam team in site.TeamCollection)
                              {
                                  if (team.PersonsInHierarchy(_allPermittedPersons, _period).Count > 0) 
                                      _selectedTeams.Add(team);
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
                 else noSelection = true;
             }
-            foreach (Site site in bu.SiteCollection)
+            foreach (ISite site in bu.SiteCollection)
             {
                 if (site.PersonsInHierarchy(_allPermittedPersons, _period).Count > 0)
                 {
@@ -192,7 +191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 TraverseNodes(node, retList);
                 if (node.Checked)
                 {
-                    ITeam team = node.Tag as Team;
+                    ITeam team = node.Tag as ITeam;
                     if (team != null)
                     {
                         retList.Add(team);
@@ -223,7 +222,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 CheckNodes(node, nodes);
                 if (node.Checked)
                 {
-                    Team team = node.Tag as Team;
+                    ITeam team = node.Tag as ITeam;
                     if (team != null)
                     {
                         nodes.Add(node);

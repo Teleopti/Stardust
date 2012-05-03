@@ -112,6 +112,8 @@
     <Compile Include="Assemblers\ContractAssembler.cs" />
     <Compile Include="Assemblers\ContractScheduleAssembler.cs" />
     <Compile Include="Assemblers\ActivityAssembler.cs" />
+    <Compile Include="Assemblers\IDateTimePeriodAssembler.cs" />
+    <Compile Include="Assemblers\ISchedulePartAssembler.cs" />
     <Compile Include="Assemblers\ISdkProjectionServiceFactory.cs" />
     <Compile Include="Assemblers\PayrollResultDetailAssembler.cs" />
     <Compile Include="Assemblers\PayrollResultAssembler.cs" />
@@ -201,6 +203,7 @@
     <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByEmploymentNumberQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetTeamByDescriptionNameQueryHandler.cs" />

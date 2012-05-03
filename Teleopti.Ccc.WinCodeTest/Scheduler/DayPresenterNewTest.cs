@@ -6,6 +6,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scenario = mocks.StrictMock<IScenario>();
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-            schedulerState = new SchedulerStateHolder(scenario, new DateTimePeriod(), new List<IPerson>());
+            schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             _scaleCalculator = mocks.StrictMock<IDayPresenterScaleCalculator>();
@@ -67,12 +68,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
                 eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
                 ((DayPresenterNewTestClass)target).CreateDayHeaderTest(eventArgs);
-                Assert.AreEqual(new DateOnly(2011, 1, 1).Date, eventArgs.Style.Tag);
+                Assert.AreEqual(new DateOnly(2011, 1, 1), eventArgs.Style.Tag);
 
                 eventArgs = new GridQueryCellInfoEventArgs(1, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
-                eventArgs.Style.Tag = target.SelectedPeriod.LocalStartDateTime.Date;
+                eventArgs.Style.Tag = target.SelectedPeriod.DateOnly.StartDate;
                 ((DayPresenterNewTestClass)target).CreateDayHeaderTest(eventArgs);
-                Assert.AreEqual(new DateOnly(2011, 1, 1).Date, eventArgs.Style.Tag);
+                Assert.AreEqual(new DateOnly(2011, 1, 1), eventArgs.Style.Tag);
             }
 
             Assert.AreEqual(new DateTimePeriod(2011, 1, 1, 2011, 1, 2), target.ScalePeriod);
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
                 Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
-                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateTimePeriod());
+                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone));
                 Expect.Call(schedulerState1.FilteredPersonDictionary).Return(persons).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);

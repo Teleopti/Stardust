@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 
 		public IEnumerable<IPerson> FindPeopleWithBudgetGroup(IBudgetGroup budgetGroup, DateOnly day)
 		{
-			var periodForQuery = new DateOnlyPeriod(day.AddDays(-1), day.AddDays(1)).ToDateTimePeriod(budgetGroup.TimeZone);
+			var periodForQuery = new DateOnlyPeriod(day.AddDays(-1), day.AddDays(1));
 			var people = _personRepository.FindPeopleInOrganizationLight(periodForQuery);
 
 			foreach (IPerson person in people)

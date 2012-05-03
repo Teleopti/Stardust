@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _schedulingResultLoader = schedulingResultLoader;
 
-            _intradayDate = new DateOnly(HistoryOnly ? SchedulerStateHolder.RequestedPeriod.LocalStartDateTime : DateTime.Today);
+            _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnly.StartDate : DateOnly.Today;
         }
 
         public bool EarlyWarningEnabled
@@ -112,18 +112,19 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             if (_messageBroker==null) return;
 
+        	var period = SchedulerStateHolder.RequestedPeriod.Period();
             _messageBroker.RegisterEventSubscription(OnEventStatisticMessageHandler,
                                                     typeof(IStatisticTask));
             _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
                                                     typeof(IPersistableScheduleData),
-                                                    SchedulerStateHolder.RequestedPeriod.StartDateTime,
-                                                    SchedulerStateHolder.RequestedPeriod.EndDateTime);
+                                                    period.StartDateTime,
+                                                    period.EndDateTime);
         	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
         	                                         typeof (IMeeting));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
-                                                    SchedulerStateHolder.RequestedPeriod.StartDateTime,
-                                                    SchedulerStateHolder.RequestedPeriod.EndDateTime);
+                                                    period.StartDateTime,
+                                                    period.EndDateTime);
             if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 
             foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
@@ -322,7 +323,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
             {
                 _rtaStateHolder.CollectAgentStates(
-                    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod,_rtaStateHolder.ExternalLogOnPersons));
+                    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod.Period(),_rtaStateHolder.ExternalLogOnPersons));
             }
             using (PerformanceOutput.ForOperation("Analyzing alarms for initial states"))
             {
@@ -490,7 +491,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public bool HistoryOnly
         {
-            get { return !SchedulerStateHolder.RequestedPeriod.Contains(DateTime.UtcNow); }
+            get { return !SchedulerStateHolder.RequestedPeriod.Period().Contains(DateTime.UtcNow); }
         }
 
         public event EventHandler ExternalAgentStateReceived;

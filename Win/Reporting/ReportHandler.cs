@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Reporting
 				}
 			}
 			var loadPeriod = new DateOnlyPeriod(startDate, endDate);
-			var stateHolder = new SchedulerStateHolder(model.Scenario, loadPeriod.ToDateTimePeriod(timeZoneInfo), model.Persons);
+			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod,timeZoneInfo), model.Persons);
 			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			LoadSchedules(unitOfWork, model.Persons, stateHolder);
 			
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		private static void LoadSchedules(IUnitOfWork unitOfWork, IEnumerable<IPerson> persons, ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
-			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod, stateHolder.SchedulingResultState.PersonsInOrganization);
+			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization);
 			IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true};
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
             unitOfWork.Reassociate(persons);

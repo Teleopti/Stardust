@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private readonly IDictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>> _projectionCache =
             new Dictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>>();
         private DateOnly _currentDate;
-        private DateTimePeriod _currentPeriod;
+        private DateOnlyPeriod _currentPeriod;
         private IList<ContactPersonViewModel> _participantList;
         private IList<TimePeriod> _meetingTimeList;
         private readonly IMeetingSlotFinderService _meetingSlotFinderService;
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 projection =
                     _rangeProjectionService.CreateProjection(
-                        _schedulerStateHolder.Schedules[personViewModel.ContainedEntity], period);
+                        _schedulerStateHolder.Schedules[personViewModel.ContainedEntity], period.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
                 _projectionCache.Add(cacheKey,projection);
             }
             return projection;
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             //return person;
         }
          
-        public DateTimePeriod GetCurrentPeriod()
+        public DateOnlyPeriod GetCurrentPeriod()
         {
             return _currentPeriod;
         }
@@ -326,23 +326,21 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             _currentDate = currentDate;
 
-			var endDate = new DateOnly(currentDate.AddDays(2));
-			_currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDate.AddDays(-1), endDate, _meetingViewModel.TimeZone);
+			var endDate = currentDate.AddDays(2);
+			_currentPeriod = new DateOnlyPeriod(currentDate.AddDays(-1), endDate);
 
-            if (!_schedulerStateHolder.RequestedPeriod.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
+            if (!_schedulerStateHolder.RequestedPeriod.DateOnly.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
             {
-
-            	var scheduleDateTimePeriod = new ScheduleDateTimePeriod(_currentPeriod,
+            	var period = _currentPeriod.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+            	var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period,
             	                                                        _schedulerStateHolder.SchedulingResultState.
             	                                                        	PersonsInOrganization,
-            	                                                        new MeetingScheduleRangeToLoadCalculator(
-            	                                                        	_currentPeriod));
+            	                                                        new MeetingScheduleRangeToLoadCalculator(period));
 				_schedulerStateLoader.LoadSchedules(scheduleDateTimePeriod);
 				
             }
 
-            _currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentDate.Date,
-                                                                        _currentDate.Date.AddDays(1), _meetingViewModel.TimeZone); //OBS var 1.5
+            _currentPeriod = new DateOnlyPeriod(_currentDate, _currentDate.AddDays(1)); //OBS var 1.5
         }
 
         public void SetStartTime(TimeSpan startTime)
@@ -395,7 +393,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 			public IPerson Person {     get; set; }
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-			public DateTimePeriod Period { get; set; }
+			public DateOnlyPeriod Period { get; set; }
 		}
 
         public bool IsDayOff(EntityContainer<IPerson> personViewModel)

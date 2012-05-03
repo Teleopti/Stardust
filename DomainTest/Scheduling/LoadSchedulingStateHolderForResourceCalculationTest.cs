@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyExecute()
 		{
 			DateTimePeriod period = new DateTimePeriod(2010,2,1,2010,2,2);
@@ -71,14 +71,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var requestedPeople = new List<IPerson> {person};
 			var peopleInOrganization = new List<IPerson> {person};
 			var visiblePeople = new List<IPerson>();
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			using (_mocks.Record())
 			{
 				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(period, true)).Return(peopleInOrganization);
+				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
 				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments
 					().Return(scheduleDictionary);
-				Expect.Call(_skillRepository.FindAllWithSkillDays(period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()))).Return(skills);
+				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 				_peopleAndSkillLoadDecider.Execute(scenario,period,requestedPeople);
 				Expect.Call(_peopleAndSkillLoadDecider.FilterPeople(peopleInOrganization)).Return(0);
 				Expect.Call(_peopleAndSkillLoadDecider.FilterSkills(skills)).Return(0);
@@ -105,13 +106,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var requestedPeople = new List<IPerson> { person };
 			var peopleInOrganization = new List<IPerson>();
 			var visiblePeople = new List<IPerson>();
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(period, true)).Return(peopleInOrganization);
+				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, true)).Return(peopleInOrganization);
 				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments
 					().Return(scheduleDictionary);
-				Expect.Call(_skillRepository.FindAllWithSkillDays(period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()))).Return(skills);
+				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
 				_peopleAndSkillLoadDecider.Execute(scenario, period, requestedPeople);
 				Expect.Call(_peopleAndSkillLoadDecider.FilterPeople(peopleInOrganization)).Return(1);
 				Expect.Call(_peopleAndSkillLoadDecider.FilterSkills(skills)).Return(0);

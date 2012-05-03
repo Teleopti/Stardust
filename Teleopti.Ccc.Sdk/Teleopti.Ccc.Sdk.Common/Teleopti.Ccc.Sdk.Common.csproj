@@ -186,6 +186,7 @@
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleForShiftTradeByGroupPageGroupQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByTeamQueryHandlerDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetValidatedSchedulePartsForStudentAvailabilityQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAgentPortalSettingsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllPayrollExportsQueryDto.cs" />

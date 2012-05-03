@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                                                                     (
                                                                                         unitOfWork)));
                     loader.Execute(requestedScenario, periodForResourceCalc,
-                                   personRepository.FindPeopleInOrganization(periodForResourceCalc, true));
+                                   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
                 	var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
                 	                                                                new OccupiedSeatCalculator(

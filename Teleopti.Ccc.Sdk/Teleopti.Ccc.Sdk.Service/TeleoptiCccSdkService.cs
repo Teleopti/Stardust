@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
                 var personDtos =
                     _factoryProvider.CreatePersonsFromLoadOptionFactory(inner).GetPersonFromLoadOption(
-                        scheduleLoadOptionDto, teamDtos, startDate, endDate, timeZoneId);
+                        scheduleLoadOptionDto, teamDtos, startDate, endDate);
 
                 if (personDtos != null)
                 {
@@ -466,6 +466,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 return schedulePartDtos;
             }
 		}
+
+		public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
+			{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<SchedulePartDto>>>();
+				return invoker.Invoke(queryDto);
+			}
+			}
 
 		public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
@@ -1640,8 +1649,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
                     IRepositoryFactory repositoryFactory = new RepositoryFactory();
                     IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam
-					(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period.ToDateTimePeriod(timeZoneInfo));
+					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
 					dtos = personAssembler.DomainEntitiesToDtos(personCollection);
 				}
 				else

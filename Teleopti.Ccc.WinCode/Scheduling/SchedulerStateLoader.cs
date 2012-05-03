@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -6,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -61,14 +59,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod)
         {
-            if (_schedulerState.Schedules != null && _schedulerState.RequestedPeriod.Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
+            if (_schedulerState.Schedules != null && _schedulerState.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
                 return;
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                if (_schedulerState.RequestedPeriod != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+                if (_schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
                 {
-                    ((SchedulerStateHolder) _schedulerState).RequestedPeriod =
-                        scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod;
+                	((SchedulerStateHolder) _schedulerState).RequestedPeriod =
+                		new DateOnlyPeriodAsDateTimePeriod(
+                			scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
+                				_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
                 }
                 _schedulerState.SchedulingResultState.SkillDays = null;
                 reassociateCommonData(uow);
@@ -90,10 +90,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (_backgroundWorker.CancellationPending)
                 return;
 
-            if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+            if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
             {
-				((SchedulerStateHolder)_schedulerState).RequestedPeriod =
-					scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod;
+            	((SchedulerStateHolder) _schedulerState).RequestedPeriod =
+            		new DateOnlyPeriodAsDateTimePeriod(
+            			scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
+            				_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
                 initializeSchedules(uow, scheduleDateTimePeriod);
             }
             if (_backgroundWorker.CancellationPending)
@@ -117,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                    ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+                    ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnly);
 
                     foreach (ISkill skill in skills)
                     {
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IPersonRepository service = _repositoryFactory.CreatePersonRepository(uow);
 				
                 _schedulerState.SchedulingResultState.PersonsInOrganization =
-                    service.FindPeopleInOrganization(_schedulerState.RequestedPeriod, true);
+                    service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnly, true);
 
                 foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
                 {
@@ -191,7 +193,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             using (PerformanceOutput.ForOperation("Loading skills"))
             {
                 ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+                ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnly);
 
                 _schedulerState.SchedulingResultState.Skills.Clear();
                 foreach (ISkill skill in skills)
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
 					_repositoryFactory.CreateSkillDayRepository(uow),
 					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
-                    _schedulerState.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo),
+                    _schedulerState.RequestedPeriod.DateOnly,
                     skills,
                     _schedulerState.RequestedScenario);
             }
@@ -236,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 var service = 
                     new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, false);
-                service.SchedulingResult(_schedulerState.RequestedPeriod);
+                service.SchedulingResult(_schedulerState.RequestedPeriod.Period());
             }
         }
     }

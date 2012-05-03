@@ -1,8 +1,6 @@
-using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -14,9 +12,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
     [TestFixture]
     public class PersonBelongsToSiteSpecificationTest
     {
-        private DateTimePeriod _periodInQuestion =
-            new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                               new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+        private DateOnlyPeriod _periodInQuestion = new DateOnlyPeriod(2007, 1, 1, 2008, 1, 1);
 
         private BusinessUnit _bu = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 
@@ -47,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             ITeam falseTeam = TeamFactory.CreateSimpleTeam();
             IPerson notMemberOfTeamAgent = PersonFactory.CreatePerson();
-            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_periodInQuestion.StartDateTime), falseTeam);
+            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(_periodInQuestion.StartDate, falseTeam);
             notMemberOfTeamAgent.AddPersonPeriod(personPeriod);
           
             PersonBelongsToSiteSpecification spec =
@@ -63,9 +59,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             ITeam okTeam = _bu.SiteCollection[1].TeamCollection[0];
             IPerson notMemberInPeriodAgent = PersonFactory.CreatePerson();
-            DateTimePeriod newPeriodInQuestion =
-                new DateTimePeriod(_periodInQuestion.EndDateTime.AddDays(1) , _periodInQuestion.EndDateTime.AddYears(1));
-            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(newPeriodInQuestion.StartDateTime), okTeam);
+            var newPeriodInQuestion = new DateOnlyPeriod(_periodInQuestion.EndDate.AddDays(1) , _periodInQuestion.EndDate.AddDays(366));
+            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(newPeriodInQuestion.StartDate, okTeam);
             notMemberInPeriodAgent.AddPersonPeriod(personPeriod);
 
             PersonBelongsToSiteSpecification spec =

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -34,7 +35,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             dtp = new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2001,1,1));
             IPerson person = PersonFactory.CreatePerson("first", "last");
             selectedPersons = new List<IPerson>{person};
-            target = new SchedulerStateHolder(scenario, dtp.VisiblePeriod, selectedPersons);
+        	target = new SchedulerStateHolder(scenario,
+        	                                  new DateOnlyPeriodAsDateTimePeriod(
+        	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()),
+        	                                  	CccTimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons);
             mocks = new MockRepository();
         }
 
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void LoadPeriodCanBeRead()
         {
-            Assert.AreEqual(dtp.VisiblePeriod, target.RequestedPeriod);
+            Assert.AreEqual(dtp.VisiblePeriod, target.RequestedPeriod.Period());
         }
 
         [Test]

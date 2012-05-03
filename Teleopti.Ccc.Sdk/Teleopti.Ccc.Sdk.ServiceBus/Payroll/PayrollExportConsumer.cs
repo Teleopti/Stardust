@@ -45,10 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
                 _serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
                 _serviceBusPayrollExportFeedback.ReportProgress(1,"Payroll export initiated.");
 
-                var people = _payrollPeopleLoader.GetPeopleForExport(message,
-                                                                     message.ExportPeriod.ToDateTimePeriod(
-                                                                         exportingPerson.PermissionInformation.
-                                                                             DefaultTimeZone()), unitOfWork);
+                var people = _payrollPeopleLoader.GetPeopleForExport(message, message.ExportPeriod, unitOfWork);
                 var personDtos = _personBusAssembler.CreatePersonDto(people);
                 try
                 {

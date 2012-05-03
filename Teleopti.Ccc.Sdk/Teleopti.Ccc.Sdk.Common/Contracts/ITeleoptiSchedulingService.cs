@@ -382,5 +382,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute);
 
         void EndCreateServerScheduleDistribution(IAsyncResult result);
+
+		/// <summary>
+		/// Get the schedules for the given query.
+		/// </summary>
+		/// <param name="queryDto">The query.</param>
+		[OperationContract]
+    	ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto);
     }
 }

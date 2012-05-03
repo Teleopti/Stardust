@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// <value></value>
         /// <returns>All persons in the team.</returns>
         [SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.CompareTo(System.String)")]
-        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateTimePeriod period)
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
         {
             List<IPerson> personInTeamCollection = new List<IPerson>(candidates)
                 .FindAll(new PersonBelongsToTeamSpecification(period, this).IsSatisfiedBy);
