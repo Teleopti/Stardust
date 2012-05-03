@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	/// <summary>
 	/// Returns Existing/Current Teleopti Principal from Thread
 	/// </summary>
-	public interface ICurrentPrincipalProvider
+	public interface IPrincipalProvider
 	{
 		TeleoptiPrincipal Current();
 	}

@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[SetUp]
 		public void Setup()
 		{
-			currentPrincipalProvider = MockRepository.GenerateMock<ICurrentPrincipalProvider>();
-			target = new CurrentDataSourceProvider(currentPrincipalProvider);
+			principalProvider = MockRepository.GenerateMock<IPrincipalProvider>();
+			target = new CurrentDataSourceProvider(principalProvider);
 		}
 
 		#endregion
 
 		private ICurrentDataSourceProvider target;
-		private ICurrentPrincipalProvider currentPrincipalProvider;
+		private IPrincipalProvider principalProvider;
 
 		[Test]
 		public void ShouldReturnCurrentDataSource()
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", dataSource, null, null, AuthenticationTypeOption.Unknown), new Person());
 
-			currentPrincipalProvider.Expect(x => x.Current()).Return(teleoptiPrincipal);
+			principalProvider.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
 			target.CurrentDataSource()
 				.Should().Be.SameInstanceAs(dataSource);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldReturnNullWhenCurrentPrincipalNotDefined()
 		{
-			currentPrincipalProvider.Expect(x => x.Current()).Return(null);
+			principalProvider.Expect(x => x.Current()).Return(null);
 
 			target.CurrentDataSource()
 				.Should().Be.Null();

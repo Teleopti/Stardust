@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		{
 		}
 
-		protected class PrincipalForTest : ICurrentPrincipalProvider
+		protected class PrincipalForTest : IPrincipalProvider
 		{
 			private readonly BusinessUnit _businessUnit;
 

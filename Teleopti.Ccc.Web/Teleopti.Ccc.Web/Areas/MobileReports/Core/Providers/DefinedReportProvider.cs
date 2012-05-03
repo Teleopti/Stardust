@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 
 	public class DefinedReportProvider : IDefinedReportProvider
 	{
-		private readonly ICurrentPrincipalProvider _grantPrincipalProvider;
+		private readonly IPrincipalProvider _grantPrincipalProvider;
 
-		public DefinedReportProvider(ICurrentPrincipalProvider grantPrincipalProvider)
+		public DefinedReportProvider(IPrincipalProvider grantPrincipalProvider)
 		{
 			_grantPrincipalProvider = grantPrincipalProvider;
 		}

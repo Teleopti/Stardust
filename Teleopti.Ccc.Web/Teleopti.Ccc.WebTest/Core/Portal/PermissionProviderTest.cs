@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(false);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasApplicationFunctionPermission("ApplicationFunctionPath");
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(true);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasApplicationFunctionPermission("ApplicationFunctionPath");
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(false);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasPersonPermission("ApplicationFunctionPath", DateOnly.Today, person);
 
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(true);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasPersonPermission("ApplicationFunctionPath", DateOnly.Today, person);
 
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(false);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasTeamPermission("ApplicationFunctionPath", DateOnly.Today, team);
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(true);
 
-			var target = new PermissionProvider();
+			var target = new PermissionProvider(new PrincipalProvider());
 
 			var result = target.HasTeamPermission("ApplicationFunctionPath", DateOnly.Today, team);
 

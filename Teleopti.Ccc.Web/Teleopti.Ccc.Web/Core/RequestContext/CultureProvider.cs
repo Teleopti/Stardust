@@ -4,18 +4,18 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class CultureProvider : ICultureProvider
 	{
-		private readonly ICurrentPrincipalProvider _currentPrincipalProvider;
+		private readonly IPrincipalProvider _principalProvider;
 
-		public CultureProvider(ICurrentPrincipalProvider currentPrincipalProvider)
+		public CultureProvider(IPrincipalProvider principalProvider)
 		{
-			_currentPrincipalProvider = currentPrincipalProvider;
+			_principalProvider = principalProvider;
 		}
 
 		#region ICultureProvider Members
 
 		public CultureInfo GetCulture()
 		{
-			var current = _currentPrincipalProvider.Current();
+			var current = _principalProvider.Current();
 			return current != null ? current.Regional.Culture : CultureInfo.CurrentCulture;
 		}
 

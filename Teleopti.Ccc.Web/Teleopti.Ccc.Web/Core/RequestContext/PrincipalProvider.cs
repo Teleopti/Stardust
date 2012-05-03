@@ -2,7 +2,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
-	public class CurrentPrincipalProvider : ICurrentPrincipalProvider
+	public class PrincipalProvider : IPrincipalProvider
 	{
 		public TeleoptiPrincipal Current()
 		{

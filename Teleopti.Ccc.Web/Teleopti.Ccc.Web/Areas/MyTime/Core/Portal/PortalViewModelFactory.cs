@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
-		private readonly ICurrentPrincipalProvider _principalProvider;
+		private readonly IPrincipalProvider _principalProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider, 
 												IPreferenceOptionsProvider preferenceOptionsProvider, 
 												ILicenseActivator licenseActivator,
-												ICurrentPrincipalProvider principalProvider)
+												IPrincipalProvider principalProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;

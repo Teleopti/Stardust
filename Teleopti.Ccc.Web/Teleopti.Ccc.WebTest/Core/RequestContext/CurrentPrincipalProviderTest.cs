@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void Setup()
 		{
 			savePrincipal();
-			target = new CurrentPrincipalProvider();
+			target = new PrincipalProvider();
 		}
 
 		[TearDown]
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		#endregion
 
-		private ICurrentPrincipalProvider target;
+		private IPrincipalProvider target;
 		private IPrincipal _savedPrincipal;
 
 		private void savePrincipal()
