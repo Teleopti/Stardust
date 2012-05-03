@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
-	public interface ICurrentDataSourceProvider
+	public interface IDataSourceProvider
 	{
 		IDataSource CurrentDataSource();
 	}

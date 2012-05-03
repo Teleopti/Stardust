@@ -143,7 +143,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
-    <Compile Include="Core\RequestContext\CurrentDataSourceProviderTest.cs" />
+    <Compile Include="Core\RequestContext\DataSourceProviderTest.cs" />
     <Compile Include="Core\RequestContext\PrincipalProviderTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
     <Compile Include="Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />

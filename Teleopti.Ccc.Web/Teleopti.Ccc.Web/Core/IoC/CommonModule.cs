@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		private static void registerReportTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebReportRepository>().As<IWebReportRepository>();
-			builder.RegisterType<CurrentDataSourceProvider>().As<ICurrentDataSourceProvider>();
-			builder.Register(c => c.Resolve<ICurrentDataSourceProvider>().CurrentDataSource())
+			builder.RegisterType<DataSourceProvider>().As<IDataSourceProvider>();
+			builder.Register(c => c.Resolve<IDataSourceProvider>().CurrentDataSource())
 				.As<IDataSource>()
 				.ExternallyOwned();
 		}
