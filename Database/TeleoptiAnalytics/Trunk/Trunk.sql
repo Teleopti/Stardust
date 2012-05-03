@@ -58,3 +58,25 @@ GO
 ALTER TABLE mart.dim_person ALTER COLUMN windows_domain		nvarchar(50) NOT NULL
 ALTER TABLE mart.dim_person ALTER COLUMN windows_username	nvarchar(50) NOT NULL
 GO
+
+-----------------  
+---Name: Jonas N
+---Date: 2012-04-04
+---Desc: Add a table used by ETL service and ETL Tool. 
+---			Before a ETL job is started a check is made if another ETL is running. 
+---			When a job is started a transaction lock is set on this table.
+-----------------
+
+CREATE TABLE [mart].[sys_etl_running_lock](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[computer_name] [nvarchar](255) NOT NULL,
+	[start_time] [datetime] NOT NULL,
+	[job_name] [nvarchar](100) NOT NULL,
+	[is_started_by_service] [bit] NOT NULL,
+ CONSTRAINT [PK_sys_etl_running_lock] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)
+) ON [PRIMARY]
+
+GO
