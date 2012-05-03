@@ -1,43 +1,24 @@
+using System.Linq;
+using MvcContrib.TestHelper.Fakes;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Web.Areas.MobileReports.Core;
+using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
+
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 {
-	using System.Linq;
-
-	using MvcContrib.TestHelper.Fakes;
-
-	using NUnit.Framework;
-
-	using Rhino.Mocks;
-
-	using SharpTestsEx;
-
-	using Teleopti.Ccc.Domain.Security.Principal;
-	using Teleopti.Ccc.TestCommon;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core;
-	using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
-	using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
-
 	[TestFixture]
 	public class DefinedReportProviderTest
 	{
-		#region Setup/Teardown
-
-		[SetUp]
-		public void Setup()
-		{
-			_mock = new MockRepository();
-			_principalAuthorization = _mock.DynamicMock<IPrincipalAuthorization>();
-		}
-
-		#endregion
-
-		private MockRepository _mock;
-
-		private IPrincipalAuthorization _principalAuthorization;
-
-		private PrincipalProviderForTest CreatePrincipalProvider()
+		private IPrincipalProvider CreatePrincipalProvider(IPrincipalAuthorization principalAuthorization)
 		{
 			var teleoptiPrincipalForTest = new TeleoptiPrincipalForTest(new FakeIdentity("MeFaky"), null);
-			teleoptiPrincipalForTest.SetPrincipalAuthorization(this._principalAuthorization);
+			teleoptiPrincipalForTest.SetPrincipalAuthorization(principalAuthorization);
 			return new PrincipalProviderForTest(teleoptiPrincipalForTest);
 		}
 
@@ -47,19 +28,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 			const string reportId = "GetForeCastVsActualWorkload";
 			var excludeFunction = DefinedReports.ReportInformations.First(x => reportId.Equals(x.ReportId)).FunctionCode;
 			var applicationFunctions = new DefinedReportsApplicationFunctionsFactory(excludeFunction).ApplicationFunctions;
-			var target = new DefinedReportProvider(this.CreatePrincipalProvider());
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var target = new DefinedReportProvider(CreatePrincipalProvider(principalAuthorization));
 
-			using (_mock.Record())
-			{
-				Expect.Call(_principalAuthorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(
-					applicationFunctions).Repeat.AtLeastOnce();
-			}
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(applicationFunctions);
 
-			using (_mock.Playback())
-			{
-				var definedReportInformations = target.GetDefinedReports();
-				definedReportInformations.Count().Should().Be.EqualTo(3);
-			}
+			var definedReportInformations = target.GetDefinedReports();
+
+			definedReportInformations.Count().Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -67,39 +43,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 		{
 			const string reportId = "GetForeCastVsActualWorkload";
 			var applicationFunctions = new DefinedReportsApplicationFunctionsFactory(null).ApplicationFunctions;
-			var target = new DefinedReportProvider(this.CreatePrincipalProvider());
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var target = new DefinedReportProvider(CreatePrincipalProvider(principalAuthorization));
 
-			using (_mock.Record())
-			{
-				Expect.Call(_principalAuthorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(
-					applicationFunctions).Repeat.AtLeastOnce();
-			}
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(applicationFunctions);
 
-			using (_mock.Playback())
-			{
-				var report = target.Get(reportId);
+			var report = target.Get(reportId);
 
-				report.ReportId.Should().Be.EqualTo(reportId);
-			}
+			report.ReportId.Should().Be.EqualTo(reportId);
 		}
 
 		[Test]
 		public void ShouldReturnDefinedReports()
 		{
 			var applicationFunctions = new DefinedReportsApplicationFunctionsFactory(null).ApplicationFunctions;
-			var target = new DefinedReportProvider(this.CreatePrincipalProvider());
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var target = new DefinedReportProvider(CreatePrincipalProvider(principalAuthorization));
 
-			using (_mock.Record())
-			{
-				Expect.Call(_principalAuthorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(
-					applicationFunctions).Repeat.AtLeastOnce();
-			}
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(applicationFunctions);
 
-			using (_mock.Playback())
-			{
-				var definedReportInformations = target.GetDefinedReports();
-				definedReportInformations.Count().Should().Be.EqualTo(4);
-			}
+			var definedReportInformations = target.GetDefinedReports();
+
+			definedReportInformations.Count().Should().Be.EqualTo(4);
 		}
 
 		[Test]
@@ -108,20 +73,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 			const string reportId = "NonExistent";
 
 			var applicationFunctions = new DefinedReportsApplicationFunctionsFactory(null).ApplicationFunctions;
-			var target = new DefinedReportProvider(this.CreatePrincipalProvider());
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var target = new DefinedReportProvider(CreatePrincipalProvider(principalAuthorization));
 
-			using (_mock.Record())
-			{
-				Expect.Call(_principalAuthorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(
-					applicationFunctions).Repeat.AtLeastOnce();
-			}
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(applicationFunctions);
 
-			using (_mock.Playback())
-			{
-				var report = target.Get(reportId);
+			var report = target.Get(reportId);
 
-				report.Should().Be.Null();
-			}
+			report.Should().Be.Null();
 		}
 
 		[Test]
@@ -131,20 +90,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 
 			var excludeFunction = DefinedReports.ReportInformations.First(x => reportId.Equals(x.ReportId)).FunctionCode;
 			var applicationFunctions = new DefinedReportsApplicationFunctionsFactory(excludeFunction).ApplicationFunctions;
-			var target = new DefinedReportProvider(this.CreatePrincipalProvider());
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var target = new DefinedReportProvider(CreatePrincipalProvider(principalAuthorization));
 
-			using (_mock.Record())
-			{
-				Expect.Call(_principalAuthorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(
-					applicationFunctions).Repeat.AtLeastOnce();
-			}
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(applicationFunctions);
 
-			using (_mock.Playback())
-			{
-				var report = target.Get(reportId);
+			var report = target.Get(reportId);
 
-				report.Should().Be.Null();
-			}
+			report.Should().Be.Null();
 		}
 	}
 }

@@ -126,7 +126,6 @@
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\TestControllerTest.cs" />
-    <Compile Include="Areas\Start\FakePermissionProvider.cs" />
     <Compile Include="Areas\Start\MenuViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
@@ -135,7 +134,7 @@
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
-    <Compile Include="Core\Portal\FakePermissionProvider.cs" />
+    <Compile Include="FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryStudentAvailabilityTest.cs" />
     <Compile Include="Core\Portal\PortalViewModelFactoryTeamScheduleTest.cs" />

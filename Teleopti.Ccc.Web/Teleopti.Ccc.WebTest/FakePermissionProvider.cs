@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Portal
+namespace Teleopti.Ccc.WebTest
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{

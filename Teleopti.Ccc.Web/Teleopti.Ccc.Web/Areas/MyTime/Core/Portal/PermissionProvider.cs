@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Teleopti.Ccc.Domain.Security.Principal;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
