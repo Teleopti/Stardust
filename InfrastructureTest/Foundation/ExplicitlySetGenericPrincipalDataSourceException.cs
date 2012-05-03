@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             _explicitPrincipal = teleoptiPrincipal;
         }
 
-        protected override TeleoptiPrincipal GetCurrentPrincipal()
+        protected override ITeleoptiPrincipal GetCurrentPrincipal()
         {
             if(_explicitPrincipal != null)
-                return _explicitPrincipal as TeleoptiPrincipal;
+                return _explicitPrincipal as ITeleoptiPrincipal;
             return base.GetCurrentPrincipal();
         }
     }

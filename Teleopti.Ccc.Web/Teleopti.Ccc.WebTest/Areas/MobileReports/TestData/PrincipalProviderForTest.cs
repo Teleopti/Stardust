@@ -5,14 +5,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
 {
 	internal class PrincipalProviderForTest : IPrincipalProvider
 	{
-		private readonly TeleoptiPrincipal _teleoptiPrincipal;
+		private readonly ITeleoptiPrincipal _teleoptiPrincipal;
 
-		public PrincipalProviderForTest(TeleoptiPrincipal teleoptiPrincipal)
+		public PrincipalProviderForTest(ITeleoptiPrincipal teleoptiPrincipal)
 		{
 			_teleoptiPrincipal = teleoptiPrincipal;
 		}
 
-		public TeleoptiPrincipal Current()
+		public ITeleoptiPrincipal Current()
 		{
 			return _teleoptiPrincipal;
 		}

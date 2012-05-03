@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 
 		public IDataSource CurrentDataSource()
 		{
-			TeleoptiPrincipal teleoptiPrincipal = _principalProvider.Current();
+			var teleoptiPrincipal = _principalProvider.Current();
 			return teleoptiPrincipal == null ? null : ((TeleoptiIdentity) teleoptiPrincipal.Identity).DataSource;
 		}
 	}

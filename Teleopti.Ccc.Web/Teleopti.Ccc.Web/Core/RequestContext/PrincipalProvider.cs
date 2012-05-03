@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class PrincipalProvider : IPrincipalProvider
 	{
-		public TeleoptiPrincipal Current()
+		public ITeleoptiPrincipal Current()
 		{
 			return TeleoptiPrincipal.Current;
 		}

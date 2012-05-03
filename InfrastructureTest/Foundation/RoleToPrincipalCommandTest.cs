@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void ShouldExecuteCommand()
         {
-            var currentPrincipal = TeleoptiPrincipal.Current;
+			var currentPrincipal = TeleoptiPrincipal.Current as TeleoptiPrincipal;
             
             var newRole = mocks.StrictMock<IApplicationRole>();
             var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 TeleoptiPrincipal.Current.ClaimSets.Contains(claimSet).Should().Be.True();
             }
 
-            TeleoptiPrincipal.Current.ChangePrincipal(currentPrincipal);
+            ((TeleoptiPrincipal) TeleoptiPrincipal.Current).ChangePrincipal(currentPrincipal);
         }
     }
 }

@@ -800,6 +800,7 @@
     <Compile Include="Security\Principal\IOrganisationMembership.cs" />
     <Compile Include="Security\Principal\IPrincipalAuthorization.cs" />
     <Compile Include="Security\Principal\IRegional.cs" />
+    <Compile Include="Security\Principal\ITeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\LicensedFunctionsProvider.cs" />
     <Compile Include="Security\Principal\OrganisationMembership.cs" />
     <Compile Include="Security\Principal\PrincipalAuthorization.cs" />

@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	/// </summary>
 	public interface IPrincipalProvider
 	{
-		TeleoptiPrincipal Current();
+		ITeleoptiPrincipal Current();
 	}
 }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             _roleToClaimSetTransformer = roleToClaimSetTransformer;
         }
 
-        public void Execute(TeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository)
+        public void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository)
         {
             var person = principalToFillWithClaimSets.GetPerson(personRepository);
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)

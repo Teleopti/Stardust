@@ -7,8 +7,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson
-    {
+	public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson, ITeleoptiPrincipal
+	{
         private IPerson _person;
         private IList<ClaimSet> _claimSets = new List<ClaimSet>();
         private IPrincipalAuthorization _principalAuthorization;
@@ -21,6 +21,21 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
             setupPerson();
         }
+
+		public static ITeleoptiPrincipal Current
+		{
+			get { return Thread.CurrentPrincipal as ITeleoptiPrincipal; }
+		}
+
+		public void ChangePrincipal(TeleoptiPrincipal principal)
+		{
+			_person = principal._person;
+			_principalAuthorization = null;
+			_claimSets = principal._claimSets;
+			_identity = principal.Identity;
+
+			setupPerson();
+		}
 
         private void setupPerson()
         {
@@ -44,16 +59,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
                                     _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture());
         }
 
-        public void ChangePrincipal(TeleoptiPrincipal principal)
-        {
-            _person = principal._person;
-            _principalAuthorization = null;
-            _claimSets = principal._claimSets;
-            _identity = principal.Identity;
-
-            setupPerson();
-        }
-
         public virtual IPerson GetPerson(IPersonRepository personRepository)
         {
             return personRepository.Get(_person.Id.GetValueOrDefault());
@@ -75,11 +80,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
 
         public virtual IPrincipalAuthorization PrincipalAuthorization { get { return _principalAuthorization ?? (_principalAuthorization = new PrincipalAuthorization(this)); } }
-
-        public static TeleoptiPrincipal Current
-        {
-            get { return Thread.CurrentPrincipal as TeleoptiPrincipal; }
-        }
 
         public IRegional Regional { get; private set; }
 

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		private BusinessUnit _businessUnit;
 		private MockRepository _mocks;
 		private Person _person;
-		private PrincipalForTest _principal;
+		private PrincipalProviderForTest _principalProvider;
 		private IWebReportUserInfoProvider _target;
 		private CultureInfo _uiCulture;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 			_person = new Person();
 			_person.SetId(Guid.NewGuid());
 			_person.PermissionInformation.SetUICulture(_uiCulture);
-			_principal = new PrincipalForTest(_businessUnit, _person);
+			_principalProvider = new PrincipalProviderForTest(_businessUnit, _person);
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 				Expect.Call(personRepository.Get(_person.Id.Value)).Return(_person);
 			}
 
-			_target = new WebReportUserInfoProvider(_principal, personRepository);
+			_target = new WebReportUserInfoProvider(_principalProvider, personRepository);
 
 			WebReportUserInformation webReportUserInformation;
 			using (_mocks.Playback())
@@ -69,26 +69,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		{
 		}
 
-		protected class PrincipalForTest : IPrincipalProvider
+		protected class PrincipalProviderForTest : IPrincipalProvider
 		{
 			private readonly BusinessUnit _businessUnit;
-
 			private readonly Person _person;
+			private readonly ITeleoptiPrincipal _principal;
 
-			private readonly TeleoptiPrincipalForTest _principalForTest;
-
-			public PrincipalForTest(BusinessUnit businessUnit, Person person)
+			public PrincipalProviderForTest(BusinessUnit businessUnit, Person person)
 			{
 				_businessUnit = businessUnit;
 				_person = person;
-				_principalForTest =
+				_principal =
 					new TeleoptiPrincipalForTest(
 						new TeleoptiIdentity(_person.Name.ToString(), null, _businessUnit, null, AuthenticationTypeOption.Unknown), _person);
 			}
 
-			public TeleoptiPrincipal Current()
+			public ITeleoptiPrincipal Current()
 			{
-				return _principalForTest;
+				return _principal;
 			}
 		}
 	}

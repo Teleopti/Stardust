@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
     public class PrincipalAuthorization : IPrincipalAuthorization
     {
-        private readonly TeleoptiPrincipal _teleoptiPrincipal;
+		private readonly ITeleoptiPrincipal _teleoptiPrincipal;
 
-        public PrincipalAuthorization(TeleoptiPrincipal teleoptiPrincipal)
+		public PrincipalAuthorization(ITeleoptiPrincipal teleoptiPrincipal)
         {
             _teleoptiPrincipal = teleoptiPrincipal;
         }

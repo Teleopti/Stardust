@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        protected virtual TeleoptiPrincipal GetCurrentPrincipal()
+        protected virtual ITeleoptiPrincipal GetCurrentPrincipal()
         {
             return TeleoptiPrincipal.Current;
         }

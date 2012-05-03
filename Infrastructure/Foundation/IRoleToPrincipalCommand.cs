@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
     public interface IRoleToPrincipalCommand
     {
-		void Execute(TeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository);
+		void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository);
     }
 }
