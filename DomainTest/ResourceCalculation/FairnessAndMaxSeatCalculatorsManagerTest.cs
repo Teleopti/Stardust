@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftCategoryFairnessShiftValueCalculator _shiftCategoryFairnessShiftValueCalculator;
         private IShiftCategoryFairnessManager _shiftCatFairnessManager;
         private FairnessAndMaxSeatCalculatorsManager _target;
-        private IAverageShiftLengthValueCalculator _averageShiftLengthValueCalculator;
         private IShiftCategoryFairnessFactors _shiftCategoryFairnessFactors;
         private IList<IShiftCategory> _shiftCategories;
         private IShiftCategory _shiftCategory;
@@ -34,14 +33,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _averageShiftLengthValueCalculator = _mocks.StrictMock<IAverageShiftLengthValueCalculator>();
             _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
             _seatLimitationWorkShiftCalculator = _mocks.StrictMock<ISeatLimitationWorkShiftCalculator2>();
             _shiftCategoryFairnessShiftValueCalculator = _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
             _shiftCatFairnessManager = _mocks.StrictMock<IShiftCategoryFairnessManager>();
             _options = new SchedulingOptions{ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
                 WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime, UseMaxSeats = true, DoNotBreakMaxSeats = true};
-            _target = new FairnessAndMaxSeatCalculatorsManager(_stateHolder, _averageShiftLengthValueCalculator,_shiftCatFairnessManager,
+            _target = new FairnessAndMaxSeatCalculatorsManager(_stateHolder, _shiftCatFairnessManager,
                 _shiftCategoryFairnessShiftValueCalculator, _fairnessValueCalculator,_seatLimitationWorkShiftCalculator,_options);
 
             _shiftCategoryFairnessFactors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
