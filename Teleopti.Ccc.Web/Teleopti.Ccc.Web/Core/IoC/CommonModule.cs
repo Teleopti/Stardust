@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
 			builder.RegisterType<PrincipalFactory>().As<IPrincipalFactory>();
 			builder.RegisterType<PrincipalProvider>().As<IPrincipalProvider>();
+			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
 			builder.RegisterType<CultureProvider>().As<ICultureProvider>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();

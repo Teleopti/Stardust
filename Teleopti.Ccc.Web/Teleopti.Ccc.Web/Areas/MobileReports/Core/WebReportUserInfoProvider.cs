@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 		public WebReportUserInformation GetUserInformation()
 		{
-			// TODO: in
-			TeleoptiPrincipal teleoptiPrincipal = _principalProvider.Current();
+			var teleoptiPrincipal = _principalProvider.Current();
 			var teleoptiIdentity = teleoptiPrincipal.Identity as TeleoptiIdentity;
 
 			IPerson person = teleoptiPrincipal.GetPerson(_personRepository);

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IPrincipalProvider>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateStub<IIdentityProvider>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		public void ShouldHaveCustomerName()
 		{
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), licenseActivator, MockRepository.GenerateStub<IPrincipalProvider>());
+			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), licenseActivator, MockRepository.GenerateStub<IIdentityProvider>());
 
 			licenseActivator.Stub(x => x.CustomerName).Return("Customer Name");
 
@@ -51,11 +51,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldHideChangePasswordIfWindowsAuthentication()
 		{
-			var principalProvider = MockRepository.GenerateMock<IPrincipalProvider>();
-			var winPrincipal =
-				new TeleoptiPrincipal(new TeleoptiIdentity(string.Empty, null, null, null, AuthenticationTypeOption.Windows), null);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), principalProvider);
-			principalProvider.Expect(mock => mock.Current()).Return(winPrincipal);
+			var identityProvider = MockRepository.GenerateMock<IIdentityProvider>();
+			var identity = new TeleoptiIdentity(string.Empty, null, null, null, AuthenticationTypeOption.Windows);
+			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), identityProvider);
+			identityProvider.Expect(mock => mock.Current()).Return(identity);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
@@ -63,11 +62,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 		[Test]
 		public void ShouldShowChangePasswordIfFormsAuthentication()
 		{
-			var principalProvider = MockRepository.GenerateMock<IPrincipalProvider>();
-			var winPrincipal =
-				new TeleoptiPrincipal(new TeleoptiIdentity(string.Empty, null, null, null, AuthenticationTypeOption.Application), null);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), principalProvider);
-			principalProvider.Expect(mock => mock.Current()).Return(winPrincipal);
+			var identityProvider = MockRepository.GenerateMock<IIdentityProvider>();
+			var identity = new TeleoptiIdentity(string.Empty, null, null, null, AuthenticationTypeOption.Application);
+			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), identityProvider);
+			identityProvider.Expect(mock => mock.Current()).Return(identity);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
 		}

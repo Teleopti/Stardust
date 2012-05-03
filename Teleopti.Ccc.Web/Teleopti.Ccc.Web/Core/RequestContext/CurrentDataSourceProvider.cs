@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	{
 		private readonly IPrincipalProvider _principalProvider;
 
-
 		public CurrentDataSourceProvider(IPrincipalProvider principalProvider)
 		{
 			_principalProvider = principalProvider;

@@ -17,17 +17,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly IIdentityProvider _identityProvider;
 
-		public PortalViewModelFactory(IPermissionProvider permissionProvider, 
-												IPreferenceOptionsProvider preferenceOptionsProvider, 
+		public PortalViewModelFactory(
+			IPermissionProvider permissionProvider,
+												IPreferenceOptionsProvider preferenceOptionsProvider,
 												ILicenseActivator licenseActivator,
-												IPrincipalProvider principalProvider)
+			IIdentityProvider identityProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
-			_principalProvider = principalProvider;
+			_identityProvider = identityProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -49,19 +50,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			{
 				navigationItems.Add(createRequestsNavigationItem());
 			}
-			var showPw = showChangePassword();
 			return new PortalViewModel
 			       	{
 			       		NavigationItems = navigationItems,
-							CustomerName = _licenseActivator.CustomerName,
-							ShowChangePassword = showPw
+			       		CustomerName = _licenseActivator.CustomerName,
+			       		ShowChangePassword = showChangePassword()
 			       	};
 		}
 
 		private bool showChangePassword()
 		{
-			var principal = _principalProvider.Current();
-			return principal != null && ((TeleoptiIdentity)principal.Identity).TeleoptiAuthenticationType == AuthenticationTypeOption.Application;
+			var identity = _identityProvider.Current();
+			if (identity == null)
+				return false;
+			return identity.TeleoptiAuthenticationType == AuthenticationTypeOption.Application;
 		}
 
 		private SectionNavigationItem createTeamScheduleNavigationItem()

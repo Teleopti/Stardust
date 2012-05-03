@@ -184,6 +184,8 @@
     <Compile Include="Core\Aop\Core\IResolvedAspect.cs" />
     <Compile Include="Core\Aop\Core\IResolvedAspectAttribute.cs" />
     <Compile Include="Core\Aop\Core\ResolvedAspectAttribute.cs" />
+    <Compile Include="Core\RequestContext\IdentityProvider.cs" />
+    <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
