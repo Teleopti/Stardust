@@ -131,7 +131,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		var title = textRequestCount.attr('title');
 		if (title == undefined)
 			return;
-		var newTitle = title.replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
+		var newTitle = title.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
 		textRequestCount.attr('title', newTitle);
 		textRequestCount
 			.show()
