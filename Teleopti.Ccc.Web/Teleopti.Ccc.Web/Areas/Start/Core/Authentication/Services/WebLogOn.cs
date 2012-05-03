@@ -19,30 +19,33 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ILogOnOff _logOnOff;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
+		private readonly IPrincipalProvider _principalProvider;
 
-		public WebLogOn(ILogOnOff logOnOff, 
-						IDataSourcesProvider dataSourceProvider, 
-						IRepositoryFactory repositoryFactory, 
-						ISessionSpecificDataProvider sessionSpecificDataProvider,
-						IRoleToPrincipalCommand roleToPrincipalCommand)
+		public WebLogOn(ILogOnOff logOnOff,
+		                IDataSourcesProvider dataSourceProvider,
+		                IRepositoryFactory repositoryFactory,
+		                ISessionSpecificDataProvider sessionSpecificDataProvider,
+		                IRoleToPrincipalCommand roleToPrincipalCommand,
+		                IPrincipalProvider principalProvider)
 		{
 			_logOnOff = logOnOff;
 			_dataSourceProvider = dataSourceProvider;
 			_repositoryFactory = repositoryFactory;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
-	    	_roleToPrincipalCommand = roleToPrincipalCommand;
+			_roleToPrincipalCommand = roleToPrincipalCommand;
+			_principalProvider = principalProvider;
 		}
 
 		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
-			using(var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
 				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
-				var principal = (TeleoptiPrincipal) Thread.CurrentPrincipal;
+				var principal = _principalProvider.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 				checkWebPermission(principal, person);
 			}
@@ -51,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_sessionSpecificDataProvider.Store(sessionSpecificData);
 		}
 
-		private static void checkWebPermission(TeleoptiPrincipal principal, IPerson person)
+		private static void checkWebPermission(ITeleoptiPrincipal principal, IPerson person)
 		{
 			var allowed = principal.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
 			if (!allowed)

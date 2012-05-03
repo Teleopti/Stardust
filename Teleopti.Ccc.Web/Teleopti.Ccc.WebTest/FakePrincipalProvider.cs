@@ -1,13 +1,13 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
-namespace Teleopti.Ccc.WebTest.Areas.MobileReports.TestData
+namespace Teleopti.Ccc.WebTest
 {
-	internal class PrincipalProviderForTest : IPrincipalProvider
+	public class FakePrincipalProvider : IPrincipalProvider
 	{
 		private readonly ITeleoptiPrincipal _teleoptiPrincipal;
 
-		public PrincipalProviderForTest(ITeleoptiPrincipal teleoptiPrincipal)
+		public FakePrincipalProvider(ITeleoptiPrincipal teleoptiPrincipal)
 		{
 			_teleoptiPrincipal = teleoptiPrincipal;
 		}

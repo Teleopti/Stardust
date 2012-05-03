@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		private IPrincipalProvider PrincipalProvider(IPerson person)
 		{
 			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
-			return new PrincipalProviderForTest(principal);
+			return new FakePrincipalProvider(principal);
 		}
 
 		[Test]

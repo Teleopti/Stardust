@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IPrincipalAuthorization principalAuthorization;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
@@ -43,16 +42,17 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			sessionSpecificDataProvider = mocks.StrictMock<ISessionSpecificDataProvider>(); //made this strict on purpose
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			logOnOff = mocks.DynamicMock<ILogOnOff>();
-	    	var ruleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
-	    	target = new WebLogOn(logOnOff, 
-							dataSourcesProvider, 
-							repositoryFactory, 
-							sessionSpecificDataProvider,
-							ruleToPrincipalCommand);
-	    	principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
-			var principalForTest = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
-			principalForTest.SetPrincipalAuthorization(principalAuthorization);
-	    	Thread.CurrentPrincipal = principalForTest;
+			var ruleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
+			principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
+			var principal = new TeleoptiPrincipalForTest(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
+
+			target = new WebLogOn(logOnOff,
+			                      dataSourcesProvider,
+			                      repositoryFactory,
+			                      sessionSpecificDataProvider,
+			                      ruleToPrincipalCommand,
+			                      new FakePrincipalProvider(principal));
+			principal.SetPrincipalAuthorization(principalAuthorization);
 		}
 
 		[Test]
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			const string dataSourceName = "sdfsjdlfkjsd ";
 			var personId = Guid.NewGuid();
 
-			var choosenBusinessUnit =new BusinessUnit("sdfsdf");
+			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
 			var choosenDatasource = mocks.DynamicMock<IDataSource>();
 			var uow = mocks.DynamicMock<IUnitOfWork>();
 			var logonPerson = new Person();
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			using (mocks.Playback())
 			{
 				Assert.Throws<PermissionException>(() =>
-					target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Application));
+				                                   target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Application));
 			}
 		}
 	}

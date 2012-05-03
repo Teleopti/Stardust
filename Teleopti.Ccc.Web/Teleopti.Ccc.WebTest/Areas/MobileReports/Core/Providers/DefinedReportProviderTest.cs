@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 		{
 			var teleoptiPrincipalForTest = new TeleoptiPrincipalForTest(new FakeIdentity("MeFaky"), null);
 			teleoptiPrincipalForTest.SetPrincipalAuthorization(principalAuthorization);
-			return new PrincipalProviderForTest(teleoptiPrincipalForTest);
+			return new FakePrincipalProvider(teleoptiPrincipalForTest);
 		}
 
 		[Test]
