@@ -7,15 +7,17 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	public class LoggedOnUser : ILoggedOnUser
 	{
 		private readonly IPersonRepository _personRepository;
+		private readonly IPrincipalProvider _principalProvider;
 
-		public LoggedOnUser(IPersonRepository personRepository)
+		public LoggedOnUser(IPersonRepository personRepository, IPrincipalProvider principalProvider)
 		{
 			_personRepository = personRepository;
+			_principalProvider = principalProvider;
 		}
 
 		public IPerson CurrentUser()
 		{
-			return TeleoptiPrincipal.Current.GetPerson(_personRepository);
+			return _principalProvider.Current().GetPerson(_personRepository);
 		}
 
 		public ITeam MyTeam(DateOnly date)

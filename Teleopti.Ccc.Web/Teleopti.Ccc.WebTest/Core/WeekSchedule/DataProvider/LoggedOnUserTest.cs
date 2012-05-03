@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
@@ -17,25 +18,19 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	[TestFixture]
 	public class LoggedOnUserTest
 	{
-		private IPrincipal previousPrincipal;
-
-		[TearDown]
-		public void Teardown() { Thread.CurrentPrincipal = previousPrincipal; }
-
-		private void SetupPrincipal(IPerson person)
+		private IPrincipalProvider PrincipalProvider(IPerson person)
 		{
-			previousPrincipal = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
+			return new PrincipalProviderForTest(principal);
 		}
 
 		[Test]
 		public void ShouldGetCurrentPersonFromPrincipal()
 		{
 			var person = PersonFactory.CreatePerson();
-			SetupPrincipal(person);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository);
+			var target = new LoggedOnUser(personRepository, PrincipalProvider(person));
 
 			var result = target.CurrentUser();
 
@@ -48,10 +43,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var person = PersonFactory.CreatePerson();
 			var team = new Team();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
-			SetupPrincipal(person);
+			PrincipalProvider(person);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository);
+			var target = new LoggedOnUser(personRepository, PrincipalProvider(person));
 
 			var result = target.MyTeam(DateOnly.Today);
 
