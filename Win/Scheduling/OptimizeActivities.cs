@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// </summary>
 		private void OptimizeActivities_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
 		{
-			buttonCancel.Focus();
+			twoListSelectorActivities.Select();
 		}
     }
 }
