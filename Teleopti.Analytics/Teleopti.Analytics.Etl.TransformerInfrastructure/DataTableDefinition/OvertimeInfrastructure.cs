@@ -5,6 +5,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
 {
 	public static class OvertimeInfrastructure
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void AddColumnsToTable(DataTable table)
 		{
 			table.Columns.Add("overtime_code", typeof(Guid));

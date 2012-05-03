@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -14,6 +15,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_connectionString = connectionString;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public void CreateLock(string jobName, bool isStartByService)
 		{
 			_sqlConnection= new SqlConnection(_connectionString);
@@ -26,7 +28,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			string computerName = Environment.MachineName;
 			DateTime startTime = DateTime.Now;
 			string sqlText = "insert into mart.sys_etl_running_lock ";
-			sqlText += string.Format("select '{0}','{1}','{2}',{3}", computerName, startTime, jobName, isStartByService ? 1 : 0);
+			sqlText += string.Format(CultureInfo.InvariantCulture, "select '{0}','{1}','{2}',{3}", computerName, startTime, jobName, isStartByService ? 1 : 0);
 			sqlCommand.CommandType = CommandType.Text;
 			sqlCommand.CommandText = sqlText;
 			sqlCommand.ExecuteNonQuery();
@@ -35,8 +37,26 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public void Dispose()
 		{
-			_sqlConnection.Dispose();
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
+		private void Dispose(bool disposing)
+		{
+				if (disposing)
+				{
+					ReleaseManagedResources();
+				}
+				ReleaseUnmanagedResources();
+		}
+
+		protected virtual void ReleaseUnmanagedResources()
+		{
+		}
+
+		protected virtual void ReleaseManagedResources()
+		{
+			_sqlConnection.Dispose();
 		}
 	}
 }
