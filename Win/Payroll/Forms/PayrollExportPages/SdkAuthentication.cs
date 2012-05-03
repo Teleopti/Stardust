@@ -12,10 +12,11 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             var identity = ((ITeleoptiIdentity)principal.Identity);
             AuthenticationMessageHeader.BusinessUnit = identity.BusinessUnit.Id.GetValueOrDefault();
             AuthenticationMessageHeader.DataSource = identity.DataSource.Application.Name;
-            if (((IUnsafePerson)principal).Person.ApplicationAuthenticationInfo != null)
+        	var unsafePerson = ((IUnsafePerson) principal);
+			if (unsafePerson.Person.ApplicationAuthenticationInfo != null)
             {
-                AuthenticationMessageHeader.UserName = ((IUnsafePerson)principal).Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-                AuthenticationMessageHeader.Password = ((IUnsafePerson)principal).Person.ApplicationAuthenticationInfo.Password;
+				AuthenticationMessageHeader.UserName = unsafePerson.Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				AuthenticationMessageHeader.Password = unsafePerson.Person.ApplicationAuthenticationInfo.Password;
             }
             
             AuthenticationMessageHeader.UseWindowsIdentity =

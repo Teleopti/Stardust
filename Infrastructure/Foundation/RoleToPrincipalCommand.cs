@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             _roleToClaimSetTransformer = roleToClaimSetTransformer;
         }
 
-        public void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Execute(ITeleoptiPrincipal principalToFillWithClaimSets, IUnitOfWork unitOfWork, IPersonRepository personRepository)
         {
             var person = principalToFillWithClaimSets.GetPerson(personRepository);
             foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)

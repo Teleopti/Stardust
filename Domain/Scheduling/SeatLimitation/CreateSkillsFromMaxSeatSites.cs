@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void CreateSkillList(IEnumerable<ISite> sites)
 		{
 			IList<ISkill> newSkills = new List<ISkill>();
