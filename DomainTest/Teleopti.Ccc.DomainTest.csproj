@@ -487,7 +487,6 @@
     <Compile Include="Optimization\SchedulePartExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleDayProTest.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillServiceTest.cs" />
-    <Compile Include="ResourceCalculation\AverageShiftLengthValueCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\BlockFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\BlockSchedulingWorkShiftFinderServiceTest.cs" />
     <Compile Include="ResourceCalculation\BestBlockShiftCategoryFinderTest.cs" />

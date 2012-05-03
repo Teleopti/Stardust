@@ -165,61 +165,64 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private IWorkShiftCalculationResultHolder findBestShift(IEffectiveRestriction effectiveRestriction,
             IVirtualSchedulePeriod virtualSchedulePeriod, DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
-            {
-                if (schedulingOptions.ShiftCategory != null)
-                {
-                    // override the one in Effective
-                    effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
-                }
-
-                _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
-
-                _shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
-                                                                                                         person.PermissionInformation.DefaultTimeZone(),
-                                                                                                         _shiftList,
-                                                                                                         effectiveRestriction,
-                                                                                                         schedulingOptions.NotAllowedShiftCategories,
-                                                                                                          FinderResult);
-				
-
-                if (_shiftList.Count == 0)
-                    return null;
-
-            	MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
-
-                if (!allowedMinMax.HasValue)
-                {
-                    loggFilterResult(UserTexts.Resources.NoShiftsThatMatchesTheContractTimeCouldBeFound, _shiftList.Count, 0);
-                    return null;
-                }
-
-                IScheduleRange wholeRange = ScheduleDictionary[person];
-                _shiftList = _shiftProjectionCacheFilter.Filter(allowedMinMax.Value, _shiftList, _scheduleDateOnly, wholeRange, FinderResult);
-                if (_shiftList.Count == 0)
-                    return null;
-
-                if (schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime && schedulingOptions.SpecificStartAndEndTime.HasValue)
-                {
-                    _shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(schedulingOptions.SpecificStartAndEndTime.Value, _shiftList, _finderResult);
-                    if (_shiftList.Count == 0)
-                        return null;
-                }
-
-				var temp = TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(
-					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-				if (temp)
+			using (PerformanceOutput.ForOperation("Filtering shifts before calculating"))
+			{
+				if (schedulingOptions.ShiftCategory != null)
 				{
-					if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
-					{
-						_shiftList = _shiftLengthDecider.FilterList(_shiftList, _workShiftMinMaxCalculator, matrix, schedulingOptions);
-						if (_shiftList.Count == 0)
-							return null;
-					}
+					// override the one in Effective
+					effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 				}
-            }
 
-            IWorkShiftCalculationResultHolder result;
+				_shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList);
+
+				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
+				                                                                                         person.
+				                                                                                         	PermissionInformation.
+				                                                                                         	DefaultTimeZone(),
+				                                                                                         _shiftList,
+				                                                                                         effectiveRestriction,
+				                                                                                         schedulingOptions.
+				                                                                                         	NotAllowedShiftCategories,
+				                                                                                         FinderResult);
+
+
+				if (_shiftList.Count == 0)
+					return null;
+
+				MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix,
+				                                                                                            schedulingOptions);
+
+				if (!allowedMinMax.HasValue)
+				{
+					loggFilterResult(UserTexts.Resources.NoShiftsThatMatchesTheContractTimeCouldBeFound, _shiftList.Count, 0);
+					return null;
+				}
+
+				IScheduleRange wholeRange = ScheduleDictionary[person];
+				_shiftList = _shiftProjectionCacheFilter.Filter(allowedMinMax.Value, _shiftList, _scheduleDateOnly, wholeRange,
+				                                                FinderResult);
+				if (_shiftList.Count == 0)
+					return null;
+
+				if (schedulingOptions.RescheduleOptions == OptimizationRestriction.KeepStartAndEndTime &&
+				    schedulingOptions.SpecificStartAndEndTime.HasValue)
+				{
+					_shiftList = _shiftProjectionCacheFilter.FilterOnStartAndEndTime(schedulingOptions.SpecificStartAndEndTime.Value,
+					                                                                 _shiftList, _finderResult);
+					if (_shiftList.Count == 0)
+						return null;
+				}
+
+				if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
+				{
+					_shiftList = _shiftLengthDecider.FilterList(_shiftList, _workShiftMinMaxCalculator, matrix, schedulingOptions);
+					if (_shiftList.Count == 0)
+						return null;
+				}
+
+			}
+
+			IWorkShiftCalculationResultHolder result;
             using (PerformanceOutput.ForOperation("Calculating and selecting best shift"))
             {
                 var maxSeatPeriods = _personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);

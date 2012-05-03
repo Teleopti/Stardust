@@ -665,17 +665,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                         selectedPeriod, 
                         _backgroundWorker);
 
+				if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
+					_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
+																			selectedDays, SchedulingStateHolder,
+																			selectedPeriod,
+																			matrixOriginalStateContainerListForMoveMax);
+
                 if (optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
                     _extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
                                                                                  selectedDays, _schedulerStateHolder,
                                                                                  selectedPeriod,
                                                                                  matrixOriginalStateContainerListForMoveMax);
-
-                if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
-                    _extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-                                                                            selectedDays, SchedulingStateHolder,
-                                                                            selectedPeriod,
-                                                                            matrixOriginalStateContainerListForMoveMax);
 
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     RunIntradayOptimization(
