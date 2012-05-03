@@ -132,9 +132,6 @@
   </Target>
   
   <Target Name="MoveToKanbox">
-	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
-	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
-	
 	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
 		<ZIPName>$(CCNetProject)</ZIPName>
 		<KanboxShare>$(MSIShare)</KanboxShare>
@@ -144,6 +141,9 @@
 		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
 		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
 	</PropertyGroup>
+	
+	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
+	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
 
 	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
