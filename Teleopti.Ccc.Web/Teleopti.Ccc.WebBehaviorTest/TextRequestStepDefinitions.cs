@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input text request values")]
 		public void WhenIInputTextRequstValues()
 		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
