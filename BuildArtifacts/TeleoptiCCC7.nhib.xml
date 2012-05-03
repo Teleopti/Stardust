@@ -5,7 +5,7 @@
 			<!-- properties -->
 			<property name="connection.connection_string">
 				<!--WISEMETA: default="[SQL_AUTH_STRING];initial Catalog=[DB_CCC7];Application Name=Teleopti.CCC.Client"-->
-				Data Source=antonov\sql2005test;Initial Catalog=TeleoptiCCC7;User Id=sa;Password=cadadi;Application Name=Teleopti.CCC.Client
+				Data Source=.;Integrated Security=True;initial Catalog=$(CCC7DB)
 			</property>
 			<property name="command_timeout">60</property>
 		</session-factory>
@@ -13,7 +13,7 @@
 	<matrix name="MatrixDatamartDemo">
 		<connectionString>
 		<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Application Name=Teleopti.CCC.Client"-->
-		Data Source=antonov\sql2005test;Initial Catalog=TeleoptiAnalytics;User Id=sa;Password=cadadi;Application Name=Teleopti.CCC.Client
+		Data Source=.;Integrated Security=True;Initial Catalog=$(AnalyticsDB)
 		</connectionString>
 	</matrix>
 	<authentication>
