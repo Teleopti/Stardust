@@ -795,7 +795,9 @@
     <Compile Include="Security\Principal\AuthorizeMyOwn.cs" />
     <Compile Include="Security\Principal\AuthorizeMySite.cs" />
     <Compile Include="Security\Principal\AuthorizeMyTeam.cs" />
+    <Compile Include="Security\Principal\CurrentTeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\IAuthorizeAvailableData.cs" />
+    <Compile Include="Security\Principal\ICurrentTeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\IExternalFunctionsProvider.cs" />
     <Compile Include="Security\Principal\IOrganisationMembership.cs" />
     <Compile Include="Security\Principal\IPrincipalAuthorization.cs" />
