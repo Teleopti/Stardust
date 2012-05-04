@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="timeZoneId">The time zone.</param>
         /// <returns></returns>
         /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
-        [OperationContract]
+		[OperationContract]
+		[Obsolete("This method is obsolete, use GetSchedulesByQuery with appropriate query dto instead, to reduce data sent over the network.")]
         SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId);
 
         /// <summary>
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="timeZoneId">The time zone.</param>
         /// <returns></returns>
         /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
-        [OperationContract]
+		[OperationContract]
+		[Obsolete("This method is obsolete, use GetSchedulesByQuery with appropriate query dto instead, to reduce data sent over the network.")]
         ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 
         /// <summary>
@@ -76,7 +78,8 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <returns></returns>
         /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
         [OperationContract, FaultContract(typeof(FaultException))]
-    	ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
+		[Obsolete("This method is obsolete, use GetSchedulesByQuery with appropriate query dto instead, to reduce data sent over the network.")]
+		ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 
         /// <summary>
         /// Saves updated schedule information.
