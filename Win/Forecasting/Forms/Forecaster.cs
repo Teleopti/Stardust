@@ -1635,6 +1635,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 PrintDialog pPrintDialog = new PrintDialog();
                 pPrintDialog.Document = this._chartControl.PrintDocument;
                 _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
+                //this will check if the platform is 64bit or not
+                String sArchType = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+                if (sArchType != null && sArchType.Contains("64") == true)
+                    pPrintDialog.UseEXDialog = true;
 
                 if (pPrintDialog.ShowDialog() == DialogResult.OK)
                 {
