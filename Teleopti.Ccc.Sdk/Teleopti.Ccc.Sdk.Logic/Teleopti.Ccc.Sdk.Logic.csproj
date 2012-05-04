@@ -203,6 +203,7 @@
     <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByEmploymentNumberQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesByPersonQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
