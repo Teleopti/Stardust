@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	        _personAssembler = personAssembler;
 	    }
 
-	    public ICollection<PersonDto> GetPersonFromLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ICollection<PersonDto> GetPersonFromLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
             CheckScheduleLoadOption(scheduleLoadOptionDto);
 			ICollection<PersonDto> personDtos = new Collection<PersonDto>();

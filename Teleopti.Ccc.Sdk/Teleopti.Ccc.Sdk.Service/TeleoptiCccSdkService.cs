@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             if (publicNoteLoadOptionDto.LoadSite != null)
                 teamDtos = GetTeamsOnSite(publicNoteLoadOptionDto.LoadSite);
 
-            return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate, timeZoneId);
+            return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate);
 	    }
 
 	    public void SavePublicNote(PublicNoteDto publicNoteDto)

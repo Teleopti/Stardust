@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
             using (var unitOfWork = UnitOfWorkFactoryContainer.Current.CreateAndOpenUnitOfWork())
             {
-                var exportingPerson = _payrollPeopleLoader.GetOwningPerson(message,unitOfWork);
-                
                 var rep = _repositoryFactory.CreatePayrollExportRepository(unitOfWork);
                 var payrollExport = rep.Get(message.PayrollExportId);
 
