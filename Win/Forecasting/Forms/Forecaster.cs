@@ -1653,7 +1653,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             PrintPreviewDialog pPrintPreviewDialog = new PrintPreviewDialog();
             _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
             pPrintPreviewDialog.Document = _chartControl.PrintDocument;
-            pPrintPreviewDialog.ShowDialog();
+            try
+            {
+                pPrintPreviewDialog.ShowDialog();
+            }
+            catch (System.Drawing.Printing.InvalidPrinterException exceptionInvalidPrinterException)
+            {
+                ShowInformationMessage(exceptionInvalidPrinterException.Message, UserTexts.Resources.Forecasts);
+            }
+
         }
 
         private void tabControlWorkloads_SelectedIndexChanged(object sender, EventArgs e)
