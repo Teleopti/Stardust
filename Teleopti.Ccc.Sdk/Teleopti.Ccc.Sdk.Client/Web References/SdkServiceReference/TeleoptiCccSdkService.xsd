@@ -6,10 +6,10 @@
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" namespace="http://schemas.ccc.teleopti.com/sdk/2010/08/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
   <xs:element name="ConvertToUtc">
     <xs:complexType>
       <xs:sequence>
@@ -1089,191 +1089,151 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetActivities">
+  <xs:element name="GetSchedulesByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q169="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q169:LoadOptionDto" />
+        <xs:element xmlns:q169="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q169:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="LoadOptionDto">
+  <xs:element name="GetSchedulesByQueryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q170="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulesByQueryResult" nillable="true" type="q170:ArrayOfSchedulePartDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfSchedulePartDto">
     <xs:sequence>
-      <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
+      <xs:element xmlns:q171="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="SchedulePartDto" nillable="true" type="q171:SchedulePartDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q170="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="LoadOptionDto" nillable="true" type="q170:LoadOptionDto" />
-  <xs:element name="GetActivitiesResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q171="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetActivitiesResult" nillable="true" type="q171:ArrayOfActivityDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAbsences">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q172="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q172:AbsenceLoadOptionDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="AbsenceLoadOptionDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q173="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q173:LoadOptionDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="LoadRequestable" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q174="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceLoadOptionDto" nillable="true" type="q174:AbsenceLoadOptionDto" />
-  <xs:element name="GetAbsencesResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q175="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAbsencesResult" nillable="true" type="q175:ArrayOfAbsenceDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetSchedulePart">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q176="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q176:PersonDto" />
-        <xs:element xmlns:q177="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q177:DateOnlyDto" />
-        <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetSchedulePartResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q178="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartResult" nillable="true" type="q178:SchedulePartDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:element xmlns:q172="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfSchedulePartDto" nillable="true" type="q172:ArrayOfSchedulePartDto" />
   <xs:complexType name="SchedulePartDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q179="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q179:Dto">
+      <xs:extension xmlns:q173="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q173:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="ContractTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="Date" nillable="true" type="q179:DateOnlyDto" />
+          <xs:element minOccurs="0" name="Date" nillable="true" type="q173:DateOnlyDto" />
           <xs:element minOccurs="0" name="IsFullDayAbsence" type="xs:boolean" />
-          <xs:element minOccurs="0" name="LocalPeriod" nillable="true" type="q179:DateTimePeriodDto" />
-          <xs:element minOccurs="0" name="PersonAbsenceCollection" nillable="true" type="q179:ArrayOfPersonAbsenceDto" />
-          <xs:element minOccurs="0" name="PersonAssignmentCollection" nillable="true" type="q179:ArrayOfPersonAssignmentDto" />
-          <xs:element minOccurs="0" name="PersonDayOff" nillable="true" type="q179:PersonDayOffDto" />
+          <xs:element minOccurs="0" name="LocalPeriod" nillable="true" type="q173:DateTimePeriodDto" />
+          <xs:element minOccurs="0" name="PersonAbsenceCollection" nillable="true" type="q173:ArrayOfPersonAbsenceDto" />
+          <xs:element minOccurs="0" name="PersonAssignmentCollection" nillable="true" type="q173:ArrayOfPersonAssignmentDto" />
+          <xs:element minOccurs="0" name="PersonDayOff" nillable="true" type="q173:PersonDayOffDto" />
           <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-          <xs:element minOccurs="0" name="PersonMeetingCollection" nillable="true" type="q179:ArrayOfPersonMeetingDto" />
-          <xs:element minOccurs="0" name="PreferenceRestriction" nillable="true" type="q179:PreferenceRestrictionDto" />
-          <xs:element minOccurs="0" name="ProjectedLayerCollection" nillable="true" type="q179:ArrayOfProjectedLayerDto" />
-          <xs:element minOccurs="0" name="StudentAvailabilityDay" nillable="true" type="q179:StudentAvailabilityDayDto" />
+          <xs:element minOccurs="0" name="PersonMeetingCollection" nillable="true" type="q173:ArrayOfPersonMeetingDto" />
+          <xs:element minOccurs="0" name="PreferenceRestriction" nillable="true" type="q173:PreferenceRestrictionDto" />
+          <xs:element minOccurs="0" name="ProjectedLayerCollection" nillable="true" type="q173:ArrayOfProjectedLayerDto" />
+          <xs:element minOccurs="0" name="StudentAvailabilityDay" nillable="true" type="q173:StudentAvailabilityDayDto" />
           <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q180="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="SchedulePartDto" nillable="true" type="q180:SchedulePartDto" />
+  <xs:element xmlns:q174="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="SchedulePartDto" nillable="true" type="q174:SchedulePartDto" />
   <xs:complexType name="ArrayOfPersonAbsenceDto">
     <xs:sequence>
-      <xs:element xmlns:q181="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAbsenceDto" nillable="true" type="q181:PersonAbsenceDto" />
+      <xs:element xmlns:q175="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAbsenceDto" nillable="true" type="q175:PersonAbsenceDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q182="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAbsenceDto" nillable="true" type="q182:ArrayOfPersonAbsenceDto" />
+  <xs:element xmlns:q176="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAbsenceDto" nillable="true" type="q176:ArrayOfPersonAbsenceDto" />
   <xs:complexType name="PersonAbsenceDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q183="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q183:Dto">
+      <xs:extension xmlns:q177="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q177:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="AbsenceLayer" nillable="true" type="q183:AbsenceLayerDto" />
+          <xs:element minOccurs="0" name="AbsenceLayer" nillable="true" type="q177:AbsenceLayerDto" />
           <xs:element minOccurs="0" name="Version" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q184="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAbsenceDto" nillable="true" type="q184:PersonAbsenceDto" />
+  <xs:element xmlns:q178="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAbsenceDto" nillable="true" type="q178:PersonAbsenceDto" />
   <xs:complexType name="AbsenceLayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q185="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q185:LayerDto">
+      <xs:extension xmlns:q179="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q179:LayerDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Absence" nillable="true" type="q185:AbsenceDto" />
+          <xs:element minOccurs="0" name="Absence" nillable="true" type="q179:AbsenceDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q186="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceLayerDto" nillable="true" type="q186:AbsenceLayerDto" />
+  <xs:element xmlns:q180="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceLayerDto" nillable="true" type="q180:AbsenceLayerDto" />
   <xs:complexType name="LayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q187="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q187:Dto">
+      <xs:extension xmlns:q181="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q181:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Period" nillable="true" type="q187:DateTimePeriodDto" />
+          <xs:element minOccurs="0" name="Period" nillable="true" type="q181:DateTimePeriodDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q188="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="LayerDto" nillable="true" type="q188:LayerDto" />
+  <xs:element xmlns:q182="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="LayerDto" nillable="true" type="q182:LayerDto" />
   <xs:complexType name="PersonMeetingDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q189="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q189:LayerDto">
+      <xs:extension xmlns:q183="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q183:LayerDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="MeetingId" type="ser:guid" />
-          <xs:element minOccurs="0" name="Person" nillable="true" type="q189:PersonDto" />
+          <xs:element minOccurs="0" name="Person" nillable="true" type="q183:PersonDto" />
           <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q190="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonMeetingDto" nillable="true" type="q190:PersonMeetingDto" />
+  <xs:element xmlns:q184="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonMeetingDto" nillable="true" type="q184:PersonMeetingDto" />
   <xs:complexType name="PersonalShiftActivityDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q191="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q191:LayerDto">
+      <xs:extension xmlns:q185="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q185:LayerDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Activity" nillable="true" type="q191:ActivityDto" />
+          <xs:element minOccurs="0" name="Activity" nillable="true" type="q185:ActivityDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q192="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonalShiftActivityDto" nillable="true" type="q192:PersonalShiftActivityDto" />
+  <xs:element xmlns:q186="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonalShiftActivityDto" nillable="true" type="q186:PersonalShiftActivityDto" />
   <xs:complexType name="OvertimeLayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q193="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q193:ActivityLayerDto">
+      <xs:extension xmlns:q187="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q187:ActivityLayerDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="OvertimeDefinitionSetId" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q194="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeLayerDto" nillable="true" type="q194:OvertimeLayerDto" />
+  <xs:element xmlns:q188="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeLayerDto" nillable="true" type="q188:OvertimeLayerDto" />
   <xs:complexType name="ActivityLayerDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q195="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q195:LayerDto">
+      <xs:extension xmlns:q189="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q189:LayerDto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Activity" nillable="true" type="q195:ActivityDto" />
+          <xs:element minOccurs="0" name="Activity" nillable="true" type="q189:ActivityDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q196="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ActivityLayerDto" nillable="true" type="q196:ActivityLayerDto" />
+  <xs:element xmlns:q190="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ActivityLayerDto" nillable="true" type="q190:ActivityLayerDto" />
   <xs:complexType name="ArrayOfPersonAssignmentDto">
     <xs:sequence>
-      <xs:element xmlns:q197="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAssignmentDto" nillable="true" type="q197:PersonAssignmentDto" />
+      <xs:element xmlns:q191="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAssignmentDto" nillable="true" type="q191:PersonAssignmentDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q198="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAssignmentDto" nillable="true" type="q198:ArrayOfPersonAssignmentDto" />
+  <xs:element xmlns:q192="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAssignmentDto" nillable="true" type="q192:ArrayOfPersonAssignmentDto" />
   <xs:complexType name="PersonAssignmentDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q199="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q199:Dto">
+      <xs:extension xmlns:q193="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q193:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="MainShift" nillable="true" type="q199:MainShiftDto" />
-          <xs:element minOccurs="0" name="OvertimeShiftCollection" nillable="true" type="q199:ArrayOfShiftDto" />
-          <xs:element minOccurs="0" name="PersonalShiftCollection" nillable="true" type="q199:ArrayOfShiftDto" />
+          <xs:element minOccurs="0" name="MainShift" nillable="true" type="q193:MainShiftDto" />
+          <xs:element minOccurs="0" name="OvertimeShiftCollection" nillable="true" type="q193:ArrayOfShiftDto" />
+          <xs:element minOccurs="0" name="PersonalShiftCollection" nillable="true" type="q193:ArrayOfShiftDto" />
           <xs:element minOccurs="0" name="Version" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q200="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAssignmentDto" nillable="true" type="q200:PersonAssignmentDto" />
+  <xs:element xmlns:q194="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAssignmentDto" nillable="true" type="q194:PersonAssignmentDto" />
   <xs:complexType name="MainShiftDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q201="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q201:ShiftDto">
+      <xs:extension xmlns:q195="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q195:ShiftDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="ShiftCategoryId" type="ser:guid" />
           <xs:element minOccurs="0" name="ShiftCategoryName" nillable="true" type="xs:string" />
@@ -1282,40 +1242,40 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q202="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="MainShiftDto" nillable="true" type="q202:MainShiftDto" />
+  <xs:element xmlns:q196="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="MainShiftDto" nillable="true" type="q196:MainShiftDto" />
   <xs:complexType name="ShiftDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q203="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q203:Dto">
+      <xs:extension xmlns:q197="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q197:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="LayerCollection" nillable="true" type="q203:ArrayOfActivityLayerDto" />
+          <xs:element minOccurs="0" name="LayerCollection" nillable="true" type="q197:ArrayOfActivityLayerDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q204="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftDto" nillable="true" type="q204:ShiftDto" />
+  <xs:element xmlns:q198="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftDto" nillable="true" type="q198:ShiftDto" />
   <xs:complexType name="ArrayOfActivityLayerDto">
     <xs:sequence>
-      <xs:element xmlns:q205="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ActivityLayerDto" nillable="true" type="q205:ActivityLayerDto" />
+      <xs:element xmlns:q199="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ActivityLayerDto" nillable="true" type="q199:ActivityLayerDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q206="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfActivityLayerDto" nillable="true" type="q206:ArrayOfActivityLayerDto" />
+  <xs:element xmlns:q200="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfActivityLayerDto" nillable="true" type="q200:ArrayOfActivityLayerDto" />
   <xs:complexType name="ArrayOfShiftDto">
     <xs:sequence>
-      <xs:element xmlns:q207="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ShiftDto" nillable="true" type="q207:ShiftDto" />
+      <xs:element xmlns:q201="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ShiftDto" nillable="true" type="q201:ShiftDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q208="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfShiftDto" nillable="true" type="q208:ArrayOfShiftDto" />
+  <xs:element xmlns:q202="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfShiftDto" nillable="true" type="q202:ArrayOfShiftDto" />
   <xs:complexType name="PersonDayOffDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q209="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q209:LayerDto">
+      <xs:extension xmlns:q203="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q203:LayerDto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Anchor" type="xs:dateTime" />
           <xs:element minOccurs="0" name="AnchorTime" type="ser:duration" />
-          <xs:element minOccurs="0" name="Color" nillable="true" type="q209:ColorDto" />
+          <xs:element minOccurs="0" name="Color" nillable="true" type="q203:ColorDto" />
           <xs:element minOccurs="0" name="Flexibility" type="ser:duration" />
           <xs:element minOccurs="0" name="Length" type="ser:duration" />
           <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Person" nillable="true" type="q209:PersonDto" />
+          <xs:element minOccurs="0" name="Person" nillable="true" type="q203:PersonDto" />
           <xs:element minOccurs="0" name="ShortName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Version" type="xs:int" />
           <xs:element minOccurs="0" name="PayrollCode" nillable="true" type="xs:string" />
@@ -1323,38 +1283,98 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q210="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonDayOffDto" nillable="true" type="q210:PersonDayOffDto" />
+  <xs:element xmlns:q204="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonDayOffDto" nillable="true" type="q204:PersonDayOffDto" />
   <xs:complexType name="ArrayOfPersonMeetingDto">
     <xs:sequence>
-      <xs:element xmlns:q211="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonMeetingDto" nillable="true" type="q211:PersonMeetingDto" />
+      <xs:element xmlns:q205="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonMeetingDto" nillable="true" type="q205:PersonMeetingDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q212="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonMeetingDto" nillable="true" type="q212:ArrayOfPersonMeetingDto" />
+  <xs:element xmlns:q206="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonMeetingDto" nillable="true" type="q206:ArrayOfPersonMeetingDto" />
   <xs:complexType name="ArrayOfProjectedLayerDto">
     <xs:sequence>
-      <xs:element xmlns:q213="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ProjectedLayerDto" nillable="true" type="q213:ProjectedLayerDto" />
+      <xs:element xmlns:q207="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ProjectedLayerDto" nillable="true" type="q207:ProjectedLayerDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q214="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfProjectedLayerDto" nillable="true" type="q214:ArrayOfProjectedLayerDto" />
+  <xs:element xmlns:q208="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfProjectedLayerDto" nillable="true" type="q208:ArrayOfProjectedLayerDto" />
   <xs:complexType name="ProjectedLayerDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="ContractTime" type="ser:duration" />
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element xmlns:q215="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DisplayColor" nillable="true" type="q215:ColorDto" />
+      <xs:element xmlns:q209="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DisplayColor" nillable="true" type="q209:ColorDto" />
       <xs:element minOccurs="0" name="IsAbsence" type="xs:boolean" />
       <xs:element minOccurs="0" name="MeetingId" nillable="true" type="ser:guid" />
       <xs:element minOccurs="0" name="OvertimeDefinitionSetId" nillable="true" type="ser:guid" />
       <xs:element minOccurs="0" name="PayloadId" type="ser:guid" />
-      <xs:element xmlns:q216="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q216:DateTimePeriodDto" />
+      <xs:element xmlns:q210="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q210:DateTimePeriodDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q217="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ProjectedLayerDto" nillable="true" type="q217:ProjectedLayerDto" />
+  <xs:element xmlns:q211="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ProjectedLayerDto" nillable="true" type="q211:ProjectedLayerDto" />
+  <xs:element name="GetActivities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q212="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q212:LoadOptionDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="LoadOptionDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q213="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="LoadOptionDto" nillable="true" type="q213:LoadOptionDto" />
+  <xs:element name="GetActivitiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q214="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetActivitiesResult" nillable="true" type="q214:ArrayOfActivityDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAbsences">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q215="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q215:AbsenceLoadOptionDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AbsenceLoadOptionDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q216="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q216:LoadOptionDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="LoadRequestable" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q217="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceLoadOptionDto" nillable="true" type="q217:AbsenceLoadOptionDto" />
+  <xs:element name="GetAbsencesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q218="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAbsencesResult" nillable="true" type="q218:ArrayOfAbsenceDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSchedulePart">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q219="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q219:PersonDto" />
+        <xs:element xmlns:q220="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q220:DateOnlyDto" />
+        <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSchedulePartResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q221="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartResult" nillable="true" type="q221:SchedulePartDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetScheduleParts">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q218="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q218:PersonDto" />
-        <xs:element xmlns:q219="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q219:DateOnlyDto" />
-        <xs:element xmlns:q220="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q220:DateOnlyDto" />
+        <xs:element xmlns:q222="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q222:PersonDto" />
+        <xs:element xmlns:q223="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q223:DateOnlyDto" />
+        <xs:element xmlns:q224="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q224:DateOnlyDto" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -1362,22 +1382,16 @@
   <xs:element name="GetSchedulePartsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q221="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartsResult" nillable="true" type="q221:ArrayOfSchedulePartDto" />
+        <xs:element xmlns:q225="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartsResult" nillable="true" type="q225:ArrayOfSchedulePartDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfSchedulePartDto">
-    <xs:sequence>
-      <xs:element xmlns:q222="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="SchedulePartDto" nillable="true" type="q222:SchedulePartDto" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element xmlns:q223="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfSchedulePartDto" nillable="true" type="q223:ArrayOfSchedulePartDto" />
   <xs:element name="GetSchedulePartsForPersons">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q224="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personList" nillable="true" type="q224:ArrayOfPersonDto" />
-        <xs:element xmlns:q225="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q225:DateOnlyDto" />
-        <xs:element xmlns:q226="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q226:DateOnlyDto" />
+        <xs:element xmlns:q226="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personList" nillable="true" type="q226:ArrayOfPersonDto" />
+        <xs:element xmlns:q227="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q227:DateOnlyDto" />
+        <xs:element xmlns:q228="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q228:DateOnlyDto" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -1385,16 +1399,16 @@
   <xs:element name="GetSchedulePartsForPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q227="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartsForPersonsResult" nillable="true" type="q227:ArrayOfSchedulePartDto" />
+        <xs:element xmlns:q229="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulePartsForPersonsResult" nillable="true" type="q229:ArrayOfSchedulePartDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSchedules">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q228="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="scheduleLoadOptionDto" nillable="true" type="q228:ScheduleLoadOptionDto" />
-        <xs:element xmlns:q229="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q229:DateOnlyDto" />
-        <xs:element xmlns:q230="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q230:DateOnlyDto" />
+        <xs:element xmlns:q230="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="scheduleLoadOptionDto" nillable="true" type="q230:ScheduleLoadOptionDto" />
+        <xs:element xmlns:q231="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q231:DateOnlyDto" />
+        <xs:element xmlns:q232="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q232:DateOnlyDto" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -1402,14 +1416,14 @@
   <xs:element name="GetSchedulesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q231="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulesResult" nillable="true" type="q231:ArrayOfSchedulePartDto" />
+        <xs:element xmlns:q233="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSchedulesResult" nillable="true" type="q233:ArrayOfSchedulePartDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveSchedulePart">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q232="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="schedulePartDto" nillable="true" type="q232:SchedulePartDto" />
+        <xs:element xmlns:q234="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="schedulePartDto" nillable="true" type="q234:SchedulePartDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1421,37 +1435,37 @@
   <xs:element name="GetShiftCategoriesBelongingToRuleSetBag">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q233="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q233:PersonDto" />
-        <xs:element xmlns:q234="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDateOnlyDto" nillable="true" type="q234:DateOnlyDto" />
-        <xs:element xmlns:q235="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDateOnlyDto" nillable="true" type="q235:DateOnlyDto" />
+        <xs:element xmlns:q235="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q235:PersonDto" />
+        <xs:element xmlns:q236="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDateOnlyDto" nillable="true" type="q236:DateOnlyDto" />
+        <xs:element xmlns:q237="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDateOnlyDto" nillable="true" type="q237:DateOnlyDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetShiftCategoriesBelongingToRuleSetBagResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q236="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetShiftCategoriesBelongingToRuleSetBagResult" nillable="true" type="q236:ArrayOfShiftCategoryDto" />
+        <xs:element xmlns:q238="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetShiftCategoriesBelongingToRuleSetBagResult" nillable="true" type="q238:ArrayOfShiftCategoryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DeletePersonRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q237="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q237:PersonRequestDto" />
+        <xs:element xmlns:q239="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q239:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="PersonRequestDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q238="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q238:Dto">
+      <xs:extension xmlns:q240="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q240:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="CanDelete" type="xs:boolean" />
           <xs:element minOccurs="0" name="CreatedDate" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DenyReason" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Person" nillable="true" type="q238:PersonDto" />
-          <xs:element minOccurs="0" name="Request" nillable="true" type="q238:RequestDto" />
-          <xs:element xmlns:q239="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" minOccurs="0" name="RequestStatus" type="q239:RequestStatusDto" />
+          <xs:element minOccurs="0" name="Person" nillable="true" type="q240:PersonDto" />
+          <xs:element minOccurs="0" name="Request" nillable="true" type="q240:RequestDto" />
+          <xs:element xmlns:q241="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" minOccurs="0" name="RequestStatus" type="q241:RequestStatusDto" />
           <xs:element minOccurs="0" name="RequestedDate" type="xs:dateTime" />
           <xs:element minOccurs="0" name="RequestedDateLocal" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string" />
@@ -1461,71 +1475,71 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q240="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonRequestDto" nillable="true" type="q240:PersonRequestDto" />
+  <xs:element xmlns:q242="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonRequestDto" nillable="true" type="q242:PersonRequestDto" />
   <xs:complexType name="RequestDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q241="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q241:Dto">
+      <xs:extension xmlns:q243="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q243:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Details" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Period" nillable="true" type="q241:DateTimePeriodDto" />
+          <xs:element minOccurs="0" name="Period" nillable="true" type="q243:DateTimePeriodDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q242="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="RequestDto" nillable="true" type="q242:RequestDto" />
+  <xs:element xmlns:q244="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="RequestDto" nillable="true" type="q244:RequestDto" />
+  <xs:complexType name="TextRequestDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q245="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q245:RequestDto">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q246="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="TextRequestDto" nillable="true" type="q246:TextRequestDto" />
+  <xs:complexType name="AbsenceRequestDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q247="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q247:RequestDto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Absence" nillable="true" type="q247:AbsenceDto" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q248="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceRequestDto" nillable="true" type="q248:AbsenceRequestDto" />
   <xs:complexType name="ShiftTradeRequestDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q243="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q243:RequestDto">
+      <xs:extension xmlns:q249="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q249:RequestDto">
         <xs:sequence>
-          <xs:element xmlns:q244="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" minOccurs="0" name="ShiftTradeStatus" type="q244:ShiftTradeStatusDto" />
-          <xs:element minOccurs="0" name="ShiftTradeSwapDetails" nillable="true" type="q243:ArrayOfShiftTradeSwapDetailDto" />
+          <xs:element xmlns:q250="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" minOccurs="0" name="ShiftTradeStatus" type="q250:ShiftTradeStatusDto" />
+          <xs:element minOccurs="0" name="ShiftTradeSwapDetails" nillable="true" type="q249:ArrayOfShiftTradeSwapDetailDto" />
           <xs:element minOccurs="0" name="TypeDescription" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q245="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftTradeRequestDto" nillable="true" type="q245:ShiftTradeRequestDto" />
+  <xs:element xmlns:q251="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftTradeRequestDto" nillable="true" type="q251:ShiftTradeRequestDto" />
   <xs:complexType name="ArrayOfShiftTradeSwapDetailDto">
     <xs:sequence>
-      <xs:element xmlns:q246="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ShiftTradeSwapDetailDto" nillable="true" type="q246:ShiftTradeSwapDetailDto" />
+      <xs:element xmlns:q252="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ShiftTradeSwapDetailDto" nillable="true" type="q252:ShiftTradeSwapDetailDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q247="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfShiftTradeSwapDetailDto" nillable="true" type="q247:ArrayOfShiftTradeSwapDetailDto" />
+  <xs:element xmlns:q253="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfShiftTradeSwapDetailDto" nillable="true" type="q253:ArrayOfShiftTradeSwapDetailDto" />
   <xs:complexType name="ShiftTradeSwapDetailDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q248="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q248:Dto">
+      <xs:extension xmlns:q254="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q254:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="ChecksumFrom" type="xs:long" />
           <xs:element minOccurs="0" name="ChecksumTo" type="xs:long" />
-          <xs:element minOccurs="0" name="DateFrom" nillable="true" type="q248:DateOnlyDto" />
-          <xs:element minOccurs="0" name="DateTo" nillable="true" type="q248:DateOnlyDto" />
-          <xs:element minOccurs="0" name="PersonFrom" nillable="true" type="q248:PersonDto" />
-          <xs:element minOccurs="0" name="PersonTo" nillable="true" type="q248:PersonDto" />
-          <xs:element minOccurs="0" name="SchedulePartFrom" nillable="true" type="q248:SchedulePartDto" />
-          <xs:element minOccurs="0" name="SchedulePartTo" nillable="true" type="q248:SchedulePartDto" />
+          <xs:element minOccurs="0" name="DateFrom" nillable="true" type="q254:DateOnlyDto" />
+          <xs:element minOccurs="0" name="DateTo" nillable="true" type="q254:DateOnlyDto" />
+          <xs:element minOccurs="0" name="PersonFrom" nillable="true" type="q254:PersonDto" />
+          <xs:element minOccurs="0" name="PersonTo" nillable="true" type="q254:PersonDto" />
+          <xs:element minOccurs="0" name="SchedulePartFrom" nillable="true" type="q254:SchedulePartDto" />
+          <xs:element minOccurs="0" name="SchedulePartTo" nillable="true" type="q254:SchedulePartDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q249="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftTradeSwapDetailDto" nillable="true" type="q249:ShiftTradeSwapDetailDto" />
-  <xs:complexType name="TextRequestDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q250="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q250:RequestDto">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q251="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="TextRequestDto" nillable="true" type="q251:TextRequestDto" />
-  <xs:complexType name="AbsenceRequestDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q252="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q252:RequestDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Absence" nillable="true" type="q252:AbsenceDto" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q253="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AbsenceRequestDto" nillable="true" type="q253:AbsenceRequestDto" />
+  <xs:element xmlns:q255="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ShiftTradeSwapDetailDto" nillable="true" type="q255:ShiftTradeSwapDetailDto" />
   <xs:element name="DeletePersonRequestResponse">
     <xs:complexType>
       <xs:sequence />
@@ -1534,21 +1548,21 @@
   <xs:element name="SavePersonRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q254="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q254:PersonRequestDto" />
+        <xs:element xmlns:q256="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q256:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SavePersonRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q255="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="SavePersonRequestResult" nillable="true" type="q255:PersonRequestDto" />
+        <xs:element xmlns:q257="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="SavePersonRequestResult" nillable="true" type="q257:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SavePersonAbsenceRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q256="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q256:PersonRequestDto" />
+        <xs:element xmlns:q258="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q258:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1560,40 +1574,24 @@
   <xs:element name="GetAllPersonRequests">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q257="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q257:PersonDto" />
+        <xs:element xmlns:q259="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q259:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAllPersonRequestsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q258="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllPersonRequestsResult" nillable="true" type="q258:ArrayOfPersonRequestDto" />
+        <xs:element xmlns:q260="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllPersonRequestsResult" nillable="true" type="q260:ArrayOfPersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPersonRequestDto">
     <xs:sequence>
-      <xs:element xmlns:q259="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonRequestDto" nillable="true" type="q259:PersonRequestDto" />
+      <xs:element xmlns:q261="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonRequestDto" nillable="true" type="q261:PersonRequestDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q260="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonRequestDto" nillable="true" type="q260:ArrayOfPersonRequestDto" />
+  <xs:element xmlns:q262="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonRequestDto" nillable="true" type="q262:ArrayOfPersonRequestDto" />
   <xs:element name="GetPersonRequests">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q261="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q261:PersonDto" />
-        <xs:element minOccurs="0" name="utcStartDate" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="utcEndDate" type="xs:dateTime" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetPersonRequestsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q262="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonRequestsResult" nillable="true" type="q262:ArrayOfPersonRequestDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllRequestModifiedWithinPeriodOrPending">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q263="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q263:PersonDto" />
@@ -1602,114 +1600,130 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPersonRequestsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q264="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonRequestsResult" nillable="true" type="q264:ArrayOfPersonRequestDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllRequestModifiedWithinPeriodOrPending">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q265="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q265:PersonDto" />
+        <xs:element minOccurs="0" name="utcStartDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="utcEndDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetAllRequestModifiedWithinPeriodOrPendingResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q264="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllRequestModifiedWithinPeriodOrPendingResult" nillable="true" type="q264:ArrayOfPersonRequestDto" />
+        <xs:element xmlns:q266="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllRequestModifiedWithinPeriodOrPendingResult" nillable="true" type="q266:ArrayOfPersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateShiftTradeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q265="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="requester" nillable="true" type="q265:PersonDto" />
+        <xs:element xmlns:q267="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="requester" nillable="true" type="q267:PersonDto" />
         <xs:element minOccurs="0" name="subject" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
-        <xs:element xmlns:q266="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="shiftTradeSwapDetailDtos" nillable="true" type="q266:ArrayOfShiftTradeSwapDetailDto" />
+        <xs:element xmlns:q268="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="shiftTradeSwapDetailDtos" nillable="true" type="q268:ArrayOfShiftTradeSwapDetailDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateShiftTradeRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q267="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="CreateShiftTradeRequestResult" nillable="true" type="q267:PersonRequestDto" />
+        <xs:element xmlns:q269="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="CreateShiftTradeRequestResult" nillable="true" type="q269:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetShiftTradeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q268="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q268:PersonRequestDto" />
+        <xs:element xmlns:q270="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequestDto" nillable="true" type="q270:PersonRequestDto" />
         <xs:element minOccurs="0" name="subject" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
-        <xs:element xmlns:q269="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="shiftTradeSwapDetailDtos" nillable="true" type="q269:ArrayOfShiftTradeSwapDetailDto" />
+        <xs:element xmlns:q271="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="shiftTradeSwapDetailDtos" nillable="true" type="q271:ArrayOfShiftTradeSwapDetailDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetShiftTradeRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q270="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="SetShiftTradeRequestResult" nillable="true" type="q270:PersonRequestDto" />
+        <xs:element xmlns:q272="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="SetShiftTradeRequestResult" nillable="true" type="q272:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdatePersonRequestMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q271="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q271:PersonRequestDto" />
+        <xs:element xmlns:q273="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q273:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdatePersonRequestMessageResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q272="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="UpdatePersonRequestMessageResult" nillable="true" type="q272:PersonRequestDto" />
+        <xs:element xmlns:q274="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="UpdatePersonRequestMessageResult" nillable="true" type="q274:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AcceptShiftTradeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q273="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q273:PersonRequestDto" />
+        <xs:element xmlns:q275="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q275:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AcceptShiftTradeRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q274="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="AcceptShiftTradeRequestResult" nillable="true" type="q274:PersonRequestDto" />
+        <xs:element xmlns:q276="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="AcceptShiftTradeRequestResult" nillable="true" type="q276:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DenyShiftTradeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q275="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q275:PersonRequestDto" />
+        <xs:element xmlns:q277="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personRequest" nillable="true" type="q277:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DenyShiftTradeRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q276="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DenyShiftTradeRequestResult" nillable="true" type="q276:PersonRequestDto" />
+        <xs:element xmlns:q278="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DenyShiftTradeRequestResult" nillable="true" type="q278:PersonRequestDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetDaysOffs">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q277="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q277:LoadOptionDto" />
+        <xs:element xmlns:q279="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q279:LoadOptionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetDaysOffsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q278="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetDaysOffsResult" nillable="true" type="q278:ArrayOfDayOffInfoDto" />
+        <xs:element xmlns:q280="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetDaysOffsResult" nillable="true" type="q280:ArrayOfDayOffInfoDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetShiftCategories">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q279="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q279:LoadOptionDto" />
+        <xs:element xmlns:q281="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q281:LoadOptionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetShiftCategoriesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q280="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetShiftCategoriesResult" nillable="true" type="q280:ArrayOfShiftCategoryDto" />
+        <xs:element xmlns:q282="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetShiftCategoriesResult" nillable="true" type="q282:ArrayOfShiftCategoryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1718,8 +1732,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="dateTime" type="xs:dateTime" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q281="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q281:PersonDto" />
-        <xs:element xmlns:q282="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="agentPersonDto" nillable="true" type="q282:PersonDto" />
+        <xs:element xmlns:q283="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q283:PersonDto" />
+        <xs:element xmlns:q284="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="agentPersonDto" nillable="true" type="q284:PersonDto" />
         <xs:element minOccurs="0" name="languageId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -1727,22 +1741,22 @@
   <xs:element name="GetAdherenceDataResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q283="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAdherenceDataResult" nillable="true" type="q283:AdherenceDto" />
+        <xs:element xmlns:q285="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAdherenceDataResult" nillable="true" type="q285:AdherenceDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="AdherenceDto">
     <xs:sequence>
-      <xs:element xmlns:q284="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="AdherenceDataDtos" nillable="true" type="q284:ArrayOfAdherenceDataDto" />
+      <xs:element xmlns:q286="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="AdherenceDataDtos" nillable="true" type="q286:ArrayOfAdherenceDataDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q285="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceDto" nillable="true" type="q285:AdherenceDto" />
+  <xs:element xmlns:q287="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceDto" nillable="true" type="q287:AdherenceDto" />
   <xs:complexType name="ArrayOfAdherenceDataDto">
     <xs:sequence>
-      <xs:element xmlns:q286="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AdherenceDataDto" nillable="true" type="q286:AdherenceDataDto" />
+      <xs:element xmlns:q288="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AdherenceDataDto" nillable="true" type="q288:AdherenceDataDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q287="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAdherenceDataDto" nillable="true" type="q287:ArrayOfAdherenceDataDto" />
+  <xs:element xmlns:q289="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAdherenceDataDto" nillable="true" type="q289:ArrayOfAdherenceDataDto" />
   <xs:complexType name="AdherenceDataDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="Adherence" type="xs:decimal" />
@@ -1753,30 +1767,30 @@
       <xs:element minOccurs="0" name="ReadyTimeMinutes" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q288="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceDataDto" nillable="true" type="q288:AdherenceDataDto" />
+  <xs:element xmlns:q290="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceDataDto" nillable="true" type="q290:AdherenceDataDto" />
   <xs:element name="GetAgentQueueStatDetails">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q289="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q289:PersonDto" />
+        <xs:element xmlns:q291="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q291:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAgentQueueStatDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q290="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentQueueStatDetailsResult" nillable="true" type="q290:ArrayOfAgentQueueStatDetailsDto" />
+        <xs:element xmlns:q292="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentQueueStatDetailsResult" nillable="true" type="q292:ArrayOfAgentQueueStatDetailsDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfAgentQueueStatDetailsDto">
     <xs:sequence>
-      <xs:element xmlns:q291="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentQueueStatDetailsDto" nillable="true" type="q291:AgentQueueStatDetailsDto" />
+      <xs:element xmlns:q293="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentQueueStatDetailsDto" nillable="true" type="q293:AgentQueueStatDetailsDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q292="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentQueueStatDetailsDto" nillable="true" type="q292:ArrayOfAgentQueueStatDetailsDto" />
+  <xs:element xmlns:q294="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentQueueStatDetailsDto" nillable="true" type="q294:ArrayOfAgentQueueStatDetailsDto" />
   <xs:complexType name="AgentQueueStatDetailsDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="AfterContactWorkTime" type="xs:long" />
@@ -1786,44 +1800,44 @@
       <xs:element minOccurs="0" name="QueueName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q293="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentQueueStatDetailsDto" nillable="true" type="q293:AgentQueueStatDetailsDto" />
+  <xs:element xmlns:q295="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentQueueStatDetailsDto" nillable="true" type="q295:AgentQueueStatDetailsDto" />
   <xs:element name="GetAdherenceInfo">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="timeZoneId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q294="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q294:PersonDto" />
+        <xs:element xmlns:q296="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q296:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAdherenceInfoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q295="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAdherenceInfoResult" nillable="true" type="q295:ArrayOfAdherenceInfoDto" />
+        <xs:element xmlns:q297="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAdherenceInfoResult" nillable="true" type="q297:ArrayOfAdherenceInfoDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfAdherenceInfoDto">
     <xs:sequence>
-      <xs:element xmlns:q296="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AdherenceInfoDto" nillable="true" type="q296:AdherenceInfoDto" />
+      <xs:element xmlns:q298="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AdherenceInfoDto" nillable="true" type="q298:AdherenceInfoDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q297="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAdherenceInfoDto" nillable="true" type="q297:ArrayOfAdherenceInfoDto" />
+  <xs:element xmlns:q299="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAdherenceInfoDto" nillable="true" type="q299:ArrayOfAdherenceInfoDto" />
   <xs:complexType name="AdherenceInfoDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="AvailableTime" type="xs:long" />
-      <xs:element xmlns:q298="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DateOnlyDto" nillable="true" type="q298:DateOnlyDto" />
+      <xs:element xmlns:q300="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DateOnlyDto" nillable="true" type="q300:DateOnlyDto" />
       <xs:element minOccurs="0" name="IdleTime" type="xs:long" />
       <xs:element minOccurs="0" name="LoggedInTime" type="xs:long" />
       <xs:element minOccurs="0" name="ScheduleWorkCtiTime" type="xs:long" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q299="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceInfoDto" nillable="true" type="q299:AdherenceInfoDto" />
+  <xs:element xmlns:q301="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AdherenceInfoDto" nillable="true" type="q301:AdherenceInfoDto" />
   <xs:element name="SavePreference">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q300="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="preferenceRestrictionDto" nillable="true" type="q300:PreferenceRestrictionDto" />
+        <xs:element xmlns:q302="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="preferenceRestrictionDto" nillable="true" type="q302:PreferenceRestrictionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1835,7 +1849,7 @@
   <xs:element name="DeletePreference">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q301="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="preferenceRestrictionDto" nillable="true" type="q301:PreferenceRestrictionDto" />
+        <xs:element xmlns:q303="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="preferenceRestrictionDto" nillable="true" type="q303:PreferenceRestrictionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1847,7 +1861,7 @@
   <xs:element name="SaveStudentAvailabilityDay">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q302="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="studentAvailabilityDayDto" nillable="true" type="q302:StudentAvailabilityDayDto" />
+        <xs:element xmlns:q304="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="studentAvailabilityDayDto" nillable="true" type="q304:StudentAvailabilityDayDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1859,7 +1873,7 @@
   <xs:element name="DeleteStudentAvailabilityDay">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q303="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="studentAvailabilityDayDto" nillable="true" type="q303:StudentAvailabilityDayDto" />
+        <xs:element xmlns:q305="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="studentAvailabilityDayDto" nillable="true" type="q305:StudentAvailabilityDayDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1871,37 +1885,37 @@
   <xs:element name="GetTeamsOnSite">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q304="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="siteDto" nillable="true" type="q304:SiteDto" />
+        <xs:element xmlns:q306="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="siteDto" nillable="true" type="q306:SiteDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTeamsOnSiteResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q305="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsOnSiteResult" nillable="true" type="q305:ArrayOfTeamDto" />
+        <xs:element xmlns:q307="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsOnSiteResult" nillable="true" type="q307:ArrayOfTeamDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfTeamDto">
     <xs:sequence>
-      <xs:element xmlns:q306="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="TeamDto" nillable="true" type="q306:TeamDto" />
+      <xs:element xmlns:q308="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="TeamDto" nillable="true" type="q308:TeamDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q307="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfTeamDto" nillable="true" type="q307:ArrayOfTeamDto" />
+  <xs:element xmlns:q309="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfTeamDto" nillable="true" type="q309:ArrayOfTeamDto" />
   <xs:element name="SetWriteProtectionDateOnPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q308="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personWriteProtectionDto" nillable="true" type="q308:PersonWriteProtectionDto" />
+        <xs:element xmlns:q310="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personWriteProtectionDto" nillable="true" type="q310:PersonWriteProtectionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="PersonWriteProtectionDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-      <xs:element xmlns:q309="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="WriteProtectedToDate" nillable="true" type="q309:DateOnlyDto" />
+      <xs:element xmlns:q311="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="WriteProtectedToDate" nillable="true" type="q311:DateOnlyDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q310="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonWriteProtectionDto" nillable="true" type="q310:PersonWriteProtectionDto" />
+  <xs:element xmlns:q312="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonWriteProtectionDto" nillable="true" type="q312:PersonWriteProtectionDto" />
   <xs:element name="SetWriteProtectionDateOnPersonResponse">
     <xs:complexType>
       <xs:sequence />
@@ -1910,85 +1924,85 @@
   <xs:element name="GetWriteProtectionDateOnPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q311="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q311:PersonDto" />
+        <xs:element xmlns:q313="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q313:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetWriteProtectionDateOnPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q312="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetWriteProtectionDateOnPersonResult" nillable="true" type="q312:PersonWriteProtectionDto" />
+        <xs:element xmlns:q314="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetWriteProtectionDateOnPersonResult" nillable="true" type="q314:PersonWriteProtectionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPayrollExportByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q313="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q313:QueryDto" />
+        <xs:element xmlns:q315="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q315:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPayrollExportByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q314="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollExportByQueryResult" nillable="true" type="q314:ArrayOfPayrollExportDto" />
+        <xs:element xmlns:q316="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollExportByQueryResult" nillable="true" type="q316:ArrayOfPayrollExportDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPayrollExportDto">
     <xs:sequence>
-      <xs:element xmlns:q315="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollExportDto" nillable="true" type="q315:PayrollExportDto" />
+      <xs:element xmlns:q317="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollExportDto" nillable="true" type="q317:PayrollExportDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q316="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollExportDto" nillable="true" type="q316:ArrayOfPayrollExportDto" />
+  <xs:element xmlns:q318="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollExportDto" nillable="true" type="q318:ArrayOfPayrollExportDto" />
   <xs:complexType name="PayrollExportDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q317="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q317:Dto">
+      <xs:extension xmlns:q319="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q319:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="DatePeriod" nillable="true" type="q317:DateOnlyPeriodDto" />
-          <xs:element minOccurs="0" name="PayrollFormat" nillable="true" type="q317:PayrollFormatDto" />
-          <xs:element minOccurs="0" name="Period" nillable="true" type="q317:DateTimePeriodDto" />
-          <xs:element minOccurs="0" name="PersonCollection" nillable="true" type="q317:ArrayOfPersonDto" />
+          <xs:element minOccurs="0" name="DatePeriod" nillable="true" type="q319:DateOnlyPeriodDto" />
+          <xs:element minOccurs="0" name="PayrollFormat" nillable="true" type="q319:PayrollFormatDto" />
+          <xs:element minOccurs="0" name="Period" nillable="true" type="q319:DateTimePeriodDto" />
+          <xs:element minOccurs="0" name="PersonCollection" nillable="true" type="q319:ArrayOfPersonDto" />
           <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
-          <xs:element xmlns:q318="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ExportPersonCollection" nillable="true" type="q318:ArrayOfguid" />
+          <xs:element xmlns:q320="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ExportPersonCollection" nillable="true" type="q320:ArrayOfguid" />
           <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q319="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollExportDto" nillable="true" type="q319:PayrollExportDto" />
+  <xs:element xmlns:q321="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollExportDto" nillable="true" type="q321:PayrollExportDto" />
   <xs:complexType name="PayrollFormatDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="FormatId" type="ser:guid" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q320="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollFormatDto" nillable="true" type="q320:PayrollFormatDto" />
+  <xs:element xmlns:q322="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollFormatDto" nillable="true" type="q322:PayrollFormatDto" />
   <xs:element name="GetPayrollResultStatusByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q321="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q321:QueryDto" />
+        <xs:element xmlns:q323="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q323:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPayrollResultStatusByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q322="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollResultStatusByQueryResult" nillable="true" type="q322:ArrayOfPayrollResultDto" />
+        <xs:element xmlns:q324="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollResultStatusByQueryResult" nillable="true" type="q324:ArrayOfPayrollResultDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPayrollResultDto">
     <xs:sequence>
-      <xs:element xmlns:q323="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollResultDto" nillable="true" type="q323:PayrollResultDto" />
+      <xs:element xmlns:q325="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollResultDto" nillable="true" type="q325:PayrollResultDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q324="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollResultDto" nillable="true" type="q324:ArrayOfPayrollResultDto" />
+  <xs:element xmlns:q326="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollResultDto" nillable="true" type="q326:ArrayOfPayrollResultDto" />
   <xs:complexType name="PayrollResultDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q325="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q325:Dto">
+      <xs:extension xmlns:q327="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q327:Dto">
         <xs:sequence>
-          <xs:element xmlns:q326="http://schemas.ccc.teleopti.com/sdk/2010/05/" minOccurs="0" name="Details" nillable="true" type="q326:ArrayOfPayrollResultDetailDto" />
+          <xs:element xmlns:q328="http://schemas.ccc.teleopti.com/sdk/2010/05/" minOccurs="0" name="Details" nillable="true" type="q328:ArrayOfPayrollResultDetailDto" />
           <xs:element minOccurs="0" name="FinishedOk" type="xs:boolean" />
           <xs:element minOccurs="0" name="HasError" type="xs:boolean" />
           <xs:element minOccurs="0" name="IsWorking" type="xs:boolean" />
@@ -1997,67 +2011,99 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q327="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollResultDto" nillable="true" type="q327:PayrollResultDto" />
+  <xs:element xmlns:q329="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PayrollResultDto" nillable="true" type="q329:PayrollResultDto" />
   <xs:element name="GroupPagesByQuery">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q328="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q328:QueryDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GroupPagesByQueryResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q329="http://schemas.ccc.teleopti.com/sdk/2011/09/" minOccurs="0" name="GroupPagesByQueryResult" nillable="true" type="q329:ArrayOfGroupPageDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GroupPageGroupsByQuery">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q330="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q330:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GroupPageGroupsByQueryResponse">
+  <xs:element name="GroupPagesByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q331="http://schemas.ccc.teleopti.com/sdk/2011/09/" minOccurs="0" name="GroupPageGroupsByQueryResult" nillable="true" type="q331:ArrayOfGroupPageGroupDto" />
+        <xs:element xmlns:q331="http://schemas.ccc.teleopti.com/sdk/2011/09/" minOccurs="0" name="GroupPagesByQueryResult" nillable="true" type="q331:ArrayOfGroupPageDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetBusinessUnitsByQuery">
+  <xs:element name="GroupPageGroupsByQuery">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q332="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q332:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetBusinessUnitsByQueryResponse">
+  <xs:element name="GroupPageGroupsByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q333="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetBusinessUnitsByQueryResult" nillable="true" type="q333:ArrayOfBusinessUnitDto" />
+        <xs:element xmlns:q333="http://schemas.ccc.teleopti.com/sdk/2011/09/" minOccurs="0" name="GroupPageGroupsByQueryResult" nillable="true" type="q333:ArrayOfGroupPageGroupDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetPeopleForShiftTradeByQuery">
+  <xs:element name="GetBusinessUnitsByQuery">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q334="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q334:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetBusinessUnitsByQueryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q335="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetBusinessUnitsByQueryResult" nillable="true" type="q335:ArrayOfBusinessUnitDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetScenariosByQuery">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q336="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q336:QueryDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetScenariosByQueryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q337="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetScenariosByQueryResult" nillable="true" type="q337:ArrayOfScenarioDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfScenarioDto">
+    <xs:sequence>
+      <xs:element xmlns:q338="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ScenarioDto" nillable="true" type="q338:ScenarioDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q339="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfScenarioDto" nillable="true" type="q339:ArrayOfScenarioDto" />
+  <xs:complexType name="ScenarioDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q340="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q340:Dto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShortName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DefaultScenario" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q341="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ScenarioDto" nillable="true" type="q341:ScenarioDto" />
+  <xs:element name="GetPeopleForShiftTradeByQuery">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q342="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q342:QueryDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetPeopleForShiftTradeByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q335="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPeopleForShiftTradeByQueryResult" nillable="true" type="q335:ArrayOfPersonDto" />
+        <xs:element xmlns:q343="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPeopleForShiftTradeByQueryResult" nillable="true" type="q343:ArrayOfPersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSites">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q336="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q336:ApplicationFunctionDto" />
+        <xs:element xmlns:q344="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q344:ApplicationFunctionDto" />
         <xs:element minOccurs="0" name="utcDateTime" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
@@ -2065,35 +2111,35 @@
   <xs:element name="GetSitesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q337="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesResult" nillable="true" type="q337:ArrayOfSiteDto" />
+        <xs:element xmlns:q345="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesResult" nillable="true" type="q345:ArrayOfSiteDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfSiteDto">
     <xs:sequence>
-      <xs:element xmlns:q338="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="SiteDto" nillable="true" type="q338:SiteDto" />
+      <xs:element xmlns:q346="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="SiteDto" nillable="true" type="q346:SiteDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q339="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfSiteDto" nillable="true" type="q339:ArrayOfSiteDto" />
+  <xs:element xmlns:q347="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfSiteDto" nillable="true" type="q347:ArrayOfSiteDto" />
   <xs:element name="GetSitesByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q340="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q340:QueryDto" />
+        <xs:element xmlns:q348="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q348:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSitesByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q341="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesByQueryResult" nillable="true" type="q341:ArrayOfSiteDto" />
+        <xs:element xmlns:q349="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesByQueryResult" nillable="true" type="q349:ArrayOfSiteDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTeams">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q342="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="site" nillable="true" type="q342:SiteDto" />
-        <xs:element xmlns:q343="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q343:ApplicationFunctionDto" />
+        <xs:element xmlns:q350="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="site" nillable="true" type="q350:SiteDto" />
+        <xs:element xmlns:q351="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q351:ApplicationFunctionDto" />
         <xs:element minOccurs="0" name="utcDateTime" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
@@ -2101,28 +2147,28 @@
   <xs:element name="GetTeamsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q344="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsResult" nillable="true" type="q344:ArrayOfTeamDto" />
+        <xs:element xmlns:q352="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsResult" nillable="true" type="q352:ArrayOfTeamDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTeamsByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q345="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q345:QueryDto" />
+        <xs:element xmlns:q353="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q353:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetTeamsByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q346="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsByQueryResult" nillable="true" type="q346:ArrayOfTeamDto" />
+        <xs:element xmlns:q354="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetTeamsByQueryResult" nillable="true" type="q354:ArrayOfTeamDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAllPermittedTeams">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q347="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q347:ApplicationFunctionDto" />
+        <xs:element xmlns:q355="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q355:ApplicationFunctionDto" />
         <xs:element minOccurs="0" name="utcDateTime" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
@@ -2130,15 +2176,15 @@
   <xs:element name="GetAllPermittedTeamsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q348="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllPermittedTeamsResult" nillable="true" type="q348:ArrayOfTeamDto" />
+        <xs:element xmlns:q356="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAllPermittedTeamsResult" nillable="true" type="q356:ArrayOfTeamDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonsByTeam">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q349="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="team" nillable="true" type="q349:TeamDto" />
-        <xs:element xmlns:q350="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q350:ApplicationFunctionDto" />
+        <xs:element xmlns:q357="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="team" nillable="true" type="q357:TeamDto" />
+        <xs:element xmlns:q358="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="applicationFunction" nillable="true" type="q358:ApplicationFunctionDto" />
         <xs:element minOccurs="0" name="utcDateTime" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
@@ -2146,14 +2192,14 @@
   <xs:element name="GetPersonsByTeamResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q351="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsByTeamResult" nillable="true" type="q351:ArrayOfPersonDto" />
+        <xs:element xmlns:q359="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsByTeamResult" nillable="true" type="q359:ArrayOfPersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonTeamMembers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q352="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q352:PersonDto" />
+        <xs:element xmlns:q360="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q360:PersonDto" />
         <xs:element minOccurs="0" name="utcDate" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
@@ -2161,7 +2207,7 @@
   <xs:element name="GetPersonTeamMembersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q353="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonTeamMembersResult" nillable="true" type="q353:ArrayOfPersonDto" />
+        <xs:element xmlns:q361="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonTeamMembersResult" nillable="true" type="q361:ArrayOfPersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2175,49 +2221,49 @@
   <xs:element name="GetPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q354="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsResult" nillable="true" type="q354:ArrayOfPersonDto" />
+        <xs:element xmlns:q362="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsResult" nillable="true" type="q362:ArrayOfPersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonsByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q355="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q355:QueryDto" />
+        <xs:element xmlns:q363="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q363:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonsByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q356="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsByQueryResult" nillable="true" type="q356:ArrayOfPersonDto" />
+        <xs:element xmlns:q364="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonsByQueryResult" nillable="true" type="q364:ArrayOfPersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonPeriods">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q357="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="loadOptionDto" nillable="true" type="q357:PersonPeriodLoadOptionDto" />
-        <xs:element xmlns:q358="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q358:DateOnlyDto" />
-        <xs:element xmlns:q359="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q359:DateOnlyDto" />
+        <xs:element xmlns:q365="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="loadOptionDto" nillable="true" type="q365:PersonPeriodLoadOptionDto" />
+        <xs:element xmlns:q366="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q366:DateOnlyDto" />
+        <xs:element xmlns:q367="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q367:DateOnlyDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonPeriodsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q360="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="GetPersonPeriodsResult" nillable="true" type="q360:ArrayOfPersonPeriodDetailDto" />
+        <xs:element xmlns:q368="http://schemas.ccc.teleopti.com/sdk/2010/10/" minOccurs="0" name="GetPersonPeriodsResult" nillable="true" type="q368:ArrayOfPersonPeriodDetailDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfExternalLogOnDto">
     <xs:sequence>
-      <xs:element xmlns:q361="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ExternalLogOnDto" nillable="true" type="q361:ExternalLogOnDto" />
+      <xs:element xmlns:q369="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ExternalLogOnDto" nillable="true" type="q369:ExternalLogOnDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q362="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfExternalLogOnDto" nillable="true" type="q362:ArrayOfExternalLogOnDto" />
+  <xs:element xmlns:q370="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfExternalLogOnDto" nillable="true" type="q370:ArrayOfExternalLogOnDto" />
   <xs:complexType name="ExternalLogOnDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q363="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q363:Dto">
+      <xs:extension xmlns:q371="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q371:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="AcdLogOnName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="AcdLogOnOriginalId" nillable="true" type="xs:string" />
@@ -2225,11 +2271,11 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q364="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ExternalLogOnDto" nillable="true" type="q364:ExternalLogOnDto" />
+  <xs:element xmlns:q372="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ExternalLogOnDto" nillable="true" type="q372:ExternalLogOnDto" />
   <xs:element name="SavePerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q365="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q365:PersonDto" />
+        <xs:element xmlns:q373="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q373:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2248,91 +2294,91 @@
   <xs:element name="GetLoggedOnPersonTeamResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q366="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetLoggedOnPersonTeamResult" nillable="true" type="q366:TeamDto" />
+        <xs:element xmlns:q374="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetLoggedOnPersonTeamResult" nillable="true" type="q374:TeamDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPushMessageDialogue">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q367="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q367:PushMessageDialogueDto" />
+        <xs:element xmlns:q375="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q375:PushMessageDialogueDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="PushMessageDialogueDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q368="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q368:Dto">
+      <xs:extension xmlns:q376="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q376:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="IsReplied" type="xs:boolean" />
           <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Messages" nillable="true" type="q368:ArrayOfDialogueMessageDto" />
+          <xs:element minOccurs="0" name="Messages" nillable="true" type="q376:ArrayOfDialogueMessageDto" />
           <xs:element minOccurs="0" name="OriginalDate" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="PushMessage" nillable="true" type="q368:PushMessageDto" />
-          <xs:element minOccurs="0" name="Receiver" nillable="true" type="q368:PersonDto" />
+          <xs:element minOccurs="0" name="PushMessage" nillable="true" type="q376:PushMessageDto" />
+          <xs:element minOccurs="0" name="Receiver" nillable="true" type="q376:PersonDto" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q369="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PushMessageDialogueDto" nillable="true" type="q369:PushMessageDialogueDto" />
+  <xs:element xmlns:q377="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PushMessageDialogueDto" nillable="true" type="q377:PushMessageDialogueDto" />
   <xs:complexType name="ArrayOfDialogueMessageDto">
     <xs:sequence>
-      <xs:element xmlns:q370="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="DialogueMessageDto" nillable="true" type="q370:DialogueMessageDto" />
+      <xs:element xmlns:q378="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="DialogueMessageDto" nillable="true" type="q378:DialogueMessageDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q371="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfDialogueMessageDto" nillable="true" type="q371:ArrayOfDialogueMessageDto" />
+  <xs:element xmlns:q379="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfDialogueMessageDto" nillable="true" type="q379:ArrayOfDialogueMessageDto" />
   <xs:complexType name="DialogueMessageDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q372="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q372:Dto">
+      <xs:extension xmlns:q380="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q380:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="CreatedOn" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Sender" nillable="true" type="q372:PersonDto" />
+          <xs:element minOccurs="0" name="Sender" nillable="true" type="q380:PersonDto" />
           <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q373="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="DialogueMessageDto" nillable="true" type="q373:DialogueMessageDto" />
+  <xs:element xmlns:q381="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="DialogueMessageDto" nillable="true" type="q381:DialogueMessageDto" />
   <xs:complexType name="PushMessageDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="AllowDialogueReply" type="xs:boolean" />
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
-      <xs:element xmlns:q374="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReplyOptions" nillable="true" type="q374:ArrayOfstring" />
-      <xs:element xmlns:q375="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Sender" nillable="true" type="q375:PersonDto" />
+      <xs:element xmlns:q382="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReplyOptions" nillable="true" type="q382:ArrayOfstring" />
+      <xs:element xmlns:q383="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Sender" nillable="true" type="q383:PersonDto" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q376="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PushMessageDto" nillable="true" type="q376:PushMessageDto" />
+  <xs:element xmlns:q384="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PushMessageDto" nillable="true" type="q384:PushMessageDto" />
   <xs:element name="GetPushMessageDialogueResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q377="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPushMessageDialogueResult" nillable="true" type="q377:PushMessageDialogueDto" />
+        <xs:element xmlns:q385="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPushMessageDialogueResult" nillable="true" type="q385:PushMessageDialogueDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPushMessageDialoguesNotRepliedTo">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q378="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q378:PersonDto" />
+        <xs:element xmlns:q386="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q386:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPushMessageDialoguesNotRepliedToResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q379="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPushMessageDialoguesNotRepliedToResult" nillable="true" type="q379:ArrayOfPushMessageDialogueDto" />
+        <xs:element xmlns:q387="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPushMessageDialoguesNotRepliedToResult" nillable="true" type="q387:ArrayOfPushMessageDialogueDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPushMessageDialogueDto">
     <xs:sequence>
-      <xs:element xmlns:q380="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PushMessageDialogueDto" nillable="true" type="q380:PushMessageDialogueDto" />
+      <xs:element xmlns:q388="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PushMessageDialogueDto" nillable="true" type="q388:PushMessageDialogueDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q381="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPushMessageDialogueDto" nillable="true" type="q381:ArrayOfPushMessageDialogueDto" />
+  <xs:element xmlns:q389="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPushMessageDialogueDto" nillable="true" type="q389:ArrayOfPushMessageDialogueDto" />
   <xs:element name="SavePushMessageDialogue">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q382="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q382:PushMessageDialogueDto" />
+        <xs:element xmlns:q390="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q390:PushMessageDialogueDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2344,9 +2390,9 @@
   <xs:element name="SetDialogueReply">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q383="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q383:PushMessageDialogueDto" />
+        <xs:element xmlns:q391="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q391:PushMessageDialogueDto" />
         <xs:element minOccurs="0" name="dialogueReply" nillable="true" type="xs:string" />
-        <xs:element xmlns:q384="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sender" nillable="true" type="q384:PersonDto" />
+        <xs:element xmlns:q392="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sender" nillable="true" type="q392:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2358,7 +2404,7 @@
   <xs:element name="SetReply">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q385="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q385:PushMessageDialogueDto" />
+        <xs:element xmlns:q393="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="pushMessageDialogueDto" nillable="true" type="q393:PushMessageDialogueDto" />
         <xs:element minOccurs="0" name="reply" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -2371,24 +2417,24 @@
   <xs:element name="GetPersonAccounts">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q386="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q386:PersonDto" />
-        <xs:element xmlns:q387="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="containingDate" nillable="true" type="q387:DateOnlyDto" />
+        <xs:element xmlns:q394="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q394:PersonDto" />
+        <xs:element xmlns:q395="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="containingDate" nillable="true" type="q395:DateOnlyDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonAccountsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q388="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonAccountsResult" nillable="true" type="q388:ArrayOfPersonAccountDto" />
+        <xs:element xmlns:q396="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonAccountsResult" nillable="true" type="q396:ArrayOfPersonAccountDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPersonAccountDto">
     <xs:sequence>
-      <xs:element xmlns:q389="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAccountDto" nillable="true" type="q389:PersonAccountDto" />
+      <xs:element xmlns:q397="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonAccountDto" nillable="true" type="q397:PersonAccountDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q390="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAccountDto" nillable="true" type="q390:ArrayOfPersonAccountDto" />
+  <xs:element xmlns:q398="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonAccountDto" nillable="true" type="q398:ArrayOfPersonAccountDto" />
   <xs:complexType name="PersonAccountDto">
     <xs:sequence>
       <xs:element minOccurs="0" name="Accrued" type="xs:long" />
@@ -2397,16 +2443,16 @@
       <xs:element minOccurs="0" name="Extra" type="xs:long" />
       <xs:element minOccurs="0" name="IsInMinutes" type="xs:boolean" />
       <xs:element minOccurs="0" name="LatestCalculatedBalance" type="xs:long" />
-      <xs:element xmlns:q391="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q391:DateOnlyPeriodDto" />
+      <xs:element xmlns:q399="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q399:DateOnlyPeriodDto" />
       <xs:element minOccurs="0" name="TrackingDescription" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Remaining" type="xs:long" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q392="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAccountDto" nillable="true" type="q392:PersonAccountDto" />
+  <xs:element xmlns:q400="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonAccountDto" nillable="true" type="q400:PersonAccountDto" />
   <xs:element name="GetPersonMultiplicatorData">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q393="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q393:PersonDto" />
+        <xs:element xmlns:q401="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="person" nillable="true" type="q401:PersonDto" />
         <xs:element minOccurs="0" name="utcStartTime" type="xs:dateTime" />
         <xs:element minOccurs="0" name="utcEndTime" type="xs:dateTime" />
       </xs:sequence>
@@ -2415,101 +2461,101 @@
   <xs:element name="GetPersonMultiplicatorDataResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q394="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonMultiplicatorDataResult" nillable="true" type="q394:ArrayOfMultiplicatorDataDto" />
+        <xs:element xmlns:q402="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonMultiplicatorDataResult" nillable="true" type="q402:ArrayOfMultiplicatorDataDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonSkillPeriodsForPersons">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q395="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personList" nillable="true" type="q395:ArrayOfPersonDto" />
-        <xs:element xmlns:q396="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q396:DateOnlyDto" />
-        <xs:element xmlns:q397="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q397:DateOnlyDto" />
+        <xs:element xmlns:q403="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personList" nillable="true" type="q403:ArrayOfPersonDto" />
+        <xs:element xmlns:q404="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="startDate" nillable="true" type="q404:DateOnlyDto" />
+        <xs:element xmlns:q405="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="endDate" nillable="true" type="q405:DateOnlyDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetPersonSkillPeriodsForPersonsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q398="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonSkillPeriodsForPersonsResult" nillable="true" type="q398:ArrayOfPersonSkillPeriodDto" />
+        <xs:element xmlns:q406="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPersonSkillPeriodsForPersonsResult" nillable="true" type="q406:ArrayOfPersonSkillPeriodDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPersonSkillPeriodDto">
     <xs:sequence>
-      <xs:element xmlns:q399="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonSkillPeriodDto" nillable="true" type="q399:PersonSkillPeriodDto" />
+      <xs:element xmlns:q407="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PersonSkillPeriodDto" nillable="true" type="q407:PersonSkillPeriodDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q400="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonSkillPeriodDto" nillable="true" type="q400:ArrayOfPersonSkillPeriodDto" />
+  <xs:element xmlns:q408="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPersonSkillPeriodDto" nillable="true" type="q408:ArrayOfPersonSkillPeriodDto" />
   <xs:complexType name="PersonSkillPeriodDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q401="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q401:Dto">
+      <xs:extension xmlns:q409="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q409:Dto">
         <xs:sequence>
-          <xs:element minOccurs="0" name="DateFrom" nillable="true" type="q401:DateOnlyDto" />
-          <xs:element minOccurs="0" name="DateTo" nillable="true" type="q401:DateOnlyDto" />
+          <xs:element minOccurs="0" name="DateFrom" nillable="true" type="q409:DateOnlyDto" />
+          <xs:element minOccurs="0" name="DateTo" nillable="true" type="q409:DateOnlyDto" />
           <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-          <xs:element xmlns:q402="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SkillCollection" nillable="true" type="q402:ArrayOfguid" />
+          <xs:element xmlns:q410="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SkillCollection" nillable="true" type="q410:ArrayOfguid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q403="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonSkillPeriodDto" nillable="true" type="q403:PersonSkillPeriodDto" />
+  <xs:element xmlns:q411="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PersonSkillPeriodDto" nillable="true" type="q411:PersonSkillPeriodDto" />
   <xs:element name="GetContracts">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q404="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q404:LoadOptionDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetContractsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q405="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetContractsResult" nillable="true" type="q405:ArrayOfContractDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="ArrayOfContractDto">
-    <xs:sequence>
-      <xs:element xmlns:q406="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ContractDto" nillable="true" type="q406:ContractDto" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element xmlns:q407="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfContractDto" nillable="true" type="q407:ArrayOfContractDto" />
-  <xs:complexType name="ContractDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q408="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q408:Dto">
-        <xs:sequence>
-          <xs:element xmlns:q409="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AvailableOvertimeDefinitionSets" nillable="true" type="q409:ArrayOfguid" />
-          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-          <xs:element xmlns:q410="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" minOccurs="0" name="EmploymentType" type="q410:EmploymentType" />
-          <xs:element minOccurs="0" name="IsDeleted" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q411="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ContractDto" nillable="true" type="q411:ContractDto" />
-  <xs:element name="GetPartTimePercentages">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q412="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q412:LoadOptionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetContractsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q413="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetContractsResult" nillable="true" type="q413:ArrayOfContractDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArrayOfContractDto">
+    <xs:sequence>
+      <xs:element xmlns:q414="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="ContractDto" nillable="true" type="q414:ContractDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q415="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfContractDto" nillable="true" type="q415:ArrayOfContractDto" />
+  <xs:complexType name="ContractDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q416="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q416:Dto">
+        <xs:sequence>
+          <xs:element xmlns:q417="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AvailableOvertimeDefinitionSets" nillable="true" type="q417:ArrayOfguid" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element xmlns:q418="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" minOccurs="0" name="EmploymentType" type="q418:EmploymentType" />
+          <xs:element minOccurs="0" name="IsDeleted" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:q419="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ContractDto" nillable="true" type="q419:ContractDto" />
+  <xs:element name="GetPartTimePercentages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q420="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q420:LoadOptionDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetPartTimePercentagesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q413="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPartTimePercentagesResult" nillable="true" type="q413:ArrayOfPartTimePercentageDto" />
+        <xs:element xmlns:q421="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPartTimePercentagesResult" nillable="true" type="q421:ArrayOfPartTimePercentageDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPartTimePercentageDto">
     <xs:sequence>
-      <xs:element xmlns:q414="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PartTimePercentageDto" nillable="true" type="q414:PartTimePercentageDto" />
+      <xs:element xmlns:q422="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PartTimePercentageDto" nillable="true" type="q422:PartTimePercentageDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q415="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPartTimePercentageDto" nillable="true" type="q415:ArrayOfPartTimePercentageDto" />
+  <xs:element xmlns:q423="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPartTimePercentageDto" nillable="true" type="q423:ArrayOfPartTimePercentageDto" />
   <xs:complexType name="PartTimePercentageDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q416="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q416:Dto">
+      <xs:extension xmlns:q424="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q424:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Percentage" type="xs:double" />
@@ -2518,30 +2564,30 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q417="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PartTimePercentageDto" nillable="true" type="q417:PartTimePercentageDto" />
+  <xs:element xmlns:q425="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="PartTimePercentageDto" nillable="true" type="q425:PartTimePercentageDto" />
   <xs:element name="GetOvertimeDefinitions">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q418="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q418:LoadOptionDto" />
+        <xs:element xmlns:q426="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q426:LoadOptionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetOvertimeDefinitionsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q419="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetOvertimeDefinitionsResult" nillable="true" type="q419:ArrayOfOvertimeDefinitionSetDto" />
+        <xs:element xmlns:q427="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetOvertimeDefinitionsResult" nillable="true" type="q427:ArrayOfOvertimeDefinitionSetDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfOvertimeDefinitionSetDto">
     <xs:sequence>
-      <xs:element xmlns:q420="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="OvertimeDefinitionSetDto" nillable="true" type="q420:OvertimeDefinitionSetDto" />
+      <xs:element xmlns:q428="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="OvertimeDefinitionSetDto" nillable="true" type="q428:OvertimeDefinitionSetDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q421="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfOvertimeDefinitionSetDto" nillable="true" type="q421:ArrayOfOvertimeDefinitionSetDto" />
+  <xs:element xmlns:q429="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfOvertimeDefinitionSetDto" nillable="true" type="q429:ArrayOfOvertimeDefinitionSetDto" />
   <xs:complexType name="OvertimeDefinitionSetDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q422="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q422:Dto">
+      <xs:extension xmlns:q430="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q430:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="IsDeleted" type="xs:boolean" />
@@ -2549,25 +2595,25 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q423="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeDefinitionSetDto" nillable="true" type="q423:OvertimeDefinitionSetDto" />
+  <xs:element xmlns:q431="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="OvertimeDefinitionSetDto" nillable="true" type="q431:OvertimeDefinitionSetDto" />
   <xs:element name="GetContractSchedules">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q424="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q424:LoadOptionDto" />
+        <xs:element xmlns:q432="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="loadOptionDto" nillable="true" type="q432:LoadOptionDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetContractSchedulesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q425="http://schemas.ccc.teleopti.com/sdk/2010/05/" minOccurs="0" name="GetContractSchedulesResult" nillable="true" type="q425:ArrayOfContractScheduleDto" />
+        <xs:element xmlns:q433="http://schemas.ccc.teleopti.com/sdk/2010/05/" minOccurs="0" name="GetContractSchedulesResult" nillable="true" type="q433:ArrayOfContractScheduleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q426="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q426:PersonDto" />
+        <xs:element xmlns:q434="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q434:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2579,7 +2625,7 @@
   <xs:element name="UpdatePerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q427="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q427:PersonDto" />
+        <xs:element xmlns:q435="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q435:PersonDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2591,8 +2637,8 @@
   <xs:element name="AddPersonPeriod">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q428="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q428:PersonDto" />
-        <xs:element xmlns:q429="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personPeriodDto" nillable="true" type="q429:PersonPeriodDto" />
+        <xs:element xmlns:q436="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personDto" nillable="true" type="q436:PersonDto" />
+        <xs:element xmlns:q437="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="personPeriodDto" nillable="true" type="q437:PersonPeriodDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2604,14 +2650,14 @@
   <xs:element name="GetSitesOnBusinessUnit">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q430="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="businessUnitDto" nillable="true" type="q430:BusinessUnitDto" />
+        <xs:element xmlns:q438="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="businessUnitDto" nillable="true" type="q438:BusinessUnitDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSitesOnBusinessUnitResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q431="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesOnBusinessUnitResult" nillable="true" type="q431:ArrayOfSiteDto" />
+        <xs:element xmlns:q439="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetSitesOnBusinessUnitResult" nillable="true" type="q439:ArrayOfSiteDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2623,20 +2669,20 @@
   <xs:element name="GetPayrollFormatsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q432="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollFormatsResult" nillable="true" type="q432:ArrayOfPayrollFormatDto" />
+        <xs:element xmlns:q440="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollFormatsResult" nillable="true" type="q440:ArrayOfPayrollFormatDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPayrollFormatDto">
     <xs:sequence>
-      <xs:element xmlns:q433="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollFormatDto" nillable="true" type="q433:PayrollFormatDto" />
+      <xs:element xmlns:q441="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollFormatDto" nillable="true" type="q441:PayrollFormatDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q434="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollFormatDto" nillable="true" type="q434:ArrayOfPayrollFormatDto" />
+  <xs:element xmlns:q442="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollFormatDto" nillable="true" type="q442:ArrayOfPayrollFormatDto" />
   <xs:element name="CreateServerPayrollExport">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q435="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollExport" nillable="true" type="q435:PayrollExportDto" />
+        <xs:element xmlns:q443="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollExport" nillable="true" type="q443:PayrollExportDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2648,7 +2694,7 @@
   <xs:element name="InitializePayrollFormats">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q436="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollFormatDtos" nillable="true" type="q436:ArrayOfPayrollFormatDto" />
+        <xs:element xmlns:q444="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollFormatDtos" nillable="true" type="q444:ArrayOfPayrollFormatDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2665,7 +2711,7 @@
   <xs:element name="GetHibernateConfigurationInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q437="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHibernateConfigurationInternalResult" nillable="true" type="q437:ArrayOfstring" />
+        <xs:element xmlns:q445="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHibernateConfigurationInternalResult" nillable="true" type="q445:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2677,14 +2723,14 @@
   <xs:element name="VerifyLicenseInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q438="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="VerifyLicenseInternalResult" nillable="true" type="q438:LicenseVerificationResultDto" />
+        <xs:element xmlns:q446="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="VerifyLicenseInternalResult" nillable="true" type="q446:LicenseVerificationResultDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TransferSessionInternal">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q439="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sessionDataDto" nillable="true" type="q439:SessionDataDto" />
+        <xs:element xmlns:q447="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sessionDataDto" nillable="true" type="q447:SessionDataDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2701,7 +2747,7 @@
   <xs:element name="GetAppSettingsInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q440="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAppSettingsInternalResult" nillable="true" type="q440:ArrayOfKeyValueOfstringstring" />
+        <xs:element xmlns:q448="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAppSettingsInternalResult" nillable="true" type="q448:ArrayOfKeyValueOfstringstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2720,45 +2766,45 @@
   <xs:element name="ExecuteCommand">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q441="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="commandDto" nillable="true" type="q441:CommandDto" />
+        <xs:element xmlns:q449="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="commandDto" nillable="true" type="q449:CommandDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ExecuteCommandResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q442="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="ExecuteCommandResult" nillable="true" type="q442:CommandResultDto" />
+        <xs:element xmlns:q450="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="ExecuteCommandResult" nillable="true" type="q450:CommandResultDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAgentPortalSettingsByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q443="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q443:QueryDto" />
+        <xs:element xmlns:q451="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q451:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAgentPortalSettingsByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q444="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentPortalSettingsByQueryResult" nillable="true" type="q444:ArrayOfAgentPortalSettingsDto" />
+        <xs:element xmlns:q452="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentPortalSettingsByQueryResult" nillable="true" type="q452:ArrayOfAgentPortalSettingsDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfAgentPortalSettingsDto">
     <xs:sequence>
-      <xs:element xmlns:q445="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentPortalSettingsDto" nillable="true" type="q445:AgentPortalSettingsDto" />
+      <xs:element xmlns:q453="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentPortalSettingsDto" nillable="true" type="q453:AgentPortalSettingsDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q446="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentPortalSettingsDto" nillable="true" type="q446:ArrayOfAgentPortalSettingsDto" />
+  <xs:element xmlns:q454="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentPortalSettingsDto" nillable="true" type="q454:ArrayOfAgentPortalSettingsDto" />
   <xs:complexType name="AgentPortalSettingsDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q447="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q447:Dto">
+      <xs:extension xmlns:q455="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q455:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Resolution" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q448="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentPortalSettingsDto" nillable="true" type="q448:AgentPortalSettingsDto" />
+  <xs:element xmlns:q456="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentPortalSettingsDto" nillable="true" type="q456:AgentPortalSettingsDto" />
 </xs:schema>

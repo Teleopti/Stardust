@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 		public IEnumerable<PersonDto> SelectedPeople { get; private set; }
 
-		public ICollection<TeamDto> SelectedTeams { get; private set; }
+		public ICollection<GroupForPeople> SelectedTeams { get; private set; }
 
 		public void Initialize(bool filterEnabled)
 		{
-			var teamDtos = new List<TeamDto>();
+			var teamDtos = new List<GroupForPeople>();
 			var persons = new List<PersonDto>();
 
 			foreach (GroupDetailModel groupDetailModel in _allTeams)
 			{
 				if (groupDetailModel == _selectedTeam) continue;
 
-				teamDtos.Add(new TeamDto { Id = groupDetailModel.Id });
+				teamDtos.Add(new GroupForPeople { GroupId = groupDetailModel.Id });
                 if (!filterEnabled)
                     persons.AddRange(SdkServiceHelper.OrganizationService.GetPersonsByQuery(new GetPeopleByGroupPageGroupQueryDto
                                                                                                 {
