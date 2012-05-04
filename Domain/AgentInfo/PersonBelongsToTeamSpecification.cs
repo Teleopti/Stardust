@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         }
 
         public PersonBelongsToTeamSpecification(DateOnlyPeriod period, ITeam team)
-            : this(period.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone), team)
+            : this(period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone), team)
         {
         }
 
