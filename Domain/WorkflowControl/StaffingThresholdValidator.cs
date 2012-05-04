@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -40,12 +41,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             {
                 //As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
                 var dayPeriod = new DateOnlyPeriod(dateTime, dateTime).ToDateTimePeriod(timeZone);
-                var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone);
+                var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
                 foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
                 {
                     ResourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
                 }
-                var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
+                var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
                 var scheduleDay = SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDay(dateTime);
                 var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
                 foreach (var absenceLayer in absenceLayers)
