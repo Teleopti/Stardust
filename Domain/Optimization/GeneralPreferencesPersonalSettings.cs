@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
