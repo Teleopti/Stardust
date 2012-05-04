@@ -164,6 +164,7 @@
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversAuditDelegateTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfigurationDelegateTest.cs" />
+    <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliaryTest.cs" />

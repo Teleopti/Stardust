@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
 			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
+			nhConfiguration.SetProperty(Environment.ProxyFactoryFactoryClass,
+			                            typeof (FasterProxyFactoryFactory).AssemblyQualifiedName);
 			nhConfiguration.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (_useSecondLevelCache)
 			{
