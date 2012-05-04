@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gradientPanelMain.Controls.Add(tabView);
 			tabView.Dock = DockStyle.Fill;
 			tabView.VisibleChanged += _budgetGroupTabView_VisibleChanged;
+			ribbonControlAdv1.Height = 160;
+			toolStripEx1.AutoSize = true;
 		}
 
 		void _budgetGroupTabView_VisibleChanged(object sender, EventArgs e)
