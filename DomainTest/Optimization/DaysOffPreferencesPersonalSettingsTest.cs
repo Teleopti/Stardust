@@ -44,5 +44,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(_daysOffPreferencesSource.WeekEndDaysOffValue.Minimum, _daysOffPreferencesTarget.WeekEndDaysOffValue.Minimum);
 			Assert.AreEqual(_daysOffPreferencesSource.WeekEndDaysOffValue.Maximum, _daysOffPreferencesTarget.WeekEndDaysOffValue.Maximum);
 		}
+
+		[Test]
+		public void MapToShouldGetAndSetSimpleProperties()
+		{
+			_daysOffPreferencesSource.UseKeepExistingDaysOff = !_daysOffPreferencesSource.UseKeepExistingDaysOff;
+			_daysOffPreferencesSource.KeepExistingDaysOffValue = 1000d;
+			_daysOffPreferencesSource.UseDaysOffPerWeek = !_daysOffPreferencesSource.UseDaysOffPerWeek;
+			_daysOffPreferencesSource.UseConsecutiveDaysOff = !_daysOffPreferencesSource.UseConsecutiveDaysOff;
+			_daysOffPreferencesSource.UseConsecutiveWorkdays = !_daysOffPreferencesSource.UseConsecutiveWorkdays;
+			_daysOffPreferencesSource.UseFullWeekendsOff = !_daysOffPreferencesSource.UseFullWeekendsOff;
+			_daysOffPreferencesSource.UseWeekEndDaysOff = !_daysOffPreferencesSource.UseWeekEndDaysOff;
+			_daysOffPreferencesSource.ConsiderWeekBefore = !_daysOffPreferencesSource.ConsiderWeekBefore;
+			_daysOffPreferencesSource.ConsiderWeekAfter = !_daysOffPreferencesSource.ConsiderWeekAfter;
+			_daysOffPreferencesSource.KeepFreeWeekends = !_daysOffPreferencesSource.KeepFreeWeekends;
+			_daysOffPreferencesSource.KeepFreeWeekendDays = !_daysOffPreferencesSource.KeepFreeWeekendDays;
+			_target.MapFrom(_daysOffPreferencesSource);
+			_target.MapTo(_daysOffPreferencesTarget);
+			Assert.AreEqual(_daysOffPreferencesSource.UseKeepExistingDaysOff, _daysOffPreferencesTarget.UseKeepExistingDaysOff);
+			Assert.AreEqual(_daysOffPreferencesSource.KeepExistingDaysOffValue, _daysOffPreferencesTarget.KeepExistingDaysOffValue);
+			Assert.AreEqual(_daysOffPreferencesSource.UseDaysOffPerWeek, _daysOffPreferencesTarget.UseDaysOffPerWeek);
+			Assert.AreEqual(_daysOffPreferencesSource.UseConsecutiveDaysOff, _daysOffPreferencesTarget.UseConsecutiveDaysOff);
+			Assert.AreEqual(_daysOffPreferencesSource.UseConsecutiveWorkdays, _daysOffPreferencesTarget.UseConsecutiveWorkdays);
+			Assert.AreEqual(_daysOffPreferencesSource.UseFullWeekendsOff, _daysOffPreferencesTarget.UseFullWeekendsOff);
+			Assert.AreEqual(_daysOffPreferencesSource.UseWeekEndDaysOff, _daysOffPreferencesTarget.UseWeekEndDaysOff);
+			Assert.AreEqual(_daysOffPreferencesSource.ConsiderWeekBefore, _daysOffPreferencesTarget.ConsiderWeekBefore);
+			Assert.AreEqual(_daysOffPreferencesSource.ConsiderWeekAfter, _daysOffPreferencesTarget.ConsiderWeekAfter);
+			Assert.AreEqual(_daysOffPreferencesSource.KeepFreeWeekends, _daysOffPreferencesTarget.KeepFreeWeekends);
+			Assert.AreEqual(_daysOffPreferencesSource.KeepFreeWeekendDays, _daysOffPreferencesTarget.KeepFreeWeekendDays);
+		}
 	}
 }
