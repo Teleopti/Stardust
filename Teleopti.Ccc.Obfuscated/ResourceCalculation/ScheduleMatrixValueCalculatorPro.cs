@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -60,8 +61,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         public double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList)
         {
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+                scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.Current.Regional.TimeZone);
 
             IList<ISkillStaffPeriod> skillStaffPeriods =
                 _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
@@ -83,8 +83,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         public double? DayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IList<ISkill> skillList)
         {
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+                scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.Current.Regional.TimeZone);
 
             IList<ISkillStaffPeriod> skillStaffPeriods =
                 _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
