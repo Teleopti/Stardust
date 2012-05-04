@@ -15,6 +15,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Optimization;
+using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using log4net;
 using MbCache.Core;
@@ -1092,6 +1093,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemFindMatching2.Visible = true;
                 toolStripMenuItemFindMatching.Visible = true;
             }
+
+			if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+			{
+				ToolStripMenuItemRestrictionViewTemp.Visible = true;
+			}
+
+
 
             backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
             backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
@@ -8484,6 +8492,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.Button != MouseButtons.Left) return;
             ExportToPdf(true);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
+		{
+			var agentRestrictionView = new AgentRestrictionViewTemp();
+			agentRestrictionView.ShowDialog(this);
+		}
+
     }
 }
 
