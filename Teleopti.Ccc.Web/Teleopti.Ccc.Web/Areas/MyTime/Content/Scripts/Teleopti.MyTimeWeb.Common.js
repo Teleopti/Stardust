@@ -211,8 +211,9 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 					event: 'click'
 				},
 				hide: {
-					target: addTextRequest,
-					event: 'unfocus'
+					target: $(document.body).children().not('#ui-datepicker-div').not($(self)),
+					event: 'mousedown'
+					
 				},
 				style: {
 					classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
