@@ -72,6 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
+    <Compile Include="AbsenceRequestFromSchedule.feature.cs">
+      <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Core\TestMethods.cs" />
     <Compile Include="Data\User\ExistingAvailability.cs" />
     <Compile Include="Data\User\ExistingLunchPreferenceToday.cs" />
@@ -325,6 +330,10 @@
     <None Include="ApplicationStartRecovery.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AbsenceRequestFromSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
