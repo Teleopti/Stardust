@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class OrganisationMembership : IOrganisationMembership, IOrganisationMembershipWithId
 	{
+
+		[DataMember]
         private IEnumerable<PeriodizedOrganisationMembership> _periodizedOrganisationMembership = new List<PeriodizedOrganisationMembership>();
         
 		[DataMember]
@@ -99,11 +101,16 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         }
 
 
-        private class PeriodizedOrganisationMembership
+		[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
+		private class PeriodizedOrganisationMembership
         {
+			[DataMember]
             private readonly Guid _teamId;
-            private readonly Guid _siteId;
+			[DataMember]
+			private readonly Guid _siteId;
+			[DataMember]
             private readonly Guid _businessUnitId;
+			[DataMember]
             private DateOnlyPeriod _period;
 
             public PeriodizedOrganisationMembership(DateOnly startDate, DateOnly endDate, Guid teamId, Guid siteId, Guid businessUnitId)
