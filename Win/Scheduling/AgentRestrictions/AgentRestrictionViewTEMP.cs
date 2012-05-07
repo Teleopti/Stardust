@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common.Controls.Cells;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
@@ -21,6 +19,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			agentRestrictionGrid.MergeHeaders();
 			agentRestrictionGrid.Model.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+			agentRestrictionGrid.LoadData();
+			agentRestrictionGrid.Refresh();
 		}
 	}
 }

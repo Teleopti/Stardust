@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsPresenter _presenter;
 		private IAgentRestrictionsView _view;
 		private IAgentRestrictionsModel _model;
+		private IAgentRestrictionsWarningDrawer _warningDrawer;
 		private MockRepository _mocks;
 
 		[SetUp]
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_mocks = new MockRepository();
 			_model = _mocks.StrictMock<IAgentRestrictionsModel>();
 			_view = _mocks.StrictMock<IAgentRestrictionsView>();
-			_presenter = new AgentRestrictionsPresenter(_view, _model);
+			_warningDrawer = _mocks.StrictMock<IAgentRestrictionsWarningDrawer>();
+			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer);
 		}
 
 		[Test]
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Playback())
 			{
 				var rows = _presenter.GridQueryRowCount;
-				Assert.AreEqual(0, rows);
+				Assert.AreEqual(1, rows);
 			}
 		}
 
@@ -130,6 +132,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 					if (i == 11) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
 					if (i == 12) Assert.AreEqual("Static", args.Style.CellType);
 				}
+			}
+		}
+
+		[Test]
+		public void ShouldDrawWarnings()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(() => _warningDrawer.Draw(null, null));
+			}
+
+			using(_mocks.Playback())
+			{
+				_presenter.GridCellDrawn(null);	
 			}
 		}
 	}

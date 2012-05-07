@@ -19,5 +19,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			Assert.IsNotNull(_model.DisplayRows);	
 		}
+
+		[Test]
+		public void ShouldLoadData()
+		{
+			_model.LoadData();
+		}
 	}
 }
