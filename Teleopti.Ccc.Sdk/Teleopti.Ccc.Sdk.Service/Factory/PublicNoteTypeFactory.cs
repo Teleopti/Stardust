@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             _personsFromLoadOptionFactory = personsFromLoadOptionFactory;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public ICollection<PublicNoteDto> GetPublicNotes(PublicNoteLoadOptionDto publicNoteLoadOptionDto, ICollection<TeamDto> teamDtoCollection, DateOnlyDto startDate, DateOnlyDto endDate)
         {
             ICollection<PublicNoteDto> publicNoteDtosToReturn;

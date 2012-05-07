@@ -496,8 +496,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
             if (publicNoteLoadOptionDto == null)
                 throw new FaultException("Parameter publicNoteLoadOptionDto cannot be null.");
 
-            string timeZoneId = TeleoptiPrincipal.Current.Regional.TimeZone.Id;
-
             ICollection<TeamDto> teamDtos = null;
 
             if (publicNoteLoadOptionDto.LoadSite != null)
