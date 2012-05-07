@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleTag _scheduleTag;
         private PersonNameComparer _personNameComparer;
 
-        [SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();

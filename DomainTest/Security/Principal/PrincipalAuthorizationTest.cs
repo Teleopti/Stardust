@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldHandleTerminalDateProperlyWhenGettingPermittedPeriods()
 		{
 			applicationFunction = new ApplicationFunction(Function);
