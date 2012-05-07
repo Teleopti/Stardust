@@ -34,6 +34,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool KeepFreeWeekends { get; set; }
 		private bool KeepFreeWeekendDays { get; set; }
 
+		public DaysOffPreferencesPersonalSettings()
+		{
+			MapFrom(new DaysOffPreferences());
+		}
 
 		public void MapTo(IDaysOffPreferences target)
 		{

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[Serializable]
 	public class GeneralPreferencesPersonalSettings : SettingValue, IPersonalSettings<IGeneralPreferences>
 	{
-		private IList<IScheduleTag> ScheduleTags { get; set; }
+		//private IList<IScheduleTag> ScheduleTags { get; set; }
 
 		private Guid? ScheduleTagId { get; set; }
 
@@ -33,17 +33,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public GeneralPreferencesPersonalSettings(IList<IScheduleTag> scheduleTags)
 		{
+			MapFrom(new GeneralPreferences());
 			// add initial values
-			ScheduleTags = scheduleTags;
+			//ScheduleTags = scheduleTags;
 		}
 
 		public void MapTo(IGeneralPreferences target)
 		{
-			foreach (var scheduleTag in ScheduleTags)
-			{
-				if (ScheduleTagId == scheduleTag.Id)
-					target.ScheduleTag = scheduleTag;
-			}
+			//foreach (var scheduleTag in ScheduleTags)
+			//{
+			//    if (ScheduleTagId == scheduleTag.Id)
+			//        target.ScheduleTag = scheduleTag;
+			//}
 
 			target.OptimizationStepDaysOff = OptimizationStepDaysOff;
 			target.OptimizationStepTimeBetweenDays = OptimizationStepTimeBetweenDays;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapFrom(IGeneralPreferences source)
 		{
-			ScheduleTagId = source.ScheduleTag.Id;
+			//ScheduleTagId = source.ScheduleTag.Id;
 
 			OptimizationStepDaysOff = source.OptimizationStepDaysOff;
 			OptimizationStepTimeBetweenDays = source.OptimizationStepTimeBetweenDays;

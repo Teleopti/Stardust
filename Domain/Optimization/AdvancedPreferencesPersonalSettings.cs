@@ -19,6 +19,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private int RefreshScreenInterval { get; set; }
 
+		public AdvancedPreferencesPersonalSettings()
+		{
+			MapFrom(new AdvancedPreferences());
+		}
 
 		public void MapTo(IAdvancedPreferences target)
 		{

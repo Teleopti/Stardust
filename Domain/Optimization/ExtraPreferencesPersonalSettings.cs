@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[Serializable]
 	public class ExtraPreferencesPersonalSettings : SettingValue, IPersonalSettings<IExtraPreferences>
 	{
-		private IList<IGroupPage> GroupPages { get; set; }
+		//private IList<IGroupPage> GroupPages { get; set; }
 
 		private Guid? GroupPageOnTeamId { get; set; }
 		private Guid? GroupPageOnCompareWithId { get; set; }
@@ -27,19 +27,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public ExtraPreferencesPersonalSettings(IList<IGroupPage> groupPages)
 		{
-			GroupPages = groupPages;
+			MapFrom(new ExtraPreferences());
+			//GroupPages = groupPages;
 			//BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
 		}
 
 		public void MapTo(IExtraPreferences target)
 		{
-			foreach (var groupPage in GroupPages)
-			{
-				if (GroupPageOnTeamId == groupPage.Id)
-					target.GroupPageOnTeam = groupPage;
-				if (GroupPageOnCompareWithId == groupPage.Id)
-					target.GroupPageOnCompareWith = groupPage;
-			}
+			//foreach (var groupPage in GroupPages)
+			//{
+			//    if (GroupPageOnTeamId == groupPage.Id)
+			//        target.GroupPageOnTeam = groupPage;
+			//    if (GroupPageOnCompareWithId == groupPage.Id)
+			//        target.GroupPageOnCompareWith = groupPage;
+			//}
 
 			target.BlockFinderTypeValue = BlockFinderTypeValue;
 			target.UseBlockScheduling = UseBlockScheduling;
