@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -9,12 +10,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IScheduleColorProvider scheduleColorProvider;
 		private IHasDayOffUnderFullDayAbsence hasDayOffUnderFullDayAbsence;
 		private IPermissionProvider permissionProvider;
+		private IAbsenceTypesProvider absenceTypesProvider;
 
 		[SetUp]
 		public void Setup()
@@ -43,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 			hasDayOffUnderFullDayAbsence = MockRepository.GenerateMock<IHasDayOffUnderFullDayAbsence>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -54,7 +59,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => headerViewModelFactory,
 			                  		             	() => scheduleColorProvider,
 													() => hasDayOffUnderFullDayAbsence,
-													() => permissionProvider
+													() => permissionProvider,
+													() => absenceTypesProvider
 			                  		             	));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
@@ -281,6 +287,22 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
 			result.TextRequestPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAbsenceTypes()
+		{
+			var expected = "Vacation";
+			var absences = new List<IAbsence> { new Absence() { Description = new Description(expected) } };
+			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
+			var domainData = new WeekScheduleDomainData()
+			{
+				Days = new WeekScheduleDayDomainData[] { }
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(expected);
 		}
 	}
 }

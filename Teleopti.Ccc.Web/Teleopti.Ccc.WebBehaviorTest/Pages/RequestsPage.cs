@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
+		public Span AbsenceRequestTab
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Request-detail-fromDate-input")]

@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 		public IEnumerable<DayViewModel> Days { get; set; }
 		public bool TextRequestPermission { get; set; }
+		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
+	}
+
+	public class AbsenceTypeViewModel
+	{
+		public string Name { get; set; }
 	}
 
 	[Flags]

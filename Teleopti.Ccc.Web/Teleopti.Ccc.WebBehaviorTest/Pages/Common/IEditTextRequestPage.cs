@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		Button AddTextRequestButton { get; }
 		Div RequestDetailSection { get; }
+		Span AbsenceRequestTab { get; }
 		TextField TextRequestDetailSubjectInput { get; }
 		TextField TextRequestDetailFromDateInput { get; }
 		TextField TextRequestDetailFromTimeTextField { get; }

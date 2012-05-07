@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				<ISessionSpecificCookieDataProviderSettings>();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
+			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

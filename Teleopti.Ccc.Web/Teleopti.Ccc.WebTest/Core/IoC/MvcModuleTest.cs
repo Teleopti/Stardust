@@ -22,6 +22,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -199,6 +200,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterSessionSpecificDataProvider()
 		{
 			requestContainer.Resolve<ISessionSpecificDataProvider>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterAbsenceTypesProvider()
+		{
+			requestContainer.Resolve<IAbsenceTypesProvider>()
 				.Should().Not.Be.Null();
 		}
 

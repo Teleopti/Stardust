@@ -60,6 +60,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
+		[FindBy(Id = "Absence-request-tab")]
+		public Span AbsenceRequestTab { get; set; }
+
 		[FindBy(Id = "Schedule-addRequest-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Schedule-addRequest-fromDate-input")]

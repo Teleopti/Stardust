@@ -145,6 +145,7 @@
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\ReportViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
+    <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
     <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />

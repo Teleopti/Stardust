@@ -172,6 +172,8 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
     <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
     <Compile Include="Core\Aop\Core\AspectInterceptor.cs" />
     <Compile Include="Core\Aop\Core\AspectsAttribute.cs" />
@@ -731,9 +733,7 @@
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\MyTime\Core\WeekSchedule\DataProvider\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
   </ItemGroup>
