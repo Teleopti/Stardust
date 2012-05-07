@@ -7505,7 +7505,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (contextMenuViews != null) contextMenuViews.Dispose();
 
             if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
-            if (_ruleSetProjectionService != null) ((ICachingComponent) _ruleSetProjectionService).Invalidate();
 
             if (!Disposing)
             {
