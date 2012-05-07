@@ -4,6 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[Serializable]
 	public class AdvancedPreferencesPersonalSettings : SettingValue, IPersonalSettings<IAdvancedPreferences>
 	{
 

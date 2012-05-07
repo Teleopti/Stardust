@@ -5,6 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[Serializable]
 	public class ExtraPreferencesPersonalSettings : SettingValue, IPersonalSettings<IExtraPreferences>
 	{
 		private IList<IGroupPage> GroupPages { get; set; }

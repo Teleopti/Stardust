@@ -5,6 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[Serializable]
 	public class GeneralPreferencesPersonalSettings : SettingValue, IPersonalSettings<IGeneralPreferences>
 	{
 		private IList<IScheduleTag> ScheduleTags { get; set; }

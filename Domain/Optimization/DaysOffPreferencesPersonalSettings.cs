@@ -1,8 +1,10 @@
-﻿using Teleopti.Ccc.Domain.SystemSetting;
+﻿using System;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[Serializable]
 	public class DaysOffPreferencesPersonalSettings : SettingValue, IPersonalSettings<IDaysOffPreferences>
 	{
 
