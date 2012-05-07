@@ -391,6 +391,7 @@
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
+    <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
