@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.PerformanceManagerProxy;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -17,7 +18,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			Name = "Performance Manager permissions";
 			Transformer = new PmPermissionTransformer(new PmProxyFactory());
 			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()));
-			TransformerInfrastructure.PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
+			PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 		
 		protected virtual IUnitOfWorkFactory UnitOfWorkFactory

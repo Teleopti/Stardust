@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
