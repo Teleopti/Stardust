@@ -1,8 +1,10 @@
+using System.Runtime.Serialization;
 using System.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class TeleoptiIdentity : GenericIdentity, ITeleoptiIdentity
 	{
 		public TeleoptiIdentity(string name,

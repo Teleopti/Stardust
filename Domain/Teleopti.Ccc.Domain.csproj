@@ -110,6 +110,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -811,6 +812,8 @@
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalSerializable.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalSerializer.cs" />
     <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\UserDetail.cs" />

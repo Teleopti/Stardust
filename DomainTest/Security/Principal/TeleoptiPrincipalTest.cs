@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -10,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
-    [TestFixture]
+	[TestFixture]
     public class TeleoptiPrincipalTest
     {
         private IPerson person;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void Setup()
         {
             person = PersonFactory.CreatePerson();
-				identity = new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown);
+			identity = new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown);
 
             target = new TeleoptiPrincipal(identity, person);
         }

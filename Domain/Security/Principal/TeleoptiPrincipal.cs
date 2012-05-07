@@ -13,15 +13,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 
 
-
-
-
 		private IPerson _person;
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
 		private IIdentity _identity;
 
-		public TeleoptiPrincipal(IIdentity identity, IPerson person)
-            : base(identity, new string[] { })
+		public TeleoptiPrincipal(IIdentity identity, IPerson person) : base(identity, new string[] { })
         {
             _person = person;
 
@@ -39,25 +35,26 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private void InitializeFromPerson()
 		{
-			Organisation = new OrganisationMembership();
+			var organization = new OrganisationMembership();
+			Organisation = organization;
 
 			if (_person == null) return;
 
-			Regional = new Regional(_person.PermissionInformation.DefaultTimeZone(),
-			                        _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture());
-
-			Organisation.AddFromPerson(_person);
+			Regional = Principal.Regional.FromPerson(_person);
+			organization.AddFromPerson(_person);
 		}
+
+		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
+
+		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
+		IPerson IUnsafePerson.Person { get { return _person; } }
 
 		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
 		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
 
-		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
 		public IRegional Regional { get; private set; }
 		public IOrganisationMembership Organisation { get; private set; }
 
-		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
-		IPerson IUnsafePerson.Person { get { return _person; } }
 	}
 
     public interface IUnsafePerson

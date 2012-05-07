@@ -119,6 +119,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -858,6 +859,7 @@
     </Compile>
     <Compile Include="Security\Principal\PrincipalAuthorizationTest.cs" />
     <Compile Include="Security\Principal\RoleToClaimSetTransformerTest.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalSerializerTest.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalTest.cs" />
     <Compile Include="Security\Principal\UnsafePersonProviderTest.cs" />
     <Compile Include="Security\RaptorApplicationFunctionsSynchronizerTest.cs">
