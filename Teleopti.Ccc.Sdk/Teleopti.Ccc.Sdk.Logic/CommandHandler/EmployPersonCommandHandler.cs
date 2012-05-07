@@ -12,15 +12,21 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRepository _personRepository;
-        private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IAssembler<IPerson, PersonDto> _personAssembler;
+        private readonly IPersonAssembler _personAssembler;
+        private readonly IPartTimePercentageRepository _partTimePercentageRepository;
+        private readonly IContractScheduleRepository _contractScheduleRepository;
+        private readonly IContractRepository _contractRepository;
+        private readonly ITeamRepository _teamRepository;
 
-        public EmployPersonCommandHandler(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IRepositoryFactory repositoryFactory, IAssembler<IPerson, PersonDto> personAssembler)
+        public EmployPersonCommandHandler(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository,IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _personRepository = personRepository;
-            _repositoryFactory = repositoryFactory;
             _personAssembler = personAssembler;
+            _partTimePercentageRepository = partTimePercentageRepository;
+            _contractScheduleRepository = contractScheduleRepository;
+            _contractRepository = contractRepository;
+            _teamRepository = teamRepository;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -31,15 +37,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 var start = command.Period.StartDate.DateTime;
 
-                ((PersonAssembler)_personAssembler).EnableSaveOrUpdate = true;
+                _personAssembler.EnableSaveOrUpdate = true;
                 var person = _personAssembler.DtoToDomainEntity(command.Person);
 
                 var partTimePercentage =
-                   _repositoryFactory.CreatePartTimePercentageRepository(uow).Load(command.PersonContract.PartTimePercentageId.GetValueOrDefault());
+                   _partTimePercentageRepository.Load(command.PersonContract.PartTimePercentageId.GetValueOrDefault());
                 var contractSchedule =
-                    _repositoryFactory.CreateContractScheduleRepository(uow).Load(command.PersonContract.ContractScheduleId.GetValueOrDefault());
-                var team = _repositoryFactory.CreateTeamRepository(uow).Load(command.Team.Id.GetValueOrDefault());
-                var contract = _repositoryFactory.CreateContractRepository(uow).Load(command.PersonContract.ContractId.GetValueOrDefault());
+                    _contractScheduleRepository.Load(command.PersonContract.ContractScheduleId.GetValueOrDefault());
+                var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
+                var contract = _contractRepository.Load(command.PersonContract.ContractId.GetValueOrDefault());
 
                 var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
                 personPeriod = new PersonPeriod(new DateOnly(start.Year, start.Month, start.Day), personContract, team);
