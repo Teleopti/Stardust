@@ -3,7 +3,7 @@
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<CCCMajorMinor>7.1</CCCMajorMinor>
+		<CCCMajorMinor>7.2</CCCMajorMinor>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
