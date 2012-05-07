@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	    _scheduleDictionaryModifiedCallback = scheduleDictionaryModifiedCallback;
         }
 
-        public virtual IRequestApprovalService GetRequestApprovalServiceSchedular(IScheduleDictionary scheduleDictionary,
+        public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
                                                     IScenario scenario,
                                                     ISwapAndModifyService swapAndModifyService,
                                                     INewBusinessRuleCollection newBusinessRules)
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var allNewRules = NewBusinessRuleCollection.Minimum();
                 var scheduleDictionary = getSchedules(personRequest);
 
-                var approvalService = GetRequestApprovalServiceSchedular(scheduleDictionary,
+                var approvalService = GetRequestApprovalServiceScheduler(scheduleDictionary,
                                                                           _scenarioProvider.DefaultScenario(),
                                                                           _swapAndModifyService, allNewRules);
                 try
