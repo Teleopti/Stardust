@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         bool BelongsToBusinessUnit(IBusinessUnit businessUnit, DateOnly dateOnly);
         bool BelongsToSite(ISite site, DateOnly dateOnly);
         bool BelongsToTeam(ITeam team, DateOnly dateOnly);
-        void AddFromPerson(IPerson person);
         bool IsUser(IPerson person);
         IEnumerable<DateOnlyPeriod> Periods();
     }

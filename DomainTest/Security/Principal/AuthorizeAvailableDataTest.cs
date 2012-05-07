@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IAvailableData availableData;
         private IAuthorizeAvailableData target;
         private IPerson queryingPerson;
-        private IOrganisationMembership queryingPersonMembership;
+        private OrganisationMembership queryingPersonMembership;
 
         [SetUp]
         public void Setup()

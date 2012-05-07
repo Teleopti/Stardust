@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
     public class AuthorizeMyTeamTest
     {
         private IAuthorizeAvailableData target;
-        private IOrganisationMembership queryingPersonMembership;
+        private OrganisationMembership queryingPersonMembership;
         private ISite site;
         private ITeam team;
         private IPerson queryingPerson;

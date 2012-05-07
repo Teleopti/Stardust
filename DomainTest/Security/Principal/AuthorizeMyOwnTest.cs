@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IPerson queryingPerson;
         private ISite site;
         private ITeam team;
-        private IOrganisationMembership queryingPersonMembership;
+        private OrganisationMembership queryingPersonMembership;
 
         [SetUp]
         public void Setup()
