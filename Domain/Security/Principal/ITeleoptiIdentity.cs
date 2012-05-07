@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		AuthenticationTypeOption TeleoptiAuthenticationType { get; }
 		IDataSource DataSource { get; }
 		IBusinessUnit BusinessUnit { get; }
+		Guid BusinessUnitId { get; }
 		string Ticket { get; set; }
 	}
 }
