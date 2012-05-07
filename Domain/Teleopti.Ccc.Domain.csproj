@@ -222,6 +222,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />

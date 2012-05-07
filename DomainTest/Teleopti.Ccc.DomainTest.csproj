@@ -208,6 +208,7 @@
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerTest.cs" />
+    <Compile Include="Optimization\ExtraPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationServiceTest.cs">
       <SubType>Code</SubType>

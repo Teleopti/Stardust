@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IGeneralPreferences _generalPreferencesSource;
 		private IGeneralPreferences _generalPreferencesTarget;
 
-			[SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_scheduleTag1Id = Guid.NewGuid();
@@ -34,54 +34,54 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_generalPreferencesTarget = new GeneralPreferences();
 		}
 
-			[Test]
-			public void MappingShouldGetAndSetSimpleProperties()
-			{
+		[Test]
+		public void MappingShouldGetAndSetSimpleProperties()
+		{
 
-				_generalPreferencesSource.OptimizationStepTimeBetweenDays = !_generalPreferencesSource.OptimizationStepTimeBetweenDays;
-				_generalPreferencesSource.OptimizationStepShiftsWithinDay = !_generalPreferencesSource.OptimizationStepShiftsWithinDay;
-				_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime = !_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime;
-				_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime = !_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime;
+			_generalPreferencesSource.OptimizationStepTimeBetweenDays = !_generalPreferencesSource.OptimizationStepTimeBetweenDays;
+			_generalPreferencesSource.OptimizationStepShiftsWithinDay = !_generalPreferencesSource.OptimizationStepShiftsWithinDay;
+			_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime = !_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime;
+			_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime = !_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime;
 
-				_generalPreferencesSource.UsePreferences = !_generalPreferencesSource.UsePreferences;
-				_generalPreferencesSource.UseMustHaves = !_generalPreferencesSource.UseMustHaves;
-				_generalPreferencesSource.UseRotations = !_generalPreferencesSource.UseRotations;
-				_generalPreferencesSource.UseAvailabilities = !_generalPreferencesSource.UseAvailabilities;
-				_generalPreferencesSource.UseStudentAvailabilities = !_generalPreferencesSource.UseStudentAvailabilities;
-				_generalPreferencesSource.UseShiftCategoryLimitations = !_generalPreferencesSource.UseShiftCategoryLimitations;
+			_generalPreferencesSource.UsePreferences = !_generalPreferencesSource.UsePreferences;
+			_generalPreferencesSource.UseMustHaves = !_generalPreferencesSource.UseMustHaves;
+			_generalPreferencesSource.UseRotations = !_generalPreferencesSource.UseRotations;
+			_generalPreferencesSource.UseAvailabilities = !_generalPreferencesSource.UseAvailabilities;
+			_generalPreferencesSource.UseStudentAvailabilities = !_generalPreferencesSource.UseStudentAvailabilities;
+			_generalPreferencesSource.UseShiftCategoryLimitations = !_generalPreferencesSource.UseShiftCategoryLimitations;
 
-				_generalPreferencesSource.PreferencesValue = 100d;
-				_generalPreferencesSource.MustHavesValue = 101d;
-				_generalPreferencesSource.RotationsValue = 102d;
-				_generalPreferencesSource.AvailabilitiesValue = 103d;
-				_generalPreferencesSource.StudentAvailabilitiesValue = 104d;
-	
-				_target.MapFrom(_generalPreferencesSource);
-				_target.MapTo(_generalPreferencesTarget);
+			_generalPreferencesSource.PreferencesValue = 100d;
+			_generalPreferencesSource.MustHavesValue = 101d;
+			_generalPreferencesSource.RotationsValue = 102d;
+			_generalPreferencesSource.AvailabilitiesValue = 103d;
+			_generalPreferencesSource.StudentAvailabilitiesValue = 104d;
 
-				Assert.AreEqual(_generalPreferencesSource.OptimizationStepTimeBetweenDays, _generalPreferencesTarget.OptimizationStepTimeBetweenDays);
-				Assert.AreEqual(_generalPreferencesSource.OptimizationStepShiftsWithinDay, _generalPreferencesTarget.OptimizationStepShiftsWithinDay);
-				Assert.AreEqual(_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime, _generalPreferencesTarget.OptimizationStepShiftsForFlexibleWorkTime);
-				Assert.AreEqual(_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime, _generalPreferencesTarget.OptimizationStepDaysOffForFlexibleWorkTime);
+			_target.MapFrom(_generalPreferencesSource);
+			_target.MapTo(_generalPreferencesTarget);
 
-				Assert.AreEqual(_generalPreferencesSource.UsePreferences, _generalPreferencesTarget.UsePreferences);
-				Assert.AreEqual(_generalPreferencesSource.UseMustHaves, _generalPreferencesTarget.UseMustHaves);
-				Assert.AreEqual(_generalPreferencesSource.UseRotations, _generalPreferencesTarget.UseRotations);
-				Assert.AreEqual(_generalPreferencesSource.UseAvailabilities, _generalPreferencesTarget.UseAvailabilities);
-				Assert.AreEqual(_generalPreferencesSource.UseStudentAvailabilities, _generalPreferencesTarget.UseStudentAvailabilities);
-				Assert.AreEqual(_generalPreferencesSource.UseShiftCategoryLimitations, _generalPreferencesTarget.UseShiftCategoryLimitations);
+			Assert.AreEqual(_generalPreferencesSource.OptimizationStepTimeBetweenDays, _generalPreferencesTarget.OptimizationStepTimeBetweenDays);
+			Assert.AreEqual(_generalPreferencesSource.OptimizationStepShiftsWithinDay, _generalPreferencesTarget.OptimizationStepShiftsWithinDay);
+			Assert.AreEqual(_generalPreferencesSource.OptimizationStepShiftsForFlexibleWorkTime, _generalPreferencesTarget.OptimizationStepShiftsForFlexibleWorkTime);
+			Assert.AreEqual(_generalPreferencesSource.OptimizationStepDaysOffForFlexibleWorkTime, _generalPreferencesTarget.OptimizationStepDaysOffForFlexibleWorkTime);
 
-				Assert.AreEqual(_generalPreferencesSource.PreferencesValue, _generalPreferencesTarget.PreferencesValue);
-				Assert.AreEqual(_generalPreferencesSource.MustHavesValue, _generalPreferencesTarget.MustHavesValue);
-				Assert.AreEqual(_generalPreferencesSource.RotationsValue, _generalPreferencesTarget.RotationsValue);
-				Assert.AreEqual(_generalPreferencesSource.AvailabilitiesValue, _generalPreferencesTarget.AvailabilitiesValue);
-				Assert.AreEqual(_generalPreferencesSource.StudentAvailabilitiesValue, _generalPreferencesTarget.StudentAvailabilitiesValue);
-			}
+			Assert.AreEqual(_generalPreferencesSource.UsePreferences, _generalPreferencesTarget.UsePreferences);
+			Assert.AreEqual(_generalPreferencesSource.UseMustHaves, _generalPreferencesTarget.UseMustHaves);
+			Assert.AreEqual(_generalPreferencesSource.UseRotations, _generalPreferencesTarget.UseRotations);
+			Assert.AreEqual(_generalPreferencesSource.UseAvailabilities, _generalPreferencesTarget.UseAvailabilities);
+			Assert.AreEqual(_generalPreferencesSource.UseStudentAvailabilities, _generalPreferencesTarget.UseStudentAvailabilities);
+			Assert.AreEqual(_generalPreferencesSource.UseShiftCategoryLimitations, _generalPreferencesTarget.UseShiftCategoryLimitations);
+
+			Assert.AreEqual(_generalPreferencesSource.PreferencesValue, _generalPreferencesTarget.PreferencesValue);
+			Assert.AreEqual(_generalPreferencesSource.MustHavesValue, _generalPreferencesTarget.MustHavesValue);
+			Assert.AreEqual(_generalPreferencesSource.RotationsValue, _generalPreferencesTarget.RotationsValue);
+			Assert.AreEqual(_generalPreferencesSource.AvailabilitiesValue, _generalPreferencesTarget.AvailabilitiesValue);
+			Assert.AreEqual(_generalPreferencesSource.StudentAvailabilitiesValue, _generalPreferencesTarget.StudentAvailabilitiesValue);
+		}
 
 		[Test]
 		public void ShouldFindScheduleTagByIdIfExistInScheduleTagList()
 		{
-			_target.SetScheduleTagId(_scheduleTag1Id);	
+			_target.SetScheduleTagId(_scheduleTag1Id);
 			_target.MapTo(_generalPreferencesSource);
 			Assert.AreEqual(_generalPreferencesSource.ScheduleTag.Id.Value, _scheduleTag1Id);
 		}
