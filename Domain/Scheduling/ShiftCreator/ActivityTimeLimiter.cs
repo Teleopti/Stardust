@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 		{
 			var layers = endProjection.FilterLayers(_activity);
 
-			if (layers.Any())
+			if (layers.HasLayers)
 			{
 				foreach (var layerTime in layers.Select(layer => layer.Period.ElapsedTime()))
 				{
