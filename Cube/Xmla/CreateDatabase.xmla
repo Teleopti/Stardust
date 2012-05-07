@@ -24018,10 +24018,4 @@ END</Trend>
       </Database>
     </ObjectDefinition>
   </Alter>
-  <Process>
-    <Type>ProcessDefault</Type>
-    <Object>
-      <DatabaseID>$(SQL_DATABASE_NAME)</DatabaseID>
-    </Object>
-  </Process>
 </Batch>
