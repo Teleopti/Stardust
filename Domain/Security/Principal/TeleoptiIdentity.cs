@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class TeleoptiIdentity : GenericIdentity, ITeleoptiIdentity
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public TeleoptiIdentity(string name,
 		                        IDataSource dataSource,
 		                        IBusinessUnit businessUnit,

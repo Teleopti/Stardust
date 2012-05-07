@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			if (businessUnitRepository == null)
 				businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
-			var stream = new MemoryStream();
-			var target = new TeleoptiPrincipalSerializer(applicationData, businessUnitRepository);
-			target.Serialize(principal, stream);
+			using (var stream = new MemoryStream())
+			{
+				var target = new TeleoptiPrincipalSerializer(applicationData, businessUnitRepository);
+				target.Serialize(principal, stream);
 
-			stream.Position = 0;
-			var deserializedPrincipal = target.Deserialize(stream);
-			return deserializedPrincipal;
+				stream.Position = 0;
+				return target.Deserialize(stream);
+			}
 		}
 
 		[Test]

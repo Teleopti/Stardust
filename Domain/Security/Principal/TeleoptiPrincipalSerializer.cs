@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.IdentityModel.Claims;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			_businessUnitRepository = businessUnitRepository;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void Serialize(TeleoptiPrincipalSerializable principal, Stream stream)
 		{
 			Serializer.WriteObject(stream, principal);

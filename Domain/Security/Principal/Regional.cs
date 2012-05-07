@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		[DataMember]
 		public CultureInfo UICulture { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IRegional FromPerson(IPerson person)
 		{
 			return new Regional(person.PermissionInformation.DefaultTimeZone(),
