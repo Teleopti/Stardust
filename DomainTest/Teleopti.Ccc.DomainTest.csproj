@@ -198,6 +198,7 @@
     <Compile Include="Helper\NotificationTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
+    <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
