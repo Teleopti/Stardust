@@ -15,10 +15,16 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			: base(name)
 		{
 			DataSource = dataSource;
+			if (DataSource != null)
+				DataSourceName = DataSource.DataSourceName;
 			WindowsIdentity = windowsIdentity;
 			TeleoptiAuthenticationType = teleoptiAuthenticationType;
 			BusinessUnit = businessUnit;
 		}
+
+		[DataMember]
+		public string DataSourceName { get; set; }
+		public IDataSource DataSource { get; set; }
 
 		[DataMember]
 		public AuthenticationTypeOption TeleoptiAuthenticationType { get; private set; }
@@ -26,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public string Ticket { get; set; }
 
 		public WindowsIdentity WindowsIdentity { get; set; }
-		public IDataSource DataSource { get; private set; }
-		public IBusinessUnit BusinessUnit { get; private set; }
+		public IBusinessUnit BusinessUnit { get; set; }
 	}
 }

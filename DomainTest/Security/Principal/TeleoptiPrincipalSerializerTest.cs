@@ -1,10 +1,12 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.IdentityModel.Claims;
 using System.Linq;
 using System.Security.Principal;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -16,10 +18,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 	[TestFixture]
 	public class TeleoptiPrincipalSerializerTest
 	{
-		private static TeleoptiPrincipalSerializable SerializeAndBack(TeleoptiPrincipalSerializable principal)
+
+		
+		private static TeleoptiPrincipalSerializable SerializeAndBack(TeleoptiPrincipalSerializable principal, IApplicationData applicationData = null)
 		{
 			var stream = new MemoryStream();
-			var target = new TeleoptiPrincipalSerializer();
+			var target = new TeleoptiPrincipalSerializer(applicationData);
 			target.Serialize(principal, stream);
 
 			stream.Position = 0;
@@ -114,9 +118,29 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var readPrincipal = SerializeAndBack(principal);
 			var readIdentity = readPrincipal.Identity as ITeleoptiIdentity;
 
-			readIdentity.WindowsIdentity.Name.Should().Be(WindowsIdentity.GetCurrent().Name);
+			readIdentity.Name.Should().Be(identity.Name);
+			readIdentity.WindowsIdentity.Name.Should().Be(WindowsIdentity.GetCurrent().Name); // cheating with this for now..
 			readIdentity.TeleoptiAuthenticationType.Should().Be(identity.TeleoptiAuthenticationType);
 			readIdentity.Ticket.Should().Be(identity.Ticket);
+		}
+
+		[Test]
+		public void ShouldPopulateIdentityDataSource()
+		{
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			dataSource.Stub(x => x.DataSourceName).Return("data");
+			var applicationData = MockRepository.GenerateMock<IApplicationData>();
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { dataSource });
+
+			var person = PersonFactory.CreatePerson("A", "Person");
+			person.SetId(Guid.NewGuid());
+			var identity = new TeleoptiIdentity(person.Name.ToString(), dataSource, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
+			var principal = new TeleoptiPrincipalSerializable(identity, person);
+
+			var readPrincipal = SerializeAndBack(principal, applicationData);
+			var readIdentity = readPrincipal.Identity as ITeleoptiIdentity;
+
+			readIdentity.DataSource.Should().Be.SameInstanceAs(dataSource);
 		}
 
 	}
