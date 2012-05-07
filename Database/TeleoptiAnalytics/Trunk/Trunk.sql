@@ -77,6 +77,5 @@ CREATE TABLE [mart].[sys_etl_running_lock](
 (
 	[id] ASC
 )
-) ON [PRIMARY]
-
+)
 GO
