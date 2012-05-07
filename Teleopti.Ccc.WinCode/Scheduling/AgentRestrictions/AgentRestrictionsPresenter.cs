@@ -7,6 +7,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	public interface IAgentRestrictionsView
 	{
 		void MergeHeaders();
+		void LoadData();
+	}
+
+	public interface IAgentRestrictionsWarningDrawer
+	{
+		void Draw(GridDrawCellEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
 	}
 
 	public class AgentRestrictionsPresenter
@@ -15,12 +21,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private IAgentRestrictionsView _view;
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsModel _model;
+		private IAgentRestrictionsWarningDrawer _warningDrawer;
 		private const int ColCount = 12;
+		private const int HeaderCount = 1;
 
-		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model)
+		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer)
 		{
 			_view = view;
 			_model = model;
+			_warningDrawer = warningDrawer;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -32,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public int GridQueryRowCount
 		{
-			get { return _model.DisplayRows.Count; }
+			get { return _model.DisplayRows.Count + HeaderCount; }
 		}
 
 		public void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
@@ -41,6 +50,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			HandleHeaderQuerys(e);
 			HandleDisplayRowQuerys(e);
+		}
+
+		public void GridCellDrawn(GridDrawCellEventArgs e)
+		{
+			//if warnings
+			_warningDrawer.Draw(e, null);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

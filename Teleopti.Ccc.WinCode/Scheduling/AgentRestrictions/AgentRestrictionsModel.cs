@@ -4,7 +4,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
 	public interface IAgentRestrictionsModel
 	{
-		IList<AgentRestrictionsDisplayRow> DisplayRows { get; }	
+		IList<AgentRestrictionsDisplayRow> DisplayRows { get; }
+		void LoadData();
 	}
 
 	public class AgentRestrictionsModel : IAgentRestrictionsModel
@@ -17,6 +18,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_displayRows = new List<AgentRestrictionsDisplayRow>();
 		}
 
-		public IList<AgentRestrictionsDisplayRow> DisplayRows { get { return _displayRows; } }	
+		public IList<AgentRestrictionsDisplayRow> DisplayRows { get { return _displayRows; } }
+
+		public void LoadData()
+		{
+			_displayRows.Add(new AgentRestrictionsDisplayRow());
+			_displayRows.Add(new AgentRestrictionsDisplayRow());
+		}
 	}
 }
