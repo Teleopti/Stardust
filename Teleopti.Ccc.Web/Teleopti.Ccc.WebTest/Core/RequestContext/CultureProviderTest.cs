@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	[TestFixture]
 	public class CultureProviderTest
 	{
-		private static TeleoptiPrincipal SetupTeleoptiPrincipal(int testLcid)
+		private static ITeleoptiPrincipal SetupTeleoptiPrincipal(int testLcid)
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(testLcid));

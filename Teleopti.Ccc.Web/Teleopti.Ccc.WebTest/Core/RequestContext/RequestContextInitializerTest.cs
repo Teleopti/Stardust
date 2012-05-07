@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		protected class TestPrincipalFactory : IPrincipalFactory
 		{
-			public TestPrincipalFactory(TeleoptiPrincipal principal)
+			public TestPrincipalFactory(ITeleoptiPrincipal principal)
 			{
 				_principal = principal;
 			}
 
-			private readonly TeleoptiPrincipal _principal;
+			private readonly ITeleoptiPrincipal _principal;
 
 			public ITeleoptiPrincipal Generate()
 			{
