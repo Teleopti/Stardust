@@ -46,11 +46,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value, Is.EqualTo("23:59"));
 		}
 
-		[Then(@"I should see all absence types in droplist")]
-		public void ThenIShouldSeeAllAbsenceTypesInDroplist()
+		[Given(@"I have a requestable absence called (.*)")]
+		public void GivenIHaveARequestableAbsenceCalledVacation(string name)
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new RequestableAbsenceType(name));
 		}
+
+		[Then(@"I should see a absence type called (.*) in droplist")]
+		public void ThenIShouldSeeAAbsenceTypeCalledVacationInDroplist(string name)
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.InnerHtml, Is.StringContaining(name));
+		}
+
 
 		[Then(@"I should not see the absence request tab")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()

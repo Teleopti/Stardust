@@ -52,4 +52,4 @@ Scenario: View absence types
 	And I am viewing week schedule
 	When I click on today's summary
 	And I click absence request tab
-	Then I should see a absence type celled Vacation in droplist
+	Then I should see a absence type called Vacation in droplist

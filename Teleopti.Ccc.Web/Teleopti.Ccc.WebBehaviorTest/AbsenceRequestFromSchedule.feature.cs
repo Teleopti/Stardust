@@ -204,7 +204,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 54
  testRunner.And("I click absence request tab");
 #line 55
- testRunner.Then("I should see a absence type celled Vacation in droplist");
+ testRunner.Then("I should see a absence type called Vacation in droplist");
 #line hidden
             this.ScenarioCleanup();
         }

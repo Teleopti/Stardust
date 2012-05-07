@@ -90,7 +90,7 @@
 	</div>
 	<div id="Absence-type-element" class="edit-module-element floatleft displaynone">
 		<div class="floatleft absence-input">Absence Type:</div>
-		<select id="Absence-type" class="edit-module-element floatleft absence-input combobox">
+		<select id="Absence-type" class="floatleft absence-input combobox">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType)">@absenceType.Name</option>

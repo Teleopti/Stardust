@@ -41,6 +41,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { throw new NotImplementedException(); }
 		}
 
+		public TextField AbsenceTypesTextField
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public SelectList AbsenceTypesSelectList
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Request-detail-fromDate-input")]
