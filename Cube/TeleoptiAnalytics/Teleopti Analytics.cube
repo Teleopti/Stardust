@@ -3241,7 +3241,10 @@
         <Attribute dwd:design-time-name="ae9a8530-38cc-4a12-afd7-2e7dc6ec6369">
           <AttributeID>Windows Domain</AttributeID>
         </Attribute>
-        <Attribute dwd:design-time-name="21476bd7-dea5-4385-9e33-9a6619103e19">
+        <Attribute dwd:design-time-name="b8e87de7-6f7d-48f1-80a0-d98afdbb27e0">
+          <AttributeID>Windows Username</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="dea6418c-a5a3-4cb2-9118-67ff5375f3fd">
           <AttributeID>Windows Domain Username</AttributeID>
         </Attribute>
       </Attributes>
