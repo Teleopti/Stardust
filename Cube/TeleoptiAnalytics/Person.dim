@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-1131" scrolltop="3112" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="8599" y="14605" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="3" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-1131" scrolltop="3112" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="11404" y="18574" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -68,26 +68,37 @@
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ARDiagramLayout</Name>
       <Value>
-        <DiagramLayout ZoomPercent="100" ViewPortX="0" ViewPortY="17" xmlns="">
+        <DiagramLayout ZoomPercent="100" ViewPortX="3" ViewPortY="0" xmlns="">
           <Shapes NodeWidth="288">
             <Shape Id="Dim Person" Expanded="true">
               <Attributes>
                 <Attribute Id="Dim Person" />
-                <Attribute Id="Windows Domain Username" />
               </Attributes>
               <Position x="20" y="20" />
-            </Shape>
-            <Shape Id="Windows Domain" Expanded="false">
-              <Attributes>
-                <Attribute Id="Windows Domain" />
-              </Attributes>
-              <Position x="385" y="20" />
             </Shape>
             <Shape Id="Person Name" Expanded="false">
               <Attributes>
                 <Attribute Id="Person Name" />
               </Attributes>
-              <Position x="385" y="68" />
+              <Position x="385" y="20" />
+            </Shape>
+            <Shape Id="Windows Username" Expanded="false">
+              <Attributes>
+                <Attribute Id="Windows Username" />
+              </Attributes>
+              <Position x="750" y="20" />
+            </Shape>
+            <Shape Id="Windows Domain Username" Expanded="false">
+              <Attributes>
+                <Attribute Id="Windows Domain Username" />
+              </Attributes>
+              <Position x="1115" y="20" />
+            </Shape>
+            <Shape Id="Windows Domain" Expanded="false">
+              <Attributes>
+                <Attribute Id="Windows Domain" />
+              </Attributes>
+              <Position x="1480" y="20" />
             </Shape>
             <Shape Id="Employment Number 1" Expanded="false">
               <Attributes>
@@ -214,14 +225,6 @@
         <AttributeRelationship dwd:design-time-name="bc470905-8df9-440d-b2a5-e0ac8db53620">
           <AttributeID>Person Name</AttributeID>
           <Name>Person Name</Name>
-        </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="01917e13-6c13-479c-8b30-5601ab254080">
-          <AttributeID>Windows Domain</AttributeID>
-          <Name>Windows Domain</Name>
-        </AttributeRelationship>
-        <AttributeRelationship dwd:design-time-name="786a9a5f-a9cf-4185-a45c-9be469e86f37">
-          <AttributeID>Windows Domain Username</AttributeID>
-          <Name>Windows Domain Username</Name>
         </AttributeRelationship>
       </AttributeRelationships>
       <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
@@ -479,6 +482,10 @@
           <AttributeID>Employment Number 1</AttributeID>
           <Name>EmploymentNumber</Name>
         </AttributeRelationship>
+        <AttributeRelationship dwd:design-time-name="d9e50ae3-28b1-4e3b-b67e-11edbe425a7e">
+          <AttributeID>Windows Username</AttributeID>
+          <Name>Windows Username</Name>
+        </AttributeRelationship>
       </AttributeRelationships>
       <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
@@ -518,22 +525,74 @@
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn dwd:design-time-name="96446f42-4a3c-4da7-b62b-09ffc9ec2477">
+        <DataType>WChar</DataType>
+        <DataSize>50</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="4d0acf07-8ec0-48ef-be27-59204d173adb">
+          <TableID>dbo_dim_person</TableID>
+          <ColumnID>windows_domain</ColumnID>
+        </Source>
+      </NameColumn>
       <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
     </Attribute>
-    <Attribute dwd:design-time-name="23aa2edc-b7f7-4eea-b9a9-1cba2685812a">
-      <ID>Windows Domain Username</ID>
-      <Name>Windows Domain Username</Name>
+    <Attribute dwd:design-time-name="dd02c8ae-e9e0-4f01-9064-595e23a61df5">
+      <ID>Windows Username</ID>
+      <Name>Windows Username</Name>
       <KeyColumns>
-        <KeyColumn dwd:design-time-name="a57665a2-2be2-4c82-9981-beb8ec17c8e0">
+        <KeyColumn dwd:design-time-name="3168200d-fc86-4caa-bc40-ad40f69c1538">
           <DataType>WChar</DataType>
           <DataSize>101</DataSize>
-          <Source xsi:type="ColumnBinding" dwd:design-time-name="6b78cd39-db88-4761-a6b6-0d0291761645">
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="068d9e4a-b417-4314-a6db-6d64f325dc82">
             <TableID>dbo_dim_person</TableID>
             <ColumnID>windows_domain_username</ColumnID>
           </Source>
         </KeyColumn>
       </KeyColumns>
+      <NameColumn dwd:design-time-name="d249e1fb-9adb-4f2a-85cb-d4bad79b5e7c">
+        <DataType>WChar</DataType>
+        <DataSize>50</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="b65d476a-3162-4610-94ae-a81c78d33b61">
+          <TableID>dbo_dim_person</TableID>
+          <ColumnID>windows_username</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="d84d7276-16b3-48e7-81d8-d3cfd4f2c2da">
+          <AttributeID>Windows Domain Username</AttributeID>
+          <Name>Windows Domain Username</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
+      <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+      <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+    </Attribute>
+    <Attribute dwd:design-time-name="b55abae3-651e-45f5-8188-5149d7d03ab6">
+      <ID>Windows Domain Username</ID>
+      <Name>Windows Domain Username</Name>
+      <KeyColumns>
+        <KeyColumn dwd:design-time-name="13a13ac2-de1d-45fd-9bfd-abfadf3e579e">
+          <DataType>WChar</DataType>
+          <DataSize>101</DataSize>
+          <Source xsi:type="ColumnBinding" dwd:design-time-name="410b9a09-dd04-429c-b949-a51461a4d4b3">
+            <TableID>dbo_dim_person</TableID>
+            <ColumnID>windows_domain_username</ColumnID>
+          </Source>
+        </KeyColumn>
+      </KeyColumns>
+      <NameColumn dwd:design-time-name="6c9d6b91-18ba-4fe7-a5cf-9b801b07e5e3">
+        <DataType>WChar</DataType>
+        <DataSize>101</DataSize>
+        <Source xsi:type="ColumnBinding" dwd:design-time-name="d88312c2-eb08-4213-8e7a-11d65260b5a4">
+          <TableID>dbo_dim_person</TableID>
+          <ColumnID>windows_domain_username</ColumnID>
+        </Source>
+      </NameColumn>
+      <AttributeRelationships>
+        <AttributeRelationship dwd:design-time-name="56584206-44ae-4757-94c2-7a9cfa792f80">
+          <AttributeID>Windows Domain</AttributeID>
+          <Name>Windows Domain</Name>
+        </AttributeRelationship>
+      </AttributeRelationships>
       <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
       <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
     </Attribute>
@@ -681,10 +740,15 @@
           <Name>Domain</Name>
           <SourceAttributeID>Windows Domain</SourceAttributeID>
         </Level>
-        <Level dwd:design-time-name="a8a108b0-d51b-44c0-9915-1754b9d51b6e">
+        <Level dwd:design-time-name="57e8f0a5-46ff-4e81-835f-5ba2d6e76b6e">
           <ID>Windows Domain Username</ID>
           <Name>Domain Username</Name>
           <SourceAttributeID>Windows Domain Username</SourceAttributeID>
+        </Level>
+        <Level dwd:design-time-name="f026e1a2-95d0-4cb4-a175-653a59b923bc">
+          <ID>Windows Username</ID>
+          <Name>Username</Name>
+          <SourceAttributeID>Windows Username</SourceAttributeID>
         </Level>
         <Level dwd:design-time-name="3f336bd1-da5d-4854-928d-7e9cc535a8a7">
           <ID>Person Name</ID>
