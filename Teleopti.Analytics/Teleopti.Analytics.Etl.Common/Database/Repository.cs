@@ -9,7 +9,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Database
 {
-	public class Repository : IScheduleRepository, ILogRepository, IRunControllerRepository
+public class Repository : IScheduleRepository, ILogRepository, IRunControllerRepository
 	{
 		private readonly string _connectionString;
 
@@ -111,6 +111,20 @@ namespace Teleopti.Analytics.Etl.Common.Database
 
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_log_jobstep_save", parameterList,
 											_connectionString);
+		}
+
+		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId)
+		{
+			var parameterList = new List<SqlParameter>
+									{
+										new SqlParameter("start_date", startDate),
+										new SqlParameter("end_date", endDate),
+										new SqlParameter("business_unit_id", businessUnitId)
+									};
+
+
+			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_execution_history", parameterList, _connectionString);
+			return ds.Tables[0];
 		}
 
 		public int SaveSchedule(IEtlSchedule etlScheduleItem)

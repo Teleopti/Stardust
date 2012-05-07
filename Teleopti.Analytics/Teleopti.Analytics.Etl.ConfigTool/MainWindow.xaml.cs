@@ -36,6 +36,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
         	scheduleControl.SetBaseConfiguration(baseConfiguration);
         	manualEtl.SetBaseConfiguration(baseConfiguration);
+			jobHistory.SetBaseConfiguration(baseConfiguration);
 
             DataContext = this;
             CanRun = true;
