@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		WindowsIdentity WindowsIdentity { get; }
 		AuthenticationTypeOption TeleoptiAuthenticationType { get; }
 		IDataSource DataSource { get; }
-		IBusinessUnit BusinessUnit { get; set; }
+		IBusinessUnit BusinessUnit { get; }
 		string Ticket { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 using System.IO;
 using System.IdentityModel.Claims;
 using System.Runtime.Serialization;
+using System.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -32,7 +33,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public TeleoptiPrincipalSerializable Deserialize(Stream stream)
 		{
-			return (TeleoptiPrincipalSerializable)Serializer.ReadObject(stream);
+			var principal = (TeleoptiPrincipalSerializable)Serializer.ReadObject(stream);
+			var identity = (TeleoptiIdentity) principal.Identity;
+			identity.WindowsIdentity = WindowsIdentity.GetCurrent();
+			return principal;
 		}
 	}
 }

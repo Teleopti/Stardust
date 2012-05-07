@@ -20,10 +20,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			BusinessUnit = businessUnit;
 		}
 
-		public WindowsIdentity WindowsIdentity { get; private set; }
+		[DataMember]
 		public AuthenticationTypeOption TeleoptiAuthenticationType { get; private set; }
-		public IDataSource DataSource { get; private set; }
-		public IBusinessUnit BusinessUnit { get; set; }
+		[DataMember]
 		public string Ticket { get; set; }
+
+		public WindowsIdentity WindowsIdentity { get; set; }
+		public IDataSource DataSource { get; private set; }
+		public IBusinessUnit BusinessUnit { get; private set; }
 	}
 }
