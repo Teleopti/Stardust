@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public TeleoptiPrincipal(IIdentity identity, IPerson person) : base(identity, new string[] { })
         {
             _person = person;
-
             InitializeFromPerson();
         }
 
@@ -35,13 +34,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private void InitializeFromPerson()
 		{
-			var organization = new OrganisationMembership();
-			Organisation = organization;
-
-			if (_person == null) return;
-
+			// dont ask my why, just refact without changing behavior...
+			if (_person == null)
+			{
+				Organisation = new OrganisationMembership();
+				return;
+			}
 			Regional = Principal.Regional.FromPerson(_person);
-			organization.AddFromPerson(_person);
+			Organisation = OrganisationMembership.FromPerson(_person);
 		}
 
 		public override IIdentity Identity { get { return _identity ?? base.Identity; } }

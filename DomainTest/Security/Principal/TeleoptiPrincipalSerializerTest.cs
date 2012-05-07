@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			readPrincipal.Regional.TimeZone.StandardName.Should().Be(person.PermissionInformation.DefaultTimeZone().StandardName);
 			readPrincipal.Regional.Culture.Should().Be(person.PermissionInformation.Culture());
 			readPrincipal.Regional.UICulture.Should().Be(person.PermissionInformation.UICulture());
+			readPrincipal.Organisation.IsUser(person).Should().Be.True();
 		}
 
 	}

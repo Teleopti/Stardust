@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 					typeof (TeleoptiIdentity),
 					typeof (DefaultClaimSet),
 					typeof (Regional),
-					typeof (CccTimeZoneInfo)
+					typeof (CccTimeZoneInfo),
+					typeof (OrganisationMembership)
 				},
 			1024, // just a number...
 			false,

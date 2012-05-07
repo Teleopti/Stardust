@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			PersonId = person.Id.Value;
 			Regional = Principal.Regional.FromPerson(person);
+			Organisation = OrganisationMembership.FromPerson(person);
 		}
 
 		[DataMember]
@@ -29,6 +30,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		[DataMember]
 		public IRegional Regional { get; private set; }
-		public IOrganisationMembership Organisation { get; set; }
+
+		[DataMember]
+		public IOrganisationMembership Organisation { get; private set; }
 	}
 }

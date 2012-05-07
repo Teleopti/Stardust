@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -13,10 +14,31 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		bool IsUser(Guid? personId);
 	}
 
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class OrganisationMembership : IOrganisationMembership, IOrganisationMembershipWithId
 	{
         private IEnumerable<PeriodizedOrganisationMembership> _periodizedOrganisationMembership = new List<PeriodizedOrganisationMembership>();
-        private Guid _personId;
+        
+		[DataMember]
+		private Guid _personId;
+
+		public static IOrganisationMembership FromPerson(IPerson person)
+		{
+			var organization = new OrganisationMembership();
+			organization.AddFromPerson(person);
+			return organization;
+		}
+
+		public void AddFromPerson(IPerson person)
+		{
+			_personId = person.Id.GetValueOrDefault();
+			_periodizedOrganisationMembership =
+				person.PersonPeriodCollection.Where(pp => pp.Team != null && pp.Team.Site != null).Select(
+					pp =>
+					new PeriodizedOrganisationMembership(pp.StartDate, pp.EndDate(), pp.Team.Id.GetValueOrDefault(),
+														 pp.Team.Site.Id.GetValueOrDefault(),
+														 pp.Team.BusinessUnitExplicit.Id.GetValueOrDefault())).ToList();
+		}
 
         public bool BelongsToBusinessUnit(IBusinessUnit businessUnit, DateOnly dateOnly)
         {
@@ -60,17 +82,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			var membership = findMembershipForDate(dateOnly);
 			return membership.BelongsToTeam(teamId);
 		}
-
-        public void AddFromPerson(IPerson person)
-        {
-            _personId = person.Id.GetValueOrDefault();
-            _periodizedOrganisationMembership =
-                person.PersonPeriodCollection.Where(pp => pp.Team!=null && pp.Team.Site!=null).Select(
-                    pp =>
-                    new PeriodizedOrganisationMembership(pp.StartDate, pp.EndDate(), pp.Team.Id.GetValueOrDefault(),
-                                                         pp.Team.Site.Id.GetValueOrDefault(),
-                                                         pp.Team.BusinessUnitExplicit.Id.GetValueOrDefault())).ToList();
-        }
 
         public bool IsUser(IPerson person)
         {
