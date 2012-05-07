@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-	class DenormalizeNotificationCommandHandler : IHandleCommand<DenormalizeNotificationCommandDto>
+	public class DenormalizeNotificationCommandHandler : IHandleCommand<DenormalizeNotificationCommandDto>
 	{
 		private readonly IServiceBusSender _busSender;
 

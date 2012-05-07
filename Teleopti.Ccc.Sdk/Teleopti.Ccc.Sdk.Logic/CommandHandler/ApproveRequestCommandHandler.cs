@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
+        private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
 
-    	public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioProvider scenarioProvider, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+        public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioProvider scenarioProvider, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -35,6 +36,20 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _personRequestRepository = personRequestRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
+    	    _scheduleDictionaryModifiedCallback = scheduleDictionaryModifiedCallback;
+        }
+
+        public virtual IRequestApprovalService GetRequestApprovalServiceSchedular(IScheduleDictionary scheduleDictionary,
+                                                    IScenario scenario,
+                                                    ISwapAndModifyService swapAndModifyService,
+                                                    INewBusinessRuleCollection newBusinessRules)
+        {
+            
+
+           return new RequestApprovalServiceScheduler(scheduleDictionary,
+                                                                          scenario,
+                                                                          swapAndModifyService, newBusinessRules,
+                                                                          new EmptyScheduleDayChangeCallback());
         }
 
         public CommandResultDto Handle(ApproveRequestCommandDto command)
@@ -46,10 +61,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var allNewRules = NewBusinessRuleCollection.Minimum();
                 var scheduleDictionary = getSchedules(personRequest);
 
-                var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary,
+                var approvalService = GetRequestApprovalServiceSchedular(scheduleDictionary,
                                                                           _scenarioProvider.DefaultScenario(),
-                                                                          _swapAndModifyService, allNewRules,
-                                                                          new EmptyScheduleDayChangeCallback());
+                                                                          _swapAndModifyService, allNewRules);
                 try
                 {
                     personRequest.Approve(approvalService, _authorization);
@@ -61,7 +75,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository,
                                                         scheduleDictionary.DifferenceSinceSnapshot());
 
-                new ScheduleDictionaryModifiedCallback().Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+                //new ScheduleDictionaryModifiedCallback().Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+                _scheduleDictionaryModifiedCallback.Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {

@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
+    public class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
     {
     	private readonly IServiceBusSender _busSender;
 

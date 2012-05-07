@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    class CreatePayrollExportCommandHandler : IHandleCommand<CreatePayrollExportCommandDto>
+    public class CreatePayrollExportCommandHandler : IHandleCommand<CreatePayrollExportCommandDto>
     {
         private readonly IPayrollResultFactory _payrollResultFactory;
 
