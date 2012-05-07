@@ -160,3 +160,15 @@
 	height: 16px;
 	float: left;
 }
+
+.selectable-tab {
+	cursor: pointer
+}
+.selected-tab {
+	color: #15C
+}
+.absence-input {
+	width: 8em;
+	height: 10px;
+	font-size: 10px
+}
