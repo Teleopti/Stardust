@@ -646,9 +646,6 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
-    <Content Include="Teleopti.Ccc.Web.ServiceBus.Client.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -805,4 +802,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusClient.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"</PreBuildEvent>
+  </PropertyGroup>
 </Project>
