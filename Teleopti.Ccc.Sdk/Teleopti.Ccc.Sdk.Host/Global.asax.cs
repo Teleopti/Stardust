@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IDenormalizer>
         			                       	{new ScheduleDenormalizer(busSender,saveToDenormalizationQueue), new MeetingDenormalizer(busSender,saveToDenormalizationQueue)},
-													new DataSourceConfigurationSetter(false, false, "thread_static")),
+													DataSourceConfigurationSetter.ForSdk),
         			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
