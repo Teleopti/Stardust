@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.TestCommon
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
 			dictionary[DataSourceSettings.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";
 			dictionary[DataSourceSettings.ConnectionString] = connectionString;
+			dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = "for test";
 			dictionary[DataSourceSettings.SqlExceptionConverter] = DataSourceSettingValues.SqlServerExceptionConverterTypeName;
 			dictionary[DataSourceSettings.CurrentSessionContextClass] = "call";
 			if (timeout.HasValue)

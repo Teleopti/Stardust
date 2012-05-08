@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "Desktop");
 		}
 
-		public const string NoDataSourceName = "[not set]";
-
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache, 
 															bool useDistributedTransactionFactory, 
 															string sessionContext,
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
 			nhConfiguration.SetProperty(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			nhConfiguration.SetProperty(Environment.DefaultSchema, "dbo");
-			nhConfiguration.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
 			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
 			nhConfiguration.SetProperty(Environment.ProxyFactoryFactoryClass,
