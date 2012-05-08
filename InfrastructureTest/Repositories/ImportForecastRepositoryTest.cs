@@ -1,7 +1,9 @@
 ﻿using System.Text;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -25,6 +27,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(forecastFile.FileName, loadedAggregateFromDatabase.FileName);
             Assert.AreEqual(forecastFile.FileContent, loadedAggregateFromDatabase.FileContent);
         }
+
+		/// <summary>
+		/// Determines whether this instance can be created.
+		/// </summary>
+		[Test]
+		public void CanCreate()
+		{
+			new ImportForecastsRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
+		}
 
         protected override Repository<IForecastFile> TestRepository(IUnitOfWork unitOfWork)
         {
