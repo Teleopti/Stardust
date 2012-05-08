@@ -7,20 +7,16 @@ namespace SdkTestClientWin.Domain
 {
     public class ScheduleLoader
     {
-        private IList<Agent> _agentsToLoad;
-        private DateTime _dateFrom;
-        private DateTime _dateTo;
-        private ServiceApplication _service;
-        private TimeZoneInfo _timeZoneInfo;
+        private readonly IList<Agent> _agentsToLoad;
+        private readonly DateTime _dateFrom;
+        private readonly ServiceApplication _service;
+        private readonly TimeZoneInfo _timeZoneInfo;
 
-
-        public ScheduleLoader(ServiceApplication service, IList<Agent> agentsToLoad, 
-            DateTime dateFrom, DateTime dateTo, TimeZoneInfo timeZoneInfo)
+        public ScheduleLoader(ServiceApplication service, IList<Agent> agentsToLoad, DateTime dateFrom, TimeZoneInfo timeZoneInfo)
         {
             _service = service;
             _agentsToLoad = agentsToLoad;
             _dateFrom = dateFrom;
-            _dateTo = dateTo;
             _timeZoneInfo = timeZoneInfo;
         }
 
@@ -33,8 +29,14 @@ namespace SdkTestClientWin.Domain
 
             foreach (var agent in _agentsToLoad)
             {
-                SchedulePartDto schedulePartDto = _service.SchedulingService.GetSchedulePart(agent.Dto, dateOnly,
-                                                                                 _timeZoneInfo.Id);
+            	SchedulePartDto schedulePartDto =
+            		_service.SchedulingService.GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+            		                                               	{
+            		                                               		StartDate = dateOnly,
+            		                                               		EndDate = dateOnly,
+            		                                               		PersonId = agent.Dto.Id,
+            		                                               		TimeZoneId = _timeZoneInfo.Id
+            		                                               	})[0];
                 AgentDay agentDay = new AgentDay(agent,schedulePartDto);
                 IList<PersonAssignmentDto> personAssignmentDtos = new List<PersonAssignmentDto>(schedulePartDto.PersonAssignmentCollection);
 

@@ -173,8 +173,7 @@ namespace SdkTestWinGui
             toolStripStatusLabel1.Text = "Drawing schedules...";
             //listView1.Items.Clear();
             IList<Agent> selectedAgents = _organization.SelectedAgents(selectedNode);
-            ScheduleLoader loader = new ScheduleLoader(Service, selectedAgents, _currentDate,
-                                                       _currentDate, _timeZoneInfo);
+            ScheduleLoader loader = new ScheduleLoader(Service, selectedAgents, _currentDate, _timeZoneInfo);
             backgroundWorkerLoadSchedules.RunWorkerAsync(loader);
         }
 
