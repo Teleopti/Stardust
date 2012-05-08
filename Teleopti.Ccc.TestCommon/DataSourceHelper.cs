@@ -141,15 +141,15 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout)
 		{
 			var dictionary = new Dictionary<string, string>();
-			dictionary[DataSourceSettings.ConnectionProvider] =
+			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
-			dictionary[DataSourceSettings.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";
-			dictionary[DataSourceSettings.ConnectionString] = connectionString;
+			dictionary[NHibernate.Cfg.Environment.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";
+			dictionary[NHibernate.Cfg.Environment.ConnectionString] = connectionString;
 			dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = "for test";
-			dictionary[DataSourceSettings.SqlExceptionConverter] = DataSourceSettingValues.SqlServerExceptionConverterTypeName;
-			dictionary[DataSourceSettings.CurrentSessionContextClass] = "call";
+			dictionary[NHibernate.Cfg.Environment.SqlExceptionConverter] = DataSourceSettingValues.SqlServerExceptionConverterTypeName;
+			dictionary[NHibernate.Cfg.Environment.CurrentSessionContextClass] = "call";
 			if (timeout.HasValue)
-				dictionary[DataSourceSettings.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
+				dictionary[NHibernate.Cfg.Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
 		}
 	}

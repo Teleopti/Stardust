@@ -128,7 +128,6 @@
     <Compile Include="Licensing\LicenseStatusUpdater.cs" />
     <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
-    <Compile Include="NHibernateConfiguration\DataSourceSettings.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
     <Compile Include="Foundation\CannotConnectToDatabaseException.cs" />
