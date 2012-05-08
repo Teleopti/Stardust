@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Win.Meetings
     /// <summary>
     /// Manages recurrent meetings
     /// </summary>
-    public partial class MeetingRecurrenceView : BaseRibbonForm, IMeetingRecurrenceView
+    public partial class MeetingRecurrenceView : BaseDialogForm, IMeetingRecurrenceView
     {
     	private readonly INotifyComposerMeetingChanged _composer;
     	private readonly MeetingRecurrencePresenter _meetingRecurrencePresenter;
@@ -22,8 +23,6 @@ namespace Teleopti.Ccc.Win.Meetings
 		{
 			InitializeComponent();
 
-
-			SetColors();
 			if (DesignMode) return;
 			outlookTimePickerStart.CreateAndBindList();
 			outlookTimePickerEnd.CreateAndBindList();
@@ -36,9 +35,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			outlookTimePickerEnd.Leave += OutlookTimePickerEndLeave;
 			outlookTimePickerEnd.KeyDown += OutlookTimePickerEndKeyDown;
 			outlookTimePickerEnd.SelectedIndexChanged +=  OutlookTimePickerEndSelectedIndexChanged;
-			timeDurationPickerViewLength.Leave += TimeDurationPickerViewLengthLeave;
-			timeDurationPickerViewLength.KeyDown += TimeDurationPickerViewLengthKeyDown;
-			timeDurationPickerViewLength.SelectedIndexChanged += TimeDurationPickerViewLengthSelectedIndexChanged;
+			dateTimePickerAdvStart.Calendar.TodayButton.Text = UserTexts.Resources.Today;
+			dateTimePickerAdvEnd.Calendar.TodayButton.Text = UserTexts.Resources.Today;
+			UseOffice2007SchemeBackColor = false;
+
 		}
 
 		/// <summary>
@@ -58,22 +58,10 @@ namespace Teleopti.Ccc.Win.Meetings
             if (DesignMode)return;
                 
             _meetingRecurrencePresenter.Initialize();
+				BackColor = Color.FromArgb(216,228,246);
+	
         }
 
-        /// <summary>
-        /// Sets the colors.
-        /// </summary>
-        protected void SetColors()
-        {
-            BackColor = ColorHelper.ControlPanelColor;
-            splitContainerAdv1.BackColor = ColorHelper.ControlPanelColor;
-        }
-
-        /// <summary>
-        /// Handles the Click event of the buttonAdvOK control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ButtonAdvOkClick(object sender, EventArgs e)
         {
             _meetingRecurrencePresenter.SaveRecurrenceForMeeting();
@@ -81,11 +69,6 @@ namespace Teleopti.Ccc.Win.Meetings
             NotifyMeetingTimeChanged();
         }
 
-        /// <summary>
-        /// Handles the Click event of the buttonAdvRemove control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ButtonAdvRemoveClick(object sender, EventArgs e)
         {
             _meetingRecurrencePresenter.RemoveRecurrence();
@@ -196,14 +179,12 @@ namespace Teleopti.Ccc.Win.Meetings
             buttonAdvRemove.Enabled = recurringExists;
         }
 
-        public void SetMeetingDuration(TimeSpan duration)
-        {
-			var time = new WinCode.Common.Time.TimeSpanDataBoundItem(duration);
-			timeDurationPickerViewLength.SelectedIndex = timeDurationPickerViewLength.FindStringExact(time.FormattedText);
-			//timeDurationPickerViewLength.Text = time.FormattedText;
-        }
+    	public void SetMeetingDuration(TimeSpan duration)
+    	{
+    		throw new NotImplementedException();
+    	}
 
-        public void AcceptAndClose()
+    	public void AcceptAndClose()
         {
             DialogResult = DialogResult.OK;
         }
@@ -222,13 +203,6 @@ namespace Teleopti.Ccc.Win.Meetings
 
             if (_meetingRecurrencePresenter != null)
             _meetingRecurrencePresenter.ChangeRecurringType((RecurrentMeetingType)radioButton.CheckedInt);
-        }
-
-        protected override void SetCommonTexts()
-        {
-            base.SetCommonTexts();
-            dateTimePickerAdvStart.Calendar.TodayButton.Text = UserTexts.Resources.Today;
-            dateTimePickerAdvEnd.Calendar.TodayButton.Text = UserTexts.Resources.Today;
         }
 
         private void DateTimePickerAdvEndValueChanged(object sender, EventArgs e)
@@ -255,12 +229,6 @@ namespace Teleopti.Ccc.Win.Meetings
 				_meetingRecurrencePresenter.OnOutlookTimePickerEndLeave(outlookTimePickerEnd.Text);
 		}
 
-		void TimeDurationPickerViewLengthLeave(object sender, EventArgs e)
-		{
-			if (_meetingRecurrencePresenter != null)
-				_meetingRecurrencePresenter.OnTimeDurationPickerViewLengthLeave(timeDurationPickerViewLength.Text);
-		}
-
     	void OutlookTimePickerStartKeyDown(object sender, KeyEventArgs e)
     	{
     		_meetingRecurrencePresenter.OnOutlookTimePickerStartKeyDown(e.KeyCode, outlookTimePickerStart.Text);
@@ -269,11 +237,6 @@ namespace Teleopti.Ccc.Win.Meetings
 		void OutlookTimePickerEndKeyDown(object sender, KeyEventArgs e)
 		{
 			_meetingRecurrencePresenter.OnOutlookTimePickerEndKeyDown(e.KeyCode, outlookTimePickerEnd.Text);
-		}
-
-		void TimeDurationPickerViewLengthKeyDown(object sender, KeyEventArgs e)
-		{
-			_meetingRecurrencePresenter.OnTimeDurationPickerViewLengthKeyDown(e.KeyCode, timeDurationPickerViewLength.Text);
 		}
 
 		void OutlookTimePickerStartSelectedIndexChanged(object sender, EventArgs e)
@@ -286,9 +249,25 @@ namespace Teleopti.Ccc.Win.Meetings
 			_meetingRecurrencePresenter.OnOutlookTimePickerEndSelectedIndexChanged(outlookTimePickerEnd.Text);
 		}
 
-		void TimeDurationPickerViewLengthSelectedIndexChanged(object sender, EventArgs e)
-		{
-			_meetingRecurrencePresenter.OnTimeDurationPickerViewLengthSelectedIndexChanged(timeDurationPickerViewLength.Text);
-		}
+
+    	public DialogResult ShowConfirmationMessage(string text, string caption)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public void ShowInformationMessage(string text, string caption)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public DialogResult ShowOkCancelMessage(string text, string caption)
+    	{
+    		throw new NotImplementedException();
+    	}
+
+    	public DialogResult ShowWarningMessage(string text, string caption)
+    	{
+    		throw new NotImplementedException();
+    	}
     }
 }
