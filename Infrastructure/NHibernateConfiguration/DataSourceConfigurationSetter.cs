@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "Desktop");
 		}
 
+		private const string noDataSourceName = "[not set]";
+
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache, 
 															bool useDistributedTransactionFactory, 
 															string sessionContext,
@@ -77,6 +79,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 												 "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
 			if (!string.IsNullOrEmpty(SessionContext))
 				nhConfiguration.SetProperty(Environment.CurrentSessionContextClass, SessionContext);
+
+			if(nhConfiguration.GetProperty(Environment.SessionFactoryName)==null)
+				nhConfiguration.SetProperty(Environment.SessionFactoryName, noDataSourceName);
 
 			fixApplicationNameOnConnectionString(nhConfiguration);
 		}

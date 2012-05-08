@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var sessionFactory = (ISessionFactoryImplementor)factoryField.GetValue(res.Application, BindingFlags.NonPublic |
 																								  BindingFlags.Instance, null, null, CultureInfo.InvariantCulture);
 			Assert.IsNotNull(sessionFactory, "Session factory is null, shouldn't be!");
-			Assert.IsInstanceOf<AdoNetWithDistributedTransactionFactory>(sessionFactory.TransactionFactory);
+			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
 		}
 
 		[Test]
