@@ -4,7 +4,7 @@
 		<session-factory name="Teleopti CCC">
 			<!-- properties -->
 			<property name="connection.connection_string">
-				<!--WISEMETA: default="[SQL_AUTH_STRING];initial Catalog=[DB_CCC7];Application Name=Teleopti.CCC.Client"-->
+				<!--WISEMETA: default="[SQL_AUTH_STRING];initial Catalog=[DB_CCC7]"-->
 				Data Source=.;Integrated Security=True;initial Catalog=$(CCC7DB)
 			</property>
 			<property name="command_timeout">60</property>
@@ -12,7 +12,7 @@
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">
 		<connectionString>
-		<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Application Name=Teleopti.CCC.Client"-->
+		<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS]"-->
 		Data Source=.;Integrated Security=True;Initial Catalog=$(AnalyticsDB)
 		</connectionString>
 	</matrix>
