@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		IScheduleMatrixPro Matrix { get; }
 		TimeSpan MinimumPossibleTime { get; set; }
 		TimeSpan MaximumPossibleTime { get; set; }
+		int ScheduledAndRestrictionDaysOff { get; set; }
 	}
 
 	public sealed class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly IScheduleMatrixPro _matrix;
 		TimeSpan IAgentDisplayData.MinimumPossibleTime { get; set; }
 		TimeSpan IAgentDisplayData.MaximumPossibleTime { get; set; }
+		int IAgentDisplayData.ScheduledAndRestrictionDaysOff { get; set; }
 
 		public AgentRestrictionsDisplayRow(IScheduleMatrixPro matrix)
 		{
