@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldReturnBoostedIfUseImproved()
         {
+			_advancedPreferences.UseTweakedValues = true;
             var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix);
             Assert.That(result, Is.TypeOf(typeof(RelativeBoostedDailyDifferencesByPersonalSkillsExtractor)));
         }
