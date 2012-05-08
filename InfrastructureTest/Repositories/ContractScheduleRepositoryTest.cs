@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -32,6 +34,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             rep = new ContractScheduleRepository(UnitOfWork);
         }
 
+		/// <summary>
+		/// Determines whether this instance can be created.
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void CanCreate()
+		{
+			new ContractScheduleRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
+		}
 
         /// <summary>
         /// Creates an aggregate using the Bu of logged in user.
