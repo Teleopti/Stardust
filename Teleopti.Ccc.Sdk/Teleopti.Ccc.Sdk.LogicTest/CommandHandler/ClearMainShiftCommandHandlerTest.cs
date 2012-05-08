@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -28,6 +23,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ISaveSchedulePartService _saveSchedulePartService;
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private ClearMainShiftCommandHandler _target ;
+        private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto(new DateOnly(_startDate));
+        private IPerson _person;
+        private IScenario _scenario;
+        private ClearMainShiftCommandDto _clearMainShiftDto;
+        private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
+        private SchedulePartFactoryForDomain _scheduleRange;
 
         [SetUp]
         public void Setup()
@@ -40,47 +42,40 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _target = new ClearMainShiftCommandHandler(_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+
+            _person = PersonFactory.CreatePerson("test");
+            _person.SetId(Guid.NewGuid());
+
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            _scenario.SetId(Guid.NewGuid());
+
+            _clearMainShiftDto = new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = _person.Id.GetValueOrDefault() };
+            _scheduleRange = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
         }
 
         [Test]
         public void ClearMainShiftFromTheDictionarySuccessfully()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var startDate = new DateTime(2012, 1, 1,0,0,0,DateTimeKind.Utc);
-            var dateOnlydto = new DateOnlyDto(new DateOnly(startDate));
-            var person = PersonFactory.CreatePerson("test");
-            person.SetId(Guid.NewGuid());
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            scenario.SetId(Guid.NewGuid());
-
-            var clearMainShiftDto = new ClearMainShiftCommandDto();
-            clearMainShiftDto.Date = dateOnlydto;
-            clearMainShiftDto.PersonId = person.Id.GetValueOrDefault();
-
-            var period = new DateTimePeriod(startDate, startDate.AddDays(1));
-            var scheduleRange = new SchedulePartFactoryForDomain(person, scenario, period, SkillFactory.CreateSkill("Test Skill"));
-            var schedulePart = scheduleRange.CreatePart();
+            var schedulePart = _scheduleRange.CreatePart();
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-            var dictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period),
-                                                           new Dictionary<IPerson, IScheduleRange> { { person, scheduleRangeMock } });
+            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.Load(clearMainShiftDto.PersonId)).Return(person);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(scenario);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(startDate.AddDays(1))).ToDateTimePeriod(timeZone), scenario)).
+                Expect.Call(_personRepository.Load(_clearMainShiftDto.PersonId)).Return(_person);
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
                     IgnoreArguments().Return(dictionary);
-                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(startDate))).Return(schedulePart);
+                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
                 Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
                 Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
             }
             using(_mock.Playback())
             {
-                _target.Handle(clearMainShiftDto);
+                _target.Handle(_clearMainShiftDto);
             }
         }
     }

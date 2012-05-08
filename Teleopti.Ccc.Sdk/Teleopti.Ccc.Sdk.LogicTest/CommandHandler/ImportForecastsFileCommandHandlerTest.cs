@@ -8,6 +8,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -23,6 +24,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ImportForecastsFileCommandHandler _target;
+        private IPerson _person;
+        private ISkill _targetSkill;
+        private Guid _fileId;
+        private ImportForecastsFileCommandDto _importForecastsFileCommandDto;
+        private IJobResult _jobResult;
 
         [SetUp]
         public void Setup()
@@ -32,6 +38,23 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
             _target = new ImportForecastsFileCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository);
+
+            _person = PersonFactory.CreatePerson("test");
+            _person.SetId(Guid.NewGuid());
+
+            _targetSkill = SkillFactory.CreateSkill("Test Skills");
+            _targetSkill.SetId(Guid.NewGuid());
+
+            _fileId = Guid.NewGuid();
+            _importForecastsFileCommandDto = new ImportForecastsFileCommandDto
+                                                 {
+                                                     ImportForecastsMode =
+                                                         ImportForecastsOptionsDto.ImportWorkloadAndStaffing,
+                                                     TargetSkillId = _targetSkill.Id.GetValueOrDefault(),
+                                                     UploadedFileId = _fileId
+                                                 };
+            _jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
+                                            _person, DateTime.UtcNow);
         }
 
         [Test]
@@ -39,26 +62,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void ShouldThrowFaultExceptionIfServiceBusIsNotAvailable()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson("test");
-            person.SetId(Guid.NewGuid());
-
-            var targetSkill = SkillFactory.CreateSkill("Test Skills");
-            targetSkill.SetId(Guid.NewGuid());
-
-            var fileId = Guid.NewGuid();
-           
-            var importForecastsFileCommandDto = new ImportForecastsFileCommandDto();
-            importForecastsFileCommandDto.ImportForecastsMode = ImportForecastsOptionsDto.ImportWorkloadAndStaffing;
-            importForecastsFileCommandDto.TargetSkillId = targetSkill.Id.GetValueOrDefault();
-            importForecastsFileCommandDto.UploadedFileId = fileId;
-            var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-                                            person, DateTime.UtcNow);
-
-
+         
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(()=>_jobResultRepository.Add(jobResult)).IgnoreArguments();
+                Expect.Call(()=>_jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(()=>unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(false);
@@ -66,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(importForecastsFileCommandDto);
+                _target.Handle(_importForecastsFileCommandDto);
             }
         }
 
@@ -75,20 +83,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void ShouldThrowFaultExceptionIfCommandIsNull()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson("test");
-            person.SetId(Guid.NewGuid());
-
-            var targetSkill = SkillFactory.CreateSkill("Test Skills");
-            targetSkill.SetId(Guid.NewGuid());
             
-            var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-                                            person, DateTime.UtcNow);
-
-
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(() => _jobResultRepository.Add(jobResult)).IgnoreArguments();
+                Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
@@ -104,27 +103,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void ShouldHandleImportForecastFileCommandSuccessfully()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson("test");
-            person.SetId(Guid.NewGuid());
-
-            var targetSkill = SkillFactory.CreateSkill("Test Skills");
-            targetSkill.SetId(Guid.NewGuid());
-
-            var fileId = Guid.NewGuid();
-
-            var importForecastsFileCommandDto = new ImportForecastsFileCommandDto();
-            importForecastsFileCommandDto.ImportForecastsMode = ImportForecastsOptionsDto.ImportWorkloadAndStaffing;
-            importForecastsFileCommandDto.TargetSkillId = targetSkill.Id.GetValueOrDefault();
-            importForecastsFileCommandDto.UploadedFileId = fileId;
             
-            var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(new DateOnly(DateTime.Now), new DateOnly(DateTime.Now)),
-                                            person, DateTime.UtcNow);
-
-
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(() => _jobResultRepository.Add(jobResult)).IgnoreArguments();
+                Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
@@ -132,8 +115,27 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(importForecastsFileCommandDto);
+                _target.Handle(_importForecastsFileCommandDto);
             }
-        }   
+        }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfNotPermitted()
+        {
+            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            }
+            using (_mock.Playback())
+            {
+                using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+                {
+                    _target.Handle(_importForecastsFileCommandDto);
+                }
+            }
+        }
     }
 }

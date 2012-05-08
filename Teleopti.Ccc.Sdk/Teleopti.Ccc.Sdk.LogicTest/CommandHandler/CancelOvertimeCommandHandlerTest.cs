@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -29,6 +30,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ISaveSchedulePartService _saveSchedulePartService;
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private CancelOvertimeCommandHandler _target;
+        private IPerson _person;
+        private Activity _activity;
+        private IScenario _scenario;
+        private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto(new DateOnly(_startDate));
+        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
+        {
+            UtcStartTime = _startDate,
+            UtcEndTime = _startDate.AddDays(1)
+        };
+
+        private DateTimePeriod _period;
+        private SchedulePartFactoryForDomain _schedulePartFactoryForDomain;
+        private CancelOvertimeCommandDto _cancelOvertimeCommandDto;
+
 
         [SetUp]
         public void Setup()
@@ -42,59 +58,54 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _saveSchedulePartService = _mock.DynamicMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _target = new CancelOvertimeCommandHandler(_dateTimePeriodAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+
+            _person = PersonFactory.CreatePerson();
+            _person.SetId(Guid.NewGuid());
+            
+            _activity = ActivityFactory.CreateActivity("Test Activity");
+            _activity.SetId(Guid.NewGuid());
+
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
+            _schedulePartFactoryForDomain = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
+            _cancelOvertimeCommandDto = new CancelOvertimeCommandDto
+            {
+                Date = _dateOnlydto,
+                Period = _periodDto,
+                PersonId = _person.Id.GetValueOrDefault()
+            };
+
         }
 
         [Test]
         public void ShouldCancelOvertimeSuccessfully()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson();
-            person.SetId(Guid.NewGuid());
-
-            var activity = ActivityFactory.CreateActivity("Test Activity");
-            activity.SetId(Guid.NewGuid());
-
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-            var startDate = new DateTime(2012, 1, 1,0,0,0,DateTimeKind.Utc);
-            var dateOnlydto = new DateOnlyDto(new DateOnly(startDate));
-            var periodDto = new DateTimePeriodDto()
-            {
-                UtcStartTime = startDate,
-                UtcEndTime = startDate.AddDays(1)
-            };
-
-            var period = new DateTimePeriod(startDate, startDate.AddDays(1));
-            var schedulePartFactoryForDomain = new SchedulePartFactoryForDomain(person, scenario, period, SkillFactory.CreateSkill("Test Skill"));
-            var scheduleDay = schedulePartFactoryForDomain.CreatePart();
+            var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
+            OvertimeShiftFactory.CreateOvertimeShift(_activity, _period,
+                                                                         new MultiplicatorDefinitionSet("test",
+                                                                                                        MultiplicatorType
+                                                                                                            .Overtime),
+                                                                         scheduleDay.PersonAssignmentCollection()[0]);
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-            var dictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period),
-                                                           new Dictionary<IPerson, IScheduleRange> { { person, scheduleRangeMock } });
-
-            var cancelOvertimeCommandDto = new CancelOvertimeCommandDto
-                                               {
-                                                   Date = dateOnlydto,
-                                                   Period = periodDto,
-                                                   PersonId = person.Id.GetValueOrDefault()
-                                               };
-
+            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+            
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.Load(cancelOvertimeCommandDto.PersonId)).Return(person);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(scenario);
-                Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(cancelOvertimeCommandDto.Period)).Return(period);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(new DateOnly(startDate),new DateOnly(startDate.AddDays(1))).ToDateTimePeriod(timeZone), scenario)).
+                Expect.Call(_personRepository.Load(_cancelOvertimeCommandDto.PersonId)).Return(_person);
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+                Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelOvertimeCommandDto.Period)).Return(_period);
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
                     IgnoreArguments().Return(dictionary);
-                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
+                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
                 Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
             }
             using (_mock.Playback())
             {
-                _target.Handle(cancelOvertimeCommandDto);
-                scheduleDay.PersonAssignmentCollection().Count.Should().Be.EqualTo(0);
+                _target.Handle(_cancelOvertimeCommandDto);
+                scheduleDay.PersonAssignmentCollection()[0].OvertimeShiftCollection.Count.Should().Be.EqualTo(0);
             }
         }
     }

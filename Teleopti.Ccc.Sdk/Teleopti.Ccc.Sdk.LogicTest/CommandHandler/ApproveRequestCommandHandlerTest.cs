@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -30,8 +33,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private ApproveRequestCommandHandler _target;
         private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
-        private IRequestApprovalService _requestApprovalService;
-
+        private IPerson _person;
+        private ApproveRequestCommandDto _approveRequestCommandDto;
+        private PersonRequestFactory _personRequestFactory;
+        private IAbsenceRequest _absenceRequest;
+        private IScenario _scenario;
+        private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private DateTimePeriod _period;
+        private ShiftTradeRequest _shiftTradeRequest;
+        private IPerson _personTo;
 
         [SetUp]
         public  void Setup()
@@ -46,41 +56,46 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _scheduleDictionaryModifiedCallback = _mock.StrictMock<IScheduleDictionaryModifiedCallback>();
-            _requestApprovalService = _mock.StrictMock<IRequestApprovalService>();
             _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioProvider,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
                                                        _unitOfWorkFactory, _messageBrokerEnablerFactory,
                                                        _scheduleDictionaryModifiedCallback);
+
+            _person = PersonFactory.CreatePerson("Test Peson");
+            _person.SetId(Guid.NewGuid());
+            _approveRequestCommandDto = new ApproveRequestCommandDto { PersonRequestId = Guid.NewGuid() };
+            _personRequestFactory = new PersonRequestFactory();
+            _absenceRequest = _personRequestFactory.CreateAbsenceRequest(
+                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod());
+
+            _personTo = PersonFactory.CreatePerson("Test Peson");
+            _personTo.SetId(Guid.NewGuid());
+
+            var shiftTradeSwapDetilList = new List<IShiftTradeSwapDetail>();
+            var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _personTo, new DateOnly(_startDate),  new DateOnly(_startDate));
+            shiftTradeSwapDetilList.Add(shiftTradeSwapDetail);
+            _shiftTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetilList);
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
         }
             
         [Test]
-        public void ApproveRequestShouldBeAddedSuccessfully()
+        public void ApproveAbsenceRequestShouldBeAddedSuccessfully()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var request = _mock.StrictMock<IPersonRequest>();
-            
-            IPerson person = PersonFactory.CreatePerson("Test Peson");
-            person.SetId(Guid.NewGuid());
-            var approveRequestCommandDto = new ApproveRequestCommandDto { PersonRequestId = Guid.NewGuid() };
-            var personRequestFactory = new PersonRequestFactory();
-            var absenceRequest = personRequestFactory.CreateAbsenceRequest(
-                AbsenceFactory.CreateAbsence("test absence"), new DateTimePeriod());
-
-            var startDate = new DateTime(2012, 1, 1,0,0,0,DateTimeKind.Utc);
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            var period = new DateTimePeriod(startDate, startDate.AddDays(1));
-            var dictionary = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(period),
+            var dictionary = new ReadOnlyScheduleDictionary(_scenario, new ScheduleDateTimePeriod(_period),
                 new DifferenceEntityCollectionService<IPersistableScheduleData>());
 
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(request.Request).Return(absenceRequest).Repeat.Times(3);
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(scenario).Repeat.Twice();
+                Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
+                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), period, null)).
+                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);
-                Expect.Call(_personRequestRepository.Get(approveRequestCommandDto.PersonRequestId)).Return(request);
+                Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
                 Expect.Call(_scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, null)).
                     IgnoreArguments().Return(new ScheduleDictionaryPersisterResult());
@@ -89,7 +104,66 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using (_mock.Playback())
             {
-                _target.Handle(approveRequestCommandDto);
+                _target.Handle(_approveRequestCommandDto);
+            }
+        }
+
+        [Test]
+        public void ApproveShiftTradeRequestShouldBeAddedSuccessfully()
+        {
+            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+            var request = _mock.StrictMock<IPersonRequest>();
+            var dictionary = new ReadOnlyScheduleDictionary(_scenario, new ScheduleDateTimePeriod(_period),
+                new DifferenceEntityCollectionService<IPersistableScheduleData>());
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
+                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
+                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
+                    IgnoreArguments().Return(dictionary);
+                Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
+                Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
+                Expect.Call(_scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, null)).
+                    IgnoreArguments().Return(new ScheduleDictionaryPersisterResult());
+                Expect.Call(() => _scheduleDictionaryModifiedCallback.Callback(dictionary, null, null, null)).IgnoreArguments();
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Handle(_approveRequestCommandDto);
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfRequestIsInvalid()
+        {
+            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+            var request = _mock.StrictMock<IPersonRequest>();
+            var dictionary = new ReadOnlyScheduleDictionary(_scenario, new ScheduleDateTimePeriod(_period),
+                new DifferenceEntityCollectionService<IPersistableScheduleData>());
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
+                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
+                    new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
+                    IgnoreArguments().Return(dictionary);
+                Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
+                Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
+                Expect.Call(_scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, null)).
+                    IgnoreArguments().Return(new ScheduleDictionaryPersisterResult());
+                Expect.Call(() => _scheduleDictionaryModifiedCallback.Callback(dictionary, null, null, null)).IgnoreArguments();
+            }
+
+            using (_mock.Playback())
+            {
+                _target.Handle(_approveRequestCommandDto);
             }
         }
     }
