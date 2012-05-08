@@ -7,12 +7,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	public interface IAgentRestrictionsView
 	{
 		void MergeHeaders();
+		void MergeCells(int rowIndex, bool unmerge);
 		void LoadData();
+		bool FinishedTest { get; set; }
 	}
 
 	public interface IAgentRestrictionsWarningDrawer
 	{
 		void Draw(GridDrawCellEventArgs e, IAgentRestrictionsDisplayRow agentRestrictionsDisplayRow);
+	}
+
+	public interface IAgentRestrictionsLoadingDrawer
+	{
+		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e);
 	}
 
 	public class AgentRestrictionsPresenter
@@ -22,14 +29,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
+		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
 		private const int ColCount = 12;
 		private const int HeaderCount = 1;
 
-		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer)
+		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsLoadingDrawer loadingDrawer)
 		{
 			_view = view;
 			_model = model;
 			_warningDrawer = warningDrawer;
+			_loadingDrawer = loadingDrawer;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -91,6 +100,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			if(e.RowIndex > 1)
 			{
+				if (_loadingDrawer.Draw(_view, e)) return;
+				
 				//Name
 				if (e.ColIndex == 0)
 				{

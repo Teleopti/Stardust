@@ -57,3 +57,4 @@ Teleopti.Ccc.Web/Teleopti.Ccc.WebBehaviorTest/Teleopti.Ccc.WebBehaviorTest.dll.C
 Teleopti.Ccc.Rta/Teleopti.Ccc.Rta.WebService/RtaWebService.log.1
 *.sln
 Database/Tools/Restore/output
+Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/SdkWebService.log.1
