@@ -320,10 +320,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
             var resourceCalculateDaysDecider = _container.Resolve<IResourceCalculateDaysDecider>();
-            var groupDayOffOptimizerCreator = _container.Resolve<IGroupDayOffOptimizerCreator>();
-
+            //var groupDayOffOptimizerCreator = _container.Resolve<IGroupDayOffOptimizerCreator>();
             var restrictionChecker = new RestrictionChecker();
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
+        	IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences.Advanced);
+        	ILockableBitArrayChangesTracker lockableBitArrayChangesTracker =
+        		_container.Resolve<ILockableBitArrayChangesTracker>();
+        	IGroupSchedulingService groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+        	IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker =
+        		_container.Resolve<IGroupPersonPreOptimizationChecker>();
+        	IGroupMatrixHelper groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
+			IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator = new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker, rollbackService, groupSchedulingService, groupPersonPreOptimizationChecker, groupMatrixHelper);
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
