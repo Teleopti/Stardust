@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("LongRunning")]
     public class BusinessUnitRepositoryTest : DatabaseTest  
     {
-
         private BusinessUnitRepository rep;
 
         protected override void SetupForRepositoryTest()
@@ -32,10 +33,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <summary>
         /// Determines whether this instance can be created.
         /// </summary>
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void CanCreate()
         {
-            new BusinessUnitRepository(UnitOfWork);
+            new BusinessUnitRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
         }
 
         [Test]
@@ -152,6 +153,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, loadedBusinessUnit.SiteCollection.Count);
             Assert.AreEqual(2, loadedBusinessUnit.SiteCollection[0].TeamCollection.Count);
         }
-
     }
 }

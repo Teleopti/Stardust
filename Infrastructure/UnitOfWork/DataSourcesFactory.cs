@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (UseDistributedTransactionFactory)
 			{
 				cfg.SetProperty(Environment.TransactionStrategy,
-				                typeof (AdoNetWithDistributedTransactionFactory).FullName);
+				                typeof (TeleoptiDistributedTransactionFactory).AssemblyQualifiedName);
 			}
 			_enversConfiguration.Configure(cfg);
 		}
