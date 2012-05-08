@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public GeneralPreferences()
         {
             ScheduleTag = NullScheduleTag.Instance;
+
             OptimizationStepDaysOff = true;
             OptimizationStepTimeBetweenDays = true;
             OptimizationStepShiftsWithinDay = true;

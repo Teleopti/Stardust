@@ -200,9 +200,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private void EditMeetingExecuted()
         {
-
             _observers.ForEach(o => o.EditorEditMeetingExecuted(GetCurrentPersonMeeting()));
-            
         }
 
         private void RemoveParticipantExecuted()
@@ -239,19 +237,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             if (SchedulePart != null)
                 period = Scheduling.AddActivityCommand.GetDefaultPeriodFromPart(SchedulePart);
             _observers.ForEach(o => o.EditorAddPersonalShift(SchedulePart, period));
-            new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
         }
 
         private void AddAbsenceExecuted()
         {
             _observers.ForEach(o => o.EditorAddAbsence(SchedulePart, null));
-            new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
         }
 
         private void AddOvertimeExecuted()
         {
             _observers.ForEach(o => o.EditorAddOvertime(SchedulePart, null));
-            new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator);
         }
 
         private void AddActivityExecuted()
@@ -262,31 +257,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 period = Scheduling.AddActivityCommand.GetDefaultPeriodFromPart(SchedulePart);
 
             _observers.ForEach(o => o.EditorAddActivity(SchedulePart, period));
-            new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); //Makes the SchedulingScreen trigger a resourcecalculation, Henke is this Ok? We need to talk, Help!!!
         }
         private void AddPersonalShiftWithPeriodExecuted()
         {
             _observers.ForEach(o => o.EditorAddPersonalShift(SchedulePart, Timeline.SelectedPeriod));
-            //new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator);
         }
 
         private void AddAbsenceWithPeriodExecuted()
         {
             _observers.ForEach(o => o.EditorAddAbsence(SchedulePart, Timeline.SelectedPeriod));
-            //new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator);
         }
 
         private void AddOvertimeWithPeriodExecuted()
         {
             _observers.ForEach(o => o.EditorAddOvertime(SchedulePart, Timeline.SelectedPeriod));
-            //new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator);
         }
 
         private void AddActivityWithPeriodExecuted()
         {
-         
             _observers.ForEach(o => o.EditorAddActivity(SchedulePart, Timeline.SelectedPeriod));
-            //new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator);
         }
 
         #endregion

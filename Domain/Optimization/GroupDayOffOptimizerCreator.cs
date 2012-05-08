@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class GroupDayOffOptimizerCreator : IGroupDayOffOptimizerCreator
     {
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+		//private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupMatrixHelper _groupMatrixHelper;
 
         public GroupDayOffOptimizerCreator(
-            IOptimizerOriginalPreferences optimizerPreferences, 
+            //IOptimizationPreferences optimizerPreferences, 
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
             ILockableBitArrayChangesTracker changesTracker, 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupPersonPreOptimizationChecker groupPersonPreOptimizationChecker, 
             IGroupMatrixHelper groupMatrixHelper)
         {
-            _optimizerPreferences = optimizerPreferences;
+            //_optimizerPreferences = optimizerPreferences;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
             _changesTracker = changesTracker;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -52,19 +52,19 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<IDayOffLegalStateValidator> validatorList, 
             IList<IPerson> allSelectedPersons)
         {
-            if (_optimizerPreferences.SchedulingOptions.UseSameDayOffs)
-                return new GroupDayOffOptimizer(converter,
-                                    decisionMaker,
-                                    _scheduleResultDataExtractorProvider,
-                                    daysOffPreferences,
-                                    dayOffDecisionMakerExecuter,
-                                    _changesTracker,
-                                    _schedulePartModifyAndRollbackService,
-                                    _groupSchedulingService,
-                                    validatorList,
-                                    allSelectedPersons,
-                                    _groupPersonPreOptimizationChecker,
-                                    _groupMatrixHelper);
+			//if (_optimizerPreferences.SchedulingOptions.UseSameDayOffs)
+			//    return new GroupDayOffOptimizer(converter,
+			//                        decisionMaker,
+			//                        _scheduleResultDataExtractorProvider,
+			//                        daysOffPreferences,
+			//                        dayOffDecisionMakerExecuter,
+			//                        _changesTracker,
+			//                        _schedulePartModifyAndRollbackService,
+			//                        _groupSchedulingService,
+			//                        validatorList,
+			//                        allSelectedPersons,
+			//                        _groupPersonPreOptimizationChecker,
+			//                        _groupMatrixHelper);
 
             return new GroupDayOffSingleOptimizer(converter,
                                     decisionMaker,

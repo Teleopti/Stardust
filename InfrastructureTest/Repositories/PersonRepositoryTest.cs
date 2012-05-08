@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -71,6 +72,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
 
 			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);           
+		}
+
+		/// <summary>
+		/// Determines whether this instance can be created.
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void CanCreate()
+		{
+			new PersonRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
 		}
 
 		[Test]

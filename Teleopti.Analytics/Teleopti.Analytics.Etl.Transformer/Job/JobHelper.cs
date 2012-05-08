@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
         public JobHelper()
         {
-            _logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, Application.StartupPath);
+			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
             _messageSender = MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]);
         }
 
