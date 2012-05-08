@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click absence request tab")]
 		public void WhenIClickAbsenceRequestTab()
 		{
+			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Pages.Pages.CurrentEditTextRequestPage.AbsenceRequestTab.EventualClick();
 		}
 
@@ -38,13 +41,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
-		}
-
-		[Then(@"I should see 00:00 - 23:59 as the default times")]
-		public void ThenIShouldSee0000_2359AsTheDefaultTimes()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value, Is.EqualTo("00:00"));
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value, Is.EqualTo("23:59"));
 		}
 
 		[Given(@"I have a requestable absence called (.*)")]

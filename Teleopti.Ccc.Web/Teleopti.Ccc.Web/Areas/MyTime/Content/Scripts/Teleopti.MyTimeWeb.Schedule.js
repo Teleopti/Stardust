@@ -114,12 +114,16 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Absence-type-element').show();
 		$('#Absence-request-tab').addClass("selected-tab");
 		$('#Text-request-tab').removeClass("selected-tab");
+		$('#Schedule-addRequest-fromTime-input-input').val($('#Schedule-addRequest-default-start-time').text());
+		$('#Schedule-addRequest-toTime-input-input').val($('#Schedule-addRequest-default-end-time').text());
 	}
 
 	function _hideAbsenceTypes() {
 		$('#Absence-type-element').hide();
 		$('#Text-request-tab').addClass("selected-tab");
 		$('#Absence-request-tab').removeClass("selected-tab");
+		$('#Schedule-addRequest-fromTime-input-input').reset();
+		$('#Schedule-addRequest-toTime-input-input').reset();
 	}
 
 	function _displayValidationError(data) {
