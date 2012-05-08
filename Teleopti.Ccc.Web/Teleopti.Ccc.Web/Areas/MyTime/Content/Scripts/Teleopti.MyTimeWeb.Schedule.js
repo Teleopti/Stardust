@@ -112,14 +112,14 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
 	function _showAbsenceTypes() {
 		$('#Absence-type-element').show();
-		$('#Absence-request-tab').css("color", "#15C");
-		$('#Text-request-tab').css("color", "#000");
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
 	}
 
 	function _hideAbsenceTypes() {
 		$('#Absence-type-element').hide();
-		$('#Text-request-tab').css("color", "#15C");
-		$('#Absence-request-tab').css("color", "#000");
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
 	}
 
 	function _displayValidationError(data) {
