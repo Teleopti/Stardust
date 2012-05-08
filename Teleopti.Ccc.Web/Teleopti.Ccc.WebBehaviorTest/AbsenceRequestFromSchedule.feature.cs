@@ -77,14 +77,16 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.And("I am viewing week schedule");
 #line 9
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I have a requestable absence called Vacation");
 #line 10
- testRunner.And("I click absence request tab");
+ testRunner.When("I click on today\'s summary");
 #line 11
- testRunner.And("I input absence request values");
+ testRunner.And("I click absence request tab");
 #line 12
- testRunner.And("I click the OK button");
+ testRunner.And("I input absence request values with Vacation");
 #line 13
+ testRunner.And("I click the OK button");
+#line 14
  testRunner.Then("I should see a symbol at the top of the schedule");
 #line hidden
             this.ScenarioCleanup();
@@ -95,15 +97,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanNotAddAbsenceRequestIfNoPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not add absence request if no permission", ((string[])(null)));
-#line 15
-this.ScenarioSetup(scenarioInfo);
 #line 16
- testRunner.Given("I am an agent without access to absence requests");
+this.ScenarioSetup(scenarioInfo);
 #line 17
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent without access to absence requests");
 #line 18
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 19
+ testRunner.When("I click on today\'s summary");
+#line 20
  testRunner.Then("I should not see the absence request tab");
 #line hidden
             this.ScenarioCleanup();
@@ -114,19 +116,19 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DefaultAbsenceRequestValuesFromWeekSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default absence request values from week schedule", ((string[])(null)));
-#line 21
-this.ScenarioSetup(scenarioInfo);
 #line 22
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 23
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 24
- testRunner.When("I click on tomorrows summary");
+ testRunner.And("I am viewing week schedule");
 #line 25
- testRunner.And("I click absence request tab");
+ testRunner.When("I click on tomorrows summary");
 #line 26
- testRunner.Then("I should see the text request form with tomorrow as default date");
+ testRunner.And("I click absence request tab");
 #line 27
+ testRunner.Then("I should see the text request form with tomorrow as default date");
+#line 28
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line hidden
             this.ScenarioCleanup();
@@ -137,21 +139,21 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CancelAddingAbsenceRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancel adding absence request", ((string[])(null)));
-#line 29
-this.ScenarioSetup(scenarioInfo);
 #line 30
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 31
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 32
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 33
- testRunner.And("I click absence request tab");
+ testRunner.When("I click on today\'s summary");
 #line 34
- testRunner.And("I input absence request values");
+ testRunner.And("I click absence request tab");
 #line 35
- testRunner.And("I click the Cancel button");
+ testRunner.And("I input absence request values");
 #line 36
+ testRunner.And("I click the Cancel button");
+#line 37
  testRunner.Then("I should not see a symbol at the top of the schedule");
 #line hidden
             this.ScenarioCleanup();
@@ -162,25 +164,25 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddingInvalidAbsenceRequestValues()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid absence request values", ((string[])(null)));
-#line 38
-this.ScenarioSetup(scenarioInfo);
 #line 39
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 40
- testRunner.And("I am viewing week schedule");
+ testRunner.Given("I am an agent");
 #line 41
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 42
- testRunner.And("I click absence request tab");
+ testRunner.When("I click on today\'s summary");
 #line 43
- testRunner.And("I input empty subject");
+ testRunner.And("I click absence request tab");
 #line 44
- testRunner.And("I input later start time than end time");
+ testRunner.And("I input empty subject");
 #line 45
- testRunner.And("I click the OK button");
+ testRunner.And("I input later start time than end time");
 #line 46
- testRunner.Then("I should see texts describing my errors");
+ testRunner.And("I click the OK button");
 #line 47
+ testRunner.Then("I should see texts describing my errors");
+#line 48
  testRunner.And("I should not see a symbol at the top of the schedule");
 #line hidden
             this.ScenarioCleanup();
@@ -191,20 +193,20 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ViewAbsenceTypes()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View absence types", ((string[])(null)));
-#line 49
-this.ScenarioSetup(scenarioInfo);
 #line 50
- testRunner.Given("I am an agent");
+this.ScenarioSetup(scenarioInfo);
 #line 51
- testRunner.And("I have a requestable absence called Vacation");
+ testRunner.Given("I am an agent");
 #line 52
- testRunner.And("I am viewing week schedule");
+ testRunner.And("I have a requestable absence called Vacation");
 #line 53
- testRunner.When("I click on today\'s summary");
+ testRunner.And("I am viewing week schedule");
 #line 54
- testRunner.And("I click absence request tab");
+ testRunner.When("I click on today\'s summary");
 #line 55
- testRunner.Then("I should see a absence type called Vacation in droplist");
+ testRunner.And("I click absence request tab");
+#line 56
+ testRunner.Then("I should see an absence type called Vacation in droplist");
 #line hidden
             this.ScenarioCleanup();
         }

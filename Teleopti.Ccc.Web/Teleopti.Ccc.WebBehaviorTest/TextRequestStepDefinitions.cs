@@ -10,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -116,11 +117,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(today));
 		}
 
-		[Then(@"I should see 8:00 - 17:00 as the default times")]
-		public void ThenIShouldSee800_1700AsTheDefaultTimes()
+		[Then(@"I should see (.*) - (.*) as the default times")]
+		public void ThenIShouldSee800_1700AsTheDefaultTimes(string startTime, string endTime)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value, Is.EqualTo("08:00"));
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value, Is.EqualTo("17:00"));
+			int[] st = startTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var tstart=new TimeSpan(st[0],st[1],0);
+			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var tend = new TimeSpan(end[0], end[1], 0);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tstart, UserFactory.User().Culture)));
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tend, UserFactory.User().Culture)));
 		}
 
 		[When(@"I input empty subject")]
