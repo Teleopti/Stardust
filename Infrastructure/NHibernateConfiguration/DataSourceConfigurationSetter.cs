@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 			nhConfiguration.SetProperty(Environment.TransactionStrategy,
 			                            _useDistributedTransactionFactory ? 
-												 typeof (AdoNetWithDistributedTransactionFactory).AssemblyQualifiedName : 
+												 typeof (TeleoptiDistributedTransactionFactory).AssemblyQualifiedName : 
 												 "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
 			if (!string.IsNullOrEmpty(_sessionContext))
 				nhConfiguration.SetProperty(Environment.CurrentSessionContextClass, _sessionContext);
