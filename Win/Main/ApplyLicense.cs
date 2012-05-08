@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Main
     /// <summary>
     /// A dialog letting the user apply a license
     /// </summary>
-    public partial class ApplyLicense : BaseRibbonForm
+    public partial class ApplyLicense : BaseDialogForm
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
