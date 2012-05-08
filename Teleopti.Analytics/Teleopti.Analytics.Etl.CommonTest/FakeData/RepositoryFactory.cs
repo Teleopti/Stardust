@@ -1,4 +1,4 @@
-using Teleopti.Analytics.Etl.CommonTest.Database;
+using Teleopti.Analytics.Etl.CommonTest.Infrastructure;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
 

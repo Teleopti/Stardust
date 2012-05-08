@@ -6,7 +6,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
-namespace Teleopti.Analytics.Etl.CommonTest.Database
+namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 {
 	internal class RepositoryStub : Interfaces.Common.IScheduleRepository, ILogRepository
 	{

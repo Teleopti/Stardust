@@ -5,10 +5,10 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.CommonTest.FakeData;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlLogs
+namespace Teleopti.Analytics.Etl.CommonTest.JobLog
 {
     [TestFixture]
-    public class EtlLogCollectionTest
+    public class EtlJobLogCollectionTest
     {
         #region Setup/Teardown
 

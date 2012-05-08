@@ -2,13 +2,14 @@ using System;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
+using Teleopti.Analytics.Etl.CommonTest.Infrastructure;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
-namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlSchedules
+namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
     [TestFixture]
-    public class EtlScheduleTest
+    public class EtlJobScheduleTest
     {
         private EtlJobScheduleCollection _etlJobScheduleCollection;
 

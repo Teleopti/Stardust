@@ -4,7 +4,7 @@ using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlSchedules
+namespace Teleopti.Analytics.Etl.CommonTest.Entity
 {
     [TestFixture]
     public class EtlJobRelativePeriodTest

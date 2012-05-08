@@ -3,21 +3,17 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlLogs
+namespace Teleopti.Analytics.Etl.CommonTest.JobLog
 {
     [TestFixture]
-    public class LogTest
+    public class EtlJobLogTest
     {
-        
-
         [SetUp]
         public void Setup()
         {
             _etlJobLog = new EtlJobLog(3, new DateTime(2001, 01, 01, 0, 0, 0, DateTimeKind.Utc),
                                  new DateTime(2002, 02, 02, 0, 0, 0, DateTimeKind.Utc));
         }
-
-        
 
         private IEtlJobLog _etlJobLog;
 
