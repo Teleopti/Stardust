@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public void LoadData()
 		{
-			_displayRows.Add(new AgentRestrictionsDisplayRow());
-			_displayRows.Add(new AgentRestrictionsDisplayRow());
+			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
+			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
 		}
 	}
 }
