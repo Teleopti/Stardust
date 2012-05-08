@@ -79,13 +79,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\EtlLogs\EtlLog.cs" />
-    <Compile Include="Database\EtlLogs\EtlLogCollection.cs" />
-    <Compile Include="Database\EtlSchedules\EtlJobRelativePeriod.cs" />
-    <Compile Include="Database\Repository.cs" />
-    <Compile Include="Database\EtlSchedules\EtlSchedule.cs" />
-    <Compile Include="Database\EtlSchedules\EtlScheduleCollection.cs" />
-    <Compile Include="EtlRunningInformation.cs" />
+    <Compile Include="Entity\BusinessUnitItem.cs" />
+    <Compile Include="JobLog\EtlJobLog.cs" />
+    <Compile Include="JobLog\EtlJobLogCollection.cs" />
+    <Compile Include="Entity\EtlJobRelativePeriod.cs" />
+    <Compile Include="Infrastructure\Repository.cs" />
+    <Compile Include="JobSchedule\EtlJobSchedule.cs" />
+    <Compile Include="JobSchedule\EtlJobScheduleCollection.cs" />
+    <Compile Include="Entity\EtlRunningInformation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="JobRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +133,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

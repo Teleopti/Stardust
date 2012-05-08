@@ -4,7 +4,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
-    public interface IEtlLog
+    public interface IEtlJobLog
     {
         int ScheduleId { get; }
         DateTime StartTime { get; }

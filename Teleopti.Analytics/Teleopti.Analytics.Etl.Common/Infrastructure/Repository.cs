@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
-
-namespace Teleopti.Analytics.Etl.Common.Database
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 public class Repository : IScheduleRepository, ILogRepository, IRunControllerRepository
 	{
@@ -50,17 +50,17 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 			return id;
 		}
 
-		public void SaveLogPost(IEtlLog etlLogItem, IJobResult jobResult)
+		public void SaveLogPost(IEtlJobLog etlJobLogItem, IJobResult jobResult)
 		{
 			var parameterList = new List<SqlParameter>
 									{
-										new SqlParameter("job_execution_id", etlLogItem.ScopeIdentity),
+										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
 										new SqlParameter("job_name", jobResult.Name),
-										new SqlParameter("schedule_id", etlLogItem.ScheduleId), 
+										new SqlParameter("schedule_id", etlJobLogItem.ScheduleId), 
 										jobResult.CurrentBusinessUnit == null ? new SqlParameter("business_unit_code", DBNull.Value) : new SqlParameter("business_unit_code", jobResult.CurrentBusinessUnit.Id),
 										jobResult.CurrentBusinessUnit == null ? new SqlParameter("business_unit_name", DBNull.Value) : new SqlParameter("business_unit_name", jobResult.CurrentBusinessUnit.Description.Name),
-										new SqlParameter("start_datetime", etlLogItem.StartTime),
-										new SqlParameter("end_datetime", etlLogItem.EndTime),
+										new SqlParameter("start_datetime", etlJobLogItem.StartTime),
+										new SqlParameter("end_datetime", etlJobLogItem.EndTime),
 										new SqlParameter("duration", Convert.ToInt32(jobResult.Duration)),
 										new SqlParameter("affected_rows", jobResult.RowsAffected),
 										new SqlParameter("error_msg", DBNull.Value)
@@ -70,7 +70,7 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 											_connectionString);
 		}
 
-		public void SaveLogStepPost(IEtlLog etlLogItem, IJobStepResult jobStepResult)
+		public void SaveLogStepPost(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult)
 		{
 			Exception jobStepException = jobStepResult.JobStepException;
 			Exception innerException = null;
@@ -81,7 +81,7 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 
 			var parameterList = new List<SqlParameter>
 									{
-										new SqlParameter("job_execution_id", etlLogItem.ScopeIdentity),
+										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
 										jobStepResult.CurrentBusinessUnit == null ? new SqlParameter("business_unit_code", DBNull.Value) : new SqlParameter("business_unit_code", jobStepResult.CurrentBusinessUnit.Id),
 										jobStepResult.CurrentBusinessUnit == null ? new SqlParameter("business_unit_name", DBNull.Value) : new SqlParameter("business_unit_name", jobStepResult.CurrentBusinessUnit.Description.Name),
 										new SqlParameter("jobstep_name", jobStepResult.Name),
@@ -99,12 +99,12 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 		}
 
 
-		public void AddJobStep(IEtlLog etlLogItem, IJobStepResult jobStepResult)
+		public void AddJobStep(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult)
 		{
 
 			var parameterList = new List<SqlParameter>
 									{
-										new SqlParameter("job_execution_id", etlLogItem.ScopeIdentity),
+										new SqlParameter("job_execution_id", etlJobLogItem.ScopeIdentity),
 										new SqlParameter("jobstep_name", jobStepResult.Name)
 									};
 
@@ -127,23 +127,23 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 			return ds.Tables[0];
 		}
 
-		public int SaveSchedule(IEtlSchedule etlScheduleItem)
+		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
 		{
 			var parameterList = new List<SqlParameter>
 									{
-										new SqlParameter("schedule_id", etlScheduleItem.ScheduleId),
-										new SqlParameter("schedule_name", etlScheduleItem.ScheduleName),
-										new SqlParameter("enabled", etlScheduleItem.Enabled),
-										new SqlParameter("schedule_type", etlScheduleItem.ScheduleType),
-										new SqlParameter("occurs_daily_at", etlScheduleItem.OccursOnceAt),
-										new SqlParameter("occurs_every_minute", etlScheduleItem.OccursEveryMinute),
-										new SqlParameter("recurring_starttime", etlScheduleItem.OccursEveryMinuteStartingAt),
-										new SqlParameter("recurring_endtime", etlScheduleItem.OccursEveryMinuteEndingAt),
-										new SqlParameter("etl_job_name", etlScheduleItem.JobName),
-										new SqlParameter("etl_relative_period_start", etlScheduleItem.RelativePeriodStart),
-										new SqlParameter("etl_relative_period_end", etlScheduleItem.RelativePeriodEnd),
-										new SqlParameter("etl_datasource_id", etlScheduleItem.DataSourceId),
-										new SqlParameter("description", etlScheduleItem.Description)
+										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
+										new SqlParameter("schedule_name", etlJobScheduleItem.ScheduleName),
+										new SqlParameter("enabled", etlJobScheduleItem.Enabled),
+										new SqlParameter("schedule_type", etlJobScheduleItem.ScheduleType),
+										new SqlParameter("occurs_daily_at", etlJobScheduleItem.OccursOnceAt),
+										new SqlParameter("occurs_every_minute", etlJobScheduleItem.OccursEveryMinute),
+										new SqlParameter("recurring_starttime", etlJobScheduleItem.OccursEveryMinuteStartingAt),
+										new SqlParameter("recurring_endtime", etlJobScheduleItem.OccursEveryMinuteEndingAt),
+										new SqlParameter("etl_job_name", etlJobScheduleItem.JobName),
+										new SqlParameter("etl_relative_period_start", etlJobScheduleItem.RelativePeriodStart),
+										new SqlParameter("etl_relative_period_end", etlJobScheduleItem.RelativePeriodEnd),
+										new SqlParameter("etl_datasource_id", etlJobScheduleItem.DataSourceId),
+										new SqlParameter("description", etlJobScheduleItem.Description)
 									};
 
 			return
@@ -152,13 +152,13 @@ public class Repository : IScheduleRepository, ILogRepository, IRunControllerRep
 											  _connectionString);
 		}
 
-		public void SaveSchedulePeriods(IEtlSchedule etlScheduleItem)
+		public void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem)
 		{
-			foreach (IEtlJobRelativePeriod relativePeriod in etlScheduleItem.RelativePeriodCollection)
+			foreach (IEtlJobRelativePeriod relativePeriod in etlJobScheduleItem.RelativePeriodCollection)
 			{
 				var parameterList = new List<SqlParameter>
 									{
-										new SqlParameter("schedule_id", etlScheduleItem.ScheduleId),
+										new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
 										new SqlParameter("job_name", relativePeriod.JobCategoryName),
 										new SqlParameter("relative_period_start", relativePeriod.RelativePeriod.Minimum),
 										new SqlParameter("relative_period_end", relativePeriod.RelativePeriod.Maximum),

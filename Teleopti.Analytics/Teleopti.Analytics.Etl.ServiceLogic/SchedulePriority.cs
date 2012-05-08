@@ -7,12 +7,12 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 {
     internal class SchedulePriority
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(SchedulePriority));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulePriority));
 
-        public IEtlSchedule GetTopPriority(IEtlScheduleCollection scheduleCollection, DateTime now, DateTime serviceStartTime)
+        public IEtlJobSchedule GetTopPriority(IEtlJobScheduleCollection jobScheduleCollection, DateTime now, DateTime serviceStartTime)
         {
 
-            IOrderedEnumerable<IEtlSchedule> scheulesOverDue = from s in scheduleCollection
+            IOrderedEnumerable<IEtlJobSchedule> scheulesOverDue = from s in jobScheduleCollection
                                   where s.Enabled
                                   where s.TimeToRunNextJob > s.LastTimeStarted
                                   where s.TimeToRunNextJob < now
@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
                                   orderby s.TimeToRunNextJob
                                   select s;
 
-            foreach (IEtlSchedule etlSchedule in scheduleCollection)
+            foreach (IEtlJobSchedule etlSchedule in jobScheduleCollection)
             {
                 Console.WriteLine("Check this out: ");
                 Console.WriteLine("next time to run: " + etlSchedule.TimeToRunNextJob);
@@ -37,7 +37,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
             if (scheulesOverDue.Count() >= 2)
             {
                 String logText = "There are " + scheulesOverDue.Count() + "enqueued jobs";
-                _log.Info(logText);
+                Log.Info(logText);
             }
 
             return scheulesOverDue.Count() == 0 ? null : scheulesOverDue.First();

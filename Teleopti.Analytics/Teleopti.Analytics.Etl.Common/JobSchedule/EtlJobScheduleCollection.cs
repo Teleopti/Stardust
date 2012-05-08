@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
+namespace Teleopti.Analytics.Etl.Common.JobSchedule
 {
-    public class EtlScheduleCollection : List<IEtlSchedule>, IEtlScheduleCollection
+    public class EtlJobScheduleCollection : List<IEtlJobSchedule>, IEtlJobScheduleCollection
     {
-        public EtlScheduleCollection(Interfaces.Common.IScheduleRepository repository, IEtlLogCollection etlLogCollection, DateTime serverStartTime)
+        public EtlJobScheduleCollection(Interfaces.Common.IScheduleRepository repository, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
         {
-            Populate(repository, etlLogCollection, serverStartTime);
+            Populate(repository, etlJobLogCollection, serverStartTime);
         }
 
 
-        public void Populate(Interfaces.Common.IScheduleRepository rep, IEtlLogCollection etlLogCollection, DateTime serverStartTime)
+        public void Populate(Interfaces.Common.IScheduleRepository rep, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
         {
 
             DataTable dataTable = rep.GetSchedules();
@@ -29,20 +30,20 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
                 {
                     case 0:
                         {
-                            IEtlSchedule etlSchedule = new EtlSchedule((int)row["schedule_id"], (string)row["schedule_name"],
+                            IEtlJobSchedule etlJobSchedule = new EtlJobSchedule((int)row["schedule_id"], (string)row["schedule_name"],
                                                                        (bool)row["enabled"], (int)row["occurs_daily_at"],
                                                                        (string)row["etl_job_name"],
                                                                        row["etl_relative_period_start"] == DBNull.Value ? 0 : (int)row["etl_relative_period_start"],
                                                                        row["etl_relative_period_end"] == DBNull.Value ? 0 : (int)row["etl_relative_period_end"],
                                                                        row["etl_datasource_id"] == DBNull.Value ? -1 : (int)row["etl_datasource_id"],
                                                                        row["description"] == DBNull.Value ? "" : (string)row["description"],
-                                                                       etlLogCollection, GetSchedulePeriods((int)row["schedule_id"], rep));
-                            Add(etlSchedule);
+                                                                       etlJobLogCollection, GetSchedulePeriods((int)row["schedule_id"], rep));
+                            Add(etlJobSchedule);
                         }
                         break;
                     case 1:
                         {
-                            IEtlSchedule etlSchedule = new EtlSchedule((int)row["schedule_id"], (string)row["schedule_name"],
+                            IEtlJobSchedule etlJobSchedule = new EtlJobSchedule((int)row["schedule_id"], (string)row["schedule_name"],
                                                                        (bool)row["enabled"], (int)row["occurs_every_minute"],
                                                                        (int)row["recurring_starttime"],
                                                                        (int)row["recurring_endtime"],
@@ -51,8 +52,8 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
                                                                        row["etl_relative_period_end"] == DBNull.Value ? 0 : (int)row["etl_relative_period_end"],
                                                                        row["etl_datasource_id"] == DBNull.Value ? -1 : (int)row["etl_datasource_id"],
                                                                        row["description"] == DBNull.Value ? "" : (string)row["description"],
-                                                                       etlLogCollection, serverStartTime, GetSchedulePeriods((int)row["schedule_id"], rep));
-                            Add(etlSchedule);
+                                                                       etlJobLogCollection, serverStartTime, GetSchedulePeriods((int)row["schedule_id"], rep));
+                            Add(etlJobSchedule);
                         }
                         break;
                 }

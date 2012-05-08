@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.ViewModel
+namespace Teleopti.Analytics.Etl.Common.Entity
 {
 	public class BusinessUnitItem
 	{

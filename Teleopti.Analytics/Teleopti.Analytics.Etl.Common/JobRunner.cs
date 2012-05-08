@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
+using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
@@ -32,13 +32,13 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			foreach (var jobResult in jobResultCollection)
 			{
-				IEtlLog etlLogItem = new EtlLog(logRepository);
-				etlLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime);
+				IEtlJobLog etlJobLogItem = new EtlJobLog(logRepository);
+				etlJobLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime);
 
 				foreach (var jobStepResult in jobResult.JobStepResultCollection)
-					etlLogItem.PersistJobStep(jobStepResult);
+					etlJobLogItem.PersistJobStep(jobStepResult);
 
-				etlLogItem.Persist(jobResult);
+				etlJobLogItem.Persist(jobResult);
 			}
 		}
 	}

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
-
-namespace Teleopti.Analytics.Etl.Common.Database.EtlLogs
+namespace Teleopti.Analytics.Etl.Common.JobLog
 {
-    public class EtlLogCollection : List<IEtlLog>, IEtlLogCollection
+    public class EtlJobLogCollection : List<IEtlJobLog>, IEtlJobLogCollection
     {
-        public EtlLogCollection(ILogRepository repository)
+        public EtlJobLogCollection(ILogRepository repository)
         {
             Populate(repository);
         }
@@ -20,8 +19,8 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlLogs
 
             foreach (DataRow row in dataTable.Rows)
             {
-                IEtlLog etlLog = new EtlLog((int)row["schedule_id"], (DateTime)row["job_start_time"], (DateTime)row["job_end_time"]); 
-                Add(etlLog);
+                IEtlJobLog etlJobLog = new EtlJobLog((int)row["schedule_id"], (DateTime)row["job_start_time"], (DateTime)row["job_end_time"]); 
+                Add(etlJobLog);
             }
         }
     }

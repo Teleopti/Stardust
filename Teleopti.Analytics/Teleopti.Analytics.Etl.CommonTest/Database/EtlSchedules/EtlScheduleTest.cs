@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
+using Teleopti.Analytics.Etl.Common.JobLog;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlSchedules
     [TestFixture]
     public class EtlScheduleTest
     {
-        private EtlScheduleCollection _etlScheduleCollection;
+        private EtlJobScheduleCollection _etlJobScheduleCollection;
 
         [SetUp]
         public void Setup()
@@ -18,47 +18,47 @@ namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlSchedules
             //IScheduleRepository scheduleRepository = new RepositoryStub();
             ILogRepository logRepository = new RepositoryStub();
 
-            IEtlLogCollection etlLogCollection = new EtlLogCollection(logRepository);
-            _etlScheduleCollection = new EtlScheduleCollection(new RepositoryStub(), etlLogCollection, DateTime.Now);
+            IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(logRepository);
+            _etlJobScheduleCollection = new EtlJobScheduleCollection(new RepositoryStub(), etlJobLogCollection, DateTime.Now);
         }
 
         [Test]
         public void VerifyJobSchedule()
         {
             // Occurs once per day
-            IEtlSchedule schedule = _etlScheduleCollection[0];
-            Assert.AreEqual(1, schedule.ScheduleId);
-            Assert.AreEqual("OccursDaily", schedule.ScheduleName);
-            Assert.AreEqual(true, schedule.Enabled);
-            Assert.AreEqual(JobScheduleType.OccursDaily, schedule.ScheduleType);
-            Assert.AreEqual(60, schedule.OccursOnceAt);
-            Assert.AreEqual("Intraday", schedule.JobName);
-            Assert.AreEqual(-14, schedule.RelativePeriodStart);
-            Assert.AreEqual(14, schedule.RelativePeriodEnd);
-            Assert.AreEqual(1, schedule.DataSourceId);
-            Assert.AreEqual("Occurs daily at x.", schedule.Description);
+            IEtlJobSchedule jobSchedule = _etlJobScheduleCollection[0];
+            Assert.AreEqual(1, jobSchedule.ScheduleId);
+            Assert.AreEqual("OccursDaily", jobSchedule.ScheduleName);
+            Assert.AreEqual(true, jobSchedule.Enabled);
+            Assert.AreEqual(JobScheduleType.OccursDaily, jobSchedule.ScheduleType);
+            Assert.AreEqual(60, jobSchedule.OccursOnceAt);
+            Assert.AreEqual("Intraday", jobSchedule.JobName);
+            Assert.AreEqual(-14, jobSchedule.RelativePeriodStart);
+            Assert.AreEqual(14, jobSchedule.RelativePeriodEnd);
+            Assert.AreEqual(1, jobSchedule.DataSourceId);
+            Assert.AreEqual("Occurs daily at x.", jobSchedule.Description);
 
             // Occurs daily every x minute
-            schedule = _etlScheduleCollection[1];
-            Assert.AreEqual(2, schedule.ScheduleId);
-            Assert.AreEqual("Periodic", schedule.ScheduleName);
-            Assert.AreEqual(true, schedule.Enabled);
-            Assert.AreEqual(JobScheduleType.Periodic, schedule.ScheduleType);
-            Assert.AreEqual(15, schedule.OccursEveryMinute);
-            Assert.AreEqual(180, schedule.OccursEveryMinuteStartingAt);
-            Assert.AreEqual(1430, schedule.OccursEveryMinuteEndingAt);
-            Assert.AreEqual("Forecast", schedule.JobName);
-            Assert.AreEqual(-7, schedule.RelativePeriodStart);
-            Assert.AreEqual(7, schedule.RelativePeriodEnd);
-            Assert.AreEqual(1, schedule.DataSourceId);
-            Assert.AreEqual("Occurs daily every x minute.", schedule.Description);
+            jobSchedule = _etlJobScheduleCollection[1];
+            Assert.AreEqual(2, jobSchedule.ScheduleId);
+            Assert.AreEqual("Periodic", jobSchedule.ScheduleName);
+            Assert.AreEqual(true, jobSchedule.Enabled);
+            Assert.AreEqual(JobScheduleType.Periodic, jobSchedule.ScheduleType);
+            Assert.AreEqual(15, jobSchedule.OccursEveryMinute);
+            Assert.AreEqual(180, jobSchedule.OccursEveryMinuteStartingAt);
+            Assert.AreEqual(1430, jobSchedule.OccursEveryMinuteEndingAt);
+            Assert.AreEqual("Forecast", jobSchedule.JobName);
+            Assert.AreEqual(-7, jobSchedule.RelativePeriodStart);
+            Assert.AreEqual(7, jobSchedule.RelativePeriodEnd);
+            Assert.AreEqual(1, jobSchedule.DataSourceId);
+            Assert.AreEqual("Occurs daily every x minute.", jobSchedule.Description);
         }
 
         [Test]
         public void VerifyJobSchedulePeriod()
         {
-            IEtlSchedule schedule1 = _etlScheduleCollection[0];
-            IEtlSchedule schedule2 = _etlScheduleCollection[1];
+            IEtlJobSchedule schedule1 = _etlJobScheduleCollection[0];
+            IEtlJobSchedule schedule2 = _etlJobScheduleCollection[1];
 
             Assert.AreEqual(4, schedule1.RelativePeriodCollection.Count);
             Assert.AreEqual(1, schedule2.RelativePeriodCollection.Count);
@@ -74,14 +74,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlSchedules
         public void VerifySetScheduleIdOnPersistedItem()
         {
             //You should ONLY be able to change ScheduleId on a newly persisted item that has ScheuleId = -1
-            IEtlSchedule etlScheduleCannotChange = _etlScheduleCollection[0];
-            IEtlSchedule etlScheduleCanChange = _etlScheduleCollection[2];
+            IEtlJobSchedule etlJobScheduleCannotChange = _etlJobScheduleCollection[0];
+            IEtlJobSchedule etlJobScheduleCanChange = _etlJobScheduleCollection[2];
             const int newScheduleId = 9999;
-            etlScheduleCannotChange.SetScheduleIdOnPersistedItem(newScheduleId);
-            etlScheduleCanChange.SetScheduleIdOnPersistedItem(newScheduleId);
+            etlJobScheduleCannotChange.SetScheduleIdOnPersistedItem(newScheduleId);
+            etlJobScheduleCanChange.SetScheduleIdOnPersistedItem(newScheduleId);
 
-            Assert.AreNotEqual(newScheduleId, etlScheduleCannotChange.ScheduleId);
-            Assert.AreEqual(newScheduleId, etlScheduleCanChange.ScheduleId);
+            Assert.AreNotEqual(newScheduleId, etlJobScheduleCannotChange.ScheduleId);
+            Assert.AreEqual(newScheduleId, etlJobScheduleCanChange.ScheduleId);
 
 
         }

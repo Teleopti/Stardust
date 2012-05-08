@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.Common.Database;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
+using Teleopti.Analytics.Etl.Common.Entity;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -19,17 +19,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
     public partial class JobSchedule : Form
     {
         private readonly bool _isNewSchedule;
-        private IEtlSchedule _etlSchedule;
-        private readonly IEtlSchedule _etlScheduleToEdit;
+        private IEtlJobSchedule _etlJobSchedule;
+        private readonly IEtlJobSchedule _etlJobScheduleToEdit;
         private readonly Interfaces.Common.IScheduleRepository _repository;
         private readonly string _connectionString;
         private bool _isScheduleSettingsValid;
         private bool _isOkButtonClicked;
         private IJob _selectedJob;
-        private readonly ObservableCollection<IEtlSchedule> _observableCollection;
+        private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
     	private readonly IBaseConfiguration _baseConfiguration;
 
-    	public JobSchedule(IEtlSchedule etlSchedule, ObservableCollection<IEtlSchedule> observableCollection, IBaseConfiguration baseConfiguration)
+    	public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration)
         {
             InitializeComponent();
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
@@ -37,14 +37,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
             _observableCollection = observableCollection;
         	_baseConfiguration = baseConfiguration;
 
-        	if (etlSchedule == null)
+        	if (etlJobSchedule == null)
             {
                 _isNewSchedule = true;
             }
             else
             {
-                _etlSchedule = etlSchedule;
-                _etlScheduleToEdit = etlSchedule;
+                _etlJobSchedule = etlJobSchedule;
+                _etlJobScheduleToEdit = etlJobSchedule;
             }
         }
 
@@ -91,32 +91,32 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
             }
             else
             {
-                textBoxScheduleName.Text = _etlSchedule.ScheduleName;
-                checkBoxEnabled.Checked = _etlSchedule.Enabled;
-                comboBoxJob.SelectedValue = _etlSchedule.JobName;
-                if (_etlSchedule.ScheduleType == JobScheduleType.OccursDaily)
+                textBoxScheduleName.Text = _etlJobSchedule.ScheduleName;
+                checkBoxEnabled.Checked = _etlJobSchedule.Enabled;
+                comboBoxJob.SelectedValue = _etlJobSchedule.JobName;
+                if (_etlJobSchedule.ScheduleType == JobScheduleType.OccursDaily)
                 {
                     radioButtonOccursOnce.Checked = true;
                     radioButtonOccursEvery.Checked = false;
-                    dateTimePickerOccursOnce.Value = new DateTime(1900, 1, 1).AddMinutes(_etlSchedule.OccursOnceAt);
+                    dateTimePickerOccursOnce.Value = new DateTime(1900, 1, 1).AddMinutes(_etlJobSchedule.OccursOnceAt);
                 }
                 else
                 {
                     radioButtonOccursOnce.Checked = false;
                     radioButtonOccursEvery.Checked = true;
-                    numericUpDownOccursEveryMinute.Value = _etlSchedule.OccursEveryMinute;
-                    dateTimePickerStartingAt.Value = new DateTime(1900, 1, 1).AddMinutes(_etlSchedule.OccursEveryMinuteStartingAt);
-                    dateTimePickerEndingAt.Value = new DateTime(1900, 1, 1).AddMinutes(_etlSchedule.OccursEveryMinuteEndingAt);
+                    numericUpDownOccursEveryMinute.Value = _etlJobSchedule.OccursEveryMinute;
+                    dateTimePickerStartingAt.Value = new DateTime(1900, 1, 1).AddMinutes(_etlJobSchedule.OccursEveryMinuteStartingAt);
+                    dateTimePickerEndingAt.Value = new DateTime(1900, 1, 1).AddMinutes(_etlJobSchedule.OccursEveryMinuteEndingAt);
                 }
 
-                comboBoxDataSource.SelectedValue = _etlSchedule.DataSourceId;
+                comboBoxDataSource.SelectedValue = _etlJobSchedule.DataSourceId;
                 updateRelativePeriods();
             }
         }
 
         private void updateRelativePeriods()
         {
-            foreach (IEtlJobRelativePeriod relativePeriod in _etlSchedule.RelativePeriodCollection)
+            foreach (IEtlJobRelativePeriod relativePeriod in _etlJobSchedule.RelativePeriodCollection)
             {
                 switch (relativePeriod.JobCategory)
                 {
@@ -411,7 +411,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
 
             if (radioButtonOccursOnce.Checked)
             {
-                _etlSchedule = new EtlSchedule(_isNewSchedule ? -1 : _etlSchedule.ScheduleId, textBoxScheduleName.Text,
+                _etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
                                              checkBoxEnabled.Checked,
                                              (int)dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
                                              (string)comboBoxJob.SelectedValue,
@@ -421,7 +421,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
             }
             else
             {
-                _etlSchedule = new EtlSchedule(_isNewSchedule ? -1 : _etlSchedule.ScheduleId, textBoxScheduleName.Text,
+                _etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
                                              checkBoxEnabled.Checked,
                                              (int)numericUpDownOccursEveryMinute.Value,
                                              (int)dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
@@ -493,20 +493,20 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule
 
         private void saveJobSchedule()
         {
-            int scheduleId = _repository.SaveSchedule(_etlSchedule);
-            _etlSchedule.SetScheduleIdOnPersistedItem(scheduleId);
-            _repository.SaveSchedulePeriods(_etlSchedule);
+            int scheduleId = _repository.SaveSchedule(_etlJobSchedule);
+            _etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
+            _repository.SaveSchedulePeriods(_etlJobSchedule);
             if (_isNewSchedule && _observableCollection != null)
             {
                 // Add to ObservableCollection
-                _observableCollection.Add(_etlSchedule);
+                _observableCollection.Add(_etlJobSchedule);
             }
             else if (_observableCollection != null)
             {
                 // Update existing job schedule in ObservableCollection
-                int index = _observableCollection.IndexOf(_etlScheduleToEdit);
+                int index = _observableCollection.IndexOf(_etlJobScheduleToEdit);
                 _observableCollection.RemoveAt(index);
-                _observableCollection.Insert(index, _etlSchedule);
+                _observableCollection.Insert(index, _etlJobSchedule);
             }
         }
 

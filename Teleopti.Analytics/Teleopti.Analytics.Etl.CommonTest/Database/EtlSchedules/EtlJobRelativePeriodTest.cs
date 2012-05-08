@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;

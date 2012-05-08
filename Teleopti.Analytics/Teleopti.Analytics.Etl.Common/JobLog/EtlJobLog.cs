@@ -2,25 +2,24 @@ using System;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
-
-namespace Teleopti.Analytics.Etl.Common.Database.EtlLogs
+namespace Teleopti.Analytics.Etl.Common.JobLog
 {
-    public class EtlLog : IEtlLog
+    public class EtlJobLog : IEtlJobLog
     {
         private readonly ILogRepository _repository;
 
-        public EtlLog()
+        public EtlJobLog()
         {
 
         }
 
-        public EtlLog(ILogRepository rep)
+        public EtlJobLog(ILogRepository rep)
         {
             _repository = rep;
         }
 
 
-        public EtlLog(int scheduleId, DateTime startTime, DateTime endTime)
+        public EtlJobLog(int scheduleId, DateTime startTime, DateTime endTime)
         {
             ScheduleId = scheduleId;
             StartTime = startTime;

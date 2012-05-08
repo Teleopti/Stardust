@@ -8,9 +8,9 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
     {        
         DataTable GetLog();
         int SaveLogPre();
-        void SaveLogPost(IEtlLog etlLogItem, IJobResult jobResult); 
-        void SaveLogStepPost(IEtlLog etlLogItem, IJobStepResult jobStepResult);
-        void AddJobStep(IEtlLog etlLogItem, IJobStepResult jobStepResult);
+        void SaveLogPost(IEtlJobLog etlJobLogItem, IJobResult jobResult); 
+        void SaveLogStepPost(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult);
+        void AddJobStep(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult);
     	DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId);
     }
 }

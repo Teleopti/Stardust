@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.Common.Database;
-using Teleopti.Analytics.Etl.Common.Database.EtlSchedules;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Interfaces.Domain;
 using MessageBox = System.Windows.MessageBox;
@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control
     /// </summary>
     public partial class ScheduleControl : UserControl
     {
-        private readonly ObservableCollection<IEtlSchedule> _observableCollection;
+        private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
         private readonly Repository _repository;
     	private IBaseConfiguration _baseConfiguration;
 
@@ -34,9 +34,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control
             {
 
                 _repository = new Repository(connectionString);
-                var etlScheduleCollection = new EtlScheduleCollection(_repository, null, DateTime.Now);
+                var etlScheduleCollection = new EtlJobScheduleCollection(_repository, null, DateTime.Now);
 
-                _observableCollection = new ObservableCollection<IEtlSchedule>(etlScheduleCollection);
+                _observableCollection = new ObservableCollection<IEtlJobSchedule>(etlScheduleCollection);
                 DataContext = _observableCollection;
             }
         }
@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control
         private void MenuItemEdit(object sender, RoutedEventArgs e)
         {
             // Edit
-            var etlSchedule = (IEtlSchedule)lv.SelectedItem;
+            var etlSchedule = (IEtlJobSchedule)lv.SelectedItem;
 			var jobSchedule = new JobSchedule(etlSchedule, _observableCollection, _baseConfiguration);
 
             if (jobSchedule.ShowDialog() == DialogResult.OK)
@@ -84,7 +84,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.Control
                 //    : 0);
                 if (dialogResult == MessageBoxResult.Yes)
                 {
-                    var etlSchedule = (IEtlSchedule)lv.SelectedItem;
+                    var etlSchedule = (IEtlJobSchedule)lv.SelectedItem;
                     _repository.DeleteSchedule(etlSchedule.ScheduleId);
                     _observableCollection.Remove(etlSchedule);
                 }

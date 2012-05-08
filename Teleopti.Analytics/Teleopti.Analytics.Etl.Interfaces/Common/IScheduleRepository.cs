@@ -8,9 +8,9 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
     public interface IScheduleRepository
     {
         DataTable GetSchedules();
-        int SaveSchedule(IEtlSchedule etlScheduleItem);
+        int SaveSchedule(IEtlJobSchedule etlJobScheduleItem);
         void DeleteSchedule(int scheduleId);
         DataTable GetSchedulePeriods(int scheduleId);
-        void SaveSchedulePeriods(IEtlSchedule etlScheduleItem);
+        void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using Teleopti.Analytics.Etl.Common.Database;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.ViewModel
 {

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.Common.Database.EtlLogs;
+using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.CommonTest.FakeData;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
@@ -16,17 +16,17 @@ namespace Teleopti.Analytics.Etl.CommonTest.Database.EtlLogs
         public void Setup()
         {
             ILogRepository logRepository = RepositoryFactory.GetLogRepository();
-            _etlLogCollection = new EtlLogCollection(logRepository);
+            _etlJobLogCollection = new EtlJobLogCollection(logRepository);
         }
 
         #endregion
 
-        private IEtlLogCollection _etlLogCollection;
+        private IEtlJobLogCollection _etlJobLogCollection;
 
         [Test]
         public void VerifyLog()
         {
-            foreach (IEtlLog log in _etlLogCollection)
+            foreach (IEtlJobLog log in _etlJobLogCollection)
             {
                 object[] parameters = new object[3];
                 parameters[0] = log.ScheduleId;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.ViewModel

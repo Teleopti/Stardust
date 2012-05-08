@@ -5,10 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
-
-namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
+namespace Teleopti.Analytics.Etl.Common.JobSchedule
 {
-    public class EtlSchedule : IEtlSchedule
+    public class EtlJobSchedule : IEtlJobSchedule
     {
         private readonly DateTime _occursDailyAt;
         private readonly int _cyclicInterval;
@@ -16,12 +15,12 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
         private readonly DateTime _startTime;
         private readonly IList<IEtlJobRelativePeriod> _relativePeriodCollection;
 
-        public EtlSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
+        public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
                             string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
-                            string description, IEtlLogCollection etlLogCollection, 
+                            string description, IEtlJobLogCollection etlJobLogCollection, 
                             IList<IEtlJobRelativePeriod> relativePeriodCollection)
         {
-            _etlLogCollection = etlLogCollection;
+            _etlJobLogCollection = etlJobLogCollection;
 
             var dateTime = DateTime.Today;
 
@@ -40,12 +39,12 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
             _relativePeriodCollection = relativePeriodCollection;
         }
 
-        public EtlSchedule(int scheduleId, String scheduleName, bool enabled, int cyclicInterval, int startTime, int endTime,
+        public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int cyclicInterval, int startTime, int endTime,
                             string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
-                            string description, IEtlLogCollection etlLogCollection, DateTime serverStartTime, 
+                            string description, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime, 
                             IList<IEtlJobRelativePeriod> relativePeriodCollection)
         {
-            _etlLogCollection = etlLogCollection;
+            _etlJobLogCollection = etlJobLogCollection;
 
             _cyclicInterval = cyclicInterval;
 
@@ -75,17 +74,17 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
 
         #region IScheduleOccursDaily Members
 
-        IEtlLogCollection _etlLogCollection;
+        IEtlJobLogCollection _etlJobLogCollection;
 
 
         private DateTime _serverStartTime;
 
-        public IEtlLogCollection RecentEtlLogData
+        public IEtlJobLogCollection RecentEtlJobLogData
         {
             get
             {
 
-                return _etlLogCollection;
+                return _etlJobLogCollection;
             }
         }
 
@@ -98,7 +97,7 @@ namespace Teleopti.Analytics.Etl.Common.Database.EtlSchedules
         {
             get
             {
-                var result = from l in RecentEtlLogData
+                var result = from l in RecentEtlJobLogData
                              where ScheduleId == l.ScheduleId
                              orderby l.StartTime
                              select l;

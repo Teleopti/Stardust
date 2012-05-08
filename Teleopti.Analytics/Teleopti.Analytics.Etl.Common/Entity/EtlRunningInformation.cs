@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.Common
+namespace Teleopti.Analytics.Etl.Common.Entity
 {
 	public class EtlRunningInformation : IEtlRunningInformation
 	{

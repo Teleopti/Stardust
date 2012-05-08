@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
-    public interface IEtlSchedule
+    public interface IEtlJobSchedule
     {
         int ScheduleId { get; }
         DateTime Time { get; }
