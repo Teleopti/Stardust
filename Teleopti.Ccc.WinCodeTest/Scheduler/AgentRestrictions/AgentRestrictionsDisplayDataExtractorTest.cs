@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		public void Setup()
 		{
 			_target = new AgentRestrictionsDisplayDataExtractor();
+			_mocks = new MockRepository();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 		}
 

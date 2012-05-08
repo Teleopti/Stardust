@@ -6,10 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface  IAgentRestrictionsDisplayRow
 	{
-		
+		Name AgentName { get; set; }
 	}
 
 	public interface IAgentDisplayData
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		IScheduleMatrixPro Matrix { get; }
 	}
 
-	public class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
+	public sealed class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
 	{
 		private readonly IScheduleMatrixPro _matrix;
 
@@ -29,6 +28,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		IScheduleMatrixPro IAgentDisplayData.Matrix
 		{
 			get { return _matrix; }
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+		public Name AgentName
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 	}
 }
