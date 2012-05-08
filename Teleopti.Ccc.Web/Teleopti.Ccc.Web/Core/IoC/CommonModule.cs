@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
+			builder.RegisterType<CurrentBusinessUnitProvider>().As<ICurrentBusinessUnitProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

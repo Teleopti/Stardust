@@ -147,6 +147,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldRegisterCurrentBusinessUnitProvider()
+		{
+			requestContainer.Resolve<ICurrentBusinessUnitProvider>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldRegisterDatePickerGlobalizationViewModelFactory()
 		{
 			requestContainer.Resolve<IDatePickerGlobalizationViewModelFactory>()

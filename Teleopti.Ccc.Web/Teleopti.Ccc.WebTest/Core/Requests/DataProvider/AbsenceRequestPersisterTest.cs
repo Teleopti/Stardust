@@ -137,14 +137,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var message = new NewAbsenceRequestCreated()
-			{
-				BusinessUnitId = buId,
-				Datasource = datasource.DataSourceName,
-				PersonRequestId = personRequestId,
-				Timestamp = time
-			};
-
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
 			target.Persist(form);
 
