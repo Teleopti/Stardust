@@ -96,6 +96,12 @@
     <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
       <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.ServiceBus">
+      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.1.1\lib\3.5\Rhino.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.Autofac">
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.1.1\lib\3.5\Rhino.ServiceBus.Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -172,6 +178,13 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportResponseModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
+    <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
+    <Compile Include="Core\RequestContext\ICurrentBusinessUnitProvider.cs" />
+    <Compile Include="Core\ServiceBus\IServiceBusSender.cs" />
+    <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
     <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
@@ -633,6 +646,9 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Menu\MobileMenu.cshtml" />
     <Content Include="Areas\Start\Views\Menu\Index.cshtml" />
+    <Content Include="Teleopti.Ccc.Web.ServiceBus.Client.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

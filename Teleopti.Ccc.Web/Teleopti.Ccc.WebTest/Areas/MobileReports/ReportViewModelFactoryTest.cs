@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 				get { return _now; }
 			}
 
+			public DateTime UtcTime
+			{
+				get { return _now.ToUniversalTime(); }
+			}
+
 			#endregion
 		}
 

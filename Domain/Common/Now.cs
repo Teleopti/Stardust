@@ -9,5 +9,10 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return DateTime.Now; }
 		}
+
+		public DateTime UtcTime
+		{
+			get { return DateTime.UtcNow; }
+		}
 	}
 }
