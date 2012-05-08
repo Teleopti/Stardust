@@ -4,7 +4,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
-    public interface ILogRepository
+    public interface IJobLogRepository
     {        
         DataTable GetLog();
         int SaveLogPre();

@@ -8,7 +8,7 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 {
-	internal class RepositoryStub : Interfaces.Common.IScheduleRepository, ILogRepository
+	internal class RepositoryStub : Interfaces.Common.IJobScheduleRepository, IJobLogRepository
 	{
 		private readonly DataTable _logTable;
 		private readonly DataTable _scheduleTable;

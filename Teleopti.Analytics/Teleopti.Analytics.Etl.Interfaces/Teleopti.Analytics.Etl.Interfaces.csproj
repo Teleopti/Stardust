@@ -103,8 +103,8 @@
     <Compile Include="Common\IEtlJobLogCollection.cs" />
     <Compile Include="Common\IEtlJobSchedule.cs" />
     <Compile Include="Common\IEtlJobScheduleCollection.cs" />
-    <Compile Include="Common\ILogRepository.cs" />
-    <Compile Include="Common\IScheduleRepository.cs" />
+    <Compile Include="Common\IJobLogRepository.cs" />
+    <Compile Include="Common\IJobScheduleRepository.cs" />
     <Compile Include="Common\JobScheduleType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Transformer\EtlToolStateType.cs" />

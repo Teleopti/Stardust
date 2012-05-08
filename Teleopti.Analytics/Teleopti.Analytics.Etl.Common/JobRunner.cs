@@ -28,11 +28,11 @@ namespace Teleopti.Analytics.Etl.Common
 			return jobResultCollection;
 		}
 
-		public void SaveResult(IList<IJobResult> jobResultCollection, ILogRepository logRepository, int jobScheduleId)
+		public void SaveResult(IList<IJobResult> jobResultCollection, IJobLogRepository jobLogRepository, int jobScheduleId)
 		{
 			foreach (var jobResult in jobResultCollection)
 			{
-				IEtlJobLog etlJobLogItem = new EtlJobLog(logRepository);
+				IEtlJobLog etlJobLogItem = new EtlJobLog(jobLogRepository);
 				etlJobLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime);
 
 				foreach (var jobStepResult in jobResult.JobStepResultCollection)

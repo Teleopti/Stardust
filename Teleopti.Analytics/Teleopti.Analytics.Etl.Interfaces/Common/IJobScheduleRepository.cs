@@ -5,7 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
-    public interface IScheduleRepository
+    public interface IJobScheduleRepository
     {
         DataTable GetSchedules();
         int SaveSchedule(IEtlJobSchedule etlJobScheduleItem);

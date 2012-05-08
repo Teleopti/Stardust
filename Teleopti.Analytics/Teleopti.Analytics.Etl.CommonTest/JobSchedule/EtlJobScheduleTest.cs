@@ -16,10 +16,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
         [SetUp]
         public void Setup()
         {
-            //IScheduleRepository scheduleRepository = new RepositoryStub();
-            ILogRepository logRepository = new RepositoryStub();
+            IJobLogRepository jobLogRepository = new RepositoryStub();
 
-            IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(logRepository);
+            IEtlJobLogCollection etlJobLogCollection = new EtlJobLogCollection(jobLogRepository);
             _etlJobScheduleCollection = new EtlJobScheduleCollection(new RepositoryStub(), etlJobLogCollection, DateTime.Now);
         }
 

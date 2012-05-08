@@ -96,7 +96,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 		}
 
-		private void RunJob(IJob jobToRun, int scheduleId, ILogRepository repository, IList<IBusinessUnit> businessUnitCollection)
+		private void RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();

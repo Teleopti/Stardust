@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
         private readonly bool _isNewSchedule;
         private IEtlJobSchedule _etlJobSchedule;
         private readonly IEtlJobSchedule _etlJobScheduleToEdit;
-        private readonly Interfaces.Common.IScheduleRepository _repository;
+        private readonly Interfaces.Common.IJobScheduleRepository _repository;
         private readonly string _connectionString;
         private bool _isScheduleSettingsValid;
         private bool _isOkButtonClicked;

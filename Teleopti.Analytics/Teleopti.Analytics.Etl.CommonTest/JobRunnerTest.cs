@@ -70,7 +70,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		[Test]
 		public void ShouldSaveJobResultForOneBusinessUnit()
 		{
-			var repository = MockRepository.GenerateMock<ILogRepository>();
+			var repository = MockRepository.GenerateMock<IJobLogRepository>();
 			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IJobResult jobResult = new JobResult(businessUnit1, jobResultCollection);
@@ -91,7 +91,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		[Test]
 		public void ShouldSaveJobResultForTwoBusinessUnits()
 		{
-			var repository = MockRepository.GenerateMock<ILogRepository>();
+			var repository = MockRepository.GenerateMock<IJobLogRepository>();
 			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
 			IBusinessUnit businessUnit2 = new BusinessUnit("myBU 2");
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();

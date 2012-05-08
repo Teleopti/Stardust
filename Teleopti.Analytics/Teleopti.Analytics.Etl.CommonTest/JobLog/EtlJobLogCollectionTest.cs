@@ -15,8 +15,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobLog
         [SetUp]
         public void Setup()
         {
-            ILogRepository logRepository = RepositoryFactory.GetLogRepository();
-            _etlJobLogCollection = new EtlJobLogCollection(logRepository);
+            IJobLogRepository jobLogRepository = RepositoryFactory.GetLogRepository();
+            _etlJobLogCollection = new EtlJobLogCollection(jobLogRepository);
         }
 
         #endregion

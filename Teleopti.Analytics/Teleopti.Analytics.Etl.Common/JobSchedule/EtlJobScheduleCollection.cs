@@ -10,13 +10,13 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 {
     public class EtlJobScheduleCollection : List<IEtlJobSchedule>, IEtlJobScheduleCollection
     {
-        public EtlJobScheduleCollection(Interfaces.Common.IScheduleRepository repository, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
+        public EtlJobScheduleCollection(Interfaces.Common.IJobScheduleRepository repository, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
         {
             Populate(repository, etlJobLogCollection, serverStartTime);
         }
 
 
-        public void Populate(Interfaces.Common.IScheduleRepository rep, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
+        public void Populate(Interfaces.Common.IJobScheduleRepository rep, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
         {
 
             DataTable dataTable = rep.GetSchedules();
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             }
         }
 
-        private static IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId, Interfaces.Common.IScheduleRepository rep)
+        private static IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId, Interfaces.Common.IJobScheduleRepository rep)
         {
             IList<IEtlJobRelativePeriod> schedulePeriods = new List<IEtlJobRelativePeriod>();
             DataTable dataTable = rep.GetSchedulePeriods(scheduleId);

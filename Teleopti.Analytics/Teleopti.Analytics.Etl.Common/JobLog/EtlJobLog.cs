@@ -6,14 +6,14 @@ namespace Teleopti.Analytics.Etl.Common.JobLog
 {
     public class EtlJobLog : IEtlJobLog
     {
-        private readonly ILogRepository _repository;
+        private readonly IJobLogRepository _repository;
 
         public EtlJobLog()
         {
 
         }
 
-        public EtlJobLog(ILogRepository rep)
+        public EtlJobLog(IJobLogRepository rep)
         {
             _repository = rep;
         }

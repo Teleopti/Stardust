@@ -7,12 +7,12 @@ namespace Teleopti.Analytics.Etl.Common.JobLog
 {
     public class EtlJobLogCollection : List<IEtlJobLog>, IEtlJobLogCollection
     {
-        public EtlJobLogCollection(ILogRepository repository)
+        public EtlJobLogCollection(IJobLogRepository repository)
         {
             Populate(repository);
         }
 
-        private void Populate(ILogRepository rep)
+        private void Populate(IJobLogRepository rep)
         {
             DataTable dataTable = rep.GetLog();
 

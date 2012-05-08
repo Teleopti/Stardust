@@ -9,7 +9,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-public class Repository : IScheduleRepository, ILogRepository, IRunControllerRepository
+public class Repository : IJobScheduleRepository, IJobLogRepository, IRunControllerRepository
 	{
 		private readonly string _connectionString;
 
