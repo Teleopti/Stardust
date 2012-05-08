@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon
 					if (IniFileInfo.Create)
 						PrepareDatabases(ccc7, analytics);
 
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest);
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
 					var dataSource = CreateDataSource(dataSourceFactory);
 
 					if (IniFileInfo.Create)

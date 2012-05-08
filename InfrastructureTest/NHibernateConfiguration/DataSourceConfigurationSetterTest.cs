@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyEtlConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForEtl;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForEtl();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyApplicationConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForApplicationConfig;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForApplicationConfig();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifySdkConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForSdk;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForSdk();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyServiceBusConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForServiceBus;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForServiceBus();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.True();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyWebConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForWeb;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForWeb();
 			target.UseSecondLevelCache.Should().Be.True();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyDesktopConfig()
 		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForDesktop;
+			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForDesktop();
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");

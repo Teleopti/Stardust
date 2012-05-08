@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb));
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();

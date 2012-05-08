@@ -6,22 +6,36 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class DataSourceConfigurationSetter : IDataSourceConfigurationSetter
 	{
-		public const string NoDataSourceName = "[not set]";
+		public static IDataSourceConfigurationSetter ForTest()
+		{
+			return new DataSourceConfigurationSetter(false, false, "call", "unit tests");
+		}
+		public static IDataSourceConfigurationSetter ForEtl()
+		{
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "ETL tool");
+		} 
+		public static IDataSourceConfigurationSetter ForApplicationConfig()
+		{
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Application Config");
+		}
+		public static IDataSourceConfigurationSetter ForSdk()
+		{
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "SDK");
+		} 
+		public static IDataSourceConfigurationSetter ForServiceBus()
+		{
+			return new DataSourceConfigurationSetter(false, true, "thread_static", "Service bus");
+		}
+		public static IDataSourceConfigurationSetter ForWeb()
+		{
+			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Web mytime");
+		}
+		public static IDataSourceConfigurationSetter ForDesktop()
+		{
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Desktop");
+		}
 
-		public static IDataSourceConfigurationSetter ForTest = 
-			new DataSourceConfigurationSetter(false, false, "call", "unit tests");
-		public static IDataSourceConfigurationSetter ForEtl = 
-			new DataSourceConfigurationSetter(false, false, "thread_static", "ETL tool");
-		public static IDataSourceConfigurationSetter ForApplicationConfig = 
-			new DataSourceConfigurationSetter(false, false, "thread_static", "Application Config");
-		public static IDataSourceConfigurationSetter ForSdk = 
-			new DataSourceConfigurationSetter(false, false, "thread_static", "SDK");
-		public static IDataSourceConfigurationSetter ForServiceBus = 
-			new DataSourceConfigurationSetter(false, true, "thread_static", "Service bus");
-		public static IDataSourceConfigurationSetter ForWeb = 
-			new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Web mytime");
-		public static IDataSourceConfigurationSetter ForDesktop = 
-			new DataSourceConfigurationSetter(false, false, "thread_static", "Desktop");
+		public const string NoDataSourceName = "[not set]";
 
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache, 
 															bool useDistributedTransactionFactory, 
