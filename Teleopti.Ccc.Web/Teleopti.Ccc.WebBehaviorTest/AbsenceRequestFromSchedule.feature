@@ -6,9 +6,10 @@
 Scenario: Add absence request from week schedule view
 	Given I am an agent
 	And I am viewing week schedule
+	And I have a requestable absence called Vacation
 	When I click on today's summary
 	And I click absence request tab
-	And I input absence request values
+	And I input absence request values with Vacation
 	And I click the OK button
 	Then I should see a symbol at the top of the schedule
 
@@ -52,4 +53,4 @@ Scenario: View absence types
 	And I am viewing week schedule
 	When I click on today's summary
 	And I click absence request tab
-	Then I should see a absence type called Vacation in droplist
+	Then I should see an absence type called Vacation in droplist

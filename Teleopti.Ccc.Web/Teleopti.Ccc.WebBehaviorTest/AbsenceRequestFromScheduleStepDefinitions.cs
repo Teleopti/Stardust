@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 
-		[When(@"I input absence request values")]
-		public void WhenIInputAbsenceRequestValues()
+		[When(@"I input absence request values with (.*)")]
+		public void WhenIInputAbsenceRequestValuesWithVacation(string name)
 		{
 			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
+			Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesTextField.Value = name;
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new RequestableAbsenceType(name));
 		}
 
-		[Then(@"I should see a absence type called (.*) in droplist")]
+		[Then(@"I should see an absence type called (.*) in droplist")]
 		public void ThenIShouldSeeAAbsenceTypeCalledVacationInDroplist(string name)
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.InnerHtml, Is.StringContaining(name));
