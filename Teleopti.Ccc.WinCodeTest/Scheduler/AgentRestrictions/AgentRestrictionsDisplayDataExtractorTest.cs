@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
@@ -10,24 +6,25 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
 	[TestFixture]
-	public class AgentRestrictionsDisplayRowTest
+	public class AgentRestrictionsDisplayDataExtractorTest
 	{
-		private IAgentDisplayData _dataTarget;
 		private MockRepository _mocks;
+		private IAgentRestrictionsDisplayDataExtractor _target;
 		private IScheduleMatrixPro _matrix;
 
 		[SetUp]
 		public void Setup()
 		{
+			_target = new AgentRestrictionsDisplayDataExtractor();
 			_mocks = new MockRepository();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			_dataTarget = new AgentRestrictionsDisplayRow(_matrix);
 		}
 
 		[Test]
-		public void VerifyDefaultProperties()
+		public void ShouldExctractToDisplayData()
 		{
-			Assert.AreSame(_matrix, _dataTarget.Matrix);
+			IAgentDisplayData data = new AgentRestrictionsDisplayRow(_matrix);
+			_target.ExtractTo(data);
 		}
 	}
 }
