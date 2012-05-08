@@ -19,14 +19,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.EtlJobSchedule.ViewModel
 									: CultureInfo.GetCultureInfo("sv-SE");
 
 			SetWeekPeriod();
+			SetBusinessUnit();
 		}
 
 		private void SetWeekPeriod()
 		{
 			StartDate = GetFirstDayOfWeek(DateTime.Now.Date, _culture);
 			EndDate = StartDate.AddDays(6);
-
-			SetBusinessUnit();
 		}
 
 		private void SetBusinessUnit()

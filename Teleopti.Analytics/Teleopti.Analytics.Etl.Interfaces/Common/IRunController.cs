@@ -1,7 +1,4 @@
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-
-namespace Teleopti.Analytics.Etl.Common
+namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
 	public interface IRunController
 	{

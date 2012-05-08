@@ -86,7 +86,10 @@
   <ItemGroup>
     <Compile Include="Common\AlarmEventArgs.cs" />
     <Compile Include="Common\IConfigurationHandler.cs" />
+    <Compile Include="Common\IEtlJobLock.cs" />
     <Compile Include="Common\IEtlRunningInformation.cs" />
+    <Compile Include="Common\IJobRunner.cs" />
+    <Compile Include="Common\IRunController.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />

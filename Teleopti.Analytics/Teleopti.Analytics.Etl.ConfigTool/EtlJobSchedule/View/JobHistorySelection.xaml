@@ -31,7 +31,7 @@
 		<!--</StackPanel>-->
 		<GroupBox Name="groupBoxBusinessUnit" Margin="5">
 			<GroupBox.Header>
-				<Label>Business Unit Name</Label>
+				<Label>Business Unit</Label>
 			</GroupBox.Header>
 			<StackPanel Name="stackPanelBusinessUnit" Width="200" Margin="10" HorizontalAlignment="Left">
 				<ComboBox Name="comboBoxBusinessUnit" ItemsSource="{Binding}"  DisplayMemberPath="Name" SelectedValuePath="Id" SelectedIndex="0" SelectionChanged="comboBoxBusinessUnit_SelectionChanged">

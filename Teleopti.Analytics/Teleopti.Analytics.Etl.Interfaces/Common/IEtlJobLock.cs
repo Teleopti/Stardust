@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
 	public interface IEtlJobLock:IDisposable
 	{
