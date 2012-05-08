@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IdentityModel.Claims;
 using System.Linq;
 using System.Security.Principal;
+using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -25,11 +27,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			if (businessUnitRepository == null)
 				businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
-			using (var stream = new MemoryStream())
+			using (var stream = new FileStream(@"c:\test.txt", FileMode.Create))
 			{
 				var target = new TeleoptiPrincipalSerializer(applicationData, businessUnitRepository);
 				target.Serialize(principal, stream);
 
+				Debug.WriteLine(stream.Position);
 				stream.Position = 0;
 				return target.Deserialize(stream);
 			}
