@@ -238,9 +238,6 @@
     <Content Include="Resources\error_16x16.gif" />
     <Content Include="Resources\ok_16x16.gif" />
     <Content Include="Resources\warning_16x16.gif" />
-    <Content Include="test.nhib.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -327,4 +324,7 @@
     <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppETLTool.config" "$(ProjectDir)App.config"</PreBuildEvent>
+  </PropertyGroup>
 </Project>
