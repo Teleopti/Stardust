@@ -88,7 +88,7 @@ namespace SdkTestClientWin.Infrastructure
             if (authenticationResult.Successful)
             {
                 //Select the first one (generally choosen by a user)
-                _businessUnit = authenticationResult.BusinessUnitCollection.FirstOrDefault(b => b.Name[0]!='A');
+                _businessUnit = authenticationResult.BusinessUnitCollection.FirstOrDefault();
 
                 currentHeader.UserName = logonName;
                 currentHeader.Password = passWord;
