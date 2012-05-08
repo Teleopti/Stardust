@@ -68,20 +68,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule<RuleSetModule>();
-
-			builder.Register(c =>
-			                 	{
-			                 		var shiftCreatorService = c.Resolve<IShiftCreatorService>();
-			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-									var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(shiftCreatorService);
-			                 		return instance;
-			                 	})
-				.As<IRuleSetProjectionService>();
-
-			mbCacheModule.Builder
-				.For<RuleSetProjectionService>()
-				.CacheMethod(m => m.ProjectionCollection(null))
-				.As<IRuleSetProjectionService>();
+			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
 		}
 	}
 }

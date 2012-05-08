@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var mbCacheModule = new MbCacheModule(new AspNetCache(20), null);
 			containerBuilder.RegisterModule(mbCacheModule);
 			containerBuilder.RegisterModule(new RuleSetModule());
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule));
+			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
