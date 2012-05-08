@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Windows;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.ConfigTool.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
