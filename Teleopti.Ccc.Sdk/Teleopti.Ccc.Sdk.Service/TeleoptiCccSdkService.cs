@@ -405,27 +405,24 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A <see cref="SchedulePartDto"/>.</returns>
 		/// <remarks>
 		/// </remarks>
-        public SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-		    {
-		        IList<PersonDto> personList = new List<PersonDto> {person};
-		        return
-		            _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate, startDate,
-		                                                                                  timeZoneId, string.Empty).First();
-		    }
+			return
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				                    	{
+				                    		StartDate = startDate,
+				                    		EndDate = startDate,
+				                    		PersonId = person.Id.GetValueOrDefault(),
+				                    		TimeZoneId = timeZoneId
+				                    	}).First();
 		}
 
         public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
         {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                IList<PersonDto> personList = new List<PersonDto> {person};
-                ICollection<SchedulePartDto> schedulePartDtos =
-                    _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate, endDate,
-                                                                                          timeZoneId, string.Empty);
-                return schedulePartDtos;
-            }
+        	return
+        		GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+        		                    	{StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
 		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
@@ -439,35 +436,62 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                if (scheduleLoadOptionDto == null)
-                    throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
+			if (scheduleLoadOptionDto == null)
+				throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
 
-                var schedulePartDtos = new List<SchedulePartDto>();
-                ICollection<TeamDto> teamDtos = null;
-
-                if (scheduleLoadOptionDto.LoadSite != null)
-                    teamDtos = GetTeamsOnSite(scheduleLoadOptionDto.LoadSite);
-
-                var personDtos =
-                    _factoryProvider.CreatePersonsFromLoadOptionFactory(inner).GetPersonFromLoadOption(
-                        scheduleLoadOptionDto, teamDtos, startDate, endDate);
-
-                if (personDtos != null)
-                {
-                    var scheduleFactory = _factoryProvider.CreateScheduleFactory(inner);
-                    schedulePartDtos.AddRange(scheduleFactory.CreateSchedulePartCollection(personDtos, startDate,
-                                                                                           endDate, timeZoneId,
-                                                                                           scheduleLoadOptionDto.
-                                                                                               SpecialProjection));
-                }
-
-                return schedulePartDtos;
-            }
+			QueryDto query = null;
+			if (scheduleLoadOptionDto.LoadAll)
+			{
+				query = new GetSchedulesForAllPeopleQueryHandlerDto
+				        	{
+				        		StartDate = startDate,
+				        		EndDate = endDate,
+				        		TimeZoneId = timeZoneId,
+				        		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+				        	};
+			}
+			if (scheduleLoadOptionDto.LoadSite != null)
+			{
+				query = new GetSchedulesBySiteQueryHandlerDto
+					{
+						StartDate = startDate,
+						EndDate = endDate,
+						TimeZoneId = timeZoneId,
+						SiteId = scheduleLoadOptionDto.LoadSite.Id.GetValueOrDefault(),
+						SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+					};
+			}
+			if (scheduleLoadOptionDto.LoadTeam != null)
+			{
+				query = new GetSchedulesByTeamQueryHandlerDto
+					                    	{
+					                    		StartDate = startDate,
+					                    		EndDate = endDate,
+					                    		TimeZoneId = timeZoneId,
+					                    		TeamId = scheduleLoadOptionDto.LoadTeam.Id.GetValueOrDefault(),
+					                    		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+					                    	};
+			}
+			if (scheduleLoadOptionDto.LoadPerson != null)
+			{
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				{
+					StartDate = startDate,
+					EndDate = endDate,
+					TimeZoneId = timeZoneId,
+					PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
+					SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+				});
+			}
+			
+			if (query==null)
+			{
+				return new Collection<SchedulePartDto>();
+			}
+			return GetSchedulesByQuery(query);
 		}
 
-		public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
+    	public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
 			{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{

@@ -24,35 +24,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	        _personAssembler = personAssembler;
 	    }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ICollection<PersonDto> GetPersonFromLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
-		{
-            CheckScheduleLoadOption(scheduleLoadOptionDto);
-			ICollection<PersonDto> personDtos = new Collection<PersonDto>();
-
-			if (scheduleLoadOptionDto.LoadAll)
-			{
-				personDtos = GetAllPersons();
-			}
-
-			else if (scheduleLoadOptionDto.LoadSite != null)
-			{
-				personDtos = GetPersonsOnSite(teamDtos, startDate, endDate);
-			}
-
-			if (scheduleLoadOptionDto.LoadTeam != null)
-			{
-				personDtos = GetPersonsOnTeam(scheduleLoadOptionDto.LoadTeam, startDate, endDate);
-			}
-
-			else if (scheduleLoadOptionDto.LoadPerson != null)
-			{
-				personDtos = GetPersonsOnPerson(scheduleLoadOptionDto.LoadPerson);
-			}
-
-			return personDtos;
-		}
-
 		internal ICollection<PersonDto> GetPersonFromLoadOption(PublicNoteLoadOptionDto publicNoteLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
 			CheckPublicNoteLoadOption(publicNoteLoadOptionDto);
@@ -74,20 +45,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			return personDtos;
 		}
 
-        private static void CheckScheduleLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto)
-        {
-            int countParametersSet = 0;
-            if (scheduleLoadOptionDto.LoadAll) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadSite != null) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadTeam != null) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadPerson != null) countParametersSet++;
-
-            if (countParametersSet != 1)
-            {
-                throw new FaultException("scheduleLoadOptionDto must have exact one option specified.");
-            }
-        }
-
 		private static void CheckPublicNoteLoadOption(PublicNoteLoadOptionDto publicNoteLoadOptionDto)
 		{
 			int countParametersSet = 0;
@@ -99,16 +56,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				throw new FaultException("publicNoteLoadOptionDto must have exact one option specified.");
 			}
-		}
-
-		private ICollection<PersonDto> GetAllPersons()
-		{
-		    using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		    {
-		        var personList = _personRepository.FindAllSortByName();
-
-		        return _personAssembler.DomainEntitiesToDtos(personList).ToList();
-		    }
 		}
 
 		private ICollection<PersonDto> GetPersonsOnSite(IEnumerable<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
