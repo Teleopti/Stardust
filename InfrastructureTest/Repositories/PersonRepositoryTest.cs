@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		/// <summary>
 		/// Determines whether this instance can be created.
 		/// </summary>
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void CanCreate()
 		{
 			new PersonRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();

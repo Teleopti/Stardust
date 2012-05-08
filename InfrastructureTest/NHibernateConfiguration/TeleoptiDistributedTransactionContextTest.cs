@@ -10,7 +10,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class TeleoptiDistributedTransactionContextTest
 	{
 		private MockRepository mocks;

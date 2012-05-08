@@ -14,15 +14,19 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiDistributedTransactionFactory));
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
 		public class TeleoptiDistributedTransactionContext : ITransactionContext, IEnlistmentNotification
 		{
 			private readonly ISessionImplementor _sessionImplementor;
 			private readonly IPrincipal _currentPrincipal;
 
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Transation")]
 			public Transaction AmbientTransation { get; set; }
 			public bool ShouldCloseSessionOnDistributedTransactionCompleted { get; set; }
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InActive")]
 			public bool IsInActiveTransaction { get; set; }
-			
+
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Implementor"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 			public TeleoptiDistributedTransactionContext(ISessionImplementor sessionImplementor, Transaction transaction)
 			{
 				_currentPrincipal = Thread.CurrentPrincipal;
@@ -93,6 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 					IsInActiveTransaction = false;
 				}
 			}
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 			public void Dispose()
 			{
 				if (AmbientTransation != null)
@@ -102,6 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.DebugFormat(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public new void EnlistInDistributedTransactionIfNeeded(ISessionImplementor session)
 		{
 			if (session.TransactionContext != null)
@@ -145,6 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			transactionContext.AmbientTransation.EnlistVolatile(transactionContext, EnlistmentOptions.EnlistDuringPrepareRequired);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public new bool IsInDistributedActiveTransaction(ISessionImplementor session)
 		{
 			var distributedTransactionContext = (TeleoptiDistributedTransactionContext)session.TransactionContext;

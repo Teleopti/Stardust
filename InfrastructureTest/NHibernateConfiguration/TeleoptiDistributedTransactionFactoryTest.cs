@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldJustGetThroughThisToGetCoverage2()
 		{
 			var sessionImplementor = mocks.StrictMock<ISessionImplementor>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldJustGetThroughThisToGetCoverage3()
 		{
 			var sessionImplementor = mocks.StrictMock<ISessionImplementor>();
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldJustGetThroughThisToGetCoverage4()
 		{
 			var sessionImplementor = mocks.StrictMock<ISessionImplementor>();
