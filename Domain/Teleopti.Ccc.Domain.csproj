@@ -700,6 +700,7 @@
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatLimitationWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\ShiftCreator\EndTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
@@ -1559,9 +1560,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\MasterActivity.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollResultDetail.hbm.xml" />

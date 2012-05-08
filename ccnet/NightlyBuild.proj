@@ -45,8 +45,8 @@
 
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 %22$(ETLStuff)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)"/>
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)"/>
 		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->

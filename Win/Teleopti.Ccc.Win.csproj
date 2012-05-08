@@ -1173,6 +1173,19 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
+      <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.Designer.cs">
+      <DependentUpon>AgentRestrictionViewTEMP.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
@@ -2650,6 +2663,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportSettingsScheduledTimePerActivityView.resx">
       <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentRestrictions\AgentRestrictionViewTEMP.resx">
+      <DependentUpon>AgentRestrictionViewTEMP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

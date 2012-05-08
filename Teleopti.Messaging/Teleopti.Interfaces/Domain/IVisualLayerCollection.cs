@@ -127,7 +127,7 @@ namespace Teleopti.Interfaces.Domain
 
 		/// <summary>
 		/// Gets the count.
-		/// RK: If you just want to know it empty; use IsEmpty instead - much faster!
+		/// RK: If you just want to know it empty; use HasLayers instead - much faster!
 		/// </summary>
 		/// <value>The count.</value>
 		/// <remarks>

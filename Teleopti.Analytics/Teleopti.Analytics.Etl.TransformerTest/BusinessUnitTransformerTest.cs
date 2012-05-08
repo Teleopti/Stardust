@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
@@ -21,7 +22,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             _dataTable= new DataTable();
             _dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-            TransformerInfrastructure.BusinessUnitInfrastructure.AddColumnsToDataTable(_dataTable);
+            BusinessUnitInfrastructure.AddColumnsToDataTable(_dataTable);
             _bu = FakeData.BusinessUnitFactory.CreateSimpleBusinessUnit("BU1");
             IList<IBusinessUnit> buList = new List<IBusinessUnit> {_bu};
             _target = new BusinessUnitTransformer(_insertDateTime);

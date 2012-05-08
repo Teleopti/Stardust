@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetProperty(Environment.SessionFactoryName, NoDataSourceName);
 			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
+			nhConfiguration.SetProperty(Environment.ProxyFactoryFactoryClass,
+			                            typeof (FasterProxyFactoryFactory).AssemblyQualifiedName);
 			nhConfiguration.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (_useSecondLevelCache)
 			{
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 			nhConfiguration.SetProperty(Environment.TransactionStrategy,
 			                            _useDistributedTransactionFactory ? 
-												 typeof (AdoNetWithDistributedTransactionFactory).AssemblyQualifiedName : 
+												 typeof (TeleoptiDistributedTransactionFactory).AssemblyQualifiedName : 
 												 "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
 			if (!string.IsNullOrEmpty(_sessionContext))
 				nhConfiguration.SetProperty(Environment.CurrentSessionContextClass, _sessionContext);

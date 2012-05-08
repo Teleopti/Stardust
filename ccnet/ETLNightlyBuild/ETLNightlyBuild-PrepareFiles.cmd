@@ -1,11 +1,10 @@
 @ECHO off
 
 SET CCNetWorkDir=%~1
-SET ETLStuff=%~2
-SET TargetDir=%~3
-SET CCC7DB=%~4
-SET AnalyticsDB=%~5
-SET config=%~6
+SET TargetDir=%~2
+SET CCC7DB=%~3
+SET AnalyticsDB=%~4
+SET config=%~5
 
 ::Delete target Dir
 ECHO RMDIR "%TargetDir%" /S /Q
@@ -23,8 +22,8 @@ DEL "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config" /Q
 DEL "%TargetDir%\test.nhib.xml" /Q
 
 ::Get Prepared config for the restored DBs
-COPY "%ETLStuff%\ETLTeleopti.Analytics.Etl.ServiceHost.exe.config" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config" /Y
-COPY "%ETLStuff%\ETLTeleoptiCCC7.nhib.xml" "%TargetDir%\TeleoptiCCC7.nhib.xml" /Y
+COPY "%CCNetWorkDir%\BuildArtifacts\AppETLService.config" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config" /Y
+COPY "%CCNetWorkDir%\BuildArtifacts\TeleoptiCCC7.nhib.xml" "%TargetDir%\TeleoptiCCC7.nhib.xml" /Y
 
 ::replace dbnames
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(CCC7DB) %CCC7DB% "%TargetDir%\TeleoptiCCC7.nhib.xml"

@@ -1,5 +1,4 @@
 ﻿using NHibernate.Cfg;
-using NHibernate.Transaction;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var target = new DataSourceConfigurationSetter(false, true, null);
 			target.AddDefaultSettingsTo(cfg);
 
-			cfg.GetProperty(Environment.TransactionStrategy).Should().Be.EqualTo(typeof(AdoNetWithDistributedTransactionFactory).AssemblyQualifiedName);
+			cfg.GetProperty(Environment.TransactionStrategy).Should().Be.EqualTo(typeof(TeleoptiDistributedTransactionFactory).AssemblyQualifiedName);
 		}
 
 		[Test]

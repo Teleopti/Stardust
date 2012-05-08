@@ -5,9 +5,9 @@
                    default-access="field.camelcase-underscore">
 
   <class name="GroupPage">
-    <id name="Id" type="guid" unsaved-value="null">
-      <generator class="guid.comb" />
-    </id>
+	  <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
+		  <generator class="guid.comb" />
+	  </id>
     <version name="Version" unsaved-value ="null"/>
     <many-to-one name="CreatedBy" class="Teleopti.Ccc.Domain.Common.Person" not-null="true" update="false" foreign-key="FK_GroupPage_Person_CreatedBy"/>
     <many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person" not-null="true" foreign-key="FK_GroupPage_Person_UpdatedBy"/>

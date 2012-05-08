@@ -63,7 +63,7 @@ WHERE day_off_name IS NOT NULL
 GROUP BY s.day_off_name,s.business_unit_code
 
 --Load mart dimension
-EXEC [mart].[etl_dim_day_off_load]
+EXEC [mart].[etl_dim_day_off_load] @business_unit_code
 -- </Temporary>
 ----------------------------------------------------------------------------------
 DECLARE @start_date_id	INT

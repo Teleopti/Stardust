@@ -15,6 +15,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Optimization;
+using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using log4net;
 using MbCache.Core;
@@ -1091,6 +1092,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemFindMatching2.Visible = true;
                 toolStripMenuItemFindMatching.Visible = true;
             }
+
+			if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+			{
+				ToolStripMenuItemRestrictionViewTemp.Visible = true;
+			}
+
+
 
             backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
             backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
@@ -3368,6 +3376,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
 				if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 					toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
+            	disableButtonsIfTeamLeaderMode();
                 if (_scheduleView != null &&
                     (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp))
                 {
@@ -7480,7 +7489,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (contextMenuViews != null) contextMenuViews.Dispose();
 
             if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
-            if (_ruleSetProjectionService != null) ((ICachingComponent) _ruleSetProjectionService).Invalidate();
 
             if (!Disposing)
             {
@@ -8468,6 +8476,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.Button != MouseButtons.Left) return;
             ExportToPdf(true);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private void ToolStripMenuItemRestrictionViewTemp_MouseUp(object sender, MouseEventArgs e)
+		{
+			var agentRestrictionView = new AgentRestrictionViewTemp();
+			agentRestrictionView.ShowDialog(this);
+		}
+
     }
 }
 

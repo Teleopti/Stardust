@@ -127,6 +127,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -162,9 +163,12 @@
     <Compile Include="Licensing\LicenseVerifierTest.cs" />
     <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
+    <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversAuditDelegateTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfigurationDelegateTest.cs" />
+    <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
+    <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliaryTest.cs" />
     <Compile Include="NHibernateConfiguration\HashedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
@@ -187,6 +191,7 @@
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategyTest.cs" />
+    <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDriverConnectionProviderTest.cs" />
     <Compile Include="NHibernateConfiguration\TrackerByteTest.cs" />
     <Compile Include="Foundation\WriteStringToFileTest.cs" />

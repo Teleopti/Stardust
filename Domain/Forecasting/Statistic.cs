@@ -419,7 +419,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-09-22
         /// </remarks>
-        public static void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IList<IActiveAgentCount> activeAgentCountCollection)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IEnumerable<IActiveAgentCount> activeAgentCountCollection)
         {
             foreach (ISkillStaffPeriod skillStaffPeriod in targetSkillStaffPeriods)
             {

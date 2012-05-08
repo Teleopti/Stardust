@@ -25,6 +25,10 @@ SET CROSSDB=1
 "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -T
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR_Schema
 
+IF "%DATABASETYPE%"=="TeleoptiCCC7" (
+"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -EE
+)
+
 IF %CROSSDB% EQU 1 (
 ECHO Adding Crossdatabases
 SQLCMD -S%MyServerInstance% -E -d%DATABASE% -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%TeleoptiCCCAgg%'"

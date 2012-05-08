@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			HasLayers = UnMergedCollection.Count > 0;
 		}
 
-		public bool HasLayers { get; set; }
+		public bool HasLayers { get; private set; }
 
 		public IPerson Person { get; private set; }
 
