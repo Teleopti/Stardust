@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\BusinessUnitItemTest.cs" />
     <Compile Include="JobLog\EtlJobLogCollectionTest.cs" />
     <Compile Include="JobLog\EtlJobLogTest.cs" />
     <Compile Include="Entity\EtlJobRelativePeriodTest.cs" />
