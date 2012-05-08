@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
@@ -12,6 +17,7 @@ namespace Teleopti.Ccc.Win.Optimization
     {
 
         public IOptimizationPreferences Preferences { get; private set; }
+
         private IList<IDataExchange> panels { get; set; }
 
         private readonly IList<IGroupPage> _groupPages;
@@ -60,6 +66,7 @@ namespace Teleopti.Ccc.Win.Optimization
         }
 
         #endregion
+
 
         private void AddToHelpContext()
         {
