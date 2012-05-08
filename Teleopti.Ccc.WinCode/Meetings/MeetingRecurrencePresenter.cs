@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private TimeSpan _startTime;
         private TimeSpan _endTime;
         private RecurrentMeetingOptionViewModel _currentRecurrenceOption;
-        private TimeSpan _meetingDuration;
 
         public MeetingRecurrencePresenter(IMeetingRecurrenceView view, IMeetingViewModel meetingViewModel)
         {
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _recurrenceEndDate = _meetingViewModel.RecurringEndDate;
             _startTime = _meetingViewModel.StartTime;
             _endTime = _meetingViewModel.EndTime;
-            _meetingDuration = _meetingViewModel.MeetingDuration;
             _originalRecurrenceOption = _meetingViewModel.RecurringOption;
 
             RecurrentMeetingType recurrentMeetingType =
@@ -104,25 +102,12 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             _startTime = startTime;
             _view.SetStartTime(startTime);
-            CalculateAndSetDuration();
         }
 
         public void SetEndTime(TimeSpan endTime)
         {
             _endTime = endTime;
             _view.SetEndTime(endTime);
-            CalculateAndSetDuration();
-        }
-
-        private void CalculateAndSetDuration()
-        {
-            TimeSpan realEndTime = _endTime;
-            if (_startTime>realEndTime)
-            {
-                realEndTime = realEndTime.Add(TimeSpan.FromDays(1));
-            }
-            _meetingDuration = realEndTime.Subtract(_startTime);
-            
         }
 
         public void SetMeetingDuration(TimeSpan duration)
