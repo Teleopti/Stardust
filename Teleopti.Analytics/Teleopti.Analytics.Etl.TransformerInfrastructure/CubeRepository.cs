@@ -49,7 +49,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             }
         }
 
-		private void ExecuteCubeQuery(AdomdCommand cmd, string cmdText)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		private static void ExecuteCubeQuery(AdomdCommand cmd, string cmdText)
 		{
 			cmd.CommandText = cmdText;
 			cmd.ExecuteNonQuery();
