@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private DenyRequestCommandHandler _target;
+        private DenyRequestCommandDto _denyRequestCommandDto;
 
         [SetUp]
         public void Setup()
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.StrictMock<IMessageBrokerEnablerFactory>();
             _target = new DenyRequestCommandHandler(_personRequestRepository,_authorization,_unitOfWorkFactory,_messageBrokerEnablerFactory);
+            _denyRequestCommandDto = new DenyRequestCommandDto {PersonRequestId = Guid.NewGuid()};
         }
 
         [Test]
@@ -36,22 +40,41 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var request = _mock.StrictMock<IPersonRequest>();
-            var denyRequestCommandDto = new DenyRequestCommandDto();
-            denyRequestCommandDto.PersonRequestId = Guid.NewGuid();
             
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRequestRepository.Get(denyRequestCommandDto.PersonRequestId)).Return(request);
+                Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments();
                 Expect.Call(() => _messageBrokerEnablerFactory.NewMessageBrokerEnabler());
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-
             }
             using (_mock.Playback())
             {
-                _target.Handle(denyRequestCommandDto);
+                _target.Handle(_denyRequestCommandDto);
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfRequestIsInvalid()
+        {
+            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var request = _mock.StrictMock<IPersonRequest>();
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
+                Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
+                Expect.Call(() => _messageBrokerEnablerFactory.NewMessageBrokerEnabler());
+                Expect.Call(() => unitOfWork.PersistAll());
+                Expect.Call(unitOfWork.Dispose);
+            }
+            using (_mock.Playback())
+            {
+                _target.Handle(_denyRequestCommandDto);
             }
         }
     }

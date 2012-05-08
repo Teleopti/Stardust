@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -25,6 +26,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IContractRepository _contractRepository;
         private ITeamRepository _teamRepository;
         private EmployPersonCommandHandler _target;
+        private IPerson _person;
+        private PersonDto _personDto;
+        private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(_startDate), new DateOnly(_startDate.AddDays(1)));
+        private ITeam _team;
+        private TeamDto _teamDto;
+        private PersonContractDto _personContractDto;
+        private EmployPersonCommandDto _employPersonCommandDto;
+        private IContract _contract;
+        private IContractSchedule _contractSchedule;
+        private IPartTimePercentage _partTimePercentage;
 
         [SetUp]
         public void Setup()
@@ -38,25 +50,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _contractRepository = _mock.StrictMock<IContractRepository>();
             _teamRepository = _mock.StrictMock<ITeamRepository>();
             _target = new EmployPersonCommandHandler(_unitOfWorkFactory,_personRepository,_personAssembler,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository,_teamRepository);
-        }
 
-        [Test]
-        public void ShouldHandlerEmployeePersonCommand()
-        {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson("test");
-            person.SetId(Guid.NewGuid());
+            _person = PersonFactory.CreatePerson("test");
+            _person.SetId(Guid.NewGuid());
+            _personDto = new PersonDto { Id = Guid.NewGuid() };
 
-            var personDto = new PersonDto {Id = Guid.NewGuid()};
-            var startDate = new DateTime(2012, 1, 1,0,0,0,DateTimeKind.Utc);
-            var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(startDate.AddDays(1)));
+            _team = TeamFactory.CreateSimpleTeam("test team");
+            _team.SetId(Guid.NewGuid());
+            _team.Site = new Site("test site");
+            _teamDto = new TeamDto(_team) {Id = Guid.NewGuid()};
 
-            var team = TeamFactory.CreateSimpleTeam("test team");
-            team.SetId(Guid.NewGuid());
-            team.Site = new Site("test site");
-            var teamDto = new TeamDto(team) {Id = Guid.NewGuid()};
-
-            var personContractDto = new PersonContractDto
+            _personContractDto = new PersonContractDto
                                         {
                                             Id = Guid.NewGuid(),
                                             ContractScheduleId = Guid.NewGuid(),
@@ -64,45 +68,51 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                             PartTimePercentageId = Guid.NewGuid()
                                         };
 
-            var employPersonCommandDto = new EmployPersonCommandDto
-                                             {
-                                                 Person = personDto,
-                                                 Period = new DateOnlyPeriodDto(dateOnlyPeriod),
-                                                 PersonContract = personContractDto,
-                                                 Team = teamDto
-                                             };
+            _employPersonCommandDto = new EmployPersonCommandDto
+            {
+                Person = _personDto,
+                Period = new DateOnlyPeriodDto(_dateOnlyPeriod),
+                PersonContract = _personContractDto,
+                Team = _teamDto
+            };
 
-            var contract = new Contract("test contract");
-            contract.SetId(Guid.NewGuid());
-            var contractSchedule = new ContractSchedule("temp contract schedule");
-            contractSchedule.SetId(Guid.NewGuid());
-            var partTimePercentage = new PartTimePercentage("temp part time percentage");
-            partTimePercentage.SetId(Guid.NewGuid());
+            _contract = new Contract("test contract");
+            _contract.SetId(Guid.NewGuid());
+            _contractSchedule = new ContractSchedule("temp contract schedule");
+            _contractSchedule.SetId(Guid.NewGuid());
+            _partTimePercentage = new PartTimePercentage("temp part time percentage");
+            _partTimePercentage.SetId(Guid.NewGuid());
+        }
+
+        [Test]
+        public void ShouldHandlerEmployeePersonCommand()
+        {
+            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personAssembler.DtoToDomainEntity(employPersonCommandDto.Person)).Return(person);
+                Expect.Call(_personAssembler.DtoToDomainEntity(_employPersonCommandDto.Person)).Return(_person);
                 Expect.Call(_personAssembler.EnableSaveOrUpdate = true);
-                Expect.Call(_partTimePercentageRepository.Load(employPersonCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(partTimePercentage);
+                Expect.Call(_partTimePercentageRepository.Load(_employPersonCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
                 
                 Expect.Call(
                     _contractScheduleRepository.Load(
-                        employPersonCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
-                            contractSchedule);
+                        _employPersonCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
+                            _contractSchedule);
                 Expect.Call(
                     _teamRepository.Load(
-                        employPersonCommandDto.Team.Id.GetValueOrDefault())).Return(team);
+                        _employPersonCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
                 Expect.Call(
                     _contractRepository.Load(
-                        employPersonCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(contract);
-                Expect.Call(() => _personRepository.Add(person));
+                        _employPersonCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
+                Expect.Call(() => _personRepository.Add(_person));
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
             }
             using(_mock.Playback())
             {
-                _target.Handle(employPersonCommandDto);
+                _target.Handle(_employPersonCommandDto);
             }
         }
     }

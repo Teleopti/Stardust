@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IServiceBusSender _busSender;
         private MockRepository _mock;
         private DenormalizeScheduleCommandHandler _target;
+        private DenormalizeScheduleCommandDto _denormalizeScheduleCommandDto;
 
         [SetUp]
         public void Setup()
@@ -21,13 +22,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock = new MockRepository();
             _busSender = _mock.StrictMock<IServiceBusSender>();
             _target = new DenormalizeScheduleCommandHandler(_busSender);
+            _denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
         }
 
         [Test]
         public void ShouldProcessDenormalizeScheduleCommand()
         {
-            var denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
-
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(true);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(denormalizeScheduleCommandDto);
+                _target.Handle(_denormalizeScheduleCommandDto);
             }
         }
 
@@ -43,8 +43,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfServiceBusNotEnabled()
         {
-            var denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
-
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(false);
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(denormalizeScheduleCommandDto);
+                _target.Handle(_denormalizeScheduleCommandDto);
             }
         }
     }

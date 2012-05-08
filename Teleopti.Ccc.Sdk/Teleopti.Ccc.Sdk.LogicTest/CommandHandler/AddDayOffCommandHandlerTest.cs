@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
-using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +26,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private MockRepository _mock;
         private AddDayOffCommandHandler _target;
-
+        private IPerson _person;
+        private IScenario _scenario;
+        private static DateOnly _startDate = new DateOnly(2012, 1, 1);
+        private readonly DateOnlyDto _dateOnydto = new DateOnlyDto(_startDate);
+        private static DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(_startDate, _startDate.AddDays(1));
+        private DateTimePeriod _period;
+        private DayOffTemplate _dayOff;
+        private SchedulePartFactoryForDomain _schedulePartFactory;
+        private AddDayOffCommandDto _addAbsenceCommandDto;
 
         [SetUp]
         public  void Setup()
@@ -44,55 +47,50 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
+
+            _person = PersonFactory.CreatePerson();
+            _person.SetId(Guid.NewGuid());
+
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            _period = _dateOnlyPeriod.ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
+
+            _dayOff = DayOffFactory.CreateDayOff();
+            _dayOff.SetId(Guid.NewGuid());
+
             _target = new AddDayOffCommandHandler(_dayOffRepository,_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+            _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
+
+            _addAbsenceCommandDto = new AddDayOffCommandDto
+            {
+                PersonId = _person.Id.GetValueOrDefault(),
+                Date = _dateOnydto,
+                DayOffInfoId = _dayOff.Id.GetValueOrDefault()
+            };
+
         }
 
         [Test]
         public void ShouldAddDayOffInTheDictionarySuccessfully()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            IPerson person = PersonFactory.CreatePerson();
-            person.SetId(Guid.NewGuid());
-            
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-            var startDate = new DateOnly(2012, 1, 1);
-            var dateOnydto = new DateOnlyDto(startDate);
-            var dateOnlyPeriod = new DateOnlyPeriod(startDate, startDate.AddDays(1));
-            var period = dateOnlyPeriod.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var schedulePartFactory = new SchedulePartFactoryForDomain(person, scenario, period, SkillFactory.CreateSkill("Test Skill"));
-            var scheduleDay = schedulePartFactory.CreatePartWithMainShift();
+            var scheduleDay = _schedulePartFactory.CreatePartWithMainShift();
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-
-            var dictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period),
-                                                           new Dictionary<IPerson, IScheduleRange> { { person, scheduleRangeMock } });
-
-            var dayOff = DayOffFactory.CreateDayOff();
-            dayOff.SetId(Guid.NewGuid());
-
-            var addAbsenceCommandDto = new AddDayOffCommandDto
-                                           {
-                                               PersonId = person.Id.GetValueOrDefault(),
-                                               Date = dateOnydto,
-                                               DayOffInfoId = dayOff.Id.GetValueOrDefault()
-                                           };
+            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.Load(person.Id.GetValueOrDefault())).Return(person);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(scenario);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario)).
-                    IgnoreArguments().Return(dictionary);
-                Expect.Call(_dayOffRepository.Load(dayOff.Id.GetValueOrDefault())).Return(dayOff);
-                Expect.Call(scheduleRangeMock.ScheduledDay(startDate)).Return(scheduleDay);
+                Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
+                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+                Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
+                Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
                 Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
             }
             using (_mock.Playback())
             {
-                _target.Handle(addAbsenceCommandDto);
+                _target.Handle(_addAbsenceCommandDto);
                 scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
             }
 

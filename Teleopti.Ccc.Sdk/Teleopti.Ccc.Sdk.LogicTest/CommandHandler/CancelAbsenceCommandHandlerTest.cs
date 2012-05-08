@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -31,6 +28,20 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ISaveSchedulePartService _saveSchedulePartService;
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private CancelAbsenceCommandHandler _target;
+        private IPerson _person;
+        private IAbsence _absence;
+        private IScenario _scenario;
+        private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateTimePeriod _period = new DateTimePeriod(_startDate, _startDate.AddDays(1));
+        private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
+        {
+            UtcStartTime = _startDate,
+            UtcEndTime = _startDate.AddDays(1)
+        };
+
+        private SchedulePartFactoryForDomain _schedulePartFactoryForDomain;
+        private CancelAbsenceCommandDto _cancelAbsenceCommandDto;
+
 
         [SetUp]
         public void Setup()
@@ -44,54 +55,72 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _target = new CancelAbsenceCommandHandler(_dateTimePeriodAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_unitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory);
+
+            _person = PersonFactory.CreatePerson();
+            _person.SetId(Guid.NewGuid());
+
+            _absence = AbsenceFactory.CreateAbsence("Sick");
+            _absence.SetId(Guid.NewGuid());
+
+            _scenario = ScenarioFactory.CreateScenarioAggregate();
+            _schedulePartFactoryForDomain = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
+
+            _cancelAbsenceCommandDto = new CancelAbsenceCommandDto { Period = _periodDto, PersonId = _person.Id.GetValueOrDefault() };
         }
 
         [Test]
         public void AbsenceCancelSuccessfully()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var person = PersonFactory.CreatePerson();
-            person.SetId(Guid.NewGuid());
-            var absence = AbsenceFactory.CreateAbsence("Sick");
-            absence.SetId(Guid.NewGuid());
-            
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
-            var startDate = new DateTime(2012, 1, 1,0,0,0,DateTimeKind.Utc);
-            var period = new DateTimePeriod(startDate, startDate.AddDays(1));
-            var periodDto = new DateTimePeriodDto()
-            {
-                UtcStartTime = startDate,
-                UtcEndTime = startDate.AddDays(1)
-            };
-
-            var schedulePartFactoryForDomain = new SchedulePartFactoryForDomain(person, scenario, period, SkillFactory.CreateSkill("Test Skill"));
-            var scheduleDay = schedulePartFactoryForDomain.CreatePart();
+            var scheduleDay = _schedulePartFactoryForDomain.CreatePart();
+            scheduleDay.CreateAndAddAbsence(new AbsenceLayer(_absence,_period));
             var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-            var dictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(period),
-                                                           new Dictionary<IPerson, IScheduleRange> { { person, scheduleRangeMock } });
-
-            var cancelAbsenceCommandDto = new CancelAbsenceCommandDto
-                                              {Period = periodDto, PersonId = person.Id.GetValueOrDefault()};
-
+            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+            
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_personRepository.Load(cancelAbsenceCommandDto.PersonId)).Return(person);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(scenario);
-                Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(cancelAbsenceCommandDto.Period)).Return(period);
-                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(startDate.AddDays(1))).ToDateTimePeriod(timeZone), scenario)).
+                Expect.Call(_personRepository.Load(_cancelAbsenceCommandDto.PersonId)).Return(_person);
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+                Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelAbsenceCommandDto.Period)).Return(_period);
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
                     IgnoreArguments().Return(dictionary);
-                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
+                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
                 Expect.Call(()=>_saveSchedulePartService.Save(unitOfWork, scheduleDay));
             }
             using(_mock.Playback())
             {
-                _target.Handle(cancelAbsenceCommandDto);
+                _target.Handle(_cancelAbsenceCommandDto);
                 scheduleDay.PersonAbsenceCollection().Count.Should().Be.EqualTo(0);
             }
         }
+
+        [Test]
+        [ExpectedException(typeof(FaultException))]
+        public void ShouldThrowExceptionIfScheduleDayIsNull()
+        {
+            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+            var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+
+            using (_mock.Record())
+            {
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_personRepository.Load(_cancelAbsenceCommandDto.PersonId)).Return(_person);
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
+                Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelAbsenceCommandDto.Period)).Return(_period);
+                Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+                    IgnoreArguments().Return(dictionary);
+                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(null);
+                Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, null));
+            }
+            using (_mock.Playback())
+            {
+                _target.Handle(_cancelAbsenceCommandDto);
+            }
+        }
+
     }
 }

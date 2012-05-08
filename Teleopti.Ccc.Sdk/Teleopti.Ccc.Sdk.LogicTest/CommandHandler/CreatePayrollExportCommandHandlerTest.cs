@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPayrollResultFactory _payrollResultFactory;
         private MockRepository _mock;
         private CreatePayrollExportCommandHandler _target;
+        private PayrollExportDto _payrollExportDto;
+        private CreatePayrollExportCommandDto _createPayrollExportCommandDto;
 
         [SetUp]
         public void Setup()
@@ -21,25 +23,24 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock  = new MockRepository();
             _payrollResultFactory = _mock.StrictMock<IPayrollResultFactory>();
             _target = new CreatePayrollExportCommandHandler(_payrollResultFactory);
+
+            _payrollExportDto = new PayrollExportDto();
+            _createPayrollExportCommandDto = new CreatePayrollExportCommandDto {PayrollExportDto = _payrollExportDto};
+
         }
 
         [Test]
         public void ShouldProcessCreatePayrollExportCommand()
         {
-            var payrollExportDto = new PayrollExportDto();
-            var createPayrollExportCommandDto = new CreatePayrollExportCommandDto();
-            createPayrollExportCommandDto.PayrollExportDto = payrollExportDto;
-
             using(_mock.Record())
             {
-                Expect.Call(_payrollResultFactory.RunPayrollOnBus(createPayrollExportCommandDto.PayrollExportDto)).
+                Expect.Call(_payrollResultFactory.RunPayrollOnBus(_createPayrollExportCommandDto.PayrollExportDto)).
                     IgnoreArguments().Return(Guid.NewGuid());
             }
             using(_mock.Playback())
             {
-                _target.Handle(createPayrollExportCommandDto);
+                _target.Handle(_createPayrollExportCommandDto);
             }
-
         }
     }
 }
