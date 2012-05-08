@@ -10,23 +10,23 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof (MessageBrokerHub));
 
-		//public void AddSubscription(Subscription subscription)
-		//{
-		//    if (Logger.IsDebugEnabled)
-		//    {
-		//        Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).",Context.ConnectionId,subscription.Route(),subscription.Route().GetHashCode());
-		//    }
-		//    AddToGroup(subscription.Route().GetHashCode().ToString()).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.",subscription.Route()));
-		//}
+		public void AddSubscription(Subscription subscription)
+		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), subscription.Route().GetHashCode());
+			}
+			AddToGroup(subscription.Route().GetHashCode().ToString()).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", subscription.Route()));
+		}
 
-		//public void RemoveSubscription(string route)
-		//{
-		//    if (Logger.IsDebugEnabled)
-		//    {
-		//        Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, route,route.GetHashCode());
-		//    }
-		//    RemoveFromGroup(route);
-		//}
+		public void RemoveSubscription(string route)
+		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, route, route.GetHashCode());
+			}
+			RemoveFromGroup(route);
+		}
 
 		public void NotifyClients(Notification notification)
 		{
