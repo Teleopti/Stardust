@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxTeams.Checked = Preferences.UseTeams;
 
             if (Preferences.GroupPageOnTeam != null)
-                comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.ToString();
+                comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.Key;
             if (comboBoxGroupPageOnTeams.SelectedValue == null)
                 comboBoxGroupPageOnTeams.SelectedIndex = 0;
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 
             if (Preferences.GroupPageOnCompareWith != null)
-                comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.ToString();
+                comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
