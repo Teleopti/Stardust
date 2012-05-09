@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private void InitializeStateHolder()
 		{
 			// Code that runs on application startup
-			if (String.IsNullOrEmpty(_nhibConfPath))
+			if (string.IsNullOrEmpty(_nhibConfPath))
 				_nhibConfPath = Directory.GetCurrentDirectory();
 			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForEtl()),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
