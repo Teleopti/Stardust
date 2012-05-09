@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -82,7 +83,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
             // Code that runs on application startup
             if (string.IsNullOrEmpty(_nhibConfPath))
-                _nhibConfPath = Directory.GetCurrentDirectory();
+                _nhibConfPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, "thread_static")),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
             application.MessageBrokerDisabled = true;
