@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 	{
 		public static PdfFont GetFont(float fontSize, PdfFontStyle fontStyle, CultureInfo cultureInfo)
 		{
+			if (cultureInfo == null) throw new ArgumentNullException("cultureInfo");
 			//             HeiseiKakuGothicW5 The Heisei Kaku Gothic W5 japanese font face.  
 			//             HeiseiMinchoW3 The Heisei Mincho W3 japanese font face.  
 			//             HanyangSystemsGothicMedium The Hanyang Systems Gothic Medium korean font face.  
