@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
+using log4net;
 
 [assembly: PreApplicationStartMethod(typeof(ApplicationStartModule), "RegisterModule")]
 
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class ApplicationStartModule : IHttpModule
 	{
+		private static ILog log = LogManager.GetLogger(typeof (ApplicationStartModule));
+
 		public static void RegisterModule()
 		{
 			DynamicModuleUtility.RegisterModule(typeof(ApplicationStartModule));
@@ -97,6 +100,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			}
 			catch (Exception ex)
 			{
+				log.Error(ex);
 				ErrorAtStartup = ex;
 			}
 
