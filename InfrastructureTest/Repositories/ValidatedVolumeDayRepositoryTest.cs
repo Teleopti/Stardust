@@ -278,8 +278,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IValidatedVolumeDay validatedVolumeDay2 = new ValidatedVolumeDay(
                 validatedVolumeDay1.Workload,
                 validatedVolumeDay1.VolumeDayDate.AddDays(-1));
-            Thread.Sleep(1000);
+            SetUpdatedOnForValidatedVolumeDay(validatedVolumeDay1,-2);
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay2);
+			SetUpdatedOnForValidatedVolumeDay(validatedVolumeDay2, -1);
 
             IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(UnitOfWork);
             IValidatedVolumeDay result = validatedVolumeDayRepository.FindLatestUpdated(validatedVolumeDay1.Workload.Skill);
@@ -287,12 +288,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(validatedVolumeDay2, result);
 
             validatedVolumeDay1.AddAbsoluteValueToTasks(10);
-            Thread.Sleep(1000);
+            
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay1);
 
             result = validatedVolumeDayRepository.FindLatestUpdated(validatedVolumeDay1.Workload.Skill);
 
             Assert.AreEqual(validatedVolumeDay1, result);
         }
+
+		private void SetUpdatedOnForValidatedVolumeDay(IValidatedVolumeDay validatedVolumeDay, int minutes)
+		{
+			Session.CreateSQLQuery("UPDATE dbo.ValidatedVolumeDay SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
+				"Id", validatedVolumeDay.Id.GetValueOrDefault()).SetInt32("Minutes", minutes).ExecuteUpdate();
+		}
     }
 }
