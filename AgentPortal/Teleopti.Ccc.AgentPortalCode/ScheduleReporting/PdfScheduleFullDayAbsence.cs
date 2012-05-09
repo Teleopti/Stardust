@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         public PdfScheduleFullDayAbsence(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, CultureInfo culture):base(culture)
         {
-            PersonAbsenceDto absence = schedulePart.PersonAbsenceCollection[0];
+        	if (schedulePart == null) throw new ArgumentNullException("schedulePart");
+        	PersonAbsenceDto absence = schedulePart.PersonAbsenceCollection[0];
             //IVisualLayerCollection projection = schedulePart.ProjectionService().CreateProjection();
             TimeSpan contractTime = schedulePart.ContractTime.TimeOfDay;
             DateTime start = schedulePart.ProjectedLayerCollection[0].Period.LocalStartDateTime;
