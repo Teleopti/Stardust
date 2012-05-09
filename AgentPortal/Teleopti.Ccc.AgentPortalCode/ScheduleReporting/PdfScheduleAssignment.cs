@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         public PdfScheduleAssignment(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture):base(culture)
         {
+        	if (schedulePart == null) throw new ArgumentNullException("schedulePart");
         	Brush = new PdfSolidBrush(Color.DimGray);
 
             Template = new PdfTemplate(columnWidth, Height);

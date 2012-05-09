@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft, CultureInfo culture):base(culture)
         {
-            Brush = new PdfSolidBrush(Color.DimGray);
+        	if (schedulePartDto == null) throw new ArgumentNullException("schedulePartDto");
+        	Brush = new PdfSolidBrush(Color.DimGray);
 
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;

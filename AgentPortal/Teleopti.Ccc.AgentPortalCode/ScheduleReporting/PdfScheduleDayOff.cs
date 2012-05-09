@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         public PdfScheduleDayOff(float columnWidth, PersonDayOffDto dayOff, bool rightToLeft, CultureInfo culture):base(culture)
         {
-            Brush = new PdfSolidBrush(Color.DimGray);
+        	if (dayOff == null) throw new ArgumentNullException("dayOff");
+        	Brush = new PdfSolidBrush(Color.DimGray);
            
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;
