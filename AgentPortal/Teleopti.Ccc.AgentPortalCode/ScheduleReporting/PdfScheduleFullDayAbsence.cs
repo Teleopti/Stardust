@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
     public class PdfScheduleFullDayAbsence : PdfScheduleTemplate
     {
 
-        public PdfScheduleFullDayAbsence(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft)
+        public PdfScheduleFullDayAbsence(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, CultureInfo culture):base(culture)
         {
             PersonAbsenceDto absence = schedulePart.PersonAbsenceCollection[0];
             //IVisualLayerCollection projection = schedulePart.ProjectionService().CreateProjection();
