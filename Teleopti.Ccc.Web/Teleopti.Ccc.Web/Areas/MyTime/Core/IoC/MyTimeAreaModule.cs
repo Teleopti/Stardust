@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>().SingleInstance();
 			builder.RegisterType<PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay>().SingleInstance();
 			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>().As<ITypeConverter<TextRequestForm, IPersonRequest>>().SingleInstance();
+			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>().SingleInstance();
 		}
 
 		private void registerPreferenceTypes(ContainerBuilder builder)
