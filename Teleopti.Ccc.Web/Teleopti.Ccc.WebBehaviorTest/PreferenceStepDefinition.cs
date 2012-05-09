@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-start-times"));
+			var div = cell.Div(Find.ByClass("possible-start-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-end-times"));
+			var div = cell.Div(Find.ByClass("possible-end-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-contract-times"));
+			var div = cell.Div(Find.ByClass("possible-contract-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
