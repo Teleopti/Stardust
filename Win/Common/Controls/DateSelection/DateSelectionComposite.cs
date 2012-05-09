@@ -34,11 +34,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             periodListSelectionBox1.AddSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
         }
 
-        internal void SetSelectedDates(IList<DateOnlyPeriod> selectedDates)
-        {
-            periodListSelectionBox1.SetSelectedDates(selectedDates);
-        }
-
+        
         internal void AddSelectedDates(IList<DateOnlyPeriod> selectedDates)
         {
             periodListSelectionBox1.AddSelectedDates(selectedDates);

@@ -118,6 +118,48 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		}
 
 		[Test]
+		public void ShouldNotChangeDefinedDefaultConfig()
+		{
+			const string cfgValue = "user defined";
+			var cfg = new Configuration();
+			var keys = new[]
+			           	{
+			           		Environment.ConnectionProvider,
+			           		Environment.DefaultSchema,
+			           		Environment.ProxyFactoryFactoryClass,
+			           		Environment.SqlExceptionConverter,
+			           		Environment.CacheProvider,
+			           		Environment.UseSecondLevelCache,
+			           		Environment.UseQueryCache,
+			           		Environment.TransactionStrategy,
+			           		Environment.CurrentSessionContextClass,
+			           		Environment.SessionFactoryName
+			           	};
+			foreach (var key in keys)
+			{
+				cfg.SetProperty(key, cfgValue);
+			}
+			cfg.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			var target = new dataSourceConfigurationSetterForTest(false, false, null, null);
+			target.AddDefaultSettingsTo(cfg);
+			foreach (var key in keys)
+			{
+				cfg.Properties[key].Should().Be.EqualTo(cfgValue);
+			}
+		}
+
+		[Test]
+		public void ShouldNotChangeDefinedDialect()
+		{
+			const string dialect = "NHibernate.Dialect.MsSql2008Dialect";
+			var cfg = new Configuration();
+			cfg.SetProperty(Environment.Dialect, dialect);
+			var target = new dataSourceConfigurationSetterForTest(false, false, null, null);
+			target.AddDefaultSettingsTo(cfg);
+			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(dialect);
+		}
+
+		[Test]
 		public void VerifyEtlConfig()
 		{
 			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForEtl();

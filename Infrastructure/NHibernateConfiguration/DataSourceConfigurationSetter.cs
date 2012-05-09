@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "ETL tool");
-		} 
+		}
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "Application Config");
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "SDK");
-		} 
+		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
 			return new DataSourceConfigurationSetter(false, true, "thread_static", "Service bus");
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private const string noDataSourceName = "[not set]";
 
-		protected DataSourceConfigurationSetter(bool useSecondLevelCache, 
-															bool useDistributedTransactionFactory, 
+		protected DataSourceConfigurationSetter(bool useSecondLevelCache,
+															bool useDistributedTransactionFactory,
 															string sessionContext,
 															string applicationName)
 		{
@@ -55,33 +55,32 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
-			nhConfiguration.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
-			nhConfiguration.SetProperty(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
-			nhConfiguration.SetProperty(Environment.DefaultSchema, "dbo");
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
 			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
-			nhConfiguration.SetProperty(Environment.ProxyFactoryFactoryClass,
-			                            typeof (FasterProxyFactoryFactory).AssemblyQualifiedName);
-			nhConfiguration.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ProxyFactoryFactoryClass,
+												 typeof(FasterProxyFactoryFactory).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (UseSecondLevelCache)
 			{
-				nhConfiguration.SetProperty(Environment.CacheProvider, "NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
-				nhConfiguration.SetProperty(Environment.UseSecondLevelCache, "true");
-				nhConfiguration.SetProperty(Environment.UseQueryCache, "true");
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CacheProvider, "NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "true");
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseQueryCache, "true");
 			}
 			else
 			{
-				nhConfiguration.SetProperty(Environment.UseSecondLevelCache, "false");
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");
 			}
-			nhConfiguration.SetProperty(Environment.TransactionStrategy,
-			                            UseDistributedTransactionFactory ? 
-												 typeof (TeleoptiDistributedTransactionFactory).AssemblyQualifiedName : 
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy,
+												 UseDistributedTransactionFactory ?
+												 typeof(TeleoptiDistributedTransactionFactory).AssemblyQualifiedName :
 												 "NHibernate.Transaction.AdoNetTransactionFactory, NHibernate");
 			if (!string.IsNullOrEmpty(SessionContext))
-				nhConfiguration.SetProperty(Environment.CurrentSessionContextClass, SessionContext);
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CurrentSessionContextClass, SessionContext);
 
-			if(nhConfiguration.GetProperty(Environment.SessionFactoryName)==null)
-				nhConfiguration.SetProperty(Environment.SessionFactoryName, noDataSourceName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, noDataSourceName);
 
 			fixApplicationNameOnConnectionString(nhConfiguration);
 		}
