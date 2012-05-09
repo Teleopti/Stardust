@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
     public class PdfScheduleNotScheduled : PdfScheduleTemplate
     {
 
-        public PdfScheduleNotScheduled(float columnWidth, DateOnly date, bool rightToLeft)
+        public PdfScheduleNotScheduled(float columnWidth, DateOnly date, bool rightToLeft, CultureInfo culture):base(culture)
         {
             Brush = new PdfSolidBrush(Color.DimGray);
 
