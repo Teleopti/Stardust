@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 				destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
 
-				destination.TrySetMessage(source.Message);
+				destination.TrySetMessage(source.Message ?? "");
 
 				destination.Request = new AbsenceRequest(new Absence(), new DateTimePeriod());
 
