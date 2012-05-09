@@ -29,18 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			CreateMap<TextRequestForm, IPersonRequest>()
 				.ConvertUsing(_textRequestFormToPersonRequest.Invoke());
-
-			CreateMap<DateTimePeriodForm, DateTimePeriod>()
-				.ConvertUsing(s =>
-				              	{
-									if (s == null)
-										return new DateTimePeriod();
-									var fromTime = s.StartDate.Date.Add(s.StartTime.Time);
-									var toTime = s.EndDate.Date.Add(s.EndTime.Time);
-									var fromTimeUtc = TimeZoneHelper.ConvertToUtc(fromTime, _userTimeZone.Invoke().TimeZone());
-									var toTimeUtc = TimeZoneHelper.ConvertToUtc(toTime, _userTimeZone.Invoke().TimeZone());
-									return new DateTimePeriod(fromTimeUtc, toTimeUtc);
-								});
 		}
 
 		public class TextRequestFormToPersonRequest : ITypeConverter<TextRequestForm, IPersonRequest>

@@ -35,13 +35,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				new TextRequestFormMappingProfile.TextRequestFormToPersonRequest(() => Mapper.Engine, () => loggedOnUser);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(
-				new TextRequestFormMappingProfile(
-					() => Mapper.Engine, 
-					() => loggedOnUser, 
-					() => userTimeZone,
-					() => textRequestFormToPersonRequest
-					)));
+			Mapper.Initialize(c =>
+			                  	{
+			                  		c.AddProfile(
+			                  			new TextRequestFormMappingProfile(
+			                  				() => Mapper.Engine,
+			                  				() => loggedOnUser,
+			                  				() => userTimeZone,
+			                  				() => textRequestFormToPersonRequest
+			                  				));
+			                  		c.AddProfile(new DateTimePeriodFormMappingProfile(() => userTimeZone));
+			                  	});
 		}	
 
 		[Test]
@@ -82,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapToUtcPeriod()
+		public void ShouldMapPeriod()
 		{
 			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
@@ -98,10 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			           	};
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
 
-			var expected = new DateTimePeriod(
-				TimeZoneHelper.ConvertToUtc(form.Period.StartDate.Date.Add(form.Period.StartTime.Time), timeZone),
-				TimeZoneHelper.ConvertToUtc(form.Period.EndDate.Date.Add(form.Period.EndTime.Time), timeZone)
-				);
+			var expected = Mapper.Map<DateTimePeriodForm, DateTimePeriod>(form.Period);
 			result.Request.Period.Should().Be(expected);
 		}
 
