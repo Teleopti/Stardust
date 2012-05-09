@@ -1167,4 +1167,13 @@
     <value>Förfrågningsperiod</value>
     <comment>Förfrågningsperiod</comment>
   </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Omdirigera nu</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Sessionen löpte ut</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Din session löpte ut på grund av en längre period av inaktivitet. Du kommer snart att omdirigeras till inloggningssidan.</value>
+  </data>
 </root>
