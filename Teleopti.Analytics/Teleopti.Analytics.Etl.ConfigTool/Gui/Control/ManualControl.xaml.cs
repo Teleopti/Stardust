@@ -21,7 +21,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
         private IJob _currentJob;
     	private IBaseConfiguration _baseConfiguration;
 
-    	public ManualControl()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		public ManualControl()
         {
             InitializeComponent();
             if (isInDesignMode) return;

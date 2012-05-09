@@ -127,6 +127,7 @@
       <DependentUpon>SpinningProgressControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Gui\SpinningProgress\ToolStripSpinningProgressControl.cs" />
+    <Compile Include="Gui\ViewModel\BusinessUnitItemMapper.cs" />
     <Compile Include="Gui\ViewModel\IJobHistory.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryMapper.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionEventArgs.cs" />

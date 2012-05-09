@@ -2,10 +2,10 @@
 <datasource>
   <hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
     <session-factory name="Demo on my Computer">
-      <property name="connection.connection_string">Data Source=.;Initial Catalog=HgMain_Demoreg_TeleoptiCCC7;Integrated Security=SSPI;</property>
+      <property name="connection.connection_string">Data Source=.;Initial Catalog=PBI18829-clone_Demoreg_TeleoptiCCC7;Integrated Security=SSPI;</property>
     </session-factory>
   </hibernate-configuration>
   <matrix name="MatrixDatamartDemo">
-    <connectionString>Data source=.;Initial Catalog=HgMain_Demoreg_TeleoptiAnalytics;Integrated Security=SSPI;</connectionString>
+    <connectionString>Data source=.;Initial Catalog=PBI18829-clone_Demoreg_TeleoptiAnalytics;Integrated Security=SSPI;</connectionString>
   </matrix>
 </datasource>

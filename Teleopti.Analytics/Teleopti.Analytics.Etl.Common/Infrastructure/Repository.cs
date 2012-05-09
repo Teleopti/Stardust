@@ -9,7 +9,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-public class Repository : IJobScheduleRepository, IJobLogRepository, IRunControllerRepository, IJobHistoryRepository
+	public class Repository : IJobScheduleRepository, IJobLogRepository, IRunControllerRepository, IJobHistoryRepository
 	{
 		private readonly string _connectionString;
 
@@ -200,6 +200,16 @@ public class Repository : IJobScheduleRepository, IJobLogRepository, IRunControl
 			}
 
 			return false;
+		}
+
+		public DataTable BusinessUnitsIncludingAllItem
+		{
+			get
+			{
+				var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_business_unit_all_get", null,
+														_connectionString);
+				return ds.Tables[0];
+			}
 		}
 	}
 }

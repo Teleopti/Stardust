@@ -8,14 +8,21 @@ namespace Teleopti.Analytics.Etl.CommonTest.Entity
 	[TestFixture]
 	public class BusinessUnitItemTest
 	{
+		private BusinessUnitItem _target;
+		private Guid _newId;
+
+		[SetUp]
+		public void Setup()
+		{
+			_newId = Guid.NewGuid();
+			_target = new BusinessUnitItem { Id = _newId, Name = "name" };
+		}
+
 		[Test]
 		public void ShouldBeAbleToSetProperties()
 		{
-			Guid newId = Guid.NewGuid();
-			var target = new BusinessUnitItem { Id = newId, Name = "name" };
-
-			target.Id.Should().Be.EqualTo(newId);
-			target.Name.Should().Be.EqualTo("name");
+			_target.Id.Should().Be.EqualTo(_newId);
+			_target.Name.Should().Be.EqualTo("name");
 		}
 	}
 }

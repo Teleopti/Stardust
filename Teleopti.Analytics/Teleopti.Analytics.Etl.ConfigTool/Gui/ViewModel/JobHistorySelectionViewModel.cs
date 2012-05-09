@@ -12,6 +12,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		private readonly CultureInfo _culture;
 		private DateTime _startDate;
 		private DateTime _endDate;
+		private IList<BusinessUnitItem> _businessUnitCollection;
 
 		public JobHistorySelectionViewModel(IBaseConfiguration baseConfiguration)
 		{
@@ -20,7 +21,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 									: CultureInfo.GetCultureInfo("sv-SE");
 
 			SetWeekPeriod();
-			SetBusinessUnit();
 		}
 
 		private void SetWeekPeriod()
@@ -28,18 +28,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			StartDate = GetFirstDayOfWeek(DateTime.Now.Date, _culture);
 			EndDate = StartDate.AddDays(6);
 		}
-
-		private void SetBusinessUnit()
-		{
-			BusinessUnitCollection = new List<BusinessUnitItem>
-			                         	{
-			                         		new BusinessUnitItem {Id = new Guid("00000000-0000-0000-0000-000000000002"), Name = "<All>"},
-			                         		new BusinessUnitItem
-			                         			{Id = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"), Name = "TeleoptiCCCDemo"}
-			                         	};
-			SelectedBusinessUnitId = BusinessUnitCollection[0].Id;
-		}
-
+		
 		private static DateTime GetFirstDayOfWeek(DateTime dayInWeek, CultureInfo cultureInfo)
 		{
 			DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
@@ -72,7 +61,19 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			}
 		}
 
-		public IList<BusinessUnitItem> BusinessUnitCollection { get; set; }
+		public IList<BusinessUnitItem> BusinessUnitCollection
+		{
+			get
+			{
+				if (_businessUnitCollection == null)
+				{
+					_businessUnitCollection = BusinessUnitItemMapper.Map();
+					SelectedBusinessUnitId = _businessUnitCollection[0].Id;
+				}
+				return _businessUnitCollection;
+			}
+		}
+
 		public Guid SelectedBusinessUnitId { get; set; }
 
 		public void PreviousPeriod()

@@ -123,11 +123,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
 
         private static System.Windows.Forms.Control createControlInstance()
         {
-            SpinningProgressControl c = new SpinningProgressControl();
-            c.AutoSize = false;
-            c.Height = 16;
+        	var c = new SpinningProgressControl {AutoSize = false, Height = 16};
 
-            return c;
+        	return c;
         }
     }
 }

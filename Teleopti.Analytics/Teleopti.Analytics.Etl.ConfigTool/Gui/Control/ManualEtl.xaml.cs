@@ -76,8 +76,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
                 {
                     const string message = "'Date from' cannot be set to a later date than 'Date to'. Change date selection and try again.";
                     const string caption = "Invalid date selection";
-                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-                                    MessageBoxDefaultButton.Button1);
+                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
                     myTree.SetExecuteEnabledState(true);
                     return false;
                 }

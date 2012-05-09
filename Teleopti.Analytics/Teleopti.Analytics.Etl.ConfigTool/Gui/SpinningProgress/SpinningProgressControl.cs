@@ -1,34 +1,35 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
 {
     public partial class SpinningProgressControl  
     { 
-        private Color m_InactiveColor = Color.FromArgb( 218, 218, 218 ); 
-        private Color m_ActiveColor = Color.FromArgb( 35, 146, 33 ); 
-        private Color m_TransissionColor = Color.FromArgb( 129, 242, 121 ); 
+        private Color _inactiveColor = Color.FromArgb( 218, 218, 218 ); 
+        private Color _activeColor = Color.FromArgb( 35, 146, 33 ); 
+        private Color _transissionColor = Color.FromArgb( 129, 242, 121 ); 
         
-        private Region innerBackgroundRegion; 
-        private System.Drawing.Drawing2D.GraphicsPath[] segmentPaths = new System.Drawing.Drawing2D.GraphicsPath[ 12 ]; 
+        private Region _innerBackgroundRegion; 
+        private readonly System.Drawing.Drawing2D.GraphicsPath[] _segmentPaths = new System.Drawing.Drawing2D.GraphicsPath[ 12 ]; 
         
-        private bool m_AutoIncrement = true; 
-        private double m_IncrementFrequency = 100; 
-        private bool m_BehindIsActive = true; 
-        private int m_TransitionSegment; 
+        private bool _autoIncrement = true; 
+        private double _incrementFrequency = 100; 
+        private bool _behindIsActive = true; 
+        private int _transitionSegment; 
         
-        private System.Timers.Timer m_AutoRotateTimer;
+        private System.Timers.Timer _autoRotateTimer;
         [System.ComponentModel.DefaultValue(typeof(Color), "218, 218, 218")]
         public Color InactiveSegmentColor 
         { 
             get 
             { 
-                return m_InactiveColor; 
+                return _inactiveColor; 
             } 
             set 
             { 
-                m_InactiveColor = value; 
+                _inactiveColor = value; 
                 Invalidate(); 
             } 
         }
@@ -37,11 +38,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_ActiveColor; 
+                return _activeColor; 
             } 
             set 
             { 
-                m_ActiveColor = value; 
+                _activeColor = value; 
                 Invalidate(); 
             } 
         } 
@@ -50,11 +51,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_TransissionColor; 
+                return _transissionColor; 
             } 
             set 
             { 
-                m_TransissionColor = value; 
+                _transissionColor = value; 
                 Invalidate(); 
             } 
         }
@@ -63,11 +64,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_BehindIsActive; 
+                return _behindIsActive; 
             } 
             set 
             { 
-                m_BehindIsActive = value; 
+                _behindIsActive = value; 
                 Invalidate(); 
             } 
         }
@@ -76,7 +77,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_TransitionSegment; 
+                return _transitionSegment; 
             } 
             set 
             { 
@@ -84,7 +85,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
                 { 
                     throw new ArgumentException( "TransistionSegment must be between -1 and 11" ); 
                 } 
-                m_TransitionSegment = value; 
+                _transitionSegment = value; 
                 Invalidate(); 
             } 
         }
@@ -93,23 +94,23 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_AutoIncrement; 
+                return _autoIncrement; 
             } 
             set 
             { 
-                m_AutoIncrement = value; 
+                _autoIncrement = value; 
                 
-                if ( value == false && m_AutoRotateTimer != null ) 
+                if ( value == false && _autoRotateTimer != null ) 
                 { 
-                    m_AutoRotateTimer.Dispose(); 
-                    m_AutoRotateTimer = null; 
+                    _autoRotateTimer.Dispose(); 
+                    _autoRotateTimer = null; 
                 } 
                 
-                if ( value == true && m_AutoRotateTimer == null ) 
+                if ( value && _autoRotateTimer == null ) 
                 { 
-                    m_AutoRotateTimer = new System.Timers.Timer( m_IncrementFrequency ); 
-                    m_AutoRotateTimer.Elapsed += new System.Timers.ElapsedEventHandler( IncrementTransisionSegment ); 
-                    m_AutoRotateTimer.Start(); 
+                    _autoRotateTimer = new System.Timers.Timer( _incrementFrequency ); 
+                    _autoRotateTimer.Elapsed += new System.Timers.ElapsedEventHandler( IncrementTransisionSegment ); 
+                    _autoRotateTimer.Start(); 
                 } 
             } 
         }
@@ -118,13 +119,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             get 
             { 
-                return m_IncrementFrequency; 
+                return _incrementFrequency; 
             } 
             set 
             { 
-                m_IncrementFrequency = value; 
+                _incrementFrequency = value; 
                 
-                if ( m_AutoRotateTimer != null ) 
+                if ( _autoRotateTimer != null ) 
                 { 
                     AutoIncrement = false; 
                     AutoIncrement = true; 
@@ -140,34 +141,34 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
             //  Add any initialization after the InitializeComponent() call.
             CalculateSegments(); 
             
-            m_AutoRotateTimer = new System.Timers.Timer( m_IncrementFrequency ); 
-            m_AutoRotateTimer.Elapsed += new System.Timers.ElapsedEventHandler( IncrementTransisionSegment );
-            this.DoubleBuffered = true;
-            m_AutoRotateTimer.Start(); 
+            _autoRotateTimer = new System.Timers.Timer( _incrementFrequency ); 
+            _autoRotateTimer.Elapsed += new System.Timers.ElapsedEventHandler( IncrementTransisionSegment );
+            DoubleBuffered = true;
+            _autoRotateTimer.Start(); 
 
-            this.EnabledChanged += new EventHandler( SpinningProgress_EnabledChanged ); 
+            EnabledChanged += new EventHandler( SpinningProgress_EnabledChanged ); 
             // events handled by ProgressDisk_Paint
-            this.Paint += new PaintEventHandler(ProgressDisk_Paint); 
+            Paint += new PaintEventHandler(ProgressDisk_Paint); 
             // events handled by ProgressDisk_Resize
-            this.Resize += new EventHandler( ProgressDisk_Resize); 
+            Resize += new EventHandler( ProgressDisk_Resize); 
             // events handled by ProgressDisk_SizeChanged
-            this.SizeChanged += new EventHandler(ProgressDisk_SizeChanged); 
+            SizeChanged += new EventHandler(ProgressDisk_SizeChanged); 
         } 
         
         private void IncrementTransisionSegment( object sender, System.Timers.ElapsedEventArgs e ) 
         { 
-            if ( m_TransitionSegment == 11 ) 
+            if ( _transitionSegment == 11 ) 
             { 
-                m_TransitionSegment = 0; 
-                m_BehindIsActive = !( m_BehindIsActive ); 
+                _transitionSegment = 0; 
+                _behindIsActive = !( _behindIsActive ); 
             } 
-            else if ( m_TransitionSegment == -1 ) 
+            else if ( _transitionSegment == -1 ) 
             { 
-                m_TransitionSegment = 0; 
+                _transitionSegment = 0; 
             } 
             else 
             { 
-                m_TransitionSegment += 1; 
+                _transitionSegment += 1; 
             } 
             
             Invalidate(); 
@@ -176,27 +177,25 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         
         private void CalculateSegments() 
         { 
-            Rectangle rctFull = new Rectangle( 0, 0, Width, Height ); 
-            Rectangle rctInner = new Rectangle( ((Width *  7) / 30),
+            var rctFull = new Rectangle( 0, 0, Width, Height ); 
+            var rctInner = new Rectangle( ((Width *  7) / 30),
                                                 ((Height *  7) / 30),
                                                 (Width -  ((Width *  14 ) / 30 )),
-                                                (Height - ((Height * 14) / 30 ))); 
+                                                (Height - ((Height * 14) / 30 )));
 
-            System.Drawing.Drawing2D.GraphicsPath pthInnerBackground; 
-            
-            // Create 12 segment pieces
+        	// Create 12 segment pieces
             for ( int intCount=0; intCount < 12; intCount++ ) 
             { 
-                segmentPaths[ intCount ] = new System.Drawing.Drawing2D.GraphicsPath(); 
+                _segmentPaths[ intCount ] = new GraphicsPath(); 
                 
                 // We subtract 90 so that the starting segment is at 12 o'clock
-                segmentPaths[ intCount ].AddPie( rctFull, ( intCount * 30 ) - 90, 25 ); 
+                _segmentPaths[ intCount ].AddPie( rctFull, ( intCount * 30 ) - 90, 25 ); 
             } 
             
             // Create the center circle cut-out
-            pthInnerBackground = new System.Drawing.Drawing2D.GraphicsPath(); 
+            var pthInnerBackground = new GraphicsPath(); 
             pthInnerBackground.AddPie( rctInner, 0, 360 ); 
-            innerBackgroundRegion = new Region( pthInnerBackground ); 
+            _innerBackgroundRegion = new Region( pthInnerBackground ); 
         } 
         
         
@@ -204,16 +203,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         { 
             if ( Enabled ) 
             { 
-                if ( m_AutoRotateTimer != null ) 
+                if ( _autoRotateTimer != null ) 
                 { 
-                    m_AutoRotateTimer.Start(); 
+                    _autoRotateTimer.Start(); 
                 } 
             } 
             else 
             { 
-                if ( m_AutoRotateTimer != null ) 
+                if ( _autoRotateTimer != null ) 
                 { 
-                    m_AutoRotateTimer.Stop(); 
+                    _autoRotateTimer.Stop(); 
                 } 
             } 
         } 
@@ -221,62 +220,62 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         
         private void ProgressDisk_Paint( object sender, PaintEventArgs e ) 
         { 
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; 
-            e.Graphics.ExcludeClip( innerBackgroundRegion ); 
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; 
+            e.Graphics.ExcludeClip( _innerBackgroundRegion ); 
             
             for ( int intCount=0; intCount < 12; intCount++ ) 
             { 
                 if ( Enabled ) 
                 { 
-                    if ( intCount == m_TransitionSegment ) 
+                    if ( intCount == _transitionSegment ) 
                     { 
                         // If this segment is the transistion segment, colour it differently
-                        using(var brush = new SolidBrush( m_TransissionColor ))
+                        using(var brush = new SolidBrush( _transissionColor ))
                         {
-                            e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                            e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                         }
                     } 
-                    else if ( intCount < m_TransitionSegment ) 
+                    else if ( intCount < _transitionSegment ) 
                     { 
                         // This segment is behind the transistion segment
-                        if ( m_BehindIsActive ) 
+                        if ( _behindIsActive ) 
                         { 
                             // If behind the transistion should be active, 
                             // colour it with the active colour
-                            using (var brush = new SolidBrush(m_ActiveColor))
+                            using (var brush = new SolidBrush(_activeColor))
                             {
-                                e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                                e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                             }
                         } 
                         else 
                         { 
                             // If behind the transistion should be in-active, 
                             // colour it with the in-active colour
-                            using (var brush = new SolidBrush(m_InactiveColor))
+                            using (var brush = new SolidBrush(_inactiveColor))
                             {
-                                e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                                e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                             }
                         } 
                     } 
                     else 
                     { 
                         // This segment is ahead of the transistion segment
-                        if ( m_BehindIsActive ) 
+                        if ( _behindIsActive ) 
                         { 
                             // If behind the the transistion should be active, 
                             // colour it with the in-active colour
-                            using (var brush = new SolidBrush(m_InactiveColor))
+                            using (var brush = new SolidBrush(_inactiveColor))
                             {
-                                e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                                e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                             }
                         } 
                         else 
                         { 
                             // If behind the the transistion should be in-active, 
                             // colour it with the active colour
-                            using (var brush = new SolidBrush(m_ActiveColor))
+                            using (var brush = new SolidBrush(_activeColor))
                             {
-                                e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                                e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                             }
                         } 
                     } 
@@ -284,9 +283,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
                 else 
                 { 
                     // Draw all segments in in-active colour if not enabled
-                    using (var brush = new SolidBrush(m_InactiveColor))
+                    using (var brush = new SolidBrush(_inactiveColor))
                     {
-                        e.Graphics.FillPath(brush, segmentPaths[intCount]);
+                        e.Graphics.FillPath(brush, _segmentPaths[intCount]);
                     }
                 } 
             } 

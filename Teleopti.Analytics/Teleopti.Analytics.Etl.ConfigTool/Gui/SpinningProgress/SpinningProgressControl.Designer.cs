@@ -9,7 +9,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.SpinningProgress
         [ System.Diagnostics.DebuggerNonUserCode() ]
         protected override void Dispose( bool disposing ) 
         { 
-            innerBackgroundRegion.Dispose();
+            _innerBackgroundRegion.Dispose();
             if ( disposing && components != null ) 
             { 
                 components.Dispose(); 
