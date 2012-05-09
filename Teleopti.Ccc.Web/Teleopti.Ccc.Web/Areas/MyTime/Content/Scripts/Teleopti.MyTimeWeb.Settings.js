@@ -60,7 +60,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				var updatedLabel = $("label#updated");
 				updatedLabel.show();
 				$("#passwordDiv input").reset();
-				setTimeout(function () { updatedLabel.hide() }, 2000);
+				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
@@ -90,7 +90,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _selectorChanged(value, url) {
-		$("#selectors label").hide();
 		var data = { LCID: value };
 		$.myTimeAjax({
 			url: url,
@@ -99,12 +98,19 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			type: "PUT",
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
-				location.reload();
+				_refreshPageWhenAllAjaxDone();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
+	}
+
+	function _refreshPageWhenAllAjaxDone() {
+		if (!Teleopti.MyTimeWeb.Ajax.IsRequesting())
+			location.reload();
+		else
+			setTimeout(function () { _refreshPageWhenAllAjaxDone(); }, 100);
 	}
 
 	return {
