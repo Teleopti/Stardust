@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void VerifyDefaultProperty()
 		{
-			target = new InitializeApplication(new DataSourcesFactory(null, new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null)),
+			target = new InitializeApplication(new DataSourcesFactory(null, new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest()),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
 		}
 

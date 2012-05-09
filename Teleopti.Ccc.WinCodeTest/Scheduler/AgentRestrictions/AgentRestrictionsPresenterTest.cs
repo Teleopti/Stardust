@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IAgentRestrictionsView _view;
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
+		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
 		private MockRepository _mocks;
 
 		[SetUp]
@@ -22,7 +23,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_model = _mocks.StrictMock<IAgentRestrictionsModel>();
 			_view = _mocks.StrictMock<IAgentRestrictionsView>();
 			_warningDrawer = _mocks.StrictMock<IAgentRestrictionsWarningDrawer>();
-			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer);
+			_loadingDrawer = _mocks.StrictMock<IAgentRestrictionsLoadingDrawer>();
+			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer, _loadingDrawer);
 		}
 
 		[Test]
@@ -113,24 +115,34 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			for (var i = 0; i < 12; i++)
 			{
-				using (var gridStyleInfo = new GridStyleInfo())
+				using(_mocks.Record())
 				{
-					var args = new GridQueryCellInfoEventArgs(2, i, gridStyleInfo);
-					_presenter.GridQueryCellInfo(null, args);
+					Expect.Call(_loadingDrawer.Draw(_view, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
+				}
 
-					if (i == 0) Assert.AreEqual("Header", args.Style.CellType);
-					if (i == 1) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-					if (i == 2) Assert.AreEqual("Static", args.Style.CellType);
-					if (i == 3) Assert.AreEqual("Static", args.Style.CellType);
-					if (i == 4) Assert.AreEqual("Static", args.Style.CellType);
-					if (i == 5) Assert.AreEqual("TimeSpan", args.Style.CellType);
-					if (i == 6) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-					if (i == 7) Assert.AreEqual("TimeSpan", args.Style.CellType);
-					if (i == 8) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-					if (i == 9) Assert.AreEqual("TimeSpan", args.Style.CellType);
-					if (i == 10) Assert.AreEqual("TimeSpan", args.Style.CellType);
-					if (i == 11) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
-					if (i == 12) Assert.AreEqual("Static", args.Style.CellType);
+				using(_mocks.Playback()) 
+				{
+					using (var gridStyleInfo = new GridStyleInfo())
+					{
+						var args = new GridQueryCellInfoEventArgs(2, i, gridStyleInfo);
+						_presenter.GridQueryCellInfo(null, args);
+
+						if (i == 0) Assert.AreEqual("Header", args.Style.CellType);
+						if (i == 1) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
+						if (i == 2) Assert.AreEqual("Static", args.Style.CellType);
+						if (i == 3) Assert.AreEqual("Static", args.Style.CellType);
+						if (i == 4) Assert.AreEqual("Static", args.Style.CellType);
+						if (i == 5) Assert.AreEqual("TimeSpan", args.Style.CellType);
+						if (i == 6) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
+						if (i == 7) Assert.AreEqual("TimeSpan", args.Style.CellType);
+						if (i == 8) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
+						if (i == 9) Assert.AreEqual("TimeSpan", args.Style.CellType);
+						if (i == 10) Assert.AreEqual("TimeSpan", args.Style.CellType);
+						if (i == 11) Assert.AreEqual("NumericReadOnlyCellModel", args.Style.CellType);
+						if (i == 12) Assert.AreEqual("Static", args.Style.CellType);
+
+						Setup();
+					}
 				}
 			}
 		}

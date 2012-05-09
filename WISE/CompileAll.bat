@@ -251,7 +251,7 @@ DEL /F /Q "%WISESOURCEFILE%\Web\web.config"
 COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7Web.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
+COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
 
 DEL /F /Q "%WISESOURCEFILE%\Broker\web.config"
 COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"

@@ -12,6 +12,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private AgentRestrictionsPresenter _presenter;
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
+		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
+
+		public bool FinishedTest{get; set;}
 		
 		public AgentRestrictionGrid()
 		{
@@ -31,8 +34,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private void InitializeGrid()
 		{
 			_warningDrawer = new AgentRestrictionsWarningDrawer();
+			_loadingDrawer = new AgentRestrictionsLoadingDrawer();
 			_model = new AgentRestrictionsModel();
-			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer);
+			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer);
 			
 
 			ResetVolatileData();
@@ -70,7 +74,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				e.Cancel = true; 
 		}
 
-
 		private void InitializeHeaders()
 		{
 			Rows.HeaderCount = 1; // = 2 headers
@@ -81,7 +84,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 2, 0, 6));
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 7, 0, 8));
-			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));
+			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
+		}
+
+		public void MergeCells(int rowIndex, bool unmerge)
+		{
+			if (unmerge) Model.CoveredRanges.RemoveRows(rowIndex, rowIndex);
+			else Model.CoveredRanges.Add(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
 		}
 
 		public void LoadData()

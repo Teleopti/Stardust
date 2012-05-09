@@ -181,8 +181,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				}
 
 				var appCfg = new Configuration();
-				setDefaultValuesOnApplicationConf(appCfg);
 				appCfg.Configure(temporaryConfigFile);
+				setDefaultValuesOnApplicationConf(appCfg);
 				_applicationConfiguration = appCfg;
 			}
 			finally

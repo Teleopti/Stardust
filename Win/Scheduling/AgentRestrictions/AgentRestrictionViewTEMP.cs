@@ -5,6 +5,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
 	public partial class AgentRestrictionViewTemp : Form
 	{
+		
+
 		public AgentRestrictionViewTemp()
 		{
 			InitializeComponent();
@@ -21,6 +23,19 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			agentRestrictionGrid.Model.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 			agentRestrictionGrid.LoadData();
 			agentRestrictionGrid.Refresh();
+		}
+
+		private void button2_Click(object sender, System.EventArgs e)
+		{
+			agentRestrictionGrid.FinishedTest = true;
+			agentRestrictionGrid.MergeCells(2, true);
+			agentRestrictionGrid.Refresh();
+		}
+
+		private void button3_Click(object sender, System.EventArgs e)
+		{
+			agentRestrictionGrid.FinishedTest = false;
+			Refresh();
 		}
 	}
 }

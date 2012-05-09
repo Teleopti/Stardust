@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             			                       		new ScheduleDenormalizer(notify, saveToDenormalizationQueue),
             			                       		new MeetingDenormalizer(notify, saveToDenormalizationQueue)
             			                       	},
-															new DataSourceConfigurationSetter(false, true, "thread_static")),
+															DataSourceConfigurationSetter.ForServiceBus()),
             			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
