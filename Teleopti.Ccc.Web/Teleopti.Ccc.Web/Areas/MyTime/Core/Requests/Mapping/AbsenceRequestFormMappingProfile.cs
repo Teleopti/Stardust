@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
@@ -43,13 +44,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			public IPersonRequest Convert(ResolutionContext context)
 			{
-				var source = context.SourceValue as TextRequestForm;
+				var source = context.SourceValue as AbsenceRequestForm;
 				var destination = context.DestinationValue as IPersonRequest;
 
-				if (destination == null)
-				{
-					destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser());
-				}
+				destination = new PersonRequest(_loggedOnUser.Invoke().CurrentUser()) {Subject = source.Subject};
+
+				destination.TrySetMessage(source.Message);
+
+				destination.Request = new AbsenceRequest(new Absence(), new DateTimePeriod());
 
 				return destination;
 			}

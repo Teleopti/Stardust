@@ -6,7 +6,9 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -52,6 +54,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(new AbsenceRequestForm());
 
 			result.Person.Should().Be.SameInstanceAs(_person);
+		}
+
+		[Test]
+		public void ShouldMapSubject()
+		{
+			var form = new AbsenceRequestForm { Subject = "Test" };
+
+			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+
+			result.GetSubject(new NoFormatting()).Should().Be("Test");
+		}
+
+		[Test]
+		public void ShouldMapToAbsenceRequest()
+		{
+			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(new AbsenceRequestForm());
+
+			result.Request.Should().Be.OfType<AbsenceRequest>();
+		}
+
+		[Test]
+		public void ShouldMapMessage()
+		{
+			var form = new AbsenceRequestForm { Message = "Message" };
+
+			var result = Mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
+
+			result.GetMessage(new NoFormatting()).Should().Be("Message");
 		}
 	}
 }
