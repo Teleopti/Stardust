@@ -10262,6 +10262,18 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Visa publik notering</value>
     <comment>ShowPublicNotes</comment>
   </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Tillgänglighetsuppfyllnad</value>
+    <comment>Availability Fulfillment</comment>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Vetouppfyllnad</value>
+    <comment>Must Have Fulfillment</comment>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Önskemålsuppfyllnad</value>
+    <comment>Preference Fulfillment</comment>
+  </data>
   <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
     <value>Kunde inte nå Teleoptis kundwebb just nu!</value>
   </data>
@@ -10273,6 +10285,14 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="ImportStaffing" xml:space="preserve">
     <value>Importera bemanning</value>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Sekvensuppfyllnad</value>
+    <comment>Rotation Fulfillment</comment>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Studenttillgänglighetsuppfyllnad</value>
+    <comment>Student Availability Fulfillment</comment>
   </data>
   <data name="ImportWorkload" xml:space="preserve">
     <value>Importera workload</value>
@@ -10324,5 +10344,20 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
     <value>Extern resurs används av ett annat program, var god försök igen senare.</value>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Resursberäkna efter:</value>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Importera prognos från fil</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Efterfråga tilldelningar</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Visa enbart tillgängliga för skiftbyte</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Starttiden {0} måste vara tidigare än sluttiden {1}.</value>
   </data>
 </root>
