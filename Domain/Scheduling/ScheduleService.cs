@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     return false;
                 }
 
+					 if (_finderResults.Contains(_finderService.FinderResult.PersonDateKey))
+					 {
+					 	var res = (WorkShiftFinderResult)_finderResults[_finderService.FinderResult.PersonDateKey];
+					 	res.Successful = true;
+					 }
                 schedulePart.AddMainShift((IMainShift)cache.ShiftProjection.TheMainShift.EntityClone());
                 _rollbackService.Modify(schedulePart);
 
