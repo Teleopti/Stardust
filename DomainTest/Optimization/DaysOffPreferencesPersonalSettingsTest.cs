@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void VerifyDefaultvalues()
+		public void VerifyDefaultValues()
 		{
 			_target.MapTo(_daysOffPreferencesTarget);
 			Assert.AreEqual(0d, _daysOffPreferencesTarget.KeepExistingDaysOffValue);

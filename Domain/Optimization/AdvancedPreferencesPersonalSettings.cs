@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void SetDefaultValues()
 		{
 			_targetValueCalculation = TargetValueOptions.StandardDeviation;
-			_useTweakedValues = true;
 			_useMinimumStaffing = true;
 			_useMaximumStaffing = true;
 			_useMaximumSeats = true;

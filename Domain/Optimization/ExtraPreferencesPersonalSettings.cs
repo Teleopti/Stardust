@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[Serializable]
 	public class ExtraPreferencesPersonalSettings : SettingValue
 	{
-		private Guid? _groupPageOnTeamId;
-		private Guid? _groupPageOnCompareWithId;
+		private string _groupPageOnTeamKey;
+		private string _groupPageOnCompareWithKey;
 
 		private BlockFinderType _blockFinderTypeValue;
 
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			foreach (var groupPage in groupPages)
 			{
-				if (_groupPageOnTeamId == groupPage.Id)
+				if (_groupPageOnTeamKey == groupPage.Key)
 					target.GroupPageOnTeam = groupPage;
-				if (_groupPageOnCompareWithId == groupPage.Id)
+				if (_groupPageOnCompareWithKey == groupPage.Key)
 					target.GroupPageOnCompareWith = groupPage;
 			}
 
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void MapFrom(IExtraPreferences source)
 		{
 			if (source.GroupPageOnTeam != null)
-				_groupPageOnTeamId = source.GroupPageOnTeam.Id;
+				_groupPageOnTeamKey = source.GroupPageOnTeam.Key;
 			if (source.GroupPageOnCompareWith != null)
-				_groupPageOnCompareWithId = source.GroupPageOnCompareWith.Id;
+				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
 
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
 			_useBlockScheduling = source.UseBlockScheduling;
@@ -71,23 +71,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		/// <summary>
-		/// Sets the group page on team id.
+		/// Sets the group page on team key.
 		/// </summary>
-		/// <param name="guid">The GUID.</param>
+		/// <param name="key">The key.</param>
 		/// <remarks>Used in tests only</remarks>
-		public void SetGroupPageOnTeamId(Guid guid)
+		public void SetGroupPageOnTeamKey(string key)
 		{
-			_groupPageOnTeamId = guid;
+			_groupPageOnTeamKey = key;
 		}
 
 		/// <summary>
-		/// Sets the group page on compare with id.
+		/// Sets the group page on compare with key.
 		/// </summary>
-		/// <param name="guid">The GUID.</param>
+		/// <param name="key">The key.</param>
 		/// <remarks>Used in tests only</remarks>
-		public void SetGroupPageOnCompareWithId(Guid guid)
+		public void SetGroupPageOnCompareWithKey(string key)
 		{
-			_groupPageOnCompareWithId = guid;
+			_groupPageOnCompareWithKey = key;
 		}
 
 		private void SetDefaultValues()

@@ -20,11 +20,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void VerifyDefaultvalues()
+		public void VerifyDefaultValues()
 		{
 			_target.MapTo(_advancedPreferencesTarget);
 			Assert.AreEqual(TargetValueOptions.StandardDeviation, _advancedPreferencesTarget.TargetValueCalculation);
-			Assert.AreEqual(true, _advancedPreferencesTarget.UseTweakedValues);
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMinimumStaffing);
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMaximumStaffing);
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMaximumSeats);
