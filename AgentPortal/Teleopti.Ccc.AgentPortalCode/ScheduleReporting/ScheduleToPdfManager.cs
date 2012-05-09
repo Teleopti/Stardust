@@ -23,19 +23,19 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         private float _headerColumnWidth;
         private bool _rtl;
         private string _reportTitle;
+    	private CultureInfo _culture;
 
         private const float RowSpace = 1;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public void ExportIndividual(IList<PersonDto> persons,
-            DateOnlyPeriod period, AgentScheduleStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, 
-            Control owner, bool singleFile, string path)
+        public void ExportIndividual(IList<PersonDto> persons, DateOnlyPeriod period, AgentScheduleStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, bool singleFile, string path, CultureInfo culture)
         {
             //DayOfWeek firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
             _headerColumnWidth = 0;
             _brush = new PdfSolidBrush(Color.DimGray);
             _pen = new PdfPen(Color.Gray, 1);
             _rtl = rightToLeft;
+        	_culture = culture;
 
             try
             {
@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         //}
 
-        private void IndividualPages(bool rightToLeft, IList<PersonDto> persons, DateOnlyPeriod fullWeekPeriod, AgentScheduleStateHolder stateHolder, 
-            ScheduleReportDetail details, Control owner, bool singleFile, string path)
+        private void IndividualPages(bool rightToLeft, IList<PersonDto> persons, DateOnlyPeriod fullWeekPeriod, AgentScheduleStateHolder stateHolder, ScheduleReportDetail details, Control owner, bool singleFile, string path)
         {
             var doc = new PdfDocument();
             PdfPage page;
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
                     if (top + height > page.GetClientSize().Height)
                     {
-                        top = NewPage(doc, fullWeekPeriod.DayCollection()[0], 0, true, out page);
+						top = NewPage(doc, fullWeekPeriod.DayCollection()[0], 0, true, out page);
                     }
 
                     for (int i = 0; i < 7; i++)
@@ -265,8 +264,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 switch (significantPart)
                 {
                     case SchedulePartView.MainShift:
-                        IPdfScheduleTemplate schedule = new PdfScheduleAssignment(_scheduleColumnWidth,
-                                                                        part,rtl, details);
+                		IPdfScheduleTemplate schedule = new PdfScheduleAssignment(_scheduleColumnWidth,
+                		                                                          part, rtl, details, _culture);
                         weekList.Add(schedule);
                         break;
 
@@ -274,12 +273,12 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                         if (part.PersonAssignmentCollection.Length == 0)
                         {
                             IPdfScheduleTemplate dayOff = new PdfScheduleDayOff(_scheduleColumnWidth,
-                                                                                part.PersonDayOff, rtl);
+																				part.PersonDayOff, rtl, _culture);
                             weekList.Add(dayOff);
                         }
                         else
                         {
-                            IPdfScheduleTemplate dayOff = new PdfScheduleDayOffOvertime(_scheduleColumnWidth, part, rtl);
+                            IPdfScheduleTemplate dayOff = new PdfScheduleDayOffOvertime(_scheduleColumnWidth, part, rtl, _culture);
                             weekList.Add(dayOff);
                         }
 
@@ -287,12 +286,12 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
                     case SchedulePartView.FullDayAbsence:
                         IPdfScheduleTemplate fullDayAbsence = new PdfScheduleFullDayAbsence(_scheduleColumnWidth,
-                                                                                             part, rtl);
+                                                                                             part, rtl, _culture);
                         weekList.Add(fullDayAbsence);
                         break;
 
                     default:
-                        IPdfScheduleTemplate empty = new PdfScheduleNotScheduled(_scheduleColumnWidth, date, rtl);
+                        IPdfScheduleTemplate empty = new PdfScheduleNotScheduled(_scheduleColumnWidth, date, rtl, _culture);
                         weekList.Add(empty);
                         break;
                 }
@@ -332,7 +331,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         private float DrawWeekHeaders(DateOnly firstDayOfWeek, float top, bool rtl)
         {
-            float height = new PdfDayOfWeekHeader(_scheduleColumnWidth, firstDayOfWeek, rtl).Height;  //dynamic
+            float height = new PdfDayOfWeekHeader(_scheduleColumnWidth, firstDayOfWeek, rtl, _culture).Height;  //dynamic
             for (int i = 0; i < 7; i++)
             {
                 //if ((int)firstDayOfWeek + i < 7)
@@ -346,7 +345,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 DateOnly dow = firstDayOfWeek.AddDays(i);
                 float left = _headerColumnWidth + (i * _scheduleColumnWidth);
 
-                PdfDayOfWeekHeader header = new PdfDayOfWeekHeader(_scheduleColumnWidth, dow, rtl);
+                PdfDayOfWeekHeader header = new PdfDayOfWeekHeader(_scheduleColumnWidth, dow, rtl, _culture);
                 header.Template.Draw(_graphics, left, top);
             }
 
@@ -361,8 +360,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             format.Alignment = PdfTextAlignment.Left;
             format.LineAlignment = PdfVerticalAlignment.Middle;
             const float fontSize = 14f;
-            //PdfFont font = new PdfTrueTypeFont("Arial", fontSize, PdfFontStyle.Bold);
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", fontSize, FontStyle.Bold), true);
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, _culture);
             var headerRect = new RectangleF(0, top + RowSpace, width, fontSize + 4);
             PdfBrush backGround = new PdfSolidBrush(Color.PowderBlue);
             _graphics.DrawRectangle(backGround, headerRect);
@@ -379,8 +377,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             var footer = new PdfPageTemplateElement(rect);
 
             var brush = new PdfSolidBrush(Color.Gray);
-
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", 6, FontStyle.Bold), true);
+			const float fontSize = 6f;
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, _culture);
             var format = new PdfStringFormat();
             format.RightToLeft = _rtl;
             format.Alignment = PdfTextAlignment.Center;
@@ -399,8 +397,8 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             //Create page template
             var header = new PdfPageTemplateElement(rect);
             var brush = new PdfSolidBrush(Color.Gray);
-
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", 6, FontStyle.Bold), true);
+			const float fontSize = 6f;
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, _culture);
             var format = new PdfStringFormat
                              {
                                  RightToLeft = _rtl,
