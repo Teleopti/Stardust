@@ -69,6 +69,22 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public string Serialize(TeleoptiPrincipalSerializable principal)
 		{
+			//return SerializeAsXmlString(principal);
+			return SerializeAsBinaryGZippedBase64(principal);
+		}
+
+		private static string SerializeAsXmlString(TeleoptiPrincipalSerializable principal)
+		{
+			using (var memoryStream = new MemoryStream())
+			{
+				Serializer.WriteObject(memoryStream, principal);
+				memoryStream.Position = 0;
+				return new StreamReader(memoryStream).ReadToEnd();
+			}
+		}
+
+		private static string SerializeAsBinaryGZippedBase64(TeleoptiPrincipalSerializable principal)
+		{
 			using (var memoryStream = new MemoryStream())
 			{
 				using (var compressingStream = new GZipStream(memoryStream, CompressionMode.Compress))
@@ -84,20 +100,47 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public TeleoptiPrincipalSerializable Deserialize(string data)
 		{
+			//var principal = DeserializeXmlString(data);
+			var principal = DeserializeBinaryGZippedBase64(data);
+			return PopulateData(principal);
+		}
+
+		private static TeleoptiPrincipalSerializable DeserializeBinaryGZippedBase64(string data)
+		{
+			TeleoptiPrincipalSerializable principal;
 			var bytes = Convert.FromBase64String(data);
 			using (var memoryStream = new MemoryStream(bytes))
 			{
 				using (var decompressingStream = new GZipStream(memoryStream, CompressionMode.Decompress))
 				{
 					var reader = XmlDictionaryReader.CreateBinaryReader(decompressingStream, XmlDictionaryReaderQuotas.Max);
-					var principal = (TeleoptiPrincipalSerializable) Serializer.ReadObject(reader);
-					var identity = (TeleoptiIdentity) principal.Identity;
-					identity.WindowsIdentity = WindowsIdentity.GetCurrent();
-					identity.DataSource = GetDataSourceByName(identity.DataSourceName);
-					identity.BusinessUnit = GetBusinessUnitById(identity.BusinessUnitId);
-					return principal;
+					principal = (TeleoptiPrincipalSerializable) Serializer.ReadObject(reader);
 				}
 			}
+			return principal;
+		}
+
+		private static TeleoptiPrincipalSerializable DeserializeXmlString(string data)
+		{
+			TeleoptiPrincipalSerializable principal;
+			using (var memoryStream = new MemoryStream())
+			{
+				var writer = new StreamWriter(memoryStream);
+				writer.Write(data);
+				writer.Flush();
+				memoryStream.Position = 0;
+				principal = (TeleoptiPrincipalSerializable) Serializer.ReadObject(memoryStream);
+			}
+			return principal;
+		}
+
+		private TeleoptiPrincipalSerializable PopulateData(TeleoptiPrincipalSerializable principal)
+		{
+			var identity = (TeleoptiIdentity) principal.Identity;
+			identity.WindowsIdentity = WindowsIdentity.GetCurrent();
+			identity.DataSource = GetDataSourceByName(identity.DataSourceName);
+			identity.BusinessUnit = GetBusinessUnitById(identity.BusinessUnitId);
+			return principal;
 		}
 
 		private IBusinessUnit GetBusinessUnitById(Guid id) { return _businessUnitRepository.Get(id); }

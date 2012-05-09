@@ -6,13 +6,38 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class Regional : IRegional
-    {
+	{
+
+		[DataMember]
+		private string _cultureName;
+		private CultureInfo _culture;
+
+		public CultureInfo Culture
+		{
+			get { return _culture ?? (_culture = CultureInfo.GetCultureInfo(_cultureName)); }
+			set
+			{
+				_culture = value;
+				_cultureName = _culture.Name;
+			}
+		}
+
+		[DataMember]
+		private string _uiCultureName;
+		private CultureInfo _uiCulture;
+
+		public CultureInfo UICulture
+		{
+			get { return _uiCulture ?? (_uiCulture = CultureInfo.GetCultureInfo(_uiCultureName)); }
+			set
+			{
+				_uiCulture = value;
+				_uiCultureName = _uiCulture.Name;
+			}
+		}
+
 		[DataMember]
 		public ICccTimeZoneInfo TimeZone { get; set; }
-		[DataMember]
-		public CultureInfo Culture { get; set; }
-		[DataMember]
-		public CultureInfo UICulture { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IRegional FromPerson(IPerson person)

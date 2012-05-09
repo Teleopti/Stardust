@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			Debug.WriteLine(data.Length);
 			Debug.WriteLine(data);
+			System.IO.File.WriteAllText(@"C:\test.xml", data);
 
 			return target.Deserialize(data);
 		}
