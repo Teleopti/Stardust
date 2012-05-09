@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Interfaces.Domain;
 
@@ -14,10 +15,15 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         private PdfGraphics _graphics;
         private PdfBrush _brush;
         private float _columnWidth;
-
+		private readonly CultureInfo _culture;
         protected const float RowSpace = 1;
 
         #region Implementation of IPdfScheduleTemplate
+
+    	protected PdfScheduleTemplate(CultureInfo culture)
+		{
+			_culture = culture;
+		}
 
         public float Height
         {
@@ -30,6 +36,11 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             get { return _template; }
             protected set { _template = value;}
         }
+
+		protected CultureInfo Culture
+		{
+			get { return _culture; }
+		}
 
         protected PdfStringFormat Format
         {
@@ -62,7 +73,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         {
             _format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 9f;
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", fontSize, FontStyle.Regular), true);
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, Culture);
             Graphics.DrawString(startDateTime.ToShortDateString(), font, Brush, new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2), _format);
             return top + fontSize + 2 + RowSpace;
         }
@@ -72,7 +83,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         {
             _format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 9f;
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", fontSize, FontStyle.Bold), true);
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, Culture);
             Graphics.DrawString(text, font, Brush, new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2), _format);
             return top + fontSize + 2 + RowSpace;
         }
@@ -82,7 +93,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         {
             _format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 8f;
-            PdfFont font = new PdfTrueTypeFont(new Font("Helvetica", fontSize, FontStyle.Bold), true);
+			PdfFont font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Bold, Culture);
         	Graphics.DrawString(
         		TimeHelper.GetLongHourMinuteTimeString(contractTime, System.Globalization.CultureInfo.CurrentCulture), font,
         		Brush, new RectangleF(0, top + RowSpace, ColumnWidth, fontSize + 2), _format);
