@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,8 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
 			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
-            applicationFunction = mocks.StrictMock<IApplicationFunction>();
-            
+            applicationFunction = new ApplicationFunction(Function);
+            applicationFunction.SetId(new Guid());
+
             PrepareClaims();
         }
 
@@ -109,7 +112,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         [Test]
         public void ShouldHandlePermittedPeriodsCorrectly()
         {
-            applicationFunction = new ApplicationFunction(Function);
             var today = DateOnly.Today;
             var otherPerson = PersonFactory.CreatePerson();
             var site = SiteFactory.CreateSiteWithOneTeam();
@@ -143,7 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         [Test]
         public void ShouldHandlePermittedPeriodsStartingAfterGivenPeriodCorrectly()
         {
-            applicationFunction = new ApplicationFunction(Function);
             var today = DateOnly.Today;
             var otherPerson = PersonFactory.CreatePerson();
             var site = SiteFactory.CreateSiteWithOneTeam();
@@ -175,7 +176,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldHandleTerminalDateProperlyWhenGettingPermittedPeriods()
 		{
-			applicationFunction = new ApplicationFunction(Function);
 			var today = DateOnly.Today;
 			var otherPerson = PersonFactory.CreatePerson();
 			var site = SiteFactory.CreateSiteWithOneTeam();
@@ -209,7 +209,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		[Test]
 		public void ShouldHandlePermittedPeriodsOutsideIntervals()
 		{
-			applicationFunction = new ApplicationFunction(Function);
 			var today = DateOnly.Today;
 			var otherPerson = PersonFactory.CreatePerson();
 			var site = SiteFactory.CreateSiteWithOneTeam();
@@ -244,7 +243,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
                                         {
                                             new Claim(
                                                 TeleoptiAuthenticationHeaderNames.
-                                                    TeleoptiAuthenticationHeaderNamespace + "/" + Function, applicationFunction,
+                                                    TeleoptiAuthenticationHeaderNamespace + "/" + Function, 
+													applicationFunction
+													,
                                                 Rights.PossessProperty),
                                             new Claim(
                                                 TeleoptiAuthenticationHeaderNames.
@@ -257,15 +258,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void ShouldReturnGrantedFunctions()
         {
             organisationMembership.AddFromPerson(person);
-            var result = principalAuthorization.GrantedFunctions();
+			var result = principalAuthorization.GrantedFunctions(null);
             result.Count().Should().Be.EqualTo(1);
         }
 
         [Test]
         public void ShouldReturnGrantedFunctionsBasedOnSpecification()
         {
-            ISpecification<IApplicationFunction> specification =
-                mocks.StrictMock<ISpecification<IApplicationFunction>>();
+			var specification = mocks.StrictMock<ISpecification<IApplicationFunction>>();
             using (mocks.Record())
             {
                 Expect.Call(specification.IsSatisfiedBy(applicationFunction)).Return(true);
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-                var result = principalAuthorization.GrantedFunctionsBySpecification(specification);
+				var result = principalAuthorization.GrantedFunctionsBySpecification(null, specification);
                 result.Count().Should().Be.EqualTo(1);
             }
         }

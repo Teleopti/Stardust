@@ -53,12 +53,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
             LicenseProvider.ProvideLicenseActivator(licenseService);
 
-            var roleToPrincipalCommand =
-                new RoleToPrincipalCommand(
-                    new RoleToClaimSetTransformer(
-                        new FunctionsForRoleProvider(
-                            new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-                            new ExternalFunctionsProvider(new RepositoryFactory()))));
+        	var roleToPrincipalCommand =
+        		new RoleToPrincipalCommand(
+        			new RoleToClaimSetTransformer(
+        				new FunctionsForRoleProvider(
+        					new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
+        					new ExternalFunctionsProvider(new RepositoryFactory())
+        					),
+        				new ClaimWithEntity()
+        				)
+        			);
 			using(var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
                 roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, new PersonRepository(uow));

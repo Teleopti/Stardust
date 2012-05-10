@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>();
 			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>();
 			builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>();
-			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>();
+			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>().InstancePerDependency();
+			builder.RegisterType<ClaimWithEntity>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>();
 		}
     }

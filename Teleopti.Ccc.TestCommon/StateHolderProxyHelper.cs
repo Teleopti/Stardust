@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Threading;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
@@ -225,12 +226,12 @@ namespace Teleopti.Ccc.TestCommon
             return new []{period};
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctions()
+        public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
+        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
         {
             throw new NotImplementedException();
         }
@@ -278,12 +279,12 @@ namespace Teleopti.Ccc.TestCommon
             return new List<DateOnlyPeriod>(0);
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctions()
+		public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
+        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
         {
             throw new NotImplementedException();
         }

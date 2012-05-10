@@ -79,11 +79,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                             var roleRepository = new ApplicationRoleRepository(unitOfWork);
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
-                            RoleToClaimSetTransformer roleToClaimSetTransformer =
-                                new RoleToClaimSetTransformer(
-                                    new FunctionsForRoleProvider(
-                                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-                                        new ExternalFunctionsProvider(new RepositoryFactory())));
+                        	var roleToClaimSetTransformer =
+                        		new RoleToClaimSetTransformer(
+                        			new FunctionsForRoleProvider(
+                        				new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
+                        				new ExternalFunctionsProvider(new RepositoryFactory())
+                        				),
+                        			new ClaimWithEntity()
+                        			);
 
                             claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);
                             _claimCache.Add(claimSet, applicationRoleId);

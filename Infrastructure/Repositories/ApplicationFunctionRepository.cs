@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+		public ApplicationFunctionRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            : base(unitOfWorkFactory)
+        {
+        }
+
         /// <summary>
         /// Finds all application functions sorted by name.
         /// </summary>

@@ -38,16 +38,26 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
         public IEnumerable<IApplicationFunction> PermittedMatrixFunctions
         {
-            get { return PrincipalAuthorization.Instance().GrantedFunctionsBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)); }
+			get
+			{
+				return PrincipalAuthorization.Instance()
+					.GrantedFunctionsBySpecification(
+						null,
+						new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
+					);
+			}
         }
 
         public IEnumerable<IApplicationFunction> PermittedOnlineReportFunctions
         {
             get
             {
-                IEnumerable<IApplicationFunction> onlineReportFunctions =
-                    PrincipalAuthorization.Instance().GrantedFunctionsBySpecification(
-                        new IsOnlineReportFunctionSpecification());
+            	IEnumerable<IApplicationFunction> onlineReportFunctions =
+            		PrincipalAuthorization.Instance()
+            			.GrantedFunctionsBySpecification(
+            				null,
+            				new IsOnlineReportFunctionSpecification()
+            			);
 
                 return onlineReportFunctions;
             }

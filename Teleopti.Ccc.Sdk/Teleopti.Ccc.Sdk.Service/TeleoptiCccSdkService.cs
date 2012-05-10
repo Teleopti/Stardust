@@ -1740,7 +1740,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 			if (((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
 			{
-				afUnionCollection.AddRange(PrincipalAuthorization.Instance().GrantedFunctions());
+				afUnionCollection.AddRange(PrincipalAuthorization.Instance().GrantedFunctions(null));
 			}
 			else
 			{

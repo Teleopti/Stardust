@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
 
@@ -128,31 +129,38 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return permittedPeriods;
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctions()
-        {
-            HashSet<IApplicationFunction> applicationFunctions = new HashSet<IApplicationFunction>();
+		public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
+		{
+			var claimWithIdStrategy = new ClaimWithId();
+			var claimWithEntityStrategy = new ClaimWithEntity();
+            var grantedFunctions = new HashSet<IApplicationFunction>();
             foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
             {
                 foreach (var claim in claimSet)
                 {
-                    IApplicationFunction applicationFunction = claim.Resource as IApplicationFunction;
-                    if (applicationFunction==null) continue;
-
-                    applicationFunctions.Add(applicationFunction);
+                	IApplicationFunctionClaimStrategy strategy = null;
+					if (claimWithIdStrategy.UseMeForClaim(claim))
+						strategy = claimWithIdStrategy;
+					if (claimWithEntityStrategy.UseMeForClaim(claim))
+						strategy = claimWithEntityStrategy;
+					if (strategy == null)
+						continue;
+                	var applicationFunction = strategy.GetApplicationFunction(repository, claim);
+					grantedFunctions.Add(applicationFunction);
                 }
             }
-            return applicationFunctions;
+            return grantedFunctions;
         }
 
         public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
         {
-            return specification.IsSatisfiedBy(_teleoptiPrincipal.Current().ClaimSets);
+			return specification.IsSatisfiedBy(_teleoptiPrincipal.Current().ClaimSets);
         }
 
         //new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
-        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
+		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
         {
-            return GrantedFunctions().FilterBySpecification(specification);
+			return GrantedFunctions(repository).FilterBySpecification(specification);
         }
     }
 

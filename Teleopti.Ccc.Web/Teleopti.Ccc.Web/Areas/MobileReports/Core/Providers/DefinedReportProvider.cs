@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 	public class DefinedReportProvider : IDefinedReportProvider
 	{
 		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IApplicationFunctionRepository _applicationFunctionRepository;
 
-		public DefinedReportProvider(IPrincipalAuthorization principalAuthorization)
+		public DefinedReportProvider(IPrincipalAuthorization principalAuthorization, IApplicationFunctionRepository applicationFunctionRepository)
 		{
 			_principalAuthorization = principalAuthorization;
+			_applicationFunctionRepository = applicationFunctionRepository;
 		}
 
 		public IDefinedReport Get(string reportId)
@@ -32,7 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 			var definedReportFunctionSpecification = new DefinedReportFunctionSpecification(DefinedReports.ReportInformations);
 
 			var grantedFunctionsBySpecification = _principalAuthorization.GrantedFunctionsBySpecification(
-					externalApplicationFunctionSpecification.And(definedReportFunctionSpecification));
+				_applicationFunctionRepository,
+				externalApplicationFunctionSpecification.And(definedReportFunctionSpecification)
+				);
 			var grantedFunctions = grantedFunctionsBySpecification.Select(f => f.FunctionCode);
 
 			return DefinedReports.ReportInformations.Where(r => grantedFunctions.Contains(r.FunctionCode)).ToList();

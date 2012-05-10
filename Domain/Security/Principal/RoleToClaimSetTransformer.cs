@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -14,22 +15,73 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork);
     }
 
-    public class RoleToClaimSetTransformer : IRoleToClaimSetTransformer
+	public interface IApplicationFunctionClaimStrategy
+	{
+		bool UseMeForClaim(Claim claim);
+		Claim MakeClaim(IApplicationFunction applicationFunction);
+		IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim);
+	}
+
+	public class ClaimWithId : IApplicationFunctionClaimStrategy
+	{
+		public bool UseMeForClaim(Claim claim) { return claim.Resource is AuthorizeApplicationFunction; }
+
+		public Claim MakeClaim(IApplicationFunction applicationFunction)
+		{
+			return new Claim(
+				string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", applicationFunction.FunctionPath),
+				new AuthorizeApplicationFunction
+					{
+						ApplicationFunctionId = applicationFunction.Id.Value
+					},
+				Rights.PossessProperty
+				);
+		}
+
+		public IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim)
+		{
+			var resource = (AuthorizeApplicationFunction) claim.Resource;
+			return repository.Get(resource.ApplicationFunctionId);
+		}
+	}
+
+	public class ClaimWithEntity : IApplicationFunctionClaimStrategy
+	{
+		public bool UseMeForClaim(Claim claim) { return claim.Resource is IApplicationFunction; }
+
+		public Claim MakeClaim(IApplicationFunction applicationFunction)
+		{
+			return new Claim(
+				string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", applicationFunction.FunctionPath),
+				applicationFunction,
+				Rights.PossessProperty
+				);
+		}
+
+		public IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim)
+		{
+			return (IApplicationFunction)claim.Resource;
+		}
+	}
+
+	public class RoleToClaimSetTransformer : IRoleToClaimSetTransformer
     {
         private readonly IFunctionsForRoleProvider _functionsForRoleProvider;
-        
-        public RoleToClaimSetTransformer(IFunctionsForRoleProvider functionsForRoleProvider)
+		private readonly IApplicationFunctionClaimStrategy _applicationFunctionClaimStrategy;
+
+		public RoleToClaimSetTransformer(IFunctionsForRoleProvider functionsForRoleProvider, IApplicationFunctionClaimStrategy applicationFunctionClaimStrategy)
         {
-            _functionsForRoleProvider = functionsForRoleProvider;
+        	_functionsForRoleProvider = functionsForRoleProvider;
+        	_applicationFunctionClaimStrategy = applicationFunctionClaimStrategy;
         }
 
-        public ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork)
+		public ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork)
         {
             var claims = new List<Claim>();
 
             var availableFunctions = _functionsForRoleProvider.AvailableFunctions(role, unitOfWork);
-            
-            claims.AddRange(availableFunctions.Select(ClaimFromFunction));
+
+			claims.AddRange(availableFunctions.Select(_applicationFunctionClaimStrategy.MakeClaim));
 
 			if (role.AvailableData != null)
 			{
@@ -66,13 +118,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			}
 
         	return new DefaultClaimSet(ClaimSet.System,claims);
-        }
-
-        private static Claim ClaimFromFunction(IApplicationFunction applicationFunction)
-        {
-            return new Claim(string.Concat(
-                TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
-                applicationFunction.FunctionPath), null, Rights.PossessProperty);
         }
     }
 

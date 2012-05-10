@@ -102,10 +102,16 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, AuthenticationTypeOption.Application);
 
             var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
-            RoleToPrincipalCommand roleToPrincipalCommand =
-                new RoleToPrincipalCommand(
-                    new RoleToClaimSetTransformer(new FunctionsForRoleProvider(new DummyLicensedFunctionsProvider(),
-                                                                               new ExternalFunctionsProvider(repositoryFactory))));
+        	var roleToPrincipalCommand =
+        		new RoleToPrincipalCommand(
+        			new RoleToClaimSetTransformer(
+        				new FunctionsForRoleProvider(
+        					new DummyLicensedFunctionsProvider(),
+        					new ExternalFunctionsProvider(repositoryFactory)
+        					),
+        				new ClaimWithEntity()
+        				)
+        			);
 			using(var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 			    roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
