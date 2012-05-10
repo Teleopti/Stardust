@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             _filteredPeopleHolder.SelectedDate = e.Value;
             _gridConstructor.View.SelectedDateChange(sender, e);
+			_panelConstructor.View.Invalidate();
             RefilterOnTracker();
         }
 
