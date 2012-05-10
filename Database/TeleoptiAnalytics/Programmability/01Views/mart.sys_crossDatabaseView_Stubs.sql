@@ -80,3 +80,6 @@ CLOSE ViewCursor
 DEALLOCATE ViewCursor
 
 RETURN(0)
+GO
+EXEC mart.sys_crossDatabaseView_Stubs
+GO
