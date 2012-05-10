@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
             
             var totalEfficiencyShrinkages = 0d;
             var shrinkages = budgetDay.BudgetGroup.CustomEfficiencyShrinkages;
-            totalEfficiencyShrinkages += shrinkages.Where(shrinkage => shrinkage.Id != null && shrinkage.IncludedInAllowance).Sum(shrinkage => budgetDay.CustomEfficiencyShrinkages.GetEfficiencyShrinkage(shrinkage.Id.Value).Value);
+            totalEfficiencyShrinkages += shrinkages.Where(shrinkage => shrinkage.Id != null).Sum(shrinkage => budgetDay.CustomEfficiencyShrinkages.GetEfficiencyShrinkage(shrinkage.Id.Value).Value);
             
             if (totalEfficiencyShrinkages == 0d)
             {
