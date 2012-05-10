@@ -940,8 +940,8 @@
         </TablixRowHierarchy>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
-        <Height>3.02645cm</Height>
-        <Width>18.74999cm</Width>
+        <Height>3.02644cm</Height>
+        <Width>18.75cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -2070,7 +2070,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!average_speed_answer.Value</Value>
+                              <Value>=Round(Fields!average_speed_answer.Value,2)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2091,6 +2091,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
