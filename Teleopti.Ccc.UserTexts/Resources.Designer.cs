@@ -286,6 +286,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Absence Type:.
+        /// </summary>
+        public static string AbsenceType {
+            get {
+                return ResourceManager.GetString("AbsenceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absolute difference.
         /// </summary>
         public static string AbsoluteDifference {
@@ -18856,7 +18865,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send Asm.
+        ///   Looks up a localized string similar to Send message (ASM).
         /// </summary>
         public static string SendASM {
             get {
@@ -23694,7 +23703,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work week starts at.
+        ///   Looks up a localized string similar to Work week starts on.
         /// </summary>
         public static string WorkWeekStartsAt {
             get {
