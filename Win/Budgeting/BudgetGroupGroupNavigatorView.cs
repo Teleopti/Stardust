@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private static void AddBudgetModelNodes(BudgetGroupRootModel budgetGroupRootModel, TreeNodeAdv rootNode)
 		{
-			foreach (var budgetGroup in budgetGroupRootModel.BudgetGroups)
+			foreach (var budgetGroup in budgetGroupRootModel.BudgetGroups.OrderBy(g => g.DisplayName))
 			{
                 var budgetNode = new TreeNodeAdv(budgetGroup.DisplayName)
 				{
