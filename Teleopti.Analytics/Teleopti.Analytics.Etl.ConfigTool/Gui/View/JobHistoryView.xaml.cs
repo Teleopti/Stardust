@@ -16,9 +16,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			InitializeComponent();
 		}
 
-		public void LoadData(DateTime startDate, DateTime endDate, Guid businessUnitId)
+		public void LoadData(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
-			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnitId);
+			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnitId, showOnlyErrors);
 		}
 
 		private void menuItemCopyError_Click(object sender, RoutedEventArgs e)

@@ -13,6 +13,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		private DateTime _startDate;
 		private DateTime _endDate;
 		private IList<BusinessUnitItem> _businessUnitCollection;
+		private bool _showOnlyErrors;
 
 		public JobHistorySelectionViewModel(IBaseConfiguration baseConfiguration)
 		{
@@ -21,6 +22,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 									: CultureInfo.GetCultureInfo("sv-SE");
 
 			SetWeekPeriod();
+			ShowOnlyErrors = true;
 		}
 
 		private void SetWeekPeriod()
@@ -75,6 +77,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		}
 
 		public Guid SelectedBusinessUnitId { get; set; }
+
+		
+		public bool ShowOnlyErrors
+		{
+			get { return _showOnlyErrors; }
+			set
+			{
+				_showOnlyErrors = value;
+				RaisePropertyChanged("ShowOnlyErrors");
+			}
+		}
 
 		public void PreviousPeriod()
 		{

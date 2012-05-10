@@ -8,11 +8,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 {
 	public static class JobHistoryMapper
 	{
-		public static IList<JobHistoryViewModel> Map(DateTime startDate, DateTime endDate, Guid businessUnitId)
+		public static IList<JobHistoryViewModel> Map(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
 			var repository = new Repository(ConfigurationManager.AppSettings["datamartConnectionString"]);
 
-			DataTable table = repository.GetEtlJobHistory(startDate, endDate, businessUnitId);
+			DataTable table = repository.GetEtlJobHistory(startDate, endDate, businessUnitId, showOnlyErrors);
 
 			if (table == null)
 				return null;

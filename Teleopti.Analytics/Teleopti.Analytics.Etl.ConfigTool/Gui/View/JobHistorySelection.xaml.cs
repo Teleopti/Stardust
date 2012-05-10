@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void SelectionChanged()
 		{
-			JobHistorySelectionChanged(this, new JobHistorySelectionEventArgs(StartDate, EndDate, BusinessUnitId));
+			JobHistorySelectionChanged(this, new JobHistorySelectionEventArgs(StartDate, EndDate, BusinessUnitId, ShowOnlyErrors));
 		}
 
 		public DateTime StartDate
@@ -62,9 +62,19 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			get { return _model.SelectedBusinessUnitId; }
 		}
 
+		public bool ShowOnlyErrors
+		{
+			get { return _model.ShowOnlyErrors; }
+		}
+
 		private void comboBoxBusinessUnit_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			_model.SelectedBusinessUnitId = (Guid)comboBoxBusinessUnit.SelectedValue;
+			SelectionChanged();
+		}
+
+		private void checkBoxJobResultType_Changed(object sender, System.Windows.RoutedEventArgs e)
+		{
 			SelectionChanged();
 		}
 	}

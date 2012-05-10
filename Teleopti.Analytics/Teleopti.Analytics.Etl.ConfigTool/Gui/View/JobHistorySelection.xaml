@@ -3,16 +3,15 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 mc:Ignorable="d">
-	
-	<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="90" Width="Auto">
-		<!--<StackPanel Name="stackPanelPeriod" Width="Auto" Margin="10" HorizontalAlignment="Left">-->
-			<GroupBox Name="groupBoxPeriod" Margin="5">
-				<GroupBox.Header>
-					<Label>Week Period</Label>
-				</GroupBox.Header>
-				<StackPanel Orientation="Horizontal">
-					<!--<Button Content="prev" Height="23" Name="buttonPrevious" Width="75" Click="buttonPrevious_Click" />-->
+			 mc:Ignorable="d" d:DesignHeight="94" d:DesignWidth="600">
+
+	<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="90">
+		<GroupBox Name="groupBoxPeriod" Margin="5">
+			<GroupBox.Header>
+				<Label>Week Period</Label>
+			</GroupBox.Header>
+			<StackPanel Orientation="Horizontal" Margin="10">
+				<!--<Button Content="prev" Height="23" Name="buttonPrevious" Width="75" Click="buttonPrevious_Click" />-->
 				<Button Name="buttonPrevious" Click="buttonPrevious_Click" Height="25" Width="29" >
 					<StackPanel>
 						<Image Source="..\..\Resources\ccc_Left.png" Width="16" Height="16" Margin="0,0,0,0"></Image>
@@ -27,7 +26,7 @@
 					</StackPanel>
 				</Button>
 			</StackPanel>
-			</GroupBox>
+		</GroupBox>
 		<!--</StackPanel>-->
 		<GroupBox Name="groupBoxBusinessUnit" Margin="5">
 			<GroupBox.Header>
@@ -38,14 +37,25 @@
 				</ComboBox>
 			</StackPanel>
 		</GroupBox>
-		<GroupBox BorderThickness="0">
-		<StackPanel Name="stackPanelRefresh" Height="35" Width="80" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-			<Button Name="buttonRefresh" Click="buttonRefresh_Click"  Height="25" Width="29">
-				<StackPanel>
-					<Image Source="..\..\Resources\ccc_Refresh.png" Width="16" Height="16" Margin="0,0,0,0"></Image>
-				</StackPanel>
-			</Button>
-		</StackPanel>
+		<GroupBox Name="groupBoxJobResultType" Margin="5">
+			<GroupBox.Header>
+				<Label>Job Result Type</Label>
+			</GroupBox.Header>
+			<StackPanel Name="stackPanelJobResultType" Margin="10" HorizontalAlignment="Left">
+				<CheckBox Name="checkBoxJobResultType" IsChecked="{Binding Path=ShowOnlyErrors}" Checked="checkBoxJobResultType_Changed" Unchecked="checkBoxJobResultType_Changed">Only Errors</CheckBox>
+			</StackPanel>
+		</GroupBox>
+		<GroupBox Name="groupBoxRefresh" Margin="5">
+			<GroupBox.Header>
+				<Label>Refresh</Label>
+			</GroupBox.Header>
+			<StackPanel Name="stackPanelRefresh" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+				<Button Name="buttonRefresh" Click="buttonRefresh_Click"  Height="25" Width="29">
+					<StackPanel>
+						<Image Source="..\..\Resources\ccc_Refresh.png" Width="16" Height="16" Margin="0,0,0,0"></Image>
+					</StackPanel>
+				</Button>
+			</StackPanel>
 		</GroupBox>
 	</StackPanel>
 </UserControl>

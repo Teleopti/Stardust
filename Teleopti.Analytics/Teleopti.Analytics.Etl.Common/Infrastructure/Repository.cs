@@ -113,13 +113,14 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 											_connectionString);
 		}
 
-		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId)
+		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
 		{
 			var parameterList = new List<SqlParameter>
 									{
 										new SqlParameter("start_date", startDate),
 										new SqlParameter("end_date", endDate),
-										new SqlParameter("business_unit_id", businessUnitId)
+										new SqlParameter("business_unit_id", businessUnitId),
+										new SqlParameter("show_only_errors", showOnlyErrors)
 									};
 
 

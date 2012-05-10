@@ -16,13 +16,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		void historySelection_JobHistorySelectionChanged(object sender, ViewModel.JobHistorySelectionEventArgs e)
 		{
-			historyTree.LoadData(e.StartDate, e.EndDate, e.BusinessUnitId);
+			historyTree.LoadData(e.StartDate, e.EndDate, e.BusinessUnitId, e.ShowOnlyErrors);
 		}
 
 		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)
 		{
 			historySelection.SetBaseConfiguration(baseConfiguration);
-			historyTree.LoadData(historySelection.StartDate, historySelection.EndDate, historySelection.BusinessUnitId);
+			historyTree.LoadData(historySelection.StartDate, historySelection.EndDate, historySelection.BusinessUnitId, historySelection.ShowOnlyErrors);
 		}
 	}
 }
