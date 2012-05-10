@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			set
 			{
 				_culture = value;
-				_cultureName = _culture.Name;
+				_cultureName = _culture == null ? null : _culture.Name;
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			set
 			{
 				_uiCulture = value;
-				_uiCultureName = _uiCulture.Name;
+				_uiCultureName = _uiCulture == null ? null : _uiCulture.Name;
 			}
 		}
 

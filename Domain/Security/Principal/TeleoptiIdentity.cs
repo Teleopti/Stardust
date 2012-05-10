@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			if (DataSource != null)
 				DataSourceName = DataSource.DataSourceName;
 			BusinessUnit = businessUnit;
-			if (BusinessUnit != null)
+			if (BusinessUnit != null && BusinessUnit.Id.HasValue)
 				BusinessUnitId = businessUnit.Id.Value;
 			WindowsIdentity = windowsIdentity;
 			TeleoptiAuthenticationType = teleoptiAuthenticationType;

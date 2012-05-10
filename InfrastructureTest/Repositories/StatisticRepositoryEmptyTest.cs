@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			MockRepository mocks = new MockRepository();
 			IState stateMock = mocks.StrictMock<IState>();
-			IDataSource dataSource = mocks.StrictMock<IDataSource>();
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			skill = mocks.StrictMock<ISkill>();
 
 		    var applicationData = new ApplicationData(new Dictionary<string, string>(), dataSource, null);
 			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, ((IUnsafePerson)TeleoptiPrincipal.Current).Person, BusinessUnitFactory.BusinessUnitUsedInTest, applicationData, stateMock);
-			Expect.Call(dataSource.Statistic).Return(null).Repeat.Any();
+			dataSource.Stub(x => x.Statistic).Return(null).Repeat.Any();
 			mocks.ReplayAll();
 			target = StatisticRepositoryFactory.Create();
 		}
