@@ -120,6 +120,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		//    true
 		//    );
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		protected static readonly DataContractSerializer Serializer = new DataContractSerializer(
 			typeof (TeleoptiPrincipalSerializable),
 			"TeleoptiPrincipal",
@@ -148,6 +149,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			_businessUnitRepository = businessUnitRepository;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected TeleoptiPrincipalSerializable PopulateData(TeleoptiPrincipalSerializable principal)
 		{
 			var identity = (TeleoptiIdentity)principal.Identity;
