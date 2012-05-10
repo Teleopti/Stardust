@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(true, _generalPreferencesTarget.UseMustHaves);
 			Assert.AreEqual(true, _generalPreferencesTarget.UseRotations);
 			Assert.AreEqual(true, _generalPreferencesTarget.UseAvailabilities);
-			Assert.AreEqual(true, _generalPreferencesTarget.UseStudentAvailabilities);
+			Assert.AreEqual(false, _generalPreferencesTarget.UseStudentAvailabilities);
 			Assert.AreEqual(true, _generalPreferencesTarget.UseShiftCategoryLimitations);
 
 			Assert.AreEqual(0.8d, _generalPreferencesTarget.PreferencesValue);
