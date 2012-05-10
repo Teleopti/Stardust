@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			if (businessUnitRepository == null)
 				businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
-			var target = new TeleoptiPrincipalSerializer(applicationData, businessUnitRepository);
+			var target = new TeleoptiPrincipalGZipBase64Serializer(applicationData, businessUnitRepository);
 			var data = target.Serialize(principal);
 
 			Debug.WriteLine(data.Length);
 			Debug.WriteLine(data);
-			System.IO.File.WriteAllText(@"C:\test.xml", data);
+			//System.IO.File.WriteAllText(@"C:\test.xml", data);
 
 			return target.Deserialize(data);
 		}

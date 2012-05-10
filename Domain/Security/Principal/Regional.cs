@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private string _cultureName;
 		private CultureInfo _culture;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CultureInfo Culture
 		{
 			get { return _culture ?? (_culture = CultureInfo.GetCultureInfo(_cultureName)); }
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private string _uiCultureName;
 		private CultureInfo _uiCulture;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CultureInfo UICulture
 		{
 			get { return _uiCulture ?? (_uiCulture = CultureInfo.GetCultureInfo(_uiCultureName)); }

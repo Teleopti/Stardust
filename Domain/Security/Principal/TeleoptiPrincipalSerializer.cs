@@ -19,30 +19,89 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		TeleoptiPrincipalSerializable Deserialize(string data);
 	}
 
-	public class TeleoptiPrincipalSerializer : ITeleoptiPrincipalSerializer
+	public class TeleoptiPrincipalGZipBase64Serializer : TeleoptiPrincipalSerializerCore, ITeleoptiPrincipalSerializer
 	{
-		private readonly IApplicationData _applicationData;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
+		public TeleoptiPrincipalGZipBase64Serializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository) 
+			: base(applicationData, businessUnitRepository)
+		{
+			
+		}
 
-		private static readonly DataContractSerializer Serializer = new DataContractSerializer(
-			typeof(TeleoptiPrincipalSerializable),
-			"TeleoptiPrincipal",
-			"http://schemas.ccc.teleopti.com/sdk/2012/05/",
-			new[]
-		        {
-		            typeof (TeleoptiIdentity),
-		            typeof (DefaultClaimSet),
-		            typeof (Regional),
-		            typeof (CccTimeZoneInfo),
-		            typeof (OrganisationMembership), 
-		            typeof (GregorianCalendar)
-		        },
-			1024, // just a number...
-			false,
-			true,
-			null
-			);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+		public string Serialize(TeleoptiPrincipalSerializable principal)
+		{
+			using (var memoryStream = new MemoryStream())
+			{
+				using (var compressingStream = new GZipStream(memoryStream, CompressionMode.Compress))
+				{
+					var writer = XmlDictionaryWriter.CreateBinaryWriter(compressingStream);
+					Serializer.WriteObject(writer, principal);
+					writer.Flush();
+				}
+				var base64 = Convert.ToBase64String(memoryStream.ToArray());
+				return base64;
+			}
+		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+		public TeleoptiPrincipalSerializable Deserialize(string data)
+		{
+			TeleoptiPrincipalSerializable principal;
+			var bytes = Convert.FromBase64String(data);
+			using (var memoryStream = new MemoryStream(bytes))
+			{
+				using (var decompressingStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+				{
+					var reader = XmlDictionaryReader.CreateBinaryReader(decompressingStream, XmlDictionaryReaderQuotas.Max);
+					principal = (TeleoptiPrincipalSerializable)Serializer.ReadObject(reader);
+				}
+			}
+			return PopulateData(principal);
+		}
+
+	}
+
+	//public class TeleoptiPrincipalXmlStringSerializer : TeleoptiPrincipalSerializerCore, ITeleoptiPrincipalSerializer
+	//{
+	//    public TeleoptiPrincipalXmlStringSerializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository) 
+	//        : base(applicationData, businessUnitRepository)
+	//    {
+
+	//    }
+
+	//    public string Serialize(TeleoptiPrincipalSerializable principal)
+	//    {
+	//        using (var memoryStream = new MemoryStream())
+	//        {
+	//            Serializer.WriteObject(memoryStream, principal);
+	//            memoryStream.Position = 0;
+	//            return new StreamReader(memoryStream).ReadToEnd();
+	//        }
+	//    }
+
+	//    public TeleoptiPrincipalSerializable Deserialize(string data)
+	//    {
+	//        TeleoptiPrincipalSerializable principal;
+	//        using (var memoryStream = new MemoryStream())
+	//        {
+	//            var writer = new StreamWriter(memoryStream);
+	//            writer.Write(data);
+	//            writer.Flush();
+	//            memoryStream.Position = 0;
+	//            principal = (TeleoptiPrincipalSerializable)Serializer.ReadObject(memoryStream);
+	//        }
+	//        return PopulateData(principal);
+	//    }
+	//}
+
+
+
+
+
+
+
+	public class TeleoptiPrincipalSerializerCore
+	{
 		//private static readonly DataContractJsonSerializer Serializer = new DataContractJsonSerializer(
 		//    typeof(TeleoptiPrincipalSerializable),
 		//    "root",
@@ -61,82 +120,37 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		//    true
 		//    );
 
-		public TeleoptiPrincipalSerializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository)
+		protected static readonly DataContractSerializer Serializer = new DataContractSerializer(
+			typeof (TeleoptiPrincipalSerializable),
+			"TeleoptiPrincipal",
+			"http://schemas.ccc.teleopti.com/sdk/2012/05/",
+			new[]
+				{
+					typeof (TeleoptiIdentity),
+					typeof (DefaultClaimSet),
+					typeof (Regional),
+					typeof (CccTimeZoneInfo),
+					typeof (OrganisationMembership),
+					typeof (GregorianCalendar)
+				},
+			1024, // just a number...
+			false,
+			true,
+			null
+			);
+
+		private readonly IApplicationData _applicationData;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
+
+		public TeleoptiPrincipalSerializerCore(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository)
 		{
 			_applicationData = applicationData;
 			_businessUnitRepository = businessUnitRepository;
 		}
 
-		public string Serialize(TeleoptiPrincipalSerializable principal)
+		protected TeleoptiPrincipalSerializable PopulateData(TeleoptiPrincipalSerializable principal)
 		{
-			//return SerializeAsXmlString(principal);
-			return SerializeAsBinaryGZippedBase64(principal);
-		}
-
-		private static string SerializeAsXmlString(TeleoptiPrincipalSerializable principal)
-		{
-			using (var memoryStream = new MemoryStream())
-			{
-				Serializer.WriteObject(memoryStream, principal);
-				memoryStream.Position = 0;
-				return new StreamReader(memoryStream).ReadToEnd();
-			}
-		}
-
-		private static string SerializeAsBinaryGZippedBase64(TeleoptiPrincipalSerializable principal)
-		{
-			using (var memoryStream = new MemoryStream())
-			{
-				using (var compressingStream = new GZipStream(memoryStream, CompressionMode.Compress))
-				{
-					var writer = XmlDictionaryWriter.CreateBinaryWriter(compressingStream);
-					Serializer.WriteObject(writer, principal);
-					writer.Flush();
-				}
-				var base64 = Convert.ToBase64String(memoryStream.ToArray());
-				return base64;
-			}
-		}
-
-		public TeleoptiPrincipalSerializable Deserialize(string data)
-		{
-			//var principal = DeserializeXmlString(data);
-			var principal = DeserializeBinaryGZippedBase64(data);
-			return PopulateData(principal);
-		}
-
-		private static TeleoptiPrincipalSerializable DeserializeBinaryGZippedBase64(string data)
-		{
-			TeleoptiPrincipalSerializable principal;
-			var bytes = Convert.FromBase64String(data);
-			using (var memoryStream = new MemoryStream(bytes))
-			{
-				using (var decompressingStream = new GZipStream(memoryStream, CompressionMode.Decompress))
-				{
-					var reader = XmlDictionaryReader.CreateBinaryReader(decompressingStream, XmlDictionaryReaderQuotas.Max);
-					principal = (TeleoptiPrincipalSerializable) Serializer.ReadObject(reader);
-				}
-			}
-			return principal;
-		}
-
-		private static TeleoptiPrincipalSerializable DeserializeXmlString(string data)
-		{
-			TeleoptiPrincipalSerializable principal;
-			using (var memoryStream = new MemoryStream())
-			{
-				var writer = new StreamWriter(memoryStream);
-				writer.Write(data);
-				writer.Flush();
-				memoryStream.Position = 0;
-				principal = (TeleoptiPrincipalSerializable) Serializer.ReadObject(memoryStream);
-			}
-			return principal;
-		}
-
-		private TeleoptiPrincipalSerializable PopulateData(TeleoptiPrincipalSerializable principal)
-		{
-			var identity = (TeleoptiIdentity) principal.Identity;
+			var identity = (TeleoptiIdentity)principal.Identity;
 			identity.WindowsIdentity = WindowsIdentity.GetCurrent();
 			identity.DataSource = GetDataSourceByName(identity.DataSourceName);
 			identity.BusinessUnit = GetBusinessUnitById(identity.BusinessUnitId);
@@ -147,12 +161,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private IDataSource GetDataSourceByName(string dataSourceName)
 		{
-			var dataSources = _applicationData.RegisteredDataSourceCollection ?? new IDataSource[] {};
+			var dataSources = _applicationData.RegisteredDataSourceCollection ?? new IDataSource[] { };
 			return (
 					from d in dataSources
-			       	where d.DataSourceName == dataSourceName
-			       	select d)
+					where d.DataSourceName == dataSourceName
+					select d)
 				.SingleOrDefault();
 		}
 	}
+
 }

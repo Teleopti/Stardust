@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         {
             return new Claim(string.Concat(
                 TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
-                applicationFunction.FunctionPath), null, Rights.PossessProperty);
+                applicationFunction.FunctionPath), applicationFunction, Rights.PossessProperty);
         }
     }
 
