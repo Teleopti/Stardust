@@ -247,12 +247,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void createUserInfoHeaders()
 		{
-			_firstNameColumn = new EditableNotEmptyTextColumn<PersonGeneralModel>("FirstName", 25, Resources.FirstName);
+			_firstNameColumn = new EditableNotEmptyTextColumn<PersonGeneralModel>("FirstName", 25, Resources.FirstName, true);
 			_firstNameColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_firstNameColumn.CellChanged += columnCellChanged;
 			_gridColumns.Add(_firstNameColumn);
 
-			_lastNameColumn = new EditableNotEmptyTextColumn<PersonGeneralModel>("LastName", 25, Resources.LastName);
+			_lastNameColumn = new EditableNotEmptyTextColumn<PersonGeneralModel>("LastName", 25, Resources.LastName, true);
 			_lastNameColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_lastNameColumn.CellChanged += columnCellChanged;
 			_gridColumns.Add(_lastNameColumn);
