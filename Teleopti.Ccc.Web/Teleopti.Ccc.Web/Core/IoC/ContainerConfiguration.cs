@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<TeleoptiPrincipalSerializableFactory>().As<IPrincipalFactory>().SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-			builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
+			//builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
