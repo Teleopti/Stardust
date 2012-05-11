@@ -1924,21 +1924,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public PushMessageDialogueDto GetPushMessageDialogue(PushMessageDialogueDto pushMessageDialogueDto)
 		{
-			PushMessageDialogueDto returnPushMessageDialogueDto;
+			PushMessageDialogueDto returnPushMessageDialogueDto = null;
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				IPushMessageDialogueRepository repository = repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-				IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.Value);
-
-				var personAssembler = _factoryProvider.CreatePersonAssembler();
-				returnPushMessageDialogueDto =
-					new PushMessageDialogueAssembler
-					{
-						DialogueMessageAssembler = new DialogueMessageAssembler { PersonAssembler = personAssembler },
-						PushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler },
-						PersonAssembler = personAssembler
-					}.DomainEntityToDto(pushMessageDialogue);
+				IPushMessageDialogue pushMessageDialogue = repository.Get(pushMessageDialogueDto.Id.GetValueOrDefault());
+				if (pushMessageDialogue != null)
+				{
+					var assembler = _factoryProvider.CreatePushMessageDialogueAssembler();
+					returnPushMessageDialogueDto = assembler.DomainEntityToDto(pushMessageDialogue);
+				}
 			}
 			return returnPushMessageDialogueDto;
 		}
@@ -1953,15 +1949,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IList<IPushMessageDialogue> pushMessageDialogues =
 					repository.FindAllPersonMessagesNotRepliedTo(personAssembler.DtoToDomainEntity(person));
 
-				PushMessageDialogueAssembler pushMessageDialogueAssembler = new PushMessageDialogueAssembler
-																				{
-																					DialogueMessageAssembler =
-																						new DialogueMessageAssembler{PersonAssembler = personAssembler},
-																					PersonAssembler =personAssembler,
-																					PushMessageAssembler =
-																						new PushMessageAssembler { PersonAssembler = personAssembler }
-																				};
-				return pushMessageDialogueAssembler.DomainEntitiesToDtos(pushMessageDialogues).ToList();
+				var assembler = _factoryProvider.CreatePushMessageDialogueAssembler();
+				return assembler.DomainEntitiesToDtos(pushMessageDialogues).ToList();
 			}
 		}
 
@@ -1974,10 +1963,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					IRepositoryFactory repositoryFactory = new RepositoryFactory();
 					IPushMessageDialogueRepository repository =
 						repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.Value);
-					Console.WriteLine(pushMessageDialogue.ToString());
-						// Just to avoid fxcop at the moment. PeterW will fill this in later.
-					//pushMessageDialogue.IsMessageRead = pushMessageDialogue.IsMessageRead;
+					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.GetValueOrDefault());
+					if (pushMessageDialogue!=null)
+					{
+						Console.WriteLine(pushMessageDialogue.ToString());
+					}
+
 					unitOfWork.PersistAll();
 				}
 			}
