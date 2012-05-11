@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
 		{
-			var claimWithIdStrategy = new ClaimWithId();
+			var claimWithIdStrategy = new ClaimWithId(repository);
 			var claimWithEntityStrategy = new ClaimWithEntity();
             var grantedFunctions = new HashSet<IApplicationFunction>();
             foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 						strategy = claimWithEntityStrategy;
 					if (strategy == null)
 						continue;
-                	var applicationFunction = strategy.GetApplicationFunction(repository, claim);
+                	var applicationFunction = strategy.GetApplicationFunction(claim);
 					grantedFunctions.Add(applicationFunction);
                 }
             }

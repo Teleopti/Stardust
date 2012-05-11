@@ -19,11 +19,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 		bool UseMeForClaim(Claim claim);
 		Claim MakeClaim(IApplicationFunction applicationFunction);
-		IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim);
+		IApplicationFunction GetApplicationFunction(Claim claim);
 	}
 
 	public class ClaimWithId : IApplicationFunctionClaimStrategy
 	{
+		private readonly IApplicationFunctionRepository _repository;
+
+		public ClaimWithId(IApplicationFunctionRepository repository) {
+			_repository = repository;
+		}
+
 		public bool UseMeForClaim(Claim claim) { return claim.Resource is AuthorizeApplicationFunction; }
 
 		public Claim MakeClaim(IApplicationFunction applicationFunction)
@@ -38,10 +44,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				);
 		}
 
-		public IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim)
+		public IApplicationFunction GetApplicationFunction(Claim claim)
 		{
 			var resource = (AuthorizeApplicationFunction) claim.Resource;
-			return repository.Get(resource.ApplicationFunctionId);
+			return _repository.Get(resource.ApplicationFunctionId);
 		}
 	}
 
@@ -58,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				);
 		}
 
-		public IApplicationFunction GetApplicationFunction(IApplicationFunctionRepository repository, Claim claim)
+		public IApplicationFunction GetApplicationFunction(Claim claim)
 		{
 			return (IApplicationFunction)claim.Resource;
 		}
