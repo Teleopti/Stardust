@@ -27,8 +27,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		private void button2_Click(object sender, System.EventArgs e)
 		{
+			agentRestrictionGrid.BeginUpdate();
 			agentRestrictionGrid.FinishedTest = true;
 			agentRestrictionGrid.MergeCells(2, true);
+			agentRestrictionGrid.MergeCells(3, true);
+			agentRestrictionGrid.EndUpdate();
 			agentRestrictionGrid.Refresh();
 		}
 
