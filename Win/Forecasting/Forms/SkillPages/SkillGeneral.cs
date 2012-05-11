@@ -9,6 +9,7 @@ using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -30,7 +31,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         protected SkillGeneral()
         {
             InitializeComponent();
-            if (!DesignMode) SetTexts();
+            if (!DesignMode)
+            {
+                SetTexts();
+                errorProvider1.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            }
         }
 
         public SkillGeneral(IAbstractPropertyPages propertyPages)
@@ -125,7 +130,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			initIntervalLengthComboBox(resolution);
 		}
 
-		private void initIntervalLengthComboBox(int defaultLength)
+	    private void initIntervalLengthComboBox(int defaultLength)
         {
             var intervalLengths = new List<IntervalLengthItem>();
            
@@ -142,7 +147,29 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             comboBoxAdvIntervalLength.SelectedItem = selectedIntervalLengthItem;
         }
 
-		public bool Depopulate(IAggregateRoot aggregateRoot)
+        private bool isResolutionValid(ISkill skill)
+        {
+            var childSkill = skill as IChildSkill;
+            if (childSkill != null)
+            {
+                var expectedResolution = childSkill.ParentSkill.DefaultResolution;
+                var selectedIntervalLengthItem = (IntervalLengthItem) comboBoxAdvIntervalLength.SelectedItem;
+                var resolution = selectedIntervalLengthItem.Minutes;
+                if (resolution != expectedResolution)
+                {
+                    errorProvider1.SetError(comboBoxAdvIntervalLength,
+                                            string.Format(TeleoptiPrincipal.Current.Regional.UICulture,
+                                                UserTexts.Resources.
+                                                    TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot,
+                                                expectedResolution));
+                    return false;
+                }
+                errorProvider1.Clear();
+            }
+            return true;
+        }
+
+	    public bool Depopulate(IAggregateRoot aggregateRoot)
         {
             var thisSkill = aggregateRoot as ISkill;
             try
@@ -154,7 +181,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                 MessageBoxAdv.Show(string.Concat(UserTexts.Resources.SkillNameIsInvalid, "  "), "", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
                 return false;
             }
-
+            if (!isResolutionValid(thisSkill)) return false;
             var activity = (IActivity)comboBoxSkillActivity.SelectedItem;
             if (activity == null)
             {
@@ -296,7 +323,5 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         {
             labelTotalOpeningHours.Text = string.Format(CultureInfo.CurrentCulture, "{0} - {0}", office2007OutlookTimePickerMidnightOffsetBreak.Text);
 		}
-
-		
     }
 }
