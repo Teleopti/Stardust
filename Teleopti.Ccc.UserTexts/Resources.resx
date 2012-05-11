@@ -10677,4 +10677,8 @@ These options are activated:
     <value>Duplicate day offs on {0}</value>
     <comment>This error message is to show duplicate day offs on same day</comment>
   </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>The interval length of this subskill should be the same as its parent skill, which is {0} minutes.</value>
+    <comment>The interval length of this subskill should be the same as its parent skill, which is 15 minutes.</comment>
+  </data>
 </root>
