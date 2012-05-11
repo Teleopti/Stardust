@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration
 {
     public interface IDataSourceConfigurationView
     {

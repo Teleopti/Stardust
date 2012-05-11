@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;

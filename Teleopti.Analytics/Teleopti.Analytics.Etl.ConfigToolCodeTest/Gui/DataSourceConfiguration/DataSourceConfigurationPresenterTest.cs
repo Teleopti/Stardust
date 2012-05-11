@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.DataSourceConfiguration
 {
 	[TestFixture]
 	public class DataSourceConfigurationPresenterTest

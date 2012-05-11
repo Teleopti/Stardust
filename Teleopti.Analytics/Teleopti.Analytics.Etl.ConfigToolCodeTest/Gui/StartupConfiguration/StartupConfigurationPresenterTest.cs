@@ -3,11 +3,11 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration;
+using Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.StartupConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 {
 	[TestFixture]
 	public class StartupConfigurationPresenterTest

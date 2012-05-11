@@ -5,7 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration
 {
 	public class DataSourceConfigurationModel
 	{

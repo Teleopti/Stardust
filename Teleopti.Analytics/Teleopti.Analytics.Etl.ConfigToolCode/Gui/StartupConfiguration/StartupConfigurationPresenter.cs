@@ -5,7 +5,7 @@ using Common.Logging;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 {
 	public class StartupConfigurationPresenter
 	{

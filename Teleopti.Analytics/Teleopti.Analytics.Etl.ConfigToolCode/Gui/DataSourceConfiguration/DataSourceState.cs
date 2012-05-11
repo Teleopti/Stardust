@@ -1,4 +1,4 @@
-namespace Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration
 {
     public enum DataSourceState
     {

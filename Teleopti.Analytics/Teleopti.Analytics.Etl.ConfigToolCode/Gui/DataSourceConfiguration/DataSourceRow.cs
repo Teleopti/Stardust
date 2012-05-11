@@ -1,7 +1,7 @@
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration
 {
     public class DataSourceRow
     {

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration
+namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 {
 	public interface IStartupConfigurationView
 	{
