@@ -759,6 +759,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                         _scheduleView.Presenter.AddOvertime(definitionSets.ToList());
                         break;
                     case ClipboardItems.Absence:
+						if (!(from a in SchedulerState.CommonStateHolder.Absences
+							  where !((IDeleteTag)a).IsDeleted select a).Any())
+						{
+							MessageBox.Show(this, Resources.NoAbsenceDefined,
+							Resources.NoAbsenceDefinedCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+							return;
+						}
                         _scheduleView.Presenter.AddAbsence();
                         break;
                     case ClipboardItems.PersonalShift:
