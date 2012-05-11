@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
     /// <summary>
     /// Facilitates adding new definition sets
     /// </summary>
-    public partial class ManageMultiplicatorForm : BaseRibbonForm
+    public partial class ManageMultiplicatorForm : BaseDialogForm
     {
     	public event EventHandler<MultiplicatorAddedEventArgs> MultiplicatorAdded;
 
