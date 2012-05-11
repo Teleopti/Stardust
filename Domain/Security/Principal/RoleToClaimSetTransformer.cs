@@ -30,8 +30,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			_repository = repository;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseMeForClaim(Claim claim) { return claim.Resource is AuthorizeApplicationFunction; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public Claim MakeClaim(IApplicationFunction applicationFunction)
 		{
 			return new Claim(
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IApplicationFunction GetApplicationFunction(Claim claim)
 		{
 			var resource = (AuthorizeApplicationFunction) claim.Resource;
@@ -53,8 +56,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 	public class ClaimWithEntity : IApplicationFunctionClaimStrategy
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseMeForClaim(Claim claim) { return claim.Resource is IApplicationFunction; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public Claim MakeClaim(IApplicationFunction applicationFunction)
 		{
 			return new Claim(
@@ -64,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IApplicationFunction GetApplicationFunction(Claim claim)
 		{
 			return (IApplicationFunction)claim.Resource;
