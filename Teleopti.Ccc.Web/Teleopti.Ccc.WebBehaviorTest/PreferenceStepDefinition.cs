@@ -221,8 +221,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TimeHelper.TryParse(earliest, out earliestTime);
 			TimeHelper.TryParse(latest, out latestTime);
 			var culture = UserFactory.User().Person.PermissionInformation.Culture();
-			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
-						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture).ToLower() + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture).ToLower();
 			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
@@ -236,8 +236,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TimeHelper.TryParse(earliest, out earliestTime);
 			TimeHelper.TryParse(latest, out latestTime);
 			var culture = UserFactory.User().Person.PermissionInformation.Culture();
-			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture) + "-" +
-						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture);
+			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture).ToLower() + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture).ToLower();
 			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TimeHelper.TryParse(earliest, out earliestTime);
 			TimeHelper.TryParse(latest, out latestTime);
 			var culture = UserFactory.User().Person.PermissionInformation.Culture();
-			var expected = TimeHelper.GetLongHourMinuteTimeString(earliestTime, culture) + "-" +
-						   TimeHelper.GetLongHourMinuteTimeString(latestTime, culture);
+			var expected = TimeHelper.GetLongHourMinuteTimeString(earliestTime, culture).ToLower() + "-" +
+						   TimeHelper.GetLongHourMinuteTimeString(latestTime, culture).ToLower();
 			EventualAssert.That(() => div.InnerHtml, Is.StringMatching(expected));
 		}
 
