@@ -18,6 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
 			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
+			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 
 			builder.RegisterFilterProvider();
 
@@ -51,10 +53,17 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure")));
 			builder.RegisterModule<AuthenticationModule>();
+			registerAuthenticationTypes(builder);
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 
+
 			return builder.Build();
+		}
+
+		private static void registerAuthenticationTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().InstancePerLifetimeScope();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)

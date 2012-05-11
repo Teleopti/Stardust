@@ -137,7 +137,7 @@
     <Compile Include="Foundation\IInitializeApplication.cs" />
     <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />
-    <Compile Include="Foundation\WindowsAppDomainCurrentPrincipalContext.cs" />
+    <Compile Include="Foundation\WindowsAppDomainPrincipalContext.cs" />
     <Compile Include="Foundation\RoleToPrincipalCommand.cs" />
     <Compile Include="Foundation\SystemUserPasswordSpecification.cs" />
     <Compile Include="Foundation\SystemUserSpecification.cs" />

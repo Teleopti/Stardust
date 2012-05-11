@@ -1,29 +1,30 @@
 ﻿using System.Web;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class RequestContextInitializer : IRequestContextInitializer
 	{
-		private readonly HttpContextBase _httpContextBase;
 		private readonly ISessionPrincipalFactory _sessionPrincipalFactory;
 		private readonly ISetThreadCulture _setThreadCulture;
+		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 
-		public RequestContextInitializer(HttpContextBase httpContextBase,
-													ISessionPrincipalFactory sessionPrincipalFactory,
-													ISetThreadCulture setThreadCulture)
+		public RequestContextInitializer(
+			ISessionPrincipalFactory sessionPrincipalFactory,
+			ISetThreadCulture setThreadCulture,
+			ICurrentPrincipalContext currentPrincipalContext)
 		{
-			_httpContextBase = httpContextBase;
 			_sessionPrincipalFactory = sessionPrincipalFactory;
 			_setThreadCulture = setThreadCulture;
+			_currentPrincipalContext = currentPrincipalContext;
 		}
 
-		public void AttachPrincipalForAuthenticatedUser()
+		public void SetupPrincipalAndCulture()
 		{
 			var teleoptiPrincipal = _sessionPrincipalFactory.Generate();
 			if (teleoptiPrincipal == null) return;
 
-			_httpContextBase.User = teleoptiPrincipal;
-			System.Threading.Thread.CurrentPrincipal = teleoptiPrincipal;
+			_currentPrincipalContext.SetCurrentPrincipal(teleoptiPrincipal);
 			_setThreadCulture.SetCulture(teleoptiPrincipal.Regional);
 		}
 	}

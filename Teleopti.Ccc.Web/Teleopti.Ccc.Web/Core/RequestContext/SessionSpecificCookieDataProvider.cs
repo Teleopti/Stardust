@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		public SessionSpecificCookieDataProvider(HttpContextBase httpContext,
 																ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings,
 																INow now,
-																ISessionSpecificDataStringSerializer dataStringSerializer)
+																ISessionSpecificDataStringSerializer dataStringSerializer
+			)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificCookieDataProviderSettings = sessionSpecificCookieDataProviderSettings;

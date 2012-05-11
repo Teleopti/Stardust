@@ -5,6 +5,6 @@
 	/// </summary>
 	public interface IRequestContextInitializer
 	{
-		void AttachPrincipalForAuthenticatedUser();
+		void SetupPrincipalAndCulture();
 	}
 }

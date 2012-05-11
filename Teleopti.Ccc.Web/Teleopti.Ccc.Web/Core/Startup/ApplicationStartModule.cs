@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																.Current
 			                                       				.GetService<IRequestContextInitializer>()
 																;
-															requestContextInitializer.AttachPrincipalForAuthenticatedUser();
+															requestContextInitializer.SetupPrincipalAndCulture();
 			                                       		}
 			                                       	};
 
