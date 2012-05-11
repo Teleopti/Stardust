@@ -192,7 +192,7 @@
     <Compile Include="Core\RequestContext\PersonCultureSetterTest.cs" />
     <Compile Include="Core\RequestContext\RequestContextInitializerTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProviderTest.cs" />
-    <Compile Include="Core\RequestContext\PrincipalFactoryTest.cs" />
+    <Compile Include="Core\RequestContext\SessionPrincipalFactoryTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataTest.cs" />
     <Compile Include="Core\Authentication\SignInTypeViewModelBaseTest.cs" />
     <Compile Include="Core\Authentication\ViewModelFactory\SignInViewModelFactoryTest.cs" />

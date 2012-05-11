@@ -13,16 +13,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
+		private readonly IPrincipalFactory _principalFactory;
 
 		public SessionPrincipalFactory(IDataSourcesProvider dataSourcesProvider,
 							  ISessionSpecificDataProvider sessionSpecificDataProvider,
 							  IRepositoryFactory repositoryFactory,
-							  IRoleToPrincipalCommand roleToPrincipalCommand)
+							  IRoleToPrincipalCommand roleToPrincipalCommand,
+								IPrincipalFactory principalFactory)
 		{
 			_dataSourcesProvider = dataSourcesProvider;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_repositoryFactory = repositoryFactory;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
+			_principalFactory = principalFactory;
 		}
 
 		public ITeleoptiPrincipal Generate()
@@ -48,8 +51,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 				var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = buRep.Get(sessionData.BusinessUnitId);
 
-				var teleoptiIdentity = new TeleoptiIdentity(person.Name.ToString(), dataSource, businessUnit, WindowsIdentity.GetCurrent(), sessionData.AuthenticationType);
-				principal = new TeleoptiPrincipal(teleoptiIdentity, person);
+				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
 			}
