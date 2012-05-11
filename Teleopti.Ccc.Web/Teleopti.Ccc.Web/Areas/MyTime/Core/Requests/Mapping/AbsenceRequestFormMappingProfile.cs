@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
 
+				if (source.EntityId != null)
+					destination.SetId(source.EntityId);
+
 				return destination;
 			}
 		}
