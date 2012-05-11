@@ -14,13 +14,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		[DataMember]
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
 
+		private TeleoptiPrincipalSerializable(IIdentity identity)
+			: base(identity, new string[] { }) { }
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public TeleoptiPrincipalSerializable(IIdentity identity, IPerson person) : base(identity, new string[] { })
+		public static TeleoptiPrincipalSerializable Make(ITeleoptiIdentity identity, IPerson person)
 		{
-			PersonId = person.Id.Value;
-			Person = person;
-			Regional = Principal.Regional.FromPerson(person);
-			Organisation = OrganisationMembership.FromPerson(person);
+			return new TeleoptiPrincipalSerializable(identity)
+			       	{
+			       		PersonId = person.Id.Value,
+			       		Person = person
+			       	};
 		}
 
 		[DataMember]
@@ -33,10 +37,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
 
 		[DataMember]
-		public IRegional Regional { get; private set; }
+		public IRegional Regional { get; set; }
 
 		[DataMember]
-		public IOrganisationMembership Organisation { get; private set; }
+		public IOrganisationMembership Organisation { get; set; }
 
 	}
 }

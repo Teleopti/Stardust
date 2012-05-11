@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var person = PersonFactory.CreatePerson("A", "Person");
 			person.SetId(Guid.NewGuid());
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Load(person.Id.Value)).Return(person);
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var person = PersonFactory.CreatePerson("A", "Person");
 			person.SetId(Guid.NewGuid());
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("en-US"));
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team);
 			person.AddPersonPeriod(personPeriod);
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			               	{
 			               		Ticket = "ticket"
 			               	};
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 			var deserializedIdentity = deserializedPrincipal.Identity as ITeleoptiIdentity;
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var person = PersonFactory.CreatePerson("A", "Person");
 			person.SetId(Guid.NewGuid());
 			var identity = new TeleoptiIdentity(person.Name.ToString(), dataSource, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal, applicationData);
 			var deserializedIdentity = deserializedPrincipal.Identity as ITeleoptiIdentity;
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var person = PersonFactory.CreatePerson("A", "Person");
 			person.SetId(Guid.NewGuid());
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 
 			var deserializedPrincipal = SerializeAndBack(principal, null, businessUnitRepository);
 			var deserializedIdentity = deserializedPrincipal.Identity as ITeleoptiIdentity;
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		{
 			var person = MakePersonWithAllPossibleAvailableDataOptions();
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
 			SetupClaimsFromRoles(person, principal);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
