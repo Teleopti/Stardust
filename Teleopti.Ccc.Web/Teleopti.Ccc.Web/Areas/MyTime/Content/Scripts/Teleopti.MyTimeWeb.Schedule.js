@@ -109,7 +109,12 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	function _initButtons() {
 		$('#Schedule-addRequest-ok-button')
 			.click(function () {
-				_addTextRequest();
+				if ($('#Text-request-tab.selected-tab').length > 0) {
+					_addTextRequest();
+				}else {
+					_addAbsenceRequest();
+				}
+				
 			});
 
 		$('#Text-request-tab')
@@ -173,7 +178,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			cache: false,
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
-				_displayTextRequest(formData.Period.StartDate);
+				_displayRequest(formData.Period.StartDate);
 				$('#Schedule-addRequest-section').parents(".qtip").hide();
 				_clearValidationError();
 			},
@@ -187,6 +192,32 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			}
 		});
 	}
+
+	function _addAbsenceRequest() {
+		var formData = _getFormData();
+		$.myTimeAjax({
+			url: "Requests/AbsenceRequest",
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: "POST",
+			cache: false,
+			data: JSON.stringify(formData),
+			success: function (data, textStatus, jqXHR) {
+				_displayRequest(formData.Period.StartDate);
+				$('#Schedule-addRequest-section').parents(".qtip").hide();
+				_clearValidationError();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					_displayValidationError(data);
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+
 
 	function _showAbsenceTypes() {
 		$('#Absence-type-element').show();
@@ -212,6 +243,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	function _getFormData() {
 		return {
 			Subject: $('#Schedule-addRequest-subject-input').val(),
+			AbsenceId: $('#Absence-type').children(":selected").val(),
 			Period: {
 				StartDate: $('#Schedule-addRequest-fromDate-input').val(),
 				StartTime: $('#Schedule-addRequest-fromTime-input-input').val(),
@@ -233,12 +265,10 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Schedule-addRequest-toDate-input').val(defaultDate);
 	}
 
-	function _displayTextRequest(inputDate) {
-		//		var date = Date.parse(inputDate);
+	function _displayRequest(inputDate) {
 		var date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, inputDate);
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
 		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-		//		var newTitle = textRequestCount.attr('title').replace(new RegExp('[0-9]|[1-9][0-9]'), parseInt(textRequestCount.text()) + 1);
 		var title = textRequestCount.attr('title');
 		if (title == undefined)
 			return;

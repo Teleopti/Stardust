@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public interface IAbsenceRequestPersister
 	{
-		void Persist(AbsenceRequestForm form);
+		RequestViewModel Persist(AbsenceRequestForm form);
 	}
 }

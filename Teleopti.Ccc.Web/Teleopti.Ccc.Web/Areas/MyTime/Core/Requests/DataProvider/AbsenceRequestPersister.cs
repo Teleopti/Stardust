@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_now = now;
 		}
 
-		public void Persist(AbsenceRequestForm form)
+		public RequestViewModel Persist(AbsenceRequestForm form)
 		{
 			var personRequest = _mapper.Map<AbsenceRequestForm, IPersonRequest>(form);
 
@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				personRequest.Pending();
 			}
+
+			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 	}
 }

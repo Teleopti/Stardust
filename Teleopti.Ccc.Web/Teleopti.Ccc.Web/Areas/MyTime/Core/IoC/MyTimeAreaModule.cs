@@ -30,6 +30,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<RequestsViewModelFactory>().As<IRequestsViewModelFactory>();
 			builder.RegisterType<PersonRequestProvider>().As<IPersonRequestProvider>();
 			builder.RegisterType<TextRequestPersister>().As<ITextRequestPersister>();
+			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)
@@ -152,6 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<HasDayOffUnderFullDayAbsence>().As<IHasDayOffUnderFullDayAbsence>();
 			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
+			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>();
 		}
 	}
 }

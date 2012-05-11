@@ -292,8 +292,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapAbsenceTypes()
 		{
-			var expected = "Vacation";
-			var absences = new List<IAbsence> { new Absence() { Description = new Description(expected) } };
+			var absence = new Absence() { Description = new Description("Vacation")};
+			absence.SetId(Guid.NewGuid());
+
+			var absences = new List<IAbsence> { absence };
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
 			var domainData = new WeekScheduleDomainData()
 			{
@@ -302,7 +304,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
-			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(expected);
+			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(absence.Description.Name);
+			result.AbsenceTypes.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
 		}
 	}
 }

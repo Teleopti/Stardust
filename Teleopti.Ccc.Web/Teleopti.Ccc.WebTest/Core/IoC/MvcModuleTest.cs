@@ -20,6 +20,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -31,6 +32,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -410,5 +412,18 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			//result.GetType().Should().Be.AssignableTo<RuleSetProjectionServiceForMultiSessionCaching>();
 		}
 
+		[Test]
+		public void ShouldRegisterAbsenceRequestPersister()
+		{
+			requestContainer.Resolve<IAbsenceRequestPersister>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterServiceBusSender()
+		{
+			requestContainer.Resolve<IServiceBusSender>()
+				.Should().Not.Be.Null();
+		}
 	}
 }

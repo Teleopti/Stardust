@@ -3,12 +3,14 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
-			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null);
+			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null);
 
 			var result = target.Index();
 
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnViewModelForIndex()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var target = new RequestsController(viewModelFactory, null);
+			var target = new RequestsController(viewModelFactory, null, null);
 
 			viewModelFactory.Stub(x => x.CreatePageViewModel()).Return(new RequestsViewModel());
 
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
-			var target = new RequestsController(viewModelFactory, null);
+			var target = new RequestsController(viewModelFactory, null, null);
 			var model = new RequestViewModel[]{};
 			var paging = new Paging();
 
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new TextRequestForm();
 			var resultData = new RequestViewModel();
 
-			var target = new RequestsController(null, textRequestPersister);
+			var target = new RequestsController(null, textRequestPersister, null);
 
 			textRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -73,9 +75,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldPersistAbsenceRequestForm()
+		{
+			var absenceRequestPersister = MockRepository.GenerateMock<IAbsenceRequestPersister>();
+			var form = new AbsenceRequestForm();
+			var resultData = new RequestViewModel();
+
+			var target = new RequestsController(null, null, absenceRequestPersister);
+
+			absenceRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
+
+			var result = target.AbsenceRequest(form);
+			var data = result.Data as RequestViewModel;
+
+			data.Should().Be.SameInstanceAs(resultData);
+		}
+
+		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModel()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -92,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDeleteTextRequest()
 		{
 			var textRequestPersister = MockRepository.GenerateMock<ITextRequestPersister>();
-			using (var target = new RequestsController(null, textRequestPersister))
+			using (var target = new RequestsController(null, textRequestPersister, null))
 			{
 				var id = Guid.NewGuid();
 
@@ -106,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetRequestById()
 		{
 			var modelFactory = MockRepository.GenerateStub<IRequestsViewModelFactory>();
-			using (var target = new RequestsController(modelFactory, null))
+			using (var target = new RequestsController(modelFactory, null, null))
 			{
 				var id = Guid.NewGuid();
 				var viewModel = new RequestViewModel { Dates = "a", Id = "b", Status = "c", Subject = "d", Text = "e", Type = "f", UpdatedOn = "g" };
