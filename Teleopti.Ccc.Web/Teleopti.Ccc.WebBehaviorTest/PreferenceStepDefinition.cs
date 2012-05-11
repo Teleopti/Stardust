@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-start-times"));
+			var div = cell.Div(Find.ByClass("possible-start-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-end-times"));
+			var div = cell.Div(Find.ByClass("possible-end-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
 			var cell = _page.CalendarCellForDate(DateOnly.Today);
-			var div = cell.Div(Find.ByClass("possible-contract-times"));
+			var div = cell.Div(Find.ByClass("possible-contract-times", false));
 			TimeSpan earliestTime;
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
@@ -261,9 +261,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
-			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
-			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
-			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times", false));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times", false));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times", false));
 
 			startTimeDiv.InnerHtml.Should().Be.Null();
 			endTimeDiv.InnerHtml.Should().Be.Null();
@@ -282,9 +282,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = _page.CalendarCellForDate(date);
-			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times"));
-			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times"));
-			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times"));
+			var startTimeDiv = cell.Div(Find.ByClass("possible-start-times", false));
+			var endTimeDiv = cell.Div(Find.ByClass("possible-end-times", false));
+			var contractTimeDiv = cell.Div(Find.ByClass("possible-contract-times", false));
 
 			startTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();
 			endTimeDiv.InnerHtml.Should().Not.Be.NullOrEmpty();

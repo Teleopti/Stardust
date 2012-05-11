@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMustHaves = true;
 			_useRotations = true;
 			_useAvailabilities = true;
-			_useStudentAvailabilities = true;
+			_useStudentAvailabilities = false;
 			_useShiftCategoryLimitations = true;
 
 			_preferencesValue = 0.8d;

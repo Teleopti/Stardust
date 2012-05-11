@@ -10654,4 +10654,8 @@ These options are activated:
     <value>Start time {0} should be earlier than end time {1}.</value>
     <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
   </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Duplicate day offs on {0}</value>
+    <comment>This error message is to show duplicate day offs on same day</comment>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
@@ -8,9 +9,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
     public class PdfScheduleDayOff : PdfScheduleTemplate
     {
 
-        public PdfScheduleDayOff(float columnWidth, PersonDayOffDto dayOff, bool rightToLeft)
+        public PdfScheduleDayOff(float columnWidth, PersonDayOffDto dayOff, bool rightToLeft, CultureInfo culture):base(culture)
         {
-            Brush = new PdfSolidBrush(Color.DimGray);
+        	if (dayOff == null) throw new ArgumentNullException("dayOff");
+        	Brush = new PdfSolidBrush(Color.DimGray);
            
             Template = new PdfTemplate(columnWidth, Height);
             Graphics = Template.Graphics;
