@@ -1,8 +1,10 @@
 using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -14,13 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> _absenceRequestFormToPersonRequest;
+		private readonly Func<IAbsenceRepository> _absenceRepository;
 
-		public AbsenceRequestFormMappingProfile(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IUserTimeZone> userTimeZone, Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> absenceRequestFormToPersonRequest)
+		public AbsenceRequestFormMappingProfile(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IUserTimeZone> userTimeZone, Func<ITypeConverter<AbsenceRequestForm, IPersonRequest>> absenceRequestFormToPersonRequest, Func<IAbsenceRepository> absenceRepository)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_userTimeZone = userTimeZone;
 			_absenceRequestFormToPersonRequest = absenceRequestFormToPersonRequest;
+			_absenceRepository = absenceRepository;
 		}
 
 		protected override void Configure()
@@ -35,11 +39,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			private readonly Func<IMappingEngine> _mapper;
 			private readonly Func<ILoggedOnUser> _loggedOnUser;
+			private readonly Func<IAbsenceRepository> _absenceRepository;
+			private readonly Func<IUserTimeZone> _userTimeZone;
 
-			public AbsenceRequestFormToPersonRequest(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser)
+			public AbsenceRequestFormToPersonRequest(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IAbsenceRepository> absenceRepository, Func<IUserTimeZone> userTimeZone)
 			{
 				_mapper = mapper;
 				_loggedOnUser = loggedOnUser;
+				_absenceRepository = absenceRepository;
+				_userTimeZone = userTimeZone;
 			}
 
 			public IPersonRequest Convert(ResolutionContext context)
@@ -51,7 +59,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 				destination.TrySetMessage(source.Message ?? "");
 
-				destination.Request = new AbsenceRequest(new Absence(), new DateTimePeriod());
+				DateTimePeriod period;
+
+				if (source.FullDay)
+				{
+					var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), _userTimeZone.Invoke().TimeZone());
+					var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), _userTimeZone.Invoke().TimeZone());
+					period = new DateTimePeriod(startTime, endTime);
+				}
+				else
+				{
+					period = _mapper.Invoke().Map<DateTimePeriodForm, DateTimePeriod>(source.Period);
+				}
+
+				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
 
 				return destination;
 			}
