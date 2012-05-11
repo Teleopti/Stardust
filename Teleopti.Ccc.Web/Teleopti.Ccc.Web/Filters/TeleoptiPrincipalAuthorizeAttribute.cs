@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override bool AuthorizeCore(HttpContextBase httpContext)
 		{
-			return (httpContext.User is TeleoptiPrincipal);
+			return (httpContext.User is ITeleoptiPrincipal);
 		}
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

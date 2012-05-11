@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.Register(c =>
 			{
-				var principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+				var principal = c.Resolve<ICurrentTeleoptiPrincipal>().Current();
 				if (principal != null && principal.Identity.IsAuthenticated)
 					return UnitOfWorkFactory.Current;
 

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Web.Mvc;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnActionsResultWhenTeleoptiPrincipal()
 		{
-			var principal = new TeleoptiPrincipal(new GenericIdentity("me", "custom"), new Person());
+			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
 			var target = new TeleoptiPrincipalAuthorizeAttribute();
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());

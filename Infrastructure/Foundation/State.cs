@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         {
             get
             {
-                var principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+                var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
                 return (principal!=null && principal.Identity.IsAuthenticated);
             }
         }

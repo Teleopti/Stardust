@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerAuthenticationTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().InstancePerLifetimeScope();
+			builder.RegisterType<TeleoptiPrincipalSerializableFactory>().As<IPrincipalFactory>().SingleInstance();
+			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
