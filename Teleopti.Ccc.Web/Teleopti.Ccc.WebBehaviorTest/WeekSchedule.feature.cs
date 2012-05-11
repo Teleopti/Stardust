@@ -299,6 +299,27 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show both text and absence requests")]
+        public virtual void ShowBothTextAndAbsenceRequests()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show both text and absence requests", ((string[])(null)));
+#line 90
+this.ScenarioSetup(scenarioInfo);
+#line 91
+ testRunner.Given("I am an agent");
+#line 92
+ testRunner.And("I have an existing text request");
+#line 93
+ testRunner.And("I have an existing absence request");
+#line 94
+ testRunner.When("I view my week schedule");
+#line 95
+ testRunner.Then("I should see 2 with the request count");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
