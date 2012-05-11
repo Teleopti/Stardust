@@ -12,7 +12,7 @@
 		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
-		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
+		<NugetPackages>$(CCNetWorkingDirectory)\packages\NUnit.Runners.2.6.0.12051\tools</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 <!-- Robin: Add when we reach coverage again... Teleopti.Ccc.Sdk.Logic; -->
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
