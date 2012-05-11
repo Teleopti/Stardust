@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 
 		public ITeleoptiPrincipal Generate()
 		{
-			var sessionData = _sessionSpecificDataProvider.Grab();
+			var sessionData = _sessionSpecificDataProvider.GrabFromCookie();
 			return sessionData == null ? null : createPrincipal(sessionData);
 		}
 

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 			
-			target.Store(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData);
 
 			_cookieCollection[FormsAuthentication.FormsCookieName].Should().Not.Be.Null();
 			
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void GrabShouldReturnNullWhenCookieIsMissing()
 		{
-			var result = target.Grab();
+			var result = target.GrabFromCookie();
 
 			result.Should().Be.Null();
 		}
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			// Good enought?
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.Store(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData);
 	
-			var result = target.Grab();
+			var result = target.GrabFromCookie();
 
 			result.Should().Not.Be.Null();
 			result.PersonId.Should().Be.EqualTo(sessionSpecificData.PersonId);
@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldExpireCookie()
 		{
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
-			target.Store(sessionSpecificData);
+			target.StoreInCookie(sessionSpecificData);
 
-			target.Grab().Should().Not.Be.Null();
+			target.GrabFromCookie().Should().Not.Be.Null();
 
 			target.ExpireCookie();
 
-			target.Grab().Should().Be.Null();
+			target.GrabFromCookie().Should().Be.Null();
 		}
 	}
 }

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-				Expect.Call(() => sessionSpecificDataProvider.Store(null)).IgnoreArguments();
+				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{

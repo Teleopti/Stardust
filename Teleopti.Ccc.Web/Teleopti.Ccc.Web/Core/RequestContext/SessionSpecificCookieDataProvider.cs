@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			_dataStringSerializer = dataStringSerializer;
 		}
 
-		public void Store(SessionSpecificData data)
+		public void StoreInCookie(SessionSpecificData data)
 		{
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			MakeCookie(userName, _now.Time, userData);
 		}
 
-		public SessionSpecificData Grab()
+		public SessionSpecificData GrabFromCookie()
 		{
 			var cookie = getCookie();
 			if (cookie == null || string.IsNullOrEmpty(cookie.Value))

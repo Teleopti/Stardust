@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(sessData);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessData);
 				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(sessData.DataSourceName)).Return(dataSource);
 				Expect.Call(dataSource.Application).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(null);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(null);
 			}
 			using (mocks.Playback())
 			{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid(), AuthenticationTypeOption.Windows);
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(sessionData);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessionData);
 			}
 			using (mocks.Playback())
 			{
