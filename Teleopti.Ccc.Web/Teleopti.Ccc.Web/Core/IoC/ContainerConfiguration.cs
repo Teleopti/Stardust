@@ -8,6 +8,7 @@ using AutofacContrib.DynamicProxy2;
 using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<TeleoptiPrincipalSerializableFactory>().As<IPrincipalFactory>().SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
+			builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
