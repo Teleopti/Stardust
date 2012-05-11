@@ -44,16 +44,17 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			ITeleoptiPrincipal principal;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var personRep = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRep.Get(sessionData.PersonId);
+				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
+
+				var person = personRepository.Load(sessionData.PersonId);
 				if (person == null)
 					return null;
 
-				var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
-				var businessUnit = buRep.Get(sessionData.BusinessUnitId);
+				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
 				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
-				_roleToPrincipalCommand.Execute(principal, uow, personRep);
+				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
 			}
 
 			return principal;
