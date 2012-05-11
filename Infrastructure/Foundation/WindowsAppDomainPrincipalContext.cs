@@ -7,11 +7,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class PrincipalManager : IPrincipalManager
+	public class WindowsAppDomainPrincipalContext : ICurrentPrincipalContext
 	{
 		private readonly IPrincipalFactory _factory;
 
-		public PrincipalManager(IPrincipalFactory factory)
+		public WindowsAppDomainPrincipalContext(IPrincipalFactory factory)
 		{
 			_factory = factory;
 		}
@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				currentPrincipal.ChangePrincipal((TeleoptiPrincipal) teleoptiPrincipal);
 			}
+		}
+
+		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

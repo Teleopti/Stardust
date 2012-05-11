@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// </summary>
     public class LogOnOff : ILogOnOff
     {
-        private readonly IPrincipalManager _principalManager;
+        private readonly ICurrentPrincipalContext _currentPrincipalContext;
 
-    	public LogOnOff(IPrincipalManager principalManager)
+    	public LogOnOff(ICurrentPrincipalContext currentPrincipalContext)
     	{
-    		_principalManager = principalManager;
+    		_currentPrincipalContext = currentPrincipalContext;
     	}
 
     	/// <summary>
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IBusinessUnit businessUnit,
 			AuthenticationTypeOption teleoptiAuthenticationType)
     	{
-    		_principalManager.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
+    		_currentPrincipalContext.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
 
     		var sessionData = new SessionData();
     		StateHolder.Instance.State.SetSessionData(sessionData);

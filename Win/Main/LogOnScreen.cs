@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main
         private delegate bool LoadingFunction();
         private readonly IEnumerable<LoadingFunction> _loadingFunctions;
         private readonly IEnumerable<LoadingFunction> _initializeFunctions;
-    	private readonly PrincipalManager _principalManager = new PrincipalManager(new TeleoptiPrincipalFactory());
+    	private readonly WindowsAppDomainPrincipalContext _principalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
         private IRoleToPrincipalCommand _roleToPrincipalCommand;
 
         public LogOnScreen()
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.Win.Main
         {
             _choosenDataSource = dataSourceContainer;
 
-            _principalManager.SetCurrentPrincipal(_choosenDataSource.User,_choosenDataSource.DataSource,null, dataSourceContainer.AuthenticationTypeOption);
+            _principalContext.SetCurrentPrincipal(_choosenDataSource.User,_choosenDataSource.DataSource,null, dataSourceContainer.AuthenticationTypeOption);
             return true;
         }
 

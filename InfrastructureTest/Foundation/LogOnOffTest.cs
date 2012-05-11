@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void Setup()
         {
             mocks = new MockRepository();
-            target = new LogOnOff(new PrincipalManager(new TeleoptiPrincipalFactory()));
+            target = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
             StateHolderProxyHelper.ClearAndSetStateHolder(mocks.StrictMock<IState>());
         }
 

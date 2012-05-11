@@ -135,9 +135,9 @@
     <Compile Include="Foundation\ForeignKeyException.cs" />
     <Compile Include="Foundation\IAvailableWindowsDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
-    <Compile Include="Foundation\IPrincipalManager.cs" />
+    <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />
-    <Compile Include="Foundation\PrincipalManager.cs" />
+    <Compile Include="Foundation\WindowsAppDomainCurrentPrincipalContext.cs" />
     <Compile Include="Foundation\RoleToPrincipalCommand.cs" />
     <Compile Include="Foundation\SystemUserPasswordSpecification.cs" />
     <Compile Include="Foundation\SystemUserSpecification.cs" />

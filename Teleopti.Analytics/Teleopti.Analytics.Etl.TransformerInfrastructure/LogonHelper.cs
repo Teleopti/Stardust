@@ -89,7 +89,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             application.Start(new StateManager(), _nhibConfPath, null);
 
             //This one would benefit from some Autofac maybe?
-			_logOnOff = new LogOnOff(new PrincipalManager(new TeleoptiPrincipalFactory()));
+			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
             _repositoryFactory = new RepositoryFactory();
             var passwordPolicy = new DummyPasswordPolicy();
             _logonService =

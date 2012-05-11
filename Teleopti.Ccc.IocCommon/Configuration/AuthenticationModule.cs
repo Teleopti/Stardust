@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
         protected override void Load(ContainerBuilder builder)
         {
-			builder.RegisterType<PrincipalManager>()
-				.As<IPrincipalManager>()
+			builder.RegisterType<WindowsAppDomainPrincipalContext>()
+				.As<ICurrentPrincipalContext>()
 				.SingleInstance();
         	builder.RegisterType<TeleoptiPrincipalFactory>()
         		.As<IPrincipalFactory>()

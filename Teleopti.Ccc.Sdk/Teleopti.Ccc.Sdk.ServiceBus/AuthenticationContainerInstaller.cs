@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<PrincipalManager>().As<IPrincipalManager>();
+			builder.RegisterType<WindowsAppDomainPrincipalContext>().As<ICurrentPrincipalContext>();
 			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>();
 			builder.RegisterType<LogOnOff>().As<ILogOnOff>();
 			builder.RegisterType<AvailableDataSourcesProvider>().As<IAvailableDataSourcesProvider>().SingleInstance();
