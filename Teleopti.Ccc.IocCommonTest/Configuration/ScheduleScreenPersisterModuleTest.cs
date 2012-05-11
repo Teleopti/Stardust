@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         {
             _module = new ScheduleScreenPersisterModule();
             _containerBuilder = new ContainerBuilder();
-            _containerBuilder.RegisterModule(new UnitOfWorkModule());
-            _containerBuilder.RegisterModule(new RepositoryModule());
-            _containerBuilder.RegisterModule(_module);
+			_containerBuilder.RegisterModule(new AuthenticationModule());
+			_containerBuilder.RegisterModule(new UnitOfWorkModule());
+			_containerBuilder.RegisterModule(new RepositoryModule());
+			_containerBuilder.RegisterModule(_module);
             _container = _containerBuilder.Build();
         }
 
