@@ -22,6 +22,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e);
 	}
 
+	public interface IAgentRestrictionsNotAvailableDrawer
+	{
+		bool Draw(IAgentRestrictionsView view, GridQueryCellInfoEventArgs e);
+	}
+
 	public class AgentRestrictionsPresenter
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
@@ -30,15 +35,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
 		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
+		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
 		private const int ColCount = 12;
 		private const int HeaderCount = 1;
 
-		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsLoadingDrawer loadingDrawer)
+		public AgentRestrictionsPresenter(IAgentRestrictionsView view, IAgentRestrictionsModel model, IAgentRestrictionsWarningDrawer warningDrawer, IAgentRestrictionsLoadingDrawer loadingDrawer, IAgentRestrictionsNotAvailableDrawer notAvailableDrawer)
 		{
 			_view = view;
 			_model = model;
 			_warningDrawer = warningDrawer;
 			_loadingDrawer = loadingDrawer;
+			_notAvailableDrawer = notAvailableDrawer;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -101,6 +108,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if(e.RowIndex > 1)
 			{
 				if (_loadingDrawer.Draw(_view, e)) return;
+				if (_notAvailableDrawer.Draw(_view, e)) return;
 				
 				//Name
 				if (e.ColIndex == 0)

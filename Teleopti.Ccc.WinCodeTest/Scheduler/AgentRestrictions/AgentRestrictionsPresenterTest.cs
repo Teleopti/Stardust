@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
 		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
+		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
 		private MockRepository _mocks;
 
 		[SetUp]
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_view = _mocks.StrictMock<IAgentRestrictionsView>();
 			_warningDrawer = _mocks.StrictMock<IAgentRestrictionsWarningDrawer>();
 			_loadingDrawer = _mocks.StrictMock<IAgentRestrictionsLoadingDrawer>();
-			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer, _loadingDrawer);
+			_notAvailableDrawer = _mocks.StrictMock<IAgentRestrictionsNotAvailableDrawer>();
+			_presenter = new AgentRestrictionsPresenter(_view, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer);
 		}
 
 		[Test]
@@ -117,6 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				using(_mocks.Record())
 				{
+					Expect.Call(_notAvailableDrawer.Draw(_view, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
 					Expect.Call(_loadingDrawer.Draw(_view, null)).Return(false).IgnoreArguments().Repeat.AtLeastOnce();
 				}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IAgentRestrictionsModel _model;
 		private IAgentRestrictionsWarningDrawer _warningDrawer;
 		private IAgentRestrictionsLoadingDrawer _loadingDrawer;
+		private IAgentRestrictionsNotAvailableDrawer _notAvailableDrawer;
+		private IList<int> _merged;
 
 		public bool FinishedTest{get; set;}
 		
@@ -33,10 +36,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void InitializeGrid()
 		{
+			_merged = new List<int>();
 			_warningDrawer = new AgentRestrictionsWarningDrawer();
 			_loadingDrawer = new AgentRestrictionsLoadingDrawer();
+			_notAvailableDrawer = new AgentRestrictionsNotAvailableDrawer();
 			_model = new AgentRestrictionsModel();
-			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer);
+			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer);
 			
 
 			ResetVolatileData();
@@ -89,8 +94,19 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public void MergeCells(int rowIndex, bool unmerge)
 		{
-			if (unmerge) Model.CoveredRanges.RemoveRows(rowIndex, rowIndex);
-			else Model.CoveredRanges.Add(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
+			if (unmerge)
+			{
+				Model.CoveredRanges.Remove(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
+				_merged.Remove(rowIndex);
+			}
+			else
+			{
+				if (!_merged.Contains(rowIndex))
+				{
+					Model.CoveredRanges.Add(GridRangeInfo.Cells(rowIndex, 1, rowIndex, 12));
+					_merged.Add(rowIndex);
+				}
+			}
 		}
 
 		public void LoadData()
