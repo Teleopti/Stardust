@@ -21423,6 +21423,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The interval length of this subskill should be the same as its parent skill, which is {0} minutes..
+        /// </summary>
+        public static string TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot {
+            get {
+                return ResourceManager.GetString("TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParamet" +
+                        "erMinutesDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Theme colors.
         /// </summary>
         public static string ThemeColors {

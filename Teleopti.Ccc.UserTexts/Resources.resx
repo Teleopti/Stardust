@@ -10666,4 +10666,8 @@ These options are activated:
     <value>No absence is defined</value>
     <comment>MessageBox caption on message  in Add Absence in Scheduler when no absence</comment>
   </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>The interval length of this subskill should be the same as its parent skill, which is {0} minutes.</value>
+    <comment>The interval length of this subskill should be the same as its parent skill, which is 15 minutes.</comment>
+  </data>
 </root>
