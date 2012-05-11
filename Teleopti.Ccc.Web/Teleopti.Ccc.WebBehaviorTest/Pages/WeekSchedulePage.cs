@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField AbsenceTypesTextField { get; set; }
 		[FindBy(Id = "Absence-type")]
 		public SelectList AbsenceTypesSelectList { get; set; }
+		[FindBy(Id = "Fullday-check")]
+		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Schedule-addRequest-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }

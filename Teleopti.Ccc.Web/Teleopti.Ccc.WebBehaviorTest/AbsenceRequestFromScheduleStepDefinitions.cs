@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesTextField.Value = name;
+			Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.Select(name);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
@@ -55,6 +55,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.InnerHtml, Is.StringContaining(name));
 		}
 
+		[When(@"I click full day checkbox")]
+		public void WhenIClickFullDayCheckbox()
+		{
+			Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked = true;
+		}
 
 		[Then(@"I should not see the absence request tab")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()

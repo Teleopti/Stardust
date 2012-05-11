@@ -5,8 +5,8 @@
 
 Scenario: Add absence request from week schedule view
 	Given I am an agent
-	And I am viewing week schedule
 	And I have a requestable absence called Vacation
+	And I am viewing week schedule
 	When I click on today's summary
 	And I click absence request tab
 	And I input absence request values with Vacation
@@ -24,6 +24,7 @@ Scenario: Default absence request values from week schedule
 	And I am viewing week schedule
 	When I click on tomorrows summary
 	And I click absence request tab
+	And I click full day checkbox
 	Then I should see the text request form with tomorrow as default date
 	And I should see 00:00 - 23:59 as the default times
 

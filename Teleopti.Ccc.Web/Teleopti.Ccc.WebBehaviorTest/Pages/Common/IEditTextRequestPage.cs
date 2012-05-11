@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		Span AbsenceRequestTab { get; }
 		TextField AbsenceTypesTextField { get; }
 		SelectList AbsenceTypesSelectList { get; }
+		CheckBox FulldayCheck { get; }
 		TextField TextRequestDetailSubjectInput { get; }
 		TextField TextRequestDetailFromDateInput { get; }
 		TextField TextRequestDetailFromTimeTextField { get; }

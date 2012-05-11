@@ -127,7 +127,7 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 				_showAbsenceTypes();
 				_clearFormData();
 			});
-		$('#Absence-type-check')
+		$('#Fullday-check')
 			.click(function () {
 				if ($(this).is(':checked')) {
 					$('#Schedule-addRequest-fromTime-input-input').val($('#Schedule-addRequest-default-start-time').text());
@@ -259,7 +259,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.not(':button, :submit, :reset')
 			.reset()
 			;
-		$('#Absence-type-check').removeAttr("checked");
+		$('#Absence-type').prop('selectedIndex', 0);
+		$('#Fullday-check').removeAttr("checked");
 		_enableTimeinput();
 		$('#Schedule-addRequest-fromDate-input').val(defaultDate);
 		$('#Schedule-addRequest-toDate-input').val(defaultDate);
