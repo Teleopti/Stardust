@@ -99,21 +99,30 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
 		}
 
-		[Then(@"I should see a number with the text request count")]
+		[Then(@"I should see a number with the request count")]
 		public void ThenIShouldSeeANumberWithTheTextRequestCount()
 		{
 			var date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
-			var textRequest = _page.TextRequestForDate(date);
+			var textRequest = _page.RequestForDate(date);
 			EventualAssert.That(() => textRequest.InnerHtml, Is.StringContaining("1"));
 		}
+
+		[Then(@"I should see (.*) with the request count")]
+		public void ThenIShouldSee2WithTheRequestCount(int count)
+		{
+			var date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
+			var textRequest = _page.RequestForDate(date);
+			EventualAssert.That(() => textRequest.InnerHtml, Is.StringContaining("2"));
+		}
+
 
 		[Then(@"I should see a symbol at the top of the schedule for the first day")]
 		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForTheFirstDay()
 		{
 			var startDate = UserFactory.User().UserData<ExistingTextRequestOver2Days>().PersonRequest.Request.Period.StartDateTime.Date;
 			var endDate = UserFactory.User().UserData<ExistingTextRequestOver2Days>().PersonRequest.Request.Period.EndDateTime.Date;
-			var iconDay1 = _page.TextRequestForDate(startDate);
-			var iconDay2 = _page.TextRequestForDate(endDate);
+			var iconDay1 = _page.RequestForDate(startDate);
+			var iconDay2 = _page.RequestForDate(endDate);
 			EventualAssert.That(() => iconDay1.DisplayVisible(), Is.True);
 			EventualAssert.That(() => iconDay2.DisplayVisible(), Is.False);
 		}

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var date = DateTime.Today;
 			if (UserFactory.User().HasSetup<ExistingTextRequest>())
 				date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
-			var textRequest = Pages.Pages.WeekSchedulePage.TextRequestForDate(date);
+			var textRequest = Pages.Pages.WeekSchedulePage.RequestForDate(date);
 			EventualAssert.That(() => textRequest.DisplayVisible(), Is.True);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheSchedule()
 		{
 			var date = DateTime.Today;
-			var textRequestSymbol = Pages.Pages.WeekSchedulePage.TextRequestForDate(date);
+			var textRequestSymbol = Pages.Pages.WeekSchedulePage.RequestForDate(date);
 			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
 		}
 

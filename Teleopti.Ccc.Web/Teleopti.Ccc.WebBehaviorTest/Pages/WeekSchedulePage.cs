@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			DatePicker.ClickDay(new DateOnly(TestDataSetup.ThirdDayOfOtherThanCurrentWeekInCurrentMonth(culture)));
 		}
 
-		public Div TextRequestForDate(DateTime date)
+		public Div RequestForDate(DateTime date)
 		{
 			return DayElementForDate(date).Div(Find.ByClass("text-request", false));
 		}

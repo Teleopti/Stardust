@@ -276,7 +276,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 81
  testRunner.Then("I should see a symbol at the top of the schedule");
 #line 82
- testRunner.And("I should see a number with the text request count");
+ testRunner.And("I should see a number with the request count");
 #line hidden
             this.ScenarioCleanup();
         }

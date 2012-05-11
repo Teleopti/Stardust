@@ -79,7 +79,7 @@ Scenario: Show text request symbol
 	And I have an existing text request
 	When I view my week schedule
 	Then I should see a symbol at the top of the schedule
-	And I should see a number with the text request count
+	And I should see a number with the request count
 
 Scenario: Multiple day text requests symbol
 	Given I am an agent
