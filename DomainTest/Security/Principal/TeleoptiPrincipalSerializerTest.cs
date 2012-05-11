@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			return target.Deserialize(data);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldLoadUnsafePerson()
 		{
 			var person = PersonFactory.CreatePerson("A", "Person");
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			deserializedIdentity.DataSource.Should().Be.SameInstanceAs(dataSource);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldLoadIdentityBusinessUnit()
 		{
 			// someone else is setting up state for me. UGH!
