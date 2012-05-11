@@ -236,6 +236,7 @@
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
+    <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
