@@ -16,6 +16,52 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 
+	function _initTooltip() {
+		var addTextRequest = $('.add-text-request');
+		$('<div/>').qtip({
+
+			content: {
+				text: $('#Schedule-addRequest-section'),
+				title: {
+					text: $('#Schedule-addRequest-title'),
+					button: $('#Schedule-addRequest-cancel-button').text()
+				}
+			},
+			position: {
+				target: 'event',
+				my: 'middle left',
+				at: 'middle right',
+				viewport: $(window),
+				adjust: {
+					x: 15
+				}
+			},
+			events: {
+				show: function (event, api) {
+					var date = $(event.originalEvent.target).closest('ul').attr('data-request-default-date');
+					Teleopti.MyTimeWeb.Schedule.TextRequest.ClearFormData(date);
+					
+				}
+			},
+			show: {
+				target: addTextRequest,
+				event: 'click'
+			},
+			hide: {
+				target: $(document.body).children().not('#ui-datepicker-div').not($(self)),
+				event: 'mousedown'
+
+			},
+			style: {
+				classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
+				tip: true,
+				border: {
+					radius: 2
+				}
+			}
+		});
+	}
+
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#ScheduleDateRangeSelector';
 		var periodData = $('#ScheduleWeek-body').data('mytime-periodselection');
@@ -31,6 +77,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+			_initTooltip();
 			Teleopti.MyTimeWeb.Schedule.Layout.SetSchemaItemsHeights();
 			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
@@ -43,12 +90,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 
+	var defaultDate;
+
 	function _initEditSection() {
 		_initButtons();
 		_initControls();
 		_initLabels();
-		_clearFormData();
 	}
+
+
 
 	function _initLabels() {
 		$('#Schedule-addRequest-section input[type=text], #Schedule-addRequest-section textarea')
@@ -89,11 +139,15 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 	function _enableTimeinput() {
 		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
 			.removeAttr("disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "black");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "black");
 	}
 
 	function _disableTimeinput() {
 		$('#Schedule-addRequest-fromTime button, #Schedule-addRequest-fromTime-input-input, #Schedule-addRequest-toTime button, #Schedule-addRequest-toTime-input-input')
 			.attr("disabled", "disabled");
+		$('#Schedule-addRequest-fromTime-input-input').css("color", "grey");
+		$('#Schedule-addRequest-toTime-input-input').css("color", "grey");
 	}
 
 	function _initControls() {
@@ -105,8 +159,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			;
 		$("#Schedule-addRequest-section .combobox.absence-input")
 			.combobox()
-			;
-		$("#Absence-type-input").attr('disabled', 'disabled');
+		;
+		$("#Absence-type-input").attr('readonly', 'true');
 	}
 
 	function _addTextRequest() {
@@ -121,7 +175,6 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				_displayTextRequest(formData.Period.StartDate);
 				$('#Schedule-addRequest-section').parents(".qtip").hide();
-				_clearFormData();
 				_clearValidationError();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -176,6 +229,8 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			;
 		$('#Absence-type-check').removeAttr("checked");
 		_enableTimeinput();
+		$('#Schedule-addRequest-fromDate-input').val(defaultDate);
+		$('#Schedule-addRequest-toDate-input').val(defaultDate);
 	}
 
 	function _displayTextRequest(inputDate) {
@@ -203,6 +258,11 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		},
 		PartialInit: function () {
 			_initEditSection();
+		},
+
+		ClearFormData: function (date) {
+			defaultDate = date;
+			_clearFormData();
 		}
 	};
 

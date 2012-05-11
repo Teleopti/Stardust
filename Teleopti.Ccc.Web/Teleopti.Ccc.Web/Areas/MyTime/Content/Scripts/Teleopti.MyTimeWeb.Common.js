@@ -178,51 +178,6 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 				});
 			});
 
-			var addTextRequest = $('.add-text-request');
-			$('<div/>').qtip({
-
-				content: {
-					text: $('#Schedule-addRequest-section'),
-					title: {
-						text: $('#Schedule-addRequest-title'),
-						button: $('#Schedule-addRequest-cancel-button').text()
-					}
-				},
-				position: {
-					target: 'event',
-					my: 'middle left',
-					at: 'middle right',
-					viewport: $(window),
-					adjust: {
-						x: 15
-					}
-				},
-				events: {
-					show: function (event, api) {
-						$('#Schedule-addRequest-section input, #Schedule-addRequest-section textarea, #Schedule-addRequest-section select')
-							.not(':button, :submit, :reset')
-							.reset();
-						$('#Schedule-addRequest-fromDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
-						$('#Schedule-addRequest-toDate-input').val($(event.originalEvent.target).closest('ul').attr('data-request-default-date'));
-					}
-				},
-				show: {
-					target: addTextRequest,
-					event: 'click'
-				},
-				hide: {
-					target: $(document.body).children().not('#ui-datepicker-div').not($(self)),
-					event: 'mousedown'
-					
-				},
-				style: {
-					classes: 'ui-tooltip-input ui-tooltip-rounded ui-tooltip-shadow',
-					tip: true,
-					border: {
-						radius: 2
-					}
-				}
-			});
 		}
 	};
 })(jQuery);
