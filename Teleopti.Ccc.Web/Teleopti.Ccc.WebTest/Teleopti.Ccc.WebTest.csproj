@@ -116,6 +116,7 @@
     <Compile Include="Areas\MobileReports\TestData\CurrentThreadCultureProvider.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportProviderForTest.cs" />
     <Compile Include="Areas\MobileReports\TestData\DefinedReportsApplicationFunctionsFactory.cs" />
+    <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakePrincipalProvider.cs" />
     <Compile Include="Areas\MobileReports\UserSettingServiceTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />

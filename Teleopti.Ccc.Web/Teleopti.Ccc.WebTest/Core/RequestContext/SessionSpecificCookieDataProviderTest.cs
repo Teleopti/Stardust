@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now.Stub(x => x.Time).Return(fictiveNow);
 
 			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
-			target = new SessionSpecificCookieDataProvider(httpContext, _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}
 
 		[Test]

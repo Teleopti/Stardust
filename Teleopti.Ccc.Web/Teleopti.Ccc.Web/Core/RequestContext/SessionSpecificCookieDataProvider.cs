@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 {
 	public class SessionSpecificCookieDataProvider : ISessionSpecificDataProvider
 	{
-		private readonly HttpContextBase _httpContext;
+		private readonly ICurrentHttpContext _httpContext;
 		private readonly ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
 
-		public SessionSpecificCookieDataProvider(HttpContextBase httpContext,
+		public SessionSpecificCookieDataProvider(ICurrentHttpContext httpContext,
 																ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings,
 																INow now,
 																ISessionSpecificDataStringSerializer dataStringSerializer
@@ -64,13 +64,13 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 
 		private HttpCookie getCookie()
 		{
-			return _httpContext.Request.Cookies[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName];
+			return _httpContext.Current().Request.Cookies[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName];
 		}
 
 		private void setCookie(HttpCookie cookie)
 		{
-			_httpContext.Response.Cookies.Remove(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
-			_httpContext.Response.Cookies.Add(cookie);
+			_httpContext.Current().Response.Cookies.Remove(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
+			_httpContext.Current().Response.Cookies.Add(cookie);
 		}
 
 		public void MakeCookie(string userName, DateTime now, string userData)

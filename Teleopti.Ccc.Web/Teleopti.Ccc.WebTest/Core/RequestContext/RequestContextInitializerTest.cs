@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	    		new TestSessionPrincipalFactory(_teleoptiPrincipal),
 	    		_setThreadCulture,
 	    		new WebRequestPrincipalContext(
-	    			_httpContextBase,
+					new FakeCurrentHttpContext(_httpContextBase),
 	    			new TeleoptiPrincipalFactory()
 	    			)
 	    		);
