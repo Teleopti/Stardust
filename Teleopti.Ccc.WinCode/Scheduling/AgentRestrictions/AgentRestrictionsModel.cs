@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
 			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
-			_displayRows.Add(new AgentRestrictionsDisplayRow());
+			_displayRows.Add(new AgentRestrictionsDisplayRow(null));
 		}
 	}
 }
