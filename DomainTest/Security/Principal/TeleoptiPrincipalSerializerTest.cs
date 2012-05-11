@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 				.IgnoreArguments()
 				.Return(applicationFunctions)
 				;
-			var roleToPrincipalCommand = new RoleToPrincipalCommand(new RoleToClaimSetTransformer(functionsForRoleProvider, new ClaimWithId()));
+			var roleToPrincipalCommand = new RoleToPrincipalCommand(new RoleToClaimSetTransformer(functionsForRoleProvider, new ClaimWithId(null)));
 			roleToPrincipalCommand.Execute(principal, null, personRepository);
 		}
 
