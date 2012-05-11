@@ -61,22 +61,22 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 	}
 
-	//public class TeleoptiPrincipalXmlStringSerializer : TeleoptiPrincipalSerializerCore, ITeleoptiPrincipalSerializer
+	//public class TeleoptiPrincipalXmlFileSerializer : TeleoptiPrincipalSerializerCore, ITeleoptiPrincipalSerializer
 	//{
-	//    public TeleoptiPrincipalXmlStringSerializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository) 
-	//        : base(applicationData, businessUnitRepository)
-	//    {
+	//    private readonly string _file;
 
-	//    }
+	//    public TeleoptiPrincipalXmlFileSerializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository, string file)
+	//        : base(applicationData, businessUnitRepository) {
+	//        _file = file;
+	//        }
 
 	//    public string Serialize(TeleoptiPrincipalSerializable principal)
 	//    {
-	//        using (var memoryStream = new MemoryStream())
+	//        using (var stream = new FileStream(_file, FileMode.Create))
 	//        {
-	//            Serializer.WriteObject(memoryStream, principal);
-	//            memoryStream.Position = 0;
-	//            return new StreamReader(memoryStream).ReadToEnd();
+	//            Serializer.WriteObject(stream, principal);
 	//        }
+	//        return System.IO.File.ReadAllText(_file);
 	//    }
 
 	//    public TeleoptiPrincipalSerializable Deserialize(string data)
@@ -132,9 +132,15 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 					typeof (Regional),
 					typeof (CccTimeZoneInfo),
 					typeof (OrganisationMembership),
-					typeof (GregorianCalendar)
+					typeof (AuthorizeApplicationFunction),
+					typeof (AuthorizeExternalAvailableData),
+					typeof (AuthorizeMyOwn),
+					typeof (AuthorizeMyTeam),
+					typeof (AuthorizeMySite),
+					typeof (AuthorizeMyBusinessUnit),
+					typeof (AuthorizeEveryone)
 				},
-			1024, // just a number...
+			32000, // just a number...
 			false,
 			true,
 			null

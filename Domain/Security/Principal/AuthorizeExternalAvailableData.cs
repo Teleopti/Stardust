@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public class AuthorizeExternalAvailableData : IAuthorizeAvailableData
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
+	public class AuthorizeExternalAvailableData : IAuthorizeAvailableData
     {
+		[DataMember]
         private readonly IEnumerable<Guid> _availableTeams;
-        private readonly IEnumerable<Guid> _availableSites;
-        private readonly IEnumerable<Guid> _availableBusinessUnits;
-        private readonly IEnumerable<Guid> _availablePersons;
+		[DataMember]
+		private readonly IEnumerable<Guid> _availableSites;
+		[DataMember]
+		private readonly IEnumerable<Guid> _availableBusinessUnits;
+		[DataMember]
+		private readonly IEnumerable<Guid> _availablePersons;
 
         public AuthorizeExternalAvailableData(IAvailableData availableData)
         {

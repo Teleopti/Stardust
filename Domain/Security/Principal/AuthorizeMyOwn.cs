@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public class AuthorizeMyOwn : IAuthorizeAvailableData
+	public class AuthorizeMyOwn : IAuthorizeAvailableData
     {
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPerson person)
         {

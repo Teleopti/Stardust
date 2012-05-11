@@ -9,8 +9,12 @@ using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,12 +31,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			if (businessUnitRepository == null)
 				businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
+			//var target = new TeleoptiPrincipalXmlFileSerializer(applicationData, businessUnitRepository, @"C:\test.xml");
 			var target = new TeleoptiPrincipalGZipBase64Serializer(applicationData, businessUnitRepository);
 			var data = target.Serialize(principal);
 
 			Debug.WriteLine(data.Length);
 			Debug.WriteLine(data);
-			//System.IO.File.WriteAllText(@"C:\test.xml", data);
 
 			return target.Deserialize(data);
 		}
@@ -48,24 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var deserializedPrincipal = SerializeAndBack(principal);
 
 			deserializedPrincipal.PersonId.Should().Be(principal.PersonId);
-		}
-
-		[Test]
-		public void ShouldSerializeClaimSets()
-		{
-			var person = PersonFactory.CreatePerson("A", "Person");
-			person.SetId(Guid.NewGuid());
-			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
-			var principal = new TeleoptiPrincipalSerializable(identity, person);
-			var claim = new Claim("type", "resource", "right");
-			var claimSet = new DefaultClaimSet(ClaimSet.System, new[] { claim });
-			principal.AddClaimSet(claimSet);
-
-			var deserializedPrincipal = SerializeAndBack(principal);
-
-			deserializedPrincipal.ClaimSets.Single().Single().ClaimType.Should().Be.EqualTo(claim.ClaimType);
-			deserializedPrincipal.ClaimSets.Single().Single().Resource.Should().Be.EqualTo(claim.Resource);
-			deserializedPrincipal.ClaimSets.Single().Single().Right.Should().Be.EqualTo(claim.Right);
 		}
 
 		[Test]
@@ -166,6 +152,83 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var deserializedIdentity = deserializedPrincipal.Identity as ITeleoptiIdentity;
 
 			deserializedIdentity.BusinessUnit.Should().Be.SameInstanceAs(businessUnit);
+		}
+
+
+
+
+
+
+
+		[Test]
+		public void ShouldSerializeClaimSets()
+		{
+			var person = MakePersonWithAllPossibleAvailableDataOptions();
+			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
+			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			SetupClaimsFromRoles(person, principal);
+
+			var deserializedPrincipal = SerializeAndBack(principal);
+
+			var actualClaimTypes =
+				from claimSet in deserializedPrincipal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			var expectedClaimTypes =
+				from claimSet in principal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			actualClaimTypes.Should().Have.SameSequenceAs(expectedClaimTypes);
+
+			var actualResources =
+				from claimSet in deserializedPrincipal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			var expectedResources =
+				from claimSet in principal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			actualResources.Should().Have.SameSequenceAs(expectedResources);
+
+			var actualRights =
+				from claimSet in deserializedPrincipal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			var expectedRights =
+				from claimSet in principal.ClaimSets
+				from claim in claimSet
+				select claim.ClaimType;
+			actualRights.Should().Have.SameSequenceAs(expectedRights);
+		}
+
+		private static IPerson MakePersonWithAllPossibleAvailableDataOptions()
+		{
+			var person = PersonFactory.CreatePerson("A", "Person");
+			person.SetId(Guid.NewGuid());
+			Enum.GetValues(typeof(AvailableDataRangeOption))
+				.Cast<AvailableDataRangeOption>()
+				.ForEach(o =>
+				{
+					var role = ApplicationRoleFactory.CreateRole("A", "Role");
+					role.AvailableData = new AvailableData { AvailableDataRange = o };
+					person.PermissionInformation.AddApplicationRole(role);
+				});
+			return person;
+		}
+
+		private static void SetupClaimsFromRoles(IPerson person, TeleoptiPrincipalSerializable principal)
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
+			var functionsForRoleProvider = MockRepository.GenerateMock<IFunctionsForRoleProvider>();
+			var applicationFunctions = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
+			applicationFunctions.ForEach(a => a.SetId(Guid.NewGuid()));
+			functionsForRoleProvider.Stub(x => x.AvailableFunctions(null, null))
+				.IgnoreArguments()
+				.Return(applicationFunctions)
+				;
+			var roleToPrincipalCommand = new RoleToPrincipalCommand(new RoleToClaimSetTransformer(functionsForRoleProvider, new ClaimWithId()));
+			roleToPrincipalCommand.Execute(principal, null, personRepository);
 		}
 
 	}
