@@ -74,7 +74,7 @@
 <div id="Schedule-addRequest-title"class="displaynone">
 	<span id="Text-request-tab" class="selectable-tab selected-tab">@Resources.NewTextRequest</span>
 	|
-	<span id="Absence-request-tab" class="selectable-tab">Absence Request</span>
+	<span id="Absence-request-tab" class="selectable-tab">@Resources.CreateAbsenceRequest</span>
 </div>
 
 <div class="displaynone" id="Schedule-addRequest-cancel-button">@Resources.Cancel</div>
@@ -91,18 +91,19 @@
 		<textarea id="Schedule-addRequest-message-input" />
 	</div>
 	<div id="Absence-type-element" class="edit-module-element floatleft displaynone">
-		<div class="floatleft absence-input">Absence Type:</div>
+		<div class="floatleft absence-input">@Resources.AbsenceType</div>
 		<select id="Absence-type" class="floatleft absence-input combobox">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
 				<option value="@Html.AttributeEncode(absenceType)">@absenceType.Name</option>
 			}
 		</select>
+		<input type="checkbox" id="Absence-type-check"/>@Resources.IsFullDayAbsence<br />
 	</div>
 	<div class="edit-module-element floatleft">
 		<input id="Schedule-addRequest-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
 	</div>
-	<div class="edit-module-element floatleft">
+	<div id="Schedule-addRequest-fromTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-fromTime-input-input">@Resources.Time</label>
 		<select id="Schedule-addRequest-fromTime-input" class="time-input combobox">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
@@ -114,7 +115,7 @@
 	<div class="edit-module-element clearleftfloat floatleft">
 		<input id="Schedule-addRequest-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
 	</div>
-	<div class="edit-module-element floatleft">
+	<div id="Schedule-addRequest-toTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-toTime-input-input">@Resources.Time</label>
 		<select id="Schedule-addRequest-toTime-input" class="time-input combobox">
 			@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
