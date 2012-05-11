@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
-	public class TeleoptiPrincipalSerializable : GenericPrincipal, ITeleoptiPrincipal
+	public class TeleoptiPrincipalSerializable : GenericPrincipal, ITeleoptiPrincipal, IUnsafePerson
 	{
 		[DataMember]
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
@@ -18,12 +18,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public TeleoptiPrincipalSerializable(IIdentity identity, IPerson person) : base(identity, new string[] { })
 		{
 			PersonId = person.Id.Value;
+			Person = person;
 			Regional = Principal.Regional.FromPerson(person);
 			Organisation = OrganisationMembership.FromPerson(person);
 		}
 
 		[DataMember]
 		public Guid PersonId { get; private set; }
+		public IPerson Person { get; set; }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(PersonId); }
 
@@ -35,5 +37,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		[DataMember]
 		public IOrganisationMembership Organisation { get; private set; }
+
 	}
 }

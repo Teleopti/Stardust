@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 	public class TeleoptiPrincipalGZipBase64Serializer : TeleoptiPrincipalSerializerCore, ITeleoptiPrincipalSerializer
 	{
-		public TeleoptiPrincipalGZipBase64Serializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository) 
-			: base(applicationData, businessUnitRepository)
+		public TeleoptiPrincipalGZipBase64Serializer(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository, IPersonRepository personRepository) 
+			: base(applicationData, businessUnitRepository, personRepository)
 		{
 			
 		}
@@ -148,24 +148,25 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private readonly IApplicationData _applicationData;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly IPersonRepository _personRepository;
 
-		public TeleoptiPrincipalSerializerCore(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository)
+		public TeleoptiPrincipalSerializerCore(IApplicationData applicationData, IBusinessUnitRepository businessUnitRepository, IPersonRepository personRepository)
 		{
 			_applicationData = applicationData;
 			_businessUnitRepository = businessUnitRepository;
+			_personRepository = personRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected TeleoptiPrincipalSerializable PopulateData(TeleoptiPrincipalSerializable principal)
 		{
+			principal.Person = _personRepository.Load(principal.PersonId);
 			var identity = (TeleoptiIdentity)principal.Identity;
 			identity.WindowsIdentity = WindowsIdentity.GetCurrent();
 			identity.DataSource = GetDataSourceByName(identity.DataSourceName);
-			identity.BusinessUnit = GetBusinessUnitById(identity.BusinessUnitId);
+			identity.BusinessUnit = _businessUnitRepository.Load(identity.BusinessUnitId);
 			return principal;
 		}
-
-		private IBusinessUnit GetBusinessUnitById(Guid id) { return _businessUnitRepository.Get(id); }
 
 		private IDataSource GetDataSourceByName(string dataSourceName)
 		{

@@ -24,21 +24,38 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 	public class TeleoptiPrincipalSerializerTest
 	{
 
-		private static TeleoptiPrincipalSerializable SerializeAndBack(TeleoptiPrincipalSerializable principal, IApplicationData applicationData = null, IBusinessUnitRepository businessUnitRepository = null)
+		private static TeleoptiPrincipalSerializable SerializeAndBack(TeleoptiPrincipalSerializable principal, IApplicationData applicationData = null, IBusinessUnitRepository businessUnitRepository = null, IPersonRepository personRepository = null)
 		{
 			if (applicationData == null)
 				applicationData = MockRepository.GenerateMock<IApplicationData>();
 			if (businessUnitRepository == null)
 				businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			if (personRepository == null)
+				personRepository = MockRepository.GenerateMock<IPersonRepository>();
 
-			//var target = new TeleoptiPrincipalXmlFileSerializer(applicationData, businessUnitRepository, @"C:\test.xml");
-			var target = new TeleoptiPrincipalGZipBase64Serializer(applicationData, businessUnitRepository);
+			//var target = new TeleoptiPrincipalXmlFileSerializer(applicationData, businessUnitRepository, personRepository, @"C:\test.xml");
+			var target = new TeleoptiPrincipalGZipBase64Serializer(applicationData, businessUnitRepository, personRepository);
 			var data = target.Serialize(principal);
 
 			Debug.WriteLine(data.Length);
 			Debug.WriteLine(data);
 
 			return target.Deserialize(data);
+		}
+
+		[Test]
+		public void ShouldLoadUnsafePerson()
+		{
+			var person = PersonFactory.CreatePerson("A", "Person");
+			person.SetId(Guid.NewGuid());
+			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
+			var principal = new TeleoptiPrincipalSerializable(identity, person);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Load(person.Id.Value)).Return(person);
+
+			var deserializedPrincipal = SerializeAndBack(principal, personRepository: personRepository);
+
+			deserializedPrincipal.Person.Should().Be(person);
 		}
 
 		[Test]
@@ -136,12 +153,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		}
 
 		[Test]
-		public void ShouldPopulateIdentityBusinessUnit()
+		public void ShouldLoadIdentityBusinessUnit()
 		{
 			// someone else is setting up state for me. UGH!
 			var businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
-			businessUnitRepository.Stub(x => x.Get(businessUnit.Id.Value)).Return(businessUnit);
+			businessUnitRepository.Stub(x => x.Load(businessUnit.Id.Value)).Return(businessUnit);
 
 			var person = PersonFactory.CreatePerson("A", "Person");
 			person.SetId(Guid.NewGuid());
