@@ -35,11 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			private readonly Func<IMappingEngine> _mapper;
 			private readonly Func<ILoggedOnUser> _loggedOnUser;
+			private readonly Func<IUserTimeZone> _userTimeZone;
 
-			public TextRequestFormToPersonRequest(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser)
+			public TextRequestFormToPersonRequest(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser, Func<IUserTimeZone> userTimeZone)
 			{
 				_mapper = mapper;
 				_loggedOnUser = loggedOnUser;
+				_userTimeZone = userTimeZone;
 			}
 
 			public IPersonRequest Convert(ResolutionContext context)
@@ -54,8 +56,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					destination.Pending();
 				}
 
-
-				var period = _mapper.Invoke().Map<DateTimePeriodForm, DateTimePeriod>(source.Period);
+				DateTimePeriod period;
+				if (source.FullDay)
+				{
+					var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), _userTimeZone.Invoke().TimeZone());
+					var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), _userTimeZone.Invoke().TimeZone());
+					period = new DateTimePeriod(startTime, endTime);
+				}
+				else
+				{
+					period = _mapper.Invoke().Map<DateTimePeriodForm, DateTimePeriod>(source.Period);
+				}
 				var textRequest = new TextRequest(period);
 				destination.Request = textRequest;
 

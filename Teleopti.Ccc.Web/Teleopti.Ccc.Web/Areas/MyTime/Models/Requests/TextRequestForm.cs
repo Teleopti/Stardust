@@ -19,5 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTimePeriodForm Period { get; set; }
 
 		public Guid? EntityId { get; set; }
+
+		public bool FullDay { get; set; }
 	}
 }

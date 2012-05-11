@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			textRequestFormToPersonRequest =
-				new TextRequestFormMappingProfile.TextRequestFormToPersonRequest(() => Mapper.Engine, () => loggedOnUser);
+				new TextRequestFormMappingProfile.TextRequestFormToPersonRequest(() => Mapper.Engine, () => loggedOnUser, () => userTimeZone);
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -157,6 +157,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form, destination);
 
 			result.GetSubject(new NoFormatting()).Should().Be.EqualTo(form.Subject);
+		}
+
+		[Test]
+		public void ShouldMapFullDayRequest()
+		{
+			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			var form = new TextRequestForm() { FullDay = true };
+
+			var result = Mapper.Map<TextRequestForm, IPersonRequest>(form);
+
+			var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), timeZone);
+			var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), timeZone);
+
+			var expected = new DateTimePeriod(startTime, endTime);
+
+			result.Request.Period.Should().Be(expected);
 		}
 	}
 }
