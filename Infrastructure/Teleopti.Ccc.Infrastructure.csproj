@@ -120,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Foundation\PrincipalFactory.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />

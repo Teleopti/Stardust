@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             }
                 
             //var provider = sourceContainer.AvailableBusinessUnitProvider;
-            var logOnOff = new LogOnOff(new PrincipalManager());
+            var logOnOff = new LogOnOff(new PrincipalManager(new TeleoptiPrincipalFactory()));
             //var bUnit = provider.AvailableBusinessUnits().FirstOrDefault(b => b.Id.ToString().Equals(businessUnit));
             logOnOff.LogOn(ds, sourceContainer.User, null, sourceContainer.AuthenticationTypeOption);// bUnit);
 

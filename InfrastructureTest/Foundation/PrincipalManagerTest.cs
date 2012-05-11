@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
             threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
-            target = new PrincipalManager();
+            target = new PrincipalManager(new TeleoptiPrincipalFactory());
         }
 
         [Test]

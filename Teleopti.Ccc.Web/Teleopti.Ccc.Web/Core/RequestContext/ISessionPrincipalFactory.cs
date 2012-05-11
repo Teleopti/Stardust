@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	/// <summary>
 	/// Will give correct principal object back
 	/// </summary>
-	public interface IPrincipalFactory
+	public interface ISessionPrincipalFactory
 	{
 		ITeleoptiPrincipal Generate();
 	}

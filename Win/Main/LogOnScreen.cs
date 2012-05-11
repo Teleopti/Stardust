@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main
         private delegate bool LoadingFunction();
         private readonly IEnumerable<LoadingFunction> _loadingFunctions;
         private readonly IEnumerable<LoadingFunction> _initializeFunctions;
-        private readonly PrincipalManager _principalManager = new PrincipalManager();
+    	private readonly PrincipalManager _principalManager = new PrincipalManager(new TeleoptiPrincipalFactory());
         private IRoleToPrincipalCommand _roleToPrincipalCommand;
 
         public LogOnScreen()

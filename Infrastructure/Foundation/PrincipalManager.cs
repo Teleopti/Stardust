@@ -7,31 +7,36 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-    public class PrincipalManager : IPrincipalManager
-    {
-		 public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
-        {
-            var teleoptiPrincipal =
-                new TeleoptiPrincipal(new TeleoptiIdentity(loggedOnUser ==null ? string.Empty : loggedOnUser.Name.ToString(), dataSource, businessUnit,
-                                                           WindowsIdentity.GetCurrent(), teleoptiAuthenticationType), loggedOnUser);
+	public class PrincipalManager : IPrincipalManager
+	{
+		private readonly IPrincipalFactory _factory;
 
-            var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-            if (currentPrincipal == null)
-            {
-                try
-                {
-                    AppDomain.CurrentDomain.SetThreadPrincipal(teleoptiPrincipal);
-                }
-                catch (PolicyException)
-                {
-                    //This seems to happen some times when we already have set the default principal, but not for this thread apparently.
-                }
-                Thread.CurrentPrincipal = teleoptiPrincipal;
-            }
-            else
-            {
-                currentPrincipal.ChangePrincipal(teleoptiPrincipal);
-            }
-        }
-    }
+		public PrincipalManager(IPrincipalFactory factory)
+		{
+			_factory = factory;
+		}
+
+		public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
+		{
+			var teleoptiPrincipal = _factory.MakePrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
+
+			var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+			if (currentPrincipal == null)
+			{
+				try
+				{
+					AppDomain.CurrentDomain.SetThreadPrincipal(teleoptiPrincipal);
+				}
+				catch (PolicyException)
+				{
+					//This seems to happen some times when we already have set the default principal, but not for this thread apparently.
+				}
+				Thread.CurrentPrincipal = teleoptiPrincipal;
+			}
+			else
+			{
+				currentPrincipal.ChangePrincipal((TeleoptiPrincipal) teleoptiPrincipal);
+			}
+		}
+	}
 }

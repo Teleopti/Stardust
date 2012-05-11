@@ -30,15 +30,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     	/// <param name="loggedOnUser">The logged on user.</param>
     	/// <param name="businessUnit">The business unit.</param>
     	/// <param name="teleoptiAuthenticationType">Win or form authentication?</param>
-    	public void LogOn(IDataSource dataSource,
-                          IPerson loggedOnUser,
-                          IBusinessUnit businessUnit,
-								AuthenticationTypeOption teleoptiAuthenticationType)
-        {
-            _principalManager.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
-            
-            SessionData sessionData = new SessionData();
-            StateHolder.Instance.State.SetSessionData(sessionData);
-        }
+		public void LogOn(
+			IDataSource dataSource,
+			IPerson loggedOnUser,
+			IBusinessUnit businessUnit,
+			AuthenticationTypeOption teleoptiAuthenticationType)
+    	{
+    		_principalManager.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
+
+    		var sessionData = new SessionData();
+    		StateHolder.Instance.State.SetSessionData(sessionData);
+    	}
     }
 }

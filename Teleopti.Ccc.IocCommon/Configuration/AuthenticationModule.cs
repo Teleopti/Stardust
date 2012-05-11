@@ -27,10 +27,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
         protected override void Load(ContainerBuilder builder)
         {
-        	builder.RegisterType<PrincipalManager>()
+			builder.RegisterType<PrincipalManager>()
 				.As<IPrincipalManager>()
 				.SingleInstance();
-            builder.RegisterType<LogOnOff>()
+        	builder.RegisterType<TeleoptiPrincipalFactory>()
+        		.As<IPrincipalFactory>()
+        		.SingleInstance();
+			builder.RegisterType<LogOnOff>()
                 .As<ILogOnOff>()
                 .SingleInstance();
             builder.RegisterType<RepositoryFactory>()

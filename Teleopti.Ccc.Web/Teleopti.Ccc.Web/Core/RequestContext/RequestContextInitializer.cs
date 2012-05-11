@@ -5,21 +5,21 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	public class RequestContextInitializer : IRequestContextInitializer
 	{
 		private readonly HttpContextBase _httpContextBase;
-		private readonly IPrincipalFactory _principalFactory;
+		private readonly ISessionPrincipalFactory _sessionPrincipalFactory;
 		private readonly ISetThreadCulture _setThreadCulture;
 
 		public RequestContextInitializer(HttpContextBase httpContextBase,
-													IPrincipalFactory principalFactory,
+													ISessionPrincipalFactory sessionPrincipalFactory,
 													ISetThreadCulture setThreadCulture)
 		{
 			_httpContextBase = httpContextBase;
-			_principalFactory = principalFactory;
+			_sessionPrincipalFactory = sessionPrincipalFactory;
 			_setThreadCulture = setThreadCulture;
 		}
 
 		public void AttachPrincipalForAuthenticatedUser()
 		{
-			var teleoptiPrincipal = _principalFactory.Generate();
+			var teleoptiPrincipal = _sessionPrincipalFactory.Generate();
 			if (teleoptiPrincipal == null) return;
 
 			_httpContextBase.User = teleoptiPrincipal;

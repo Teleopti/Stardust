@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			registerCommonTypes(builder);
 			registerPortalTypes(builder);
-			registerRequestContextTypes(builder);
 			registerScheduleTypes(builder);
 			registerTeamScheduleTypes(builder);
 			registerStudentAvailabilityTypes(builder);
@@ -107,18 +106,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
-		}
-
-		private static void registerRequestContextTypes(ContainerBuilder builder)
-		{
-			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
-			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
-			builder.RegisterType<PrincipalFactory>().As<IPrincipalFactory>();
-			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
-			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
-			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
-			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
-			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 			builder.RegisterType<DefaultTeamCalculator>().As<IDefaultTeamCalculator>();
 		}
 

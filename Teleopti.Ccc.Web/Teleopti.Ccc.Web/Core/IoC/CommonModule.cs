@@ -38,14 +38,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
-			builder.RegisterType<PrincipalFactory>().As<IPrincipalFactory>();
+			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
 			builder.RegisterType<PrincipalProvider>().As<IPrincipalProvider>();
 			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
 			builder.RegisterType<CultureProvider>().As<ICultureProvider>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
-			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As
-				<ISessionSpecificCookieDataProviderSettings>();
+			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 		}

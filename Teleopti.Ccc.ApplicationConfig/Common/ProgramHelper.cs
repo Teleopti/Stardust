@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                                                               new SystemUserPasswordSpecification())), repositoryFactory));
             DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();
 
-			var logOnOff = new LogOnOff(new PrincipalManager());
+			var logOnOff = new LogOnOff(new PrincipalManager(new TeleoptiPrincipalFactory()));
             dataSourceContainer.LogOn(
                 convertPerson.ApplicationAuthenticationInfo.ApplicationLogOnName,
                 convertPerson.ApplicationAuthenticationInfo.Password);

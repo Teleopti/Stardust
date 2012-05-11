@@ -7,14 +7,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
-	public class PrincipalFactory : IPrincipalFactory
+	public class SessionPrincipalFactory : ISessionPrincipalFactory
 	{
 		private readonly IDataSourcesProvider _dataSourcesProvider;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 
-		public PrincipalFactory(IDataSourcesProvider dataSourcesProvider,
+		public SessionPrincipalFactory(IDataSourcesProvider dataSourcesProvider,
 							  ISessionSpecificDataProvider sessionSpecificDataProvider,
 							  IRepositoryFactory repositoryFactory,
 							  IRoleToPrincipalCommand roleToPrincipalCommand)

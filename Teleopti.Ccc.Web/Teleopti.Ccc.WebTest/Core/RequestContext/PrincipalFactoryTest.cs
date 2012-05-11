@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	public class PrincipalFactoryTest
 	{
 		private MockRepository mocks;
-		private PrincipalFactory target;
+		private SessionPrincipalFactory target;
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
 		private IRepositoryFactory repositoryFactory;
 		private IDataSourcesProvider dataSourcesProvider;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 			dataSourcesProvider = mocks.DynamicMock<IDataSourcesProvider>();
 			roleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
-			target = new PrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand);
+			target = new SessionPrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand);
 		}
 
 

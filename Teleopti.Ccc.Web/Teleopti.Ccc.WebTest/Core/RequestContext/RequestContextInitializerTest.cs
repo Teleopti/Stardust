@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		    _setThreadCulture = MockRepository.GenerateMock<ISetThreadCulture>();
 			_teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity("MyName"), null);
 			_requestContextInitializer = new RequestContextInitializer(_httpContextBase,
-			                                                           new TestPrincipalFactory(_teleoptiPrincipal), _setThreadCulture);
+			                                                           new TestSessionPrincipalFactory(_teleoptiPrincipal), _setThreadCulture);
 		}
 
 		[Test]
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
             _setThreadCulture.VerifyAllExpectations();
 		}
 
-		protected class TestPrincipalFactory : IPrincipalFactory
+		protected class TestSessionPrincipalFactory : ISessionPrincipalFactory
 		{
-			public TestPrincipalFactory(ITeleoptiPrincipal principal)
+			public TestSessionPrincipalFactory(ITeleoptiPrincipal principal)
 			{
 				_principal = principal;
 			}
