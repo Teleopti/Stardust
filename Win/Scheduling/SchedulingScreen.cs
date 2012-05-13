@@ -762,8 +762,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (!(from a in SchedulerState.CommonStateHolder.Absences
 							  where !((IDeleteTag)a).IsDeleted select a).Any())
 						{
-							MessageBox.Show(this, Resources.NoAbsenceDefined,
-							Resources.NoAbsenceDefinedCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+							ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
 							return;
 						}
                         _scheduleView.Presenter.AddAbsence();
