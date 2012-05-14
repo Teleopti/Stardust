@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_personRequestRepository.Add(personRequest);
 
 			if (_serviceBusSender.EnsureBus())
-			{
-				personRequest.SetNew();
-				
+			{		
 				var message = new NewAbsenceRequestCreated()
 				              	{
 				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
