@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalInternalsFactory : IMakeRegionalFromPerson, IMakeOrganisationMembershipFromPerson
 	{
-		public IRegional MakeRegionalFromPerson(IPerson loggedOnUser)
+		public virtual IRegional MakeRegionalFromPerson(IPerson loggedOnUser)
 		{
 			return Regional.FromPerson(loggedOnUser);
 		}
 
-		public IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser)
+		public virtual IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser)
 		{
 			return OrganisationMembership.FromPerson(loggedOnUser);
 		}

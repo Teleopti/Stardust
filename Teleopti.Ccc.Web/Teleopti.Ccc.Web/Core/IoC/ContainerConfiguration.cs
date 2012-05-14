@@ -47,23 +47,25 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<MobileReportsAreaModule>();
 
-        	registerMbCachedComponents(builder);
-			registerAopComponents(builder);
-
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure")));
-			builder.RegisterModule<AuthenticationModule>();
-			registerAuthenticationTypes(builder);
+			registerAuthenticationModule(builder);
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
+			builder.RegisterModule<RuleSetModule>();
 
+			registerAopComponents(builder);
+
+			registerMbCachedComponents(builder);
 
 			return builder.Build();
 		}
 
-		private static void registerAuthenticationTypes(ContainerBuilder builder)
+		private static void registerAuthenticationModule(ContainerBuilder builder)
 		{
+			builder.RegisterModule<AuthenticationModule>();
+
 			builder.RegisterType<TeleoptiPrincipalSerializableFactory>().As<IPrincipalFactory>().SingleInstance();
 			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
 				.As<IMakeRegionalFromPerson>()
@@ -83,7 +85,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule<RuleSetModule>();
 
 			builder.Register(c =>
 			                 	{
@@ -92,12 +93,31 @@ namespace Teleopti.Ccc.Web.Core.IoC
 									var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(shiftCreatorService);
 			                 		return instance;
 			                 	})
-				.As<IRuleSetProjectionService>();
+				.As<IRuleSetProjectionService>()
+				.SingleInstance();
 
 			mbCacheModule.Builder
 				.For<RuleSetProjectionService>()
 				.CacheMethod(m => m.ProjectionCollection(null))
 				.As<IRuleSetProjectionService>();
+
+			builder.Register(c =>
+			                 	{
+			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
+									var instance = cacheProxyFactory.Create<TeleoptiPrincipalInternalsFactory>();
+			                 		return instance;
+			                 	})
+				.As<IMakeRegionalFromPerson>()
+				.As<IMakeOrganisationMembershipFromPerson>()
+				.SingleInstance();
+
+			mbCacheModule.Builder
+				.For<TeleoptiPrincipalInternalsFactory>()
+				.CacheMethod(m => m.MakeOrganisationMembership(null))
+				.CacheMethod(m => m.MakeRegionalFromPerson(null))
+				.AsImplemented()
+				;
+
 		}
 	}
 }
