@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class ScheduleDayService :IScheduleDayService
     {
     	private readonly IScheduleService _scheduleService;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private ScheduleDayService() { }
 
 		public ScheduleDayService(IScheduleService scheduleService,
-								  ISchedulingOptions schedulingOptions,
 								  IDeleteSchedulePartService deleteSchedulePartService,
 								  IResourceOptimizationHelper resourceOptimizationHelper,
 								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -27,40 +25,39 @@ namespace Teleopti.Ccc.Domain.Optimization
 			: this()
 		{
 			_scheduleService = scheduleService;
-			_schedulingOptions = schedulingOptions;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
-    	public bool RescheduleDay(IScheduleDay schedulePart)
+    	public bool RescheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
             var originalDay = (IScheduleDay) schedulePart.Clone();
             var partList = new List<IScheduleDay> { schedulePart };
 
-            IList<IScheduleDay> retList = DeleteMainShift(partList);
-            
-            bool result = ScheduleDay(retList[0]);
+			IList<IScheduleDay> retList = DeleteMainShift(partList, schedulingOptions);
+
+			bool result = ScheduleDay(retList[0], schedulingOptions);
             if(!result)
             {
 				_schedulePartModifyAndRollbackService.Modify(originalDay);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(originalDay.Period.LocalStartDateTime), true, _schedulingOptions.ConsiderShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(originalDay.Period.LocalStartDateTime), true, schedulingOptions.ConsiderShortBreaks);
             }
 
             return result;
         }
 
-        public bool ScheduleDay(IScheduleDay schedulePart)
+		public bool ScheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, _schedulingOptions);
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
         	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-        	                                                            _schedulingOptions.ConsiderShortBreaks);
-			return _scheduleService.SchedulePersonOnDay(schedulePart, _schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
+																		schedulingOptions.ConsiderShortBreaks);
+			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
         }
 
-        public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList)
+		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
         {
             //Delete old current shift
             //TODO use a new Delete method with a rollbackservice
@@ -83,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var date in daysToRecalculate)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(date, true, _schedulingOptions.ConsiderShortBreaks);
+				_resourceOptimizationHelper.ResourceCalculateDate(date, true, schedulingOptions.ConsiderShortBreaks);
             }
 
             return retList;

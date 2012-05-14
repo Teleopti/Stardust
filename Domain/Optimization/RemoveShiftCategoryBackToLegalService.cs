@@ -16,24 +16,24 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleMatrix = scheduleMatrix;
         }
 
-        public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation)
+		public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
             if(shiftCategoryLimitation.Weekly)
             {
-                return ExecuteWeeks(shiftCategoryLimitation);
+                return ExecuteWeeks(shiftCategoryLimitation, schedulingOptions);
             }
 
-            return ExecutePeriod(shiftCategoryLimitation);
+            return ExecutePeriod(shiftCategoryLimitation, schedulingOptions);
 
         }
 
-        public IList<IScheduleDayPro> ExecutePeriod(IShiftCategoryLimitation shiftCategoryLimitation)
+		public IList<IScheduleDayPro> ExecutePeriod(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
             while (IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation))
             {
                 IScheduleDayPro thisResult =
-                    _removeShiftCategoryOnBestDateService.ExecuteOne(shiftCategoryLimitation.ShiftCategory);
+                    _removeShiftCategoryOnBestDateService.ExecuteOne(shiftCategoryLimitation.ShiftCategory, schedulingOptions);
                 if (thisResult != null)
                     result.Add(thisResult);
                 else
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-        public IList<IScheduleDayPro> ExecuteWeeks(IShiftCategoryLimitation shiftCategoryLimitation)
+		public IList<IScheduleDayPro> ExecuteWeeks(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
 
             IList<IScheduleDayPro> days = _scheduleMatrix.FullWeeksPeriodDays;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     DateOnlyPeriod periodForWeek = new DateOnlyPeriod(days[o].Day, days[o].Day.AddDays(6));
                     IScheduleDayPro thisResult =
                         _removeShiftCategoryOnBestDateService.ExecuteOne(shiftCategoryLimitation.ShiftCategory,
-                                                                         periodForWeek);
+                                                                         periodForWeek, schedulingOptions);
                     if (thisResult != null)
                         result.Add(thisResult);
                     else

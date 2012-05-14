@@ -12,32 +12,29 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
     	private readonly IScheduleDayService _scheduleDayService;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
 
         public SchedulePeriodListShiftCategoryBackToLegalStateService(
             ISchedulingResultStateHolder stateHolder,
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
 			IScheduleDayService scheduleDayService,
-            IScheduleDayChangeCallback scheduleDayChangeCallback,
-             IOptimizerOriginalPreferences optimizerPreferences)
+            IScheduleDayChangeCallback scheduleDayChangeCallback)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
             _fairnessCalculator = fairnessCalculator;
         	_scheduleDayService = scheduleDayService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _optimizerPreferences = optimizerPreferences;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList)
+		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
         {
             IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
                 BuildScheduleMatrixValueCalculator(
                     _scheduleMatrixValueCalculatorProFactory,
                     scheduleMatrixList,
-                    _optimizerPreferences, 
+					optimizationPreferences, 
                     _stateHolder, 
                     _fairnessCalculator);
 
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             		new SchedulePartModifyAndRollbackService(_stateHolder,_scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
                 ISchedulePeriodShiftCategoryBackToLegalStateService schedulePeriodBackToLegalStateService =
 					schedulePeriodBackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
-                schedulePeriodBackToLegalStateService.Execute(matrix.SchedulePeriod);
+                schedulePeriodBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions);
             }
         }
 
@@ -67,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
             (IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
              IList<IScheduleMatrixPro> scheduleMatrixList,
-             IOptimizerOriginalPreferences optimizerPreferences,
+             IOptimizationPreferences optimizerPreferences,
              ISchedulingResultStateHolder stateHolder,
              IScheduleFairnessCalculator fairnessCalculator)
         {

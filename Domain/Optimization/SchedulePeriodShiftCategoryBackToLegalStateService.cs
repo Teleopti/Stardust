@@ -21,18 +21,18 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleDayService = scheduleDayService;
         }
 
-        public bool Execute(IVirtualSchedulePeriod schedulePeriod)
+		public bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions)
         {
             bool result = true;
             var resultList = new List<IScheduleDayPro>();
             foreach (IShiftCategoryLimitation limitation in schedulePeriod.ShiftCategoryLimitationCollection())
             {
-                resultList.AddRange(_removeShiftCategoryBackToLegalService.Execute(limitation));
+                resultList.AddRange(_removeShiftCategoryBackToLegalService.Execute(limitation, schedulingOptions));
             }
 
             foreach (var scheduleDayPro in resultList)
             {
-                result = result & _scheduleDayService.ScheduleDay(scheduleDayPro.DaySchedulePart());
+                result = result & _scheduleDayService.ScheduleDay(scheduleDayPro.DaySchedulePart(), schedulingOptions);
             }
             return result;
         }

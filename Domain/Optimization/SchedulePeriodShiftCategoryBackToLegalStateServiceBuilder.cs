@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public virtual IScheduleDayService CreateScheduleService(
             IScheduleService scheduleService,
-            ISchedulingOptions schedulingOptions,
             IDeleteSchedulePartService deleteSchedulePartService,
             IResourceOptimizationHelper resourceOptimizationHelper, 
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return new ScheduleDayService(
                 scheduleService,
-                schedulingOptions,
                 deleteSchedulePartService,
                 resourceOptimizationHelper, 
 				effectiveRestrictionCreator,

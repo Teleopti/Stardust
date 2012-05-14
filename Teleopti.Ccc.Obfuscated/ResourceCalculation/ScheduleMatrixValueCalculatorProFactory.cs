@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     {
         public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(
             IEnumerable<DateOnly> scheduleDays,
-            IOptimizerOriginalPreferences optimizerPreferences,
+            IOptimizationPreferences optimizerPreferences,
             ISchedulingResultStateHolder stateHolder,
             IScheduleFairnessCalculator fairnessCalculator)
         {

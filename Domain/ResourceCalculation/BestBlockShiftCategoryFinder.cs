@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class BestBlockShiftCategoryFinder :  IBestBlockShiftCategoryFinder
     {
-	    private readonly ISchedulingOptions _options;
 	    private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 	    private readonly IShiftProjectionCacheFilter _shiftProjectionCacheFilter;
 	    private readonly IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
 		public BestBlockShiftCategoryFinder(
-            ISchedulingOptions options,
             IShiftProjectionCacheManager shiftProjectionCacheManager,
             IShiftProjectionCacheFilter shiftProjectionCacheFilter,
             IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IEffectiveRestrictionCreator effectiveRestrictionCreator, 
             IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator)
         {
-		    _options = options;
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 		    _shiftProjectionCacheFilter = shiftProjectionCacheFilter;
 		    _personSkillPeriodsDataHolderManager = personSkillPeriodsDataHolderManager;
@@ -59,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness)
+		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness, ISchedulingOptions schedulingOptions)
         {
 			InParameter.NotNull("result",result);
 			InParameter.NotNull("person", person);
@@ -76,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var shiftCategoryList = _schedulingResultStateHolder.ShiftCategories;
             foreach (IShiftCategory shiftCategory in shiftCategoryList)
             {
-                if(_options.NotAllowedShiftCategories.Contains(shiftCategory))
+                if(schedulingOptions.NotAllowedShiftCategories.Contains(shiftCategory))
                     continue;
 
 				// one more than double.MinValue because double.MinValue +1 still is double.MinValue, strange but true 
@@ -114,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						persons = new List<IPerson> { person };
 					}
 
-					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, _options, dictionary);
+					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, schedulingOptions, dictionary);
 					if (effectiveRestriction == null)
 						return new BestShiftCategoryResult(null, FailureCause.ConflictingRestrictions);
 
@@ -124,19 +121,28 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (shiftList == null)
                         continue;
 
-                    IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders = _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, currentSchedulePeriod);
+                	IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders =
+                		_personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly,
+                		                                                                               currentSchedulePeriod);
                     //if closed dataholders.count == 0 and we should skip this day
                     if(dataHolders.Count == 0)
                         continue;
 
                     //TODO Handle all results 
                     IWorkShiftFinderResult finderResult;
-                    double tempValue = getBestValueForShifts(person, shiftCategory, dateOnly, currentSchedulePeriod, dictionary, persons, effectiveRestriction, agentTimeZone, shiftList, out finderResult, totalFairness, agentFairness, dataHolders);
+                	double tempValue = getBestValueForShifts(person, shiftCategory, dateOnly, currentSchedulePeriod,
+                	                                         dictionary, persons, effectiveRestriction, agentTimeZone,
+                	                                         shiftList, out finderResult, totalFairness, agentFairness,
+                	                                         dataHolders, schedulingOptions);
+
                     if (tempValue == double.MinValue && effectiveRestriction.IsRestriction)
                     {
                         finderResult.Successful = true;
                         shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
-                        tempValue = getBestValueForShifts(person, shiftCategory, dateOnly, currentSchedulePeriod, dictionary, persons, effectiveRestriction, agentTimeZone, shiftList, out finderResult, totalFairness, agentFairness, dataHolders);
+                    	tempValue = getBestValueForShifts(person, shiftCategory, dateOnly, currentSchedulePeriod,
+                    	                                  dictionary, persons, effectiveRestriction, agentTimeZone,
+                    	                                  shiftList, out finderResult, totalFairness, agentFairness,
+                    	                                  dataHolders, schedulingOptions);
                     }
                     if(!finderResult.Successful)
                     {
@@ -183,21 +189,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private DateTimePeriod extendedVisiblePeriod()
 	    {
 	        DateTimePeriod basePeriod = _schedulingResultStateHolder.Schedules.Period.VisiblePeriod; 
-            DateTimePeriod ret = new DateTimePeriod(basePeriod.StartDateTime.AddDays(-10), basePeriod.EndDateTime.AddDays(10));
+            var ret = new DateTimePeriod(basePeriod.StartDateTime.AddDays(-10), basePeriod.EndDateTime.AddDays(10));
 	        return ret;
 	    }
 
 	    private double getBestValueForShifts(IPerson person, IShiftCategory shiftCategory, DateOnly dateOnly, IVirtualSchedulePeriod currentSchedulePeriod, 
             IScheduleDictionary dictionary, IList<IPerson> persons, IEffectiveRestriction effectiveRestriction, ICccTimeZoneInfo agentTimeZone, 
             IList<IShiftProjectionCache> shiftList, out IWorkShiftFinderResult finderResult, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness,
-            IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders)
+			IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, ISchedulingOptions schedulingOptions)
 	    {
 	        finderResult = new WorkShiftFinderResult(person, dateOnly);
 
 	        shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(shiftList);
 	        shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(shiftCategory, shiftList, finderResult);
 	        shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly, agentTimeZone, shiftList, effectiveRestriction,
-	                                                                                                _options.NotAllowedShiftCategories, finderResult);
+	                                                                                                schedulingOptions.NotAllowedShiftCategories, finderResult);
 
 	        shiftList = _shiftProjectionCacheFilter.FilterOnBusinessRules(persons, dictionary, dateOnly, shiftList, finderResult);
 	        shiftList = _shiftProjectionCacheFilter.FilterOnPersonalShifts(persons, dictionary, dateOnly, shiftList, finderResult);
@@ -234,9 +240,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	                                                      averageWorkTime,
 	                                                      useShiftCategoryFairness,
 	                                                      shiftCategoryFairnessFactors, 
-	                                                      (double)_options.WorkShiftLengthHintOption,
-	                                                      _options.UseMinimumPersons,
-	                                                      _options.UseMaximumPersons);
+	                                                      (double)schedulingOptions.WorkShiftLengthHintOption,
+	                                                      schedulingOptions.UseMinimumPersons,
+	                                                      schedulingOptions.UseMaximumPersons);
 	    }
 
 	    public IScheduleDictionary ScheduleDictionary
