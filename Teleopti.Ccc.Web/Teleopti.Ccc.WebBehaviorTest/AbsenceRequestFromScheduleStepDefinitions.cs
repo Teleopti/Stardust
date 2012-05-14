@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
-using Teleopti.Interfaces.Domain;
-using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	[Binding]
-	public class AbsenceRequestFromScheduleStepDefinitions
+	public class AbsenceRequestFromScheduleStepDefinitions 
 	{
 		[When(@"I click absence request tab")]
 		public void WhenIClickAbsenceRequestTab()
@@ -36,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
 			Pages.Pages.CurrentEditTextRequestPage.AbsenceTypesSelectList.Select(name);
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
@@ -61,16 +52,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked = true;
 		}
 
+		[Then(@"I should see my existing inputs")]
+		public void ThenIShouldSeeMyExistingInputs()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked, Is.False);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value, Is.StringContaining("The cake is a.. Cake!"));
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value, Is.StringContaining("A message. A very very very short message. Or maybe not."));
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value, Is.StringContaining(DateTime.Today.ToShortDateString(UserFactory.User().Culture)));
+		}
+
+
 		[Then(@"I should not see the absence request tab")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceRequestTab, Is.Null);
 		}
 
 		[Given(@"I am an agent without access to absence requests")]
 		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
 		}
 	}
 }

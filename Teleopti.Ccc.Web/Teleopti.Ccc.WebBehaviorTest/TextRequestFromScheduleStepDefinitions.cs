@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheTextRequestFormWithTomorrowAsDefaultDate()
 		{
 			var tomorrow = DateTime.Today.AddDays(1);
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value), Is.EqualTo(tomorrow));
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value), Is.EqualTo(tomorrow));
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(tomorrow));
 		}
 

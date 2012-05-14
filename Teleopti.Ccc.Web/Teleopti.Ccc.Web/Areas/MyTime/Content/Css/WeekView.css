@@ -144,7 +144,7 @@
 }
 
 .ui-tooltip-input .date-input {
-	width: 6.5em;
+	width: 8em;
 }
 
 .ui-tooltip-input button.ui-button-icon-only {
@@ -167,9 +167,14 @@
 .selected-tab {
 	color: #15C
 }
+.absence-input-label 
+{
+	padding-top: 4px;
+	height: 16px;
+	width: 10em;
+}
 .absence-input 
 {
-	width: 8em;
+	width: 8.5em;
 	height: 10px;
-	font-size: 10px
 }

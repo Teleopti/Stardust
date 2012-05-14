@@ -64,3 +64,13 @@ Scenario: View absence types
 	When I click on today's summary
 	And I click absence request tab
 	Then I should see an absence type called Vacation in droplist
+
+Scenario: Switch request type
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I am viewing week schedule
+	When I click on tomorrows summary
+	And I input text request values
+	And I click absence request tab
+	Then I should see my existing inputs
+	And I should see an absence type called Vacation in droplist

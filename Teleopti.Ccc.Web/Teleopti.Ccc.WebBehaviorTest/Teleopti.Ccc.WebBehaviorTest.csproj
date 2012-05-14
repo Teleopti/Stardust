@@ -79,6 +79,7 @@
     <Compile Include="Bindings\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Core\TestMethods.cs" />
+    <Compile Include="Data\User\AgentWithoutAbsenceRequestsAccess.cs" />
     <Compile Include="Data\User\ExistingAbsenceRequest.cs" />
     <Compile Include="Data\User\ExistingAvailability.cs" />
     <Compile Include="Data\User\ExistingLunchPreferenceToday.cs" />
