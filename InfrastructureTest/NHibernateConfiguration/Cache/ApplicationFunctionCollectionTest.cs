@@ -35,6 +35,21 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			sessionFactory.Statistics.CollectionLoadCount.Should().Be.EqualTo(0);
 		}
 
+
+		[Test]
+		public void ShouldCacheApplicationFunction()
+		{
+			var sessionFactory = ((NHibernateUnitOfWorkFactory)dataSource.Application).SessionFactory;
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var p = new ApplicationRoleRepository(uow).Get(applicationRole.Id.Value);
+				sessionFactory.Statistics.Clear();
+				LazyLoadingManager.Initialize(p.ApplicationFunctionCollection);
+			}
+			sessionFactory.Statistics.EntityLoadCount.Should().Be.EqualTo(0);
+		}
+
+
 		[SetUp]
 		public void Setup()
 		{
