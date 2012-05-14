@@ -188,8 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
-              new ReadOnlyCollection<DateTimePeriod>(new List<DateTimePeriod> { period.MovePeriod(TimeSpan.FromMinutes(15)) });
-            
+                  
 			 Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
