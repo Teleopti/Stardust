@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private TeleoptiPrincipalSerializable(IIdentity identity)
 			: base(identity, new string[] { }) { }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), 
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public static TeleoptiPrincipalSerializable Make(ITeleoptiIdentity identity, IPerson person)
 		{
 			return new TeleoptiPrincipalSerializable(identity)
