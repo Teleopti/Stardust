@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			get { return ((ISessionFactoryImplementor)_factory).Settings.SessionFactoryName; }
 		}
 
-		protected ISessionFactory SessionFactory
+		public ISessionFactory SessionFactory
 		{
 			get { return _factory; }
 		}

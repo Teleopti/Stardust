@@ -90,6 +90,7 @@
 			<bag name="personInApplicationRole"
             access="field"
 				    cascade="none">
+				<cache usage="read-write"/> <!--use readonly instead?-->
 				<key foreign-key="FK_PersonInApplicationRole_Person">
 					<column name="Person"
 							not-null="true"

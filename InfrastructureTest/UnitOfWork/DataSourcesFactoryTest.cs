@@ -94,15 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
 
 			IDataSource res = target.Create(nhibernateXmlConfiguration, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-
-			Assert.IsNotNull(res.Application, "Application is null, shouldn't be!");
-			var factoryField = typeof(NHibernateUnitOfWorkFactory).GetProperty("SessionFactory",
-																								  BindingFlags.NonPublic |
-																								  BindingFlags.Instance);
-			Assert.IsNotNull(factoryField, "Factory field is null, shouldn't be!");
-			var sessionFactory = (ISessionFactoryImplementor)factoryField.GetValue(res.Application, BindingFlags.NonPublic |
-																								  BindingFlags.Instance, null, null, CultureInfo.InvariantCulture);
-			Assert.IsNotNull(sessionFactory, "Session factory is null, shouldn't be!");
+			var sessionFactory = (ISessionFactoryImplementor)((NHibernateUnitOfWorkFactory)res.Application).SessionFactory;
 			Assert.IsInstanceOf<AdoNetWithDistributedTransactionFactory>(sessionFactory.TransactionFactory);
 		}
 
