@@ -1,9 +1,8 @@
-﻿using System.Security.Principal;
+﻿using System.Diagnostics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
@@ -15,11 +14,13 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalFactory _principalFactory;
 
-		public SessionPrincipalFactory(IDataSourcesProvider dataSourcesProvider,
-							  ISessionSpecificDataProvider sessionSpecificDataProvider,
-							  IRepositoryFactory repositoryFactory,
-							  IRoleToPrincipalCommand roleToPrincipalCommand,
-								IPrincipalFactory principalFactory)
+		public SessionPrincipalFactory(
+			IDataSourcesProvider dataSourcesProvider,
+			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			IRepositoryFactory repositoryFactory,
+			IRoleToPrincipalCommand roleToPrincipalCommand,
+			IPrincipalFactory principalFactory
+			)
 		{
 			_dataSourcesProvider = dataSourcesProvider;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 
 		public ITeleoptiPrincipal Generate()
 		{
-			var sessionData = _sessionSpecificDataProvider.Grab();
+			var sessionData = _sessionSpecificDataProvider.GrabFromCookie();
 			return sessionData == null ? null : createPrincipal(sessionData);
 		}
 
@@ -43,17 +44,17 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			ITeleoptiPrincipal principal;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var personRep = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRep.Get(sessionData.PersonId);
+				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
+
+				var person = personRepository.Load(sessionData.PersonId);
 				if (person == null)
 					return null;
 
-				var buRep = _repositoryFactory.CreateBusinessUnitRepository(uow);
-				var businessUnit = buRep.Get(sessionData.BusinessUnitId);
+				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
 				principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
-				_roleToPrincipalCommand.Execute(principal, uow, personRep);
-
+				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
 			}
 
 			return principal;

@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         [Test]
         public void AllRepositoriesAreWired()
         {
-            containerBuilder.RegisterModule(new UnitOfWorkModule());
-            using (var container = containerBuilder.Build())
+			containerBuilder.RegisterModule(new AuthenticationModule());
+			containerBuilder.RegisterModule(new UnitOfWorkModule());
+			using (var container = containerBuilder.Build())
             {
                 var unitOfWorkFactory = container.Resolve<IUnitOfWorkFactory>();
                 Assert.IsInstanceOf<IUnitOfWorkFactory>(unitOfWorkFactory);

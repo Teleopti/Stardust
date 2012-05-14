@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(sessData);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessData);
 				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(sessData.DataSourceName)).Return(dataSource);
 				Expect.Call(dataSource.Application).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
-				Expect.Call(personRepository.Get(sessData.PersonId)).Return(person);
+				Expect.Call(personRepository.Load(sessData.PersonId)).Return(person);
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
-				Expect.Call(businessUnitRepository.Get(sessData.BusinessUnitId)).Return(businessUnit);
+				Expect.Call(businessUnitRepository.Load(sessData.BusinessUnitId)).Return(businessUnit);
 			}
 			using (mocks.Playback())
 			{
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(null);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(null);
 			}
 			using (mocks.Playback())
 			{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid(), AuthenticationTypeOption.Windows);
 			using (mocks.Record())
 			{
-				Expect.Call(sessionSpecificDataProvider.Grab()).Return(sessionData);
+				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessionData);
 			}
 			using (mocks.Playback())
 			{

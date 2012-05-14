@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public EmptyResult NonExistingDatasourceCookie()
 		{
 			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), AuthenticationTypeOption.Windows);
-			_sessionSpecificDataProvider.Store(data);
+			_sessionSpecificDataProvider.StoreInCookie(data);
 			return new EmptyResult();
 		}
 	}
