@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using Teleopti.Ccc.AgentPortal.Common;
+using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 
 
 namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
 {
-    public partial class MessageForm : BaseRibbonForm
+	public partial class MessageForm : Office2007Form, ILocalized
     {
         private MessagePresenterObject _currentMessage;
         private Collection<MessagePresenterObject> _presenterObjects;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
             _pushMessageController.NumberOfUnreadMessagesChanged += PushMessageControllerNumberOfUnreadMessagesChanged;
             if (_presenterObjects.Count > 0) SetMessage(_presenterObjects[0]);
             SetColors();
-            SetTexts();
+			SetTexts();
             messageControl1.MessageReplyClicked += MessageControl1MessageReplyClicked;
             messageControl1.CloseButtonClicked += messageControl1_CloseButtonClicked;
         }
@@ -172,5 +173,10 @@ namespace Teleopti.Ccc.AgentPortal.PushMessagePopup
             _pushMessageController.NumberOfUnreadMessagesChanged -= PushMessageControllerNumberOfUnreadMessagesChanged;
             base.OnClosed(e);
         }
+
+		public void SetTexts()
+		{
+			new LanguageResourceHelper().SetTexts(this);
+		}
     }
 }
