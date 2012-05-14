@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
@@ -57,6 +59,11 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
 			person.PermissionInformation.AddApplicationRole(applicationRole);
+
+			StateHolderProxyHelper.ClearAndSetStateHolder(SetupFixtureForAssembly.loggedOnPerson,
+													  BusinessUnitFactory.BusinessUnitUsedInTest,
+													  SetupFixtureForAssembly.ApplicationData);
+
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				new ApplicationRoleRepository(uow).Add(applicationRole);

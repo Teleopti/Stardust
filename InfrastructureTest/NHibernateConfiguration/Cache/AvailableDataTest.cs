@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
@@ -107,6 +109,10 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			availableData.AddAvailableBusinessUnit(businessUnit);
 			availableData.AddAvailableSite(site);
 			availableData.AddAvailableTeam(team);
+
+			StateHolderProxyHelper.ClearAndSetStateHolder(SetupFixtureForAssembly.loggedOnPerson,
+													  businessUnit,
+													  SetupFixtureForAssembly.ApplicationData);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
