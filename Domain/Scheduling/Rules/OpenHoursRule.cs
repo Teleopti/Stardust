@@ -84,17 +84,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 if (layerCollection == null || !layerCollection.HasLayers)
                     return null;
                 DateTimePeriod period = layerCollection.Period().Value;
-                IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period.StartDateTime, person);
-
-                if (openHours.Any(dateTimePeriod => dateTimePeriod.Contains(period)))
-                {
-                    return null;
-                }
-
+                
+                
                 foreach (IVisualLayer layer in layerCollection.FilterLayers<IActivity>())
                 {
-                    if (((IActivity)layer.Payload).RequiresSkill)
+                    var activity = (IActivity) layer.Payload;
+                    if ((activity).RequiresSkill)
                     {
+                     IEnumerable<DateTimePeriod> openHours = createOpenHoursForAgent(period.StartDateTime, person,activity );
+
                         bool found = openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period));
                         if (!found)
                         {
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return null;
         }
 
-        private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTime startDateTime, IPerson person)
+        private IEnumerable<DateTimePeriod> createOpenHoursForAgent(DateTime startDateTime, IPerson person,IActivity activity )
         {
             IList<DateTimePeriod> ret = new List<DateTimePeriod>();
 
@@ -123,9 +121,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 return ret;
 
             ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-
+           
             for (int index = 0; index < agentSkills.Count; index++)
             {
+                if (!(agentSkills[index].Activity.Equals( activity)))
+                {
+                    continue;
+                }
                 if (_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(agentSkills[index], out skillStaffPeriodDictionary))
                 {
                     ret = DateTimePeriod.MergeLists(ret, new ReadOnlyCollection<DateTimePeriod>(skillStaffPeriodDictionary.SkillOpenHoursCollection));

@@ -175,50 +175,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         }
 
+        
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyValidateActivityWithMoreOpenHours()
+        public void VerifyValidateNotRequiresSkillActivityStartingBeforeOpenHours()
         {
-            IActivity activity = new Activity("adf") {RequiresSkill = true};
-            IActivity activity1 = new Activity("adf");
-            activity.RequiresSkill = false;
-            var type = _mocks.StrictMock<ISkillType>();
-            ISkill skill = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity};
-
-            ISkill skill1 = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity1};
-
-			IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
-			IPersonSkill personSkill1 = new PersonSkill(skill1, new Percent(1)) { Active = true };
-            var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-
-            var period = new DateTimePeriod(_date.AddMinutes(5), _date.AddMinutes(30));
+            IActivity activity = new Activity("adf") {RequiresSkill = false};
+              
+            var period = new DateTimePeriod(_date, _date.AddMinutes(30));
             IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
-            IVisualLayer layer1 = _visualLayerFactory.CreateShiftSetupLayer(activity, period.MovePeriod(TimeSpan.FromHours(1)));
-            IList<IVisualLayer> layers = new List<IVisualLayer> {layer, layer1};
+            IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
         	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-
-            var projectionService = _mocks.StrictMock<IProjectionService>();
-            var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
-            var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
-            var period1 = new DateTimePeriod(_date, _date.AddMinutes(30));
             
-            var skillOpenHoursCollection =
-                new ReadOnlyCollection<DateTimePeriod>(new List<DateTimePeriod> { period.MovePeriod(TimeSpan.FromDays(-15)), period1 });
-            var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            IList<IPersonSkill> personSkillColl = new List<IPersonSkill> { personSkill , personSkill1 };
-
-			Expect.Call(_person.Period(_dateOnlyDate)).Return(personPeriod).Repeat.Once();
-            Expect.Call(personPeriod.PersonSkillCollection).Return(personSkillColl);
-            Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            var projectionService = _mocks.StrictMock<IProjectionService>();
+                  
+			 Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
-            Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Times(3);
-            Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(2);
-            Expect.Call(skillSkillStaffPeriodExtendedDictionary.TryGetValue(personSkill.Skill, out skillStaffPeriodDictionary)).Return(true).OutRef(skillStaffPeriodDictionary);
-            Expect.Call(skillSkillStaffPeriodExtendedDictionary.TryGetValue(personSkill1.Skill, out skillStaffPeriodDictionary)).Return(true).OutRef(skillStaffPeriodDictionary);
-            Expect.Call(skillStaffPeriodDictionary.SkillOpenHoursCollection).Return(skillOpenHoursCollection).Repeat.Twice();
-
-            _mocks.ReplayAll();
+             _mocks.ReplayAll();
 
             _target = new OpenHoursRule(_state);
             Assert.AreEqual(0, _target.Validate(_dic, _days).Count());
@@ -227,41 +201,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyValidateNotRequiresSkillActivityStartingBeforeOpenHours()
+        public void VerifyValidateActivityWithNoSkill()
         {
-            IActivity activity = new Activity("adf") {RequiresSkill = false};
+            IActivity activity = new Activity("Activity1") { RequiresSkill = true };
             var type = _mocks.StrictMock<ISkillType>();
-            ISkill skill = new Skill("aslfm", "sl", Color.DarkSlateBlue, 15, type) {Activity = activity};
 
-			IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
+            IActivity activity2 = new Activity("Activity2") { RequiresSkill = false };
+            ISkill skill = new Skill("Skill1", "sl", Color.DarkSlateBlue, 15, type) { Activity = activity2 };
+
+            IPersonSkill personSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
             IList<IPersonSkill> personSkills = new List<IPersonSkill> { personSkill };
             var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
             IVisualLayer layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
-            IList<IVisualLayer> layers = new List<IVisualLayer> {layer};
-        	IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-            
+            IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
-            var skillStaffPeriodDictionary = _mocks.StrictMock<ISkillStaffPeriodDictionary>();
-            var skillOpenHoursCollection =
-                new ReadOnlyCollection<DateTimePeriod>(new List<DateTimePeriod> { period.MovePeriod(TimeSpan.FromMinutes(15)) });
             
-			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
+            Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
             Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
-            Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Twice();
+            Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary);
             Expect.Call(skillSkillStaffPeriodExtendedDictionary.Count).Return(1);
-            Expect.Call(skillSkillStaffPeriodExtendedDictionary.TryGetValue(personSkill.Skill, out skillStaffPeriodDictionary)).Return(true).OutRef(skillStaffPeriodDictionary);
-            Expect.Call(skillStaffPeriodDictionary.SkillOpenHoursCollection).Return(skillOpenHoursCollection);
+            
             _mocks.ReplayAll();
 
             _target = new OpenHoursRule(_state);
-            Assert.AreEqual(0, _target.Validate(_dic, _days).Count());
+            Assert.AreEqual(1, _target.Validate(_dic, _days).Count());
 
             _mocks.VerifyAll();
         }

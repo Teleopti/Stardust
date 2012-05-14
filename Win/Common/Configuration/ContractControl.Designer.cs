@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.tableLayoutPanel3.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanel3.ColumnCount = 2;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelChangeInfo, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel5, 0, 0);
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.comboBoxAdvContracts.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvContracts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAdvContracts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvContracts.Location = new System.Drawing.Point(253, 3);
+			this.comboBoxAdvContracts.Location = new System.Drawing.Point(303, 3);
 			this.comboBoxAdvContracts.Name = "comboBoxAdvContracts";
 			this.comboBoxAdvContracts.Size = new System.Drawing.Size(216, 21);
 			this.comboBoxAdvContracts.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.textBoxDescription.Location = new System.Drawing.Point(253, 30);
+			this.textBoxDescription.Location = new System.Drawing.Point(303, 30);
 			this.textBoxDescription.MaxLength = 50;
 			this.textBoxDescription.Name = "textBoxDescription";
 			this.textBoxDescription.OverflowIndicatorToolTipText = null;
@@ -272,11 +272,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// autoLabelInfoAboutChanges
 			// 
 			this.autoLabelInfoAboutChanges.AutoSize = false;
+			this.autoLabelInfoAboutChanges.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.autoLabelInfoAboutChanges.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(250, 54);
+			this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(300, 54);
 			this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.autoLabelInfoAboutChanges.Name = "autoLabelInfoAboutChanges";
-			this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(550, 32);
+			this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(500, 32);
 			this.autoLabelInfoAboutChanges.TabIndex = 9;
 			this.autoLabelInfoAboutChanges.Text = "xxInfoAboutChanges";
 			this.autoLabelInfoAboutChanges.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -332,7 +333,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel6.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanel6.ColumnCount = 2;
-			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxAdjustTimeBankWithPartTimePercentage, 1, 12);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxAdjustTimeBankWithSeasonality, 1, 11);
@@ -380,7 +381,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// checkBoxAdjustTimeBankWithPartTimePercentage
 			// 
-			this.checkBoxAdjustTimeBankWithPartTimePercentage.Location = new System.Drawing.Point(253, 308);
+			this.checkBoxAdjustTimeBankWithPartTimePercentage.Location = new System.Drawing.Point(303, 308);
 			this.checkBoxAdjustTimeBankWithPartTimePercentage.Name = "checkBoxAdjustTimeBankWithPartTimePercentage";
 			this.checkBoxAdjustTimeBankWithPartTimePercentage.Size = new System.Drawing.Size(17, 19);
 			this.checkBoxAdjustTimeBankWithPartTimePercentage.TabIndex = 67;
@@ -389,7 +390,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// checkBoxAdjustTimeBankWithSeasonality
 			// 
-			this.checkBoxAdjustTimeBankWithSeasonality.Location = new System.Drawing.Point(253, 281);
+			this.checkBoxAdjustTimeBankWithSeasonality.Location = new System.Drawing.Point(303, 281);
 			this.checkBoxAdjustTimeBankWithSeasonality.Name = "checkBoxAdjustTimeBankWithSeasonality";
 			this.checkBoxAdjustTimeBankWithSeasonality.Size = new System.Drawing.Size(17, 19);
 			this.checkBoxAdjustTimeBankWithSeasonality.TabIndex = 66;
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.Location = new System.Drawing.Point(3, 305);
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.Name = "autoLabelAdjustTimeBankWithPartTimePercentage";
-			this.autoLabelAdjustTimeBankWithPartTimePercentage.Size = new System.Drawing.Size(244, 27);
+			this.autoLabelAdjustTimeBankWithPartTimePercentage.Size = new System.Drawing.Size(294, 27);
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.TabIndex = 65;
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.Text = "xxAdjustTimeBankWithPartTimePercentage";
 			this.autoLabelAdjustTimeBankWithPartTimePercentage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -415,7 +416,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabelAdjustTimeBankWithSeasonality.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabelAdjustTimeBankWithSeasonality.Location = new System.Drawing.Point(3, 278);
 			this.autoLabelAdjustTimeBankWithSeasonality.Name = "autoLabelAdjustTimeBankWithSeasonality";
-			this.autoLabelAdjustTimeBankWithSeasonality.Size = new System.Drawing.Size(244, 27);
+			this.autoLabelAdjustTimeBankWithSeasonality.Size = new System.Drawing.Size(294, 27);
 			this.autoLabelAdjustTimeBankWithSeasonality.TabIndex = 64;
 			this.autoLabelAdjustTimeBankWithSeasonality.Text = "xxAdjustTimeBankWithSeasonality";
 			this.autoLabelAdjustTimeBankWithSeasonality.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -425,7 +426,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMax.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.timeSpanTextBoxPlanningMax.AllowNegativeValues = false;
 			this.timeSpanTextBoxPlanningMax.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxPlanningMax.Location = new System.Drawing.Point(256, 254);
+			this.timeSpanTextBoxPlanningMax.Location = new System.Drawing.Point(306, 254);
 			this.timeSpanTextBoxPlanningMax.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.timeSpanTextBoxPlanningMax.MaximumValue = System.TimeSpan.Parse("4.03:59:00");
 			this.timeSpanTextBoxPlanningMax.Name = "timeSpanTextBoxPlanningMax";
@@ -439,7 +440,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMin.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.timeSpanTextBoxPlanningMin.AllowNegativeValues = true;
 			this.timeSpanTextBoxPlanningMin.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxPlanningMin.Location = new System.Drawing.Point(256, 227);
+			this.timeSpanTextBoxPlanningMin.Location = new System.Drawing.Point(306, 227);
 			this.timeSpanTextBoxPlanningMin.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.timeSpanTextBoxPlanningMin.MaximumValue = System.TimeSpan.Parse("00:00:00");
 			this.timeSpanTextBoxPlanningMin.Name = "timeSpanTextBoxPlanningMin";
@@ -455,7 +456,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelTimeBankMax.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.labelTimeBankMax.Location = new System.Drawing.Point(3, 251);
 			this.labelTimeBankMax.Name = "labelTimeBankMax";
-			this.labelTimeBankMax.Size = new System.Drawing.Size(244, 27);
+			this.labelTimeBankMax.Size = new System.Drawing.Size(294, 27);
 			this.labelTimeBankMax.TabIndex = 61;
 			this.labelTimeBankMax.Text = "xxPlanningTimeBankMax";
 			this.labelTimeBankMax.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -467,7 +468,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelTimeBankMin.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.labelTimeBankMin.Location = new System.Drawing.Point(3, 224);
 			this.labelTimeBankMin.Name = "labelTimeBankMin";
-			this.labelTimeBankMin.Size = new System.Drawing.Size(244, 27);
+			this.labelTimeBankMin.Size = new System.Drawing.Size(294, 27);
 			this.labelTimeBankMin.TabIndex = 60;
 			this.labelTimeBankMin.Text = "xxPlanningTimeBankMin";
 			this.labelTimeBankMin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -479,7 +480,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel7.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel7.Location = new System.Drawing.Point(3, 197);
 			this.autoLabel7.Name = "autoLabel7";
-			this.autoLabel7.Size = new System.Drawing.Size(244, 27);
+			this.autoLabel7.Size = new System.Drawing.Size(294, 27);
 			this.autoLabel7.TabIndex = 58;
 			this.autoLabel7.Text = "xxMinTimeSchedulePeriodColon";
 			this.autoLabel7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -491,7 +492,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel6.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel6.Location = new System.Drawing.Point(3, 87);
 			this.autoLabel6.Name = "autoLabel6";
-			this.autoLabel6.Size = new System.Drawing.Size(244, 29);
+			this.autoLabel6.Size = new System.Drawing.Size(294, 29);
 			this.autoLabel6.TabIndex = 57;
 			this.autoLabel6.Text = "xxDayOffTolerancMinus";
 			this.autoLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -503,7 +504,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel3.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel3.Location = new System.Drawing.Point(3, 58);
 			this.autoLabel3.Name = "autoLabel3";
-			this.autoLabel3.Size = new System.Drawing.Size(244, 29);
+			this.autoLabel3.Size = new System.Drawing.Size(294, 29);
 			this.autoLabel3.TabIndex = 55;
 			this.autoLabel3.Text = "xxTargetToleranceMinus";
 			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -513,7 +514,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.comboBoxAdvEmpTypes.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvEmpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAdvEmpTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvEmpTypes.Location = new System.Drawing.Point(253, 3);
+			this.comboBoxAdvEmpTypes.Location = new System.Drawing.Point(303, 3);
 			this.comboBoxAdvEmpTypes.Name = "comboBoxAdvEmpTypes";
 			this.comboBoxAdvEmpTypes.Size = new System.Drawing.Size(216, 21);
 			this.comboBoxAdvEmpTypes.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -527,7 +528,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel2.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel2.Location = new System.Drawing.Point(3, 0);
 			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(244, 25);
+			this.autoLabel2.Size = new System.Drawing.Size(294, 25);
 			this.autoLabel2.TabIndex = 6;
 			this.autoLabel2.Text = "xxEmploymentTypeColon";
 			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -539,7 +540,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel11.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel11.Location = new System.Drawing.Point(3, 170);
 			this.autoLabel11.Name = "autoLabel11";
-			this.autoLabel11.Size = new System.Drawing.Size(244, 27);
+			this.autoLabel11.Size = new System.Drawing.Size(294, 27);
 			this.autoLabel11.TabIndex = 54;
 			this.autoLabel11.Text = "xxWeeklyRestTimeColon";
 			this.autoLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -551,7 +552,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel10.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel10.Location = new System.Drawing.Point(3, 143);
 			this.autoLabel10.Name = "autoLabel10";
-			this.autoLabel10.Size = new System.Drawing.Size(244, 27);
+			this.autoLabel10.Size = new System.Drawing.Size(294, 27);
 			this.autoLabel10.TabIndex = 12;
 			this.autoLabel10.Text = "xxNightlyRestTimeColon";
 			this.autoLabel10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -563,7 +564,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel8.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel8.Location = new System.Drawing.Point(3, 116);
 			this.autoLabel8.Name = "autoLabel8";
-			this.autoLabel8.Size = new System.Drawing.Size(244, 27);
+			this.autoLabel8.Size = new System.Drawing.Size(294, 27);
 			this.autoLabel8.TabIndex = 9;
 			this.autoLabel8.Text = "xxMaximumTimePerWeekColon";
 			this.autoLabel8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -575,7 +576,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel4.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.autoLabel4.Location = new System.Drawing.Point(3, 31);
 			this.autoLabel4.Name = "autoLabel4";
-			this.autoLabel4.Size = new System.Drawing.Size(244, 27);
+			this.autoLabel4.Size = new System.Drawing.Size(294, 27);
 			this.autoLabel4.TabIndex = 16;
 			this.autoLabel4.Text = "xxAverageWorkTimePerDayColon";
 			this.autoLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -586,7 +587,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtAvgWorkTimePerDay.AllowNegativeValues = true;
 			this.textBoxExtAvgWorkTimePerDay.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxExtAvgWorkTimePerDay.DefaultInterpretAsMinutes = false;
-			this.textBoxExtAvgWorkTimePerDay.Location = new System.Drawing.Point(256, 34);
+			this.textBoxExtAvgWorkTimePerDay.Location = new System.Drawing.Point(306, 34);
 			this.textBoxExtAvgWorkTimePerDay.Margin = new System.Windows.Forms.Padding(6, 1, 0, 0);
 			this.textBoxExtAvgWorkTimePerDay.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
 			this.textBoxExtAvgWorkTimePerDay.Name = "textBoxExtAvgWorkTimePerDay";
@@ -601,7 +602,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMaxTimePerWeek.AllowNegativeValues = true;
 			this.textBoxExtMaxTimePerWeek.DefaultInterpretAsMinutes = false;
 			this.textBoxExtMaxTimePerWeek.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.textBoxExtMaxTimePerWeek.Location = new System.Drawing.Point(256, 119);
+			this.textBoxExtMaxTimePerWeek.Location = new System.Drawing.Point(306, 119);
 			this.textBoxExtMaxTimePerWeek.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.textBoxExtMaxTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
 			this.textBoxExtMaxTimePerWeek.Name = "textBoxExtMaxTimePerWeek";
@@ -615,7 +616,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtNightlyRestTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.textBoxExtNightlyRestTime.AllowNegativeValues = true;
 			this.textBoxExtNightlyRestTime.DefaultInterpretAsMinutes = false;
-			this.textBoxExtNightlyRestTime.Location = new System.Drawing.Point(256, 146);
+			this.textBoxExtNightlyRestTime.Location = new System.Drawing.Point(306, 146);
 			this.textBoxExtNightlyRestTime.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.textBoxExtNightlyRestTime.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
 			this.textBoxExtNightlyRestTime.Name = "textBoxExtNightlyRestTime";
@@ -629,7 +630,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtWeeklyRestTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.textBoxExtWeeklyRestTime.AllowNegativeValues = true;
 			this.textBoxExtWeeklyRestTime.DefaultInterpretAsMinutes = false;
-			this.textBoxExtWeeklyRestTime.Location = new System.Drawing.Point(256, 173);
+			this.textBoxExtWeeklyRestTime.Location = new System.Drawing.Point(306, 173);
 			this.textBoxExtWeeklyRestTime.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.textBoxExtWeeklyRestTime.MaximumValue = System.TimeSpan.Parse("2.08:00:00");
 			this.textBoxExtWeeklyRestTime.Name = "textBoxExtWeeklyRestTime";
@@ -643,7 +644,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExMinTimeSchedulePeriod.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.textBoxExMinTimeSchedulePeriod.AllowNegativeValues = true;
 			this.textBoxExMinTimeSchedulePeriod.DefaultInterpretAsMinutes = false;
-			this.textBoxExMinTimeSchedulePeriod.Location = new System.Drawing.Point(256, 200);
+			this.textBoxExMinTimeSchedulePeriod.Location = new System.Drawing.Point(306, 200);
 			this.textBoxExMinTimeSchedulePeriod.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
 			this.textBoxExMinTimeSchedulePeriod.MaximumValue = System.TimeSpan.Parse("83.08:00:00");
 			this.textBoxExMinTimeSchedulePeriod.Name = "textBoxExMinTimeSchedulePeriod";
@@ -663,11 +664,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel1.Controls.Add(this.timeSpanTextBoxPositiveTolerance, 3, 0);
 			this.tableLayoutPanel1.Controls.Add(this.autoLabel9, 2, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(253, 61);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(303, 61);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(547, 23);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(497, 23);
 			this.tableLayoutPanel1.TabIndex = 68;
 			// 
 			// timeSpanTextBoxNegativeTolerance
@@ -723,11 +724,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel2.Controls.Add(this.numericUpDownNegativeDayOff, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.numericUpDownPositiveDayOff, 3, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(253, 90);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(303, 90);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(547, 23);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(497, 23);
 			this.tableLayoutPanel2.TabIndex = 68;
 			// 
 			// autoLabel12
@@ -794,7 +795,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.tableLayoutPanel9.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanel9.ColumnCount = 2;
-			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel9.Controls.Add(this.checkedListBoxMultiplicatorDefenitionSets, 1, 0);
 			this.tableLayoutPanel9.Controls.Add(this.labelConnectedMultiplicatorDefinitionSets, 0, 0);
@@ -812,9 +813,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkedListBoxMultiplicatorDefenitionSets.CheckOnClick = true;
 			this.checkedListBoxMultiplicatorDefenitionSets.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkedListBoxMultiplicatorDefenitionSets.FormattingEnabled = true;
-			this.checkedListBoxMultiplicatorDefenitionSets.Location = new System.Drawing.Point(253, 3);
+			this.checkedListBoxMultiplicatorDefenitionSets.Location = new System.Drawing.Point(303, 3);
 			this.checkedListBoxMultiplicatorDefenitionSets.Name = "checkedListBoxMultiplicatorDefenitionSets";
-			this.checkedListBoxMultiplicatorDefenitionSets.Size = new System.Drawing.Size(547, 98);
+			this.checkedListBoxMultiplicatorDefenitionSets.Size = new System.Drawing.Size(497, 98);
 			this.checkedListBoxMultiplicatorDefenitionSets.TabIndex = 0;
 			this.checkedListBoxMultiplicatorDefenitionSets.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxMultiplicatorDefenitionSetsItemCheck);
 			// 
