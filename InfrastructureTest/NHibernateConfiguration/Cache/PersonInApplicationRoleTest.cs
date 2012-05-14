@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		private IApplicationRole applicationRole;
 
 		[Test]
-		public void ShouldCachePersonCollection()
+		public void ShouldCachePersonApplicationRoleCollection()
 		{
 			var sessionFactory = ((NHibernateUnitOfWorkFactory) dataSource.Application).SessionFactory;
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
