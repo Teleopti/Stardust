@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		[SetUp]
 		public void Setup()
 		{
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(true, false, "call"));
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
 			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, null), null);
 			availableData = new AvailableData();
 			availableData.ApplicationRole = new ApplicationRole{Name = "d"};
