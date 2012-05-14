@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
 		{
-			var identity = new TeleoptiIdentity(loggedOnUser == null ? string.Empty : loggedOnUser.Name.ToString(), 
+			var identity = new TeleoptiIdentity(loggedOnUser.Id.Value.ToString(), 
 			                                    dataSource, businessUnit,
 			                                    WindowsIdentity.GetCurrent(), 
 			                                    teleoptiAuthenticationType

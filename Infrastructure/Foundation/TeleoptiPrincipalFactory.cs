@@ -8,10 +8,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
 		{
-			var identity = new TeleoptiIdentity(loggedOnUser == null ? string.Empty : loggedOnUser.Name.ToString(), dataSource, businessUnit,
+			var identity = new TeleoptiIdentity(GetIdentityName(loggedOnUser), dataSource, businessUnit,
 			                                    WindowsIdentity.GetCurrent(), teleoptiAuthenticationType);
 			var principal = new TeleoptiPrincipal(identity, loggedOnUser);
 			return principal;
+		}
+
+		private static string GetIdentityName(IPerson loggedOnUser)
+		{
+			return loggedOnUser == null ? string.Empty : loggedOnUser.Name.ToString();
 		}
 	}
 }
