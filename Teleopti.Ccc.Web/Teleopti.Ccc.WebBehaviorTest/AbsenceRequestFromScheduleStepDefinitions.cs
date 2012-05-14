@@ -65,13 +65,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the absence request tab")]
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.AbsenceRequestTab, Is.Null);
 		}
 
 		[Given(@"I am an agent without access to absence requests")]
 		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
 		{
-			ScenarioContext.Current.Pending();
+			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
 		}
 	}
 }
