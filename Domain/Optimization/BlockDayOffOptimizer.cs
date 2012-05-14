@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IBlockDayOffOptimizer
     {
-        bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker);
+		bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions);
     }
 
     public class BlockDayOffOptimizer : IBlockDayOffOptimizer
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
-        public bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker)
+		public bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions)
         {
             writeToLogDayOffOptimizationInProgressOnCurrentAgent(matrix);
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
 
             
-            if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {matrix}))
+            if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {matrix}, schedulingOptions))
             {
                 //rensa block med hål i
                 IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(_workingBitArray, originalArray, matrix,
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
                 }
 
-                if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { matrix }))
+                if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { matrix }, schedulingOptions))
                     return false;
             }
             

@@ -85,13 +85,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleResultDataExtractor allSkillsDataExtractor =
                 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, SchedulingStateHolder);
             OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
+        	ISchedulingOptions schedulingOptions =
+        		new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             var service = new BlockDayOffOptimizationService(periodValueCalculator, rollbackService);
             service.ReportProgress += resourceOptimizer_PersonOptimized;
-            service.Execute(optimizerContainers);
+            service.Execute(optimizerContainers, schedulingOptions);
             service.ReportProgress -= resourceOptimizer_PersonOptimized;
         }
 
-        private void daysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
+        private void daysOffBackToLegalState(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
                                     BackgroundWorker backgroundWorker,
                                     IDayOffTemplate dayOffTemplate,
                                     bool reschedule)
@@ -152,7 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         
 
-        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
+        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions)
         {
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -176,7 +178,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 optimizerPreferences.Rescheduling, 
                 _container);
 
-            IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
+            var tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
 
             using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
@@ -212,13 +214,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker);
+                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences);
             }
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = originalOnlyShiftsWhenUnderstaffed;
         }
 
-        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
+        private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
             IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
             IList<IScheduleMatrixOriginalStateContainer> result =
@@ -326,7 +328,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void removeShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-            BackgroundWorker backgroundWorker)
+            BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -338,7 +340,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (backgroundWorker.CancellationPending)
                     return;
 
-                backToLegalStateServicePro.Execute(matrixList);
+                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
             }
         }
 

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IRepositoryFactory _repositoryFactory;
 		private ISchedulerStateHolder _schedulerStateHolder;
 		private OnEventScheduleMessageCommand target;
-		private readonly DateTimePeriod _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 10, 20, 0, 0, 0, DateTimeKind.Utc), 1);
+		private readonly DateOnlyPeriod _period = new DateOnlyPeriod(2008, 10, 20, 2008, 10, 20);
 
 		[SetUp]
 		public void Setup()
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_rtaStateHolder = mocks.StrictMock<IRtaStateHolder>();
 			_unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 			_repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, _period, _persons);
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
 			
 	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_rtaStateHolder,_unitOfWorkFactory,_repositoryFactory);
 		}

@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyCanLoadAllBasedOnPeriodAndScenario()
         {
             IList<IPerson> persons = new List<IPerson>();
-            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longPeriod);
+            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
             IScheduleDictionary retDic;
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IList<IPerson> persons = new List<IPerson>();
             
-            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longPeriod);
+            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
             IScheduleDictionary retDic;
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {   
             IList<IPerson> persons = new List<IPerson>();
 
-            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longPeriod);
+            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
             IScheduleDictionary retDic;
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
            
             Expect.Call(_prefDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_prefDays);
             Expect.Call(_availabilityDayRep.Find(periodToLoad(_longPeriod), visiblePeople)).Return(_studentAvailabilityDays);
-            Expect.Call(_personRep.FindPeopleInOrganization(_longPeriod, true))
+            Expect.Call(_personRep.FindPeopleInOrganization(_longDateOnlyPeriod, true))
                 .Return(persons).Repeat.Once();
         }
 

@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	public class IntradayPresenterTest : IDisposable
 	{
 		private IntradayPresenter _target;
-        private readonly DateTimePeriod _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 10, 20, 0, 0, 0, DateTimeKind.Utc), 1);
-		private readonly DateTimePeriod _periodNow = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(1));
+        private readonly DateOnlyPeriod _period = new DateOnlyPeriod(2008, 10, 20,2008,10,20);
+		private readonly DateOnlyPeriod _periodNow = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 		private MockRepository mocks;
 		private IList<IPerson> _persons;
 		private IIntradayView _view;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	    private OnEventStatisticMessageCommand _statisticCommand;
 		private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
 			_scheduleDictionarySaver = mocks.StrictMock<IScheduleDictionarySaver>();
 			_scheduleRepository = mocks.StrictMock<IScheduleRepository>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, _period, _persons);
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
 
 			_scheduleCommand = mocks.DynamicMock<OnEventScheduleMessageCommand>();
 			_forecastCommand = mocks.DynamicMock<OnEventForecastDataMessageCommand>();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		public void VerifyHandlesDateIfTodayIsIncludedInSelection()
 		{
 			mocks.BackToRecord(_schedulingResultLoader);
-			Expect.Call(_schedulingResultLoader.SchedulerState).Return(new SchedulerStateHolder(_scenario,_periodNow,_persons)).Repeat.AtLeastOnce();
+			Expect.Call(_schedulingResultLoader.SchedulerState).Return(new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_periodNow,TeleoptiPrincipal.Current.Regional.TimeZone), _persons)).Repeat.AtLeastOnce();
 
 			mocks.Replay(_schedulingResultLoader);
 		    _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
@@ -119,7 +119,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyPrepareSkillIntradayCollection()
 		{
-			var smallPeriod = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15));
+			var period = _schedulerStateHolder.RequestedPeriod.Period();
+			var smallPeriod = new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddMinutes(15));
             var skill = mocks.StrictMock<ISkill>();
             var skillDay = mocks.DynamicMock<ISkillDay>();
             
@@ -339,6 +340,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var uow = mocks.DynamicMock<IUnitOfWork>();
 			var eventMessage = mocks.StrictMock<IEventMessage>();
             var authorization = mocks.StrictMock<IPrincipalAuthorization>();
+			var stateHolder = new SchedulerStateHolder(_scenario,
+			                                           new DateOnlyPeriodAsDateTimePeriod(_periodNow,
+			                                                                              TeleoptiPrincipal.Current.Regional.
+			                                                                              	TimeZone), _persons);
+			var period = stateHolder.RequestedPeriod.Period();
 			
             IExternalAgentState externalAgentState = new ExternalAgentState("001", "AUX2", TimeSpan.Zero, DateTime.MinValue, Guid.NewGuid(), 1, DateTime.UtcNow, false);
             byte[] data = new ExternalAgentStateEncoder().Encode(externalAgentState);
@@ -351,16 +357,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
 			
 			Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _periodNow.StartDateTime,
-																	_periodNow.EndDateTime)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, Guid.Empty, typeof(IExternalAgentState), _periodNow.StartDateTime,
-                                                                    _periodNow.EndDateTime)).IgnoreArguments().Repeat.Times(1);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
+																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, Guid.Empty, typeof(IExternalAgentState), period.StartDateTime,
+                                                                    period.EndDateTime)).IgnoreArguments().Repeat.Times(1);
 			Expect.Call(eventMessage.ModuleId).Return(Guid.Empty);
             Expect.Call(eventMessage.DomainObject).Return(data);
 
 		    Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
 			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence)).Return(true);
-			Expect.Call(_schedulingResultLoader.SchedulerState).Return(new SchedulerStateHolder(_scenario,_periodNow,_persons)).Repeat.AtLeastOnce();
+			Expect.Call(_schedulingResultLoader.SchedulerState).Return(stateHolder).Repeat.AtLeastOnce();
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow));
 
@@ -402,6 +408,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks.BackToRecord(_schedulingResultLoader);
             
 			var uow = mocks.DynamicMock<IUnitOfWork>();
+	    	var period = _schedulerStateHolder.RequestedPeriod.Period();
 			
 			createRealTimeAdherenceInitializeExpectation();
             createRtaStateHolderExpectation();
@@ -409,8 +416,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
 
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
-																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
+																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 			
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow));
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
@@ -431,7 +438,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			var uow = mocks.DynamicMock<IUnitOfWork>();
             var authorization = mocks.StrictMock<IPrincipalAuthorization>();
-			
+			var period = _schedulerStateHolder.RequestedPeriod.Period();
+
             createRealTimeAdherenceInitializeExpectation();
             
             Expect.Call(_rtaStateHolder.Initialize);
@@ -443,8 +451,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
 
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
-																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
+																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 			
 			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
 			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence)).Return(false);
@@ -532,6 +540,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks.BackToRecord(_schedulingResultLoader);
 
 			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var period = _schedulerStateHolder.RequestedPeriod.Period();
 
             createRealTimeAdherenceInitializeExpectation();
             createRtaStateHolderExpectation();
@@ -541,8 +550,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
 
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, typeof(IStatisticTask))).IgnoreArguments().Repeat.Times(2);
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, _period.StartDateTime,
-																	_period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
+			Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
+																	period.EndDateTime)).IgnoreArguments().Repeat.Times(2);
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
 			
@@ -662,11 +671,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void VerifyProperties()
 		{
-			Assert.AreEqual(_period, _schedulerStateHolder.RequestedPeriod);
+			Assert.AreEqual(_period, _schedulerStateHolder.RequestedPeriod.DateOnly);
 			Assert.IsNotNull(_schedulerStateHolder.SchedulingResultState);
 			Assert.AreEqual(0, _schedulerStateHolder.SchedulingResultState.PersonsInOrganization.Count);
 			Assert.IsTrue(string.IsNullOrEmpty(_target.ChartIntradayDescription));
-			Assert.AreEqual(new DateOnly(_period.LocalStartDateTime),_target.IntradayDate);
+			Assert.AreEqual(_period.StartDate,_target.IntradayDate);
 			Assert.IsNotNull(_target.RtaStateHolder);
 			Assert.AreNotEqual(Guid.Empty,_target.ModuleId);
 			Assert.IsTrue(_target.RealTimeAdherenceEnabled);
@@ -683,9 +692,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			}
 			using (mocks.Playback())
 			{
-				_target.IntradayDate = new DateOnly(_period.LocalEndDateTime);
+				_target.IntradayDate = _period.EndDate;
 			}
-			Assert.AreEqual(new DateOnly(_period.LocalEndDateTime),_target.IntradayDate);
+			Assert.AreEqual(_period.EndDate,_target.IntradayDate);
 		}
 
 		[Test]

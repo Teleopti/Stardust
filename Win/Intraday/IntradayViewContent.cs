@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Win.Intraday
                 dayLayerView1.SetDayLayerViewModel(model);
                 pinnedLayerView.SetDayLayerViewCollection(model);
                 
-                dayLayerView1.Model.Period = _presenter.SchedulerStateHolder.RequestedPeriod;
+                dayLayerView1.Model.Period = _presenter.SchedulerStateHolder.RequestedPeriod.Period();
 
                 if (_presenter.RealTimeAdherenceEnabled)
                 {

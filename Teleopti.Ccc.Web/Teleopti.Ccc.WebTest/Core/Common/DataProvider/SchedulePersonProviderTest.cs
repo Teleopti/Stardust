@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			var team = new Team();
 			team.SetId(Guid.NewGuid());
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 
 			teamRepository.Stub(x => x.Load(team.Id.Value)).Return(team);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.Value);
 
-			personRepository.AssertWasCalled(x => x.FindPeopleBelongTeamPeriodInUtc(team, period));
+			personRepository.AssertWasCalled(x => x.FindPeopleBelongTeam(team, period));
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var persons = new[] { new Person(), new Person() };
 
 			teamRepository.Stub(x => x.Load(team.Id.Value)).Return(team);
-			personRepository.Stub(x => x.FindPeopleBelongTeamPeriodInUtc(team, new DateTimePeriod())).IgnoreArguments().Return(persons);
+			personRepository.Stub(x => x.FindPeopleBelongTeam(team, new DateOnlyPeriod())).IgnoreArguments().Return(persons);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(0))).Return(false);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(1))).Return(true);
 

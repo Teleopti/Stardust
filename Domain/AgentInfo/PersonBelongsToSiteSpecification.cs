@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
     public class PersonBelongsToSiteSpecification : Specification<IPerson>
     {
         private readonly IList<ISite> _siteCollection;
-        private readonly DateTimePeriod _dateTimePeriod;
+        private readonly DateOnlyPeriod _dateTimePeriod;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonBelongsToSiteSpecification"/> class.
         /// </summary>
         /// <param name="dateTimePeriod">The date time period.</param>
         /// <param name="siteCollection">The site collection.</param>
-        public PersonBelongsToSiteSpecification(DateTimePeriod dateTimePeriod, IList<ISite> siteCollection)
+        public PersonBelongsToSiteSpecification(DateOnlyPeriod dateTimePeriod, IList<ISite> siteCollection)
         {
             _siteCollection = siteCollection;
             _dateTimePeriod = dateTimePeriod;
@@ -28,10 +28,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// </summary>
         /// <param name="dateTimePeriod">The date time period.</param>
         /// <param name="site">The site.</param>
-        public PersonBelongsToSiteSpecification(DateTimePeriod dateTimePeriod, ISite site)
+        public PersonBelongsToSiteSpecification(DateOnlyPeriod dateTimePeriod, ISite site) : this (dateTimePeriod,new []{site})
         {
-            _siteCollection = new List<ISite> { site };
-            _dateTimePeriod = dateTimePeriod;
         }
 
         /// <summary>

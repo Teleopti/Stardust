@@ -9,17 +9,11 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public class BusinessUnit : AggregateRoot, IBusinessUnit, IDeleteTag
     {
-        #region Fields
-
-        private Description _description;
+    	private Description _description;
         private readonly IList<ISite> _siteCollection;
         private bool _isDeleted;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
+    	/// <summary>
         /// CreateProjection new BusinessUnit
         /// </summary>
         public BusinessUnit(string nameToSet)
@@ -36,18 +30,12 @@ namespace Teleopti.Ccc.Domain.Common
             _siteCollection = new List<ISite>();
         }
 
-        #endregion
-
-        #region Interface
-
-        #region IBusinessUnitHierarchyEntity Members
-
-        /// <summary>
+    	/// <summary>
         /// Collects all the persons in the candidates that are in the Business Unit.
         /// </summary>
         /// <value></value>
         /// <returns>All persons in the business unit.</returns>
-        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateTimePeriod period)
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
         {
             IList<IPerson> personsOnSite = new List<IPerson>();
             foreach (ISite site in _siteCollection)
@@ -62,9 +50,7 @@ namespace Teleopti.Ccc.Domain.Common
             return new ReadOnlyCollection<IPerson>(personsOnSite);
         }
 
-        #endregion
-
-        /// <summary>
+    	/// <summary>
         /// Set/Get for description
         /// </summary>     
         public virtual Description Description
@@ -137,15 +123,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// <value>The team collection.</value>
         public virtual ReadOnlyCollection<ITeam> TeamCollection()
         {
-            return new ReadOnlyCollection<ITeam>((from
-                                                    s in
-                                                    SiteCollection
-                                                        from
-                                                    t in
-                                                    s.TeamCollection
-                                                        select
-                                                    t).
-                                                    ToList());
+        	return new ReadOnlyCollection<ITeam>(SiteCollection.SelectMany(s => s.TeamCollection).ToList());
         }
 
         /// <summary>
@@ -160,8 +138,6 @@ namespace Teleopti.Ccc.Domain.Common
                 _siteCollection.Remove(site);
             }
             _siteCollection.Add(site);
-            //borde inte behövas då BU sätts till inloggad
-            //site.Parent = this;
         }
 
         /// <summary>
@@ -173,7 +149,6 @@ namespace Teleopti.Ccc.Domain.Common
             InParameter.NotNull("site", site);
             _siteCollection.Remove(site);
         }
-
 
         /// <summary>
         /// Finds the Site that param Team belongs to.
@@ -193,9 +168,7 @@ namespace Teleopti.Ccc.Domain.Common
             return null;
         }
 
-        #endregion
-
-        public virtual void SetDeleted()
+    	public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

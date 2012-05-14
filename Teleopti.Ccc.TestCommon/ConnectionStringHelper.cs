@@ -9,7 +9,7 @@
 
 		public static string NonValidConnectionStringUsedInTests
 		{
-			get { return @"Data Source=nakenjanne;Initial Catalog=Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi"; }
+			get { return @"Data Source=nakenjanne;Initial Catalog=Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi;Connect Timeout=1;"; }
 		}
 
 		public static string ConnectionStringUsedInTestsMatrix

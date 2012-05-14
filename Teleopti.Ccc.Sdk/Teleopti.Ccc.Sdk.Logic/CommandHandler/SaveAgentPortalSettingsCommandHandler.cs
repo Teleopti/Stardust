@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                _personalSettingDataRepository = new PersonalSettingDataRepository(uow);
-                //for now we just save the resolution
                 var setting = _personalSettingDataRepository.FindValueByKey("AgentPortalSettings", new AgentPortalSettings());
                 setting.Resolution = command.Resolution;
                 _personalSettingDataRepository.PersistSettingValue(setting);

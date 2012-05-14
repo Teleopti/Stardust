@@ -4,10 +4,12 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -35,8 +37,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private IUnitOfWorkFactory unitOfWorkFactory;
         private IRepositoryFactory repositoryFactory;
         private IDispatcherWrapper testDispatcher;
+    	private DateOnlyPeriod dateOnlyPeriod;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             layerFactory = new VisualLayerFactory();
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             testDispatcher = new TestDispatcher();
             team = TeamFactory.CreateSimpleTeam();
             period = new DateTimePeriod();
+            dateOnlyPeriod = new DateOnlyPeriod();
             person = PersonFactory.CreatePerson();
             person.SetId(Guid.NewGuid());
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(), team));
@@ -81,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             }
             using (mocks.Playback())
             {
-                target.CreateModels(new[] {person}, period);
+                target.CreateModels(new[] {person}, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod,TeleoptiPrincipal.Current.Regional.TimeZone));
                 target.Models.Count.Should().Be.EqualTo(1);
             }
         }

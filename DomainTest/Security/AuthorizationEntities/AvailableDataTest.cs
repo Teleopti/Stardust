@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target.AddAvailableBusinessUnit(bu);
 
             IList<IPerson> result =
-               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateTimePeriod(new DateTime(2000, 01, 01, 0, 0, 0, DateTimeKind.Utc), new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc)));
+               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateOnlyPeriod(2000, 01, 01,2002, 01, 01));
 
             Assert.AreEqual(3, result.Count);
         }
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target.AddAvailableSite(bu.SiteCollection[1]);
 
             IList<IPerson> result =
-               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateTimePeriod(new DateTime(2000, 01, 01, 0, 0, 0, DateTimeKind.Utc), new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc)));
+               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateOnlyPeriod(2000, 01, 01,2002, 01, 01));
 
             Assert.AreEqual(3, result.Count);
         }
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target.AddAvailablePerson(person3);
 
             IList<IPerson> result =
-               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateTimePeriod(new DateTime(2000, 01, 01, 0, 0, 0, DateTimeKind.Utc), new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc)));
+               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateOnlyPeriod(2000, 01, 01,2002, 01, 01));
 
             Assert.AreEqual(3, result.Count);
         }
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target.AddAvailableTeam(teams[2]);
 
             IList<IPerson> result =
-               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateTimePeriod(new DateTime(2000, 01, 01, 0, 0, 0, DateTimeKind.Utc), new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc)));
+               _target.ConvertToPermittedPersonCollection(new List<IPerson> { person1, person2, person3 }, new DateOnlyPeriod(2000, 01, 01, 2002, 01, 01));
 
             Assert.AreEqual(3, result.Count);
         }

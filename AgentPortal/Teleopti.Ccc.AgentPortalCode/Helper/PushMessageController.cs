@@ -84,12 +84,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
                             pushMessageDialogueDto.Id = args.Message.DomainObjectId.ToString();
                             PushMessageDialogueDto loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialogue(pushMessageDialogueDto);
                             
-                            if(!loadedPushMessageDialogueDto.IsReplied )
+                            if(loadedPushMessageDialogueDto!=null && loadedPushMessageDialogueDto.IsReplied )
                             {
                                 string title = loadedPushMessageDialogueDto.PushMessage.Title;
                                 string message = loadedPushMessageDialogueDto.Message; //Translated
 
-                                //note: Logic for presenting last DialogueMessage instead?
                                 pushMessageHelperEventArgs = new PushMessageHelperEventArgs(title, message, numberOfUnreadMessages,this);
 								handlerAdded(this, pushMessageHelperEventArgs);
                             }

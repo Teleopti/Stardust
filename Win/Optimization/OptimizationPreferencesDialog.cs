@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public IOptimizationPreferences Preferences { get; private set; }
 
+		private GeneralPreferencesPersonalSettings _defaultGeneralPreferences;
+		private DaysOffPreferencesPersonalSettings _defaultDaysOffPreferences;
+		private ExtraPreferencesPersonalSettings _defaultExtraPreferences;
+		private AdvancedPreferencesPersonalSettings _defaultAdvancedPreferences;
+
         private IList<IDataExchange> panels { get; set; }
 
         private readonly IList<IGroupPage> _groupPages;
@@ -43,6 +48,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void Form_Load(object sender, EventArgs e)
         {
+			LoadPersonalSettings();
             generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
             extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPages);
@@ -67,6 +73,57 @@ namespace Teleopti.Ccc.Win.Optimization
 
         #endregion
 
+
+		private void LoadPersonalSettings()
+		{
+			try
+			{
+				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var settingRepository = new PersonalSettingDataRepository(uow);
+					_defaultGeneralPreferences = settingRepository.FindValueByKey("GeneralPreferencesPersonalSettings", new GeneralPreferencesPersonalSettings());
+					_defaultDaysOffPreferences = settingRepository.FindValueByKey("DaysOffPreferencesPersonalSettings", new DaysOffPreferencesPersonalSettings());
+					_defaultExtraPreferences = settingRepository.FindValueByKey("ExtraPreferencesPersonalSettings", new ExtraPreferencesPersonalSettings());
+					_defaultAdvancedPreferences = settingRepository.FindValueByKey("AdvancedPreferencesPersonalSettings", new AdvancedPreferencesPersonalSettings());
+				}
+			}
+			catch (DataSourceException)
+			{
+				// move out silently in case of ex
+			}
+
+			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
+			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
+			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
+			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
+		}
+
+		private void SavePersonalSettings()
+		{
+			_defaultGeneralPreferences.MapFrom(Preferences.General);
+			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
+			_defaultExtraPreferences.MapFrom(Preferences.Extra);
+			_defaultAdvancedPreferences.MapFrom(Preferences.Advanced);
+
+			try
+			{
+				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultGeneralPreferences);
+					uow.PersistAll();
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultDaysOffPreferences);
+					uow.PersistAll();
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultExtraPreferences);
+					uow.PersistAll();
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedPreferences);
+					uow.PersistAll();
+				}
+			}
+			catch (DataSourceException)
+			{
+				// move out silently in case of ex
+			}
+		}
 
         private void AddToHelpContext()
         {
@@ -96,7 +153,8 @@ namespace Teleopti.Ccc.Win.Optimization
             if (ValidateData(ExchangeDataOption.ControlsToDataSource))
             {
                 ExchangeData(ExchangeDataOption.ControlsToDataSource);
-                DialogResult = DialogResult.OK;
+				SavePersonalSettings();
+				DialogResult = DialogResult.OK;
                 Close();
             }
         }

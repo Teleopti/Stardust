@@ -670,6 +670,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
                                         ? CultureInfo.GetCultureInfo(person.UICultureLanguageId.Value)
                                         : CultureInfo.CurrentUICulture;
 
+        	CultureInfo culture = person.CultureLanguageId.HasValue
+        	                      	? CultureInfo.GetCultureInfo(person.CultureLanguageId.Value)
+        	                      	: CultureInfo.CurrentCulture;
+
             bool rightToLeft = cultureUi.TextInfo.IsRightToLeft;
 
             DateOnlyPeriod period = control.ScheduleView.LoadedPeriod;
@@ -680,7 +684,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 detail = ScheduleReportDetail.None;
 
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.InternetCache) + "\\Teleopti";
-            manager.ExportIndividual(new List<PersonDto> { person }, period, AgentScheduleStateHolder.Instance(), rightToLeft, detail, this, true, folderPath);
+			manager.ExportIndividual(new List<PersonDto> { person }, period, AgentScheduleStateHolder.Instance(), rightToLeft, detail, this, true, folderPath, culture);
         }
 
         private void toolStripButtonPreference_Click(object sender, EventArgs e)

@@ -140,17 +140,13 @@ end
 item: Remark
   Text=Drop AS Database
 end
-remarked item: Set Variable
+item: Set Variable
   Variable=FP
   Value=%DIR%DropDatabase.xmla
 end
-remarked item: Display Message
-  Title=aa
-  Text=.\Cube\AnalysisServicesManager.exe -AS%AS% -AD%AD% -SS%SS% -SD%SD% %SA% -FP"%FP%"
-end
-remarked item: Execute Program
+item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
-  Command Line=-AS%AS% -AD%AD% -SS%SS% -SD%SD% %SA% -FP"%FP%"
+  Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
   Flags=00000010
 end

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <summary>
         /// Optimizes this instance.
         /// </summary>
-        bool Optimize(IScheduleDay scheduleDay);
+		bool Optimize(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions);
     }
 
     public class IntradayActivityOptimizerService : IIntradayActivityOptimizerService
@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleDayService = scheduleDayService; 
         }
 
-        public bool Optimize(IScheduleDay scheduleDay)
+		public bool Optimize(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
         {
             //spara undan dagvärdet (RMS?)
-            bool result = _scheduleDayService.RescheduleDay(scheduleDay);
+            bool result = _scheduleDayService.RescheduleDay(scheduleDay, schedulingOptions);
             if (!result)
             {
                 return false;

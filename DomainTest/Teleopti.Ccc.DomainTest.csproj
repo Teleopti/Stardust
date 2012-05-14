@@ -198,15 +198,19 @@
     <Compile Include="Helper\NotificationTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
+    <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerTest.cs" />
+    <Compile Include="Optimization\ExtraPreferencesPersonalSettingsTest.cs" />
+    <Compile Include="Optimization\GeneralPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationServiceTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -232,6 +236,7 @@
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreatorTest1.cs" />
+    <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />

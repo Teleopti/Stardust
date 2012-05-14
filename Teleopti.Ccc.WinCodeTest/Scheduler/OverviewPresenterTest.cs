@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -26,7 +28,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [SetUp]
         public void Setup()
         {
-            
             mocks = new MockRepository();
             viewBase = mocks.StrictMock<IScheduleViewBase>();
             scenario = mocks.StrictMock<IScenario>();
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
-            schedulerState = new SchedulerStateHolder(scenario,new DateTimePeriod(),new List<IPerson>());
+            schedulerState = new SchedulerStateHolder(scenario,new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
             target = new OverviewPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
                                       SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
         }

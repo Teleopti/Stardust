@@ -31,15 +31,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return (int) calculator.PositionFromDateTime(Now, View.IsRightToLeft) + bounds.Left;
         }
 
-        public DateTime GetLocalDateFromColumn(int column)
+        public DateOnly GetLocalDateFromColumn(int column)
         {
             if (column<-1) throw new ArgumentOutOfRangeException("column");
-            return SelectedPeriod.LocalStartDateTime.Date.AddDays(column - (int)ColumnType.StartScheduleColumns);
+            return SelectedPeriod.DateOnly.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
         }
 
         public int GetColumnFromLocalDate(DateTime now)
         {
-            return (int)(now.Date - SelectedPeriod.LocalStartDateTime.Date).TotalDays + (int)ColumnType.StartScheduleColumns ;       
+            return (int)(now.Date - SelectedPeriod.DateOnly.StartDate).TotalDays + (int)ColumnType.StartScheduleColumns ;       
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Created by: claess/moved by zoet
         /// Created date: 2007-11-15
         /// </remarks>
-        protected override void CreateDayHeader(GridQueryCellInfoEventArgs e)
+		protected override void CreateDayHeader(GridQueryCellInfoEventArgs e)
         {
             if (e.ColIndex < (int)ColumnType.StartScheduleColumns)
             {
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (e.RowIndex == _dayHeaderIndex)
             {
                 // Text date header
-                DateTime localDate = GetLocalDateFromColumn(e.ColIndex);
-                e.Style.Text = localDate.ToShortDateString();
+                var localDate = GetLocalDateFromColumn(e.ColIndex);
+                e.Style.Text = localDate.ToShortDateString(CultureInfo.CurrentCulture);
                 e.Style.Tag = localDate;
                 e.Style.CellTipText =
                     DateHelper.WeekNumber(localDate, CultureInfo.CurrentCulture)
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             Dictionary<DateTime, DateTime> start = new Dictionary<DateTime, DateTime>();
             Dictionary<DateTime, DateTime> end = new Dictionary<DateTime, DateTime>();
 
-            DateOnly periodLocalStart = new DateOnly(SelectedPeriod.LocalStartDateTime);
-            DateOnly periodLocalEnd = new DateOnly(SelectedPeriod.LocalEndDateTime.AddDays(-1));
+            DateOnly periodLocalStart = SelectedPeriod.DateOnly.StartDate;
+            DateOnly periodLocalEnd = SelectedPeriod.DateOnly.EndDate;
 
             foreach (KeyValuePair<Guid, IPerson> kvp in SchedulerState.FilteredPersonDictionary)
             {

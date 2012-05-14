@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
     public class PersonBelongsToBusinessUnitSpecification : Specification<IPerson>
     {
         private readonly BusinessUnit _businessUnit;
-        private readonly DateTimePeriod _dateTimePeriod;
+        private readonly DateOnlyPeriod _dateTimePeriod;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonBelongsToBusinessUnitSpecification"/> class.
         /// </summary>
         /// <param name="dateTimePeriod">The date time period.</param>
         /// <param name="businessUnit">The business unit.</param>
-        public PersonBelongsToBusinessUnitSpecification(DateTimePeriod dateTimePeriod, BusinessUnit businessUnit)
+        public PersonBelongsToBusinessUnitSpecification(DateOnlyPeriod dateTimePeriod, BusinessUnit businessUnit)
         {
             _businessUnit = businessUnit;
             _dateTimePeriod = dateTimePeriod;

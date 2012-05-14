@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -12,68 +11,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo
     public class PersonBelongsToTeamSpecification : Specification<IPerson>
     {
         private readonly IList<ITeam> _teamCollection;
-        private readonly DateTimePeriod _dateTimePeriod;
-        private DateOnlyPeriod? _cachedDateOnlyPeriod;
-        private string _cachedTimeZone;
+        private readonly DateOnlyPeriod _dateOnlyPeriod;
+        
+		public PersonBelongsToTeamSpecification(DateOnly dateOnly, ITeam team) : this(new DateOnlyPeriod(dateOnly,dateOnly), team)
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonBelongsToTeamSpecification"/> class.
-        /// </summary>
-        /// <param name="dateTimePeriod">The date time period.</param>
-        /// <param name="team">The team.</param>
-        public PersonBelongsToTeamSpecification(DateTimePeriod dateTimePeriod, ITeam team)
-        {
-            _teamCollection = new List<ITeam> { team };
-            _dateTimePeriod = dateTimePeriod;
-        }
+		public PersonBelongsToTeamSpecification(DateOnly dateOnly, IEnumerable<ITeam> teams)
+			: this(new DateOnlyPeriod(dateOnly, dateOnly), teams)
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonBelongsToTeamSpecification"/> class.
-        /// </summary>
-        /// <param name="dateTimePeriod">The date time period.</param>
-        /// <param name="teamCollection">The team collection.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-12-13
-        /// </remarks>
-        public PersonBelongsToTeamSpecification(DateTimePeriod dateTimePeriod, IList<ITeam> teamCollection)
-        {
-            _teamCollection = teamCollection;
-            _dateTimePeriod = dateTimePeriod;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonBelongsToTeamSpecification"/> class.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <param name="teamCollection">The team collection.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-12-13
-        /// </remarks>
-        public PersonBelongsToTeamSpecification(DateTime dateTime, IList<ITeam> teamCollection) 
-            : this(new DateTimePeriod(TimeZoneInfo.ConvertTimeToUtc(dateTime),
-                   TimeZoneInfo.ConvertTimeToUtc(dateTime)), teamCollection)
+        public PersonBelongsToTeamSpecification(DateOnlyPeriod period, ITeam team) : this(period,new []{team})
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonBelongsToTeamSpecification"/> class.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <param name="team">The team.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-12-13
-        /// </remarks>
-        public PersonBelongsToTeamSpecification(DateTime dateTime, ITeam team)
-            : this(new DateTimePeriod(TimeZoneInfo.ConvertTimeToUtc(dateTime), TimeZoneInfo.ConvertTimeToUtc(dateTime)), team)
-        {
-        }
-
-        public PersonBelongsToTeamSpecification(DateOnlyPeriod period, ITeam team)
-            : this(period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone), team)
-        {
+        public PersonBelongsToTeamSpecification(DateOnlyPeriod period, IEnumerable<ITeam> teams)
+		{
+			_teamCollection = new List<ITeam>(teams);
+			_dateOnlyPeriod = period;
         }
 
         /// <summary>
@@ -85,14 +41,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         /// </returns>
         public override bool IsSatisfiedBy(IPerson obj)
         {
-            ICccTimeZoneInfo timeZoneInfo = obj.PermissionInformation.DefaultTimeZone();
-            if (!_cachedDateOnlyPeriod.HasValue || _cachedTimeZone!=timeZoneInfo.Id)
-            {
-                _cachedDateOnlyPeriod = _dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo);
-                _cachedTimeZone = timeZoneInfo.Id;
-            }
-            
-            IList<IPersonPeriod> personPeriods = obj.PersonPeriods(_cachedDateOnlyPeriod.Value);
+            IList<IPersonPeriod> personPeriods = obj.PersonPeriods(_dateOnlyPeriod);
             foreach (IPersonPeriod personPeriod in personPeriods)
             {
                 if (_teamCollection.Contains(personPeriod.Team))

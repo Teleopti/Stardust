@@ -58,22 +58,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
             SetButtonEnableStatus();
         }
 
-        /// <summary>
-        /// Sets the selected dates.
-        /// </summary>
-        /// <param name="dateTimePairs">The date time pairs.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-17
-        /// </remarks>
-        internal void SetSelectedDates(IList<DateOnlyPeriod> dateTimePairs)
-        {
-            gridListControlPeriods.Items.Clear();
-            _dateTimePairs.Clear();
-            AddSelectedDates(dateTimePairs);
-
-        }
-
         #region InitializeComponent
 
         private void InitializeComponent()

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> CreateStudentAvailabilityDayAssembler();
         PlanningTimeBankFactory CreatePlanningTimeBankFactory(ILifetimeScope lifetimeScope);
         WriteProtectionFactory CreateWriteProtectionFactory(ILifetimeScope lifetimeScope);
+    	IAssembler<IPushMessageDialogue, PushMessageDialogueDto> CreatePushMessageDialogueAssembler();
     }
 
     public class FactoryProvider : IFactoryProvider
@@ -57,6 +58,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             return _container.Resolve<IAssembler<IPerson, PersonDto>>();
         }
+
+		public IAssembler<IPushMessageDialogue, PushMessageDialogueDto> CreatePushMessageDialogueAssembler()
+		{
+			return _container.Resolve<IAssembler<IPushMessageDialogue, PushMessageDialogueDto>>();
+		}
 
         public PersonsFromLoadOptionFactory CreatePersonsFromLoadOptionFactory(ILifetimeScope lifetimeScope)
         {

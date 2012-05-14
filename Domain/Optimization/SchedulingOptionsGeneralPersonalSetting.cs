@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useRotations = schedulingOptions.UseRotations;
 			_rotationDaysOnly = schedulingOptions.RotationDaysOnly;
 			_useAvailability = schedulingOptions.UseAvailability;
-			_availabilityDaysOnly = schedulingOptions.UseAvailability;
+			_availabilityDaysOnly = schedulingOptions.AvailabilityDaysOnly;
 			_blockFinderType = schedulingOptions.UseBlockScheduling;
 			_useGroupScheduling = schedulingOptions.UseGroupScheduling;
 			_groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;

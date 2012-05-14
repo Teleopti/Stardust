@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                         new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
                         new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+
                 var scheduleDay = scheduleDic[person].ScheduledDay(startDate);
                 var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
 
@@ -61,12 +62,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						}
             		}
             	}
-                
+
                 _saveSchedulePartService.Save(uow, scheduleDay);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
                 }
+
             }
             return new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 1};
         }

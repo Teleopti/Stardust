@@ -22,13 +22,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
             _personsInOrganization = personsInOrganization;
         }
 
-        public void CreateMaxSeatSkills(DateTimePeriod requestedPeriod, ICccTimeZoneInfo timeZoneInfo)
+        public void CreateMaxSeatSkills(DateOnlyPeriod requestedPeriod)
         {
-            var dateOnlyPeriod = requestedPeriod.ToDateOnlyPeriod(timeZoneInfo);
-            var sitesWithMaxSeats = _maxSeatSitesExtractor.MaxSeatSites(dateOnlyPeriod);
+            var sitesWithMaxSeats = _maxSeatSitesExtractor.MaxSeatSites(requestedPeriod);
 
             _createSkillsFromMaxSeatSites.CreateSkillList(sitesWithMaxSeats);
-            _createPersonalSkillsFromMaxSeatSites.Process(dateOnlyPeriod, _personsInOrganization);
+            _createPersonalSkillsFromMaxSeatSites.Process(requestedPeriod, _personsInOrganization);
             _schedulerSkillDayHelper.AddSkillDaysToStateHolder(ForecastSource.MaxSeatSkill, 0);
         }
     }

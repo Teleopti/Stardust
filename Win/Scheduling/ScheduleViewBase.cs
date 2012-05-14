@@ -328,10 +328,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 _grid.Model.Selections.Clear(true);
 
-                int weekNumWeekHeader = DateHelper.WeekNumber((DateTime)_grid.Model[e.RowIndex, e.ColIndex].Tag, CultureInfo.CurrentCulture);
+                int weekNumWeekHeader = DateHelper.WeekNumber((DateOnly)_grid.Model[e.RowIndex, e.ColIndex].Tag, CultureInfo.CurrentCulture);
                 for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
                 {
-                    int weekNumDateHeader = DateHelper.WeekNumber((DateTime)_grid.Model[e.RowIndex + 1, i].Tag, CultureInfo.CurrentCulture);
+                    int weekNumDateHeader = DateHelper.WeekNumber((DateOnly)_grid.Model[e.RowIndex + 1, i].Tag, CultureInfo.CurrentCulture);
                     if (weekNumWeekHeader == weekNumDateHeader)
                     {
                         _grid.Model.Selections.Add(GridRangeInfo.Cols(i, i));
@@ -762,7 +762,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         protected void DrawLayer(GridDrawCellEventArgs e, ILayer<IPayload> layer, DateDateTimePeriodDictionary timeSpans, IPerson person)
         {
-            DateTimePeriod period = timeSpans[(DateTime)e.Style.Tag];
+            DateTimePeriod period = timeSpans[(DateOnly)e.Style.Tag];
             Rectangle projectionRectangle = e.Bounds;
 
             if (e.Bounds.Height > SchedulePresenterBase.ProjectionHeight)
@@ -953,17 +953,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         //get the local selected date
         public virtual DateOnly SelectedDateLocal()
         {
-            DateTime tag;
+            DateOnly tag;
             if (_grid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
             {
-                tag = (DateTime) _grid.Model[1, _grid.CurrentCell.ColIndex].Tag; 
+                tag = (DateOnly) _grid.Model[1, _grid.CurrentCell.ColIndex].Tag; 
             }
             else
             {
-                tag = Presenter.SelectedPeriod.StartDateTimeLocal(Presenter.SchedulerState.TimeZoneInfo);
+                tag = Presenter.SelectedPeriod.DateOnly.StartDate;
             }
             
-            return new DateOnly(tag);
+            return tag;
         }
 
         public IList<IScheduleDay> DeleteList<T>(ClipHandler<T> clipHandler)
@@ -1218,7 +1218,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_grid.Model[1, colIndex].Tag == null)
                     continue;
 
-                DateOnly localDate = new DateOnly((DateTime) _grid.Model[1, colIndex].Tag);
+                var localDate = (DateOnly)_grid.Model[1, colIndex].Tag;
                 IPerson agent = null;
                 if (j - (RowHeaders + 1) >= Presenter.SchedulerState.FilteredPersonDictionary.Count)
                 {

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Common
             }
         }
 
-        public DateTime CurrentFilterDate
+        public DateOnly CurrentFilterDate
         {
             get { return _scheduleFilterPresenter.CurrentFilterDate; }
         }

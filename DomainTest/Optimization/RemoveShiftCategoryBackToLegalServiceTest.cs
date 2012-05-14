@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IList<IScheduleDayPro> _extendedPeriodDays;
         private IList<IScheduleDayPro> _periodDays;
         private IList<bool> _correctCategory;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
             _extendedPeriodDays = new List<IScheduleDayPro>();
             _periodDays = new List<IScheduleDayPro>();
+			_schedulingOptions = new SchedulingOptions();
             
             
 
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 10;
-            IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation);
+			IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation, _schedulingOptions);
             Assert.IsNotNull(result);
         }
 
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _interface = new RemoveShiftCategoryBackToLegalService(_removeOnBestDateForTest, _scheduleMatrixMock);
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 2;
-            IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation);
+			IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation, _schedulingOptions);
             Assert.AreEqual(0, result.Count);
         }
 
@@ -106,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _interface = new RemoveShiftCategoryBackToLegalService(_removeOnBestDateForTest, _scheduleMatrixMock);
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 2;
-            IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation);
+			IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation, _schedulingOptions);
             Assert.AreEqual(0, result.Count);
         }
 
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 7;
-            IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation);
+			IList<IScheduleDayPro> result = _interface.Execute(_shiftCategoryLimitation, _schedulingOptions);
             Assert.IsNotNull(result);
         }
 
@@ -224,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                result = _target.ExecutePeriod(_shiftCategoryLimitation);
+				result = _target.ExecutePeriod(_shiftCategoryLimitation, _schedulingOptions);
             }
 
             Assert.AreEqual(1, result.Count);
@@ -240,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                result = _target.ExecuteWeeks(_shiftCategoryLimitation);
+				result = _target.ExecuteWeeks(_shiftCategoryLimitation, _schedulingOptions);
             }
 
             Assert.AreEqual(1, result.Count);
@@ -260,19 +263,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayToReturn = dayToReturn;
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
         {
             _callCount++;
             return _dayToReturn;
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
         {
             _callCount++;
             return _dayToReturn;
         }
 
-        public bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory)
+    	public bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory)
         {
             if(scheduleDayPro.Day == new DateOnly(2010, 1, 1) && _callCount > 0)
                 return false;
@@ -293,13 +296,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _correctCategory = correctCategory;
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
         {
             _callCount++;
             return null;
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
         {
             _callCount++;
             return null;

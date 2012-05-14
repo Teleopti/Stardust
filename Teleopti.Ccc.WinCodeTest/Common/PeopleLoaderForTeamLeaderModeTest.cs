@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     {
         private IPeopleLoader _target;
         private IList<IEntity> _selectedEntities;
-        private DateTimePeriod _requestedPeriod;
+        private DateOnlyPeriod _requestedPeriod;
         private MockRepository _mockRep;
         private IPersonRepository _personRepository;
         private IContractRepository _contractRepository;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_teamRepository = _mockRep.StrictMock<ITeamRepository>();
 
             _schedulerStateHolder = _mockRep.StrictMock<ISchedulerStateHolder>();
-            _requestedPeriod = new DateTimePeriod(new DateTime(2009, 9, 6, 22, 0, 0, DateTimeKind.Utc), new DateTime(2009, 9, 7, 22, 0, 0, DateTimeKind.Utc));
+            _requestedPeriod = new DateOnlyPeriod(2009, 9, 6, 2009, 9, 7);
             _contract = ContractFactory.CreateContract("Part time");
             _contracts.Add(_contract);
             _uow = _mockRep.StrictMock<IUnitOfWork>();

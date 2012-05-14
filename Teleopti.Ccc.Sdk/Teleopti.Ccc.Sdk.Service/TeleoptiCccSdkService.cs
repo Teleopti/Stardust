@@ -405,27 +405,24 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A <see cref="SchedulePartDto"/>.</returns>
 		/// <remarks>
 		/// </remarks>
-        public SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public SchedulePartDto GetSchedulePart(PersonDto person, DateOnlyDto startDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-		    {
-		        IList<PersonDto> personList = new List<PersonDto> {person};
-		        return
-		            _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate, startDate,
-		                                                                                  timeZoneId, string.Empty).First();
-		    }
+			return
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				                    	{
+				                    		StartDate = startDate,
+				                    		EndDate = startDate,
+				                    		PersonId = person.Id.GetValueOrDefault(),
+				                    		TimeZoneId = timeZoneId
+				                    	}).First();
 		}
 
         public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
         {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                IList<PersonDto> personList = new List<PersonDto> {person};
-                ICollection<SchedulePartDto> schedulePartDtos =
-                    _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate, endDate,
-                                                                                          timeZoneId, string.Empty);
-                return schedulePartDtos;
-            }
+        	return
+        		GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+        		                    	{StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
 		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
@@ -439,33 +436,69 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                if (scheduleLoadOptionDto == null)
-                    throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
+			if (scheduleLoadOptionDto == null)
+				throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
 
-                var schedulePartDtos = new List<SchedulePartDto>();
-                ICollection<TeamDto> teamDtos = null;
-
-                if (scheduleLoadOptionDto.LoadSite != null)
-                    teamDtos = GetTeamsOnSite(scheduleLoadOptionDto.LoadSite);
-
-                var personDtos =
-                    _factoryProvider.CreatePersonsFromLoadOptionFactory(inner).GetPersonFromLoadOption(
-                        scheduleLoadOptionDto, teamDtos, startDate, endDate, timeZoneId);
-
-                if (personDtos != null)
-                {
-                    var scheduleFactory = _factoryProvider.CreateScheduleFactory(inner);
-                    schedulePartDtos.AddRange(scheduleFactory.CreateSchedulePartCollection(personDtos, startDate,
-                                                                                           endDate, timeZoneId,
-                                                                                           scheduleLoadOptionDto.
-                                                                                               SpecialProjection));
-                }
-
-                return schedulePartDtos;
-            }
+			QueryDto query = null;
+			if (scheduleLoadOptionDto.LoadAll)
+			{
+				query = new GetSchedulesForAllPeopleQueryHandlerDto
+				        	{
+				        		StartDate = startDate,
+				        		EndDate = endDate,
+				        		TimeZoneId = timeZoneId,
+				        		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+				        	};
+			}
+			if (scheduleLoadOptionDto.LoadSite != null)
+			{
+				query = new GetSchedulesBySiteQueryHandlerDto
+					{
+						StartDate = startDate,
+						EndDate = endDate,
+						TimeZoneId = timeZoneId,
+						SiteId = scheduleLoadOptionDto.LoadSite.Id.GetValueOrDefault(),
+						SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+					};
+			}
+			if (scheduleLoadOptionDto.LoadTeam != null)
+			{
+				query = new GetSchedulesByTeamQueryHandlerDto
+					                    	{
+					                    		StartDate = startDate,
+					                    		EndDate = endDate,
+					                    		TimeZoneId = timeZoneId,
+					                    		TeamId = scheduleLoadOptionDto.LoadTeam.Id.GetValueOrDefault(),
+					                    		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+					                    	};
+			}
+			if (scheduleLoadOptionDto.LoadPerson != null)
+			{
+				GetSchedulesByQuery(new GetSchedulesByPersonQueryHandlerDto
+				{
+					StartDate = startDate,
+					EndDate = endDate,
+					TimeZoneId = timeZoneId,
+					PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
+					SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+				});
+			}
+			
+			if (query==null)
+			{
+				return new Collection<SchedulePartDto>();
+			}
+			return GetSchedulesByQuery(query);
 		}
+
+    	public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
+			{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var invoker = inner.Resolve<IInvokeQuery<ICollection<SchedulePartDto>>>();
+				return invoker.Invoke(queryDto);
+			}
+			}
 
 		public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
@@ -487,14 +520,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
             if (publicNoteLoadOptionDto == null)
                 throw new FaultException("Parameter publicNoteLoadOptionDto cannot be null.");
 
-            string timeZoneId = TeleoptiPrincipal.Current.Regional.TimeZone.Id;
-
             ICollection<TeamDto> teamDtos = null;
 
             if (publicNoteLoadOptionDto.LoadSite != null)
                 teamDtos = GetTeamsOnSite(publicNoteLoadOptionDto.LoadSite);
 
-            return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate, timeZoneId);
+            return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate);
 	    }
 
 	    public void SavePublicNote(PublicNoteDto publicNoteDto)
@@ -1640,8 +1671,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
                     IRepositoryFactory repositoryFactory = new RepositoryFactory();
                     IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam
-					(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period.ToDateTimePeriod(timeZoneInfo));
+					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
 					dtos = personAssembler.DomainEntitiesToDtos(personCollection);
 				}
 				else
@@ -1894,21 +1924,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public PushMessageDialogueDto GetPushMessageDialogue(PushMessageDialogueDto pushMessageDialogueDto)
 		{
-			PushMessageDialogueDto returnPushMessageDialogueDto;
+			PushMessageDialogueDto returnPushMessageDialogueDto = null;
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				IPushMessageDialogueRepository repository = repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-				IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.Value);
-
-				var personAssembler = _factoryProvider.CreatePersonAssembler();
-				returnPushMessageDialogueDto =
-					new PushMessageDialogueAssembler
-					{
-						DialogueMessageAssembler = new DialogueMessageAssembler { PersonAssembler = personAssembler },
-						PushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler },
-						PersonAssembler = personAssembler
-					}.DomainEntityToDto(pushMessageDialogue);
+				IPushMessageDialogue pushMessageDialogue = repository.Get(pushMessageDialogueDto.Id.GetValueOrDefault());
+				if (pushMessageDialogue != null)
+				{
+					var assembler = _factoryProvider.CreatePushMessageDialogueAssembler();
+					returnPushMessageDialogueDto = assembler.DomainEntityToDto(pushMessageDialogue);
+				}
 			}
 			return returnPushMessageDialogueDto;
 		}
@@ -1923,15 +1949,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IList<IPushMessageDialogue> pushMessageDialogues =
 					repository.FindAllPersonMessagesNotRepliedTo(personAssembler.DtoToDomainEntity(person));
 
-				PushMessageDialogueAssembler pushMessageDialogueAssembler = new PushMessageDialogueAssembler
-																				{
-																					DialogueMessageAssembler =
-																						new DialogueMessageAssembler{PersonAssembler = personAssembler},
-																					PersonAssembler =personAssembler,
-																					PushMessageAssembler =
-																						new PushMessageAssembler { PersonAssembler = personAssembler }
-																				};
-				return pushMessageDialogueAssembler.DomainEntitiesToDtos(pushMessageDialogues).ToList();
+				var assembler = _factoryProvider.CreatePushMessageDialogueAssembler();
+				return assembler.DomainEntitiesToDtos(pushMessageDialogues).ToList();
 			}
 		}
 
@@ -1944,10 +1963,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					IRepositoryFactory repositoryFactory = new RepositoryFactory();
 					IPushMessageDialogueRepository repository =
 						repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.Value);
-					Console.WriteLine(pushMessageDialogue.ToString());
-						// Just to avoid fxcop at the moment. PeterW will fill this in later.
-					//pushMessageDialogue.IsMessageRead = pushMessageDialogue.IsMessageRead;
+					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.GetValueOrDefault());
+					if (pushMessageDialogue!=null)
+					{
+						Console.WriteLine(pushMessageDialogue.ToString());
+					}
+
 					unitOfWork.PersistAll();
 				}
 			}

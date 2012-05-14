@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             else
             {
-                tag = new DateOnly(Presenter.SelectedPeriod.StartDateTimeLocal(Presenter.SchedulerState.TimeZoneInfo));
+                tag = Presenter.SelectedPeriod.DateOnly.StartDate;
             }
 
             return tag;

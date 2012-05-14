@@ -10345,4 +10345,19 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
     <value>Extern resurs används av ett annat program, var god försök igen senare.</value>
   </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Resursberäkna efter:</value>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Importera prognos från fil</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Efterfråga tilldelningar</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Visa enbart tillgängliga för skiftbyte</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Starttiden {0} måste vara tidigare än sluttiden {1}.</value>
+  </data>
 </root>

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -18,7 +17,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(
             IEnumerable<DateOnly> scheduleDays,
-            IOptimizerOriginalPreferences optimizerPreferences,
+            IOptimizationPreferences optimizerPreferences,
             ISchedulingResultStateHolder stateHolder,
             IScheduleFairnessCalculator fairnessCalculator);
     }

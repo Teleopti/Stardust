@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public bool ForDelete { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
         {
             var responseList = new HashSet<IBusinessRuleResponse>();
@@ -31,12 +33,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 foreach (var scheduleDay in scheduleDays)
                 {
+                    IPerson person = scheduleDay.Person;
+                    DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
+                    IScheduleRange currentSchedules = rangeClones[person];
+                    var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+                    oldResponses.Remove(CreateResponse(person, dateToCheck, "remove", typeof(NewMaxOneDayOffRule)));
+                    //on delete this should be empty and never runned
+
                     var dayOffs = scheduleDay.PersonDayOffCollection();
                     if (dayOffs != null && dayOffs.Count > 1)
                     {
-                        IBusinessRuleResponse response = CreateResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, "Max One Day Off",
+                        
+                        IBusinessRuleResponse response = CreateResponse(scheduleDay.Person,
+                            scheduleDay.DateOnlyAsPeriod.DateOnly, String.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.DuplicateDaysOffValidationError, scheduleDay.DateOnlyAsPeriod.DateOnly.ToShortDateString( CultureInfo.CurrentCulture  )),
                                                                                 typeof(NewMaxOneDayOffRule));
-                        responseList.Add(response);
+                        if (response != null)
+                        {
+                            responseList.Add(response);
+                            oldResponses.Add(response);
+                        }
+                        
                     }
                 } 
             }

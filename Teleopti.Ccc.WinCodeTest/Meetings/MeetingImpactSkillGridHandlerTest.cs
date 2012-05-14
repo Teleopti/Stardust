@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target = new MeetingImpactSkillGridHandler(_meetingImpactView, _meetingViewModel,_schedulerStateHolder,_uowFactory,_decider);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldCallViewForEverySkill()
         {
             var meeting = _mocks.StrictMock<IMeeting>();
@@ -66,7 +67,10 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_uowFactory.CreateAndOpenUnitOfWork()).Return(null);
             
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
-            Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(_requestedPeriod);
+        	Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(
+        		new DateOnlyPeriodAsDateTimePeriod(
+        			_requestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone),
+        			TeleoptiPrincipal.Current.Regional.TimeZone));
             Expect.Call(_meetingViewModel.Meeting).Return(meeting);
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(),false)}));
             

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IBlockOptimizerBlockCleaner _blockCleaner;
         private ILockableBitArrayChangesTracker _changesTracker;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private ISchedulingOptions _schedulingOptions;
 
 
         [SetUp]
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _originalArray = new LockableBitArray(14, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, null);
             _workingArray = new LockableBitArray(14, _daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter, null);
             _values = new List<double?>();
+			_schedulingOptions = new SchedulingOptions();
         }
 
         [Test]
@@ -67,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker));
+				Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions));
             }
         }
 
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker));
+				Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions));
             }
         }
 
@@ -109,17 +112,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 
                 Expect.Call(_dayOffDecisionMakerExecuter.Execute(_workingArray, _originalArray, _matrix,
                                                                  _originalStateContainer, false, false)).Return(true);
-                Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {_matrix})).Return(false);
+				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(false);
                 Expect.Call(_changesTracker.DaysOffRemoved(_workingArray, _originalArray, _matrix,
                                                            _daysOffPreferences.ConsiderWeekBefore)).Return(dates);
                 Expect.Call(_blockCleaner.ClearSchedules(_matrix, dates)).Return(dates);
                 Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(dates[0], true, true));
-                Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix })).Return(false);
+				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(false);
             }
 
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker));
+				Assert.IsFalse(_target.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions));
             }
         }
 
@@ -137,12 +140,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
                 Expect.Call(_dayOffDecisionMakerExecuter.Execute(_workingArray, _originalArray, _matrix,
                                                                  _originalStateContainer, false, false)).Return(true);
-                Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix })).Return(true);
+				Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(true);
             }
 
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix, _originalStateContainer, _decisionMaker));
+				Assert.IsTrue(_target.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions));
             }
         }
     }

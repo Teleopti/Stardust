@@ -36,5 +36,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         /// <value>The absence Id.</value>
         [DataMember]
         public Guid AbsenceId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the scenario id. If omitted default scenario will be used.
+		/// </summary>
+		[DataMember(Order = 1,IsRequired = false)]
+    	public Guid? ScenarioId { get; set; }
     }
 }

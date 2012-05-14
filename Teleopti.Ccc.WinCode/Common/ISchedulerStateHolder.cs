@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Gets the load period.
         /// </summary>
         /// <value>The load period.</value>
-        DateTimePeriod RequestedPeriod { get; set; }
+		IDateOnlyPeriodAsDateTimePeriod RequestedPeriod { get; set; }
 
         /// <summary>
         /// Gets the load scenario.

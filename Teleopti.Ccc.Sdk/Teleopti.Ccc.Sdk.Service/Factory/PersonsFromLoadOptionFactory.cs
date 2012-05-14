@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -25,46 +24,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	        _personAssembler = personAssembler;
 	    }
 
-	    public ICollection<PersonDto> GetPersonFromLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
-		{
-            CheckScheduleLoadOption(scheduleLoadOptionDto);
-			ICollection<PersonDto> personDtos = new Collection<PersonDto>();
-
-			if (scheduleLoadOptionDto.LoadAll)
-			{
-				personDtos = GetAllPersons();
-			}
-
-			else if (scheduleLoadOptionDto.LoadSite != null)
-			{
-				personDtos = GetPersonsOnSite(teamDtos, startDate, endDate, timeZoneId);
-			}
-
-			if (scheduleLoadOptionDto.LoadTeam != null)
-			{
-				personDtos = GetPersonsOnTeam(scheduleLoadOptionDto.LoadTeam, startDate, endDate, timeZoneId);
-			}
-
-			else if (scheduleLoadOptionDto.LoadPerson != null)
-			{
-				personDtos = GetPersonsOnPerson(scheduleLoadOptionDto.LoadPerson);
-			}
-
-			return personDtos;
-		}
-
-		internal ICollection<PersonDto> GetPersonFromLoadOption(PublicNoteLoadOptionDto publicNoteLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		internal ICollection<PersonDto> GetPersonFromLoadOption(PublicNoteLoadOptionDto publicNoteLoadOptionDto, ICollection<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
 			CheckPublicNoteLoadOption(publicNoteLoadOptionDto);
 			ICollection<PersonDto> personDtos = new Collection<PersonDto>();
 
 			if (publicNoteLoadOptionDto.LoadSite != null)
 			{
-				personDtos = GetPersonsOnSite(teamDtos, startDate, endDate, timeZoneId);
+				personDtos = GetPersonsOnSite(teamDtos, startDate, endDate);
 			}
 			else if (publicNoteLoadOptionDto.LoadTeam != null)
 			{
-				personDtos = GetPersonsOnTeam(publicNoteLoadOptionDto.LoadTeam, startDate, endDate, timeZoneId);
+				personDtos = GetPersonsOnTeam(publicNoteLoadOptionDto.LoadTeam, startDate, endDate);
 			}
 			else if (publicNoteLoadOptionDto.LoadPerson != null)
 			{
@@ -73,20 +44,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 			return personDtos;
 		}
-
-        private static void CheckScheduleLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto)
-        {
-            int countParametersSet = 0;
-            if (scheduleLoadOptionDto.LoadAll) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadSite != null) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadTeam != null) countParametersSet++;
-            if (scheduleLoadOptionDto.LoadPerson != null) countParametersSet++;
-
-            if (countParametersSet != 1)
-            {
-                throw new FaultException("scheduleLoadOptionDto must have exact one option specified.");
-            }
-        }
 
 		private static void CheckPublicNoteLoadOption(PublicNoteLoadOptionDto publicNoteLoadOptionDto)
 		{
@@ -101,24 +58,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			}
 		}
 
-		private ICollection<PersonDto> GetAllPersons()
-		{
-		    using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		    {
-		        var personList = _personRepository.FindAllSortByName();
-
-		        return _personAssembler.DomainEntitiesToDtos(personList).ToList();
-		    }
-		}
-
-		private ICollection<PersonDto> GetPersonsOnSite(IEnumerable<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		private ICollection<PersonDto> GetPersonsOnSite(IEnumerable<TeamDto> teamDtos, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
 		    using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 		    {
 		        var persons = new List<IPerson>();
-		        var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 		        var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
-		        var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+		        var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
 		        foreach (var teamDto in teamDtos)
 		        {
@@ -131,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		    }
 		}
 
-	    private ICollection<PersonDto> GetPersonsOnTeam(TeamDto teamDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+	    private ICollection<PersonDto> GetPersonsOnTeam(TeamDto teamDto, DateOnlyDto startDate, DateOnlyDto endDate)
 	    {
 	        if (teamDto == null) throw new ArgumentNullException("teamDto");
 
@@ -141,9 +87,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	            if (teamDto.Id != null)
 	            {
 	                var team = _teamRepository.Load(teamDto.Id.Value);
-	                var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 	                var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
-	                var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
+	                var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 	                personList = _personRepository.FindPeopleBelongTeam(team, period);
 	            }
 

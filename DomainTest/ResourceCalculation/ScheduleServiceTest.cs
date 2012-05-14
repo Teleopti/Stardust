@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro>{_scheduleMatrixPro});
-            Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro)).Return(null).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(null).IgnoreArguments();
             Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
                                                                                         new DateOnly(2011, 4, 18))).Repeat.Times(3);
             _mocks.ReplayAll();
@@ -154,7 +154,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
-            Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro)).Return(resultHolder).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(resultHolder).IgnoreArguments();
+				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
+																													  new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
             Expect.Call(mainShift.EntityClone()).Return(mainShift);
@@ -192,7 +194,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 () => _shiftCatLimitChecker.SetBlockedShiftCategories(_options, _person, (new DateOnly(2011, 4, 18))));
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
-            Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro)).Return(resultHolder).IgnoreArguments();
+			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction)).Return(resultHolder).IgnoreArguments();
+				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
+																														new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
             Expect.Call(mainShift.EntityClone()).Return(mainShift);

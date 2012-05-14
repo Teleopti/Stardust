@@ -8,21 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleoptiControls", "TeleoptiControls\TeleoptiControls.csproj", "{7C8A1A99-F7DA-47BA-BE01-2CE2D708ECA2}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://challenger:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = SdkTestClientWin\\SdkTestClientDomain.csproj
-		SccProjectName1 = SdkTestClientWin
-		SccLocalPath1 = SdkTestClientWin
-		SccProjectUniqueName2 = SdkTestWinGui\\SdkTestWinGui.csproj
-		SccProjectName2 = SdkTestWinGui
-		SccLocalPath2 = SdkTestWinGui
-		SccProjectUniqueName3 = TeleoptiControls\\TeleoptiControls.csproj
-		SccProjectName3 = TeleoptiControls
-		SccLocalPath3 = TeleoptiControls
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
