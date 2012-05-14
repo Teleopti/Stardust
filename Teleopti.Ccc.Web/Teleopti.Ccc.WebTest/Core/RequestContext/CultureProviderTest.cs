@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test, SetUICulture("en-US"), SetCulture("en-US")]
 		public void ShouldBeAbleToGetDefaultForUnauthenticated()
 		{
-			var currentPrincipalProvider = MockRepository.GenerateStub<IPrincipalProvider>();
+			var currentPrincipalProvider = MockRepository.GenerateStub<ICurrentTeleoptiPrincipal>();
 			currentPrincipalProvider.Stub(p => p.Current()).Return(null);
 
 			var target = new CultureProvider(currentPrincipalProvider);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			var principal = SetupTeleoptiPrincipal(testLcid);
 
-			var currentPrincipalProvider = MockRepository.GenerateStub<IPrincipalProvider>();
+			var currentPrincipalProvider = MockRepository.GenerateStub<ICurrentTeleoptiPrincipal>();
 			currentPrincipalProvider.Stub(p => p.Current()).Return(principal);
 
 			var target = new CultureProvider(currentPrincipalProvider);

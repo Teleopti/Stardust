@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	[TestFixture]
 	public class LoggedOnUserTest
 	{
-		private IPrincipalProvider PrincipalProvider(IPerson person)
+		private ICurrentTeleoptiPrincipal FakeCurrentTeleoptiPrincipal(IPerson person)
 		{
 			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
-			return new FakePrincipalProvider(principal);
+			return new FakeCurrentTeleoptiPrincipal(principal);
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var person = PersonFactory.CreatePerson();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, PrincipalProvider(person));
+			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
 
 			var result = target.CurrentUser();
 
@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var person = PersonFactory.CreatePerson();
 			var team = new Team();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
-			PrincipalProvider(person);
+			FakeCurrentTeleoptiPrincipal(person);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, PrincipalProvider(person));
+			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
 
 			var result = target.MyTeam(DateOnly.Today);
 

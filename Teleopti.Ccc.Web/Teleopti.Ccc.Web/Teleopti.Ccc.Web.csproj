@@ -242,10 +242,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\PrincipalProvider.cs" />
     <Compile Include="Core\RequestContext\ICultureProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\IPrincipalProvider.cs" />
     <Compile Include="Core\RequestContext\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
