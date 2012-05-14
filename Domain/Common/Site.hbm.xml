@@ -3,8 +3,8 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
-
-  <class name="Site">
+	<class name="Site">
+	<cache usage ="read-write"/><!--Use readonly cache instead?-->
     <!--IEntity-->
     <id name="Id"
             type="guid"
