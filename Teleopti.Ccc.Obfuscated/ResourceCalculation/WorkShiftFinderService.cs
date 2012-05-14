@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -24,14 +22,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IPreSchedulingStatusChecker _preSchedulingStatusChecker;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
-        private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
 
     	public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-            IEffectiveRestrictionCreator effectiveRestrictionCreator, IShiftLengthDecider shiftLengthDecider)
+            IShiftLengthDecider shiftLengthDecider)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -41,7 +38,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _workShiftCalculatorsManager = workShiftCalculatorsManager;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _fairnessAndMaxSeatCalculatorsManager = fairnessAndMaxSeatCalculatorsManager;
-            _effectiveRestrictionCreator = effectiveRestrictionCreator;
         	_shiftLengthDecider = shiftLengthDecider;
         }
 
@@ -51,7 +47,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix)
+		public IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
         {
             _workShiftMinMaxCalculator.ResetCache();
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
@@ -68,7 +64,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (!currentSchedulePeriod.IsValid)
                 return null;
 
-            var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
             if (!_shiftProjectionCacheFilter.CheckRestrictions(schedulingOptions, effectiveRestriction, FinderResult))
                 return null;
 

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleDay _schedulePart;
 		private IScheduleDayService _scheduleDayService;
+		private ISchedulingOptions _schedulingOptions;
 
 		[SetUp]
 		public void Setup()
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_schedulePart = _mocks.StrictMock<IScheduleDay>();
+			_schedulingOptions = new SchedulingOptions();
 		}
 
 		[Test]
@@ -65,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				matchingShiftCategoryMock();
 				Expect.Call(scheduleMatrix.Person).Return(_person).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(firstDate).Repeat.Any();
-				Expect.Call(_scheduleDayService.DeleteMainShift(new List<IScheduleDay>{ _schedulePart })).Return(new List<IScheduleDay>{ _schedulePart }).Repeat.Once();
+				Expect.Call(_scheduleDayService.DeleteMainShift(new List<IScheduleDay> { _schedulePart }, _schedulingOptions)).Return(new List<IScheduleDay> { _schedulePart }).Repeat.Once();
 				Expect.Call(_scheduleMatrixValueCalculatorPro.DayValueForSkills(firstDate, new List<ISkill> {skill}))
 					.Repeat.Once()
 					.Return(2);
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Playback())
 			{
-				result = _interface.ExecuteOne(_shiftCategory);
+				result = _interface.ExecuteOne(_shiftCategory, _schedulingOptions);
 			}
 
 			Assert.AreSame(_scheduleDayPro, result);
@@ -109,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Playback())
 			{
-				result = _interface.ExecuteOne(_shiftCategory);
+				result = _interface.ExecuteOne(_shiftCategory, _schedulingOptions);
 			}
 
 			Assert.IsNull(result);

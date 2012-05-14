@@ -20,24 +20,24 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleService = scheduleService;
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro>(_scheduleMatrix.EffectivePeriodDays);
             DateOnly start = periodDays[0].Day;
             DateOnly end = periodDays[periodDays.Count - 1].Day;
             DateOnlyPeriod period = new DateOnlyPeriod(start, end);
 
-            return ExecuteOne(shiftCategory, period);
+            return ExecuteOne(shiftCategory, period, schedulingOptions);
         }
 
-        public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period)
+		public IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> daysToWorkWith = DaysToWorkWith(shiftCategory, period);
             IScheduleDayPro dayToRemove = FindDayToRemove(daysToWorkWith);
             if (dayToRemove == null)
                 return null;
 
-            _scheduleService.DeleteMainShift(new List<IScheduleDay> {dayToRemove.DaySchedulePart()});
+            _scheduleService.DeleteMainShift(new List<IScheduleDay> {dayToRemove.DaySchedulePart()}, schedulingOptions);
             return dayToRemove;
         }
 

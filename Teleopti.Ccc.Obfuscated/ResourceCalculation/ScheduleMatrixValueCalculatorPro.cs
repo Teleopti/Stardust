@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     public class ScheduleMatrixValueCalculatorPro : IScheduleMatrixValueCalculatorPro
     {
         private readonly IEnumerable<DateOnly> _scheduleDays;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
+        private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
         private readonly IList<ISkill> _activeSkills;
 
         public ScheduleMatrixValueCalculatorPro(
             IEnumerable<DateOnly> scheduleDays,
-            IOptimizerOriginalPreferences optimizerPreferences,
+			IOptimizationPreferences optimizerPreferences,
             ISchedulingResultStateHolder stateHolder,
             IScheduleFairnessCalculator fairnessCalculator,
             IList<ISkill> activeSkills)
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public ScheduleMatrixValueCalculatorPro(
             IEnumerable<DateOnly> scheduleDays,
-            IOptimizerOriginalPreferences optimizerPreferences,
+			IOptimizationPreferences optimizerPreferences,
             ISchedulingResultStateHolder stateHolder,
             IScheduleFairnessCalculator fairnessCalculator)
             : this(scheduleDays, optimizerPreferences, stateHolder, fairnessCalculator, stateHolder.Skills){}
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             double initialValue = CalculateInitialValue(iterationOperationOption);
             double fairnessValue = _fairnessCalculator.ScheduleFairness();
-            double fairnessSetting = _optimizerPreferences.SchedulingOptions.Fairness.Value;
+            double fairnessSetting = _optimizerPreferences.Extra.FairnessValue;
             return CalculatePeriodValue(fairnessSetting, fairnessValue, initialValue);
         }
 
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (IsConsiderMaximumIntraIntervalStandardDeviation())
                 highestIntraIntervalDeviation = SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(skillStaffPeriods) ?? 0;
 
-            bool useMinPersonnel = _optimizerPreferences.SchedulingOptions.UseMinimumPersons;
-            bool useMaxPersonnel = _optimizerPreferences.SchedulingOptions.UseMinimumPersons;
+            bool useMinPersonnel = _optimizerPreferences.Advanced.UseMinimumStaffing;
+            bool useMaxPersonnel = _optimizerPreferences.Advanced.UseMaximumStaffing;
 
             IList<double> intradayDifferences =
                 SkillStaffPeriodHelper.SkillStaffPeriodsRelativeDifferenceHours(skillStaffPeriods, useMinPersonnel, useMaxPersonnel);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public bool IsConsiderMaximumIntraIntervalStandardDeviation()
         {
-            return _optimizerPreferences.AdvancedPreferences.ConsiderMaximumIntraIntervalStandardDeviation;
+            return _optimizerPreferences.Advanced.UseIntraIntervalDeviation;
         }
 
 

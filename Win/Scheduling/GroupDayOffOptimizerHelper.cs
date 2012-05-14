@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
+        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions)
         {
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker);
+                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences);
             }
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void removeShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-            BackgroundWorker backgroundWorker)
+            BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
         {
             using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
             {
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (backgroundWorker.CancellationPending)
                     return;
 
-                backToLegalStateServicePro.Execute(matrixList);
+                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
             }
         }
 

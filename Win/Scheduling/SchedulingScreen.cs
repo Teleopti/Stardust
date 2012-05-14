@@ -4657,7 +4657,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
                     _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
-                                                                                 _backgroundWorkerScheduling);
+                                                                                 _backgroundWorkerScheduling, _optimizationPreferences);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -4866,15 +4866,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     break;
                 case OptimizationMethod.ReOptimize:
+					var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 					if (optimizerPreferences.Extra.UseTeams)
                     {
-                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
                         break;
                     }
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)
                     {
-                        _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+                        _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
                     }
                     else
                     {
@@ -4887,7 +4888,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     _scheduleOptimizerHelper.ReOptimizeIntradayActivity(_backgroundWorkerOptimization,
                                                                         options.OptimizerActivitiesPreferences,
-                                                                        selectedSchedules);
+                                                                        selectedSchedules, _schedulingOptions);
                     break;
             }
 
