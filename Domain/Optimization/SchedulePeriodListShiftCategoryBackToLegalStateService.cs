@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                                     );
         }
 
-        public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
             (IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
              IList<IScheduleMatrixPro> scheduleMatrixList,
              IOptimizationPreferences optimizerPreferences,

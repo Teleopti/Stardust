@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return Execute(matrixList, schedulingOptions, new Dictionary<string, IWorkShiftFinderResult>());
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
@@ -122,6 +123,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return success;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ActOnResult(IBlockFinderResult result, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             bool success = true;
@@ -201,6 +203,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool TryScheduleBlock(IBlockFinderResult result, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDay> scheduledDays = new List<IScheduleDay>();

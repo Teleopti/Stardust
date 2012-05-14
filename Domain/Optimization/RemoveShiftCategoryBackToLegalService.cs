@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleMatrix = scheduleMatrix;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
             if(shiftCategoryLimitation.Weekly)
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDayPro> ExecutePeriod(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDayPro> ExecuteWeeks(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions)
         {
 

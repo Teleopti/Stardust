@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleDayService = scheduleDayService;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions)
         {
             bool result = true;

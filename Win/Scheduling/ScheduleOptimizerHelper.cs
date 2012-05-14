@@ -461,7 +461,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                 IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
                                         new List<IScheduleDay> { schedulePart })[0];
 
-                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix);
+                            	var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+                            	var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
+                            		schedulePart, schedulingOptions);
+                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
                             }
                             var result = finderService.FinderResult;
                             _allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);

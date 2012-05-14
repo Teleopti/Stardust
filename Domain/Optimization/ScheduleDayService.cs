@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		}
 
-    	public bool RescheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool RescheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
             var originalDay = (IScheduleDay) schedulePart.Clone();
             var partList = new List<IScheduleDay> { schedulePart };
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool ScheduleDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions)
         {
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer);
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
         {
             //Delete old current shift
