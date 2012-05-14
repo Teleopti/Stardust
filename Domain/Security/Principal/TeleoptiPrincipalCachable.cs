@@ -8,18 +8,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class TeleoptiPrincipalSerializable : GenericPrincipal, ITeleoptiPrincipal, IUnsafePerson
+	public class TeleoptiPrincipalCachable : GenericPrincipal, ITeleoptiPrincipal, IUnsafePerson
 	{
 		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
 
-		private TeleoptiPrincipalSerializable(IIdentity identity)
+		private TeleoptiPrincipalCachable(IIdentity identity)
 			: base(identity, new string[] { }) { }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public static TeleoptiPrincipalSerializable Make(ITeleoptiIdentity identity, IPerson person)
+		public static TeleoptiPrincipalCachable Make(ITeleoptiIdentity identity, IPerson person)
 		{
-			return new TeleoptiPrincipalSerializable(identity)
+			return new TeleoptiPrincipalCachable(identity)
 			       	{
 			       		Person = person
 			       	};
