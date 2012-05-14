@@ -14,14 +14,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		bool IsUser(Guid? personId);
 	}
 
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
+	[Serializable]
 	public class OrganisationMembership : IOrganisationMembership, IOrganisationMembershipWithId
 	{
-
-		[DataMember]
         private IEnumerable<PeriodizedOrganisationMembership> _periodizedOrganisationMembership = new List<PeriodizedOrganisationMembership>();
-        
-		[DataMember]
 		private Guid _personId;
 
 		public static IOrganisationMembership FromPerson(IPerson person)
@@ -100,17 +96,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return _periodizedOrganisationMembership.Select(p => p.Period);
         }
 
-
-		[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
+		[Serializable]
 		private class PeriodizedOrganisationMembership
         {
-			[DataMember]
             private readonly Guid _teamId;
-			[DataMember]
 			private readonly Guid _siteId;
-			[DataMember]
             private readonly Guid _businessUnitId;
-			[DataMember]
             private DateOnlyPeriod _period;
 
             public PeriodizedOrganisationMembership(DateOnly startDate, DateOnly endDate, Guid teamId, Guid siteId, Guid businessUnitId)

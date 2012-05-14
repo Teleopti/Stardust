@@ -8,11 +8,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class TeleoptiPrincipalSerializable : GenericPrincipal, ITeleoptiPrincipal, IUnsafePerson
 	{
-		[DataMember]
-		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
+		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
 
 		private TeleoptiPrincipalSerializable(IIdentity identity)
 			: base(identity, new string[] { }) { }
@@ -23,25 +21,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			return new TeleoptiPrincipalSerializable(identity)
 			       	{
-			       		PersonId = person.Id.Value,
 			       		Person = person
 			       	};
 		}
 
-		[DataMember]
-		public Guid PersonId { get; private set; }
-		public IPerson Person { get; set; }
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(PersonId); }
-
-		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
+		public IRegional Regional { get; set; }
+		public IOrganisationMembership Organisation { get; set; }
 		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
 
-		[DataMember]
-		public IRegional Regional { get; set; }
+		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
 
-		[DataMember]
-		public IOrganisationMembership Organisation { get; set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(Person.Id.Value); }
+		public IPerson Person { get; set; }
 
 	}
 }

@@ -1,44 +1,21 @@
-﻿using System.Globalization;
-using System.Runtime.Serialization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
+	[Serializable]
 	public class Regional : IRegional
 	{
-
-		[DataMember]
-		private string _cultureName;
-		private CultureInfo _culture;
+		private int _cultureId;
+		private int _uiCultureId;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CultureInfo Culture
-		{
-			get { return _culture ?? (_culture = CultureInfo.GetCultureInfo(_cultureName)); }
-			set
-			{
-				_culture = value;
-				_cultureName = _culture == null ? null : _culture.Name;
-			}
-		}
-
-		[DataMember]
-		private string _uiCultureName;
-		private CultureInfo _uiCulture;
+		public CultureInfo Culture { get { return CultureInfo.GetCultureInfo(_cultureId); } set { _cultureId = value == null ? 0 : value.LCID; } }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CultureInfo UICulture
-		{
-			get { return _uiCulture ?? (_uiCulture = CultureInfo.GetCultureInfo(_uiCultureName)); }
-			set
-			{
-				_uiCulture = value;
-				_uiCultureName = _uiCulture == null ? null : _uiCulture.Name;
-			}
-		}
+		public CultureInfo UICulture { get { return CultureInfo.GetCultureInfo(_uiCultureId); } set { _uiCultureId = value == null ? 0 : value.LCID; } }
 
-		[DataMember]
 		public ICccTimeZoneInfo TimeZone { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

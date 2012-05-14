@@ -6,16 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/05/")]
 	public class AuthorizeExternalAvailableData : IAuthorizeAvailableData
     {
-		[DataMember]
         private readonly IEnumerable<Guid> _availableTeams;
-		[DataMember]
 		private readonly IEnumerable<Guid> _availableSites;
-		[DataMember]
 		private readonly IEnumerable<Guid> _availableBusinessUnits;
-		[DataMember]
 		private readonly IEnumerable<Guid> _availablePersons;
 
         public AuthorizeExternalAvailableData(IAvailableData availableData)

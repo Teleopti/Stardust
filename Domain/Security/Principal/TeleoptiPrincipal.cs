@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 
 
+
+
 		private IPerson _person;
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
 		private IIdentity _identity;
@@ -46,14 +48,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
 
-		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
-		IPerson IUnsafePerson.Person { get { return _person; } }
-
-		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
-		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
-
 		public IRegional Regional { get; private set; }
 		public IOrganisationMembership Organisation { get; private set; }
+		public IEnumerable<ClaimSet> ClaimSets { get { return _claimSets; } }
+
+		public void AddClaimSet(ClaimSet claimSet) { _claimSets.Add(claimSet); }
+
+		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
+		IPerson IUnsafePerson.Person { get { return _person; } }
 
 	}
 

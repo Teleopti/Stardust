@@ -863,7 +863,6 @@
     </Compile>
     <Compile Include="Security\Principal\PrincipalAuthorizationTest.cs" />
     <Compile Include="Security\Principal\RoleToClaimSetTransformerTest.cs" />
-    <Compile Include="Security\Principal\TeleoptiPrincipalSerializerTest.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalTest.cs" />
     <Compile Include="Security\Principal\UnsafePersonProviderTest.cs" />
     <Compile Include="Security\RaptorApplicationFunctionsSynchronizerTest.cs">

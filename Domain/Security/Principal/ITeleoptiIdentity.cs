@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		AuthenticationTypeOption TeleoptiAuthenticationType { get; }
 		IDataSource DataSource { get; }
 		IBusinessUnit BusinessUnit { get; }
-		Guid BusinessUnitId { get; }
 		string Ticket { get; set; }
 	}
 }
