@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Security.AuthorizationEntities"
                    default-access="field.camelcase-underscore">
 	<class name="ApplicationFunction">
-		<!--IEntity-->
+		<cache usage="read-write"/><!--use readonly cache instead?-->
 		<id name="Id"
 				type="guid"
 			 access="nosetter.camelcase-underscore"

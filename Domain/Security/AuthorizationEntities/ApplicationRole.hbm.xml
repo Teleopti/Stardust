@@ -47,6 +47,7 @@
     <bag name="ApplicationFunctionCollection"
          table ="ApplicationFunctionInRole"
             cascade="none">
+		 <cache usage="read-write"/> <!--use readonly cache instead?-->
       <key foreign-key="FK_ApplicationFunctionInRole_ApplicationRole">
         <column name="ApplicationRole"
                 not-null="true"
