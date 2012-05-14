@@ -59,41 +59,41 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=ETLUSERNAME
+  Variable Value1=IISVERSION
   Variable Name2=_PROP_VAR_
   Variable Value2=THREE
   Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=PM_INSTALL
+  Variable Value1=MYUSERNAME
   Variable Name2=_PROP_VAR_
-  Variable Value2=ISPM
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DATABASEINSTALLER
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DIR
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=ETL
-  Variable Name2=_PROP_VAR_
-  Variable Value2=ETLService
+  Variable Value2=FOUR
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=ETLUSERNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=FIVE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=LOGS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=LOG4NET
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
 item: Check if File/Dir Exists
-  Pathname=%ETLService%Service
+  Pathname=%LOG4NET%
   Flags=00000100
 end
 item: Custom Script Item
@@ -105,51 +105,15 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C "%ETLService%Service\ETLLogFilePermissions.bat" %ONE% %TWO% %THREE%
+  Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%""
   Flags=00000010
-end
-remarked item: Check if File/Dir Exists
-  Pathname=%ESSENTDIR%
-  Flags=00000100
-end
-remarked item: Custom Script Item
-  Filename=Pause.wse
-  Variable Name1=_PAUSE_TIME_
-  Variable Value1=10
-  Variable Name2=HELPFILE
-  Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-remarked item: Else Statement
-end
-remarked item: Create Directory
-  Pathname=%ESSENTDIR%
-end
-remarked item: End Block
 end
 item: Else Statement
 end
 item: Display Message
   Title=Folder missing!
-  Text=Can't find the folder needed for this operation: %ETLService%
+  Text=The LOG4NET folder should be installed but is missing! Cannot set permissions on: "%LOG4NET%"
   Flags=00001000
-end
-item: End Block
-end
-item: If/While Statement
-  Variable=ISPM
-  Value=True
-end
-item: If/While Statement
-  Variable=THREE
-  Flags=00000001
-end
-item: Execute Program
-  Pathname=.\ntrights.exe
-  Command Line=+r SeServiceLogonRight -u %THREE%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: End Block
 end
 item: End Block
 end

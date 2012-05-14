@@ -1,5 +1,3 @@
-
-
 ::@ECHO off
 :: =============================================
 :: Author:		DJ
@@ -18,11 +16,12 @@
 :: 2011-11-23	DJ		#16802 - Permission problem when running payroll because read permissions on the root (driveletter) is required
 :: 2012-01-10	AF		#17583 - Need to give disk perm to IIS APPPOOL\Teleopti ASP.NET v3.5
 :: 2012-02-16	DJ		#18290 - Adding some EHCO fro output from batch file
+:: 2012-05-14	DJ		possible bug where we now use quotes as input from Wise
 :: =============================================
-SET WindowsNT=%1
-SET SPLevel=%2
-SET IISVersion=%3
-SET SVCLOGIN=%4
+SET WindowsNT=%~1
+SET SPLevel=%~2
+SET IISVersion=%~3
+SET SVCLOGIN=%~4
 
 ECHO WindowsNT is: %WindowsNT%
 ECHO SPLevel is: %SPLevel%
@@ -31,7 +30,7 @@ ECHO SVCLOGIN is: %SVCLOGIN%
 
 ECHO.
 ECHO Call was:
-ECHO EsentPermissions.bat %WindowsNT% %SPLevel% %IISVersion% %SVCLOGIN%
+ECHO EsentPermissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
 
 ::Get path to this batchfile
 SET SDKPath=%~dp0
@@ -94,6 +93,10 @@ if %WindowsNT% EQU %WinXP% (SET PermissionStyle=cacls) else (SET PermissionStyle
 ::Get Install drive letter
 SET DRIVELETTER=%SDKPath:~0,2%
 
+::make uppercase
+for %%a in (%DRIVELETTER%) do set DRIVELETTER=%%~da
+for %%a in (%SystemDrive%) do set mySystemDrive=%%~da
+
 ::Switch to drive letter
 %DRIVELETTER%
 
@@ -102,11 +105,11 @@ CALL :MAIN "%SDKPath%"
 CALL :MAIN "%ServiceBusPath%"
 
 ::Set read on root, but only if %Driveletter% <> %SystemDrive%
-if "%DRIVELETTER%"=="%systemdrive%" (
-Echo No need to apply read permissions on %systemdrive%
+if "%DRIVELETTER%"=="%mySystemDrive%" (
+Echo No need to apply read permissions on %DRIVELETTER%
 )
-if not "%DRIVELETTER%"=="%systemdrive%" (
-echo We are istalling on a drive different from the systemdrive: %systemdrive%
+if not "%DRIVELETTER%"=="%mySystemDrive%" (
+echo We are istalling on a drive different from the systemdrive: %mySystemDrive%
 if "%PermissionStyle%"=="cacls" (
 Echo CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
 CACLS %DRIVELETTER%\ /E /G "%IISPoolUser%":R
@@ -121,12 +124,11 @@ GOTO EOF
 
 :MAIN
 ::Make sure we are in the folder in question (need for the FOR loop)
-SET FolderPath=%1
+SET FolderPath=%~1
 ECHO FolderPath is %FolderPath%
 CD %FolderPath%
 
 ::some output
-CLS
 ECHO Adding file essent file permissions for %IISPoolUser%
 ECHO.
 
