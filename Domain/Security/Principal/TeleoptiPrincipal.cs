@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private IPerson _person;
 		private IList<ClaimSet> _claimSets = new List<ClaimSet>();
-		private ITeleoptiIdentity _identity;
+		private IIdentity _identity;
 
 		public TeleoptiPrincipal(IIdentity identity, IPerson person) : base(identity, new string[] { })
         {
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			_person = principal._person;
 			_claimSets = principal._claimSets;
-			_identity = principal.TeleoptiIdentity;
+			_identity = principal.Identity;
 
 			InitializeFromPerson();
 		}
 
 		private void InitializeFromPerson()
 		{
-			// dont ask me why, just refact without changing behavior...
+			// dont ask my why, just refact without changing behavior...
 			if (_person == null)
 			{
 				Organisation = new OrganisationMembership();
@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			Organisation = OrganisationMembership.FromPerson(_person);
 		}
 
-		public ITeleoptiIdentity TeleoptiIdentity { get { return _identity; } }
 		public override IIdentity Identity { get { return _identity ?? base.Identity; } }
 
 		public virtual IPerson GetPerson(IPersonRepository personRepository) { return personRepository.Get(_person.Id.GetValueOrDefault()); }
