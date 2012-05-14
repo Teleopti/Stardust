@@ -137,7 +137,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             LoadTrackerDescriptions();
             toolStripComboBoxExTrackerDescription.Enabled = false;
 
-            statusStripLabel1.Text = string.Empty;
 
             Cursor.Current = Cursors.Default;
             toolStripButtonMainSave.Enabled = !_readOnly;
@@ -1706,26 +1705,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             if (_gridConstructor.View.Type == ViewType.SchedulePeriodView)
             {
                 //Call Closemethod for scheduleperiod
-                ((SchedulePeriodGridView)_gridConstructor.View).ClosePreviousStatusChanged += PeopleWorksheetClosePreviousStatusChanged;
                 ((SchedulePeriodGridView)_gridConstructor.View).OnClosePreviousPeriod();
-                ((SchedulePeriodGridView)_gridConstructor.View).ClosePreviousStatusChanged -= PeopleWorksheetClosePreviousStatusChanged;
-
+                
                 _gridConstructor.View.Grid.Refresh();
                 _gridConstructor.View.RefreshChildGrids();
-
-                statusStripLabel1.Text = string.Empty;
-                statusStripProgressBar1.Value = 0;
+                
             }
 
             Cursor = Cursors.Default;
         }
 
-        void PeopleWorksheetClosePreviousStatusChanged(object sender, UpdateClosePreviousEventArgs e)
-        {
-            statusStripLabel1.Text = e.ProgressStateText;
-            statusStripProgressBar1.Value = e.ProgressStateBar;
-        }
-
+        
     }
 
 }
