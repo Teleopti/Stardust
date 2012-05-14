@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleMatrixPro _matrix;
         private IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private IBlockDayOffOptimizer _blockDayOffOptimizer;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _blockDayOffOptimizer = _mocks.StrictMock<IBlockDayOffOptimizer>();
+			_schedulingOptions = new SchedulingOptions();
         }
 
         [Test]
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
 
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(true);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(true);
             }
 
             bool result;
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute();
+                result = _target.Execute(_schedulingOptions);
             }
 
             Assert.IsTrue(result);
@@ -87,9 +89,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
 
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(false);
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(false);
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(true);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(false);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(false);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(true);
             }
 
             bool result;
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute();
+                result = _target.Execute(_schedulingOptions);
             }
 
             Assert.IsTrue(result);
@@ -116,9 +118,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
 
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(false);
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(false);
-                Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker)).Return(false);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(false);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(false);
+				Expect.Call(_blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions)).Return(false);
             }
 
             bool result;
@@ -126,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = createTarget();
-                result = _target.Execute();
+                result = _target.Execute(_schedulingOptions);
             }
 
             Assert.IsFalse(result);

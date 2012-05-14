@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
+        public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
+			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             IShiftCategory bestCategory = groupPerson.CommonShiftCategory;
             if (bestCategory == null)
             {
-                var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, totalFairness, agentAverageFairness);
+                var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, totalFairness, agentAverageFairness, schedulingOptions);
                 bestCategory = bestCategoryResult.BestShiftCategory;
                 if (bestCategory == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
                     _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);

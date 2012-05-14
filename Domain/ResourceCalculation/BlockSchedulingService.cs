@@ -47,31 +47,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IBestBlockShiftCategoryFinder _blockShiftCategoryFinder;
         private readonly IScheduleDayService _scheduleDayService;
         private readonly IBlockFinderFactory _blockFinderFactory;
-        private readonly IOptimizerOriginalPreferences _optimizerPreferences;
         private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
-            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory, IOptimizerOriginalPreferences optimizerPreferences)
+            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory)
         {
             _blockShiftCategoryFinder = blockShiftCategoryFinder;
             _scheduleDayService = scheduleDayService;
             _blockFinderFactory = blockFinderFactory;
-            _optimizerPreferences = optimizerPreferences;
         }
 
         public event EventHandler<BlockSchedulingServiceEventArgs> BlockScheduled;
 
-        public bool Execute(IList<IScheduleMatrixPro> matrixList)
+		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
         {
-            return Execute(matrixList,_optimizerPreferences.SchedulingOptions.UseBlockScheduling,new Dictionary<string, IWorkShiftFinderResult>());
+			return Execute(matrixList, schedulingOptions, new Dictionary<string, IWorkShiftFinderResult>());
         }
 
-        public bool Execute(IList<IScheduleMatrixPro> matrixList, BlockFinderType blockFinderType,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
             bool success = true;
             _cancelMe = false;
-            IList<IBlockFinder> finders = CreateFinders(matrixList, blockFinderType);
+            IList<IBlockFinder> finders = CreateFinders(matrixList, schedulingOptions.UseBlockScheduling);
 
             IBlockFinderResult result;
             int blockCounter = 0;
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     {
                         blocksScheduled++;
                         OnBlockScheduled(blockCounter, blocksScheduled);
-                        if (!ActOnResult(result, blockFinder.ScheduleMatrix))
+                        if (!ActOnResult(result, blockFinder.ScheduleMatrix, schedulingOptions))
                             success = false;
                         validBlockFound = true;
                     }
@@ -124,10 +123,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return success;
         }
 
-        public bool ActOnResult(IBlockFinderResult result, IScheduleMatrixPro matrix)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool ActOnResult(IBlockFinderResult result, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             bool success = true;
-            _optimizerPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
+            schedulingOptions.NotAllowedShiftCategories.Clear();
 
             if(result.BlockDays.Count == 0)
                 return false;
@@ -142,19 +142,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (bestCategory != null)
                     {
                         bannedCategories.Add(bestCategory);
-                        _optimizerPreferences.SchedulingOptions.NotAllowedShiftCategories.Clear();
+                        schedulingOptions.NotAllowedShiftCategories.Clear();
                         foreach (IShiftCategory category in bannedCategories)
                         {
-                            _optimizerPreferences.SchedulingOptions.NotAllowedShiftCategories.Add(category);
+                            schedulingOptions.NotAllowedShiftCategories.Add(category);
                         }
                     }
 					
-					bestCategory = _blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, dictionary.FairnessPoints(), dictionary[matrix.Person].FairnessPoints()).BestShiftCategory;
+					bestCategory = _blockShiftCategoryFinder.BestShiftCategoryForDays(result, matrix.Person, dictionary.FairnessPoints(), dictionary[matrix.Person].FairnessPoints(), schedulingOptions).BestShiftCategory;
                     if (bestCategory == null)
                         return false;
 
-                    _optimizerPreferences.SchedulingOptions.ShiftCategory = bestCategory;
-                    scheduled = TryScheduleBlock(result, matrix);
+                    schedulingOptions.ShiftCategory = bestCategory;
+                    scheduled = TryScheduleBlock(result, matrix, schedulingOptions);
                     if (!scheduled)
                         success = false;
 
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             else
             {
                 bestCategory = result.ShiftCategory;
-                _optimizerPreferences.SchedulingOptions.ShiftCategory = bestCategory;
-                scheduled = TryScheduleBlock(result, matrix);
+                schedulingOptions.ShiftCategory = bestCategory;
+                scheduled = TryScheduleBlock(result, matrix, schedulingOptions);
                 if (!scheduled)
                     success = false;
             }
@@ -203,7 +203,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        public bool TryScheduleBlock(IBlockFinderResult result, IScheduleMatrixPro matrix)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool TryScheduleBlock(IBlockFinderResult result, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             IList<IScheduleDay> scheduledDays = new List<IScheduleDay>();
             foreach (var blockDay in result.BlockDays)
@@ -212,11 +213,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 if (matrix.UnlockedDays.Contains(scheduleDay))
                 {
                     IScheduleDay schedulePart = scheduleDay.DaySchedulePart();
-                    bool scheduleResult = _scheduleDayService.ScheduleDay(schedulePart);
+                    bool scheduleResult = _scheduleDayService.ScheduleDay(schedulePart, schedulingOptions);
                     if(!scheduleResult)
                     {
 						if (!scheduledDays.IsEmpty())
-							_scheduleDayService.DeleteMainShift(scheduledDays);
+							_scheduleDayService.DeleteMainShift(scheduledDays, schedulingOptions);
                         
                         return false;
                     }

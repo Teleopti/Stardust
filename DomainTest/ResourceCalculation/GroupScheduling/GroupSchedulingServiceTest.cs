@@ -327,10 +327,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
     		Expect.Call(_scheduleDictionary.AverageFairnessPoints(_persons)).Return(_averagePersonFairness).Repeat.Twice();
     		Expect.Call(
 				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result1, _groupPerson, _totalFairness,
-					_averagePersonFairness)).Return(result).IgnoreArguments();
+					_averagePersonFairness, _schedulingOptions)).Return(result).IgnoreArguments();
     		Expect.Call(
 				_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result2, _groupPerson, _totalFairness,
-					_averagePersonFairness)).Return(new BestShiftCategoryResult(_shiftCategory, FailureCause.NoFailure)).IgnoreArguments();
+					_averagePersonFairness, _schedulingOptions)).Return(new BestShiftCategoryResult(_shiftCategory, FailureCause.NoFailure)).IgnoreArguments();
     		Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
     	}
     }

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -8,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IBlockDayOffOptimizerContainer
     {
-        bool Execute();
+		bool Execute(ISchedulingOptions schedulingOptions);
         IPerson Owner { get; }
     }
 
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _blockDayOffOptimizer = blockDayOffOptimizer;
         }
 
-        public bool Execute()
+        public bool Execute(ISchedulingOptions schedulingOptions)
         {
             string agent =
                 _matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
@@ -39,15 +37,18 @@ namespace Teleopti.Ccc.Domain.Optimization
             using (PerformanceOutput.ForOperation("Day off optimization for " + agent))
             {
                 // note that we do not change the order of the decisionmakers
-                if (_decisionMakers.Any(runDecisionMaker))
-                    return true;
+            	foreach (var dayOffDecisionMaker in _decisionMakers)
+            	{
+					if (runDecisionMaker(dayOffDecisionMaker, schedulingOptions))
+						return true;
+            	}
             }
             return false;
         }
 
-        private bool runDecisionMaker(IDayOffDecisionMaker decisionMaker)
+		private bool runDecisionMaker(IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions)
         {
-            bool dayOffOptimizerResult = _blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, decisionMaker);
+            bool dayOffOptimizerResult = _blockDayOffOptimizer.Execute(_matrix, _originalStateContainer, decisionMaker, schedulingOptions);
             return dayOffOptimizerResult;
         }
 
