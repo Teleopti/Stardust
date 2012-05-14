@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
 				.As<IMakeRegionalFromPerson>()
 				.As<IMakeOrganisationMembershipFromPerson>()
+				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 			//builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
@@ -109,12 +110,14 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			                 	})
 				.As<IMakeRegionalFromPerson>()
 				.As<IMakeOrganisationMembershipFromPerson>()
+				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
 
 			mbCacheModule.Builder
 				.For<TeleoptiPrincipalInternalsFactory>()
 				.CacheMethod(m => m.MakeOrganisationMembership(null))
 				.CacheMethod(m => m.MakeRegionalFromPerson(null))
+				.CacheMethod(m => m.NameForPerson(null))
 				.AsImplemented()
 				;
 

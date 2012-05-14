@@ -8,16 +8,22 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		private readonly IMakeRegionalFromPerson _makeRegionalFromPerson;
 		private readonly IMakeOrganisationMembershipFromPerson _makeOrganisationMembershipFromPerson;
+		private readonly IRetrievePersonNameForPerson _retrievePersonNameForPerson;
 
-		public TeleoptiPrincipalSerializableFactory(IMakeRegionalFromPerson makeRegionalFromPerson, IMakeOrganisationMembershipFromPerson makeOrganisationMembershipFromPerson)
+		public TeleoptiPrincipalSerializableFactory(
+			IMakeRegionalFromPerson makeRegionalFromPerson, 
+			IMakeOrganisationMembershipFromPerson makeOrganisationMembershipFromPerson,
+			IRetrievePersonNameForPerson retrievePersonNameForPerson
+			)
 		{
 			_makeRegionalFromPerson = makeRegionalFromPerson;
 			_makeOrganisationMembershipFromPerson = makeOrganisationMembershipFromPerson;
+			_retrievePersonNameForPerson = retrievePersonNameForPerson;
 		}
 
 		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
 		{
-			var identity = new TeleoptiIdentity(loggedOnUser == null ? string.Empty : loggedOnUser.Name.ToString(), 
+			var identity = new TeleoptiIdentity(_retrievePersonNameForPerson.NameForPerson(loggedOnUser), 
 			                                    dataSource, businessUnit,
 			                                    WindowsIdentity.GetCurrent(), 
 			                                    teleoptiAuthenticationType
