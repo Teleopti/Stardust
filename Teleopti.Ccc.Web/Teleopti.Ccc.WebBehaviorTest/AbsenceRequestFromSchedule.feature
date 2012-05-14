@@ -38,10 +38,11 @@ Scenario: Default absence request values from week schedule When checked Fullday
 
 Scenario: Cancel adding absence request
 	Given I am an agent
+	And I have a requestable absence called Vacation
 	And I am viewing week schedule
 	When I click on today's summary
 	And I click absence request tab
-	And I input absence request values
+	And I input absence request values with Vacation
 	And I click the Cancel button
 	Then I should not see a symbol at the top of the schedule
 
