@@ -1099,7 +1099,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemFindMatching.Visible = true;
             }
 
-			if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
 			{
 				ToolStripMenuItemRestrictionViewTemp.Visible = true;
 			}
