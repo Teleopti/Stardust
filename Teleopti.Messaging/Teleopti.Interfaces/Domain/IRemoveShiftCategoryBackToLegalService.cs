@@ -8,12 +8,13 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IRemoveShiftCategoryBackToLegalService
     {
-        /// <summary>
-        /// Executes back to legal state on the specified shift category limitation.
-        /// </summary>
-        /// <param name="shiftCategoryLimitation">The shift category limitation.</param>
-        /// <returns></returns>
-        IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation);
+		/// <summary>
+		/// Executes back to legal state on the specified shift category limitation.
+		/// </summary>
+		/// <param name="shiftCategoryLimitation">The shift category limitation.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+        IList<IScheduleDayPro> Execute(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions);
 
     }
 }

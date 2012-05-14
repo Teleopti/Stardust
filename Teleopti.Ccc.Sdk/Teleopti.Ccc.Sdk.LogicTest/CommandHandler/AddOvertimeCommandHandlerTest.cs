@@ -89,7 +89,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             using (_mock.Record())
             {
-
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
                 Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
@@ -107,5 +106,35 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _target.Handle(_addOvertimeCommandDto);
             }
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
+		public void ShouldAddOvertimeInTheDictionaryForGivenScenarioSuccessfully()
+		{
+			var scenarioId = Guid.NewGuid();
+			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+			var scheduleDay = _mock.StrictMock<IScheduleDay>();
+			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
+				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
+				Expect.Call(_multiplicatorDefinitionSetRepository.Load(_addOvertimeCommandDto.OvertimeDefinitionSetId)).Return(_multiplicatorDefinitionSet);
+				Expect.Call(() => scheduleDay.CreateAndAddOvertime(null)).IgnoreArguments();
+				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
+				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
+				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+			}
+			using (_mock.Playback())
+			{
+				_addOvertimeCommandDto.ScenarioId = scenarioId;
+				_target.Handle(_addOvertimeCommandDto);
+			}
+		}
     }
 }

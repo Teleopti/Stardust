@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayService _scheduleDayService;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _schedulePart;
+    	private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new SchedulePeriodShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleDayService);
             _scheduleDayPro = _mockRepository.StrictMock<IScheduleDayPro>();
             _schedulePart = _mockRepository.StrictMock<IScheduleDay>();
+			_schedulingOptions = new SchedulingOptions();
 
         }
 
@@ -51,18 +54,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IVirtualSchedulePeriod virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
             using(_mockRepository.Record())
             {
-                Expect.Call(_shiftCategoryBackToLegalService.Execute(null))
+				Expect.Call(_shiftCategoryBackToLegalService.Execute(null, _schedulingOptions))
                     .Return(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro, _scheduleDayPro })
                     .IgnoreArguments()
                     .Repeat.Times(2);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Times(6);
-                Expect.Call(_scheduleDayService.ScheduleDay(_schedulePart)).Return(true).Repeat.Times(6);
+				Expect.Call(_scheduleDayService.ScheduleDay(_schedulePart, _schedulingOptions)).Return(true).Repeat.Times(6);
                 Expect.Call(virtualSchedulePeriod.ShiftCategoryLimitationCollection()).Return(Limitations());
             }
             using(_mockRepository.Playback())
             {
                 //AddTestShiftCategoryLimitationToSchedulePeriod();
-                Assert.IsTrue(_target.Execute(virtualSchedulePeriod));
+				Assert.IsTrue(_target.Execute(virtualSchedulePeriod, _schedulingOptions));
             }
         }
 

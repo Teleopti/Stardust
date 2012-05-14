@@ -5,20 +5,22 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IRemoveShiftCategoryOnBestDateService
     {
-        /// <summary>
-        /// Excecutes this instance.
-        /// </summary>
-        /// <param name="shiftCategory">The shift category.</param>
-        /// <returns></returns>
-        IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory);
+		/// <summary>
+		/// Excecutes this instance.
+		/// </summary>
+		/// <param name="shiftCategory">The shift category.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, ISchedulingOptions schedulingOptions);
 
-        /// <summary>
-        /// Executes the specified shift category.
-        /// </summary>
-        /// <param name="shiftCategory">The shift category.</param>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period);
+		/// <summary>
+		/// Executes the specified shift category.
+		/// </summary>
+		/// <param name="shiftCategory">The shift category.</param>
+		/// <param name="period">The period.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <returns></returns>
+		IScheduleDayPro ExecuteOne(IShiftCategory shiftCategory, DateOnlyPeriod period, ISchedulingOptions schedulingOptions);
 
         /// <summary>
         /// Determines whether this day matches the shiftCategory.
