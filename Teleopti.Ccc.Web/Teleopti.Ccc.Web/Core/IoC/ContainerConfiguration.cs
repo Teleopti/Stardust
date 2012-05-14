@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-			//builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
