@@ -16,7 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private static string GetIdentityName(IPerson loggedOnUser)
 		{
-			return loggedOnUser == null ? string.Empty : loggedOnUser.Name.ToString();
+			if (loggedOnUser == null)
+				return string.Empty;
+			if (loggedOnUser.Id.HasValue)
+				return loggedOnUser.Id.Value.ToString();
+			return loggedOnUser.Name.ToString();
 		}
 	}
 }
