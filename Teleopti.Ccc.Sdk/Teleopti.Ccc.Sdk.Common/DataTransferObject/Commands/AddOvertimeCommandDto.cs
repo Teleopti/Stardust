@@ -43,6 +43,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         /// </summary>
         /// <remarks>This can be matched with the results from <see cref="ITeleoptiOrganizationService.GetOvertimeDefinitions"/>.</remarks>
         [DataMember]
-        public Guid OvertimeDefinitionSetId { get; set; }
+		public Guid OvertimeDefinitionSetId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the scenario id. If omitted default scenario will be used.
+		/// </summary>
+		[DataMember(Order = 1, IsRequired = false)]
+		public Guid? ScenarioId { get; set; }
     }
 }

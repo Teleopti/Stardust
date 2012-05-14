@@ -107,6 +107,33 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
+		public void ShouldAddActivityInTheDictionaryForGivenScenarioSuccessfully()
+		{
+			var scenarioId = Guid.NewGuid();
+			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var schedulePart = _schedulePartFactory.CreatePartWithMainShift();
+			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 
+			using (_mock.Record())
+			{
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
+				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
+				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(schedulePart);
+				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
+				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+			}
+			using (_mock.Playback())
+			{
+				_addAbsenceCommandDto.ScenarioId = scenarioId;
+				_target.Handle(_addAbsenceCommandDto);
+				schedulePart.PersonAssignmentCollection().Count.Should().Be.EqualTo(1);
+			}
+		}
     }
 }

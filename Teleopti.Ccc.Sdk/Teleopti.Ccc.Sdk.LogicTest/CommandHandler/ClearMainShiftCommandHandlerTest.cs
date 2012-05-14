@@ -78,7 +78,33 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _target.Handle(_clearMainShiftDto);
             }
         }
-    }
 
-    
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
+		public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
+		{
+			var scenarioId = Guid.NewGuid();
+			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var schedulePart = _scheduleRange.CreatePart();
+			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_personRepository.Load(_clearMainShiftDto.PersonId)).Return(_person);
+				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).
+					IgnoreArguments().Return(dictionary);
+				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
+				Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
+				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, schedulePart));
+			}
+			using (_mock.Playback())
+			{
+				_clearMainShiftDto.ScenarioId = scenarioId;
+				_target.Handle(_clearMainShiftDto);
+			}
+		}
+    }
 }

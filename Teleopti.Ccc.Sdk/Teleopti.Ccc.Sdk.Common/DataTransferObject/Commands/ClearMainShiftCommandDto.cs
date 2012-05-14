@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         /// </summary>
         /// <value>The target date.</value>
         [DataMember]
-        public DateOnlyDto Date { get; set; }
+		public DateOnlyDto Date { get; set; }
+
+		/// <summary>
+		/// Gets or sets the scenario id. If omitted default scenario will be used.
+		/// </summary>
+		[DataMember(Order = 1, IsRequired = false)]
+		public Guid? ScenarioId { get; set; }
     }
 }
