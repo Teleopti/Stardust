@@ -382,16 +382,35 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		}
 
 		private static TreeNode GetSkillNode(ISkill aSkill)
-		{
-			var skillNode = new TreeNode(aSkill.Name)
-								{
-									Name = aSkill.Id.ToString(),
-									ImageIndex = 6,
-									SelectedImageIndex = 6,
-									Tag = aSkill
-								};
-			return skillNode;
-		}
+        {
+
+            if (aSkill.GetType().Name == "Skill")
+            {
+                var skillNode = new TreeNode(aSkill.Name)
+                {
+                    Name = aSkill.Id.ToString(),
+                    ImageIndex = 6,
+                    SelectedImageIndex = 6,
+                    Tag = aSkill
+                };
+                return skillNode;
+
+            }
+            else
+            {
+                var skillNode = new TreeNode(aSkill.Name)
+                {
+                    Name = aSkill.Id.ToString(),
+                    ImageIndex = 9,
+                    SelectedImageIndex = 9,
+                    Tag = aSkill
+                };
+                return skillNode;
+            }
+
+
+
+        }
 
 		private void fakeNodeClickColor()
 		{
