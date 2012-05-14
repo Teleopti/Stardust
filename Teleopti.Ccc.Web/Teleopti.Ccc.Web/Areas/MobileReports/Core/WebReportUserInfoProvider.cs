@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 	public class WebReportUserInfoProvider : IWebReportUserInfoProvider
 	{
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPersonRepository _personRepository;
 
-		public WebReportUserInfoProvider(IPrincipalProvider principalProvider,
+		public WebReportUserInfoProvider(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 		                                 IPersonRepository personRepository)
 		{
-			_principalProvider = principalProvider;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_personRepository = personRepository;
 		}
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 
 		public WebReportUserInformation GetUserInformation()
 		{
-			var teleoptiPrincipal = _principalProvider.Current();
+			var teleoptiPrincipal = _currentTeleoptiPrincipal.Current();
 			var teleoptiIdentity = teleoptiPrincipal.Identity as ITeleoptiIdentity;
 
 			IPerson person = teleoptiPrincipal.GetPerson(_personRepository);

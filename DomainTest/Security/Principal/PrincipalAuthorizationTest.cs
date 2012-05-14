@@ -244,8 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
                                             new Claim(
                                                 TeleoptiAuthenticationHeaderNames.
                                                     TeleoptiAuthenticationHeaderNamespace + "/" + Function, 
-													applicationFunction
-													,
+													applicationFunction,
                                                 Rights.PossessProperty),
                                             new Claim(
                                                 TeleoptiAuthenticationHeaderNames.
@@ -258,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void ShouldReturnGrantedFunctions()
         {
             organisationMembership.AddFromPerson(person);
-			var result = principalAuthorization.GrantedFunctions(null);
+			var result = principalAuthorization.GrantedFunctions();
             result.Count().Should().Be.EqualTo(1);
         }
 
@@ -273,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-				var result = principalAuthorization.GrantedFunctionsBySpecification(null, specification);
+				var result = principalAuthorization.GrantedFunctionsBySpecification(specification);
                 result.Count().Should().Be.EqualTo(1);
             }
         }

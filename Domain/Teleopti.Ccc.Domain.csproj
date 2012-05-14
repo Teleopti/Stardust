@@ -796,7 +796,6 @@
     <Compile Include="Security\PasswordStrengthRule.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolver.cs" />
     <Compile Include="Security\Matrix\TeamResolver.cs" />
-    <Compile Include="Security\Principal\AuthorizeApplicationFunction.cs" />
     <Compile Include="Security\Principal\AuthorizeEveryone.cs" />
     <Compile Include="Security\Principal\AuthorizeExternalAvailableData.cs" />
     <Compile Include="Security\Principal\AuthorizeMyBusinessUnit.cs" />
@@ -819,7 +818,7 @@
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
-    <Compile Include="Security\Principal\TeleoptiPrincipalCachable.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalCacheable.cs" />
     <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\UserDetail.cs" />

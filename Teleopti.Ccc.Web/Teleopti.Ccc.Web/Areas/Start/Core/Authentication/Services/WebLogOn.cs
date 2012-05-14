@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ILogOnOff _logOnOff;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
-		private readonly IPrincipalProvider _principalProvider;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
 		public WebLogOn(ILogOnOff logOnOff,
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		                IRepositoryFactory repositoryFactory,
 		                ISessionSpecificDataProvider sessionSpecificDataProvider,
 		                IRoleToPrincipalCommand roleToPrincipalCommand,
-		                IPrincipalProvider principalProvider,
+		                ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 		                IPrincipalAuthorization principalAuthorization)
 		{
 			_logOnOff = logOnOff;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_repositoryFactory = repositoryFactory;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
-			_principalProvider = principalProvider;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_principalAuthorization = principalAuthorization;
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
 				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
-				var principal = _principalProvider.Current();
+				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
 				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);

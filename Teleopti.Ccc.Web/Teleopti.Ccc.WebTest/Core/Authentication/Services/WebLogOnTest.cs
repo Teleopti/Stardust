@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			                      repositoryFactory,
 			                      sessionSpecificDataProvider,
 			                      ruleToPrincipalCommand,
-			                      new FakePrincipalProvider(principal),
+			                      new FakeCurrentTeleoptiPrincipal(principal),
 								  principalAuthorization);
 		}
 

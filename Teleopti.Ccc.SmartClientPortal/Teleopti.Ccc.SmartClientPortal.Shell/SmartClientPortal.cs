@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         private void LoadOutLookBar()
         {
             var authorization = PrincipalAuthorization.Instance();
-            IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(null, new ModuleSpecification());
+            IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(new ModuleSpecification());
 
             foreach (IApplicationFunction module in modules.OrderBy(m => m.SortOrder.GetValueOrDefault(1000000)))
             {

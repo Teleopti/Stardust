@@ -108,8 +108,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         				new FunctionsForRoleProvider(
         					new DummyLicensedFunctionsProvider(),
         					new ExternalFunctionsProvider(repositoryFactory)
-        					),
-        				new ClaimWithEntity()
+        					)
         				)
         			);
 			using(var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())

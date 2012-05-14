@@ -59,8 +59,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         				new FunctionsForRoleProvider(
         					new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
         					new ExternalFunctionsProvider(new RepositoryFactory())
-        					),
-        				new ClaimWithEntity()
+        					)
         				)
         			);
 			using(var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())

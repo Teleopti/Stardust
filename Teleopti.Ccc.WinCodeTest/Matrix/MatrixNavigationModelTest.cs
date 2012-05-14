@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             IEnumerable<IApplicationFunction> actualMatrixFunctions;
             using (_mocks.Record())
             {
-                Expect.Call(authorization.GrantedFunctionsBySpecification(null, null)).IgnoreArguments().Return(expectedMatrixFunctions);
+                Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(expectedMatrixFunctions);
             }
             using (_mocks.Playback())
             {
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             IEnumerable<IApplicationFunction> acctualFunctions;
             using (_mocks.Record())
             {
-                Expect.Call(authorization.GrantedFunctionsBySpecification(null, null)).IgnoreArguments().Return(expectedFunctions);
+                Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(expectedFunctions);
             }
             using (_mocks.Playback())
             {
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             IEnumerable<IMatrixFunctionGroup> actualMatrixFunctionGroups;
             using (_mocks.Record())
             {
-                Expect.Call(authorization.GrantedFunctionsBySpecification(null, null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+                Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             IEnumerable<IApplicationFunction> orphanMatrixFunctions;
             using (_mocks.Record())
             {
-                Expect.Call(authorization.GrantedFunctionsBySpecification(null, null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+                Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {

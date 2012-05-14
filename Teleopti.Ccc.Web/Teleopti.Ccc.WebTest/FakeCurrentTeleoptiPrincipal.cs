@@ -3,11 +3,11 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest
 {
-	public class FakePrincipalProvider : IPrincipalProvider
+	public class FakeCurrentTeleoptiPrincipal : ICurrentTeleoptiPrincipal
 	{
 		private readonly ITeleoptiPrincipal _teleoptiPrincipal;
 
-		public FakePrincipalProvider(ITeleoptiPrincipal teleoptiPrincipal)
+		public FakeCurrentTeleoptiPrincipal(ITeleoptiPrincipal teleoptiPrincipal)
 		{
 			_teleoptiPrincipal = teleoptiPrincipal;
 		}

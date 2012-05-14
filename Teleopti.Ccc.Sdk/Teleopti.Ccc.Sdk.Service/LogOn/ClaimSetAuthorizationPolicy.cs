@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                         			new FunctionsForRoleProvider(
                         				new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
                         				new ExternalFunctionsProvider(new RepositoryFactory())
-                        				),
-                        			new ClaimWithEntity()
+                        				)
                         			);
 
                             claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);

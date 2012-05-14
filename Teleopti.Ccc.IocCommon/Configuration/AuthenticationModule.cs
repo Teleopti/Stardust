@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
             builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>().InstancePerDependency();
 			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>().InstancePerDependency();
-			builder.RegisterType<ClaimWithEntity>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
             if (_applicationData!=null)
                 builder.Register(c => _applicationData)

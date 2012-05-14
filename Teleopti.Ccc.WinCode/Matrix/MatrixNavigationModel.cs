@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
 			{
 				return PrincipalAuthorization.Instance()
 					.GrantedFunctionsBySpecification(
-						null,
 						new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
 					);
 			}
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
             	IEnumerable<IApplicationFunction> onlineReportFunctions =
             		PrincipalAuthorization.Instance()
             			.GrantedFunctionsBySpecification(
-            				null,
             				new IsOnlineReportFunctionSpecification()
             			);
 
