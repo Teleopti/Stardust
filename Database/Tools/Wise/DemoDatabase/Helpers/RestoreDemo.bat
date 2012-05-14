@@ -5,7 +5,7 @@ if not "%ProgramFiles(x86)%" == "" set ProgRoot=%ProgramFiles(x86)%
 
 C:
 
-net stop teleoptiRtaService
+net stop "Teleopti Service Bus"
 net stop teleoptiEtlService
 net stop "Teleopti Message Broker"
 
@@ -21,6 +21,8 @@ SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -
 "%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg -E
 "%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E
 
+"%ProgRoot%\Teleopti\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DDTeleoptiCCC7_Demo -EE
+
 net start "Teleopti Message Broker"
 net start teleoptiEtlService
-net start teleoptiRtaService
+net start "Teleopti Service Bus"
