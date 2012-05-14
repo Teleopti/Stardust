@@ -129,23 +129,16 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return permittedPeriods;
         }
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
+		public IEnumerable<IApplicationFunction> GrantedFunctions()
 		{
-			var claimWithIdStrategy = new ClaimWithId(repository);
-			var claimWithEntityStrategy = new ClaimWithEntity();
             var grantedFunctions = new HashSet<IApplicationFunction>();
             foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
             {
                 foreach (var claim in claimSet)
                 {
-                	IApplicationFunctionClaimStrategy strategy = null;
-					if (claimWithIdStrategy.UseMeForClaim(claim))
-						strategy = claimWithIdStrategy;
-					if (claimWithEntityStrategy.UseMeForClaim(claim))
-						strategy = claimWithEntityStrategy;
-					if (strategy == null)
+					var applicationFunction = claim.Resource as IApplicationFunction;
+					if (applicationFunction == null)
 						continue;
-                	var applicationFunction = strategy.GetApplicationFunction(claim);
 					grantedFunctions.Add(applicationFunction);
                 }
             }
@@ -158,9 +151,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         }
 
         //new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
-		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
+		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
         {
-			return GrantedFunctions(repository).FilterBySpecification(specification);
+			return GrantedFunctions().FilterBySpecification(specification);
         }
     }
 

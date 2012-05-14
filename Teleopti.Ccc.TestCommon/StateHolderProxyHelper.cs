@@ -234,15 +234,9 @@ namespace Teleopti.Ccc.TestCommon
             return new []{period};
         }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
-        {
-            throw new NotImplementedException();
-        }
+    	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
-        {
-            throw new NotImplementedException();
-        }
+    	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
 
         public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
         {
@@ -287,15 +281,9 @@ namespace Teleopti.Ccc.TestCommon
             return new List<DateOnlyPeriod>(0);
         }
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions(IApplicationFunctionRepository repository)
-        {
-            throw new NotImplementedException();
-        }
+    	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
 
-        public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(IApplicationFunctionRepository repository, ISpecification<IApplicationFunction> specification)
-        {
-            throw new NotImplementedException();
-        }
+    	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
 
         public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
         {

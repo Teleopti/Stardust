@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             functionsForRoleProvider = mocks.StrictMock<IFunctionsForRoleProvider>();
             unitOfWork = mocks.StrictMock<IUnitOfWork>();
-            target = new RoleToClaimSetTransformer(functionsForRoleProvider, new ClaimWithEntity());
+            target = new RoleToClaimSetTransformer(functionsForRoleProvider);
         }
 
         [Test]
