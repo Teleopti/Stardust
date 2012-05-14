@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
         private readonly ICollection<IPerson> _orgSelectedPersons = new List<IPerson>();
         private readonly IList<IPerson> _persons;
         private IBusinessUnit _businessUnit;
-        private readonly DateTimePeriod _filterPeriod;
+        private readonly DateOnlyPeriod _filterPeriod;
         private IList<IContract> _contractCollection;
         private IList<IContractSchedule> _contractScheduleCollection;
         private IList<IPartTimePercentage> _partTimePercentageCollection;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
             _selectedPersons = selectedPersons;
             CopyPersonsToOrgList(selectedPersons);
             _persons = stateHolder.AllPermittedPersons;
-            _filterPeriod = stateHolder.RequestedPeriod;
+            _filterPeriod = stateHolder.RequestedPeriod.DateOnly;
             _commonNameDescriptionSetting = stateHolder.CommonNameDescription;
             _contractRepository = contractRepository;
             _contractScheduleRepository = contractScheduleRepository;
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
 
             return new DateTimePeriod(utcDateTime, utcDateTime.AddDays(1).AddMilliseconds(-1));
         }
-        public DateTimePeriod FilterPeriod
+        public DateOnlyPeriod FilterPeriod
         {
             get { return _filterPeriod; }
         }
@@ -186,8 +186,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
         {
             get
             {
-                return
-                    _filterPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+                return _filterPeriod;
             }
         }
 

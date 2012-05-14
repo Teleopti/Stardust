@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule(new InitializeModule(new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure")));
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 			registerAuthenticationModule(builder);
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
@@ -86,21 +86,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var mbCacheModule = new MbCacheModule(new AspNetCache(20), new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
+			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
 
-			builder.Register(c =>
-			                 	{
-			                 		var shiftCreatorService = c.Resolve<IShiftCreatorService>();
-			                 		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-									var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(shiftCreatorService);
-			                 		return instance;
-			                 	})
-				.As<IRuleSetProjectionService>()
-				.SingleInstance();
-
-			mbCacheModule.Builder
-				.For<RuleSetProjectionService>()
-				.CacheMethod(m => m.ProjectionCollection(null))
-				.As<IRuleSetProjectionService>();
 
 			builder.Register(c =>
 			                 	{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IMeeting _meeting;
         private MeetingComposerPresenter _target;
         private ISchedulerStateHolder _schedulerStateHolder;
-        private DateTimePeriod _requestedPeriod;
+        private DateOnlyPeriod _requestedPeriod;
         private CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly IList<IContract> _contractList = new List<IContract>();
         private readonly ICollection<IContractSchedule> _contractScheduleColl = new List<IContractSchedule>();
@@ -78,9 +79,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(_requiredPerson) },
                                    new List<ContactPersonViewModel> { new ContactPersonViewModel(_optionalPerson) });
 
-            _requestedPeriod = new DateOnlyPeriod(_meeting.StartDate, _meeting.EndDate.AddDays(2)).ToDateTimePeriod(_meeting.TimeZone);
+            _requestedPeriod = new DateOnlyPeriod(_meeting.StartDate, _meeting.EndDate.AddDays(2));
 
-            Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(_requestedPeriod);
+            Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone));
             _mocks.Replay(_schedulerStateHolder);
             _target = new MeetingComposerPresenterForTest(_view, _model, _schedulerStateHolder, _unitOfWorkFactory, _repositoryFactory);
             _mocks.Verify(_schedulerStateHolder);
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanInitializeWithStateHolder()
         {
-            ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario, _requestedPeriod,
+            ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone),
                                                                                   new List<IPerson>
                                                                                       {
                                                                                           _person,
@@ -236,7 +237,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(activityRepository.LoadAll()).Return(new List<IActivity>());
             Expect.Call(dayOffRepository.LoadAll()).Return(new List<IDayOffTemplate>());
             Expect.Call(shiftCategoryRepository.FindAll()).Return(new List<IShiftCategory>());
-            Expect.Call(personRepository.FindPeopleInOrganization(new DateTimePeriod(), true)).IgnoreArguments().Return(
+            Expect.Call(personRepository.FindPeopleInOrganization(new DateOnlyPeriod(), true)).IgnoreArguments().Return(
                 new List<IPerson>());
             Expect.Call(contractRepMock.FindAllContractByDescription()).Return(_contractList);
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
@@ -529,12 +530,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyOnCloseBehavior()
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
-            ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario, _requestedPeriod,
+            ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone), 
                                                                                   new List<IPerson>
                                                                                       {
                                                                                           _person,

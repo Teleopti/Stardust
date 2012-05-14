@@ -1,0 +1,129 @@
+﻿using System;
+using System.ServiceModel;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
+using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
+{
+	[TestFixture]
+	public class GetSchedulesForAllPeopleQueryHandlerTest
+	{
+		private MockRepository mocks;
+		private IScheduleRepository scheduleRepository;
+		private IUnitOfWorkFactory unitOfWorkFactory;
+		private GetSchedulesForAllPeopleQueryHandler target;
+		private IDateTimePeriodAssembler dateTimePeriodAssembler;
+		private ISchedulePartAssembler scheduleDayAssembler;
+		private IPersonRepository personRepository;
+		private IScenarioRepository scenarioRepository;
+		private Guid scenarioId;
+		private IUnitOfWork unitOfWork;
+
+		[SetUp]
+		public void Setup()
+		{
+			mocks = new MockRepository();
+			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			personRepository = mocks.DynamicMock<IPersonRepository>();
+			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
+			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
+			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
+			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			
+			scenarioId = Guid.NewGuid();
+			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
+
+			target = new GetSchedulesForAllPeopleQueryHandler(unitOfWorkFactory, scheduleRepository, personRepository, scenarioRepository, dateTimePeriodAssembler, scheduleDayAssembler);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetScheduleForAllPeopleInGivenScenario()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var dictionary = mocks.DynamicMock<IScheduleDictionary>();
+			var person1 = PersonFactory.CreatePerson();
+			var scheduleRange = mocks.DynamicMock<IScheduleRange>();
+			using (mocks.Record())
+			{
+				Expect.Call(scenarioRepository.Get(scenarioId)).Return(scenario);
+				Expect.Call(personRepository.FindPeopleInOrganizationLight(new DateOnlyPeriod(2012,5,2,2012,5,2))).Return(new []{person1});
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null,null,new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(dictionary[person1]).Return(scheduleRange);
+			}
+			using (mocks.Playback())
+			{
+				var result =
+					target.Handle(new GetSchedulesForAllPeopleQueryHandlerDto
+					              	{
+					              		StartDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
+					              		EndDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
+					              		ScenarioId = scenarioId,
+					              		TimeZoneId = "W. Europe Standard Time",
+					              		SpecialProjection = "special"
+					              	});
+				result.Count.Should().Be.EqualTo(1);
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetScheduleForAllPeopleUsingInvalidScenarioId()
+		{
+			using (mocks.Record())
+			{
+				Expect.Call(scenarioRepository.Get(scenarioId)).Return(null);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (mocks.Playback())
+			{
+				Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesForAllPeopleQueryHandlerDto
+					{
+						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						ScenarioId = scenarioId,
+						TimeZoneId = "W. Europe Standard Time",
+						SpecialProjection = "special"
+					}));
+			}
+		}
+
+		[Test]
+		public void ShouldGetScheduleForAllPeopleInDefaultScenario()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var dictionary = mocks.DynamicMock<IScheduleDictionary>();
+			var person1 = PersonFactory.CreatePerson();
+			var scheduleRange = mocks.DynamicMock<IScheduleRange>();
+			using (mocks.Record())
+			{
+				Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario);
+				Expect.Call(personRepository.FindPeopleInOrganizationLight(new DateOnlyPeriod(2012, 5, 2, 2012, 5, 2))).Return(new[] { person1 });
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(dictionary[person1]).Return(scheduleRange);
+			}
+			using (mocks.Playback())
+			{
+				var result =
+					target.Handle(new GetSchedulesForAllPeopleQueryHandlerDto
+					{
+						StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						ScenarioId = null,
+						TimeZoneId = "W. Europe Standard Time",
+						SpecialProjection = "special"
+					});
+				result.Count.Should().Be.EqualTo(1);
+			}
+		}
+	}
+}

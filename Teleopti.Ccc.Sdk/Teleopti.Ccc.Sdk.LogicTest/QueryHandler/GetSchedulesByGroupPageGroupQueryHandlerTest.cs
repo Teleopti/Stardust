@@ -1,0 +1,138 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ServiceModel;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
+using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
+{
+	[TestFixture]
+	public class GetSchedulesByGroupPageGroupQueryHandlerTest
+	{
+		private MockRepository mocks;
+		private IScheduleRepository scheduleRepository;
+		private IUnitOfWorkFactory unitOfWorkFactory;
+		private GetSchedulesByGroupPageGroupQueryHandler target;
+		private IDateTimePeriodAssembler dateTimePeriodAssembler;
+		private ISchedulePartAssembler scheduleDayAssembler;
+		private IPersonRepository personRepository;
+		private IScenarioRepository scenarioRepository;
+		private Guid scenarioId;
+		private IUnitOfWork unitOfWork;
+		private IGroupingReadOnlyRepository groupingReadOnlyRepository;
+		private Guid groupPageGroupId;
+
+		[SetUp]
+		public void Setup()
+		{
+			mocks = new MockRepository();
+			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			personRepository = mocks.DynamicMock<IPersonRepository>();
+			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
+			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
+			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
+			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
+			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			
+			scenarioId = Guid.NewGuid();
+			groupPageGroupId = Guid.NewGuid();
+			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
+			
+			target = new GetSchedulesByGroupPageGroupQueryHandler(unitOfWorkFactory,scheduleRepository,personRepository,scenarioRepository,groupingReadOnlyRepository,dateTimePeriodAssembler,scheduleDayAssembler);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetScheduleForTeamInGivenScenario()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var dictionary = mocks.DynamicMock<IScheduleDictionary>();
+			var person1Id = Guid.NewGuid();
+			var person1 = PersonFactory.CreatePerson();
+			var scheduleRange = mocks.DynamicMock<IScheduleRange>();
+			using (mocks.Record())
+			{
+				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, new DateOnly(2012, 5, 2))).Return(
+					new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PersonId = person1Id} });
+				Expect.Call(scenarioRepository.Get(scenarioId)).Return(scenario);
+				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new[] { person1Id })).Return(new[] { person1 });
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null,null,new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(dictionary[person1]).Return(scheduleRange);
+			}
+			using (mocks.Playback())
+			{
+				var result =
+					target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+					              	{
+					              		QueryDate = new DateOnlyDto {DateTime = new DateTime(2012, 5, 2)},
+					              		ScenarioId = scenarioId,
+					              		TimeZoneId = "W. Europe Standard Time",
+					              		GroupPageGroupId = groupPageGroupId
+					              	});
+				result.Count.Should().Be.EqualTo(1);
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetScheduleForTeamUsingInvalidScenarioId()
+		{
+			using (mocks.Record())
+			{
+				Expect.Call(scenarioRepository.Get(scenarioId)).Return(null);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			}
+			using (mocks.Playback())
+			{
+				Assert.Throws<FaultException>(() => target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+					{
+						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						ScenarioId = scenarioId,
+						GroupPageGroupId = groupPageGroupId,
+						TimeZoneId = "W. Europe Standard Time"
+					}));
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetScheduleForTeamInDefaultScenario()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var dictionary = mocks.DynamicMock<IScheduleDictionary>();
+			var person1Id = Guid.NewGuid();
+			var person1 = PersonFactory.CreatePerson();
+			var scheduleRange = mocks.DynamicMock<IScheduleRange>();
+			using (mocks.Record())
+			{
+				Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario);
+				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, new DateOnly(2012, 5, 2))).Return(
+					new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PersonId = person1Id } });
+				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new[] { person1Id })).Return(new[] { person1 });
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(dictionary[person1]).Return(scheduleRange);
+			}
+			using (mocks.Playback())
+			{
+				var result =
+					target.Handle(new GetSchedulesByGroupPageGroupQueryHandlerDto
+					{
+						QueryDate = new DateOnlyDto { DateTime = new DateTime(2012, 5, 2) },
+						ScenarioId = null,
+						GroupPageGroupId = groupPageGroupId,
+						TimeZoneId = "W. Europe Standard Time"
+					});
+				result.Count.Should().Be.EqualTo(1);
+			}
+		}
+	}
+}

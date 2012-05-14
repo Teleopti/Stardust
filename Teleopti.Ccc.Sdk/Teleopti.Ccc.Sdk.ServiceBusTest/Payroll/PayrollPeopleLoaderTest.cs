@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             personNotInExport.SetId(notInExport);
 
             RunPayrollExport message = new RunPayrollExport { ExportPersonIdCollection = new Collection<Guid> {includeInExport}};
-            DateTimePeriod payrollExportPeriod = new DateTimePeriod();
+            var payrollExportPeriod = new DateOnlyPeriod();
 
             using (mocks.Record())
             {

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             _selectedDate = dateOnly;
             _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate);
-            SelectedPeriod = new DateOnlyAsDateTimePeriod(dateOnly, TeleoptiPrincipal.Current.Regional.TimeZone).Period();
+            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly), TeleoptiPrincipal.Current.Regional.TimeZone);
         }
 
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 // Text date header;
                 e.Style.Text = _selectedDate.ToShortDateString();
-                e.Style.Tag = _selectedDate.Date;
+                e.Style.Tag = _selectedDate;
                 e.Style.CellTipText =
                     DateHelper.WeekNumber(_selectedDate.Date, CultureInfo.CurrentCulture)
                         .ToString(CultureInfo.CurrentCulture);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             else if (e.RowIndex == timeLineHeaderIndex)
             {
-                e.Style.Tag = _selectedDate.Date;
+                e.Style.Tag = _selectedDate;
             }
         }
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     //set value to schedule day
                     e.Style.CellValue = daySchedule;
                     //set tag to local current date
-                    e.Style.Tag = _selectedDate.Date;
+                    e.Style.Tag = _selectedDate;
                     //set tip text
                     if (daySchedule.FullAccess)
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);

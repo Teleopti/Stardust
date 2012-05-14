@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
 	public class StatisticsUpdateNotificationJobStep : JobStepBase
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(FactQueueJobStep));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(StatisticsUpdateNotificationJobStep));
 
 		public StatisticsUpdateNotificationJobStep(IJobParameters jobParameters)
 			: base(jobParameters)

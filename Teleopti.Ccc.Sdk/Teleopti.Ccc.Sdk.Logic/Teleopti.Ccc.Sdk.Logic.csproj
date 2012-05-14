@@ -95,12 +95,14 @@
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentPortalSettings.cs" />
     <Compile Include="Assemblers\AbsenceAssembler.cs" />
     <Compile Include="Assemblers\AbsenceRequestAssembler.cs" />
     <Compile Include="Assemblers\ActivityLayerAssembler.cs" />
@@ -110,6 +112,8 @@
     <Compile Include="Assemblers\ContractAssembler.cs" />
     <Compile Include="Assemblers\ContractScheduleAssembler.cs" />
     <Compile Include="Assemblers\ActivityAssembler.cs" />
+    <Compile Include="Assemblers\IDateTimePeriodAssembler.cs" />
+    <Compile Include="Assemblers\ISchedulePartAssembler.cs" />
     <Compile Include="Assemblers\ISdkProjectionServiceFactory.cs" />
     <Compile Include="Assemblers\PayrollResultDetailAssembler.cs" />
     <Compile Include="Assemblers\PayrollResultAssembler.cs" />
@@ -158,10 +162,59 @@
     <Compile Include="Assemblers\StudentAvailabilityAssembler.cs" />
     <Compile Include="Assemblers\TextRequestAssembler.cs" />
     <Compile Include="Assemblers\WorkflowControlSetAssembler.cs" />
+    <Compile Include="CommandHandler\AddAbsenceCommandHandler.cs" />
+    <Compile Include="CommandHandler\AddActivityCommandHandler.cs" />
+    <Compile Include="CommandHandler\AddDayOffCommandHandler.cs" />
+    <Compile Include="CommandHandler\AddOvertimeCommandHandler.cs" />
+    <Compile Include="CommandHandler\ApproveRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\CancelAbsenceCommandHandler.cs" />
+    <Compile Include="CommandHandler\CancelOvertimeCommandHandler.cs" />
+    <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
+    <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
+    <Compile Include="CommandHandler\CreatePayrollExportCommandHandler.cs" />
+    <Compile Include="CommandHandler\DeletePersonAccountForPersonCommandHandler.cs" />
+    <Compile Include="CommandHandler\DenormalizeNotificationCommandHandler.cs" />
+    <Compile Include="CommandHandler\DenormalizeScheduleCommandHandler.cs" />
+    <Compile Include="CommandHandler\DenyRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\EmployPersonCommandHandler.cs" />
+    <Compile Include="CommandHandler\ExportMultisiteSkillToSkillCommandHandler.cs" />
+    <Compile Include="CommandHandler\IHandleCommand.cs" />
+    <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
+    <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
+    <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
+    <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IPayrollResultFactory.cs" />
+    <Compile Include="IPersistPersonRequest.cs" />
+    <Compile Include="IServiceBusSender.cs" />
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetAgentPortalSettingsQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetAllPayrollExportsQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetAllScenariosQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetAvailableGroupPagesQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetCurrentBusinessUnitQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetGroupsForGroupPageAtDateQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPayrollResultStatusByExportIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPayrollResultStatusByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPeopleByGroupPageGroupQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByEmploymentNumberQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesByPersonQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetTeamByDescriptionNameQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetTeamByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandler.cs" />
+    <Compile Include="QueryHandler\IHandleQuery.cs" />
     <Compile Include="Restrictions\IIsEditablePredicate.cs" />
     <Compile Include="Restrictions\IsEditablePredicate.cs" />
     <Compile Include="Restrictions\IsWorkflowControlSetNullSpecification.cs" />
@@ -172,6 +225,7 @@
     <Compile Include="Restrictions\PreferenceNightRestChecker.cs" />
     <Compile Include="Restrictions\RestrictionsValidator.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculator.cs" />
+    <Compile Include="SaveSchedulePartService.cs" />
     <Compile Include="Restrictions\ShiftTradeAvailableCheckItem.cs" />
     <Compile Include="Restrictions\ShiftTradeSkillSpecification.cs" />
   </ItemGroup>
@@ -179,6 +233,10 @@
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\Teleopti.Ccc.PayrollFormatter.csproj">
       <Project>{D3A96039-45CD-42CA-BCEC-1AE495651082}</Project>

@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private GridlockManager _gridlockManager;
         private ClipHandler<IScheduleDay> _clipHandlerSchedulePart;
         private MockRepository _mocks;
-        private readonly DateTime _date = new DateTime(2008, 11, 04, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateOnly _date = new DateOnly(2008, 11, 04);
         private ICccTimeZoneInfo _timeZoneInfo;
-        private DateTimePeriod _period;
+        private DateOnlyPeriod _period;
         private GridControl _grid;
         private IAddLayerViewModel<IAbsence> _dialog;
         private IAbsence _selectedItem;
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks = new MockRepository();
             _gridlockManager = new GridlockManager();
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-            _period = new DateTimePeriod(2009, 2, 2, 2009, 3, 1);
-            _schedulerState = new SchedulerStateHolder(_scenario, _period, new List<IPerson>());
+            _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
+            _schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();
@@ -112,11 +112,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_schedulerState, _target.SchedulerState);
             Assert.AreEqual(_gridlockManager, _target.LockManager);
             Assert.AreEqual(_clipHandlerSchedulePart, _target.ClipHandlerSchedule);
-            Assert.AreEqual(32, _target.ColCount);
+            Assert.AreEqual(33, _target.ColCount);
             Assert.AreEqual(1, _target.RowCount);
             Assert.AreEqual(20, SchedulePresenterBase.ProjectionHeight);
             Assert.AreEqual(SchedulePartFilter.None, _target.SchedulePartFilter);
-            Assert.AreEqual(_period, _target.SelectedPeriod);
+            Assert.AreEqual(_period, _target.SelectedPeriod.DateOnly);
             Assert.AreEqual(4, _target.VisibleWeeks);
             Assert.AreEqual(0, _target.ColWeekMap.Count);
             Assert.AreEqual(0, _target.TimelineHourPositions.Count);
@@ -130,13 +130,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var lastUnsavedSchedulePart = _mocks.StrictMock<IScheduleDay>();
 
-            var period = DateTimeFactory.CreateDateTimePeriod(_date, 1);
+            var period = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
             _target.SelectedPeriod = period;
             _target.VisibleWeeks = 6;
             _target.LastUnsavedSchedulePart = lastUnsavedSchedulePart;
             _target.DefaultScheduleTag = _scheduleTag;
 
-            Assert.AreEqual(7, _target.ColCount);
+            Assert.AreEqual(6, _target.ColCount);
             Assert.AreEqual(1, _target.RowCount);
             Assert.AreEqual(period, _target.SelectedPeriod);
             Assert.AreEqual(6, _target.VisibleWeeks);
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
-            _target.SelectedPeriod = DateTimeFactory.CreateDateTimePeriod(_date, 1);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
             _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
-            Assert.AreEqual(_target.SelectedPeriod.LocalStartDateTime.Date, eventArgs.Style.Tag);
+            Assert.AreEqual(_target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
             Assert.AreEqual(GridMergeCellDirection.ColumnsInRow, eventArgs.Style.MergeCell);
 
             eventArgs = new GridQueryCellInfoEventArgs(1, 1, new GridStyleInfo());
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             eventArgs = new GridQueryCellInfoEventArgs(1, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
-            Assert.AreEqual(_target.SelectedPeriod.LocalStartDateTime.Date, eventArgs.Style.Tag);
+            Assert.AreEqual(_target.SelectedPeriod.DateOnly.StartDate, eventArgs.Style.Tag);
             Assert.AreEqual("test", eventArgs.Style.CellTipText);
             Assert.AreEqual(GridMergeCellDirection.None, eventArgs.Style.MergeCell);
 
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _mocks.ReplayAll();
 
-            _target.SelectedPeriod = DateTimeFactory.CreateDateTimePeriod(_date, 1);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
             if (person1.Id != null) _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -533,7 +533,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.Meetings, _overriddenBusinessRulesHolder,
                 _scheduleDayChangeCallback, NullScheduleTag.Instance);
-            _target.SelectedPeriod = DateTimeFactory.CreateDateTimePeriod(_date, 1);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
 
             eventArgs = new GridQueryCellInfoEventArgs(2, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
-            _target.SelectedPeriod = DateTimeFactory.CreateDateTimePeriod(_date, 1);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
             _schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -893,7 +893,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _day1 = _mocks.StrictMock<IScheduleDay>();
             _day2 = _mocks.StrictMock<IScheduleDay>();
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+            var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date, _date.AddDays(1), _timeZoneInfo);
 
             ExpectCallsDialogOnVerifyAddAbsence(period);
             ExpectCallsViewBaseOnVerifyAddAbsence(period);
@@ -902,7 +902,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(() => _day1.CreateAndAddAbsence(null)).IgnoreArguments();
             Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
             Expect.Call(() => _ass.CheckRestrictions()).Repeat.Times(3);
-            Expect.Call(_day2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
+            Expect.Call(_day2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_date, _timeZoneInfo)).Repeat.AtLeastOnce();
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
             Expect.Call(_day1.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
 
@@ -940,8 +940,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyAddAbsenceMultipleDays()
         {
-            var periodPart1 = new DateTimePeriod(_date, _date.AddDays(1));
-            var periodPart2 = new DateTimePeriod(_date.AddDays(1), _date.AddDays(2));
+            var periodPart1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date, _date.AddDays(1),_timeZoneInfo);
+			var periodPart2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date.AddDays(1), _date.AddDays(2),_timeZoneInfo);
             var periodTotal = new DateTimePeriod(periodPart1.StartDateTime, periodPart2.EndDateTime);
 
             ExpectCallsDialogOnVerifyAddAbsenceMultipleDays(periodTotal);
@@ -955,11 +955,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             // <expect that we call for tags for each days
             IScheduleRange range1 = _mocks.StrictMock<IScheduleRange>();
             Expect.Call(scheduleDictionary[_person]).Return(range1).Repeat.AtLeastOnce();
-            Expect.Call(range1.ScheduledDay(new DateOnly(_date)))
+            Expect.Call(range1.ScheduledDay(_date))
                 .Return(_day1);
-            Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(1))))
+            Expect.Call(range1.ScheduledDay(_date.AddDays(1)))
                 .Return(_day1);
-            Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(2))))
+            Expect.Call(range1.ScheduledDay(_date.AddDays(2)))
                 .Return(_day1);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, periodPart1)).IgnoreArguments().Repeat.AtLeastOnce();
             // >
@@ -1074,8 +1074,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var ass = _mocks.StrictMock<IPersonAssignment>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             _selectedSchedules = new List<IScheduleDay> { schedulePart };
-            var period = new DateTimePeriod(_date.AddHours(3), _date.AddHours(3.5));
-            Expect.Call(schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
+        	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
+            var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
+            Expect.Call(schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date,DateTimeKind.Utc), 0)).Repeat.Any();
             ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
             ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(period);
 
@@ -1114,7 +1115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var selectedItem = _mocks.StrictMock<IAbsence>();
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IAbsence>>();
             var person = PersonFactory.CreatePerson();
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+            var period = _schedulerState.RequestedPeriod.Period();
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
@@ -1309,7 +1310,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var period1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2008, 1, 1));
             period1.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime));
             _person.AddPersonPeriod(period1);
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+            var period = _schedulerState.RequestedPeriod.Period();
 
             ExpectCallsViewBaseOnVerifyAddOvertimeTheNewWay(period);
             ExpectCallsDialogOnVerifyAddOvertimeTheNewWay(period);
@@ -1389,7 +1390,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.VerifyAll();
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyAddOvertimeNewWhenUserCancelsDialog()
         {
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), new CccTimeZoneInfo());
@@ -1397,7 +1398,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
             IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+            var period = _schedulerState.RequestedPeriod.Period();
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             var dialog = _mocks.StrictMock<IAddOvertimeViewModel>();
@@ -1425,7 +1426,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var person = _mocks.StrictMock<IPerson>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
             IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            var period = DateTimeFactory.CreateDateTimePeriod(_date, 0);
+            var period = DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date,DateTimeKind.Utc), 0);
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
@@ -1450,7 +1451,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var selectedItem = _mocks.StrictMock<IActivity>();
             var dialog = _mocks.StrictMock<IAddLayerViewModel<IActivity>>();
             var person = _mocks.StrictMock<IPerson>();
-            var period = new DateTimePeriod(_date, _date.AddDays(1));
+        	var period = _schedulerState.RequestedPeriod.Period();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.AssignmentHighZOrder()).Return(null);
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
@@ -1484,7 +1485,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var dialog = _mocks.StrictMock<IAddActivityViewModel>();
             var person = _mocks.StrictMock<IPerson>();
-            var defaultPeriod = new DateTimePeriod(_date.AddHours(8), _date.AddHours(17));
+        	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
+            var defaultPeriod = new DateTimePeriod(startDateTime.AddHours(8), startDateTime.AddHours(17));
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
             using (_mocks.Record())
@@ -1536,7 +1538,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var person = _mocks.StrictMock<IPerson>();
             var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
-            var period = new DateTimePeriod(_date.AddHours(3), _date.AddHours(3.5));
+        	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
+            var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
 
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
@@ -1595,7 +1598,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void MergeHeaders()
         {
             _target.MergeHeaders();
-            Assert.AreEqual(27, _target.ColWeekMap.Count);
+            Assert.AreEqual(28, _target.ColWeekMap.Count);
         }
 
         [Test]

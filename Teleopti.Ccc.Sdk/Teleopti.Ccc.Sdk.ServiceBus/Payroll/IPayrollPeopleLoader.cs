@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
     public interface IPayrollPeopleLoader
     {
         IPerson GetOwningPerson(RunPayrollExport message, IUnitOfWork unitOfWork);
-        IEnumerable<IPerson> GetPeopleForExport(RunPayrollExport message, DateTimePeriod payrollExportPeriod, IUnitOfWork unitOfWork);
+        IEnumerable<IPerson> GetPeopleForExport(RunPayrollExport message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork);
     }
 }

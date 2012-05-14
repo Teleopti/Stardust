@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _targetScenario = _mocks.StrictMock<IScenario>();
             _selectedSkill = _mocks.StrictMock<ISkill>();
-            _targetStateHolder = new SchedulerStateHolder(_targetScenario, _targetPeriod.ToDateTimePeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
+			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
         	_lazyManager = _mocks.DynamicMock<ILazyLoadingManager>();
         }
 

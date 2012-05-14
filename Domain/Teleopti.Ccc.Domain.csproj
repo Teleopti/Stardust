@@ -218,12 +218,17 @@
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
+    <Compile Include="Optimization\AdvancedPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleaner.cs" />
+    <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
+    <Compile Include="Optimization\PersonalSettings.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
@@ -701,6 +706,7 @@
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatLimitationWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\ShiftCreator\EndTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
@@ -1567,9 +1573,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\MasterActivity.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollResultDetail.hbm.xml" />

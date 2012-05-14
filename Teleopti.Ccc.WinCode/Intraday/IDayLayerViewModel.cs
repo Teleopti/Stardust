@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Intraday
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         void OnScheduleModified(object sender, ModifyEventArgs e);
 
         ICollection<DayLayerModel> Models { get; }
-        void CreateModels(IEnumerable<IPerson> people, DateTimePeriod period);
+        void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period);
     }
 }

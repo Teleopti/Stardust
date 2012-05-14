@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         public IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IList<IAbsence> bindingList, ISetupDateTimePeriod period)
         {
             var model = new AddAbsenceViewModel(bindingList, period, WorkingInterval);
-            model.PeriodViewModel.Min = Presenter.SelectedPeriod.StartDateTime;
-            model.PeriodViewModel.Max = Presenter.SelectedPeriod.EndDateTime.AddDays(2);
+            model.PeriodViewModel.Min = Presenter.SelectedPeriod.Period().StartDateTime;
+            model.PeriodViewModel.Max = Presenter.SelectedPeriod.Period().EndDateTime.AddDays(2);
             AddDialogComposer<AddAbsenceViewModel> composer = new AddDialogComposer<AddAbsenceViewModel>(model);
             return composer.Result();
         }
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void SetBoundary<T>(AddLayerViewModel<T> model) where T : class
         {
-            model.PeriodViewModel.Min = Presenter.SelectedPeriod.StartDateTime;
-            model.PeriodViewModel.Max = Presenter.SelectedPeriod.EndDateTime;
+            model.PeriodViewModel.Min = Presenter.SelectedPeriod.Period().StartDateTime;
+            model.PeriodViewModel.Max = Presenter.SelectedPeriod.Period().EndDateTime;
         }
     }
 }

@@ -48,20 +48,13 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 _skills.Add(skill);
             }
-            using (var unitOfWork = _uowFactory.CreateAndOpenUnitOfWork())
+            using (_uowFactory.CreateAndOpenUnitOfWork())
             {
-                _decider.Execute(_schedulerStateHolder.RequestedScenario, _schedulerStateHolder.RequestedPeriod,
-                                 _meetingViewModel.Meeting.MeetingPersons.Select(p => p.Person).ToList());
+            	_decider.Execute(_schedulerStateHolder.RequestedScenario, _schedulerStateHolder.RequestedPeriod.Period(),
+            	                 _meetingViewModel.Meeting.MeetingPersons.Select(p => p.Person).ToList());
 
-                _decider.FilterSkills(_skills);
-                //var virtualSkills = _virtualSkillHelper.LoadVirtualSkills(_skills).OrderBy(s => s.Name).ToList();
-
+            	_decider.FilterSkills(_skills);
             }
-            // skip the virtual skills for now for simplicity
-            //foreach (var virtualSkill in virtualSkills)
-            //{
-            //    _meetingImpactView.AddSkillTab(virtualSkill.Name, virtualSkill.Description, 4, virtualSkill);
-            //}
 
             _meetingImpactView.ClearTabPages();
             foreach (var skill in _skills.OrderBy(s => s.Name))

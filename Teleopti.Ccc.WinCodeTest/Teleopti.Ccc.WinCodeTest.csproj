@@ -498,6 +498,10 @@
     <Compile Include="Scheduler\AddOvertimeViewModelTest.cs" />
     <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayDataExtractorTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryScheduleDayCreatorTest.cs" />

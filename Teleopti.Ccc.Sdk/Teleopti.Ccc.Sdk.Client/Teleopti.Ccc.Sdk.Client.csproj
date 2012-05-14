@@ -242,6 +242,9 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Web References\SdkServiceReference\ScenarioDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\SdkServiceReference\SchedulePartDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -264,6 +267,7 @@
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService0.wsdl" />
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -280,6 +284,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService14.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService2.xsd">

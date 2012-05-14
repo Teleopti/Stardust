@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Web;
 using System.Web.Configuration;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
+using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 {
@@ -12,11 +13,10 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 	{
 		public static bool DoCurrentUserHavePmPermission(string currentuser)
 		{
-			var forceFormsLogOn = (bool)HttpContext.Current.Session["FORCEFORMSLOGIN"];
 			IList<SqlParameter> parameters = new List<SqlParameter>
 												 {
 													 new SqlParameter("user_name", currentuser),
-													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication(forceFormsLogOn))
+													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication())
 												 };
 
 			return
@@ -46,15 +46,15 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			get
 			{
-				var userName = (string)HttpContext.Current.Session["USERNAME"];
+				var userName = StateHolder.UserName;
 				return HttpContext.Current.User.Identity.Name == userName ? HttpContext.Current.User.Identity.Name : userName;
 			}
 		}
 
-		public static bool CheckWindowsAuthentication(bool forceFormsLogOn)
+		public static bool CheckWindowsAuthentication()
 		{
 			if (GetWebAuthenticationMode() == AuthenticationMode.Windows)
-				return !forceFormsLogOn;
+				return !StateHolder.DoForceFormsLogOn;
 
 			return false;
 		}

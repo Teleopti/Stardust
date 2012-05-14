@@ -7,6 +7,7 @@ using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory

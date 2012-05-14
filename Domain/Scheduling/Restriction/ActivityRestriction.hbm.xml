@@ -6,6 +6,7 @@
   <typedef name="PosTimeSpanType" class="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.PositiveTimeSpanOrNullMappingType, Teleopti.Ccc.Infrastructure"/>
   <class name="ActivityRestriction">
     <id name="Id"
+		  access="nosetter.camelcase-underscore"
             type="guid"
             unsaved-value="null">
       <generator class="foreign">

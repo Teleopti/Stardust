@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
             _mocks.ReplayAll();
-            _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateTimePeriod(), new List<IPerson>(), _resultHolder);
+            _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>(), _resultHolder);
 			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory);
             _mocks.BackToRecordAll();
 		}

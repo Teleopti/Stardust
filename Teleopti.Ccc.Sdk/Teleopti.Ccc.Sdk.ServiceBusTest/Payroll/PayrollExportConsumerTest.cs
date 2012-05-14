@@ -17,7 +17,6 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 {
-    //Oki, here we go... dunnhava clue, anyway....
     [TestFixture]
     public class PayrollExportConsumerTest
     {
@@ -80,8 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             using (mock.Record())
             {
                 prepareUnitOfWork(1, false);
-                Expect.Call(payrollPeopleLoader.GetOwningPerson(exportMessage,unitOfWork)).Return(exportingPerson);
-                Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateTimePeriod(), unitOfWork)).Return(persons).IgnoreArguments();
+                Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(persons).IgnoreArguments();
                 Expect.Call(repositoryFactory.CreatePayrollExportRepository(unitOfWork)).Return(payrollExportRepository);
                 Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
                 Expect.Call(personBusAssembler.CreatePersonDto(persons)).Return(personDtos);
@@ -123,8 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             using (mock.Record())
             {
                 prepareUnitOfWork(1, false);
-                Expect.Call(payrollPeopleLoader.GetOwningPerson(exportMessage, unitOfWork)).Return(exportingPerson);
-                Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateTimePeriod(), unitOfWork)).Return(new List<IPerson>()).IgnoreArguments();
+                Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(new List<IPerson>()).IgnoreArguments();
                 Expect.Call(repositoryFactory.CreatePayrollExportRepository(unitOfWork)).Return(payrollExportRepository);
                 Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
                 Expect.Call(personBusAssembler.CreatePersonDto(new List<IPerson>())).Return(new List<PersonDto>());

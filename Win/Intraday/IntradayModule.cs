@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
                 var stateHolder = inner.Resolve<ISchedulerStateHolder>();
                 stateHolder.SetRequestedScenario(intradayMainModel.Scenario);
-                stateHolder.RequestedPeriod = intradayMainModel.PeriodAsDateTimePeriod();
+                stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(intradayMainModel.Period,TeleoptiPrincipal.Current.Regional.TimeZone);
             
                 var budgetMain = inner.Resolve<IIntradayView>();
                 var form = (Form)budgetMain;

@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             ICollection<ITeam> ret = new HashSet<ITeam>();
             DateOnlyPeriod dateOnlyPeriod =
-                _selectedEntitiesForPeriod.SelectedPeriod.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone);
+                _selectedEntitiesForPeriod.SelectedPeriod;
             IList<IPersonPeriod> periods = person.PersonPeriods(dateOnlyPeriod);
             foreach (var personPeriod in periods)
             {
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Common
     public interface ISelectedEntitiesForPeriod
     {
         IEnumerable<IEntity> SelectedEntities { get; }
-        DateTimePeriod SelectedPeriod { get; }
+        DateOnlyPeriod SelectedPeriod { get; }
     }
 
     public class IntradaySelectedEntitiesForPeriod : ISelectedEntitiesForPeriod
@@ -116,18 +116,18 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _model.EntityCollection; }
         }
 
-        public DateTimePeriod SelectedPeriod
+        public DateOnlyPeriod SelectedPeriod
         {
-            get { return _model.PeriodAsDateTimePeriod(); }
+            get { return _model.Period; }
         }
     }
 
     public class SelectedEntitiesForPeriod : ISelectedEntitiesForPeriod
     {
         private readonly IEnumerable<IEntity> _selectedEntities;
-        private readonly DateTimePeriod _period;
+        private readonly DateOnlyPeriod _period;
 
-        public SelectedEntitiesForPeriod(IEnumerable<IEntity> selectedEntities, DateTimePeriod period)
+        public SelectedEntitiesForPeriod(IEnumerable<IEntity> selectedEntities, DateOnlyPeriod period)
         {
             _selectedEntities = selectedEntities;
             _period = period;
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _selectedEntities; }
         }
 
-        public DateTimePeriod SelectedPeriod
+        public DateOnlyPeriod SelectedPeriod
         {
             get { return _period; }
         }

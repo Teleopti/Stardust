@@ -10,29 +10,25 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 	{
 		private readonly DateTime _selectedDate;
 		private readonly GroupDetailModel _selectedTeam;
-		private readonly GroupPageDto _selectedPage;
 
-		public BasicSelection(DateTime selectedDate, GroupDetailModel selectedTeam, GroupPageDto selectedPage)
+		public BasicSelection(DateTime selectedDate, GroupDetailModel selectedTeam)
 		{
 			_selectedDate = selectedDate;
 			_selectedTeam = selectedTeam;
-			_selectedPage = selectedPage;
 		}
 
 		public IEnumerable<PersonDto> SelectedPeople { get; private set; }
 
-		public ICollection<TeamDto> SelectedTeams { get; private set; }
+		public ICollection<GroupForPeople> SelectedTeams { get; private set; }
 
 		public void Initialize(bool filterEnabled)
 		{
-			var teamDtos = new List<TeamDto>();
+			var teamDtos = new List<GroupForPeople>();
 			var persons = new List<PersonDto>();
 
-			if (_selectedPage.Id.ToUpperInvariant() == ScheduleTeamView.PageMain)
-			{
-				teamDtos.Add(new TeamDto { Id = _selectedTeam.Id });
-			}
-            if(!filterEnabled)
+				teamDtos.Add(new GroupForPeople { GroupId = _selectedTeam.Id });
+			
+			if(!filterEnabled)
 			persons.AddRange(SdkServiceHelper.OrganizationService.GetPersonsByQuery(new GetPeopleByGroupPageGroupQueryDto
 			                                                                        	{
 			                                                                        		GroupPageGroupId = _selectedTeam.Id,
@@ -54,5 +50,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			SelectedPeople = persons;
 			SelectedTeams = teamDtos;
 		}
+	}
+
+	internal class GroupForPeople
+	{
+		public string GroupId { get; set; }
 	}
 }

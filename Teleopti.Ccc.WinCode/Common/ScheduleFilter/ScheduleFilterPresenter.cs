@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -44,9 +43,9 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
             get { return _model.BusinessUnit; }
         }
 
-        public DateTime CurrentFilterDate
+        public DateOnly CurrentFilterDate
         {
-            get { return _model.FilterDateUtc; }
+            get { return _model.FilterDate; }
         }
 
         public void InitializeTabPages()
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.WinCode.Common.ScheduleFilter
         public void InitializeMainView()
         {
             CccTreeNode rootNode = new CccTreeNode(Resources.BusinessUnitHierarchy, null, false, 0);
-            DateTimePeriod hierarchyPeriod = _model.FilterPeriod;
+            var hierarchyPeriod = _model.FilterPeriod;
             _model.SelectedPersonDictionary.Clear();
 
             foreach (ISite site in _model.BusinessUnit.SortedSiteCollection)

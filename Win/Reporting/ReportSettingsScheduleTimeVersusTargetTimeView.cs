@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -80,8 +81,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		void ReportAgentSelector1BeforeDialog(object sender, EventArgs e)
 		{
 			_schedulerStateHolder.RequestedPeriod =
-				reportDateFromToSelector1.GetSelectedDates[0].ToDateTimePeriod(
-					TeleoptiPrincipal.Current.Regional.TimeZone);
+				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 
 		private SchedulerStateHolder CreateStateHolder()
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			{
 				var rep = new PersonRepository(UnitOfWorkFactory.Current);
 
-				var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Now.AddYears(-1), DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Now.AddYears(1), DateTimeKind.Utc));
+				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Reporting
 				new PartTimePercentageRepository(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
-				return new SchedulerStateHolder(Scenario, period, persons);
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period,TeleoptiPrincipal.Current.Regional.TimeZone), persons);
 			}
 		}
 

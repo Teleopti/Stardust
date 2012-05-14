@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
@@ -78,7 +79,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             using (DataTable dataTable = new DataTable())
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-                TransformerInfrastructure.ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
+                ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
                 _target.Transform(_schedules, dataTable);
                 Assert.AreEqual(_schedules.Count, dataTable.Rows.Count);
             }
@@ -91,7 +92,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             using (DataTable dataTable = new DataTable())
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-                TransformerInfrastructure.ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
+                ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
                 dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable, IntervalsPerDay);
             }
 
@@ -114,7 +115,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             using (DataTable dataTable = new DataTable())
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-                TransformerInfrastructure.ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
+                ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
                 ScheduleDayOffCountTransformer target = new ScheduleDayOffCountTransformer(IntervalsPerDay);
                 target.Transform(_schedules2, dataTable);
                 Assert.AreEqual(0, dataTable.Rows.Count);    
@@ -143,7 +144,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 				using (DataTable dataTable = new DataTable())
 				{
 					dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-					TransformerInfrastructure.ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
+					ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
 					dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable, IntervalsPerDay);
 				}
 			}
@@ -174,7 +175,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             using (var dataTable = new DataTable())
             {
                 dataTable.Locale = _cultureInfo;
-                TransformerInfrastructure.ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
+                ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
                 var row = ScheduleDayOffCountTransformer.CreateDataRow(null, dataTable, IntervalsPerDay);
                 Assert.That(row,Is.Not.Null);
                 Assert.That(row["date"].ToString(),Is.EqualTo(""));

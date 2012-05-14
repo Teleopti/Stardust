@@ -12,14 +12,23 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
     public class ScheduleHelper : IScheduleHelper
     {
-        public static IList<ICustomScheduleAppointment> LoadSchedules(PersonDto person, DateTimePeriodDto period)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static IList<ICustomScheduleAppointment> LoadSchedules(PersonDto person, DateTimePeriodDto period)
         {
             var startDate = new DateOnlyDto {DateTime = period.LocalStartDateTime, DateTimeSpecified = true};
 
             var endDate = new DateOnlyDto {DateTime = period.LocalEndDateTime, DateTimeSpecified = true};
 
+        	var query = new GetSchedulesByPersonQueryHandlerDto
+        	            	{
+        	            		StartDate = startDate,
+        	            		EndDate = endDate,
+        	            		TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId,
+        	            		PersonId = person.Id
+        	            	};
+
             //Fill with Assignments
-            IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetScheduleParts(person, startDate, endDate, StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
+            IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
 
             AgentScheduleStateHolder.Instance().FillAgentSchedulePartDictionary(schedulePartDtos);
             return ScheduleAppointmentFactory.Create(schedulePartDtos);

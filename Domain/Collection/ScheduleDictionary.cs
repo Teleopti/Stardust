@@ -690,8 +690,13 @@ namespace Teleopti.Ccc.Domain.Collection
         }
     }
 
-    public class ReadOnlyScheduleDictionary : ScheduleDictionary
-    {
+	public interface IReadOnlyScheduleDictionary : IScheduleDictionary
+	{
+		void MakeEditable();
+	}
+
+	public class ReadOnlyScheduleDictionary : ScheduleDictionary, IReadOnlyScheduleDictionary
+	{
         private bool _editable;
 
         public void MakeEditable()

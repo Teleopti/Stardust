@@ -2,6 +2,7 @@ using System;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     {
         private MockRepository _mocks;
 
-        private readonly DateTimePeriod _requestedPeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 10, 20, 0, 0, 0, DateTimeKind.Utc), 1);
+        private readonly DateOnlyPeriod _requestedPeriod = new DateOnlyPeriod(2008, 10, 20, 2008,10,20);
         private IList<IPerson> _permittedPeople;
         private IScenario _scenario;
         private ISchedulerStateHolder _schedulerState;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _permittedPeople = new List<IPerson> { _mocks.StrictMock<IPerson>() };
             _scenario = _mocks.StrictMock<IScenario>();
 
-            _schedulerState = new SchedulerStateHolder(_scenario, _requestedPeriod, _permittedPeople);
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
 
             target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
         }
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 
             Expect.Call(_repositoryFactory.CreateSkillRepository(_uow)).Return(skillRepository).Repeat.Once();
-            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()))).Return(new List<ISkill>()).Repeat.Once();
+            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill>()).Repeat.Once();
             
             _mocks.ReplayAll();
 
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 .Return(skillRepository)
                 .Repeat.Once();
 
-            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo())))
+            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod))
                 .Return(new List<ISkill> { skill })
                 .Repeat.Once();
 

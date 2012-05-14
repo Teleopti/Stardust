@@ -120,5 +120,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             return _presenter.IsCanceled;
         }
+
+		/// <summary>
+		/// bugfix for 19200: System crashed when closing the "Optimize Activity" dialog.
+		/// Focus from fromToTimePicker1 must be taken away
+		/// </summary>
+		private void OptimizeActivities_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+		{
+			twoListSelectorActivities.Select();
+		}
     }
 }

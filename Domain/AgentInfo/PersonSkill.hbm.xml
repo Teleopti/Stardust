@@ -8,6 +8,7 @@
   <class name="PersonSkill">
     <id name="Id"
         type="guid"
+		  				access="nosetter.camelcase-underscore"
         unsaved-value="null">
       <generator class="guid.comb" />
     </id>

@@ -1187,10 +1187,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             //Set person skill view data
             foreach (var personPeriod in personPeriods)
             {
+				
             	foreach (var skillModel in _personSkillAdapterCollection)
             	{
 					var model = skillModel;
-					IList<IPersonSkill> personSkills = personPeriod.PersonSkillCollection.Where(s => s.Skill.Equals(model.ContainedEntity.Skill)).ToList();
+            		IList<IPersonSkill> personSkills;
+					personSkills = personPeriod == null ? new List<IPersonSkill>() : personPeriod.PersonSkillCollection.Where(s => s.Skill.Equals(model.ContainedEntity.Skill)).ToList();
 
             		if (personSkills.Count <= 0)
             		{

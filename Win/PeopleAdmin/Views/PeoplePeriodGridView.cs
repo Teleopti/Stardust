@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			// ReCall Person periods
 			FilteredPeopleHolder.GetParentPersonPeriods();
+			updateGrids();
 			Grid.Invalidate();
 		}
 
@@ -205,10 +206,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		internal override void SelectionChanged(GridSelectionChangedEventArgs e, bool eventCancel)
 		{
+			updateGrids();
+		}
+
+		private void updateGrids()
+		{
 			var rangeLength = Grid.Model.SelectedRanges.Count;
 			if (rangeLength == 0)
 			{
-				eventCancel = true;
 				return;
 			}
 
@@ -286,7 +291,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			FilteredPeopleHolder.SetPersonExternalLogOnByPersonPeriod(new ReadOnlyCollection<IPersonPeriod>
 																		  (list),
 																	  new ReadOnlyCollection
-																		  <IPersonPeriodModel>(gridDataList));
+																		  <IPersonPeriodModel>(gridDataList));	
 		}
 
 		private void AddChildPersonPeriodList(IList<IPersonPeriod> list, IList<IPersonPeriodModel> gridDataList, int index)

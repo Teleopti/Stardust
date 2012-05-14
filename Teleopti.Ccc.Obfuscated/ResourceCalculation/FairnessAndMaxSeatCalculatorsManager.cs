@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     public class FairnessAndMaxSeatCalculatorsManager : IFairnessAndMaxSeatCalculatorsManager
     {
         private readonly ISchedulingResultStateHolder _resultStateHolder;
-        private readonly IAverageShiftLengthValueCalculator _averageShiftLengthValueCalculator;
         private readonly IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
         private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
         private readonly IFairnessValueCalculator _fairnessValueCalculator;
@@ -26,7 +23,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly ISchedulingOptions _options;
 
         public FairnessAndMaxSeatCalculatorsManager(ISchedulingResultStateHolder resultStateHolder,
-                                    IAverageShiftLengthValueCalculator averageShiftLengthValueCalculator,
                                     IShiftCategoryFairnessManager shiftCategoryFairnessManager,
                                     IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
                                     IFairnessValueCalculator fairnessValueCalculator,
@@ -34,7 +30,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                     ISchedulingOptions options)
         {
             _resultStateHolder = resultStateHolder;
-            _averageShiftLengthValueCalculator = averageShiftLengthValueCalculator;
             _shiftCategoryFairnessManager = shiftCategoryFairnessManager;
             _categoryFairnessShiftValueCalculator = categoryFairnessShiftValueCalculator;
             _fairnessValueCalculator = fairnessValueCalculator;
@@ -96,20 +91,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
                     shiftValue += seatVal.Value;
                 }
-
-				var temp = PrincipalAuthorization.Instance().IsPermitted(
-					DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-				if(!temp)
-				{
-					if (_options.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff &&
-						_options.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
-					{
-						shiftValue = _averageShiftLengthValueCalculator.CalculateShiftValue(shiftValue,
-																						   shiftProjection.MainShiftProjection.ContractTime(),
-																						   averageWorkTimePerDay);
-					}
-				}
-				
 
                 if (shiftValue > highestShiftValue)
                 {

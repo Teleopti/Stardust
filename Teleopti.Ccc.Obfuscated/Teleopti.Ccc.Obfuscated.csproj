@@ -104,7 +104,6 @@
     <Compile Include="Forecasting\VolumeTrend.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceCalculation\AverageShiftLengthValueCalculator.cs" />
     <Compile Include="ResourceCalculation\DayOffScheduler.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />

@@ -10,7 +10,22 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class PersonAssembler : Assembler<IPerson,PersonDto>
+    public interface IPersonAssembler : IAssembler<IPerson, PersonDto>
+    {
+        bool IgnorePersonPeriods { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether person information should be updated or new persons created when running Dto => Do assembling.
+        /// </summary>
+        /// <value><c>true</c> if [enable save or update]; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Created by: robink
+        /// Created date: 8/24/2010
+        /// </remarks>
+        bool EnableSaveOrUpdate { get; set; }
+    }
+
+    public class PersonAssembler : Assembler<IPerson,PersonDto>, IPersonAssembler
     {
         private readonly IAssembler<IWorkflowControlSet,WorkflowControlSetDto> _workflowControlSetAssembler;
         public IPersonRepository PersonRepository { get; private set; }

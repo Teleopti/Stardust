@@ -402,6 +402,7 @@
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
+    <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
@@ -511,6 +512,10 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayDataExtractor.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
+    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />

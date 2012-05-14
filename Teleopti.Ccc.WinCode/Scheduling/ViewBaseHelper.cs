@@ -340,21 +340,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Created by: ZoeT
         /// Created date: 2007-12-05
         /// </remarks>
-        public static Dictionary<int, DateTime> AddWeekDates(DateTimePeriod selectedPeriod)
+        public static Dictionary<int, DateOnly> AddWeekDates(DateOnlyPeriod selectedPeriod)
         {
-            Dictionary<int, DateTime> firstDateOfWeek = new Dictionary<int, DateTime>();
-            int i = 0;
-            DateTime periodLocalStartDateTime = selectedPeriod.LocalStartDateTime;
-            DateTime periodLocalEndCriteria = selectedPeriod.LocalEndDateTime;
-            while (periodLocalStartDateTime.AddDays(i) < periodLocalEndCriteria)
+            Dictionary<int, DateOnly> firstDateOfWeek = new Dictionary<int, DateOnly>();
+            
+            foreach (var day in selectedPeriod.DayCollection())
             {
-                var weekDate = periodLocalStartDateTime.AddDays(i);
-                var weekNumber = DateHelper.WeekNumber(weekDate, CultureInfo.CurrentCulture);
+                var weekNumber = DateHelper.WeekNumber(day, CultureInfo.CurrentCulture);
                 if (!firstDateOfWeek.ContainsKey(weekNumber))
                 {
-                    firstDateOfWeek.Add(weekNumber, weekDate);
+                    firstDateOfWeek.Add(weekNumber, day);
                 }
-                i = i + 1;
             }
             return firstDateOfWeek;
         }
@@ -369,13 +365,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Created by: zoet
         /// Created date: 2007-12-05
         /// </remarks>
-        public static DateTimePeriod WeekHeaderDates(int week, DateTimePeriod selectedPeriod)
+        public static DateOnlyPeriod WeekHeaderDates(int week, DateOnlyPeriod selectedPeriod)
         {
             bool gotWeek = false;
-            DateTime? start = null;
-            DateTime? end = null;
-            IDictionary<int, DateTime> weekDateDictionary = AddWeekDates(selectedPeriod);
-            foreach (KeyValuePair<int, DateTime> weekDate in weekDateDictionary)
+            DateOnly? start = null;
+            DateOnly? end = null;
+            IDictionary<int, DateOnly> weekDateDictionary = AddWeekDates(selectedPeriod);
+            foreach (KeyValuePair<int, DateOnly> weekDate in weekDateDictionary)
             {
                 if (weekDate.Key == week && gotWeek == false)
                 {
@@ -390,10 +386,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
             }
 
-            if (!end.HasValue) end = selectedPeriod.LocalEndDateTime;
-            //if (!start.HasValue) start = selectedPeriod.LocalStartDateTime;
-
-            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start.Value, end.Value);
+            if (!end.HasValue) end = selectedPeriod.EndDate;
+            
+            return new DateOnlyPeriod(start.Value,end.Value);
 
         }
 

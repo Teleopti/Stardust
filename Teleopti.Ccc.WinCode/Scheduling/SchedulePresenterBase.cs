@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </summary>
         int VisibleWeeks { get; set; }
 
-        DateTimePeriod SelectedPeriod { get; set; }
+        IDateOnlyPeriodAsDateTimePeriod SelectedPeriod { get; set; }
         IScheduleDay LastUnsavedSchedulePart { get; set; }
         IGridlockManager LockManager { get; }
         ClipHandler<IScheduleDay> ClipHandlerSchedule { get; }
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                TimeSpan timeSpan = SelectedPeriod.ElapsedTime();
+                TimeSpan timeSpan = SelectedPeriod.Period().ElapsedTime();
                 return (int)(Math.Round(timeSpan.TotalDays));
             }
         }
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             set { _visibleWeeks = value; }
         }
 
-        public virtual DateTimePeriod SelectedPeriod { get; set; }
+        public virtual IDateOnlyPeriodAsDateTimePeriod SelectedPeriod { get; set; }
 
         public IScheduleDay LastUnsavedSchedulePart { get; set; }
 
@@ -439,9 +439,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (_schedulerState.FilteredPersonDictionary.Count > 0)
                 {
                     IPerson agent = _schedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
-                    DateTime utcDate = _schedulerState.RequestedPeriod.StartDateTime;
 
-                    var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDate, _schedulerState.TimeZoneInfo));
+					var localDate = _schedulerState.RequestedPeriod.DateOnly.StartDate;
                     localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
                     IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
@@ -462,7 +461,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     //set value to schedule day
                     e.Style.CellValue = daySchedule;
                     //set tag to local current date
-                    e.Style.Tag = localDate.Date;
+                    e.Style.Tag = localDate;
                     //set tip text
                     if (daySchedule.FullAccess)
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
@@ -519,12 +518,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (e.RowIndex == 1 && columnType >= ColumnType.StartScheduleColumns)
             {
                 //text date header
-                DateTime localDate = SelectedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
+                DateTime localDate = SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
                 e.Style.Text = CultureInfo.CurrentCulture.Calendar.
                     GetDayOfMonth(localDate).ToString(CultureInfo.CurrentCulture);
 
-                e.Style.Tag = localDate;
+                e.Style.Tag = new DateOnly(localDate);
                 e.Style.CellTipText = View.DayHeaderTooltipText(e.Style, localDate);
 
                 View.SetCellBackTextAndBackColor(e, localDate, false, true, null);
@@ -541,7 +540,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public virtual void MergeHeaders()
         {
             const int col = (int)ColumnType.StartScheduleColumns;
-            DateTime startDate = SelectedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date;
+            DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date;
             for (int i = 0; i < Days; i++)
             {
                 ColWeekMap.Add(col + i, DateHelper.WeekNumber(startDate.AddDays(i), CultureInfo.CurrentCulture));
@@ -605,7 +604,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Create week top header
         /// </summary>
         /// <param name="e"></param>
-        internal void CreateWeekHeader(GridQueryCellInfoEventArgs e)
+		internal void CreateWeekHeader(GridQueryCellInfoEventArgs e)
         {
             if (e.RowIndex == 0)
             {
@@ -616,10 +615,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (ColWeekMap.TryGetValue(e.ColIndex, out week))
                     {
                         e.Style.WrapText = false;
-                        DateTimePeriod period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod);
-                        e.Style.Tag = SelectedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns).Date;
+                        var period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod.DateOnly);
+                        e.Style.Tag = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns).Date);
                         e.Style.Text = string.Concat(Resources.WeekAbbreviationDot, " ", week.ToString(CultureInfo.CurrentCulture),
-                                                     " ", period.StartDateTimeLocal(_schedulerState.TimeZoneInfo).ToShortDateString());
+                                                     " ", period.StartDate.ToShortDateString(CultureInfo.CurrentCulture));
 
                     }
                 }
@@ -636,7 +635,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_view.IsOverviewColumnsHidden)
 				return;
 
-            var period = _schedulerState.RequestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+            var period = _schedulerState.RequestedPeriod.DateOnly;
             
             switch (columnType)
             {
@@ -676,7 +675,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (!View.TheGrid.Enabled)
                 return;
 
-            if (SelectedPeriod.StartDateTime != DateTime.MinValue)
+            if (SelectedPeriod.DateOnly.StartDate != DateTime.MinValue)
             {
                 if (e.ColIndex > (int)ColumnType.RowHeaderColumn &&
                     e.ColIndex < (int)ColumnType.StartScheduleColumns &&

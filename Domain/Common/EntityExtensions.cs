@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		public static bool OptimizedEquals(this IEntity entity, IEntity entityToCompare)
 		{
-			if (entity == null || entityToCompare == null)
-				return false;
 			if (entity == entityToCompare)
 				return true;
+			if (entity == null || entityToCompare == null)
+				return false;
 			var entityId = entity.Id;
 			var entityToCompareId = entityToCompare.Id;
 			return entityId.HasValue && entityToCompareId.HasValue && entityId.Equals(entityToCompareId);

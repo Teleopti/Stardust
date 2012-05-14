@@ -1635,6 +1635,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 PrintDialog pPrintDialog = new PrintDialog();
                 pPrintDialog.Document = this._chartControl.PrintDocument;
                 _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
+                //this will check if the platform is 64bit or not
+                String sArchType = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+                if (sArchType != null && sArchType.Contains("64") == true)
+                    pPrintDialog.UseEXDialog = true;
 
                 if (pPrintDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -1649,7 +1653,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             PrintPreviewDialog pPrintPreviewDialog = new PrintPreviewDialog();
             _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
             pPrintPreviewDialog.Document = _chartControl.PrintDocument;
-            pPrintPreviewDialog.ShowDialog();
+            try
+            {
+                pPrintPreviewDialog.ShowDialog();
+            }
+            catch (System.Drawing.Printing.InvalidPrinterException exceptionInvalidPrinterException)
+            {
+                ShowInformationMessage(exceptionInvalidPrinterException.Message, UserTexts.Resources.Forecasts);
+            }
+
         }
 
         private void tabControlWorkloads_SelectedIndexChanged(object sender, EventArgs e)

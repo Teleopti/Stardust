@@ -136,8 +136,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skillDay2.SkillDayCalculator = calc;
             skillDay2.WorkloadDayCollection[0].Close();
 
-            Thread.Sleep(1000);
             PersistAndRemoveFromUnitOfWork(skillDay2);
+
+			SetUpdatedOnForSkillDay(skillDay, -1);
 
             SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
             ICollection<ISkillDay> skillDays = skillDayRepository.FindRange(new DateOnlyPeriod(skillDay.CurrentDate.AddDays(-10), skillDay.CurrentDate.AddDays(30)),
@@ -150,6 +151,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkillDay result2 = skillDayRepository.FindLatestUpdated(_skill, _scenario, true);
             Assert.IsNull(result2);
         }
+
+		private void SetUpdatedOnForSkillDay(ISkillDay skillDay, int minutes)
+		{
+			Session.CreateSQLQuery("UPDATE dbo.SkillDay SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
+				"Id", skillDay.Id.GetValueOrDefault()).SetInt32("Minutes", minutes).ExecuteUpdate();
+		}
 
         [Test]
         public void CanGetLastUpdatedWithLongtermTemplate()
@@ -167,8 +174,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skillDay2.AddWorkloadDay(workloadDay);
             PersistAndRemoveFromUnitOfWork(skillDay2);
 
-            Thread.Sleep(1000);
-
+			SetUpdatedOnForSkillDay(skillDay2,-1);
+            
             PersistAndRemoveFromUnitOfWork(skillDay);
             SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
 

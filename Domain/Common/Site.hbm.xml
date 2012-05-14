@@ -6,7 +6,7 @@
 
   <class name="Site">
     <!--IEntity-->
-    <id name="Id"
+    <id name="Id" access="nosetter.camelcase-underscore"
             type="guid"
             unsaved-value="null">
       <generator class="guid.comb" />

@@ -188,11 +188,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			snapshotTemplateTaskList(e.RowType);
         }
 
-        internal void SetSelectedDates(IList<DateOnlyPeriod> selectedDates)
-        {
-            dateSelectionComposite1.SetSelectedDates(selectedDates);
-        }
-
         private void templateGridControl_ModifyCells(object sender, ModifyCellEventArgs e)
         {
 			_isDirty = true;

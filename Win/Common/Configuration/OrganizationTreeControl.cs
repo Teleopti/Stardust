@@ -221,8 +221,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             var team = (ITeam)node.TagObject;
             //min date 1/1/1753-
-            var period = new DateTimePeriod(TimeZoneInfo.ConvertTimeToUtc(DateTime.Now),
-                TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(1)));
+            var period = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
             var personRep = new PersonRepository(_unitOfWork);
 
             if (personRep.FindPeopleBelongTeam(team, period).Count == 0)

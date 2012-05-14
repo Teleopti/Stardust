@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
                                                GridMergeCellsMode.MergeColumnsInRow;
 
-                var dateTimePeriods = stateHolder.RequestedPeriod.WholeDayCollection();
+                var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
                 _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
                 createGridRows(skill, _dates, stateHolder);
 
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 // user timeZone
                 var userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
                 var diff = userTimeZone.BaseUtcOffset - timeZone.BaseUtcOffset;
-                var viewPointPeriod = stateHolder.RequestedPeriod.MovePeriod(diff);
+                var viewPointPeriod = stateHolder.RequestedPeriod.Period().MovePeriod(diff);
 
                 dateTimePeriods = viewPointPeriod.WholeDayCollection();
                 var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);

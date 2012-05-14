@@ -6,17 +6,13 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-    public interface IPayrollResultFactory
-    {
-        Guid RunPayrollOnBus(PayrollExportDto payrollExport);
-    }
-
-    public class PayrollResultFactory : IPayrollResultFactory
+	public class PayrollResultFactory : IPayrollResultFactory
     {
         private readonly IServiceBusSender _serviceBusSender;
 

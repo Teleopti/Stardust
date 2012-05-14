@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </summary>
         /// <value></value>
         /// <returns>All persons in the hierarchy.</returns>
-        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateTimePeriod period)
+        public virtual ReadOnlyCollection<IPerson> PersonsInHierarchy(IEnumerable<IPerson> candidates, DateOnlyPeriod period)
         {
             IList<IPerson> ret = new List<IPerson>();
             if (candidates.Contains(this))

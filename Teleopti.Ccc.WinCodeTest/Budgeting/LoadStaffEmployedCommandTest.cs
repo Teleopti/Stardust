@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			var personRepository = mocks.StrictMock<IPersonRepository>();
 			using (mocks.Record())
 			{
-				var periodForQuery = new DateOnlyPeriod(budgetDay1.Day.AddDays(-1), budgetDay1.Day.AddDays(1)).ToDateTimePeriod(budgetGroup.TimeZone);
+				var periodForQuery = new DateOnlyPeriod(budgetDay1.Day.AddDays(-1), budgetDay1.Day.AddDays(1));
 				Expect.Call(personRepository.FindPeopleInOrganizationLight(periodForQuery)).Return(people);
 			}
 			using (mocks.Playback())

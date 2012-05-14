@@ -62,13 +62,13 @@
       <HintPath>..\packages\Newtonsoft.Json.4.5.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SignalR, Version=0.5.0.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalR.Server.0.5.0.2\lib\net40\SignalR.dll</HintPath>
+      <HintPath>..\packages\SignalR.Server.0.5.0.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Hosting.AspNet, Version=0.5.0.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalR.Hosting.AspNet.0.5.0.2\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.5.0.3\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Hosting.Common, Version=0.5.0.0, Culture=neutral, PublicKeyToken=0259a897762d58c9, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalR.Hosting.Common.0.5.0.2\lib\net40\SignalR.Hosting.Common.dll</HintPath>
+      <HintPath>..\packages\SignalR.Hosting.Common.0.5.0.3\lib\net40\SignalR.Hosting.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -123,7 +123,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>54903</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54903/</IISUrl>
+          <IISUrl>http://localhost:61554/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

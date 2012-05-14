@@ -136,8 +136,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
             IDayOffTemplate dayOffTemplate,
             DateOnlyPeriod selectedPeriod, 
-            IScheduleService scheduleService,
-            IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers)
+            IScheduleService scheduleService)
         {
             //if (matrixList == null) throw new ArgumentNullException("matrixList");
             //if (dayOffTemplate == null) throw new ArgumentNullException("dayOffTemplate");
@@ -163,9 +162,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             for (int index = 0; index < matrixContainerList.Count; index++)
             {
-
+				IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer = matrixContainerList[index];
                 IScheduleMatrixPro matrix = matrixContainerList[index].ScheduleMatrix;
-                IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer = matrixOriginalStateContainers[index];
                 IScheduleResultDataExtractor personalSkillsDataExtractor =
                     OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, matrix);
                 IPeriodValueCalculator localPeriodValueCalculator = 
@@ -665,17 +663,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                         selectedPeriod, 
                         _backgroundWorker);
 
+				if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
+					_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
+																			selectedDays, SchedulingStateHolder,
+																			selectedPeriod,
+																			matrixOriginalStateContainerListForMoveMax);
+
                 if (optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
                     _extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
                                                                                  selectedDays, _schedulerStateHolder,
                                                                                  selectedPeriod,
                                                                                  matrixOriginalStateContainerListForMoveMax);
-
-                if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
-                    _extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-                                                                            selectedDays, SchedulingStateHolder,
-                                                                            selectedPeriod,
-                                                                            matrixOriginalStateContainerListForMoveMax);
 
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     RunIntradayOptimization(
@@ -847,8 +845,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             optimizeDaysOff(validMatrixContainerList,
                             displayList[0],
                             selectedPeriod,
-                            scheduleService,
-                            matrixContainerList);
+                            scheduleService);
 
             // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
             rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));

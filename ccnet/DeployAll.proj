@@ -3,7 +3,7 @@
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<CCCMajorMinor>7.1</CCCMajorMinor>
+		<CCCMajorMinor>7.2</CCCMajorMinor>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
@@ -131,11 +131,21 @@
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
   
-  <Target Name="MoveToKanbox" Condition="'$(FullBuild)' == 'No'">
-	<Exec Command="rd &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
-	<Exec Command="md &quot;$(MSIShare)\Kanbox\$(CCNetProject)&quot;" />
+  <Target Name="MoveToKanbox">
+	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
+		<ZIPName>$(CCNetProject)</ZIPName>
+		<KanboxShare>$(MSIShare)</KanboxShare>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
+		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
+		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
+	</PropertyGroup>
+	
+	<Exec Command="rd &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
+	<Exec Command="md &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot;" />
 
-	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot; &quot;$(MSIShare)\Kanbox\$(CCNetProject)\$(CCNetProject).zip&quot;"/>
+	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
 
   <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">

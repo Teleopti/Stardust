@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -94,6 +96,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new ContractRepository(unitOfWork);
         }
+
+		/// <summary>
+		/// Determines whether this instance can be created.
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void CanCreate()
+		{
+			new ContractRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
+		}
 
         [Test, Ignore("do not know if this should be filtered in db?")]
         public void VerifyDeletedMultiplicatorIsNotPartOfContract()

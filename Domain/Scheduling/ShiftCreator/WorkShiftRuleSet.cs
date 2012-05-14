@@ -142,9 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 						 var contractTime = visualLayerInfo.ContractTime;
                     IWorkTimeMinMax thisWorkTimeMinMax = new WorkTimeMinMax();
                     TimePeriod? period = visualLayerInfo.TimePeriod;
-                    if (!period.HasValue)
-                        continue;
-                    thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);
+                	thisWorkTimeMinMax.StartTimeLimitation = new StartTimeLimitation(period.Value.StartTime, period.Value.StartTime);
                     thisWorkTimeMinMax.EndTimeLimitation = new EndTimeLimitation(period.Value.EndTime, period.Value.EndTime);
                     thisWorkTimeMinMax.WorkTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
                     if (resultWorkTimeMinMax == null)

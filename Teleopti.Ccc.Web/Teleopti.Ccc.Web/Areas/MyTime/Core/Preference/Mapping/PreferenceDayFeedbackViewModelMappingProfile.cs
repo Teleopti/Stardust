@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				          			d.FeedbackError = Resources.NoAvailableShifts;
 				          			return;
 				          		}
-				          		d.PossibleStartTimes = minMaxWorkTime.StartTimeLimitation.StartTimeString + "-" + minMaxWorkTime.StartTimeLimitation.EndTimeString;
-				          		d.PossibleEndTimes = minMaxWorkTime.EndTimeLimitation.StartTimeString + "-" + minMaxWorkTime.EndTimeLimitation.EndTimeString;
-				          		d.PossibleContractTimes = minMaxWorkTime.WorkTimeLimitation.StartTimeString + "-" + minMaxWorkTime.WorkTimeLimitation.EndTimeString;
+								d.PossibleStartTimes = minMaxWorkTime.StartTimeLimitation.StartTimeString.ToLower() + "-" + minMaxWorkTime.StartTimeLimitation.EndTimeString.ToLower();
+								d.PossibleEndTimes = minMaxWorkTime.EndTimeLimitation.StartTimeString.ToLower() + "-" + minMaxWorkTime.EndTimeLimitation.EndTimeString.ToLower();
+								d.PossibleContractTimes = minMaxWorkTime.WorkTimeLimitation.StartTimeString.ToLower() + "-" + minMaxWorkTime.WorkTimeLimitation.EndTimeString.ToLower();
 				          	})
 				;
 		}

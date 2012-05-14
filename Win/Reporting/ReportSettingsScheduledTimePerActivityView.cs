@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -59,9 +60,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
         void reportAgentSelector1BeforeDialog(object sender, EventArgs e)
         {
-            _schedulerStateHolder.RequestedPeriod =
-                reportDateFromToSelector1.GetSelectedDates[0].ToDateTimePeriod(
-                    TeleoptiPrincipal.Current.Regional.TimeZone);
+            _schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(
+                reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.Current.Regional.TimeZone);
         }
 
         private SchedulerStateHolder createStateHolder()
@@ -72,8 +72,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
                 var rep = factory.CreatePersonRepository(unitOfWork);
 
-                var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Now.AddYears(-1), DateTimeKind.Utc),
-                                       DateTime.SpecifyKind(DateTime.Now.AddYears(1), DateTimeKind.Utc));
+                var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366),DateOnly.Today.AddDays(366));
 
                 
                 _availableActivities = factory.CreateActivityRepository(unitOfWork).LoadAllSortByName();
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.Win.Reporting
                 factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
 
                 ICollection<IPerson> persons = rep.FindPeopleInOrganization(period, false);
-                return new SchedulerStateHolder(Scenario, period, persons);
+                return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period,TimeZoneHelper.CurrentSessionTimeZone), persons);
             }
         }
 

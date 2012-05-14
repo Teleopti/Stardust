@@ -97,11 +97,27 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             }
         }
 
-		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto dateOnlyDto)
-        {
-			return SdkServiceHelper.SchedulingService.GetSchedules(scheduleLoadOptionDto, dateOnlyDto, dateOnlyDto, StateHolder.Instance.State.
-																					  SessionScopeData.LoggedOnPerson.
-																					  TimeZoneId);	
+		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(GroupForPeople groupForPeople, DateOnlyDto dateOnlyDto)
+		{
+			var query = new GetSchedulesByGroupPageGroupQueryHandlerDto
+			            	{
+			            		GroupPageGroupId = groupForPeople.GroupId,
+			            		QueryDate = dateOnlyDto,
+			            		TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId
+			            	};
+			return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
+		}
+
+		private static IEnumerable<SchedulePartDto> LoadScheduleDataWithLoadOption(PersonDto person, DateOnlyDto dateOnlyDto)
+		{
+			var query = new GetSchedulesByPersonQueryHandlerDto
+			{
+				PersonId = person.Id,
+				StartDate = dateOnlyDto,
+				EndDate = dateOnlyDto,
+				TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId
+			};
+			return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
         }
 
 		private void LoadTeamMembersScheduleData(ITeamAndPeopleSelection agentTeamMemberCollection)
@@ -125,7 +141,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     		{
     			foreach (var personDto in agentTeamMemberCollection.SelectedPeople)
     			{
-    				schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadPerson = personDto }, dateOnlyDto));
+    				schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(personDto, dateOnlyDto));
     			}
     		}
     		else
@@ -135,7 +151,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     				//try to load on team
     				foreach (var teamDto in agentTeamMemberCollection.SelectedTeams)
     				{
-    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadTeam = teamDto }, dateOnlyDto));
+    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption( teamDto , dateOnlyDto));
     				}
     			}
     			catch (WebException)
@@ -144,7 +160,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     				schedulePartDtos.Clear();
     				foreach (var personDto in agentTeamMemberCollection.SelectedPeople)
     				{
-    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(new ScheduleLoadOptionDto { LoadPerson = personDto }, dateOnlyDto));
+    					schedulePartDtos.AddRange(LoadScheduleDataWithLoadOption(personDto, dateOnlyDto));
     				}
     			}
     		}
@@ -362,8 +378,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             InitializeTeamViewGrid();
 
         	var selectedTeam = (GroupDetailModel)comboSiteAndTeam.SelectedItem;
-        	var selectedPage = (GroupPageDto) comboBoxAdvGroup.SelectedItem;
-
+        	
         	ITeamAndPeopleSelection selection;
 			if (selectedTeam.Id==_teamAll)
 			{
@@ -371,7 +386,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			}
 			else
 			{
-				selection = new BasicSelection(_startDateForTeamView, selectedTeam, selectedPage);
+				selection = new BasicSelection(_startDateForTeamView, selectedTeam);
 			}
 
             selection.Initialize(filterEnabled);

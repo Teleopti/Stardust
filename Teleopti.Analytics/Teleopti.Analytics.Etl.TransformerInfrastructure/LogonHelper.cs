@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,160 +20,160 @@ using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
-    public class LogOnHelper : ILogOnHelper
-    {
-        private DataSourceContainer _choosenDb;
-        private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
-        private LogOnService _logonService;
-        private string _nhibConfPath;
-        private readonly string _password;
-        private readonly string _userName;
-        private IList<IBusinessUnit> _buList;
-        private ILogOnOff _logOnOff;
-        private IRepositoryFactory _repositoryFactory;
+	public class LogOnHelper : ILogOnHelper
+	{
+		private DataSourceContainer _choosenDb;
+		private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
+		private LogOnService _logonService;
+		private string _nhibConfPath;
+		private readonly string _password;
+		private readonly string _userName;
+		private IList<IBusinessUnit> _buList;
+		private ILogOnOff _logOnOff;
+		private IRepositoryFactory _repositoryFactory;
 
-        private LogOnHelper() { }
+		private LogOnHelper() { }
 
-        public LogOnHelper(string userName, string password, string hibernateConfPath)
-            : this()
-        {
-            _userName = userName;
-            _password = password;
-            _nhibConfPath = hibernateConfPath;
+		public LogOnHelper(string userName, string password, string hibernateConfPath)
+			: this()
+		{
+			_userName = userName;
+			_password = password;
+			_nhibConfPath = hibernateConfPath;
 
-            InitializeStateHolder();
-            SetDatabase();
-        }
+			InitializeStateHolder();
+			SetDatabase();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public IList<IBusinessUnit> GetBusinessUnitCollection()
-        {
-            if (_buList == null)
-            {
-                _buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits());
-            }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+		public IList<IBusinessUnit> GetBusinessUnitCollection()
+		{
+			if (_buList == null)
+			{
+				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits());
+			}
 
-            //Trace.WriteLine("No allowed business unit found in current database.");
-            if (_buList == null || _buList.Count == 0)
-            {
-                throw new AuthenticationException("No allowed business unit found in current database '" +
-                                            _choosenDb + "'.");
-            }
+			//Trace.WriteLine("No allowed business unit found in current database.");
+			if (_buList == null || _buList.Count == 0)
+			{
+				throw new AuthenticationException("No allowed business unit found in current database '" +
+											_choosenDb + "'.");
+			}
 
-            return _buList;
-        }
+			return _buList;
+		}
 
-        public bool LogOn(IBusinessUnit businessUnit)
-        {
-            _logonService.LogOff();
-            if (_choosenDb != null)
-            {
-                _logonService.LogOn(_choosenDb, businessUnit);
-                LicenseActivator.ProvideLicenseActivator();
-                return true;
-            }
-            return false;
-        }
+		public bool LogOn(IBusinessUnit businessUnit)
+		{
+			_logonService.LogOff();
+			if (_choosenDb != null)
+			{
+				_logonService.LogOn(_choosenDb, businessUnit);
+				LicenseActivator.ProvideLicenseActivator();
+				return true;
+			}
+			return false;
+		}
 
-        /// <summary>
-        /// Initializes the state holder components.
-        /// </summary>
+		/// <summary>
+		/// Initializes the state holder components.
+		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void InitializeStateHolder()
-        {
-            // Code that runs on application startup
-            if (_nhibConfPath == null)
-                _nhibConfPath = Directory.GetCurrentDirectory();
-			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), new DataSourceConfigurationSetter(false, false, null)),
+		{
+			// Code that runs on application startup
+			if (string.IsNullOrEmpty(_nhibConfPath))
+                _nhibConfPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForEtl()),
 				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
-            application.MessageBrokerDisabled = true;
-            application.Start(new StateManager(), _nhibConfPath, null);
+			application.MessageBrokerDisabled = true;
+			application.Start(new StateManager(), _nhibConfPath, null);
 
-            //This one would benefit from some Autofac maybe?
+			//This one would benefit from some Autofac maybe?
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-            _repositoryFactory = new RepositoryFactory();
-            var passwordPolicy = new DummyPasswordPolicy();
-            _logonService =
-                new LogOnService(
-                    new ApplicationDataSourceProvider(
-                        new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData),
-                        _repositoryFactory,
-                        new FindApplicationUser(
-                            new CheckNullUser(
-                                new CheckSuperUser(
-                                    new FindUserDetail(
-                                        new CheckUserDetail(new CheckPassword(new OneWayEncryption(),
-                                                                              new CheckBruteForce(passwordPolicy),
-                                                                              new CheckPasswordChange(passwordPolicy))),
-                                        _repositoryFactory), new SystemUserSpecification(),
-                                    new SystemUserPasswordSpecification())), _repositoryFactory)), _logOnOff);
-        }
+			_repositoryFactory = new RepositoryFactory();
+			var passwordPolicy = new DummyPasswordPolicy();
+			_logonService =
+				new LogOnService(
+					new ApplicationDataSourceProvider(
+						new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData),
+						_repositoryFactory,
+						new FindApplicationUser(
+							new CheckNullUser(
+								new CheckSuperUser(
+									new FindUserDetail(
+										new CheckUserDetail(new CheckPassword(new OneWayEncryption(),
+																			  new CheckBruteForce(passwordPolicy),
+																			  new CheckPasswordChange(passwordPolicy))),
+										_repositoryFactory), new SystemUserSpecification(),
+									new SystemUserPasswordSpecification())), _repositoryFactory)), _logOnOff);
+		}
 
-        private void SetDatabase()
-        {
-            _foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
-            if (_foundDataBases.IsEmpty())
-            {
-                //MessageBox.Show("Login failed!", "Hello", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
-                Trace.WriteLine("Login Failed! User '" + _userName +
-                                "' could not be found in any database with the given password.");
-                _choosenDb = null;
-            }
-            else
-            {
-                // If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
-                _choosenDb = _foundDataBases.First();
-                var result = _choosenDb.LogOn(_userName, _password);
-                if (!result.Successful)
-                {
-                    Trace.WriteLine(result.Message);
-                    _choosenDb = null;
-                }
-            }
-        }
+		private void SetDatabase()
+		{
+			_foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
+			if (_foundDataBases.IsEmpty())
+			{
+				//MessageBox.Show("Login failed!", "Hello", MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign);
+				Trace.WriteLine("Login Failed! User '" + _userName +
+								"' could not be found in any database with the given password.");
+				_choosenDb = null;
+			}
+			else
+			{
+				// If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
+				_choosenDb = _foundDataBases.First();
+				var result = _choosenDb.LogOn(_userName, _password);
+				if (!result.Successful)
+				{
+					Trace.WriteLine(result.Message);
+					_choosenDb = null;
+				}
+			}
+		}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                ReleaseManagedResources();
-            }
-            ReleaseUnmanagedResources();
-        }
+		private void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				ReleaseManagedResources();
+			}
+			ReleaseUnmanagedResources();
+		}
 
-        protected virtual void ReleaseUnmanagedResources()
-        {
+		protected virtual void ReleaseUnmanagedResources()
+		{
 
-        }
+		}
 
-        protected virtual void ReleaseManagedResources()
-        {
-            if (_logonService != null)
-            {
-                _logonService.LogOff();
-                _logonService = null;
-            }
-            if (_buList!=null)
-            {
-                _buList.Clear();
-                _buList = null;
-            }
-            if (_foundDataBases!=null)
-            {
-                _foundDataBases.Clear();
-                _foundDataBases = null;
-            }
-        }
+		protected virtual void ReleaseManagedResources()
+		{
+			if (_logonService != null)
+			{
+				_logonService.LogOff();
+				_logonService = null;
+			}
+			if (_buList!=null)
+			{
+				_buList.Clear();
+				_buList = null;
+			}
+			if (_foundDataBases!=null)
+			{
+				_foundDataBases.Clear();
+				_foundDataBases = null;
+			}
+		}
 
-        public void LogOff()
-        {
-            _logonService.LogOff();
-        }
-    }
+		public void LogOff()
+		{
+			_logonService.LogOff();
+		}
+	}
 }

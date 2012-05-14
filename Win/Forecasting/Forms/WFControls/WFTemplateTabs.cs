@@ -99,7 +99,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             {
                 dw.ReloadWorkloadDayTemplates();
                 dw.RefreshWorkloadDaysForTemplatesWithStatistics(historicalWorkloadDays);
-                dw.SetSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
+                // removed this call dw.SetSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
+                // as it is only populating the seleted dates to all the other days of week.(Bug 14776) 
                 dw.EnableFilterData(false);
                 
 				if (historicalWorkloadDays.Any(workloadDayBase => (int) workloadDayBase.CurrentDate.DayOfWeek == dw.TemplateIndex))

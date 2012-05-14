@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
             if (_schedulerStateHolder != null && model != null)
             {
-                DateOnlyPeriod validPeriod = _schedulerStateHolder.RequestedPeriod.ToDateOnlyPeriod(model.TimeZone);
+                DateOnlyPeriod validPeriod = _schedulerStateHolder.RequestedPeriod.DateOnly;
                 _minDate = validPeriod.StartDate;
                 _maxDate = validPeriod.EndDate;
             }
@@ -138,9 +139,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private void ReloadSchedulerStateHolder()
         {
             var requestedPeriod =
-                new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2)).ToDateTimePeriod(
-                    Model.TimeZone);
-            _schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, requestedPeriod,
+                new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
+			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone), 
                                                              new List<IPerson>());
                                         
             var stateLoader = new SchedulerStateLoader(

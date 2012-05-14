@@ -3,7 +3,7 @@ using System.ServiceModel;
 using log4net;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.WcfService.CommandHandler;
+using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {

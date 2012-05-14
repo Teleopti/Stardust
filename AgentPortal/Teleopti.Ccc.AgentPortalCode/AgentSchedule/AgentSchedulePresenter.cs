@@ -66,7 +66,14 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         {
             try
             {
-                return SdkServiceHelper.SchedulingService.GetSchedulePart(ScheduleStateHolder.Person, dateOnlyDto, ScheduleStateHolder.Person.TimeZoneId);
+            	var query = new GetSchedulesByPersonQueryHandlerDto
+            	            	{
+            	            		StartDate = dateOnlyDto,
+            	            		EndDate = dateOnlyDto,
+            	            		PersonId = ScheduleStateHolder.Person.Id,
+            	            		TimeZoneId = ScheduleStateHolder.Person.TimeZoneId
+            	            	};
+                return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query)[0];
             }
             catch (WebException webException)
             {

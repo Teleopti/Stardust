@@ -13,11 +13,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
     [TestFixture]
     public class PersonBelongsToTeamSpecificationTest
     {
-        private DateTimePeriod _periodInQuestion =
-            new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                               new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+        private DateOnlyPeriod _periodInQuestion =
+            new DateOnlyPeriod(2007, 1, 1, 2008, 1, 1);
 
-        private DateTime _dateInQuestion = new DateTime(2007, 2, 1, 0, 0, 0, DateTimeKind.Utc);
+        private DateOnly _dateInQuestion = new DateOnly(2007, 2, 1);
 
         private ITeam _okTeam = TeamFactory.CreateSimpleTeam("OKTeam");
         private ITeam _notOkTeam = TeamFactory.CreateSimpleTeam("NotOKTeam");
@@ -66,8 +65,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             Team notOkTeam2 = TeamFactory.CreateSimpleTeam();
 
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 4, 1, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2007, 4, 10, 0, 0, 0, DateTimeKind.Utc));
+            DateOnlyPeriod periodInQuestion = new DateOnlyPeriod(2007, 4, 1, 2007, 4, 10);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -92,8 +90,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         public void VerifyAgentBelongsToTeamSpecificationFindsCorrectTeamCase2()
         {
 
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 4, 1, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2007, 5, 10, 0, 0, 0, DateTimeKind.Utc));
+            var periodInQuestion = new DateOnlyPeriod(2007, 4, 1, 2007, 5, 10);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -117,9 +114,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         [Test]
         public void VerifyAgentBelongsToTeamSpecificationFindsCorrectTeamCase3()
         {
-
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 5, 10, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2007, 5, 30, 0, 0, 0, DateTimeKind.Utc));
+            var periodInQuestion = new DateOnlyPeriod(2007, 5, 10, 2007, 5, 30);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -134,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
             spec = new PersonBelongsToTeamSpecification(periodInQuestion, _notOkTeam);
             Assert.IsFalse(spec.IsSatisfiedBy(okAgent));
-
         }
 
         /// <summary>
@@ -145,8 +139,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             Team okTeam2 = TeamFactory.CreateSimpleTeam();
 
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 5, 10, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2007, 7, 10, 0, 0, 0, DateTimeKind.Utc));
+            var periodInQuestion = new DateOnlyPeriod(2007, 5, 10, 2007, 7, 10);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -171,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         public void VerifyAgentBelongsToTeamSpecificationFindsCorrectTeamCase5()
         {
 
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 6, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2007, 6, 10, 0, 0, 0, DateTimeKind.Utc));
+            var periodInQuestion = new DateOnlyPeriod(2007, 6, 2,2007, 6, 10);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -186,8 +179,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
             spec = new PersonBelongsToTeamSpecification(periodInQuestion, _okTeam);
             Assert.IsTrue(spec.IsSatisfiedBy(okAgent));
-
-
         }
 
         /// <summary>
@@ -196,11 +187,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         [Test]
         public void VerifyAgentBelongsToTeamSpecificationFindsCorrectTeamCase6()
         {
-
             ITeam okTeam2 = TeamFactory.CreateSimpleTeam();
 
-            DateTimePeriod periodInQuestion = new DateTimePeriod(new DateTime(2007, 4, 1, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2007, 6, 10, 0, 0, 0, DateTimeKind.Utc));
+            var periodInQuestion = new DateOnlyPeriod(2007, 4, 1, 2007, 6, 10);
 
             IPerson okAgent = PersonFactory.CreatePerson();
 
@@ -210,13 +199,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             IPersonPeriod okPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 6, 1), okTeam2);
             okAgent.AddPersonPeriod(okPeriod2);
 
-            // Todo: fix this test 
             PersonBelongsToTeamSpecification spec = new PersonBelongsToTeamSpecification(periodInQuestion, _okTeam);
             Assert.IsTrue(spec.IsSatisfiedBy(okAgent));
 
             spec = new PersonBelongsToTeamSpecification(periodInQuestion, okTeam2);
             Assert.IsTrue(spec.IsSatisfiedBy(okAgent));
-
         }
 
         /// <summary>
@@ -227,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         {
             ITeam falseTeam = TeamFactory.CreateSimpleTeam();
             IPerson notMemberOfTeamAgent = PersonFactory.CreatePerson();
-            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_periodInQuestion.StartDateTime), _okTeam);
+            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(_periodInQuestion.StartDate, _okTeam);
             notMemberOfTeamAgent.AddPersonPeriod(personPeriod);
 
             PersonBelongsToTeamSpecification spec = new PersonBelongsToTeamSpecification(_periodInQuestion, falseTeam);
@@ -241,8 +228,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         public void VerifyAgentBelongsToTeamSpecificationDoesHandlePeriods()
         {
             IPerson notMemberInPeriodAgent = PersonFactory.CreatePerson();
-            DateTimePeriod period = new DateTimePeriod(_periodInQuestion.EndDateTime.AddDays(1), _periodInQuestion.EndDateTime.AddYears(1));
-            IPersonPeriod newPersonPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(period.StartDateTime), _okTeam);
+            var period = new DateOnlyPeriod(_periodInQuestion.EndDate.AddDays(1), _periodInQuestion.EndDate.AddDays(366));
+            IPersonPeriod newPersonPeriod = PersonPeriodFactory.CreatePersonPeriod(period.StartDate, _okTeam);
             notMemberInPeriodAgent.AddPersonPeriod(newPersonPeriod);
 
             PersonBelongsToTeamSpecification spec = new PersonBelongsToTeamSpecification(_periodInQuestion, _okTeam);

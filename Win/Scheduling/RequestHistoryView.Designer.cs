@@ -26,7 +26,8 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSubject")]
+		private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RequestHistoryView));
 			this.comboBoxAdvPersons = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -34,6 +35,7 @@
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdv1 = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -70,7 +72,8 @@
 			this.listViewRequests.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeader3,
+            this.columnHeader4});
 			this.listViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewRequests.Font = new System.Drawing.Font("Tahoma", 8.25F);
 			this.listViewRequests.FullRowSelect = true;
@@ -78,7 +81,7 @@
 			this.listViewRequests.Location = new System.Drawing.Point(9, 43);
 			this.listViewRequests.Margin = new System.Windows.Forms.Padding(9, 3, 3, 3);
 			this.listViewRequests.Name = "listViewRequests";
-			this.listViewRequests.Size = new System.Drawing.Size(382, 468);
+			this.listViewRequests.Size = new System.Drawing.Size(460, 468);
 			this.listViewRequests.TabIndex = 1;
 			this.listViewRequests.UseCompatibleStateImageBehavior = false;
 			this.listViewRequests.View = System.Windows.Forms.View.Details;
@@ -92,19 +95,24 @@
 			// columnHeader2
 			// 
 			this.columnHeader2.Text = "xxStatus";
-			this.columnHeader2.Width = 115;
+			this.columnHeader2.Width = 76;
 			// 
 			// columnHeader3
 			// 
 			this.columnHeader3.Text = "xxDate";
-			this.columnHeader3.Width = 166;
+			this.columnHeader3.Width = 139;
+			// 
+			// columnHeader4
+			// 
+			this.columnHeader4.Text = "xxSubject";
+			this.columnHeader4.Width = 157;
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdv1, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.comboBoxAdvPersons, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.listViewRequests, 0, 1);
@@ -142,7 +150,7 @@
 			this.panel1.Location = new System.Drawing.Point(3, 524);
 			this.panel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(388, 40);
+			this.panel1.Size = new System.Drawing.Size(466, 40);
 			this.panel1.TabIndex = 2;
 			// 
 			// linkPrevious
@@ -164,7 +172,7 @@
 			this.linkNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.linkNext.AutoSize = true;
 			this.linkNext.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.linkNext.Location = new System.Drawing.Point(210, 8);
+			this.linkNext.Location = new System.Drawing.Point(288, 8);
 			this.linkNext.Name = "linkNext";
 			this.linkNext.Size = new System.Drawing.Size(42, 13);
 			this.linkNext.TabIndex = 2;
@@ -177,11 +185,11 @@
 			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox1.Location = new System.Drawing.Point(404, 43);
+			this.textBox1.Location = new System.Drawing.Point(482, 43);
 			this.textBox1.Margin = new System.Windows.Forms.Padding(10, 3, 10, 10);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(374, 461);
+			this.textBox1.Size = new System.Drawing.Size(296, 461);
 			this.textBox1.TabIndex = 3;
 			// 
 			// RequestHistoryView
@@ -218,5 +226,6 @@
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdv1;
         private System.Windows.Forms.LinkLabel linkNext;
         private System.Windows.Forms.LinkLabel linkPrevious;
+		private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }
