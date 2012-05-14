@@ -72,7 +72,5 @@ Scenario: Switch request type
 	When I click on tomorrows summary
 	And I input text request values
 	And I click absence request tab
-	Then I should see empty form
-	And I should see the text request form with tomorrow as default date
-	And I should see 08:00 - 17:00 as the default times
+	Then I should see my existing inputs
 	And I should see an absence type called Vacation in droplist

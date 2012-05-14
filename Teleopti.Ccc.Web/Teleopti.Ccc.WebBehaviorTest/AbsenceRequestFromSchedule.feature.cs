@@ -258,12 +258,8 @@ this.ScenarioSetup(scenarioInfo);
 #line 74
  testRunner.And("I click absence request tab");
 #line 75
- testRunner.Then("I should see empty form");
+ testRunner.Then("I should see my existing inputs");
 #line 76
- testRunner.And("I should see the text request form with tomorrow as default date");
-#line 77
- testRunner.And("I should see 08:00 - 17:00 as the default times");
-#line 78
  testRunner.And("I should see an absence type called Vacation in droplist");
 #line hidden
             this.ScenarioCleanup();

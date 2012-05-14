@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var date = DateTime.Today;
 			var time = date.AddHours(12);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = date.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			
 			var firstDayOfWeek = Pages.Pages.WeekSchedulePage.FirstDate;
 
-			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value, Is.EqualTo(firstDayOfWeek));
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value, Is.EqualTo(firstDayOfWeek));
 			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value, Is.EqualTo(firstDayOfWeek));
 		}
 
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheRequestsValues()
 		{
 			var request= UserFactory.User().UserData<ExistingTextRequest>();
-			
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value), 
+
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value), 
 																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.Date));
 			EventualAssert.That(() => TimeSpan.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value),
 																		Is.EqualTo(request.PersonRequest.Request.Period.StartDateTime.TimeOfDay));
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			const string disabledAttr = "disabled";
 			const string readonlyAttr = "readonly";
 			var detailForm = Pages.Pages.CurrentEditTextRequestPage;
-			EventualAssert.That(() => detailForm.TextRequestDetailFromDateInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
+			EventualAssert.That(() => detailForm.TextRequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
 			EventualAssert.That(() => detailForm.TextRequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromTimeTextField");
 			EventualAssert.That(() => detailForm.TextRequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailSubjectInput");
 			EventualAssert.That(() => detailForm.TextRequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailToDateTextField");
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var today = DateTime.Today;
 
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value), Is.EqualTo(today));
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value), Is.EqualTo(today));
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value), Is.EqualTo(today));
 		}
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public void WhenIInputTooLongTextRequestValues()
         {
             Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-            Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
             Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
             Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
             Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIInputTooLongSubjectRequestValues()
 		{
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value = "01234567890123456789012345678901234567890123456789012345678901234567890123456789#";
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Now.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Now.AddHours(2).ToShortTimeString(UserFactory.User().Culture);
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
 			Pages.Pages.CurrentEditTextRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateInput.Value = DateTime.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
+			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromDateTextField.Value = DateTime.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailFromTimeTextField.Value = DateTime.Today.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToDateTextField.Value = DateTime.Today.ToShortDateString(UserFactory.User().Culture);
 			Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailToTimeTextField.Value = DateTime.Today.AddHours(-2).ToShortTimeString(UserFactory.User().Culture);

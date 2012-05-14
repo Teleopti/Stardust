@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		SelectList AbsenceTypesSelectList { get; }
 		CheckBox FulldayCheck { get; }
 		TextField TextRequestDetailSubjectInput { get; }
-		TextField TextRequestDetailFromDateInput { get; }
+		TextField TextRequestDetailFromDateTextField { get; }
 		TextField TextRequestDetailFromTimeTextField { get; }
 		TextField TextRequestDetailToDateTextField { get; }
 		TextField TextRequestDetailToTimeTextField { get; }

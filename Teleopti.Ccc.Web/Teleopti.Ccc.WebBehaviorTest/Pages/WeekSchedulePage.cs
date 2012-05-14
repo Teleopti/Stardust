@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-subject-input")]
 		public TextField TextRequestDetailSubjectInput { get; set; }
 		[FindBy(Id = "Schedule-addRequest-fromDate-input")]
-		public TextField TextRequestDetailFromDateInput { get; set; }
+		public TextField TextRequestDetailFromDateTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-fromTime-input-input")]
 		public TextField TextRequestDetailFromTimeTextField { get; set; }
 		[FindBy(Id = "Schedule-addRequest-toDate-input")]

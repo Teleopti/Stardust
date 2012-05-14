@@ -120,12 +120,10 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 		$('#Text-request-tab')
 			.click(function () {
 				_hideAbsenceTypes();
-				_clearFormData();
 			});
 		$('#Absence-request-tab')
 			.click(function () {
 				_showAbsenceTypes();
-				_clearFormData();
 			});
 		$('#Fullday-check')
 			.click(function () {
