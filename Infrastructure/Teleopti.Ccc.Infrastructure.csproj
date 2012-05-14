@@ -120,12 +120,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Foundation\IOrganisationMembershipFactory.cs" />
-    <Compile Include="Foundation\IRegionalFactory.cs" />
-    <Compile Include="Foundation\OrganisationMembershipFactory.cs" />
-    <Compile Include="Foundation\PrincipalFactory.cs" />
+    <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
+    <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
+    <Compile Include="Foundation\IPrincipalFactory.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
-    <Compile Include="Foundation\RegionalFactory.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalSerializableFactory.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />

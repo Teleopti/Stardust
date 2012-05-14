@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public interface IOrganisationMembershipFactory
+	public interface IMakeOrganisationMembershipFromPerson
 	{
 		IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser);
 	}

@@ -3,8 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public interface IRegionalFactory
+	public interface IMakeRegionalFromPerson
 	{
-		IRegional MakeRegional(IPerson loggedOnUser);
+		IRegional MakeRegionalFromPerson(IPerson loggedOnUser);
 	}
 }

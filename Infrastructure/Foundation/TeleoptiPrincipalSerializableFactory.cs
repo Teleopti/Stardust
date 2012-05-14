@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalSerializableFactory : IPrincipalFactory
 	{
-		private readonly IRegionalFactory _regionalFactory;
-		private readonly IOrganisationMembershipFactory _organisationMembershipFactory;
+		private readonly IMakeRegionalFromPerson _makeRegionalFromPerson;
+		private readonly IMakeOrganisationMembershipFromPerson _makeOrganisationMembershipFromPerson;
 
-		public TeleoptiPrincipalSerializableFactory(IRegionalFactory regionalFactory, IOrganisationMembershipFactory organisationMembershipFactory)
+		public TeleoptiPrincipalSerializableFactory(IMakeRegionalFromPerson makeRegionalFromPerson, IMakeOrganisationMembershipFromPerson makeOrganisationMembershipFromPerson)
 		{
-			_regionalFactory = regionalFactory;
-			_organisationMembershipFactory = organisationMembershipFactory;
+			_makeRegionalFromPerson = makeRegionalFromPerson;
+			_makeOrganisationMembershipFromPerson = makeOrganisationMembershipFromPerson;
 		}
 
 		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			                                    teleoptiAuthenticationType
 				);
 			var principal = TeleoptiPrincipalSerializable.Make(identity, loggedOnUser);
-			principal.Regional = _regionalFactory.MakeRegional(loggedOnUser);
-			principal.Organisation = _organisationMembershipFactory.MakeOrganisationMembership(loggedOnUser);
+			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(loggedOnUser);
+			principal.Organisation = _makeOrganisationMembershipFromPerson.MakeOrganisationMembership(loggedOnUser);
 			return principal;
 		}
 	}

@@ -65,8 +65,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		private static void registerAuthenticationTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeleoptiPrincipalSerializableFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterType<RegionalFactory>().As<IRegionalFactory>().SingleInstance();
-			builder.RegisterType<OrganisationMembershipFactory>().As<IOrganisationMembershipFactory>().SingleInstance();
+			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
+				.As<IMakeRegionalFromPerson>()
+				.As<IMakeOrganisationMembershipFromPerson>()
+				.SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 			//builder.RegisterType<ClaimWithId>().As<IApplicationFunctionClaimStrategy>().SingleInstance();
 		}
