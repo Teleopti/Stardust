@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		}
 
 		[TearDown]
-		public void TearDown()
+		public void Teardown()
 		{
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
