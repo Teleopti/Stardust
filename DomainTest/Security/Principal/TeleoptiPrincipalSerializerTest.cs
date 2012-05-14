@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, null, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
 			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
+			principal.Regional = Regional.FromPerson(person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			person.AddPersonPeriod(personPeriod);
 			var identity = new TeleoptiIdentity(person.Name.ToString(), null, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application);
 			var principal = TeleoptiPrincipalSerializable.Make(identity, person);
+			principal.Organisation = OrganisationMembership.FromPerson(person);
 
 			var deserializedPrincipal = SerializeAndBack(principal);
 
