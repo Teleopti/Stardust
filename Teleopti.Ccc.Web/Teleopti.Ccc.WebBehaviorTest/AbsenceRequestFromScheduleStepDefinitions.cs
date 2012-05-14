@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.User;
-using Teleopti.Interfaces.Domain;
-using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -59,6 +50,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickFullDayCheckbox()
 		{
 			Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked = true;
+		}
+
+		[Then(@"I should see empty form")]
+		public void ThenIShouldSeeEmptyForm()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.FulldayCheck.Checked, Is.False);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailSubjectInput.Value, Is.Null);
+			EventualAssert.That(() => Pages.Pages.CurrentEditTextRequestPage.TextRequestDetailMessageTextField.Value, Is.Null);
 		}
 
 		[Then(@"I should not see the absence request tab")]

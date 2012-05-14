@@ -237,6 +237,37 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Switch request type")]
+        public virtual void SwitchRequestType()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Switch request type", ((string[])(null)));
+#line 68
+this.ScenarioSetup(scenarioInfo);
+#line 69
+ testRunner.Given("I am an agent");
+#line 70
+ testRunner.And("I have a requestable absence called Vacation");
+#line 71
+ testRunner.And("I am viewing week schedule");
+#line 72
+ testRunner.When("I click on tomorrows summary");
+#line 73
+ testRunner.And("I input text request values");
+#line 74
+ testRunner.And("I click absence request tab");
+#line 75
+ testRunner.Then("I should see empty form");
+#line 76
+ testRunner.And("I should see the text request form with tomorrow as default date");
+#line 77
+ testRunner.And("I should see 08:00 - 17:00 as the default times");
+#line 78
+ testRunner.And("I should see an absence type called Vacation in droplist");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
