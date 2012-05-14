@@ -30,6 +30,13 @@ Scenario: Default text request values from week schedule
 	Then I should see the text request form with tomorrow as default date
 	And I should see 8:00 - 17:00 as the default times
 
+Scenario: Default full day text request values from week schedule
+	Given I am an agent
+	And I am viewing week schedule
+	When I click on today's summary
+	And I click full day checkbox
+	Then I should see 00:00 - 23:59 as the default times
+
 Scenario: Cancel adding text request
 	Given I am an agent
 	And I am viewing week schedule
