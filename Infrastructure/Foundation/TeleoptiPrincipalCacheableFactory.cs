@@ -4,13 +4,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class TeleoptiPrincipalCachableFactory : IPrincipalFactory
+	public class TeleoptiPrincipalCacheableFactory : IPrincipalFactory
 	{
 		private readonly IMakeRegionalFromPerson _makeRegionalFromPerson;
 		private readonly IMakeOrganisationMembershipFromPerson _makeOrganisationMembershipFromPerson;
 		private readonly IRetrievePersonNameForPerson _retrievePersonNameForPerson;
 
-		public TeleoptiPrincipalCachableFactory(
+		public TeleoptiPrincipalCacheableFactory(
 			IMakeRegionalFromPerson makeRegionalFromPerson, 
 			IMakeOrganisationMembershipFromPerson makeOrganisationMembershipFromPerson,
 			IRetrievePersonNameForPerson retrievePersonNameForPerson
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			                                    WindowsIdentity.GetCurrent(), 
 			                                    teleoptiAuthenticationType
 				);
-			var principal = TeleoptiPrincipalCachable.Make(identity, loggedOnUser);
+			var principal = TeleoptiPrincipalCacheable.Make(identity, loggedOnUser);
 			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(loggedOnUser);
 			principal.Organisation = _makeOrganisationMembershipFromPerson.MakeOrganisationMembership(loggedOnUser);
 			return principal;

@@ -818,7 +818,7 @@
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
-    <Compile Include="Security\Principal\TeleoptiPrincipalCachable.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalCacheable.cs" />
     <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\UserDetail.cs" />

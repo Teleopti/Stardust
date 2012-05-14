@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterModule<AuthenticationModule>();
 
-			builder.RegisterType<TeleoptiPrincipalCachableFactory>().As<IPrincipalFactory>().SingleInstance();
+			builder.RegisterType<TeleoptiPrincipalCacheableFactory>().As<IPrincipalFactory>().SingleInstance();
 			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
 				.As<IMakeRegionalFromPerson>()
 				.As<IMakeOrganisationMembershipFromPerson>()
