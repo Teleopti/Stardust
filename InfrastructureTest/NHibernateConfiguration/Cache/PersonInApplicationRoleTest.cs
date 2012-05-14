@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 				sessionFactory.Statistics.Clear();
 				LazyLoadingManager.Initialize(p.PermissionInformation.ApplicationRoleCollection);
 			}
-			sessionFactory.Statistics.EntityLoadCount.Should().Be.EqualTo(0);
+			sessionFactory.Statistics.CollectionLoadCount.Should().Be.EqualTo(0);
 		}
 
 		[SetUp]
 		public void Setup()
 		{
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTestWithCache());
 			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, null), null);
 			applicationRole = new ApplicationRole { Name = "hejhej" };
 			person = new Person();

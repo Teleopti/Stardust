@@ -10,6 +10,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			return new DataSourceConfigurationSetter(false, false, "call", "unit tests");
 		}
+		public static IDataSourceConfigurationSetter ForTestWithCache()
+		{
+			return new DataSourceConfigurationSetter(true, false, "call", "unit tests");
+		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "ETL tool");

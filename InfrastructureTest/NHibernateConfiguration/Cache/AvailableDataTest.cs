@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 				LazyLoadingManager.Initialize(aData.AvailableTeams);
 			}
 			sessionFactory.Statistics.EntityLoadCount.Should().Be.EqualTo(0);
+			sessionFactory.Statistics.CollectionLoadCount.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		[SetUp]
 		public void Setup()
 		{
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTest());
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IDenormalizer>(), DataSourceConfigurationSetter.ForTestWithCache());
 			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, null), null);
 			availableData = new AvailableData();
 			availableData.ApplicationRole = new ApplicationRole{Name = "d"};
