@@ -161,11 +161,17 @@
 	float: left;
 }
 
+.ui-tooltip-menu-item {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.0em !important;
+}
+
 .selectable-tab {
-	cursor: pointer
+	cursor: pointer;
+	font-weight: normal;
 }
 .selected-tab {
-	color: #15C
+	font-weight: bold;
 }
 .absence-input-label 
 {

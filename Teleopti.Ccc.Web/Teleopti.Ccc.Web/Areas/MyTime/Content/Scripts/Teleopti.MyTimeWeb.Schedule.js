@@ -111,10 +111,10 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.click(function () {
 				if ($('#Text-request-tab.selected-tab').length > 0) {
 					_addTextRequest();
-				}else {
+				} else {
 					_addAbsenceRequest();
 				}
-				
+
 			});
 
 		$('#Text-request-tab')
@@ -158,10 +158,9 @@ Teleopti.MyTimeWeb.Schedule.TextRequest = (function ($) {
 			.datepicker()
 			;
 		$("#Schedule-addRequest-section .combobox.time-input")
-			.combobox()
-			;
+			.combobox({ comboboxDropDownItemClass: 'ui-tooltip-menu-item' });
 		$("#Schedule-addRequest-section .combobox.absence-input")
-			.combobox()
+			.combobox({ comboboxDropDownItemClass: 'ui-tooltip-menu-item' });
 		;
 		$("#Absence-type-input").attr('readonly', 'true');
 	}
