@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var person = _personRepository.Load(command.PersonId);
-                var scenario = _scenarioRepository.LoadDefaultScenario();
+                var scenario = getDesiredScenario(command);
                 var startDate = new DateOnly(command.Date.DateTime);
                 var timeZone = person.PermissionInformation.DefaultTimeZone();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
@@ -57,5 +57,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
             return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
+
+    	private IScenario getDesiredScenario(AddDayOffCommandDto command)
+    	{
+    		return command.ScenarioId.HasValue ? _scenarioRepository.Get(command.ScenarioId.Value) : _scenarioRepository.LoadDefaultScenario();
+    	}
     }
 }

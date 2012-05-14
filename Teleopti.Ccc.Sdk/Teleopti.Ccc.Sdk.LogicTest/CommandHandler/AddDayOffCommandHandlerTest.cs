@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Date = _dateOnydto,
                 DayOffInfoId = _dayOff.Id.GetValueOrDefault()
             };
-
         }
 
         [Test]
@@ -93,7 +92,34 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 _target.Handle(_addAbsenceCommandDto);
                 scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
             }
-
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
+		public void ShouldAddDayOffInTheDictionaryForGivenScenarioSuccessfully()
+		{
+			var scenarioId = Guid.NewGuid();
+			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var scheduleDay = _schedulePartFactory.CreatePartWithMainShift();
+			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
+			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
+				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
+				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, _period, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
+				Expect.Call(_dayOffRepository.Load(_dayOff.Id.GetValueOrDefault())).Return(_dayOff);
+				Expect.Call(scheduleRangeMock.ScheduledDay(_startDate)).Return(scheduleDay);
+				Expect.Call(() => _saveSchedulePartService.Save(unitOfWork, scheduleDay));
+			}
+			using (_mock.Playback())
+			{
+				_addAbsenceCommandDto.ScenarioId = scenarioId;
+				_target.Handle(_addAbsenceCommandDto);
+				scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
+			}
+		}
     }
 }
